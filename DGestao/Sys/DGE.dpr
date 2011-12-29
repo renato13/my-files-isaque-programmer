@@ -57,7 +57,10 @@ uses
   UGeLogradouro in 'UGeLogradouro.pas' {frmGeLogradouro},
   UGeEmpresa in 'UGeEmpresa.pas' {frmGeEmpresa},
   UGeCliente in 'UGeCliente.pas' {frmGeCliente},
-  UGeFornecedor in 'UGeFornecedor.pas' {frmGeFornecedor};
+  UGeFornecedor in 'UGeFornecedor.pas' {frmGeFornecedor},
+  UGeGrupoProduto in 'UGeGrupoProduto.pas' {frmGeGrupoProduto},
+  UGeSecaoProduto in 'UGeSecaoProduto.pas' {frmGeSecaoProduto},
+  UGeUnidade in 'UGeUnidade.pas' {frmGeUnidade};
 
 {$R *.res}
 

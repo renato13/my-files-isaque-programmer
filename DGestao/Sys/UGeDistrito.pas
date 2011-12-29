@@ -29,6 +29,8 @@ var
 
 implementation
 
+uses UDMBusiness;
+
 {$R *.dfm}
 
 procedure MostrarTabelaDistritos(const AOwner : TComponent);
@@ -59,8 +61,11 @@ procedure TfrmGeDistrito.FormCreate(Sender: TObject);
 begin
   inherited;
   DisplayFormatCodigo := '000';
+  NomeTabela     := 'TBDISTRITO';
   CampoCodigo    := 'dis_cod';
   CampoDescricao := 'dis_nome';
+
+  UpdateGenerator;
 end;
 
 end.

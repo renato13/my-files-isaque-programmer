@@ -2889,6 +2889,17 @@ object frmPrinc: TfrmPrinc
           Caption = 'Logradouros'
           OnClick = nmLogradourosClick
         end
+        object N6: TMenuItem
+          Caption = '-'
+        end
+        object nmSecaoProduto: TMenuItem
+          Caption = 'Se'#231#245'es de Produtos'
+          OnClick = nmSecaoProdutoClick
+        end
+        object nmUnidade: TMenuItem
+          Caption = 'Unidades'
+          OnClick = nmUnidadeClick
+        end
       end
       object N4: TMenuItem
         Caption = '-'
@@ -3351,9 +3362,9 @@ object frmPrinc: TfrmPrinc
       object N2: TMenuItem
         Caption = '-'
       end
-      object GrupodeProdutos1: TMenuItem
-        Caption = 'Grupo de Produto'
-        OnClick = GrupodeProdutos1Click
+      object nmGruposProduto: TMenuItem
+        Caption = 'Grupos de Produtos'
+        OnClick = nmGruposProdutoClick
       end
       object Produto1: TMenuItem
         Bitmap.Data = {

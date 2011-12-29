@@ -26,7 +26,7 @@ type
     ibdtstAjustEstoqLookProdQtde: TIntegerField;
     ibdtstAjustEstoqLookFornec: TStringField;
     qryBusca: TIBQuery;
-    RvProject1: TRvProject;
+    raveReport: TRvProject;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

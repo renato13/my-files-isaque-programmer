@@ -1,5 +1,5 @@
-inherited frmGeDistrito: TfrmGeDistrito
-  Caption = 'Tabela de Distritos'
+inherited frmGeSecaoProduto: TfrmGeSecaoProduto
+  Caption = 'Tabela de Se'#231#245'es de Produtos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
@@ -9,15 +9,27 @@ inherited frmGeDistrito: TfrmGeDistrito
         Columns = <
           item
             Expanded = False
-            FieldName = 'DIS_COD'
+            FieldName = 'SCP_COD'
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'DIS_NOME'
+            FieldName = 'SCP_DESCRICAO'
             Width = 350
             Visible = True
           end>
+      end
+      inherited pnlFiltros: TPanel
+        inherited grpBxFiltro: TGroupBox
+          inherited Label1: TLabel
+            Width = 41
+            Caption = 'Se'#231#227'o:'
+          end
+          inherited edtFiltrar: TEdit
+            Left = 56
+            Width = 147
+          end
+        end
       end
     end
     inherited tbsCadastro: TTabSheet
@@ -29,13 +41,13 @@ inherited frmGeDistrito: TfrmGeDistrito
         object lblNome: TLabel [1]
           Left = 88
           Top = 24
-          Width = 31
+          Width = 50
           Height = 13
-          Caption = 'Nome:'
+          Caption = 'Descri'#231#227'o:'
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
-          DataField = 'DIS_COD'
+          DataField = 'SCP_COD'
         end
         object dbNome: TDBEdit
           Left = 88
@@ -43,7 +55,7 @@ inherited frmGeDistrito: TfrmGeDistrito
           Width = 337
           Height = 21
           CharCase = ecUpperCase
-          DataField = 'DIS_NOME'
+          DataField = 'SCP_DESCRICAO'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -59,47 +71,47 @@ inherited frmGeDistrito: TfrmGeDistrito
   inherited IbDtstTabela: TIBDataSet
     SelectSQL.Strings = (
       'Select'
-      '    d.Dis_cod'
-      '  , d.Dis_nome'
-      'from TBDISTRITO d')
-    GeneratorField.Field = 'DIS_COD'
-    GeneratorField.Generator = 'GEN_DISTRITO_ID'
-    object IbDtstTabelaDIS_COD: TSmallintField
+      '    s.Scp_cod'
+      '  , s.Scp_descricao'
+      'from TBSECAOPROD s')
+    GeneratorField.Field = 'COD'
+    GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
+    object IbDtstTabelaSCP_COD: TSmallintField
       DisplayLabel = 'C'#243'digo'
-      FieldName = 'DIS_COD'
-      Origin = 'TBDISTRITO.DIS_COD'
+      FieldName = 'SCP_COD'
+      Origin = 'TBSECAOPROD.SCP_COD'
       Required = True
     end
-    object IbDtstTabelaDIS_NOME: TIBStringField
-      DisplayLabel = 'Nome'
-      FieldName = 'DIS_NOME'
-      Origin = 'TBDISTRITO.DIS_NOME'
-      Size = 100
+    object IbDtstTabelaSCP_DESCRICAO: TIBStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      FieldName = 'SCP_DESCRICAO'
+      Origin = 'TBSECAOPROD.SCP_DESCRICAO'
+      Size = 50
     end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
-      '  DIS_COD,'
-      '  DIS_NOME'
-      'from TBDISTRITO '
+      '  SCP_COD,'
+      '  SCP_DESCRICAO'
+      'from TBSECAOPROD '
       'where'
-      '  DIS_COD = :DIS_COD')
+      '  SCP_COD = :SCP_COD')
     ModifySQL.Strings = (
-      'update TBDISTRITO'
+      'update TBSECAOPROD'
       'set'
-      '  DIS_COD = :DIS_COD,'
-      '  DIS_NOME = :DIS_NOME'
+      '  SCP_COD = :SCP_COD,'
+      '  SCP_DESCRICAO = :SCP_DESCRICAO'
       'where'
-      '  DIS_COD = :OLD_DIS_COD')
+      '  SCP_COD = :OLD_SCP_COD')
     InsertSQL.Strings = (
-      'insert into TBDISTRITO'
-      '  (DIS_COD, DIS_NOME)'
+      'insert into TBSECAOPROD'
+      '  (SCP_COD, SCP_DESCRICAO)'
       'values'
-      '  (:DIS_COD, :DIS_NOME)')
+      '  (:SCP_COD, :SCP_DESCRICAO)')
     DeleteSQL.Strings = (
-      'delete from TBDISTRITO'
+      'delete from TBSECAOPROD'
       'where'
-      '  DIS_COD = :OLD_DIS_COD')
+      '  SCP_COD = :OLD_SCP_COD')
   end
 end

@@ -1,6 +1,6 @@
 object frmGrProdutos: TfrmGrProdutos
-  Left = 281
-  Top = 229
+  Left = 572
+  Top = 268
   Width = 737
   Height = 329
   Caption = 'Produtos'
@@ -18,7 +18,7 @@ object frmGrProdutos: TfrmGrProdutos
   TextHeight = 13
   object tlbrGridFornec: TToolBar
     Left = 0
-    Top = 258
+    Top = 256
     Width = 721
     Height = 35
     Align = alBottom
@@ -221,7 +221,7 @@ object frmGrProdutos: TfrmGrProdutos
   end
   object pnlBotaoGrid: TPanel
     Left = 0
-    Top = 207
+    Top = 205
     Width = 721
     Height = 51
     Align = alBottom
@@ -290,12 +290,11 @@ object frmGrProdutos: TfrmGrProdutos
     Left = 0
     Top = 0
     Width = 721
-    Height = 207
-    ActivePage = TabSheetLista
+    Height = 205
+    ActivePage = TabSheetDados
     Align = alClient
     DockSite = True
     HotTrack = True
-    TabIndex = 0
     TabOrder = 2
     object TabSheetLista: TTabSheet
       Caption = 'Lista'
@@ -304,7 +303,7 @@ object frmGrProdutos: TfrmGrProdutos
         Left = 0
         Top = 0
         Width = 713
-        Height = 179
+        Height = 177
         Align = alClient
         Color = clWhite
         DataSource = dtsrcProd

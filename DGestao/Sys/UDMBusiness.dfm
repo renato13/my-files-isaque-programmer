@@ -178,7 +178,7 @@ object DMBusiness: TDMBusiness
     Left = 320
     Top = 88
   end
-  object RvProject1: TRvProject
+  object raveReport: TRvProject
     Left = 448
     Top = 88
   end

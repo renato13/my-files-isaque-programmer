@@ -1,23 +1,37 @@
-inherited frmGeDistrito: TfrmGeDistrito
-  Caption = 'Tabela de Distritos'
+inherited frmGeGrupoProduto: TfrmGeGrupoProduto
+  ActiveControl = dbCodigo
+  Caption = 'Tabela de Grupos de Produtos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
           item
             Expanded = False
-            FieldName = 'DIS_COD'
+            FieldName = 'COD'
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'DIS_NOME'
+            FieldName = 'DESCRI'
             Width = 350
             Visible = True
           end>
+      end
+      inherited pnlFiltros: TPanel
+        inherited grpBxFiltro: TGroupBox
+          inherited Label1: TLabel
+            Width = 39
+            Caption = 'Grupo:'
+          end
+          inherited edtFiltrar: TEdit
+            Left = 48
+            Width = 155
+          end
+        end
       end
     end
     inherited tbsCadastro: TTabSheet
@@ -29,13 +43,13 @@ inherited frmGeDistrito: TfrmGeDistrito
         object lblNome: TLabel [1]
           Left = 88
           Top = 24
-          Width = 31
+          Width = 50
           Height = 13
-          Caption = 'Nome:'
+          Caption = 'Descri'#231#227'o:'
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
-          DataField = 'DIS_COD'
+          DataField = 'COD'
         end
         object dbNome: TDBEdit
           Left = 88
@@ -43,7 +57,7 @@ inherited frmGeDistrito: TfrmGeDistrito
           Width = 337
           Height = 21
           CharCase = ecUpperCase
-          DataField = 'DIS_NOME'
+          DataField = 'DESCRI'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -59,47 +73,47 @@ inherited frmGeDistrito: TfrmGeDistrito
   inherited IbDtstTabela: TIBDataSet
     SelectSQL.Strings = (
       'Select'
-      '    d.Dis_cod'
-      '  , d.Dis_nome'
-      'from TBDISTRITO d')
-    GeneratorField.Field = 'DIS_COD'
-    GeneratorField.Generator = 'GEN_DISTRITO_ID'
-    object IbDtstTabelaDIS_COD: TSmallintField
+      '    g.Cod'
+      '  , g.Descri'
+      'from TBGRUPOPROD g')
+    GeneratorField.Field = 'COD'
+    GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
+    object IbDtstTabelaCOD: TSmallintField
       DisplayLabel = 'C'#243'digo'
-      FieldName = 'DIS_COD'
-      Origin = 'TBDISTRITO.DIS_COD'
+      FieldName = 'COD'
+      Origin = 'TBGRUPOPROD.COD'
       Required = True
     end
-    object IbDtstTabelaDIS_NOME: TIBStringField
-      DisplayLabel = 'Nome'
-      FieldName = 'DIS_NOME'
-      Origin = 'TBDISTRITO.DIS_NOME'
-      Size = 100
+    object IbDtstTabelaDESCRI: TIBStringField
+      DisplayLabel = 'Descri'#231#227'o:'
+      FieldName = 'DESCRI'
+      Origin = 'TBGRUPOPROD.DESCRI'
+      Size = 30
     end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
-      '  DIS_COD,'
-      '  DIS_NOME'
-      'from TBDISTRITO '
+      '  COD,'
+      '  DESCRI'
+      'from TBGRUPOPROD '
       'where'
-      '  DIS_COD = :DIS_COD')
+      '  COD = :COD')
     ModifySQL.Strings = (
-      'update TBDISTRITO'
+      'update TBGRUPOPROD'
       'set'
-      '  DIS_COD = :DIS_COD,'
-      '  DIS_NOME = :DIS_NOME'
+      '  COD = :COD,'
+      '  DESCRI = :DESCRI'
       'where'
-      '  DIS_COD = :OLD_DIS_COD')
+      '  COD = :OLD_COD')
     InsertSQL.Strings = (
-      'insert into TBDISTRITO'
-      '  (DIS_COD, DIS_NOME)'
+      'insert into TBGRUPOPROD'
+      '  (COD, DESCRI)'
       'values'
-      '  (:DIS_COD, :DIS_NOME)')
+      '  (:COD, :DESCRI)')
     DeleteSQL.Strings = (
-      'delete from TBDISTRITO'
+      'delete from TBGRUPOPROD'
       'where'
-      '  DIS_COD = :OLD_DIS_COD')
+      '  COD = :OLD_COD')
   end
 end
