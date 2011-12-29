@@ -1,0 +1,72 @@
+program DGESTAO;
+
+uses
+  Forms,
+  IniFiles,
+  SysUtils,
+  HPL_Strings in 'lib\HPL_Strings.pas',
+  UPrinc in 'UPrinc.pas' {frmPrinc},
+  U_SenhaBaixa in 'U_SenhaBaixa.pas' {f_senhaBaixa},
+  UBxCP in 'UBxCP.pas' {frmBxCP},
+  UBxCR in 'UBxCR.pas' {frmBxCR},
+  UCdBanco in 'UCdBanco.pas' {frmCadBanco},
+  UCdCliente in 'UCdCliente.pas' {frmCdCliente},
+  UCdContPagar in 'UCdContPagar.pas' {frmCdContPagar},
+  UCdContReceber in 'UCdContReceber.pas' {frmCdContReceb},
+  UCdDeposito in 'UCdDeposito.pas' {frmCdDeposito},
+  UCdEmpresa in 'UCdEmpresa.pas' {frmCadEmpresa},
+  UCdVendedor in 'UCdVendedor.pas' {frmCdVendedor},
+  UDMBusiness in 'UDMBusiness.pas' {DMBusiness: TDataModule},
+  UGrBanco in 'UGrBanco.pas' {frmGridBanco},
+  UGrCliente in 'UGrCliente.pas' {frmGrCliente},
+  UGrContPagar in 'UGrContPagar.pas' {frmGrContPagar},
+  UGrContReceber in 'UGrContReceber.pas' {frmGrContReceb},
+  UGrDepositos in 'UGrDepositos.pas' {frmGrDepositos},
+  UGrEmpresa in 'UGrEmpresa.pas' {frmGridEmpresa},
+  UGrProduto in 'UGrProduto.pas' {frmGrProdutos},
+  USobre in 'USobre.pas' {frmSobre},
+  UPesq in 'UPesq.pas' {frmPesq},
+  UPesqProd in 'UPesqProd.pas' {frmPesqProd},
+  UCdFornecedor in 'UCdFornecedor.pas' {frmCdFornecedor},
+  UGridFornec in 'UGridFornec.pas' {frmGridFornec},
+  UFormPagto in 'UFormPagto.pas' {frmFormPagto},
+  UGrupoProd in 'UGrupoProd.pas' {frmGrupoProd},
+  UEntradaEstoq in 'UEntradaEstoq.pas' {frmEntradaEstoq},
+  UGrEntradaEstoq in 'UGrEntradaEstoq.pas' {frmGrEntradaEstoq},
+  uAjustEstoq in 'uAjustEstoq.pas' {frmAjustEstoq},
+  uKardex in 'uKardex.pas' {frmKardex},
+  uGrVendas in 'uGrVendas.pas' {frmGrVendas},
+  uVenda in 'uVenda.pas' {frmVenda},
+  uRelCli in 'uRelCli.pas' {frmRelCli},
+  uRelFornec in 'uRelFornec.pas' {frmRelFornec},
+  uRelProdutos in 'uRelProdutos.pas' {frmRelProdutos},
+  uGerRelCR in 'uGerRelCR.pas' {frmGerRelCR},
+  uRelCR in 'uRelCR.pas' {frmRelCR},
+  uGerRelCP in 'uGerRelCP.pas' {frmGerRelCP},
+  uRelCP in 'uRelCP.pas' {frmRelCP},
+  uRelVenda in 'uRelVenda.pas' {frmRelVenda},
+  UfrmRelVendas in 'UfrmRelVendas.pas' {frmRelVendas},
+  UGrPadraoCadastro in 'lib\UGrPadraoCadastro.pas' {frmGrPadraoCadastro},
+  UGrPadrao in 'lib\UGrPadrao.pas' {frmGrPadrao},
+  UGeBancos in 'UGeBancos.pas' {frmGeBancos},
+  UGeTipoLogradouro in 'UGeTipoLogradouro.pas' {frmGeTipoLogradouro},
+  UGeEstado in 'UGeEstado.pas' {frmGeEstado},
+  UGeCidade in 'UGeCidade.pas' {frmGeCidade},
+  UGeDistrito in 'UGeDistrito.pas' {frmGeDistrito},
+  UGeBairro in 'UGeBairro.pas' {frmGeBairro},
+  UGeLogradouro in 'UGeLogradouro.pas' {frmGeLogradouro},
+  UGeEmpresa in 'UGeEmpresa.pas' {frmGeEmpresa},
+  UGeCliente in 'UGeCliente.pas' {frmGeCliente},
+  UGeFornecedor in 'UGeFornecedor.pas' {frmGeFornecedor};
+
+{$R *.res}
+
+begin
+  FileINI := TIniFile.Create( ExtractFilePath(ParamStr(0)) + 'Conexao.ini' );
+
+  Application.Initialize;
+  Application.Title := 'DGE - Sistema Integrado de Gestão Empresarial';
+  Application.CreateForm(TDMBusiness, DMBusiness);
+  Application.CreateForm(TfrmPrinc, frmPrinc);
+  Application.Run;
+end.

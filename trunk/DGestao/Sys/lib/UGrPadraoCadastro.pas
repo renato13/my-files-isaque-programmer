@@ -1,0 +1,481 @@
+unit UGrPadraoCadastro;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, UGrPadrao, IBCustomDataSet, StdCtrls, Buttons, ExtCtrls, Grids,
+  DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList;
+
+type
+  TfrmGrPadraoCadastro = class(TfrmGrPadrao)
+    Bevel1: TBevel;
+    tlbBotoes: TToolBar;
+    Bevel2: TBevel;
+    Bevel3: TBevel;
+    btbtnIncluir: TBitBtn;
+    btbtnAlterar: TBitBtn;
+    btbtnExcluir: TBitBtn;
+    bvlTool3: TBevel;
+    btbtnLista: TBitBtn;
+    bvlTool2: TBevel;
+    btbtnFechar: TBitBtn;
+    pgcGuias: TPageControl;
+    tbsTabela: TTabSheet;
+    Bevel4: TBevel;
+    dbgDados: TDBGrid;
+    pnlFiltros: TPanel;
+    grpBxFiltro: TGroupBox;
+    Label1: TLabel;
+    btnFiltrar: TSpeedButton;
+    edtFiltrar: TEdit;
+    tbsCadastro: TTabSheet;
+    IbDtstTabela: TIBDataSet;
+    DtSrcTabela: TDataSource;
+    btbtnCancelar: TBitBtn;
+    btbtnSalvar: TBitBtn;
+    bvlTool1: TBevel;
+    GrpBxDadosNominais: TGroupBox;
+    Bevel8: TBevel;
+    lblCodigo: TLabel;
+    dbCodigo: TDBEdit;
+    IbUpdTabela: TIBUpdateSQL;
+    ImgList: TImageList;
+    bvlToolExpandir: TBevel;
+    btbtnSelecionar: TBitBtn;
+    bvlTool4: TBevel;
+    procedure btbtnFecharClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgDadosKeyPress(Sender: TObject; var Key: Char);
+    procedure dbgDadosDblClick(Sender: TObject);
+    procedure DtSrcTabelaStateChange(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btbtnIncluirClick(Sender: TObject);
+    procedure btbtnAlterarClick(Sender: TObject);
+    procedure btbtnExcluirClick(Sender: TObject);
+    procedure btbtnCancelarClick(Sender: TObject);
+    procedure btbtnSalvarClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure edtFiltrarKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure btbtnSelecionarClick(Sender: TObject);
+  private
+    { Private declarations }
+    fDisplayFormat  ,
+    fNomeTabela     ,
+    fCampoCodigo    ,
+    fCampoDescricao ,
+    fWhereAdditional: String;
+    fOcorreuErro    ,
+    fAbrirTabelaAuto: Boolean;
+    sSQL : TStringList;
+    procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
+    procedure CentralizarCodigo;
+  public
+    { Public declarations }
+    property DisplayFormatCodigo : String read fDisplayFormat write fDisplayFormat;
+    property NomeTabela : String read fNomeTabela write fNomeTabela;
+    property CampoCodigo : String read fCampoCodigo write fCampoCodigo;
+    property CampoDescricao : String read fCampoDescricao write fCampoDescricao;
+    property WhereAdditional : String read fWhereAdditional;
+    property OcorreuErro : Boolean read fOcorreuErro;
+    property AbrirTabelaAuto : Boolean read fAbrirTabelaAuto write fAbrirTabelaAuto;
+    property SQLTabela : TStringList read sSQL;
+    procedure UpdateGenerator;
+  protected
+    procedure FiltarDados; overload;
+    procedure FecharAbrirTabela(const Tabela : TIBDataSet; const Vazia : Boolean = FALSE); overload;
+    function SelecionarRegistro(var Codigo : Integer; var Descricao : String; const FiltroAdicional : String = '') : Boolean; overload;
+  end;
+
+var
+  frmGrPadraoCadastro: TfrmGrPadraoCadastro;
+
+implementation
+
+uses UDMBusiness;
+
+{$R *.dfm}
+
+procedure TfrmGrPadraoCadastro.btbtnFecharClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmGrPadraoCadastro.FormCreate(Sender: TObject);
+begin
+  inherited;
+  DisplayFormatCodigo := '00000';
+  NomeTabela      := EmptyStr;
+  CampoCodigo     := EmptyStr;
+  CampoDescricao  := EmptyStr;
+  fOcorreuErro    := False;
+  AbrirTabelaAuto := True;
+
+  if ( IbDtstTabela.Database = nil ) then
+    IbDtstTabela.Database := DMBusiness.ibdtbsBusiness;
+
+  sSQL := TStringList.Create;
+  sSQL.AddStrings( IbDtstTabela.SelectSQL );
+
+  pgcGuias.ActivePage := tbsTabela;
+end;
+
+procedure TfrmGrPadraoCadastro.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+ TDbGrid(Sender).Canvas.font.Color := clBlack;
+
+ if gdSelected in State then
+   with (Sender as TDBGrid).Canvas do
+   begin
+     Brush.Color :=  clMoneyGreen;
+     FillRect(Rect);
+     Font.Style  := [fsbold]
+   end;
+
+ TDbGrid(Sender).DefaultDrawDataCell(Rect, TDbGrid(Sender).columns[datacol].field, State);
+end;
+
+procedure TfrmGrPadraoCadastro.dbgDadosKeyPress(Sender: TObject; var Key: Char);
+begin
+  if ( Key = #13 ) then
+    pgcGuias.SelectNextPage(False)
+  else
+  if ( Key in ['0'..'9', ' ', 'a'..'z', 'A'..'Z'] ) then
+  begin
+    edtFiltrar.Text := Trim(Key);
+    edtFiltrar.SetFocus;
+    edtFiltrar.SelStart := Length(edtFiltrar.Text);
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.dbgDadosDblClick(Sender: TObject);
+begin
+  pgcGuias.SelectNextPage(False);
+end;
+
+procedure TfrmGrPadraoCadastro.DtSrcTabelaStateChange(Sender: TObject);
+begin
+  btbtnIncluir.Enabled    := (IbDtstTabela.State in [dsBrowse]);
+  btbtnAlterar.Enabled    := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);
+  btbtnExcluir.Enabled    := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);
+  btbtnCancelar.Enabled   := (IbDtstTabela.State in [dsEdit, dsInsert]);
+  btbtnSalvar.Enabled     := (IbDtstTabela.State in [dsEdit, dsInsert]);
+  btbtnLista.Enabled      := (IbDtstTabela.State in [dsBrowse]);
+  btbtnFechar.Enabled     := (IbDtstTabela.State in [dsBrowse]);
+  btbtnSelecionar.Enabled := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);
+
+  DtSrcTabela.AutoEdit   := (IbDtstTabela.State in [dsEdit, dsInsert]);
+  if ( DtSrcTabela.AutoEdit ) then
+  begin
+    fOcorreuErro        := False;
+    pgcGuias.ActivePage := tbsCadastro;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if ( not btbtnFechar.Enabled ) then
+    ShowWarning('Existe registro em edição');
+
+  CanClose := btbtnFechar.Enabled;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnIncluirClick(Sender: TObject);
+begin
+  if ( not IbDtstTabela.Active ) then
+    FecharAbrirTabela(IbDtstTabela, True);
+
+  IbDtstTabela.Append;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnAlterarClick(Sender: TObject);
+begin
+  if ( not IbDtstTabela.Active ) then
+    Exit;
+  IbDtstTabela.Edit;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnExcluirClick(Sender: TObject);
+begin
+  if ( not IbDtstTabela.Active ) then
+    Exit;
+  try
+    fOcorreuErro := False;
+    if ( Application.MessageBox('Deseja excluir o registro selecionado?', 'Excluir', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
+    begin
+      IbDtstTabela.Delete;
+      IbDtstTabela.ApplyUpdates;
+    end;
+  except
+    On E : Exception do
+    begin
+      fOcorreuErro := True;
+      ShowError('Erro ao tentar excluir o registro selecionado.' + #13#13 + E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnCancelarClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( Application.MessageBox('Deseja cancelar a inserção/edição do registro?', 'Cancelar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
+      IbDtstTabela.Cancel;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnSalvarClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    try
+      fOcorreuErro := False;
+      if ( Application.MessageBox('Deseja salvar a inserção/edição do registro?', 'Salvar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
+      begin
+        IbDtstTabela.Post;
+        IbDtstTabela.ApplyUpdates;
+      end;
+    except
+      On E : Exception do
+      begin
+        fOcorreuErro := True;
+        ShowWarning('Erro ao tentar salvar registro.' + #13#13 + E.Message);
+      end;
+    end;
+end;
+
+procedure TfrmGrPadraoCadastro.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  Case Key of
+    VK_F2 : if ( btbtnSelecionar.Visible and btbtnSelecionar.Enabled ) then
+              btbtnSelecionar.Click;
+
+    VK_ESCAPE : if (IbDtstTabela.State in [dsEdit, dsInsert]) then
+                  btbtnCancelar.Click
+                else
+                if ( pgcGuias.ActivePageIndex <> 0 ) then
+                begin
+                  pgcGuias.ActivePageIndex := 0;
+                  dbgDados.SetFocus;
+                end
+                else
+                if ( pgcGuias.ActivePageIndex = 0 ) then
+                  if ( btbtnFechar.Enabled ) then
+                    btbtnFechar.Click;
+    VK_UP : if ( (IbDtstTabela.Active) and (ActiveControl = edtFiltrar) ) then
+              IbDtstTabela.Prior;
+
+    VK_DOWN : if ( (IbDtstTabela.Active) and (ActiveControl = edtFiltrar) ) then
+                IbDtstTabela.Next;
+    else
+      CustomKeyDown(Self, Key, Shift);            
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.btnFiltrarClick(Sender: TObject);
+begin
+  FiltarDados;
+end;
+
+procedure TfrmGrPadraoCadastro.edtFiltrarKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if ( Key = 13 ) then
+    btnFiltrar.Click;
+end;
+
+procedure TfrmGrPadraoCadastro.FiltarDados;
+begin
+  try
+    fOcorreuErro := False;
+    if (Trim(CampoCodigo) = EmptyStr) or ((Trim(CampoDescricao) = EmptyStr)) then
+    begin
+      ShowWarning('O nome do campo chave e/ou de descrição não foram informados');
+      Abort;
+    end;
+
+    with IbDtstTabela, SelectSQL do
+    begin
+      Close;
+      Clear;
+      AddStrings( sSQL );
+
+      if ( Trim(edtFiltrar.Text) <> EmptyStr ) then
+        if ( StrToIntDef(Trim(edtFiltrar.Text), 0) > 0 ) then
+          Add( 'where ' + CampoCodigo +  ' = ' + Trim(edtFiltrar.Text) )
+        else
+          Add( 'where (upper(' + CampoDescricao +  ') like ' + QuotedStr('%' + UpperCase(Trim(edtFiltrar.Text)) + '%') +
+               '    or upper(' + CampoDescricao +  ') like ' + QuotedStr('%' + UpperCase(FuncoesString.StrRemoveAllAccents(Trim(edtFiltrar.Text))) + '%') + ')');
+
+      if ( fWhereAdditional <> EmptyStr ) then
+        Add( '  and (' + WhereAdditional + ')' );
+
+      Add( 'order by ' + CampoDescricao );
+
+      Open;
+
+      if ( not IsEmpty ) then
+        dbgDados.SetFocus
+      else
+      begin
+        ShowWarning('Não existe registros na tabela para este tipo de pesquisa');
+
+        edtFiltrar.SetFocus;
+        edtFiltrar.SelectAll;
+      end;
+    end;
+  except
+    On E : Exception do
+    begin
+      fOcorreuErro := True;
+      ShowWarning('Erro ao tentar filtrar registros na tabela.' + #13#13 + E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.FecharAbrirTabela(const Tabela : TIBDataSet; const Vazia : Boolean = FALSE);
+begin
+  with Tabela do
+  begin
+    Close;
+    if ( Vazia ) then
+      if ( Pos('where', UpperCase(SelectSQL.Text)) = 0 ) then
+        SelectSQL.Add('where 1=0');
+    Open;
+  end;
+end;
+
+function TfrmGrPadraoCadastro.SelecionarRegistro(var Codigo : Integer; var Descricao : String; const FiltroAdicional : String = '') : Boolean;
+begin
+  try
+    fOcorreuErro     := False;
+    fWhereAdditional := Trim(FiltroAdicional);
+
+    if (Trim(CampoCodigo) = EmptyStr) or ((Trim(CampoDescricao) = EmptyStr)) then
+    begin
+      ShowWarning('O nome do campo chave e/ou de descrição não foram informados');
+      Abort;
+    end;
+
+    Self.btbtnSelecionar.Visible := True;
+
+    Result := (ShowModal = mrOk) and (not IbDtstTabela.IsEmpty);
+
+    if ( Result ) then
+    begin
+      Codigo    := IbDtstTabela.FieldByName(CampoCodigo).AsInteger;
+      Descricao := IbDtstTabela.FieldByName(CampoDescricao).AsString;
+    end
+    else
+    begin
+      Codigo    := 0;
+      Descricao := EmptyStr;
+    end;
+  except
+    On E : Exception do
+    begin
+      fOcorreuErro := True;
+      ShowWarning('Erro ao tentar selecionar o registros da tabela.' + #13#13 + E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.FormShow(Sender: TObject);
+begin
+  inherited;
+  RedimencionarBevel(tlbBotoes, bvlToolExpandir);
+  CentralizarCodigo;
+
+  if ( not IbDtstTabela.Active ) then
+  begin
+    if ( AbrirTabelaAuto ) then
+    begin
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
+    end;
+  end
+  else
+  if ( not AbrirTabelaAuto ) then
+    IbDtstTabela.Close;
+
+  if ( (pgcGuias.ActivePage = tbsTabela) and (edtFiltrar.Visible) and (edtFiltrar.Enabled) ) then
+    edtFiltrar.SetFocus;
+end;
+
+procedure TfrmGrPadraoCadastro.RedimencionarBevel(const ToolBar : TToolBar; const bvl: TBevel);
+var
+  I ,
+  T : Integer;
+begin
+  T := 0;
+  if  Assigned(ToolBar) and Assigned(bvl) then
+  begin
+    for I := 0 to ComponentCount - 1 do
+    begin
+      if ( TControl(Components[I]).Parent = ToolBar ) then
+      begin
+        if ( Components[I] is TBitBtn ) then
+          if ( TBitBtn(Components[I]).Visible ) then
+            T := T + TBitBtn(Components[I]).Width;
+
+        if ( Components[I] is TBevel ) then
+          if ( TBevel(Components[I]).Visible ) then
+            T := T + TBevel(Components[I]).Width;
+      end;
+    end;
+
+    T := ToolBar.Width - (T - bvl.Width);
+    bvl.Width := T;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.CentralizarCodigo;
+begin
+  if ( dbgDados.Columns.Count > 0 ) then
+  begin
+    dbgDados.Columns[0].Alignment       := taCenter;
+    dbgDados.Columns[0].Title.Alignment := taCenter;
+    if ( Trim(CampoCodigo) <> EmptyStr ) then
+    begin
+      IbDtstTabela.FieldByName(CampoCodigo).Alignment                    := taCenter;
+      TIntegerField(IbDtstTabela.FieldByName(CampoCodigo)).DisplayFormat := DisplayFormatCodigo;
+    end;
+  end;
+end;
+
+procedure TfrmGrPadraoCadastro.btbtnSelecionarClick(Sender: TObject);
+begin
+  if ( not IbDtstTabela.Active ) then
+    Exit;
+  ModalResult := mrOk;
+end;
+
+procedure TfrmGrPadraoCadastro.UpdateGenerator;
+var
+  sGenerator ,
+  sTabela    ,
+  sCampoCodigo : String;
+begin
+  sGenerator   := EmptyStr;
+  sTabela      := EmptyStr;
+  sCampoCodigo := EmptyStr;
+
+  if ( (CampoCodigo = EmptyStr) and (Trim(IbDtstTabela.GeneratorField.Field) <> EmptyStr) ) then
+    CampoCodigo := IbDtstTabela.GeneratorField.Field;
+
+  sGenerator   := IbDtstTabela.GeneratorField.Generator;
+  sTabela      := NomeTabela;
+  sCampoCodigo := CampoCodigo;
+
+  if ( (sGenerator <> EmptyStr) and (sTabela <> EmptyStr) and (sCampoCodigo <> EmptyStr) ) then
+    UpdateSequence(sGenerator, sTabela, sCampoCodigo);
+end;
+
+end.
