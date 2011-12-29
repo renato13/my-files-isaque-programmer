@@ -43,7 +43,6 @@ type
     Image1: TImage;
     FormasdePagamento1: TMenuItem;
     RxSpeedButton2: TRxSpeedButton;
-    GrupodeProdutos1: TMenuItem;
     N3: TMenuItem;
     RxSpeedButton1: TRxSpeedButton;
     ppEstoque: TPopupMenu;
@@ -72,6 +71,10 @@ type
     N5: TMenuItem;
     N4: TMenuItem;
     nmDistritos: TMenuItem;
+    nmGruposProduto: TMenuItem;
+    nmSecaoProduto: TMenuItem;
+    N6: TMenuItem;
+    nmUnidade: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -81,7 +84,6 @@ type
     procedure RxSpeedButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormasdePagamento1Click(Sender: TObject);
-    procedure GrupodeProdutos1Click(Sender: TObject);
     procedure RxSpeedBtnProdClick(Sender: TObject);
     procedure Entrada1Click(Sender: TObject);
     procedure AjusteManual1Click(Sender: TObject);
@@ -101,6 +103,9 @@ type
     procedure nmDistritosClick(Sender: TObject);
     procedure nmBairrosClick(Sender: TObject);
     procedure nmLogradourosClick(Sender: TObject);
+    procedure nmGruposProdutoClick(Sender: TObject);
+    procedure nmSecaoProdutoClick(Sender: TObject);
+    procedure nmUnidadeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -117,7 +122,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uKardex, uGrVendas, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
-  UGeCliente, UGeFornecedor;
+  UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade;
 
 {$R *.dfm}
 
@@ -155,9 +160,6 @@ end;
 
 procedure TfrmPrinc.Fornecedor1Click(Sender: TObject);
 begin
-//  Application.CreateForm(TfrmGridFornec, frmGridFornec);
-//  frmGridFornec.ShowModal;
-//  frmGridFornec.Destroy;
   MostrarTabelaFornecedores(Self);
 end;
 
@@ -180,14 +182,6 @@ begin
    Application.CreateForm(TfrmGridFornec, frmGridFornec);
   frmGridFornec.ShowModal;
   frmGridFornec.Destroy;
-
-end;
-
-procedure TfrmPrinc.GrupodeProdutos1Click(Sender: TObject);
-begin
-  Application.CreateForm(TfrmGrupoProd, frmGrupoProd);
-  frmGrupoProd.ShowModal;
-  frmGrupoProd.Destroy
 
 end;
 
@@ -320,6 +314,21 @@ end;
 procedure TfrmPrinc.nmLogradourosClick(Sender: TObject);
 begin
   MostrarTabelaLogradouros(Self);
+end;
+
+procedure TfrmPrinc.nmGruposProdutoClick(Sender: TObject);
+begin
+  MostrarTabelaGrupoProdutos(Self);
+end;
+
+procedure TfrmPrinc.nmSecaoProdutoClick(Sender: TObject);
+begin
+  MostrarTabelaSecaoProdutos(Self);
+end;
+
+procedure TfrmPrinc.nmUnidadeClick(Sender: TObject);
+begin
+  MostrarTabelaUnidades(Self);
 end;
 
 end.
