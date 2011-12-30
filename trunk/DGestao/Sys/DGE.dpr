@@ -61,7 +61,8 @@ uses
   UGeGrupoProduto in 'UGeGrupoProduto.pas' {frmGeGrupoProduto},
   UGeSecaoProduto in 'UGeSecaoProduto.pas' {frmGeSecaoProduto},
   UGeUnidade in 'UGeUnidade.pas' {frmGeUnidade},
-  UGeTabelaCFOP in 'UGeTabelaCFOP.pas' {frmGeTabelaCFOP};
+  UGeTabelaCFOP in 'UGeTabelaCFOP.pas' {frmGeTabelaCFOP},
+  UGeFormaPagto in 'UGeFormaPagto.pas' {frmGeFormaPagto};
 
 {$R *.res}
 

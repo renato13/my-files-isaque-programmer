@@ -3,7 +3,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   Top = 284
   Width = 742
   Height = 440
-  ActiveControl = dbgDados
+  ActiveControl = dbCodigo
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Tabela Padr'#227'o de Cadastro'
   Color = clBtnFace
@@ -342,7 +342,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
     Top = 0
     Width = 726
     Height = 359
-    ActivePage = tbsTabela
+    ActivePage = tbsCadastro
     Align = alClient
     Images = ImgList
     TabOrder = 0
@@ -502,6 +502,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          ReadOnly = True
           TabOrder = 0
         end
       end
@@ -618,7 +619,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
     Left = 624
     Top = 40
     Bitmap = {
-      494C010129002C00040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C010129002C00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000040000000B0000000010020000000000000B0
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2074,6 +2075,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       C007C00780018001C007C00780018001C007C00780018001C007C00780018001
       C007C00780018001C007C00780018001C007C00780018001C007C00780018001
       C007C00780018001C007C00780018001C007C00780018001C00FC00F80018001
-      C01FC01F80018001FFFFFFFFFFFFFFFF}
+      C01FC01F80018001FFFFFFFFFFFFFFFF00000000000000000000000000000000
+      000000000000}
   end
 end

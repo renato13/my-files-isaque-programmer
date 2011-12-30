@@ -111,6 +111,7 @@ type
     procedure nmSecaoProdutoClick(Sender: TObject);
     procedure nmUnidadeClick(Sender: TObject);
     procedure nmTabelaCFOPClick(Sender: TObject);
+    procedure nmFormaPagtoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -128,7 +129,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
-  UGeTabelaCFOP;
+  UGeTabelaCFOP, UGeFormaPagto;
 
 {$R *.dfm}
 
@@ -340,6 +341,11 @@ end;
 procedure TfrmPrinc.nmTabelaCFOPClick(Sender: TObject);
 begin
   MostrarTabelaCFOP(Self);
+end;
+
+procedure TfrmPrinc.nmFormaPagtoClick(Sender: TObject);
+begin
+  MostrarTabelaFormaPagtos(Self);
 end;
 
 end.

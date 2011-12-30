@@ -1,9 +1,11 @@
 inherited frmGeDistrito: TfrmGeDistrito
+  ActiveControl = dbCodigo
   Caption = 'Tabela de Distritos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -36,6 +38,7 @@ inherited frmGeDistrito: TfrmGeDistrito
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'DIS_COD'
+          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88

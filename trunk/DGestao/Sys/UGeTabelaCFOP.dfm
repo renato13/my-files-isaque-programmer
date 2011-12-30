@@ -1,6 +1,5 @@
 inherited frmGeTabelaCFOP: TfrmGeTabelaCFOP
   Width = 744
-  ActiveControl = dbCodigo
   Caption = 'Tabela CFOP (C'#243'digo Fiscal de Opera'#231#245'es e Presta'#231#245'es)'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -16,7 +15,6 @@ inherited frmGeTabelaCFOP: TfrmGeTabelaCFOP
   end
   inherited pgcGuias: TPageControl
     Width = 728
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Width = 720
@@ -75,6 +73,7 @@ inherited frmGeTabelaCFOP: TfrmGeTabelaCFOP
         end
         inherited dbCodigo: TDBEdit
           DataField = 'CFOP_COD'
+          ReadOnly = False
         end
         object dbNome: TDBEdit
           Left = 88

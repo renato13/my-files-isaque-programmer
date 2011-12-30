@@ -50,6 +50,7 @@ var
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
+  function GetNextID(NomeTabela, CampoChave : String) : Largeint;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -155,6 +156,19 @@ begin
   end;
 end;
 
+
+function GetNextID(NomeTabela, CampoChave : String) : Largeint;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela);
+    Open;
+
+    Result := FieldByName('ID').AsInteger + 1;
+  end;
+end;
 
 procedure TDMBusiness.DataModuleCreate(Sender: TObject);
 begin

@@ -1,6 +1,7 @@
 inherited frmGeFornecedor: TfrmGeFornecedor
   Width = 763
   Height = 465
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Fornecedores'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -29,6 +30,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289
@@ -147,6 +149,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODFORN'
+          ReadOnly = True
         end
         object dbPessoaFisica: TDBCheckBox
           Left = 88
@@ -951,6 +954,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
     object IbDtstTabelaCEP: TIBStringField
       FieldName = 'CEP'
       Origin = 'TBFORNECEDOR.CEP'
+      EditMask = '99.999-999;0; '
       Size = 8
     end
     object IbDtstTabelaCIDADE: TIBStringField
@@ -969,6 +973,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       DisplayLabel = 'Fone'
       FieldName = 'FONE'
       Origin = 'TBFORNECEDOR.FONE'
+      EditMask = '(99)9999.9999;0; '
       Size = 11
     end
     object IbDtstTabelaTLG_TIPO: TSmallintField
