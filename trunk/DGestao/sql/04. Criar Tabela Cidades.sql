@@ -238,7 +238,7 @@ Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'ALMEIRIM', 15, 1500503, 93, 68230000, 68240000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'ALTAMIRA', 15, 1500602, 93, 68370000, 68379200);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'ANAJAS', 15, 1500701, 91, 68810000, 68810000);
-Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'ANANINDEUA', 15, 1500800, 91, 67000000, 67199999);
+Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final, Cid_siafi) values ( 'ANANINDEUA', 15, 1500800, 91, 67000000, 67199999, 980415);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'ANAPU', 15, 1500859, 91, 68365000, 68365000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'AUGUSTO CORREA', 15, 1500909, 91, 68610000, 68615000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'AURORA DO PARA', 15, 1500958, 91, 68658000, 68658000);
@@ -247,7 +247,7 @@ Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BAIAO', 15, 1501204, 91, 68465000, 68468000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BANNACH', 15, 1501253, 94, 68388000, 68388000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BARCARENA', 15, 1501303, 91, 68445000, 68448000);
-Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BELEM', 15, 1501402, 91, 66000000, 66999999);
+Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final, Cid_siafi) values ( 'BELEM', 15, 1501402, 91, 66000000, 66999999, 980427);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BELTERRA', 15, 1501451, 93, 68143000, 68143000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BENEVIDES', 15, 1501501, 91, 68795000, 68797000);
 Insert Into TBCIDADE (Cid_nome, Est_cod, Cid_ibge, Cid_ddd, Cid_cep_inicial, Cid_cep_final) values ( 'BOM JESUS DO TOCANTINS', 15, 1501576, 94, 68525000, 68525000);
