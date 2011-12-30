@@ -60,6 +60,7 @@ inherited frmGeBairro: TfrmGeBairro
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'BAI_COD'
+          ReadOnly = True
         end
         object dbCidade: TRxDBComboEdit
           Left = 16

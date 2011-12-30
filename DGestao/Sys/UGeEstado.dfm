@@ -61,6 +61,7 @@ inherited frmGeEstado: TfrmGeEstado
         end
         inherited dbCodigo: TDBEdit
           DataField = 'EST_COD'
+          ReadOnly = False
         end
         object dbNome: TDBEdit
           Left = 88

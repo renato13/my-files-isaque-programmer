@@ -54,6 +54,7 @@ inherited frmGeLogradouro: TfrmGeLogradouro
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'LOG_COD'
+          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 216

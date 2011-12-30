@@ -1,6 +1,6 @@
-inherited frmGeUnidade: TfrmGeUnidade
+inherited frmGeFormaPagto: TfrmGeFormaPagto
   ActiveControl = dbCodigo
-  Caption = 'Tabela de Unidades'
+  Caption = 'Tabela de Formas de Pagamento'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
@@ -11,32 +11,35 @@ inherited frmGeUnidade: TfrmGeUnidade
         Columns = <
           item
             Expanded = False
-            FieldName = 'UNP_COD'
+            FieldName = 'COD'
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'UNP_DESCRICAO'
+            FieldName = 'DESCRI'
             Width = 350
             Visible = True
           end
           item
-            Alignment = taCenter
             Expanded = False
-            FieldName = 'UNP_SIGLA'
-            Title.Alignment = taCenter
+            FieldName = 'ACRESCIMO'
             Visible = True
           end>
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
+          Left = 392
+          Width = 322
           inherited Label1: TLabel
-            Width = 52
-            Caption = 'Unidade:'
+            Width = 106
+            Caption = 'Forma Pagamento:'
+          end
+          inherited btnFiltrar: TSpeedButton
+            Left = 277
           end
           inherited edtFiltrar: TEdit
-            Left = 64
-            Width = 139
+            Left = 120
+            Width = 153
           end
         end
       end
@@ -54,16 +57,16 @@ inherited frmGeUnidade: TfrmGeUnidade
           Height = 13
           Caption = 'Descri'#231#227'o:'
         end
-        object lblSigla: TLabel [2]
+        object lblAcrescimo: TLabel [2]
           Left = 432
           Top = 24
-          Width = 26
+          Width = 66
           Height = 13
-          Caption = 'Sigla:'
+          Caption = '% Acr'#233'scimo:'
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
-          DataField = 'UNP_COD'
+          DataField = 'COD'
           ReadOnly = True
         end
         object dbNome: TDBEdit
@@ -71,7 +74,8 @@ inherited frmGeUnidade: TfrmGeUnidade
           Top = 40
           Width = 337
           Height = 21
-          DataField = 'UNP_DESCRICAO'
+          CharCase = ecUpperCase
+          DataField = 'DESCRI'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -81,13 +85,13 @@ inherited frmGeUnidade: TfrmGeUnidade
           ParentFont = False
           TabOrder = 1
         end
-        object dbSigla: TDBEdit
+        object dbAcrescimo: TDBEdit
           Left = 432
           Top = 40
-          Width = 81
+          Width = 97
           Height = 21
           CharCase = ecUpperCase
-          DataField = 'UNP_SIGLA'
+          DataField = 'ACRESCIMO'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -101,58 +105,56 @@ inherited frmGeUnidade: TfrmGeUnidade
     end
   end
   inherited IbDtstTabela: TIBDataSet
+    OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'
-      '    u.Unp_cod'
-      '  , u.Unp_descricao'
-      '  , u.Unp_sigla'
-      'from TBUNIDADEPROD u')
-    GeneratorField.Field = 'UNP_COD'
-    GeneratorField.Generator = 'GEN_UNIDADEPRODUTO_ID'
-    object IbDtstTabelaUNP_COD: TSmallintField
+      '    p.Cod'
+      '  , p.Descri'
+      '  , p.Acrescimo'
+      'from TBFORMPAGTO p')
+    GeneratorField.Field = 'COD'
+    GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
+    object IbDtstTabelaCOD: TSmallintField
       DisplayLabel = 'C'#243'digo'
-      FieldName = 'UNP_COD'
-      Origin = 'TBUNIDADEPROD.UNP_COD'
+      FieldName = 'COD'
+      Origin = 'TBFORMPAGTO.COD'
       Required = True
     end
-    object IbDtstTabelaUNP_DESCRICAO: TIBStringField
+    object IbDtstTabelaDESCRI: TIBStringField
       DisplayLabel = 'Descri'#231#227'o'
-      FieldName = 'UNP_DESCRICAO'
-      Origin = 'TBUNIDADEPROD.UNP_DESCRICAO'
-      Size = 50
+      FieldName = 'DESCRI'
+      Origin = 'TBFORMPAGTO.DESCRI'
+      Size = 30
     end
-    object IbDtstTabelaUNP_SIGLA: TIBStringField
-      DisplayLabel = 'SIGLA'
-      FieldName = 'UNP_SIGLA'
-      Origin = 'TBUNIDADEPROD.UNP_SIGLA'
-      Size = 5
+    object IbDtstTabelaACRESCIMO: TFloatField
+      DisplayLabel = '% Acr'#233'scimo'
+      FieldName = 'ACRESCIMO'
+      Origin = 'TBFORMPAGTO.ACRESCIMO'
     end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
-      '  UNP_COD,'
-      '  UNP_DESCRICAO,'
-      '  UNP_SIGLA'
-      'from TBUNIDADEPROD '
+      '  COD,'
+      '  DESCRI'
+      'from TBGRUPOPROD '
       'where'
-      '  UNP_COD = :UNP_COD')
+      '  COD = :COD')
     ModifySQL.Strings = (
-      'update TBUNIDADEPROD'
+      'update TBGRUPOPROD'
       'set'
-      '  UNP_COD = :UNP_COD,'
-      '  UNP_DESCRICAO = :UNP_DESCRICAO,'
-      '  UNP_SIGLA = :UNP_SIGLA'
+      '  COD = :COD,'
+      '  DESCRI = :DESCRI'
       'where'
-      '  UNP_COD = :OLD_UNP_COD')
+      '  COD = :OLD_COD')
     InsertSQL.Strings = (
-      'insert into TBUNIDADEPROD'
-      '  (UNP_COD, UNP_DESCRICAO, UNP_SIGLA)'
+      'insert into TBGRUPOPROD'
+      '  (COD, DESCRI)'
       'values'
-      '  (:UNP_COD, :UNP_DESCRICAO, :UNP_SIGLA)')
+      '  (:COD, :DESCRI)')
     DeleteSQL.Strings = (
-      'delete from TBUNIDADEPROD'
+      'delete from TBGRUPOPROD'
       'where'
-      '  UNP_COD = :OLD_UNP_COD')
+      '  COD = :OLD_COD')
   end
 end

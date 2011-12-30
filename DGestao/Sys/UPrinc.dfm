@@ -2902,7 +2902,7 @@ object frmPrinc: TfrmPrinc
         end
         object nmFormaPagto: TMenuItem
           Caption = 'Formas de Pagamento'
-          Enabled = False
+          OnClick = nmFormaPagtoClick
         end
         object nmCondicaoPagto: TMenuItem
           Caption = 'Condi'#231#245'es de Pagamento'

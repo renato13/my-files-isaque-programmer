@@ -50,6 +50,7 @@ inherited frmGeGrupoProduto: TfrmGeGrupoProduto
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'COD'
+          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88

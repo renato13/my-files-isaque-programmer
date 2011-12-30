@@ -1,9 +1,11 @@
 inherited frmGeCidade: TfrmGeCidade
+  ActiveControl = dbCodigo
   Caption = 'Tabela de Cidades (Munic'#237'pios)'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <

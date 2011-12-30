@@ -84,6 +84,7 @@ inherited frmGeBancos: TfrmGeBancos
         end
         inherited dbCodigo: TDBEdit
           DataField = 'BCO_COD'
+          ReadOnly = False
         end
         object dbNome: TDBEdit
           Left = 88
@@ -219,7 +220,7 @@ inherited frmGeBancos: TfrmGeBancos
         Left = 0
         Top = 205
         Width = 718
-        Height = 122
+        Height = 125
         Align = alClient
         Caption = 'Configura'#231#245'es CobreBemX (Boletos)'
         TabOrder = 2

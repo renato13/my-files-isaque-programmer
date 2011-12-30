@@ -33,12 +33,12 @@ inherited frmGeCliente: TfrmGeCliente
     ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 286
+        Top = 289
         Width = 739
       end
       inherited dbgDados: TDBGrid
         Width = 739
-        Height = 286
+        Height = 289
         Columns = <
           item
             Expanded = False
@@ -73,7 +73,7 @@ inherited frmGeCliente: TfrmGeCliente
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 290
+        Top = 293
         Width = 739
         inherited grpBxFiltro: TGroupBox
           Left = 464
@@ -142,6 +142,7 @@ inherited frmGeCliente: TfrmGeCliente
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODIGO'
+          ReadOnly = True
         end
         object dbPessoaFisica: TDBCheckBox
           Left = 88
@@ -715,7 +716,7 @@ inherited frmGeCliente: TfrmGeCliente
         Left = 0
         Top = 237
         Width = 739
-        Height = 115
+        Height = 118
         ActivePage = tbsContato
         Align = alClient
         Style = tsFlatButtons
