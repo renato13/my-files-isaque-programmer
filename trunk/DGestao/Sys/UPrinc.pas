@@ -73,8 +73,12 @@ type
     nmDistritos: TMenuItem;
     nmGruposProduto: TMenuItem;
     nmSecaoProduto: TMenuItem;
-    N6: TMenuItem;
     nmUnidade: TMenuItem;
+    nmTributacao: TMenuItem;
+    nmFormaPagto: TMenuItem;
+    nmCondicaoPagto: TMenuItem;
+    N6: TMenuItem;
+    nmTabelaCFOP: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -106,6 +110,7 @@ type
     procedure nmGruposProdutoClick(Sender: TObject);
     procedure nmSecaoProdutoClick(Sender: TObject);
     procedure nmUnidadeClick(Sender: TObject);
+    procedure nmTabelaCFOPClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -122,7 +127,8 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uKardex, uGrVendas, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
-  UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade;
+  UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
+  UGeTabelaCFOP;
 
 {$R *.dfm}
 
@@ -329,6 +335,11 @@ end;
 procedure TfrmPrinc.nmUnidadeClick(Sender: TObject);
 begin
   MostrarTabelaUnidades(Self);
+end;
+
+procedure TfrmPrinc.nmTabelaCFOPClick(Sender: TObject);
+begin
+  MostrarTabelaCFOP(Self);
 end;
 
 end.

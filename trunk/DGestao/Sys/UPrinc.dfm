@@ -2892,13 +2892,21 @@ object frmPrinc: TfrmPrinc
         object N6: TMenuItem
           Caption = '-'
         end
-        object nmSecaoProduto: TMenuItem
-          Caption = 'Se'#231#245'es de Produtos'
-          OnClick = nmSecaoProdutoClick
+        object nmTabelaCFOP: TMenuItem
+          Caption = 'Tabela CFOP'
+          OnClick = nmTabelaCFOPClick
         end
-        object nmUnidade: TMenuItem
-          Caption = 'Unidades'
-          OnClick = nmUnidadeClick
+        object nmTributacao: TMenuItem
+          Caption = 'Tributa'#231#245'es'
+          Enabled = False
+        end
+        object nmFormaPagto: TMenuItem
+          Caption = 'Formas de Pagamento'
+          Enabled = False
+        end
+        object nmCondicaoPagto: TMenuItem
+          Caption = 'Condi'#231#245'es de Pagamento'
+          Enabled = False
         end
       end
       object N4: TMenuItem
@@ -3365,6 +3373,14 @@ object frmPrinc: TfrmPrinc
       object nmGruposProduto: TMenuItem
         Caption = 'Grupos de Produtos'
         OnClick = nmGruposProdutoClick
+      end
+      object nmSecaoProduto: TMenuItem
+        Caption = 'Se'#231#245'es de Produtos'
+        OnClick = nmSecaoProdutoClick
+      end
+      object nmUnidade: TMenuItem
+        Caption = 'Unidades'
+        OnClick = nmUnidadeClick
       end
       object Produto1: TMenuItem
         Bitmap.Data = {

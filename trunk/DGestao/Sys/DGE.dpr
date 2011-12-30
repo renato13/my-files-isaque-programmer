@@ -60,7 +60,8 @@ uses
   UGeFornecedor in 'UGeFornecedor.pas' {frmGeFornecedor},
   UGeGrupoProduto in 'UGeGrupoProduto.pas' {frmGeGrupoProduto},
   UGeSecaoProduto in 'UGeSecaoProduto.pas' {frmGeSecaoProduto},
-  UGeUnidade in 'UGeUnidade.pas' {frmGeUnidade};
+  UGeUnidade in 'UGeUnidade.pas' {frmGeUnidade},
+  UGeTabelaCFOP in 'UGeTabelaCFOP.pas' {frmGeTabelaCFOP};
 
 {$R *.res}
 

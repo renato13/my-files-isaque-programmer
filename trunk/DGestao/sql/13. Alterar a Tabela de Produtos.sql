@@ -1,3 +1,36 @@
+CREATE DOMAIN DMN_TEXTO AS
+BLOB SUB_TYPE 1 SEGMENT SIZE 80;
+
+
+CREATE TABLE TBTRIBUTACAO_TIPO (
+    TPT_COD        SMALLINT NOT NULL,
+    TPT_DESCRICAO  VARCHAR(100),
+    TPT_SIGLA      VARCHAR(10)
+);
+
+ALTER TABLE TBTRIBUTACAO_TIPO ADD CONSTRAINT PK_TBTRIBUTACAO_TIPO PRIMARY KEY (TPT_COD);
+
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (0, 'Tributada integralmente', 'T0');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (1, 'Tributada e com cobrança de ICMS por substituição tributária', 'T1');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (2, 'Com redução de base de cálculo', 'T2');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (3, 'Isenta ou não tributada e com cobrança de ICMS por substituição tributária', 'T3');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (4, 'Isenta ou não tributada', 'T4');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (5, 'Com suspensão ou diferimento', 'T5');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (6, 'ICMS cobrado anteriormente por substituição tributária', 'T6');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (7, 'Com redução de base de cálculo e cobrança de ICMS por substituição tributária', 'T7');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (9, 'Outras', 'T9');
+
+COMMIT WORK;
+
 CREATE SEQUENCE GEN_GRUPOPRODUTO_COD;
 
 CREATE TRIGGER TG_GRUPOPRODUTO_COD FOR TBGRUPOPROD
