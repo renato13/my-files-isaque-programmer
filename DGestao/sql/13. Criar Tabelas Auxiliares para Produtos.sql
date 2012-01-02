@@ -1,6 +1,22 @@
 CREATE DOMAIN DMN_TEXTO AS
 BLOB SUB_TYPE 1 SEGMENT SIZE 80;
 
+CREATE TABLE TBORIGEMPROD (
+    ORP_COD        SMALLINT NOT NULL,
+    ORP_DESCRICAO  VARCHAR(50),
+    ORP_SIGLA      VARCHAR(5)
+);
+
+ALTER TABLE TBORIGEMPROD ADD CONSTRAINT PK_TBORIGEMPROD PRIMARY KEY (ORP_COD);
+
+INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
+                       VALUES (0, 'Nacional', '0');
+INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
+                       VALUES (1, 'Estrangeira - Importação direta', '1');
+INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
+                       VALUES (2, 'Estrangeira - Adquirida no mercado interno', '2');
+
+COMMIT WORK;
 
 CREATE TABLE TBTRIBUTACAO_TIPO (
     TPT_COD        SMALLINT NOT NULL,
@@ -11,23 +27,27 @@ CREATE TABLE TBTRIBUTACAO_TIPO (
 ALTER TABLE TBTRIBUTACAO_TIPO ADD CONSTRAINT PK_TBTRIBUTACAO_TIPO PRIMARY KEY (TPT_COD);
 
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (0, 'Tributada integralmente', 'T0');
+                       VALUES (0, 'Tributada integralmente', '00');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (1, 'Tributada e com cobrança de ICMS por substituição tributária', 'T1');
+                       VALUES (1, 'Tributada e com cobrança de ICMS por substituição tributária', '10');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (2, 'Com redução de base de cálculo', 'T2');
+                       VALUES (2, 'Com redução de base de cálculo', '20');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (3, 'Isenta ou não tributada e com cobrança de ICMS por substituição tributária', 'T3');
+                       VALUES (3, 'Isenta ou não tributada e com cobrança de ICMS por substituição tributária', '30');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (4, 'Isenta ou não tributada', 'T4');
+                       VALUES (4, 'Isenta', '40');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (5, 'Com suspensão ou diferimento', 'T5');
+                       VALUES (5, 'Não tributada', '41');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (6, 'ICMS cobrado anteriormente por substituição tributária', 'T6');
+                       VALUES (6, 'Suspensão', '50');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (7, 'Com redução de base de cálculo e cobrança de ICMS por substituição tributária', 'T7');
+                       VALUES (7, 'Diferimento', '51');
 INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (9, 'Outras', 'T9');
+                       VALUES (8, 'ICMS cobrado anteriormente por substituição tributária', '60');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (9, 'Com redução de base de cálculo e cobrança de ICMS por substituição tributária', '70');
+INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
+                       VALUES (10, 'Outras', '90');
 
 COMMIT WORK;
 
