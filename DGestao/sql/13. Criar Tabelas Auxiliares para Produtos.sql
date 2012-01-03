@@ -1,55 +1,14 @@
 CREATE DOMAIN DMN_TEXTO AS
 BLOB SUB_TYPE 1 SEGMENT SIZE 80;
 
-CREATE TABLE TBORIGEMPROD (
-    ORP_COD        SMALLINT NOT NULL,
-    ORP_DESCRICAO  VARCHAR(50),
-    ORP_SIGLA      VARCHAR(5)
-);
+CREATE DOMAIN DMN_VCHAR_01 AS
+VARCHAR(1);
 
-ALTER TABLE TBORIGEMPROD ADD CONSTRAINT PK_TBORIGEMPROD PRIMARY KEY (ORP_COD);
+CREATE DOMAIN DMN_VCHAR_02 AS
+VARCHAR(2);
 
-INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
-                       VALUES (0, 'Nacional', '0');
-INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
-                       VALUES (1, 'Estrangeira - Importação direta', '1');
-INSERT INTO TBORIGEMPROD (ORP_COD, ORP_DESCRICAO, ORP_SIGLA)
-                       VALUES (2, 'Estrangeira - Adquirida no mercado interno', '2');
-
-COMMIT WORK;
-
-CREATE TABLE TBTRIBUTACAO_TIPO (
-    TPT_COD        SMALLINT NOT NULL,
-    TPT_DESCRICAO  VARCHAR(100),
-    TPT_SIGLA      VARCHAR(10)
-);
-
-ALTER TABLE TBTRIBUTACAO_TIPO ADD CONSTRAINT PK_TBTRIBUTACAO_TIPO PRIMARY KEY (TPT_COD);
-
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (0, 'Tributada integralmente', '00');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (1, 'Tributada e com cobrança de ICMS por substituição tributária', '10');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (2, 'Com redução de base de cálculo', '20');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (3, 'Isenta ou não tributada e com cobrança de ICMS por substituição tributária', '30');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (4, 'Isenta', '40');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (5, 'Não tributada', '41');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (6, 'Suspensão', '50');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (7, 'Diferimento', '51');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (8, 'ICMS cobrado anteriormente por substituição tributária', '60');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (9, 'Com redução de base de cálculo e cobrança de ICMS por substituição tributária', '70');
-INSERT INTO TBTRIBUTACAO_TIPO (TPT_COD, TPT_DESCRICAO, TPT_SIGLA)
-                       VALUES (10, 'Outras', '90');
-
-COMMIT WORK;
+CREATE DOMAIN DMN_VCHAR_03 AS
+VARCHAR(3);
 
 CREATE SEQUENCE GEN_GRUPOPRODUTO_COD;
 
