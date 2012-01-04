@@ -1,4 +1,6 @@
 inherited frmGeUnidade: TfrmGeUnidade
+  Left = 549
+  Top = 268
   Caption = 'Tabela de Unidades'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -28,8 +30,8 @@ inherited frmGeUnidade: TfrmGeUnidade
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
-            Width = 52
+          inherited lbltFiltrar: TLabel
+            Width = 49
             Caption = 'Unidade:'
           end
           inherited edtFiltrar: TEdit

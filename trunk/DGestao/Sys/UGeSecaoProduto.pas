@@ -60,6 +60,8 @@ end;
 procedure TfrmGeSecaoProduto.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '000';
   NomeTabela     := 'TBSECAOPROD';
   CampoCodigo    := 'SCP_COD';

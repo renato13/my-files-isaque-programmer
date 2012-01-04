@@ -77,6 +77,8 @@ end;
 procedure TfrmGeUnidade.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '000';
   NomeTabela     := 'TBUNIDADEPROD';
   CampoCodigo    := 'UNP_COD';

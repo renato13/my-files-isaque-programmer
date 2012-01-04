@@ -1,4 +1,6 @@
 inherited frmGeEstado: TfrmGeEstado
+  Left = 547
+  Top = 262
   Caption = 'Tabela de Estados (UF)'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -26,7 +28,7 @@ inherited frmGeEstado: TfrmGeEstado
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
+          inherited lbltFiltrar: TLabel
             Caption = 'Estado:'
           end
         end

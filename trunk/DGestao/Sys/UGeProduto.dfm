@@ -1,6 +1,6 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 314
-  Top = 247
+  Left = 483
+  Top = 265
   Width = 800
   Height = 545
   Caption = 'Cadastro de Produtos'
@@ -63,6 +63,16 @@ inherited frmGeProduto: TfrmGeProduto
           item
             Expanded = False
             FieldName = 'PRECO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlue
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clBlue
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
             Width = 100
             Visible = True
           end>
@@ -73,8 +83,8 @@ inherited frmGeProduto: TfrmGeProduto
         inherited grpBxFiltro: TGroupBox
           Left = 512
           Width = 260
-          inherited Label1: TLabel
-            Width = 49
+          inherited lbltFiltrar: TLabel
+            Width = 48
             Caption = 'Produto:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -507,7 +517,6 @@ inherited frmGeProduto: TfrmGeProduto
           Width = 69
           Height = 13
           Caption = 'Valor IPI (R$):'
-          Enabled = False
           FocusControl = dbIPI
         end
         object lblAliquotaTipo: TLabel
@@ -516,7 +525,6 @@ inherited frmGeProduto: TfrmGeProduto
           Width = 43
           Height = 13
           Caption = 'Al'#237'quota:'
-          Enabled = False
           FocusControl = dbAliquotaTipo
         end
         object dbOrigem: TDBLookupComboBox
@@ -654,8 +662,8 @@ inherited frmGeProduto: TfrmGeProduto
           Width = 89
           Height = 21
           CharCase = ecUpperCase
+          DataField = 'VALOR_IPI'
           DataSource = DtSrcTabela
-          Enabled = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -669,9 +677,9 @@ inherited frmGeProduto: TfrmGeProduto
           Top = 80
           Width = 89
           Height = 21
+          DataField = 'ALIQUOTA_TIPO'
           DataSource = DtSrcTabela
           DropDownRows = 10
-          Enabled = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -873,7 +881,9 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Codcfop'
       '  , p.Codbarra_ean'
       '  , p.Codunidade'
+      '  , p.Aliquota_tipo'
       '  , p.Aliquota'
+      '  , p.Valor_ipi'
       '  , g.Descri as Descricao_Grupo'
       '  , coalesce(s.Scp_descricao, p.Secao) as Descricao_Secao'
       '  , coalesce(u.Unp_descricao, p.Unidade) as Descricao_Unidade'
@@ -1003,10 +1013,23 @@ inherited frmGeProduto: TfrmGeProduto
       FieldName = 'CODUNIDADE'
       Origin = 'TBPRODUTO.CODUNIDADE'
     end
+    object IbDtstTabelaALIQUOTA_TIPO: TSmallintField
+      FieldName = 'ALIQUOTA_TIPO'
+      Origin = 'TBPRODUTO.ALIQUOTA_TIPO'
+      DisplayFormat = 'Al'#237'quota'
+    end
     object IbDtstTabelaALIQUOTA: TIBBCDField
       DisplayLabel = '% Al'#237'quota'
       FieldName = 'ALIQUOTA'
       Origin = 'TBPRODUTO.ALIQUOTA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object IbDtstTabelaVALOR_IPI: TIBBCDField
+      DisplayLabel = 'Valor IPI (R$)'
+      FieldName = 'VALOR_IPI'
+      Origin = 'TBPRODUTO.VALOR_IPI'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
@@ -1069,7 +1092,9 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODCFOP,'
       '  CODBARRA_EAN,'
       '  CODUNIDADE,'
-      '  ALIQUOTA'
+      '  ALIQUOTA_TIPO,'
+      '  ALIQUOTA,'
+      '  VALOR_IPI'
       'from TBPRODUTO '
       'where'
       '  CODIGO = :CODIGO')
@@ -1096,7 +1121,9 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODCFOP = :CODCFOP,'
       '  CODBARRA_EAN = :CODBARRA_EAN,'
       '  CODUNIDADE = :CODUNIDADE,'
-      '  ALIQUOTA = :ALIQUOTA'
+      '  ALIQUOTA_TIPO = :ALIQUOTA_TIPO,'
+      '  ALIQUOTA = :ALIQUOTA,'
+      '  VALOR_IPI = :VALOR_IPI'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
@@ -1107,7 +1134,9 @@ inherited frmGeProduto: TfrmGeProduto
       
         '   ESTOQMIN, CODGRUPO, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, ' +
         'CODTRIBUTACAO, '
-      '   CST, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUOTA)'
+      
+        '   CST, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUOTA_TIPO, ALIQUO' +
+        'TA, VALOR_IPI)'
       'values'
       
         '  (:CODIGO, :COD, :DESCRI, :MODELO, :PRECO, :REFERENCIA, :SECAO,' +
@@ -1117,7 +1146,8 @@ inherited frmGeProduto: TfrmGeProduto
         'AO, :CODORIGEM, '
       
         '   :CODTRIBUTACAO, :CST, :CODCFOP, :CODBARRA_EAN, :CODUNIDADE, :' +
-        'ALIQUOTA)')
+        'ALIQUOTA_TIPO, '
+      '   :ALIQUOTA, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'

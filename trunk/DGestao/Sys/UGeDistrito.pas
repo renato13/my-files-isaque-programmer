@@ -60,6 +60,8 @@ end;
 procedure TfrmGeDistrito.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '000';
   NomeTabela     := 'TBDISTRITO';
   CampoCodigo    := 'dis_cod';

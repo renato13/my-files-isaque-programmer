@@ -64,6 +64,8 @@ end;
 procedure TfrmGeFormaPagto.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '00';
   NomeTabela     := 'TBFORMPAGTO';
   CampoCodigo    := 'COD';

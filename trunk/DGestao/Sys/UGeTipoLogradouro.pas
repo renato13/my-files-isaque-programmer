@@ -50,6 +50,8 @@ end;
 procedure TfrmGeTipoLogradouro.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '00';
   CampoCodigo    := 'tlg_cod';
   CampoDescricao := 'tlg_descricao';

@@ -124,6 +124,8 @@ end;
 procedure TfrmGeFornecedor.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbPessoaFisica;
+
   tblGrupo.Open;
   
   NomeTabela     := 'TBFORNECEDOR';

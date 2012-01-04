@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, UGrPadrao, IBCustomDataSet, StdCtrls, Buttons, ExtCtrls, Grids,
-  DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList;
+  DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList, TypInfo;
 
 type
   TfrmGrPadraoCadastro = class(TfrmGrPadrao)
@@ -26,7 +26,7 @@ type
     dbgDados: TDBGrid;
     pnlFiltros: TPanel;
     grpBxFiltro: TGroupBox;
-    Label1: TLabel;
+    lbltFiltrar: TLabel;
     btnFiltrar: TSpeedButton;
     edtFiltrar: TEdit;
     tbsCadastro: TTabSheet;
@@ -74,6 +74,7 @@ type
     fOcorreuErro    ,
     fAbrirTabelaAuto: Boolean;
     sSQL : TStringList;
+    fControlFirst : TWinControl;
     procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
     procedure CentralizarCodigo;
   public
@@ -86,6 +87,7 @@ type
     property OcorreuErro : Boolean read fOcorreuErro;
     property AbrirTabelaAuto : Boolean read fAbrirTabelaAuto write fAbrirTabelaAuto;
     property SQLTabela : TStringList read sSQL;
+    property ControlFirstEdit : TWinControl read fControlFirst write fControlFirst;
     procedure UpdateGenerator;
   protected
     procedure FiltarDados; overload;
@@ -125,6 +127,8 @@ begin
 
   dbCodigo.TabStop    := not dbCodigo.ReadOnly;
   pgcGuias.ActivePage := tbsTabela;
+
+  ControlFirstEdit := nil;
 end;
 
 procedure TfrmGrPadraoCadastro.dbgDadosDrawColumnCell(Sender: TObject;
@@ -178,6 +182,8 @@ begin
   begin
     fOcorreuErro        := False;
     pgcGuias.ActivePage := tbsCadastro;
+    if ( Assigned(ControlFirstEdit) ) then
+      ControlFirstEdit.SetFocus;
   end;
 end;
 

@@ -47,9 +47,11 @@ var
   function GetPaisIDDefault : String;
   function GetEstadoIDDefault : Integer;
   function GetCidadeIDDefault : Integer;
+  function GetCfopIDDefault : Integer;
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
+  function GetCfopNomeDefault : String;
   function GetNextID(NomeTabela, CampoChave : String) : Largeint;
 
 const
@@ -111,6 +113,11 @@ begin
   Result := FileINI.ReadInteger('Default', 'CidadeID', 170);
 end;
 
+function GetCfopIDDefault : Integer;
+begin
+  Result := FileINI.ReadInteger('Default', 'CfopID', 5102);
+end;
+
 function GetPaisNomeDefault : String;
 begin
   with DMBusiness, qryBusca do
@@ -156,6 +163,20 @@ begin
   end;
 end;
 
+function GetCfopNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select cfop_descricao from TBCFOP where cfop_cod = ' + IntToStr(GetCfopIDDefault));
+    Open;
+
+    Result := FieldByName('cfop_descricao').AsString;
+
+    Close;
+  end;
+end;
 
 function GetNextID(NomeTabela, CampoChave : String) : Largeint;
 begin

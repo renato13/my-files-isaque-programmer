@@ -105,6 +105,8 @@ end;
 procedure TfrmGeLogradouro.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbTipo;
+
   tblTipo.Open;
 
   DisplayFormatCodigo := '0000';

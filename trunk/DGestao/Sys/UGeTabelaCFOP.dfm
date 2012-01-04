@@ -1,4 +1,6 @@
 inherited frmGeTabelaCFOP: TfrmGeTabelaCFOP
+  Left = 554
+  Top = 267
   Width = 744
   Caption = 'Tabela CFOP (C'#243'digo Fiscal de Opera'#231#245'es e Presta'#231#245'es)'
   OldCreateOrder = True
@@ -38,8 +40,8 @@ inherited frmGeTabelaCFOP: TfrmGeTabelaCFOP
         Width = 720
         inherited grpBxFiltro: TGroupBox
           Left = 464
-          inherited Label1: TLabel
-            Width = 37
+          inherited lbltFiltrar: TLabel
+            Width = 31
             Caption = 'CFOP:'
           end
           inherited edtFiltrar: TEdit

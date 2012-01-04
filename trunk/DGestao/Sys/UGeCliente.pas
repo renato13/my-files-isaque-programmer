@@ -115,6 +115,8 @@ end;
 procedure TfrmGeCliente.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbPessoaFisica;
+
   NomeTabela     := 'TBCLIENTE';
   CampoCodigo    := 'codigo';
   CampoDescricao := 'nome';

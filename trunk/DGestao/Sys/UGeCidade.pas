@@ -105,6 +105,8 @@ end;
 procedure TfrmGeCidade.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   NomeTabela     := 'TBCIDADE';
   CampoCodigo    := 'cid_cod';
   CampoDescricao := 'cid_nome';

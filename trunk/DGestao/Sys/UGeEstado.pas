@@ -80,6 +80,8 @@ end;
 procedure TfrmGeEstado.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbCodigo;
+
   DisplayFormatCodigo := '00';
   CampoCodigo    := 'est_cod';
   CampoDescricao := 'est_nome';

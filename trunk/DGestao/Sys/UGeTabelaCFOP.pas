@@ -63,6 +63,8 @@ end;
 procedure TfrmGeTabelaCFOP.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbCodigo;
+
   DisplayFormatCodigo := '0000';
   NomeTabela     := 'TBCFOP';
   CampoCodigo    := 'CFOP_COD';

@@ -1,11 +1,11 @@
 inherited frmGeGrupoProduto: TfrmGeGrupoProduto
-  ActiveControl = dbCodigo
+  Left = 548
+  Top = 271
   Caption = 'Tabela de Grupos de Produtos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -23,8 +23,8 @@ inherited frmGeGrupoProduto: TfrmGeGrupoProduto
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
-            Width = 39
+          inherited lbltFiltrar: TLabel
+            Width = 37
             Caption = 'Grupo:'
           end
           inherited edtFiltrar: TEdit
@@ -50,7 +50,6 @@ inherited frmGeGrupoProduto: TfrmGeGrupoProduto
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'COD'
-          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88
