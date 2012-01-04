@@ -1,6 +1,6 @@
 object frmGrPadraoCadastro: TfrmGrPadraoCadastro
-  Left = 648
-  Top = 284
+  Left = 555
+  Top = 303
   Width = 742
   Height = 440
   ActiveControl = dbCodigo
@@ -398,20 +398,20 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
           Height = 54
           Align = alRight
           Caption = 'Pesquisar ...'
-          Font.Charset = DEFAULT_CHARSET
+          Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
-          Font.Name = 'MS Sans Serif'
+          Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 0
           DesignSize = (
             252
             54)
-          object Label1: TLabel
+          object lbltFiltrar: TLabel
             Left = 6
             Top = 25
-            Width = 44
+            Width = 41
             Height = 13
             Caption = 'Tabela:'
           end

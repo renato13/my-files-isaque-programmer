@@ -88,6 +88,8 @@ type
     lblAliquotaTipo: TLabel;
     tblAliquota: TIBTable;
     dtsAliquota: TDataSource;
+    IbDtstTabelaALIQUOTA_TIPO: TSmallintField;
+    IbDtstTabelaVALOR_IPI: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -130,6 +132,8 @@ end;
 procedure TfrmGeProduto.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbCodigoEAN;
+
   fOrdenado := False;
    
   tblEmpresa.Open;
@@ -231,6 +235,11 @@ begin
   IbDtstTabelaQTDE.Value     := 0;
   IbDtstTabelaCUSTOMEDIO.Value := 0;
   IbDtstTabelaPRECO.Value      := 0;
+  IbDtstTabelaCODCFOP.Value        := GetCfopIDDefault;
+  IbDtstTabelaCFOP_DESCRICAO.Value := GetCfopNomeDefault;
+  IbDtstTabelaALIQUOTA_TIPO.Value  := 0; // ICMS
+  IbDtstTabelaALIQUOTA.Value       := 0;
+  IbDtstTabelaVALOR_IPI.Value      := 0;
 end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);

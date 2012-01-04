@@ -1,4 +1,6 @@
 inherited frmGeCidade: TfrmGeCidade
+  Left = 497
+  Top = 273
   Caption = 'Tabela de Cidades (Munic'#237'pios)'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -33,7 +35,7 @@ inherited frmGeCidade: TfrmGeCidade
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
+          inherited lbltFiltrar: TLabel
             Caption = 'Cidade:'
           end
         end

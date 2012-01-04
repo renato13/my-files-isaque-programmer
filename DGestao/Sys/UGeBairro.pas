@@ -94,6 +94,8 @@ end;
 procedure TfrmGeBairro.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '0000';
   NomeTabela     := 'TBBAIRRO';
   CampoCodigo    := 'bai_cod';

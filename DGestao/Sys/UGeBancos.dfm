@@ -1,4 +1,6 @@
 inherited frmGeBancos: TfrmGeBancos
+  Left = 499
+  Top = 273
   Caption = 'Tabela de Bancos'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -30,8 +32,8 @@ inherited frmGeBancos: TfrmGeBancos
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
-            Width = 41
+          inherited lbltFiltrar: TLabel
+            Width = 37
             Caption = 'Banco:'
           end
         end

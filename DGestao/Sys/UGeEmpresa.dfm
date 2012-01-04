@@ -1,7 +1,8 @@
 inherited frmGeEmpresa: TfrmGeEmpresa
+  Left = 538
+  Top = 278
   Width = 763
   Height = 465
-  ActiveControl = dbCodigo
   Caption = 'Cadastro da Empresa(s)'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -30,7 +31,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289
@@ -76,8 +76,8 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         inherited grpBxFiltro: TGroupBox
           Left = 453
           Width = 282
-          inherited Label1: TLabel
-            Width = 53
+          inherited lbltFiltrar: TLabel
+            Width = 52
             Caption = 'Empresa:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -149,7 +149,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODIGO'
-          ReadOnly = True
         end
         object dbPessoaFisica: TDBCheckBox
           Left = 88

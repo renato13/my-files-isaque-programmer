@@ -60,6 +60,8 @@ end;
 procedure TfrmGeGrupoProduto.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbNome;
+
   DisplayFormatCodigo := '000';
   NomeTabela     := 'TBGRUPOPROD';
   CampoCodigo    := 'COD';

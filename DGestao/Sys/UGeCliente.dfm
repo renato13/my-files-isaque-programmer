@@ -1,7 +1,8 @@
 inherited frmGeCliente: TfrmGeCliente
+  Left = 526
+  Top = 268
   Width = 763
   Height = 465
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -30,7 +31,6 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289
@@ -78,7 +78,8 @@ inherited frmGeCliente: TfrmGeCliente
         inherited grpBxFiltro: TGroupBox
           Left = 464
           Width = 271
-          inherited Label1: TLabel
+          inherited lbltFiltrar: TLabel
+            Width = 42
             Caption = 'Cliente:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -142,7 +143,6 @@ inherited frmGeCliente: TfrmGeCliente
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODIGO'
-          ReadOnly = True
         end
         object dbPessoaFisica: TDBCheckBox
           Left = 88

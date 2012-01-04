@@ -1,11 +1,11 @@
 inherited frmGeFormaPagto: TfrmGeFormaPagto
-  ActiveControl = dbCodigo
+  Left = 553
+  Top = 269
   Caption = 'Tabela de Formas de Pagamento'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -30,8 +30,8 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
         inherited grpBxFiltro: TGroupBox
           Left = 392
           Width = 322
-          inherited Label1: TLabel
-            Width = 106
+          inherited lbltFiltrar: TLabel
+            Width = 107
             Caption = 'Forma Pagamento:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -67,7 +67,6 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'COD'
-          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88

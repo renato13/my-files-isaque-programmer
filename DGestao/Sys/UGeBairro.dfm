@@ -1,11 +1,11 @@
 inherited frmGeBairro: TfrmGeBairro
-  ActiveControl = dbCodigo
+  Left = 508
+  Top = 284
   Caption = 'Tabela de Bairros'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -60,7 +60,6 @@ inherited frmGeBairro: TfrmGeBairro
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'BAI_COD'
-          ReadOnly = True
         end
         object dbCidade: TRxDBComboEdit
           Left = 16

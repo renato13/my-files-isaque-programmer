@@ -1,11 +1,11 @@
 inherited frmGeTipoLogradouro: TfrmGeTipoLogradouro
-  ActiveControl = dbCodigo
+  Left = 552
+  Top = 272
   Caption = 'Tabela de Tipos de Logradouros'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -29,8 +29,8 @@ inherited frmGeTipoLogradouro: TfrmGeTipoLogradouro
         inherited grpBxFiltro: TGroupBox
           Left = 416
           Width = 298
-          inherited Label1: TLabel
-            Width = 98
+          inherited lbltFiltrar: TLabel
+            Width = 95
             Caption = 'Tipo Logradouro:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -66,7 +66,6 @@ inherited frmGeTipoLogradouro: TfrmGeTipoLogradouro
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'TLG_COD'
-          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88

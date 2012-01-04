@@ -122,6 +122,8 @@ end;
 procedure TfrmGeEmpresa.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbPessoaFisica;
+
   NomeTabela     := 'TBEMPRESA';
   CampoCodigo    := 'codigo';
   CampoDescricao := 'Rzsoc';

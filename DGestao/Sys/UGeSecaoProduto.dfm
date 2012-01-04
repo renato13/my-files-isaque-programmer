@@ -1,4 +1,6 @@
 inherited frmGeSecaoProduto: TfrmGeSecaoProduto
+  Left = 549
+  Top = 277
   Caption = 'Tabela de Se'#231#245'es de Produtos'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -21,8 +23,8 @@ inherited frmGeSecaoProduto: TfrmGeSecaoProduto
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          inherited Label1: TLabel
-            Width = 41
+          inherited lbltFiltrar: TLabel
+            Width = 37
             Caption = 'Se'#231#227'o:'
           end
           inherited edtFiltrar: TEdit

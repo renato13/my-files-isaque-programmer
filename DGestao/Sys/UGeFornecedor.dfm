@@ -1,7 +1,8 @@
 inherited frmGeFornecedor: TfrmGeFornecedor
+  Left = 546
+  Top = 272
   Width = 763
   Height = 465
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Fornecedores'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -30,7 +31,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289
@@ -77,8 +77,8 @@ inherited frmGeFornecedor: TfrmGeFornecedor
         inherited grpBxFiltro: TGroupBox
           Left = 464
           Width = 271
-          inherited Label1: TLabel
-            Width = 69
+          inherited lbltFiltrar: TLabel
+            Width = 67
             Caption = 'Fornecedor:'
           end
           inherited btnFiltrar: TSpeedButton
@@ -149,7 +149,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODFORN'
-          ReadOnly = True
         end
         object dbPessoaFisica: TDBCheckBox
           Left = 88

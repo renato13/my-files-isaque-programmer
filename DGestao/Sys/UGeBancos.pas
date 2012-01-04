@@ -88,6 +88,8 @@ end;
 procedure TfrmGeBancos.FormCreate(Sender: TObject);
 begin
   inherited;
+  ControlFirstEdit := dbCodigo;
+
   DisplayFormatCodigo := '0000';
   CampoCodigo    := 'bco_cod';
   CampoDescricao := 'bco_nome';
