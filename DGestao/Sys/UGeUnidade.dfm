@@ -1,11 +1,9 @@
 inherited frmGeUnidade: TfrmGeUnidade
-  ActiveControl = dbCodigo
   Caption = 'Tabela de Unidades'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -64,7 +62,6 @@ inherited frmGeUnidade: TfrmGeUnidade
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'UNP_COD'
-          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88

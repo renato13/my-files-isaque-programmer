@@ -1,19 +1,19 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas',0,1,104,60,241,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeLogradouro.pas',0,1,100,1,1,1,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTabelaCFOP.pas',0,1,1,1,1,1,0
-File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEstado.pas',0,1,1,1,1,1,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBancos.pas',0,1,1,1,1,1,0
-File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas',0,1,1,1,1,1,0
-File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBairro.pas',0,1,1,1,1,1,0
-File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCidade.pas',0,1,1,1,1,1,0
-File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,1,40,12,1,0
-File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeDistrito.pas',0,1,10,19,68,1,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas',0,1,110,53,113,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCidade.pas',0,1,45,31,99,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeUnidade.pas',0,1,52,55,100,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEstado.pas',0,1,31,1,112,1,0
+File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas',0,1,148,88,149,1,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeSecaoProduto.pas',0,1,1,1,48,1,0
+File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGrProduto.pas',0,1,1,1,1,1,0
+File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeLogradouro.pas',0,1,100,1,1,1,0
+File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTabelaCFOP.pas',0,1,1,1,1,1,0
+File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBancos.pas',0,1,1,1,1,1,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=4
 EditWindowCount=1
@@ -23,12 +23,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -38,11 +38,11 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
@@ -76,7 +76,7 @@ LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000
 RightPanelSize=0
 BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -94,16 +94,16 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-CursorX=63
-CursorY=310
-TopLine=292
+CursorX=29
+CursorY=201
+TopLine=195
 LeftCol=1
 
 [View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-CursorX=1
-CursorY=1
-TopLine=1
+CursorX=20
+CursorY=138
+TopLine=118
 LeftCol=1
 
 [Watches]
@@ -137,11 +137,11 @@ State=0
 Left=0
 Top=0
 Width=1
-Height=911
+Height=918
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1
-ClientHeight=911
+ClientHeight=918
 TBDockHeight=383
 LRDockWidth=547
 Dockable=1
@@ -176,8 +176,8 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Caption
-ExpandedItems=
+SelectedItem=Enabled
+ExpandedItems=TableTypes,Title
 HiddenCategories=
 
 [ObjectTree]
@@ -187,11 +187,11 @@ State=0
 Left=0
 Top=0
 Width=1
-Height=911
+Height=918
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1
-ClientHeight=911
+ClientHeight=918
 TBDockHeight=354
 LRDockWidth=190
 Dockable=1
@@ -201,13 +201,13 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=121
+Top=114
 Width=27
-Height=919
+Height=926
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=27
-ClientHeight=919
+ClientHeight=926
 0=ObjectTree
 1=ProjectManager
 DockCount=2
@@ -252,11 +252,11 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=794
+Height=801
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=794
+ClientHeight=801
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
@@ -265,13 +265,13 @@ Dockable=1
 Create=1
 Visible=0
 State=0
-Left=-11
-Top=-739
-Width=443
+Left=12
+Top=0
+Width=1690
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1690
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
