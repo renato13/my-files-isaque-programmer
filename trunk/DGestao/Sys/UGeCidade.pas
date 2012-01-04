@@ -105,8 +105,11 @@ end;
 procedure TfrmGeCidade.FormCreate(Sender: TObject);
 begin
   inherited;
-  CampoCodigo     := 'cid_cod';
-  CampoDescricao  := 'cid_nome';
+  NomeTabela     := 'TBCIDADE';
+  CampoCodigo    := 'cid_cod';
+  CampoDescricao := 'cid_nome';
+
+  UpdateGenerator;
 end;
 
 procedure TfrmGeCidade.dbEstadoButtonClick(Sender: TObject);

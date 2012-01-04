@@ -129,7 +129,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
-  UGeTabelaCFOP, UGeFormaPagto;
+  UGeTabelaCFOP, UGeFormaPagto, UGeProduto;
 
 {$R *.dfm}
 
@@ -194,10 +194,10 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnProdClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGrProdutos, frmGrProdutos);
-  frmGrProdutos.ShowModal;
-  frmGrProdutos.Destroy;
-
+//  Application.CreateForm(TfrmGrProdutos, frmGrProdutos);
+//  frmGrProdutos.ShowModal;
+//  frmGrProdutos.Destroy;
+  MostrarTabelaProdutos(Self);
 end;
 
 procedure TfrmPrinc.Entrada1Click(Sender: TObject);

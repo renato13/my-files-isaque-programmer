@@ -1,11 +1,9 @@
 inherited frmGeSecaoProduto: TfrmGeSecaoProduto
-  ActiveControl = dbCodigo
   Caption = 'Tabela de Se'#231#245'es de Produtos'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -50,7 +48,6 @@ inherited frmGeSecaoProduto: TfrmGeSecaoProduto
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'SCP_COD'
-          ReadOnly = True
         end
         object dbNome: TDBEdit
           Left = 88
@@ -77,8 +74,8 @@ inherited frmGeSecaoProduto: TfrmGeSecaoProduto
       '    s.Scp_cod'
       '  , s.Scp_descricao'
       'from TBSECAOPROD s')
-    GeneratorField.Field = 'COD'
-    GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
+    GeneratorField.Field = 'SCP_COD'
+    GeneratorField.Generator = 'GEN_SECAOPRODUTO_ID'
     object IbDtstTabelaSCP_COD: TSmallintField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'SCP_COD'
