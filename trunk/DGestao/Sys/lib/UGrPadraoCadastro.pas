@@ -123,6 +123,7 @@ begin
   sSQL := TStringList.Create;
   sSQL.AddStrings( IbDtstTabela.SelectSQL );
 
+  dbCodigo.TabStop    := not dbCodigo.ReadOnly;
   pgcGuias.ActivePage := tbsTabela;
 end;
 
