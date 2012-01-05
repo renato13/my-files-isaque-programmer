@@ -135,24 +135,26 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
     RefreshSQL.Strings = (
       'Select '
       '  COD,'
-      '  DESCRI'
-      'from TBGRUPOPROD '
+      '  DESCRI,'
+      '  ACRESCIMO'
+      'from TBFORMPAGTO '
       'where'
       '  COD = :COD')
     ModifySQL.Strings = (
-      'update TBGRUPOPROD'
+      'update TBFORMPAGTO'
       'set'
       '  COD = :COD,'
-      '  DESCRI = :DESCRI'
+      '  DESCRI = :DESCRI,'
+      '  ACRESCIMO = :ACRESCIMO'
       'where'
       '  COD = :OLD_COD')
     InsertSQL.Strings = (
-      'insert into TBGRUPOPROD'
-      '  (COD, DESCRI)'
+      'insert into TBFORMPAGTO'
+      '  (COD, DESCRI, ACRESCIMO)'
       'values'
-      '  (:COD, :DESCRI)')
+      '  (:COD, :DESCRI, :ACRESCIMO)')
     DeleteSQL.Strings = (
-      'delete from TBGRUPOPROD'
+      'delete from TBFORMPAGTO'
       'where'
       '  COD = :OLD_COD')
   end

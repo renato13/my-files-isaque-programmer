@@ -237,10 +237,14 @@ procedure TfrmGeFornecedor.DtSrcTabelaStateChange(Sender: TObject);
 begin
   inherited;
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+  begin
+    pgcMaisDados.ActivePageIndex := 0;
+    
     if ( IbDtstTabelaPESSOA_FISICA.AsInteger = 1 ) then
-      IbDtstTabelaCNPJ.EditMask := '000.000.000-00;0; '
+      IbDtstTabelaCNPJ.EditMask := '999.999.999-99;0; '
     else
-      IbDtstTabelaCNPJ.EditMask := '00.000.000/0000-00;0; '
+      IbDtstTabelaCNPJ.EditMask := '99.999.999/9999-99;0; ';
+  end
   else
     IbDtstTabelaCNPJ.EditMask := '';
 end;
@@ -251,9 +255,9 @@ begin
   inherited;
   if ( Field = IbDtstTabela.FieldByName('PESSOA_FISICA') ) then
     if ( IbDtstTabelaPESSOA_FISICA.AsInteger = 1 ) then
-      IbDtstTabelaCNPJ.EditMask := '000.000.000-00;0; '
+      IbDtstTabelaCNPJ.EditMask := '999.999.999-99;0; '
     else
-      IbDtstTabelaCNPJ.EditMask := '00.000.000/0000-00;0; ';
+      IbDtstTabelaCNPJ.EditMask := '99.999.999/9999-99;0; '
 end;
 
 procedure TfrmGeFornecedor.btbtnSalvarClick(Sender: TObject);
