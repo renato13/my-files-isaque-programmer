@@ -1,6 +1,6 @@
 object frmGrVendas: TfrmGrVendas
-  Left = 291
-  Top = 138
+  Left = 437
+  Top = 260
   Width = 608
   Height = 500
   Caption = 'Vendas'
@@ -254,7 +254,6 @@ object frmGrVendas: TfrmGrVendas
     Align = alClient
     DockSite = True
     HotTrack = True
-    TabIndex = 0
     TabOrder = 2
     object TabSheetLista: TTabSheet
       Caption = 'Lista'
@@ -346,14 +345,14 @@ object frmGrVendas: TfrmGrVendas
         Left = 0
         Top = 33
         Width = 584
-        Height = 317
+        Height = 315
         Align = alClient
       end
       object Bevel2: TBevel
         Left = 0
         Top = 33
         Width = 584
-        Height = 317
+        Height = 315
         Align = alClient
       end
       object Panel1: TPanel
@@ -431,7 +430,7 @@ object frmGrVendas: TfrmGrVendas
         Left = 0
         Top = 33
         Width = 584
-        Height = 317
+        Height = 315
         Align = alClient
         Caption = 'Itens Lan'#231'ados'
         Font.Charset = DEFAULT_CHARSET
@@ -466,7 +465,7 @@ object frmGrVendas: TfrmGrVendas
           Left = 2
           Top = 15
           Width = 580
-          Height = 247
+          Height = 245
           Align = alClient
           Color = clSilver
           DataSource = dtsrcVendasItens
@@ -611,7 +610,7 @@ object frmGrVendas: TfrmGrVendas
         end
         object Panel3: TPanel
           Left = 2
-          Top = 262
+          Top = 260
           Width = 580
           Height = 53
           Align = alBottom

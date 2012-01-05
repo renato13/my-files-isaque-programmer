@@ -2906,7 +2906,7 @@ object frmPrinc: TfrmPrinc
         end
         object nmCondicaoPagto: TMenuItem
           Caption = 'Condi'#231#245'es de Pagamento'
-          Enabled = False
+          OnClick = nmCondicaoPagtoClick
         end
       end
       object N4: TMenuItem

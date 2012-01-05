@@ -1,7 +1,5 @@
-inherited frmGeFormaPagto: TfrmGeFormaPagto
-  Left = 553
-  Top = 269
-  Caption = 'Tabela de Formas de Pagamento'
+inherited frmGeVendedor: TfrmGeVendedor
+  Caption = 'Cadastro de Vendedores'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
@@ -16,30 +14,31 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           end
           item
             Expanded = False
-            FieldName = 'DESCRI'
+            FieldName = 'NOME'
             Width = 350
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'ACRESCIMO'
+            FieldName = 'CPF'
+            Width = 100
             Visible = True
           end>
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          Left = 392
-          Width = 322
+          Left = 424
+          Width = 290
           inherited lbltFiltrar: TLabel
-            Width = 107
-            Caption = 'Forma Pagamento:'
+            Width = 57
+            Caption = 'Vendedor:'
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 277
+            Left = 245
           end
           inherited edtFiltrar: TEdit
-            Left = 120
-            Width = 153
+            Left = 72
+            Width = 169
           end
         end
       end
@@ -53,16 +52,17 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
         object lblNome: TLabel [1]
           Left = 88
           Top = 24
-          Width = 50
+          Width = 31
           Height = 13
-          Caption = 'Descri'#231#227'o:'
+          Caption = 'Nome:'
         end
-        object lblAcrescimo: TLabel [2]
+        object lblCPF: TLabel [2]
           Left = 432
           Top = 24
-          Width = 66
+          Width = 23
           Height = 13
-          Caption = '% Acr'#233'scimo:'
+          Caption = 'CPF:'
+          FocusControl = dbCPF
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -74,7 +74,7 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           Width = 337
           Height = 21
           CharCase = ecUpperCase
-          DataField = 'DESCRI'
+          DataField = 'NOME'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -84,13 +84,13 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           ParentFont = False
           TabOrder = 1
         end
-        object dbAcrescimo: TDBEdit
+        object dbCPF: TDBEdit
           Left = 432
           Top = 40
-          Width = 97
+          Width = 153
           Height = 21
           CharCase = ecUpperCase
-          DataField = 'ACRESCIMO'
+          DataField = 'CPF'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -107,55 +107,56 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'
-      '    p.Cod'
-      '  , p.Descri'
-      '  , p.Acrescimo'
-      'from TBFORMPAGTO p')
+      '    v.Cod'
+      '  , v.Nome'
+      '  , v.Cpf'
+      'from TBVENDEDOR v')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
-    object IbDtstTabelaCOD: TSmallintField
+    object IbDtstTabelaCOD: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'COD'
-      Origin = 'TBFORMPAGTO.COD'
+      Origin = 'TBVENDEDOR.COD'
       Required = True
     end
-    object IbDtstTabelaDESCRI: TIBStringField
-      DisplayLabel = 'Descri'#231#227'o'
-      FieldName = 'DESCRI'
-      Origin = 'TBFORMPAGTO.DESCRI'
-      Size = 30
+    object IbDtstTabelaNOME: TIBStringField
+      DisplayLabel = 'Nome'
+      FieldName = 'NOME'
+      Origin = 'TBVENDEDOR.NOME'
+      Size = 60
     end
-    object IbDtstTabelaACRESCIMO: TFloatField
-      DisplayLabel = '% Acr'#233'scimo'
-      FieldName = 'ACRESCIMO'
-      Origin = 'TBFORMPAGTO.ACRESCIMO'
-      DisplayFormat = ',0.00'
+    object IbDtstTabelaCPF: TIBStringField
+      FieldName = 'CPF'
+      Origin = 'TBVENDEDOR.CPF'
+      Required = True
+      EditMask = '000.000.000-00;0; '
+      Size = 12
     end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
       '  COD,'
-      '  DESCRI,'
-      '  ACRESCIMO'
-      'from TBFORMPAGTO '
+      '  NOME,'
+      '  CPF'
+      'from TBVENDEDOR '
       'where'
       '  COD = :COD')
     ModifySQL.Strings = (
-      'update TBFORMPAGTO'
+      'update TBVENDEDOR'
       'set'
       '  COD = :COD,'
-      '  DESCRI = :DESCRI,'
-      '  ACRESCIMO = :ACRESCIMO'
+      '  NOME = :NOME,'
+      '  CPF = :CPF'
       'where'
       '  COD = :OLD_COD')
     InsertSQL.Strings = (
-      'insert into TBFORMPAGTO'
-      '  (COD, DESCRI, ACRESCIMO)'
+      'insert into TBVENDEDOR'
+      '  (COD, NOME, CPF)'
       'values'
-      '  (:COD, :DESCRI, :ACRESCIMO)')
+      '  (:COD, :NOME, :CPF)')
     DeleteSQL.Strings = (
-      'delete from TBFORMPAGTO'
+      'delete from TBVENDEDOR'
       'where'
       '  COD = :OLD_COD')
   end

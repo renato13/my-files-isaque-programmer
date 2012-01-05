@@ -113,6 +113,7 @@ type
     procedure nmTabelaCFOPClick(Sender: TObject);
     procedure nmFormaPagtoClick(Sender: TObject);
     procedure Vendedor1Click(Sender: TObject);
+    procedure nmCondicaoPagtoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -130,7 +131,8 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
-  UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor;
+  UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
+  UGeCondicaoPagto;
 
 {$R *.dfm}
 
@@ -221,9 +223,10 @@ end;
 
 procedure TfrmPrinc.Vendas2Click(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGrVendas, frmGrVendas);
-  frmGrVendas.ShowModal;
-  frmGrVendas.Destroy;
+//  Application.CreateForm(TfrmGrVendas, frmGrVendas);
+//  frmGrVendas.ShowModal;
+//  frmGrVendas.Destroy;
+  MostrarControleVendas(Self);
 end;
 
 procedure TfrmPrinc.Cliente2Click(Sender: TObject);
@@ -349,6 +352,11 @@ end;
 procedure TfrmPrinc.Vendedor1Click(Sender: TObject);
 begin
   MostrarTabelaVendedores(Self);
+end;
+
+procedure TfrmPrinc.nmCondicaoPagtoClick(Sender: TObject);
+begin
+  MostrarTabelaCondicoesPagto(Self);
 end;
 
 end.
