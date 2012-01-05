@@ -3353,7 +3353,7 @@ object frmPrinc: TfrmPrinc
       end
       object Vendedor1: TMenuItem
         Caption = 'Vendedor'
-        Enabled = False
+        OnClick = Vendedor1Click
       end
       object N1: TMenuItem
         Caption = '-'

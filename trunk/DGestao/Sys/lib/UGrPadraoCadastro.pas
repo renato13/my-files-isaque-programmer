@@ -353,7 +353,7 @@ begin
   begin
     Close;
     if ( Vazia ) then
-      if ( Pos('where', UpperCase(SelectSQL.Text)) = 0 ) then
+      if ( Pos('where', LowerCase(SelectSQL.Text)) = 0 ) then
         SelectSQL.Add('where 1=0');
     Open;
   end;

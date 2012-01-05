@@ -1,6 +1,6 @@
 object frmVenda: TfrmVenda
-  Left = 274
-  Top = 144
+  Left = 644
+  Top = 202
   Width = 633
   Height = 515
   AutoSize = True
@@ -22,14 +22,14 @@ object frmVenda: TfrmVenda
     Left = 0
     Top = 73
     Width = 617
-    Height = 371
+    Height = 369
     Align = alClient
   end
   object Bevel2: TBevel
     Left = 0
     Top = 73
     Width = 617
-    Height = 371
+    Height = 369
     Align = alClient
   end
   object Panel1: TPanel
@@ -146,11 +146,10 @@ object frmVenda: TfrmVenda
     Left = 0
     Top = 73
     Width = 617
-    Height = 371
-    ActivePage = TabSheetFatura
+    Height = 369
+    ActivePage = TabSheetItens
     Align = alClient
     HotTrack = True
-    TabIndex = 1
     TabOrder = 1
     object TabSheetItens: TTabSheet
       Caption = 'Itens'
@@ -302,7 +301,7 @@ object frmVenda: TfrmVenda
         Left = 0
         Top = 57
         Width = 609
-        Height = 286
+        Height = 284
         Align = alClient
         Caption = 'Itens Lan'#231'ados'
         Font.Charset = DEFAULT_CHARSET
@@ -339,7 +338,7 @@ object frmVenda: TfrmVenda
           Left = 2
           Top = 15
           Width = 605
-          Height = 177
+          Height = 175
           Align = alClient
           DataSource = frmGrVendas.dtsrcVendasItens
           Font.Charset = DEFAULT_CHARSET
@@ -483,7 +482,7 @@ object frmVenda: TfrmVenda
         end
         object Panel3: TPanel
           Left = 2
-          Top = 231
+          Top = 229
           Width = 605
           Height = 53
           Align = alBottom
@@ -514,7 +513,7 @@ object frmVenda: TfrmVenda
         end
         object Panel4: TPanel
           Left = 2
-          Top = 192
+          Top = 190
           Width = 605
           Height = 39
           Align = alBottom
@@ -660,7 +659,7 @@ object frmVenda: TfrmVenda
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Top = 444
+    Top = 442
     Width = 617
     Height = 35
     Align = alBottom

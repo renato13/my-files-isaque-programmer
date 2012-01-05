@@ -9,6 +9,7 @@ uses
   ToolWin, IBTable, ToolEdit, RXDBCtrl;
 
 type
+  TAliquota = (taICMS, taISS);
   TfrmGeProduto = class(TfrmGrPadraoCadastro)
     IbDtstTabelaCODIGO: TIntegerField;
     IbDtstTabelaCOD: TIBStringField;
@@ -90,6 +91,10 @@ type
     dtsAliquota: TDataSource;
     IbDtstTabelaALIQUOTA_TIPO: TSmallintField;
     IbDtstTabelaVALOR_IPI: TIBBCDField;
+    lblReserva: TLabel;
+    dbReserva: TDBEdit;
+    IbDtstTabelaRESERVA: TIntegerField;
+    IbDtstTabelaDISPONIVEL: TLargeintField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -98,9 +103,11 @@ type
     procedure dbCFOPButtonClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
     procedure FormShow(Sender: TObject);
+    procedure DtSrcTabelaStateChange(Sender: TObject);
   private
     { Private declarations }
     fOrdenado : Boolean;
+    fAliquota : TAliquota;
   public
     { Public declarations }
   end;
@@ -109,6 +116,9 @@ var
   frmGeProduto: TfrmGeProduto;
 
   procedure MostrarTabelaProdutos(const AOwner : TComponent);
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 
 implementation
 
@@ -129,19 +139,95 @@ begin
   end;
 end;
 
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean;
+var
+  frm : TfrmGeProduto;
+begin
+  frm := TfrmGeProduto.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean;
+var
+  frm : TfrmGeProduto;
+  whr : String;
+begin
+  frm := TfrmGeProduto.Create(AOwner);
+  try
+    frm.fAliquota := TipoAliquota;
+
+    frm.lblAliquotaTipo.Enabled := False;
+    frm.dbAliquotaTipo.Enabled  := False;
+
+    whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+    with frm, IbDtstTabela do
+    begin
+      Close;
+      SelectSQL.Add('where ' + whr);
+      Open;
+    end;
+
+    Result := frm.SelecionarRegistro(Codigo, Nome, whr);
+
+    if ( Result ) then
+      CodigoAlfa := frm.IbDtstTabelaCOD.Value;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean;
+var
+  frm : TfrmGeProduto;
+  whr : String;
+begin
+  frm := TfrmGeProduto.Create(AOwner);
+  try
+    frm.fAliquota := TipoAliquota;
+
+    frm.lblAliquotaTipo.Enabled := False;
+    frm.dbAliquotaTipo.Enabled  := False;
+
+    whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+    with frm, IbDtstTabela do
+    begin
+      Close;
+      SelectSQL.Add('where ' + whr);
+      Open;
+    end;
+
+    Result := frm.SelecionarRegistro(Codigo, Nome, whr);
+
+    if ( Result ) then
+    begin
+      CodigoAlfa := frm.IbDtstTabelaCOD.Value;
+      CodigoEAN  := frm.IbDtstTabelaCODBARRA_EAN.Value;
+    end;
+  finally
+    frm.Destroy;
+  end;
+end;
+
 procedure TfrmGeProduto.FormCreate(Sender: TObject);
 begin
   inherited;
   ControlFirstEdit := dbCodigoEAN;
 
   fOrdenado := False;
+  fAliquota := taICMS;
    
   tblEmpresa.Open;
   tblOrigem.Open;
   tblTributacao.Open;
   tblAliquota.Open;
 
-  DisplayFormatCodigo := '0000000';
+  DisplayFormatCodigo := '###0000000';
 
   NomeTabela     := 'TBPRODUTO';
   CampoCodigo    := 'Codigo';
@@ -182,6 +268,14 @@ end;
 procedure TfrmGeProduto.IbDtstTabelaBeforePost(DataSet: TDataSet);
 begin
   inherited;
+  if ( IbDtstTabelaQTDE.AsInteger < 0 ) then
+    IbDtstTabelaQTDE.Value := 0;
+
+  if ( (IbDtstTabelaRESERVA.AsInteger < 0) or (IbDtstTabelaRESERVA.AsInteger > IbDtstTabelaQTDE.AsInteger) ) then
+    IbDtstTabelaRESERVA.Value := 0;
+
+  IbDtstTabelaDISPONIVEL.Value := IbDtstTabelaQTDE.Value - IbDtstTabelaRESERVA.Value;
+
   IbDtstTabelaCST.Value := IbDtstTabelaCODORIGEM.AsString + IbDtstTabelaCODTRIBUTACAO.AsString;
 
   if ( IbDtstTabela.State = dsInsert ) then
@@ -237,9 +331,10 @@ begin
   IbDtstTabelaPRECO.Value      := 0;
   IbDtstTabelaCODCFOP.Value        := GetCfopIDDefault;
   IbDtstTabelaCFOP_DESCRICAO.Value := GetCfopNomeDefault;
-  IbDtstTabelaALIQUOTA_TIPO.Value  := 0; // ICMS
+  IbDtstTabelaALIQUOTA_TIPO.Value  := Ord(fAliquota);
   IbDtstTabelaALIQUOTA.Value       := 0;
   IbDtstTabelaVALOR_IPI.Value      := 0;
+  IbDtstTabelaRESERVA.Value        := 0; 
 end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);
@@ -251,6 +346,13 @@ begin
   end;
 
   inherited;
+end;
+
+procedure TfrmGeProduto.DtSrcTabelaStateChange(Sender: TObject);
+begin
+  inherited;
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    pgcMaisDados.ActivePageIndex := 0;
 end;
 
 end.

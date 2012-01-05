@@ -112,6 +112,7 @@ type
     procedure nmUnidadeClick(Sender: TObject);
     procedure nmTabelaCFOPClick(Sender: TObject);
     procedure nmFormaPagtoClick(Sender: TObject);
+    procedure Vendedor1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -129,7 +130,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
-  UGeTabelaCFOP, UGeFormaPagto, UGeProduto;
+  UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor;
 
 {$R *.dfm}
 
@@ -194,9 +195,6 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnProdClick(Sender: TObject);
 begin
-//  Application.CreateForm(TfrmGrProdutos, frmGrProdutos);
-//  frmGrProdutos.ShowModal;
-//  frmGrProdutos.Destroy;
   MostrarTabelaProdutos(Self);
 end;
 
@@ -346,6 +344,11 @@ end;
 procedure TfrmPrinc.nmFormaPagtoClick(Sender: TObject);
 begin
   MostrarTabelaFormaPagtos(Self);
+end;
+
+procedure TfrmPrinc.Vendedor1Click(Sender: TObject);
+begin
+  MostrarTabelaVendedores(Self);
 end;
 
 end.

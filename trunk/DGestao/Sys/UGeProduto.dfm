@@ -39,11 +39,28 @@ inherited frmGeProduto: TfrmGeProduto
           item
             Expanded = False
             FieldName = 'DESCRI'
+            Width = 280
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'QTDE'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DISPONIVEL'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlue
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clBlue
+            Title.Font.Height = -11
+            Title.Font.Name = 'Tahoma'
+            Title.Font.Style = [fsBold]
             Width = 75
             Visible = True
           end
@@ -57,7 +74,7 @@ inherited frmGeProduto: TfrmGeProduto
           item
             Expanded = False
             FieldName = 'CUSTOMEDIO'
-            Width = 100
+            Width = 90
             Visible = True
           end
           item
@@ -73,7 +90,7 @@ inherited frmGeProduto: TfrmGeProduto
             Title.Font.Height = -11
             Title.Font.Name = 'Tahoma'
             Title.Font.Style = [fsBold]
-            Width = 100
+            Width = 90
             Visible = True
           end>
       end
@@ -802,6 +819,14 @@ inherited frmGeProduto: TfrmGeProduto
           Caption = 'Empresa:'
           FocusControl = dbEmpresa
         end
+        object lblReserva: TLabel
+          Left = 656
+          Top = 24
+          Width = 44
+          Height = 13
+          Caption = 'Reserva:'
+          FocusControl = dbReserva
+        end
         object dbEstoqueQtde: TDBEdit
           Left = 448
           Top = 40
@@ -853,6 +878,22 @@ inherited frmGeProduto: TfrmGeProduto
           ParentFont = False
           TabOrder = 0
         end
+        object dbReserva: TDBEdit
+          Left = 656
+          Top = 40
+          Width = 97
+          Height = 21
+          CharCase = ecUpperCase
+          DataField = 'RESERVA'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+        end
       end
     end
   end
@@ -884,6 +925,11 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Aliquota_tipo'
       '  , p.Aliquota'
       '  , p.Valor_ipi'
+      '  , p.Reserva'
+      '  , case when coalesce(p.Reserva, 0) > 0'
+      '      then coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0)'
+      '      else coalesce(p.Qtde, 0)'
+      '    end as Disponivel'
       '  , g.Descri as Descricao_Grupo'
       '  , coalesce(s.Scp_descricao, p.Secao) as Descricao_Secao'
       '  , coalesce(u.Unp_descricao, p.Unidade) as Descricao_Unidade'
@@ -1033,6 +1079,15 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
+    end
+    object IbDtstTabelaRESERVA: TIntegerField
+      DisplayLabel = 'Reserva'
+      FieldName = 'RESERVA'
+      Origin = 'TBPRODUTO.RESERVA'
+    end
+    object IbDtstTabelaDISPONIVEL: TLargeintField
+      DisplayLabel = 'Dispon'#237'vel'
+      FieldName = 'DISPONIVEL'
     end
     object IbDtstTabelaDESCRICAO_GRUPO: TIBStringField
       DisplayLabel = 'Grupo'
