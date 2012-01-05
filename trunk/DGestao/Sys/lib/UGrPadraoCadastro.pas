@@ -70,6 +70,7 @@ type
     fNomeTabela     ,
     fCampoCodigo    ,
     fCampoDescricao ,
+    fCampoOrdenacao ,
     fWhereAdditional: String;
     fOcorreuErro    ,
     fAbrirTabelaAuto: Boolean;
@@ -77,13 +78,15 @@ type
     fControlFirst : TWinControl;
     procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
     procedure CentralizarCodigo;
+    procedure SetWhereAdditional(Value : String);
   public
     { Public declarations }
     property DisplayFormatCodigo : String read fDisplayFormat write fDisplayFormat;
     property NomeTabela : String read fNomeTabela write fNomeTabela;
     property CampoCodigo : String read fCampoCodigo write fCampoCodigo;
     property CampoDescricao : String read fCampoDescricao write fCampoDescricao;
-    property WhereAdditional : String read fWhereAdditional;
+    property CampoOrdenacao : String read fCampoOrdenacao write fCampoOrdenacao;
+    property WhereAdditional : String read fWhereAdditional write SetWhereAdditional;
     property OcorreuErro : Boolean read fOcorreuErro;
     property AbrirTabelaAuto : Boolean read fAbrirTabelaAuto write fAbrirTabelaAuto;
     property SQLTabela : TStringList read sSQL;
@@ -116,6 +119,7 @@ begin
   NomeTabela      := EmptyStr;
   CampoCodigo     := EmptyStr;
   CampoDescricao  := EmptyStr;
+  CampoOrdenacao  := EmptyStr;
   fOcorreuErro    := False;
   AbrirTabelaAuto := True;
 
@@ -310,6 +314,9 @@ begin
 
     with IbDtstTabela, SelectSQL do
     begin
+      if ( Trim(CampoOrdenacao) = EmptyStr ) then
+        CampoOrdenacao := CampoDescricao;
+
       Close;
       Clear;
       AddStrings( sSQL );
@@ -324,7 +331,7 @@ begin
       if ( fWhereAdditional <> EmptyStr ) then
         Add( '  and (' + WhereAdditional + ')' );
 
-      Add( 'order by ' + CampoDescricao );
+      Add( 'order by ' + CampoOrdenacao );
 
       Open;
 
@@ -455,6 +462,11 @@ begin
       TIntegerField(IbDtstTabela.FieldByName(CampoCodigo)).DisplayFormat := DisplayFormatCodigo;
     end;
   end;
+end;
+
+procedure TfrmGrPadraoCadastro.SetWhereAdditional(Value : String);
+begin
+  fWhereAdditional := Trim(Value);
 end;
 
 procedure TfrmGrPadraoCadastro.btbtnSelecionarClick(Sender: TObject);

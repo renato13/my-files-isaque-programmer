@@ -414,6 +414,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
             Width = 41
             Height = 13
             Caption = 'Tabela:'
+            FocusControl = edtFiltrar
           end
           object btnFiltrar: TSpeedButton
             Left = 207

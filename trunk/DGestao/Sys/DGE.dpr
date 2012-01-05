@@ -64,7 +64,9 @@ uses
   UGeTabelaCFOP in 'UGeTabelaCFOP.pas' {frmGeTabelaCFOP},
   UGeFormaPagto in 'UGeFormaPagto.pas' {frmGeFormaPagto},
   UGeProduto in 'UGeProduto.pas' {frmGeProduto},
-  UGeVendedor in 'UGeVendedor.pas' {frmGeVendedor};
+  UGeVendedor in 'UGeVendedor.pas' {frmGeVendedor},
+  UGeVenda in 'UGeVenda.pas' {frmGeVenda},
+  UGeCondicaoPagto in 'UGeCondicaoPagto.pas' {frmGeCondicaoPagto};
 
 {$R *.res}
 

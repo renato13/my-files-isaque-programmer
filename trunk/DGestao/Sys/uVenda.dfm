@@ -822,7 +822,6 @@ object frmVenda: TfrmVenda
     GeneratorField.Field = 'NUMLANC'
     GeneratorField.Generator = 'GEN_TBCONTREC_ID'
     GeneratorField.ApplyEvent = gamOnPost
-    Active = True
     Left = 32
     Top = 232
     object ibdtstCRCNPJ: TIBStringField
