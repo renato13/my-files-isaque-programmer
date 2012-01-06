@@ -172,6 +172,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.DtSrcTabelaStateChange(Sender: TObject);
 begin
+  dbgDados.Enabled    := not (IbDtstTabela.State in [dsEdit, dsInsert]);
+  grpBxFiltro.Enabled := not (IbDtstTabela.State in [dsEdit, dsInsert]);
+
   btbtnIncluir.Enabled    := (IbDtstTabela.State in [dsBrowse]);
   btbtnAlterar.Enabled    := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);
   btbtnExcluir.Enabled    := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);

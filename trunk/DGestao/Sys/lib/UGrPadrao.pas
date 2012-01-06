@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, HPL_Strings, StdCtrls, DBCtrls, IBCustomDataSet, DB, DBClient,
-  ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, ToolEdit, RXDBCtrl;
+  ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, ToolEdit, RXDBCtrl,
+  ComCtrls;
 
 type
   TfrmGrPadrao = class(TForm)
@@ -332,6 +333,14 @@ begin
         TComboBox(Win.Components[i]).OnEnter := ControlEditEnter;
       if ( not Assigned(TComboBox(Win.Components[i]).OnExit) ) then
         TComboBox(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    if ( Win.Components[i] is TDateTimePicker ) then
+    begin
+      if ( not Assigned(TDateTimePicker(Win.Components[i]).OnEnter) ) then
+        TDateTimePicker(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TComboBox(Win.Components[i]).OnExit) ) then
+        TDateTimePicker(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
     // Controls DB
