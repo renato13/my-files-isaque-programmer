@@ -66,6 +66,10 @@ type
 var
   frmGeCondicaoPagto: TfrmGeCondicaoPagto;
 
+const
+  COND_PARCELA_MIN = 1;
+  COND_PARCELA_MAX = 12;
+
   procedure MostrarTabelaCondicoesPagto(const AOwner : TComponent);
   function SelecionarCondicaoPagto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarCondicaoPagto(const AOwner : TComponent; var Codigo : Integer; var Nome : String; var Prazos : IntegerArray) : Boolean; overload;
@@ -111,7 +115,7 @@ begin
 
     if ( Result ) then
     begin
-      for I := 1 to 12 do
+      for I := COND_PARCELA_MIN to COND_PARCELA_MAX do
         if ( not frm.IbDtstTabela.FieldByName('COND_PRAZO_' + FormatFloat('00', I)).IsNull ) then
         begin
           //SetLength(Prazos, Length(Prazos) + I);;

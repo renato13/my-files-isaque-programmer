@@ -91,7 +91,7 @@ type
     property AbrirTabelaAuto : Boolean read fAbrirTabelaAuto write fAbrirTabelaAuto;
     property SQLTabela : TStringList read sSQL;
     property ControlFirstEdit : TWinControl read fControlFirst write fControlFirst;
-    procedure UpdateGenerator;
+    procedure UpdateGenerator(const sWhr : String = '');
   protected
     procedure FiltarDados; overload;
     procedure FecharAbrirTabela(const Tabela : TIBDataSet; const Vazia : Boolean = FALSE); overload;
@@ -276,8 +276,9 @@ begin
                 else
                 if ( pgcGuias.ActivePageIndex <> 0 ) then
                 begin
-                  pgcGuias.ActivePageIndex := 0;
-                  dbgDados.SetFocus;
+                  pgcGuias.SelectNextPage(True);
+                  if ( pgcGuias.ActivePageIndex = 0 ) then
+                    dbgDados.SetFocus;
                 end
                 else
                 if ( pgcGuias.ActivePageIndex = 0 ) then
@@ -370,6 +371,9 @@ begin
 end;
 
 function TfrmGrPadraoCadastro.SelecionarRegistro(var Codigo : Integer; var Descricao : String; const FiltroAdicional : String = '') : Boolean;
+var
+ sCampoCodigo    ,
+ sCampoDescricao : String;
 begin
   try
     fOcorreuErro     := False;
@@ -381,14 +385,24 @@ begin
       Abort;
     end;
 
+    if ( pos('.', CampoCodigo) > 0 ) then
+      sCampoCodigo := Copy(CampoCodigo, pos('.', CampoCodigo) + 1, Length(CampoCodigo))
+    else
+      sCampoCodigo := Trim(CampoCodigo);
+
+    if ( pos('.', CampoDescricao) > 0 ) then
+      sCampoDescricao := Copy(CampoDescricao, pos('.', CampoDescricao) + 1, Length(CampoDescricao))
+    else
+      sCampoDescricao := Trim(CampoDescricao);
+
     Self.btbtnSelecionar.Visible := True;
 
     Result := (ShowModal = mrOk) and (not IbDtstTabela.IsEmpty);
 
     if ( Result ) then
     begin
-      Codigo    := IbDtstTabela.FieldByName(CampoCodigo).AsInteger;
-      Descricao := IbDtstTabela.FieldByName(CampoDescricao).AsString;
+      Codigo    := IbDtstTabela.FieldByName(sCampoCodigo).AsInteger;
+      Descricao := IbDtstTabela.FieldByName(sCampoDescricao).AsString;
     end
     else
     begin
@@ -479,7 +493,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TfrmGrPadraoCadastro.UpdateGenerator;
+procedure TfrmGrPadraoCadastro.UpdateGenerator(const sWhr : String = '');
 var
   sGenerator ,
   sTabela    ,
@@ -497,7 +511,7 @@ begin
   sCampoCodigo := CampoCodigo;
 
   if ( (sGenerator <> EmptyStr) and (sTabela <> EmptyStr) and (sCampoCodigo <> EmptyStr) ) then
-    UpdateSequence(sGenerator, sTabela, sCampoCodigo);
+    UpdateSequence(sGenerator, sTabela, sCampoCodigo, sWhr);
 end;
 
 end.

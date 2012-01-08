@@ -132,7 +132,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto;
+  UGeCondicaoPagto, UGeTeste;
 
 {$R *.dfm}
 

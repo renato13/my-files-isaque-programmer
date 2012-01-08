@@ -42,16 +42,28 @@ var
   procedure ShowInformation(sMsg : String);
   procedure ShowWarning(sMsg : String);
   procedure ShowError(sMsg : String);
-  procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String);
+  procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
 
+  function ShowConfirm(sMsg : String; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
   function GetPaisIDDefault : String;
   function GetEstadoIDDefault : Integer;
   function GetCidadeIDDefault : Integer;
   function GetCfopIDDefault : Integer;
+  function GetEmpresaIDDefault : String;
+  function GetClienteIDDefault : String;
+  function GetVendedorIDDefault : Integer;
+  function GetFormaPagtoIDDefault : Integer;
+  function GetCondicaoPagtoIDDefault : Integer;
+
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
   function GetCfopNomeDefault : String;
+  function GetEmpresaNomeDefault : String;
+  function GetClienteNomeDefault : String;
+  function GetVendedorNomeDefault : String;
+  function GetFormaPagtoNomeDefault : String;
+  function GetCondicaoPagtoNomeDefault : String;
   function GetNextID(NomeTabela, CampoChave : String) : Largeint;
 
 const
@@ -78,7 +90,7 @@ begin
   Application.MessageBox(PChar(sMsg), 'Erro', MB_ICONERROR);
 end;
 
-procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String);
+procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
 var
   ID : Largeint;
 begin
@@ -86,7 +98,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela);
+    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela + ' ' + sWhr);
     Open;
 
     ID := FieldByName('ID').AsInteger;
@@ -96,6 +108,11 @@ begin
     SQL.Add('ALTER SEQUENCE ' + GeneratorName + ' RESTART WITH ' + IntToStr(ID));
     ExecSQL;
   end;
+end;
+
+function ShowConfirm(sMsg : String; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
+begin
+  Result := ( Application.MessageBox(PChar(sMsg), 'Confirmar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES );
 end;
 
 function GetPaisIDDefault : String;
@@ -116,6 +133,31 @@ end;
 function GetCfopIDDefault : Integer;
 begin
   Result := FileINI.ReadInteger('Default', 'CfopID', 5102);
+end;
+
+function GetEmpresaIDDefault : String;
+begin
+  Result := FileINI.ReadString('Default', 'EmpresaID', EmptyStr);
+end;
+
+function GetClienteIDDefault : String;
+begin
+  Result := FileINI.ReadString('Default', 'ClienteID', EmptyStr);
+end;
+
+function GetVendedorIDDefault : Integer;
+begin
+  Result := FileINI.ReadInteger('Default', 'VendedorID', 1);
+end;
+
+function GetFormaPagtoIDDefault : Integer;
+begin
+  Result := FileINI.ReadInteger('Default', 'FormaPagtoID', 1);
+end;
+
+function GetCondicaoPagtoIDDefault : Integer;
+begin
+  Result := FileINI.ReadInteger('Default', 'CondicaoPagtoID', 1);
 end;
 
 function GetPaisNomeDefault : String;
@@ -173,6 +215,81 @@ begin
     Open;
 
     Result := FieldByName('cfop_descricao').AsString;
+
+    Close;
+  end;
+end;
+
+function GetEmpresaNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select rzsoc from TBEMPRESA where Cnpj = ' + QuotedStr(GetEmpresaIDDefault));
+    Open;
+
+    Result := FieldByName('rzsoc').AsString;
+
+    Close;
+  end;
+end;
+
+function GetClienteNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select nome from TBCLIENTE where Cnpj = ' + QuotedStr(GetClienteIDDefault));
+    Open;
+
+    Result := FieldByName('nome').AsString;
+
+    Close;
+  end;
+end;
+
+function GetVendedorNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select nome from TBVENDEDOR where cod = ' + IntToStr(GetVendedorIDDefault));
+    Open;
+
+    Result := FieldByName('nome').AsString;
+
+    Close;
+  end;
+end;
+
+function GetFormaPagtoNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select descri from TBFORMPAGTO where cod = ' + IntToStr(GetFormaPagtoIDDefault));
+    Open;
+
+    Result := FieldByName('descri').AsString;
+
+    Close;
+  end;
+end;
+
+function GetCondicaoPagtoNomeDefault : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select cond_descricao_full from VW_CONDICAOPAGTO where cond_cod = ' + IntToStr(GetCondicaoPagtoIDDefault));
+    Open;
+
+    Result := FieldByName('cond_descricao_full').AsString;
 
     Close;
   end;

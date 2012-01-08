@@ -311,6 +311,14 @@ begin
         TEdit(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
+    if ( Win.Components[i] is TMemo ) then
+    begin
+      if ( not Assigned(TMemo(Win.Components[i]).OnEnter) ) then
+        TMemo(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TMemo(Win.Components[i]).OnExit) ) then
+        TMemo(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
     if ( Win.Components[i] is TCheckBox ) then
     begin
       if ( not Assigned(TCheckBox(Win.Components[i]).OnEnter) ) then
@@ -351,6 +359,14 @@ begin
         TDBEdit(Win.Components[i]).OnEnter := ControlEditEnter;
       if ( not Assigned(TDBEdit(Win.Components[i]).OnExit) ) then
         TDBEdit(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    if ( Win.Components[i] is TDBMemo ) then
+    begin
+      if ( not Assigned(TDBMemo(Win.Components[i]).OnEnter) ) then
+        TDBMemo(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TDBMemo(Win.Components[i]).OnExit) ) then
+        TDBMemo(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
     if ( Win.Components[i] is TDBCheckBox ) then

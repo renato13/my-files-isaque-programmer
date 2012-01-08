@@ -92,6 +92,8 @@ var
   frmGeCliente: TfrmGeCliente;
 
   procedure MostrarTabelaClientes(const AOwner : TComponent);
+  function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
+  function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
 
 implementation
 
@@ -107,6 +109,32 @@ begin
   frm := TfrmGeCliente.Create(AOwner);
   try
     frm.ShowModal;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean;
+var
+  frm : TfrmGeCliente;
+begin
+  frm := TfrmGeCliente.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean;
+var
+  frm : TfrmGeCliente;
+begin
+  frm := TfrmGeCliente.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+    if ( Result ) then
+      CNPJ := frm.IbDtstTabelaCNPJ.AsString;
   finally
     frm.Destroy;
   end;
