@@ -118,6 +118,8 @@ var
   procedure MostrarTabelaProdutos(const AOwner : TComponent);
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
+    const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 
 implementation
@@ -165,17 +167,59 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
-    with frm, IbDtstTabela do
-    begin
-      Close;
-      SelectSQL.Add('where ' + whr);
-      Open;
-    end;
+//    with frm, IbDtstTabela do
+//    begin
+//      Close;
+//      SelectSQL.Add('where ' + whr);
+//      SelectSQL.Add('order by ' + CampoOrdenacao);
+//      Open;
+//    end;
 
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
     if ( Result ) then
       CodigoAlfa := frm.IbDtstTabelaCOD.Value;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
+  const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+var
+  frm : TfrmGeProduto;
+  whr : String;
+begin
+  frm := TfrmGeProduto.Create(AOwner);
+  try
+    frm.fAliquota := TipoAliquota;
+
+    frm.lblAliquotaTipo.Enabled := False;
+    frm.dbAliquotaTipo.Enabled  := False;
+
+    whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+//    with frm, IbDtstTabela do
+//    begin
+//      Close;
+//      SelectSQL.Add('where ' + whr);
+//      SelectSQL.Add('order by ' + CampoDescricao);
+//      Open;
+//    end;
+
+    Result := frm.SelecionarRegistro(Codigo, Nome, whr);
+
+    if ( Result ) then
+    begin
+      CodigoAlfa := frm.IbDtstTabelaCOD.AsString;
+      iUnidade   := frm.IbDtstTabelaCODUNIDADE.AsInteger;
+      sUnidade   := frm.IbDtstTabelaUNP_SIGLA.AsString;
+      CST        := frm.IbDtstTabelaCST.AsString;
+      CFOP       := frm.IbDtstTabelaCODCFOP.AsInteger;
+      Aliquota   := frm.IbDtstTabelaALIQUOTA.AsCurrency;
+      ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
+      ValorIPI   := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
+    end;
   finally
     frm.Destroy;
   end;
@@ -195,12 +239,13 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
-    with frm, IbDtstTabela do
-    begin
-      Close;
-      SelectSQL.Add('where ' + whr);
-      Open;
-    end;
+//    with frm, IbDtstTabela do
+//    begin
+//      Close;
+//      SelectSQL.Add('where ' + whr);
+//      SelectSQL.Add('order by ' + CampoOrdenacao);
+//      Open;
+//    end;
 
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
@@ -221,7 +266,7 @@ begin
 
   fOrdenado := False;
   fAliquota := taICMS;
-   
+
   tblEmpresa.Open;
   tblOrigem.Open;
   tblTributacao.Open;
