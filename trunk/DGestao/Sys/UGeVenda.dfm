@@ -1421,7 +1421,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 416
         Width = 1021
         Height = 146
-        ActivePage = tbsRecebimento
+        ActivePage = tbsTitulo
         Align = alBottom
         Style = tsFlatButtons
         TabOrder = 3
@@ -2006,6 +2006,7 @@ inherited frmGeVenda: TfrmGeVenda
             Height = 115
             TabStop = False
             Align = alClient
+            DataSource = dtsTitulos
             Font.Charset = ANSI_CHARSET
             Font.Color = clBlack
             Font.Height = -11
@@ -2021,6 +2022,66 @@ inherited frmGeVenda: TfrmGeVenda
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = [fsBold]
             OnDrawColumnCell = dbgDadosDrawColumnCell
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'Lancamento'
+                Width = 80
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'PARCELA'
+                Title.Alignment = taCenter
+                Width = 40
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DTEMISS'
+                Title.Alignment = taCenter
+                Width = 75
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DTVENC'
+                Title.Alignment = taCenter
+                Width = 75
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'VALORREC'
+                Width = 100
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'CODBANCO'
+                Title.Alignment = taCenter
+                Width = 60
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'NOSSONUMERO'
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'BAIXADO_'
+                Title.Alignment = taCenter
+                Width = 50
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'DTREC'
+                Title.Alignment = taCenter
+                Width = 75
+                Visible = True
+              end>
           end
         end
       end
@@ -2922,5 +2983,177 @@ inherited frmGeVenda: TfrmGeVenda
       '')
     Left = 864
     Top = 136
+  end
+  object qryTitulos: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    OnCalcFields = qryTitulosCalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'Select'
+      '    r.Anolanc'
+      '  , r.numlanc'
+      '  , r.parcela'
+      '  , r.codbanco'
+      '  , r.nossonumero'
+      '  , r.cnpj'
+      '  , r.tippag'
+      '  , r.dtemiss'
+      '  , r.dtvenc'
+      '  , r.valorrec'
+      '  , r.percentjuros'
+      '  , r.percentmulta'
+      '  , r.percentdesconto'
+      '  , r.valorrectot'
+      '  , r.valorsaldo'
+      '  , r.dataprocessoboleto'
+      '  , r.Baixado'
+      '  , Case when r.Baixado = 0 then '#39'X'#39' else '#39'.'#39' end as Baixado_'
+      '  , r.Dtrec'
+      'from TBCONTREC r')
+    ModifySQL.Strings = (
+      '')
+    Left = 928
+    Top = 72
+    object qryTitulosANOLANC: TSmallintField
+      FieldName = 'ANOLANC'
+      Origin = 'TBCONTREC.ANOLANC'
+      Required = True
+    end
+    object qryTitulosNUMLANC: TIntegerField
+      FieldName = 'NUMLANC'
+      Origin = 'TBCONTREC.NUMLANC'
+      Required = True
+    end
+    object qryTitulosPARCELA: TSmallintField
+      Alignment = taCenter
+      DisplayLabel = 'Parc.'
+      FieldName = 'PARCELA'
+      Origin = 'TBCONTREC.PARCELA'
+      DisplayFormat = '00'
+    end
+    object qryTitulosCODBANCO: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'Banco'
+      FieldName = 'CODBANCO'
+      Origin = 'TBCONTREC.CODBANCO'
+      DisplayFormat = '0000'
+    end
+    object qryTitulosNOSSONUMERO: TIBStringField
+      DisplayLabel = 'Nosso N'#250'mero'
+      FieldName = 'NOSSONUMERO'
+      Origin = 'TBCONTREC.NOSSONUMERO'
+    end
+    object qryTitulosCNPJ: TIBStringField
+      FieldName = 'CNPJ'
+      Origin = 'TBCONTREC.CNPJ'
+      Size = 18
+    end
+    object qryTitulosTIPPAG: TIBStringField
+      FieldName = 'TIPPAG'
+      Origin = 'TBCONTREC.TIPPAG'
+      Size = 35
+    end
+    object qryTitulosDTEMISS: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Emiss'#227'o'
+      FieldName = 'DTEMISS'
+      Origin = 'TBCONTREC.DTEMISS'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosDTVENC: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Vencimento'
+      FieldName = 'DTVENC'
+      Origin = 'TBCONTREC.DTVENC'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosVALORREC: TIBBCDField
+      DisplayLabel = 'Valor Doc. (R$)'
+      FieldName = 'VALORREC'
+      Origin = 'TBCONTREC.VALORREC'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosPERCENTJUROS: TIBBCDField
+      DisplayLabel = '% Juros'
+      FieldName = 'PERCENTJUROS'
+      Origin = 'TBCONTREC.PERCENTJUROS'
+      DisplayFormat = ',0.00'
+      Precision = 9
+      Size = 2
+    end
+    object qryTitulosPERCENTMULTA: TIBBCDField
+      DisplayLabel = '% Multa'
+      FieldName = 'PERCENTMULTA'
+      Origin = 'TBCONTREC.PERCENTMULTA'
+      DisplayFormat = ',0.00'
+      Precision = 9
+      Size = 2
+    end
+    object qryTitulosPERCENTDESCONTO: TIBBCDField
+      DisplayLabel = '% Desc.'
+      FieldName = 'PERCENTDESCONTO'
+      Origin = 'TBCONTREC.PERCENTDESCONTO'
+      DisplayFormat = ',0.00'
+      Precision = 9
+      Size = 2
+    end
+    object qryTitulosVALORRECTOT: TIBBCDField
+      FieldName = 'VALORRECTOT'
+      Origin = 'TBCONTREC.VALORRECTOT'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosVALORSALDO: TIBBCDField
+      FieldName = 'VALORSALDO'
+      Origin = 'TBCONTREC.VALORSALDO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosDATAPROCESSOBOLETO: TDateField
+      FieldName = 'DATAPROCESSOBOLETO'
+      Origin = 'TBCONTREC.DATAPROCESSOBOLETO'
+    end
+    object qryTitulosBAIXADO: TSmallintField
+      FieldName = 'BAIXADO'
+      Origin = 'TBCONTREC.BAIXADO'
+      Required = True
+    end
+    object qryTitulosBAIXADO_: TIBStringField
+      Alignment = taCenter
+      DisplayLabel = 'Baixado'
+      FieldName = 'BAIXADO_'
+      Required = True
+      FixedChar = True
+      Size = 1
+    end
+    object qryTitulosDTREC: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Data Baixa'
+      FieldName = 'DTREC'
+      Origin = 'TBCONTREC.DTREC'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosLancamento: TStringField
+      Alignment = taCenter
+      FieldKind = fkCalculated
+      FieldName = 'Lancamento'
+      Size = 10
+      Calculated = True
+    end
+  end
+  object dtsTitulos: TDataSource
+    AutoEdit = False
+    DataSet = qryTitulos
+    OnStateChange = DtSrcTabelaItensStateChange
+    Left = 960
+    Top = 72
   end
 end

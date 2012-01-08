@@ -182,6 +182,28 @@ type
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     cdsTabelaItensCFOP_DESCRICAO: TIBStringField;
     cdsTabelaItensCST: TIBStringField;
+    qryTitulos: TIBDataSet;
+    dtsTitulos: TDataSource;
+    qryTitulosANOLANC: TSmallintField;
+    qryTitulosNUMLANC: TIntegerField;
+    qryTitulosPARCELA: TSmallintField;
+    qryTitulosCODBANCO: TIntegerField;
+    qryTitulosNOSSONUMERO: TIBStringField;
+    qryTitulosCNPJ: TIBStringField;
+    qryTitulosTIPPAG: TIBStringField;
+    qryTitulosDTEMISS: TDateField;
+    qryTitulosDTVENC: TDateField;
+    qryTitulosVALORREC: TIBBCDField;
+    qryTitulosPERCENTJUROS: TIBBCDField;
+    qryTitulosPERCENTMULTA: TIBBCDField;
+    qryTitulosPERCENTDESCONTO: TIBBCDField;
+    qryTitulosVALORRECTOT: TIBBCDField;
+    qryTitulosVALORSALDO: TIBBCDField;
+    qryTitulosDATAPROCESSOBOLETO: TDateField;
+    qryTitulosLancamento: TStringField;
+    qryTitulosBAIXADO: TSmallintField;
+    qryTitulosBAIXADO_: TIBStringField;
+    qryTitulosDTREC: TDateField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -208,10 +230,13 @@ type
     procedure cdsTabelaItensNewRecord(DataSet: TDataSet);
     procedure btbtnFinalizarClick(Sender: TObject);
     procedure btbtnGerarNFeClick(Sender: TObject);
+    procedure qryTitulosCalcFields(DataSet: TDataSet);
   private
     { Private declarations }
-    SQL_Itens : TStringList;
+    SQL_Itens   ,
+    SQL_Titulos : TStringList;
     procedure AbrirTabelaItens(const AnoVenda : Smallint; const ControleVenda : Integer);
+    procedure AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure GerarTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure CarregarDadosProduto( sCodigoAlfa : String);
     procedure CarregarDadosCFOP( iCodigo : Integer );
@@ -271,6 +296,10 @@ begin
   SQL_Itens := TStringList.Create;
   SQL_Itens.Clear;
   SQL_Itens.AddStrings( cdsTabelaItens.SelectSQL );
+
+  SQL_Titulos := TStringList.Create;
+  SQL_Titulos.Clear;
+  SQL_Titulos.AddStrings( qryTitulos.SelectSQL );
 
   edData.Date      := Date;
   ControlFirstEdit := dbEmpresa;
@@ -396,6 +425,22 @@ begin
   HabilitarDesabilitar_Btns;
 end;
 
+procedure TfrmGeVenda.AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
+begin
+  qryTitulos.Close;
+
+  with qryTitulos, SelectSQL do
+  begin
+    Clear;
+    AddStrings( SQL_Titulos );
+    Add('where r.Anovenda = ' + IntToStr(AnoVenda));
+    Add('  and r.Numvenda = ' + IntToStr(ControleVenda));
+    Add('order by r.numlanc, r.parcela');
+  end;
+
+  qryTitulos.Open;
+end;
+
 procedure TfrmGeVenda.CarregarDadosProduto( sCodigoAlfa : String);
 begin
   if ( not cdsTabelaItens.Active ) then
@@ -486,6 +531,7 @@ procedure TfrmGeVenda.IbDtstTabelaAfterCancel(DataSet: TDataSet);
 begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 end;
 
 procedure TfrmGeVenda.btbtnExcluirClick(Sender: TObject);
@@ -507,7 +553,10 @@ begin
   begin
     inherited;
     if ( not OcorreuErro ) then
+    begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    end;  
   end;
 end;
 
@@ -651,13 +700,17 @@ procedure TfrmGeVenda.pgcGuiasChange(Sender: TObject);
 begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 end;
 
 procedure TfrmGeVenda.btbtnIncluirClick(Sender: TObject);
 begin
   inherited;
   if ( not OcorreuErro ) then
+  begin
     AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  end;  
 end;
 
 procedure TfrmGeVenda.btbtnAlterarClick(Sender: TObject);
@@ -679,7 +732,10 @@ begin
   begin
     inherited;
     if ( not OcorreuErro ) then
+    begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    end;  
   end;
 end;
 
@@ -772,6 +828,7 @@ begin
     IbDtstTabela.ApplyUpdates;
 
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
     ShowInformation('Venda finalizada com sucesso !');
 
@@ -791,6 +848,11 @@ procedure TfrmGeVenda.GerarTitulos(const AnoVenda: Smallint;
   const ControleVenda: Integer);
 begin
   ;
+end;
+
+procedure TfrmGeVenda.qryTitulosCalcFields(DataSet: TDataSet);
+begin
+  qryTitulosLancamento.AsString := FormatFloat('0000', qryTitulosANOLANC.AsInteger) + FormatFloat('000000', qryTitulosNUMLANC.AsInteger); 
 end;
 
 end.
