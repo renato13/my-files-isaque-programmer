@@ -289,21 +289,36 @@ end
 
 SET TERM ; ^
 
-        
 SET TERM ^ ;
 
-CREATE Trigger Tg_vendasitens_reservar For Tvendasitens
-Active After Insert Or Update Position 1
+CREATE OR ALTER Trigger Tg_vendasitens_reservar For Tvendasitens
+Active After Insert Or Update Or Delete Position 1
 AS
   declare variable reserva integer;
 begin
-  Select
-     coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0) + coalesce(new.Qtde, 0)
-  from TBPRODUTO p
-  where p.Cod    = new.Codprod
-    and p.Codemp = new.Codemp
-  into
-    Reserva;
+  if ( Inserting or Updating  ) then
+  begin
+      Select
+         coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0) + coalesce(new.Qtde, 0)
+      from TBPRODUTO p
+      where p.Cod    = new.Codprod
+        and p.Codemp = new.Codemp
+      into
+        Reserva;
+  end
+
+  else
+
+  if ( Deleting  ) then
+  begin
+      Select
+         coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0)
+      from TBPRODUTO p
+      where p.Cod    = old.Codprod
+        and p.Codemp = old.Codemp
+      into
+        Reserva;
+  end
 
   Update TBPRODUTO Set
     Reserva = :Reserva
@@ -313,6 +328,4 @@ end
 ^
 
 SET TERM ; ^
-
-    
 
