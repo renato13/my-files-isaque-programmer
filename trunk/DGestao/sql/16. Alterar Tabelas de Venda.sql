@@ -1,18 +1,23 @@
 CREATE DOMAIN DMN_BIGINT_NN AS BIGINT NOT NULL;
+CREATE DOMAIN DMN_INTEGER_NN AS INTEGER NOT NULL;
 
 ALTER TABLE TVENDASITENS DROP CONSTRAINT PK_TVENDASITENS;
 
 ALTER TABLE TBVENDAS DROP CONSTRAINT PK_TBVENDAS;
 
-ALTER TABLE TBVENDAS ALTER CODCONTROL TYPE DMN_BIGINT_NN;
+ALTER TABLE TBVENDAS ADD ANO SMALLINT NOT NULL;
 
-alter table TBVENDAS add constraint PK_TBVENDAS primary key (CODCONTROL);
+UPDATE TBVENDAS SET ANO = 2011;
+ 
+alter table TBVENDAS
+add constraint PK_TBVENDAS
+primary key (ANO,CODCONTROL);
 
-ALTER TABLE TVENDASITENS ALTER CODCONTROL TYPE DMN_BIGINT_NN;
+ALTER TABLE TVENDASITENS ADD ANO SMALLINT NOT NULL;
 
 ALTER TABLE TVENDASITENS ADD SEQ SMALLINT NOT NULL;
 
-Update TVENDASITENS Set SEQ = 1;
+Update TVENDASITENS Set ANO = 2011, SEQ = 1;
 
 alter table TVENDASITENS add constraint PK_TVENDASITENS primary key (CODCONTROL,SEQ,CODPROD);
 
@@ -51,24 +56,58 @@ foreign key (CODCLI)
 references TBCLIENTE(CNPJ)
 on update CASCADE;
 
-CREATE SEQUENCE GEN_VENDAS_CONTROLE;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2011;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2012;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2013;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2014;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2015;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2016;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2017;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2018;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2019;
+CREATE SEQUENCE GEN_VENDAS_CONTROLE_2020;
 
-CREATE TRIGGER TG_VENDAS_CONTROLE FOR TBVENDAS
-ACTIVE BEFORE INSERT POSITION 0
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendas_controle For Tbvendas
+Active Before Insert Position 0
 AS
 BEGIN
   IF (NEW.CODCONTROL IS NULL) THEN
-    NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE, 1);
+    if ( new.Ano = 2011 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2011, 1);
+    else
+    if ( new.Ano = 2012 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2012, 1);
+    else
+    if ( new.Ano = 2013 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2013, 1);
+    else
+    if ( new.Ano = 2014 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2014, 1);
+    else
+    if ( new.Ano = 2015 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2015, 1);
+    else
+    if ( new.Ano = 2016 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2016, 1);
+    else
+    if ( new.Ano = 2017 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2017, 1);
+    else
+    if ( new.Ano = 2018 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2018, 1);
+    else
+    if ( new.Ano = 2019 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2019, 1);
+    else
+    if ( new.Ano = 2020 ) then
+      NEW.CODCONTROL = GEN_ID(GEN_VENDAS_CONTROLE_2020, 1);
 END
+
+SET TERM ; ^
  
-CREATE OR ALTER Trigger Trgbaixaestoqq For Tvendasitens
-Inactive After Insert Position 0
-AS
-begin
-  update tbproduto p set qtde = qtde - new.qtde
-     where cod=new.codprod;
-  insert into tbprodhist values(new.codprod, new.codcontrol,'Venda - Saída',new.dtvenda, 0, new.qtde, new.qtdefinal,'dorivas',new.pfinal);
-end
+DROP TRIGGER TRGBAIXAESTOQQ;
 
 CREATE DOMAIN DMN_STATUS AS
 SMALLINT
@@ -77,7 +116,7 @@ NOT NULL
 CHECK (value between 0 and 9);
 
 UPDATE TBVENDAS
-SET STATUS = '0';     
+SET STATUS = '3';     
 
 update RDB$RELATION_FIELDS set
 RDB$FIELD_SOURCE = 'DMN_STATUS',
@@ -135,5 +174,145 @@ alter table TBVENDAS
 add constraint UNQ_TBVENDAS_NFE
 unique (SERIE,NFE);
 
+ALTER TABLE TVENDASITENS
+    ADD UNID_COD SMALLINT,
+    ADD CFOP_COD INTEGER,
+    ADD ALIQUOTA DECIMAL(10,2),
+    ADD VALOR_IPI NUMERIC(10,2);
+    
+alter table TVENDASITENS
+add constraint FK_TVENDASITENS_VENDA
+foreign key (ANO,CODCONTROL)
+references TBVENDAS(ANO,CODCONTROL)
+on delete CASCADE
+on update CASCADE;
+    
+update RDB$FIELDS set
+RDB$FIELD_LENGTH = 30,
+RDB$CHARACTER_LENGTH = 30
+where RDB$FIELD_NAME = 'RDB$168';
 
+update RDB$FIELDS set
+RDB$FIELD_LENGTH = 20,
+RDB$CHARACTER_LENGTH = 20
+where RDB$FIELD_NAME = 'RDB$162';
+
+ALTER TABLE TBPRODHIST
+    ADD CODEMPRESA VARCHAR(18);
+    
+ALTER TABLE TBPRODHIST DROP CONSTRAINT FK_TBPRODHIST_1;
+
+alter table TBPRODHIST
+add constraint FK_TBPRODHIST_PROD
+foreign key (CODPROD)
+references TBPRODUTO(COD)
+using index FK_TBPRODHIST_1;
+
+alter table TBPRODHIST
+add constraint FK_TBPRODHIST_EMP
+foreign key (CODEMPRESA)
+references TBEMPRESA(CNPJ);
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendas_atualizar_estoque For Tbvendas
+Active After Update Position 1
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable reserva integer;
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 3)) then
+  begin
+
+    -- Baixar produto do Estoque
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(p.Reserva, 0)
+      from TVENDASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          produto
+        , empresa
+        , quantidade
+        , estoque
+        , reserva
+    do
+    begin
+      reserva = :reserva - :Quantidade;
+      estoque = :Estoque - :Quantidade;
+
+      -- Baixar estoque
+      Update TBPRODUTO p Set
+          p.Reserva = :Reserva
+        , p.Qtde    = :Estoque
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'SAIDA - VENDA'
+        , Current_time
+        , null
+        , :Quantidade
+        , :Estoque
+        , user
+        , 'Venda total no valor de R$ ' || new.Totalvenda
+      );
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+
+        
+SET TERM ^ ;
+
+CREATE Trigger Tg_vendasitens_reservar For Tvendasitens
+Active After Insert Or Update Position 1
+AS
+  declare variable reserva integer;
+begin
+  Select
+     coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0) + coalesce(new.Qtde, 0)
+  from TBPRODUTO p
+  where p.Cod    = new.Codprod
+    and p.Codemp = new.Codemp
+  into
+    Reserva;
+
+  Update TBPRODUTO Set
+    Reserva = :Reserva
+  where Cod    = new.Codprod
+    and Codemp = new.Codemp;
+end
+^
+
+SET TERM ; ^
+
+    
 
