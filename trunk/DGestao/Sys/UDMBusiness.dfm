@@ -26,7 +26,7 @@ object DMBusiness: TDMBusiness
       'read_committed'
       'rec_version'
       'nowait')
-    AutoStopAction = saNone
+    AutoStopAction = saCommit
     Left = 40
     Top = 64
   end

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider;
+  ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider, IBStoredProc;
 
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
@@ -25,7 +25,7 @@ type
     Bevel6: TBevel;
     pgcMaisDados: TPageControl;
     tbsRecebimento: TTabSheet;
-    tbsTitulo: TTabSheet;
+    tbsITitulos: TTabSheet;
     lblProduto: TLabel;
     dbProduto: TRxDBComboEdit;
     dbProdutoNome: TDBEdit;
@@ -94,9 +94,9 @@ type
     lblSituacao: TLabel;
     dbSituacao: TDBEdit;
     pnlBotoesTitulo: TPanel;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
-    BitBtn3: TBitBtn;
+    btnRegerarTitulo: TBitBtn;
+    btnGerarBoleto: TBitBtn;
+    btnTituloEditar: TBitBtn;
     BitBtn4: TBitBtn;
     dbgTitulos: TDBGrid;
     Bevel9: TBevel;
@@ -204,6 +204,7 @@ type
     qryTitulosBAIXADO: TSmallintField;
     qryTitulosBAIXADO_: TIBStringField;
     qryTitulosDTREC: TDateField;
+    IbStrPrcGerarTitulos: TIBStoredProc;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -847,7 +848,29 @@ end;
 procedure TfrmGeVenda.GerarTitulos(const AnoVenda: Smallint;
   const ControleVenda: Integer);
 begin
-  ;
+  try
+
+    try
+
+      UpdateSequence('GEN_CONTAREC_NUM_' + IntToStr(AnoVenda), 'TBCONTREC', 'NUMLANC', 'where anovenda = ' + IntToStr(AnoVenda));
+
+      with IbStrPrcGerarTitulos do
+      begin
+        ParamByName('anovenda').AsInteger := AnoVenda;
+        ParamByName('numvenda').AsInteger := ControleVenda;
+        ExecProc;
+      end;
+
+    except
+      On E : Exception do
+      begin
+        DMBusiness.ibtrnsctnBusiness.Rollback;
+        ShowError('Erro ao tentar gerar títulos de recebimento.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
+  end;
 end;
 
 procedure TfrmGeVenda.qryTitulosCalcFields(DataSet: TDataSet);
