@@ -1421,7 +1421,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 416
         Width = 1021
         Height = 146
-        ActivePage = tbsTitulo
+        ActivePage = tbsRecebimento
         Align = alBottom
         Style = tsFlatButtons
         TabOrder = 3
@@ -1919,7 +1919,7 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 14
           end
         end
-        object tbsTitulo: TTabSheet
+        object tbsITitulos: TTabSheet
           Caption = 'T'#237'tulo(s) Gerado(s)'
           ImageIndex = 1
           object Bevel9: TBevel
@@ -1956,32 +1956,38 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
             TabOrder = 0
             Visible = False
-            object BitBtn1: TBitBtn
+            object btnRegerarTitulo: TBitBtn
               Left = 0
               Top = 1
               Width = 70
               Height = 25
+              Hint = 'Regerar T'#237'tulo(s)'
+              Caption = 'T'#237'tulo(s)'
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
               NumGlyphs = 2
             end
-            object BitBtn2: TBitBtn
+            object btnGerarBoleto: TBitBtn
               Left = 0
               Top = 25
               Width = 70
               Height = 25
+              Hint = 'Gerar Boleto(s)'
+              Caption = 'Boleto(s)'
               ParentShowHint = False
               ShowHint = True
               TabOrder = 1
               TabStop = False
               NumGlyphs = 2
             end
-            object BitBtn3: TBitBtn
+            object btnTituloEditar: TBitBtn
               Left = 0
               Top = 49
               Width = 70
               Height = 25
+              Hint = 'Editar T'#237'tulo'
+              Caption = 'Editar'
               ParentShowHint = False
               ShowHint = True
               TabOrder = 2
@@ -1996,6 +2002,7 @@ inherited frmGeVenda: TfrmGeVenda
               ParentShowHint = False
               ShowHint = True
               TabOrder = 3
+              Visible = False
               NumGlyphs = 2
             end
           end
@@ -2040,14 +2047,14 @@ inherited frmGeVenda: TfrmGeVenda
                 Expanded = False
                 FieldName = 'DTEMISS'
                 Title.Alignment = taCenter
-                Width = 75
+                Width = 80
                 Visible = True
               end
               item
                 Expanded = False
                 FieldName = 'DTVENC'
                 Title.Alignment = taCenter
-                Width = 75
+                Width = 80
                 Visible = True
               end
               item
@@ -2079,7 +2086,7 @@ inherited frmGeVenda: TfrmGeVenda
                 Expanded = False
                 FieldName = 'DTREC'
                 Title.Alignment = taCenter
-                Width = 75
+                Width = 80
                 Visible = True
               end>
           end
@@ -3011,7 +3018,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , r.valorsaldo'
       '  , r.dataprocessoboleto'
       '  , r.Baixado'
-      '  , Case when r.Baixado = 0 then '#39'X'#39' else '#39'.'#39' end as Baixado_'
+      '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Baixado_'
       '  , r.Dtrec'
       'from TBCONTREC r')
     ModifySQL.Strings = (
@@ -3155,5 +3162,73 @@ inherited frmGeVenda: TfrmGeVenda
     OnStateChange = DtSrcTabelaItensStateChange
     Left = 960
     Top = 72
+  end
+  object IbStrPrcGerarTitulos: TIBStoredProc
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    StoredProcName = 'SET_GERAR_TITULOS'
+    Left = 992
+    Top = 72
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'CLIENTE'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftSmallint
+        Name = 'PARCELAS'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftBCD
+        Name = 'VALOR_TOTAL'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftSmallint
+        Name = 'PARCELA'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftDate
+        Name = 'EMISSAO'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftDate
+        Name = 'VENCIMENTO'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftBCD
+        Name = 'VALOR_DOCUMENTO'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftSmallint
+        Name = 'FORMA_PAGTO'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftSmallint
+        Name = 'ANO_LANC'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftInteger
+        Name = 'NUM_LANC'
+        ParamType = ptOutput
+      end
+      item
+        DataType = ftSmallint
+        Name = 'ANOVENDA'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftInteger
+        Name = 'NUMVENDA'
+        ParamType = ptInput
+      end>
   end
 end
