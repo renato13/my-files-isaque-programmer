@@ -165,6 +165,7 @@ inherited frmGeVenda: TfrmGeVenda
   inherited pgcGuias: TPageControl
     Width = 1029
     Height = 591
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -1421,7 +1422,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 416
         Width = 1021
         Height = 146
-        ActivePage = tbsRecebimento
+        ActivePage = tbsITitulos
         Align = alBottom
         Style = tsFlatButtons
         TabOrder = 3
@@ -1966,6 +1967,7 @@ inherited frmGeVenda: TfrmGeVenda
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
+              OnClick = btnRegerarTituloClick
               NumGlyphs = 2
             end
             object btnGerarBoleto: TBitBtn
@@ -1994,11 +1996,13 @@ inherited frmGeVenda: TfrmGeVenda
               TabStop = False
               NumGlyphs = 2
             end
-            object BitBtn4: TBitBtn
+            object btnTituloExcluir: TBitBtn
               Left = 0
               Top = 73
               Width = 70
               Height = 25
+              Hint = 'Excluir T'#237'tulo'
+              Caption = 'Excluir'
               ParentShowHint = False
               ShowHint = True
               TabOrder = 3
@@ -3160,15 +3164,15 @@ inherited frmGeVenda: TfrmGeVenda
     AutoEdit = False
     DataSet = qryTitulos
     OnStateChange = DtSrcTabelaItensStateChange
-    Left = 960
+    Left = 992
     Top = 72
   end
   object IbStrPrcGerarTitulos: TIBStoredProc
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     StoredProcName = 'SET_GERAR_TITULOS'
-    Left = 992
-    Top = 72
+    Left = 928
+    Top = 104
     ParamData = <
       item
         DataType = ftString

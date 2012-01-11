@@ -97,7 +97,7 @@ type
     btnRegerarTitulo: TBitBtn;
     btnGerarBoleto: TBitBtn;
     btnTituloEditar: TBitBtn;
-    BitBtn4: TBitBtn;
+    btnTituloExcluir: TBitBtn;
     dbgTitulos: TDBGrid;
     Bevel9: TBevel;
     Bevel10: TBevel;
@@ -232,6 +232,7 @@ type
     procedure btbtnFinalizarClick(Sender: TObject);
     procedure btbtnGerarNFeClick(Sender: TObject);
     procedure qryTitulosCalcFields(DataSet: TDataSet);
+    procedure btnRegerarTituloClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -875,7 +876,21 @@ end;
 
 procedure TfrmGeVenda.qryTitulosCalcFields(DataSet: TDataSet);
 begin
-  qryTitulosLancamento.AsString := FormatFloat('0000', qryTitulosANOLANC.AsInteger) + FormatFloat('000000', qryTitulosNUMLANC.AsInteger); 
+  qryTitulosLancamento.AsString := FormatFloat('0000', qryTitulosANOLANC.AsInteger) + FormatFloat('000000', qryTitulosNUMLANC.AsInteger);
+end;
+
+procedure TfrmGeVenda.btnRegerarTituloClick(Sender: TObject);
+begin
+  if ( IbDtstTabelaSTATUS.AsInteger <> STATUS_VND_FIN ) then
+    Msg.ShowWarning('É permitida a geração de títulos apenas para vendas finalizadas')
+  else
+  if ( not qryTitulos.IsEmpty ) then
+    Msg.ShowWarning('Já existe(m) título(s) gerado(s) para esta venda')
+  else
+  begin
+    GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  end;
 end;
 
 end.

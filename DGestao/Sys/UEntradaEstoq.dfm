@@ -21,7 +21,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
     Left = 0
     Top = 41
     Width = 566
-    Height = 355
+    Height = 353
     Align = alClient
   end
   object Panel1: TPanel
@@ -90,11 +90,10 @@ object frmEntradaEstoq: TfrmEntradaEstoq
     Left = 0
     Top = 41
     Width = 566
-    Height = 355
-    ActivePage = TabSheetItens
+    Height = 353
+    ActivePage = TabSheetNota
     Align = alClient
     HotTrack = True
-    TabIndex = 1
     TabOrder = 1
     OnChange = PageControl1Change
     object TabSheetNota: TTabSheet
@@ -383,7 +382,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
         Left = 275
         Top = 0
         Width = 283
-        Height = 265
+        Height = 263
         Align = alRight
         Caption = 'Valores'
         Font.Charset = DEFAULT_CHARSET
@@ -657,7 +656,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
       end
       object GroupBox6: TGroupBox
         Left = 0
-        Top = 265
+        Top = 263
         Width = 558
         Height = 62
         Align = alBottom
@@ -817,7 +816,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
         Left = 0
         Top = 57
         Width = 558
-        Height = 270
+        Height = 268
         Align = alClient
         Caption = 'Itens Lan'#231'ados'
         Font.Charset = DEFAULT_CHARSET
@@ -839,7 +838,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
           Left = 2
           Top = 15
           Width = 554
-          Height = 253
+          Height = 251
           Align = alClient
           DataSource = frmGrEntradaEstoq.dtsrcComprasItens
           Font.Charset = DEFAULT_CHARSET
@@ -1016,7 +1015,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Top = 396
+    Top = 394
     Width = 566
     Height = 35
     Align = alBottom

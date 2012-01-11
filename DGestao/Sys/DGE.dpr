@@ -67,7 +67,8 @@ uses
   UGeVendedor in 'UGeVendedor.pas' {frmGeVendedor},
   UGeVenda in 'UGeVenda.pas' {frmGeVenda},
   UGeCondicaoPagto in 'UGeCondicaoPagto.pas' {frmGeCondicaoPagto},
-  UGeTeste in 'UGeTeste.pas' {frmGeTeste};
+  UGeTeste in 'UGeTeste.pas' {frmGeTeste},
+  UGeEntradaEstoque in 'UGeEntradaEstoque.pas' {frmGeEntradaEstoque};
 
 {$R *.res}
 
