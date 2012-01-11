@@ -667,6 +667,28 @@ begin
         , Num_lanc;
     end
 
+    -- Verificar ao valor total das parcelas
+    if ( :Parcelas > 1 ) then
+    begin
+      Select
+          sum( coalesce(r.Valorrec, 0) )
+      from TBCONTREC r
+      where r.Anovenda = :Anovenda
+        and r.Numvenda = :Numvenda
+      into
+          valor_total_parcelas;
+
+      -- Atualizar o valor da ultima parcela
+      if ( :Valor_total_parcelas < :Valor_total ) then
+      begin
+        Update TBCONTREC r Set
+            r.Valorrec = :Valor_documento + (:Valor_total - :Valor_total_parcelas)
+        where r.Anovenda = :Anovenda
+          and r.Numvenda = :Numvenda
+          and r.Parcela  = :Parcela;
+      end 
+    end 
+
   end
 end
 ^
