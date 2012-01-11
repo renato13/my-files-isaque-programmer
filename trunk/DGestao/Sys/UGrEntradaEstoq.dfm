@@ -18,7 +18,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
   TextHeight = 13
   object tlbrGridFornec: TToolBar
     Left = 0
-    Top = 407
+    Top = 405
     Width = 620
     Height = 35
     Align = alBottom
@@ -177,7 +177,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
   end
   object pnlBotaoGrid: TPanel
     Left = 0
-    Top = 356
+    Top = 354
     Width = 620
     Height = 51
     Align = alBottom
@@ -246,12 +246,11 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
     Left = 0
     Top = 0
     Width = 620
-    Height = 356
+    Height = 354
     ActivePage = TabSheetDados
     Align = alClient
     DockSite = True
     HotTrack = True
-    TabIndex = 1
     TabOrder = 2
     object TabSheetLista: TTabSheet
       Caption = 'Lista'
@@ -259,7 +258,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
         Left = 0
         Top = 0
         Width = 612
-        Height = 328
+        Height = 326
         Align = alClient
         Color = clWhite
         DataSource = dtsrcCompras
@@ -822,7 +821,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
       end
       object GroupBox6: TGroupBox
         Left = 0
-        Top = 266
+        Top = 264
         Width = 612
         Height = 62
         Align = alBottom
@@ -857,7 +856,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
         Left = 280
         Top = 0
         Width = 332
-        Height = 266
+        Height = 264
         Align = alRight
         Caption = 'Valores'
         Enabled = False
@@ -1155,7 +1154,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
         Left = 0
         Top = 0
         Width = 612
-        Height = 328
+        Height = 326
         Align = alClient
         Caption = 'Itens'
         Enabled = False
@@ -1170,7 +1169,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
           Left = 2
           Top = 15
           Width = 608
-          Height = 311
+          Height = 309
           Align = alClient
           Color = clSilver
           DataSource = dtsrcComprasItens
