@@ -17,6 +17,10 @@ ALTER TABLE TVENDASITENS ADD ANO SMALLINT NOT NULL;
 
 ALTER TABLE TVENDASITENS ADD SEQ SMALLINT NOT NULL;
 
+ALTER TABLE TBVENDAS ADD DTFINALIZACAO_VENDA DATE;
+    
+ALTER TABLE TBVENDAS ADD CFOP INTEGER;
+        
 Update TVENDASITENS Set ANO = 2011, SEQ = 1;
 
 alter table TVENDASITENS add constraint PK_TVENDASITENS primary key (CODCONTROL,SEQ,CODPROD);
@@ -32,6 +36,11 @@ add constraint FK_TBVENDAS_CLIENTE
 foreign key (CODCLI)
 references TBCLIENTE(CNPJ)
 on update CASCADE;
+
+alter table TBVENDAS
+add constraint FK_TBVENDAS_CFOP
+foreign key (CFOP)
+references TBCFOP(CFOP_COD);
 
 ALTER TABLE TVENDASITENS DROP CONSTRAINT FK_TVENDASITENS_1;
 
@@ -223,6 +232,7 @@ AS
   declare variable estoque integer;
   declare variable quantidade integer;
   declare variable reserva integer;
+  declare variable valor_produto numeric(15,2);
 begin
   if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 3)) then
   begin
@@ -235,6 +245,7 @@ begin
         , i.Qtde
         , coalesce(p.Qtde, 0)
         , coalesce(p.Reserva, 0)
+        , coalesce(p.Preco, 0)
       from TVENDASITENS i
         inner join TBPRODUTO p on (p.Cod = i.Codprod)
       where i.Ano = new.Ano
@@ -245,6 +256,7 @@ begin
         , quantidade
         , estoque
         , reserva
+        , valor_produto
     do
     begin
       reserva = :reserva - :Quantidade;
@@ -279,7 +291,7 @@ begin
         , :Quantidade
         , :Estoque
         , user
-        , 'Venda total no valor de R$ ' || new.Totalvenda
+        , 'Venda no valor de R$ ' || :Valor_produto
       );
     end
      

@@ -475,7 +475,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
         Width = 718
         Height = 121
         Align = alTop
-        Caption = 'Dados nomiais'
+        Caption = 'Dados nominais'
         TabOrder = 0
         object lblCodigo: TLabel
           Left = 16
