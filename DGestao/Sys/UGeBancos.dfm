@@ -243,23 +243,23 @@ inherited frmGeBancos: TfrmGeBancos
         object lblNossoNumeroI: TLabel
           Left = 16
           Top = 64
-          Width = 99
+          Width = 83
           Height = 13
-          Caption = 'Nosso N'#250'mero Inicial'
+          Caption = 'Nosso Nro. Inicial'
         end
         object lblNossoNumeroF: TLabel
           Left = 136
           Top = 64
-          Width = 94
+          Width = 78
           Height = 13
-          Caption = 'Nosso N'#250'mero Final'
+          Caption = 'Nosso Nro. Final'
         end
         object lblNossoNumeroP: TLabel
           Left = 256
           Top = 64
-          Width = 110
+          Width = 82
           Height = 13
-          Caption = 'Pr'#243'ximo Nosso N'#250'mero'
+          Caption = 'Pr'#243'x. Nosso Nro.'
         end
         object lblProximaRemessa: TLabel
           Left = 376

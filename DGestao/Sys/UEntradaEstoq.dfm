@@ -209,7 +209,6 @@ object frmEntradaEstoq: TfrmEntradaEstoq
           Font.Height = -11
           Font.Name = 'MS Sans Serif'
           Font.Style = []
-          MaxLength = 10
           ParentFont = False
           TabOrder = 2
         end
@@ -226,7 +225,6 @@ object frmEntradaEstoq: TfrmEntradaEstoq
           Font.Height = -11
           Font.Name = 'MS Sans Serif'
           Font.Style = []
-          MaxLength = 10
           ParentFont = False
           TabOrder = 3
         end

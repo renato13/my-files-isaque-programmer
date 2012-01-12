@@ -303,6 +303,7 @@ returns (
     VENCIMENTO date,
     VALOR_DOCUMENTO numeric(15,2),
     FORMA_PAGTO smallint,
+    DATA_FINALIZ_VENDA date,
     ANO_LANC smallint,
     NUM_LANC integer)
 as
@@ -348,6 +349,7 @@ begin
         case when v.Prazo_12 is not null then 1 else 0 end as parcelas
       , v.Totalvenda
       , v.Formapagto_cod
+      , v.Dtfinalizacao_venda
     from TBVENDAS v
     where v.Ano        = :Anovenda
       and v.Codcontrol = :Numvenda
@@ -368,11 +370,12 @@ begin
       , parcelas
       , valor_total
       , forma_pagto
+      , data_finaliz_venda
   do
   begin
 
     parcela = 0;
-    emissao = Current_date;
+    emissao = :Data_finaliz_venda;
     valor_documento = :Valor_total / :Parcelas;
 
     -- Parcela 1

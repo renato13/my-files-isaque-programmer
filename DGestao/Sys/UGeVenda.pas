@@ -205,6 +205,11 @@ type
     qryTitulosBAIXADO_: TIBStringField;
     qryTitulosDTREC: TDateField;
     IbStrPrcGerarTitulos: TIBStoredProc;
+    IbDtstTabelaDTFINALIZACAO_VENDA: TDateField;
+    btnTituloQuitar: TBitBtn;
+    lblCFOPVenda: TLabel;
+    dbCFOPVenda: TRxDBComboEdit;
+    IbDtstTabelaCFOP: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -233,6 +238,7 @@ type
     procedure btbtnGerarNFeClick(Sender: TObject);
     procedure qryTitulosCalcFields(DataSet: TDataSet);
     procedure btnRegerarTituloClick(Sender: TObject);
+    procedure dbCFOPVendaButtonClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -243,6 +249,8 @@ type
     procedure CarregarDadosProduto( sCodigoAlfa : String);
     procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
+
+    function ValidarQuantidade(sCodigoAlfa : String; Quantidade : Integer) : Boolean;
   public
     { Public declarations }
   end;
@@ -338,6 +346,7 @@ begin
   IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
   IbDtstTabelaFORMAPAG.Value          := GetFormaPagtoNomeDefault;
   IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
+  IbDtstTabelaCFOP.Value              := GetCfopIDDefault;
   IbDtstTabelaVENDA_PRAZO.Value := 0;
   IbDtstTabelaSTATUS.Value      := STATUS_VND_AND;
   IbDtstTabelaDESCONTO.Value    := 0;
@@ -519,6 +528,24 @@ begin
   begin
     btbtnFinalizar.Enabled := False;
     btbtnGerarNFe.Enabled  := False;
+  end;
+end;
+
+function TfrmGeVenda.ValidarQuantidade(sCodigoAlfa : String; Quantidade : Integer) : Boolean;
+var
+  iEstoque ,
+  iReserva : Integer;
+begin
+  with qryProduto do
+  begin
+    Close;
+    ParamByName('CodigoAlfa').AsString := sCodigoAlfa;
+    Open;
+
+    iEstoque := FieldByName('Qtde').AsInteger;
+    iReserva := FieldByName('Reserva').AsInteger;
+
+    Result := ( (iEstoque - iReserva) >= Quantidade );
   end;
 end;
 
@@ -825,7 +852,8 @@ begin
   else
   if ( ShowConfirm('Confirma a finalização da venda selecionada?') ) then
   begin
-    IbDtstTabelaSTATUS.Value := STATUS_VND_FIN;
+    IbDtstTabelaSTATUS.Value              := STATUS_VND_FIN;
+    IbDtstTabelaDTFINALIZACAO_VENDA.Value := Date;
     IbDtstTabela.Open;
     IbDtstTabela.ApplyUpdates;
 
@@ -882,15 +910,26 @@ end;
 procedure TfrmGeVenda.btnRegerarTituloClick(Sender: TObject);
 begin
   if ( IbDtstTabelaSTATUS.AsInteger <> STATUS_VND_FIN ) then
-    Msg.ShowWarning('É permitida a geração de títulos apenas para vendas finalizadas')
+    ShowWarning('É permitida a geração de títulos apenas para vendas finalizadas')
   else
   if ( not qryTitulos.IsEmpty ) then
-    Msg.ShowWarning('Já existe(m) título(s) gerado(s) para esta venda')
+    ShowWarning('Já existe(m) título(s) gerado(s) para esta venda')
   else
+  if ( ShowConfirm('Confirma geração do(s) títulos a receber da venda?') ) then
   begin
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   end;
+end;
+
+procedure TfrmGeVenda.dbCFOPVendaButtonClick(Sender: TObject);
+var
+  iCodigo : Integer;
+  sDescricao : String;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarCFOP(Self, iCodigo, sDescricao) ) then
+      IbDtstTabelaCFOP.AsInteger := iCodigo;
 end;
 
 end.
