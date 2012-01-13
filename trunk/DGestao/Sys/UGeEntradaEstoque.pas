@@ -97,62 +97,37 @@ type
     Bevel6: TBevel;
     Bevel7: TBevel;
     pnlBotoesTitulo: TPanel;
-    btnRegerarTitulo: TBitBtn;
+    btnRegerarDuplicata: TBitBtn;
     btnTituloEditar: TBitBtn;
     btnTituloExcluir: TBitBtn;
     dbgTitulos: TDBGrid;
     Bevel9: TBevel;
     cdsTabelaItens: TIBDataSet;
-    cdsTabelaItensANO: TSmallintField;
-    cdsTabelaItensCODCONTROL: TIntegerField;
-    cdsTabelaItensSEQ: TSmallintField;
-    cdsTabelaItensCODPROD: TIBStringField;
-    cdsTabelaItensCODEMP: TIBStringField;
-    cdsTabelaItensCODCLI: TIBStringField;
-    cdsTabelaItensDTVENDA: TDateTimeField;
-    cdsTabelaItensQTDE: TIntegerField;
-    cdsTabelaItensPUNIT: TIBBCDField;
-    cdsTabelaItensDESCONTO: TIBBCDField;
-    cdsTabelaItensPFINAL: TIBBCDField;
-    cdsTabelaItensQTDEFINAL: TIntegerField;
-    cdsTabelaItensUNID_COD: TSmallintField;
-    cdsTabelaItensCFOP_COD: TIntegerField;
-    cdsTabelaItensALIQUOTA: TIBBCDField;
-    cdsTabelaItensVALOR_IPI: TIBBCDField;
-    cdsTabelaItensDESCRI: TIBStringField;
-    cdsTabelaItensESTOQUE: TIntegerField;
-    cdsTabelaItensUNP_SIGLA: TIBStringField;
-    cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
-    cdsTabelaItensVALOR_DESCONTO: TIBBCDField;
-    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
-    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
-    cdsTabelaItensCFOP_DESCRICAO: TIBStringField;
-    cdsTabelaItensCST: TIBStringField;
     IbUpdTabelaItens: TIBUpdateSQL;
     DtSrcTabelaItens: TDataSource;
-    qryTitulos: TIBDataSet;
-    qryTitulosANOLANC: TSmallintField;
-    qryTitulosNUMLANC: TIntegerField;
-    qryTitulosPARCELA: TSmallintField;
-    qryTitulosCODBANCO: TIntegerField;
-    qryTitulosNOSSONUMERO: TIBStringField;
-    qryTitulosCNPJ: TIBStringField;
-    qryTitulosTIPPAG: TIBStringField;
-    qryTitulosDTEMISS: TDateField;
-    qryTitulosDTVENC: TDateField;
-    qryTitulosVALORREC: TIBBCDField;
-    qryTitulosPERCENTJUROS: TIBBCDField;
-    qryTitulosPERCENTMULTA: TIBBCDField;
-    qryTitulosPERCENTDESCONTO: TIBBCDField;
-    qryTitulosVALORRECTOT: TIBBCDField;
-    qryTitulosVALORSALDO: TIBBCDField;
-    qryTitulosDATAPROCESSOBOLETO: TDateField;
-    qryTitulosBAIXADO: TSmallintField;
-    qryTitulosBAIXADO_: TIBStringField;
-    qryTitulosDTREC: TDateField;
-    qryTitulosLancamento: TStringField;
+    qryDuplicatas: TIBDataSet;
+    qryDuplicatasANOLANC: TSmallintField;
+    qryDuplicatasNUMLANC: TIntegerField;
+    qryDuplicatasPARCELA: TSmallintField;
+    qryDuplicatasCODBANCO: TIntegerField;
+    qryDuplicatasNOSSONUMERO: TIBStringField;
+    qryDuplicatasCNPJ: TIBStringField;
+    qryDuplicatasTIPPAG: TIBStringField;
+    qryDuplicatasDTEMISS: TDateField;
+    qryDuplicatasDTVENC: TDateField;
+    qryDuplicatasVALORREC: TIBBCDField;
+    qryDuplicatasPERCENTJUROS: TIBBCDField;
+    qryDuplicatasPERCENTMULTA: TIBBCDField;
+    qryDuplicatasPERCENTDESCONTO: TIBBCDField;
+    qryDuplicatasVALORRECTOT: TIBBCDField;
+    qryDuplicatasVALORSALDO: TIBBCDField;
+    qryDuplicatasDATAPROCESSOBOLETO: TDateField;
+    qryDuplicatasBAIXADO: TSmallintField;
+    qryDuplicatasBAIXADO_: TIBStringField;
+    qryDuplicatasDTREC: TDateField;
+    qryDuplicatasLancamento: TStringField;
     dtsTitulos: TDataSource;
-    IbStrPrcGerarTitulos: TIBStoredProc;
+    IbStrPrcGerarDuplicatas: TIBStoredProc;
     GrpBxDadosProduto: TGroupBox;
     lblProduto: TLabel;
     lblQuantidade: TLabel;
@@ -168,11 +143,9 @@ type
     dbQuantidade: TDBEdit;
     dbValorUnit: TDBEdit;
     dbUnidade: TDBEdit;
-    dbCFOP: TRxDBComboEdit;
     dbParticipacao: TDBEdit;
     dbTotalBruto: TDBEdit;
     dbValorIPIProduto: TDBEdit;
-    dbCFOPDescricao: TDBEdit;
     pnlBotoesProduto: TPanel;
     btnProdutoInserir: TBitBtn;
     btnProdutoEditar: TBitBtn;
@@ -188,8 +161,112 @@ type
     dbOutros: TDBEdit;
     lblCustoMedio: TLabel;
     dbCustoMedio: TDBEdit;
+    IbDtstTabelaANO: TSmallintField;
+    IbDtstTabelaCODCONTROL: TIntegerField;
+    IbDtstTabelaCODEMP: TIBStringField;
+    IbDtstTabelaCODFORN: TIntegerField;
+    IbDtstTabelaNF: TIntegerField;
+    IbDtstTabelaNFSERIE: TIBStringField;
+    IbDtstTabelaDTLANCAMENTO: TDateTimeField;
+    IbDtstTabelaDTEMISS: TDateField;
+    IbDtstTabelaDTENT: TDateField;
+    IbDtstTabelaNFCFOP: TIntegerField;
+    IbDtstTabelaNATUREZA: TIBStringField;
+    IbDtstTabelaSTATUS: TSmallintField;
+    IbDtstTabelaIPI: TIBBCDField;
+    IbDtstTabelaICMSBASE: TIBBCDField;
+    IbDtstTabelaICMSVALOR: TIBBCDField;
+    IbDtstTabelaICMSSUBSTBASE: TIBBCDField;
+    IbDtstTabelaICMSSUBSTVALOR: TIBBCDField;
+    IbDtstTabelaFRETE: TIBBCDField;
+    IbDtstTabelaOUTROSCUSTOS: TIBBCDField;
+    IbDtstTabelaDESCONTO: TIBBCDField;
+    IbDtstTabelaTOTALNF: TIBBCDField;
+    IbDtstTabelaTOTALPROD: TIBBCDField;
+    IbDtstTabelaOBS: TMemoField;
+    IbDtstTabelaUSUARIO: TIBStringField;
+    IbDtstTabelaFORMAPAGTO_COD: TSmallintField;
+    IbDtstTabelaCONDICAOPAGTO_COD: TSmallintField;
+    IbDtstTabelaCOMPRA_PRAZO: TSmallintField;
+    IbDtstTabelaPRAZO_01: TSmallintField;
+    IbDtstTabelaPRAZO_02: TSmallintField;
+    IbDtstTabelaPRAZO_03: TSmallintField;
+    IbDtstTabelaPRAZO_04: TSmallintField;
+    IbDtstTabelaPRAZO_05: TSmallintField;
+    IbDtstTabelaPRAZO_06: TSmallintField;
+    IbDtstTabelaPRAZO_07: TSmallintField;
+    IbDtstTabelaPRAZO_08: TSmallintField;
+    IbDtstTabelaPRAZO_09: TSmallintField;
+    IbDtstTabelaPRAZO_10: TSmallintField;
+    IbDtstTabelaPRAZO_11: TSmallintField;
+    IbDtstTabelaPRAZO_12: TSmallintField;
+    IbDtstTabelaNOMEFORN: TIBStringField;
+    IbDtstTabelaCNPJ: TIBStringField;
+    IbDtstTabelaCFOP_DESCRICAO: TIBStringField;
+    btbtnFinalizar: TBitBtn;
+    Bevel12: TBevel;
+    cdsTabelaItensANO: TSmallintField;
+    cdsTabelaItensCODCONTROL: TIntegerField;
+    cdsTabelaItensCODEMP: TIBStringField;
+    cdsTabelaItensSEQ: TSmallintField;
+    cdsTabelaItensCODPROD: TIBStringField;
+    cdsTabelaItensCODFORN: TIntegerField;
+    cdsTabelaItensDTENT: TDateField;
+    cdsTabelaItensQTDE: TSmallintField;
+    cdsTabelaItensQTDEANTES: TIntegerField;
+    cdsTabelaItensQTDEFINAL: TIntegerField;
+    cdsTabelaItensPRECOUNIT: TIBBCDField;
+    cdsTabelaItensCUSTOMEDIO: TIBBCDField;
+    cdsTabelaItensNF: TIntegerField;
+    cdsTabelaItensPERC_PARTICIPACAO: TIBBCDField;
+    cdsTabelaItensVALOR_FRETE: TIBBCDField;
+    cdsTabelaItensVALOR_DESCONTO: TIBBCDField;
+    cdsTabelaItensVALOR_OUTROS: TIBBCDField;
+    cdsTabelaItensUNID_COD: TSmallintField;
+    cdsTabelaItensDESCRI: TIBStringField;
+    cdsTabelaItensESTOQUE: TIntegerField;
+    cdsTabelaItensUNP_SIGLA: TIBStringField;
+    cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
+    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
+    cdsTabelaItensVALOR_IPI: TIBBCDField;
+    dbCFOP: TRxDBComboEdit;
+    dbCFOPDescricao: TDBEdit;
+    IbDtstTabelaDTFINALIZACAO_COMPRA: TDateTimeField;
+    procedure FormCreate(Sender: TObject);
+    procedure btnFiltrarClick(Sender: TObject);
+    procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
+    procedure dbFornecedorButtonClick(Sender: TObject);
+    procedure IbDtstTabelaSTATUSGetText(Sender: TField; var Text: String;
+      DisplayText: Boolean);
+    procedure dbCondicaoPagtoClick(Sender: TObject);
+    procedure dtsEmpresaStateChange(Sender: TObject);
+    procedure DtSrcTabelaItensStateChange(Sender: TObject);
+    procedure IbDtstTabelaBeforeCancel(DataSet: TDataSet);
+    procedure btbtnExcluirClick(Sender: TObject);
+    procedure btnProdutoInserirClick(Sender: TObject);
+    procedure btnProdutoEditarClick(Sender: TObject);
+    procedure btnProdutoExcluirClick(Sender: TObject);
+    procedure btnProdutoSalvarClick(Sender: TObject);
+    procedure btbtnSalvarClick(Sender: TObject);
+    procedure ControlEditExit(Sender: TObject);
+    procedure pgcGuiasChange(Sender: TObject);
+    procedure btbtnIncluirClick(Sender: TObject);
+    procedure btbtnAlterarClick(Sender: TObject);
+    procedure dbProdutoButtonClick(Sender: TObject);
+    procedure dbCFOPButtonClick(Sender: TObject);
+    procedure cdsTabelaItensNewRecord(DataSet: TDataSet);
+    procedure btbtnFinalizarClick(Sender: TObject);
+    procedure qryDuplicatasCalcFields(DataSet: TDataSet);
+    procedure btnRegerarDuplicataClick(Sender: TObject);
   private
     { Private declarations }
+    SQL_Itens   ,
+    SQL_Duplicatas : TStringList;
+    procedure AbrirTabelaItens(const AnoCompra : Smallint; const ControleCompra : Integer);
+    procedure AbrirTabelaDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
+    procedure GerarDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
+    procedure CarregarDadosProduto( sCodigoAlfa : String);
+    procedure HabilitarDesabilitar_Btns;
   public
     { Public declarations }
   end;
@@ -197,10 +274,588 @@ type
 var
   frmGeEntradaEstoque: TfrmGeEntradaEstoque;
 
+const
+  STATUS_CMP_ABR = 1;
+  STATUS_CMP_FIN = 2;
+  STATUS_CMP_CAN = 3;
+
+  procedure MostrarControleCompras(const AOwner : TComponent);
+
 implementation
 
-uses DateUtils, UDMBusiness, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP;
+uses DateUtils, UDMBusiness, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
+  UGeFornecedor;
 
 {$R *.dfm}
+
+procedure MostrarControleCompras(const AOwner : TComponent);
+var
+  frm : TfrmGeEntradaEstoque;
+  whr : String;
+begin
+  frm := TfrmGeEntradaEstoque.Create(AOwner);
+  try
+    whr := 'cast(c.dtent as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+
+    with frm, IbDtstTabela do
+    begin
+      Close;
+      SelectSQL.Add('where ' + whr);
+      SelectSQL.Add('order by ' + CampoOrdenacao);
+      Open;
+    end;
+
+    frm.ShowModal;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.FormCreate(Sender: TObject);
+begin
+  IbDtstTabela.GeneratorField.Generator := 'GEN_COMPRAS_CONTROLE_' + FormatFloat('0000', YearOf(Date));
+
+  inherited;
+  
+  SQL_Itens := TStringList.Create;
+  SQL_Itens.Clear;
+  SQL_Itens.AddStrings( cdsTabelaItens.SelectSQL );
+
+  SQL_Duplicatas := TStringList.Create;
+  SQL_Duplicatas.Clear;
+  SQL_Duplicatas.AddStrings( qryDuplicatas.SelectSQL );
+
+  edData.Date      := Date;
+  ControlFirstEdit := dbEmpresa;
+
+  tblEmpresa.Open;
+  tblFormaPagto.Open;
+  tblCondicaoPagto.Open;
+
+  DisplayFormatCodigo := '###0000000';
+  NomeTabela     := 'TBCOMPRAS';
+  CampoCodigo    := 'Codcontrol';
+  CampoDescricao := 'f.NomeForn';
+  CampoOrdenacao := 'c.dtEnt, f.NomeForn';
+
+  UpdateGenerator( 'where Ano = ' + FormatFloat('0000', YearOf(Date)) );
+end;
+
+procedure TfrmGeEntradaEstoque.btnFiltrarClick(Sender: TObject);
+begin
+  WhereAdditional := 'cast(c.dtent as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+  inherited;
+end;
+
+procedure TfrmGeEntradaEstoque.IbDtstTabelaNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  IbDtstTabelaAno.Value     := YearOf(Now);
+  IbDtstTabelaDTENT.Value   := Date;
+  IbDtstTabelaDTLANCAMENTO.Value := Now;
+  IbDtstTabelaCODEMP.Value  := GetEmpresaIDDefault;
+  IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
+  IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
+  IbDtstTabelaNFCFOP.Value            := GetCfopIDDefault;
+  IbDtstTabelaNATUREZA.Value          := IntToStr( GetCfopIDDefault );
+  IbDtstTabelaSTATUS.Value       := STATUS_CMP_ABR;
+  IbDtstTabelaCOMPRA_PRAZO.Value := 0;
+  IbDtstTabelaICMSBASE.Value     := 0;
+  IbDtstTabelaICMSVALOR.Value      := 0;
+  IbDtstTabelaICMSSUBSTBASE.Value  := 0;
+  IbDtstTabelaICMSSUBSTVALOR.Value := 0;
+  IbDtstTabelaFRETE.Value          := 0;
+  IbDtstTabelaOUTROSCUSTOS.Value   := 0;
+  IbDtstTabelaIPI.Value            := 0;
+  IbDtstTabelaDESCONTO.Value       := 0;
+end;
+
+procedure TfrmGeEntradaEstoque.dbFornecedorButtonClick(Sender: TObject);
+var
+  iCodigo : Integer;
+  sCNPJ   ,
+  sNome   : String;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarFornecedor(Self, iCodigo, sCNPJ, sNome) ) then
+    begin
+      IbDtstTabelaCODFORN.AsInteger := iCodigo;
+      IbDtstTabelaCNPJ.AsString     := sCNPJ;
+      IbDtstTabelaNOMEFORN.AsString := sNome;
+    end;
+end;
+
+procedure TfrmGeEntradaEstoque.IbDtstTabelaSTATUSGetText(Sender: TField;
+  var Text: String; DisplayText: Boolean);
+begin
+  Case Sender.AsInteger of
+    STATUS_CMP_ABR : Text := 'Aberta';
+    STATUS_CMP_FIN : Text := 'Finalizada';
+    STATUS_CMP_CAN : Text := 'Cancelada';
+    else
+      Text := Sender.AsString;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.dbCondicaoPagtoClick(Sender: TObject);
+var
+  I : Integer;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( tblCondicaoPagto.Locate('cond_cod', dbCondicaoPagto.Field.AsInteger, []) ) then
+    begin
+      IbDtstTabelaCOMPRA_PRAZO.AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo').AsInteger;
+      for I := COND_PARCELA_MIN to COND_PARCELA_MAX do
+      begin
+        IbDtstTabela.FieldByName('PRAZO_' + FormatFloat('00', I)).Clear;
+        if ( not tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).IsNull ) then
+          IbDtstTabela.FieldByName('PRAZO_' + FormatFloat('00', I)).AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).AsInteger;
+      end;
+    end;
+end;
+
+procedure TfrmGeEntradaEstoque.dtsEmpresaStateChange(Sender: TObject);
+begin
+  inherited;
+  pgcMaisDados.ActivePageIndex := 0;
+
+  DtSrcTabelaItens.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN );
+  DtSrcTabelaItensStateChange( DtSrcTabelaItens );
+end;
+
+procedure TfrmGeEntradaEstoque.DtSrcTabelaItensStateChange(
+  Sender: TObject);
+begin
+  btnProdutoInserir.Enabled := ( DtSrcTabelaItens.AutoEdit and (cdsTabelaItens.State = dsBrowse) );
+  btnProdutoEditar.Enabled  := ( DtSrcTabelaItens.AutoEdit and (cdsTabelaItens.State = dsBrowse) and (not cdsTabelaItens.IsEmpty) );
+  btnProdutoExcluir.Enabled := ( DtSrcTabelaItens.AutoEdit and (cdsTabelaItens.State = dsBrowse) and (not cdsTabelaItens.IsEmpty) );
+  btnProdutoSalvar.Enabled  := ( cdsTabelaItens.State in [dsEdit, dsInsert] );
+
+  if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+    if ( dbProduto.Visible and dbProduto.Enabled ) then
+      dbProduto.SetFocus;
+end;
+
+procedure TfrmGeEntradaEstoque.AbrirTabelaItens(const AnoCompra: Smallint;
+  const ControleCompra: Integer);
+begin
+  cdsTabelaItens.Close;
+
+  with cdsTabelaItens, SelectSQL do
+  begin
+    Clear;
+    AddStrings( SQL_Itens );
+    Add('where i.Ano        = ' + IntToStr(AnoCompra));
+    Add('  and i.Codcontrol = ' + IntToStr(ControleCompra));
+  end;
+
+  cdsTabelaItens.Open;
+
+  HabilitarDesabilitar_Btns;
+end;
+
+procedure TfrmGeEntradaEstoque.AbrirTabelaDuplicatas(
+  const AnoCompra: Smallint; const ControleCompra: Integer);
+begin
+  qryDuplicatas.Close;
+
+  with qryDuplicatas, SelectSQL do
+  begin
+    Clear;
+    AddStrings( SQL_Duplicatas );
+    Add('where p.Anovenda = ' + IntToStr(AnoCompra));
+    Add('  and p.Numvenda = ' + IntToStr(ControleCompra));
+    Add('order by p.numlanc, p.parcela');
+  end;
+
+  qryDuplicatas.Open;
+end;
+
+procedure TfrmGeEntradaEstoque.CarregarDadosProduto(sCodigoAlfa: String);
+begin
+  if ( not cdsTabelaItens.Active ) then
+    Exit
+  else
+  if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+  begin
+    with qryProduto do
+    begin
+      Close;
+      ParamByName('CodigoAlfa').AsString := sCodigoAlfa;
+      Open;
+      if not IsEmpty then
+      begin
+        cdsTabelaItensDESCRI.AsString      := FieldByName('Descri').AsString;
+        cdsTabelaItensUNP_SIGLA.AsString   := FieldByName('Unp_sigla').AsString;
+        cdsTabelaItensQTDEANTES.AsInteger  := FieldByName('Qtde').AsInteger;
+
+        if ( FieldByName('Codunidade').AsInteger > 0 ) then
+          cdsTabelaItensUNID_COD.AsInteger   := FieldByName('Codunidade').AsInteger;
+      end
+      else
+      begin
+        ShowWarning('Código de produto não cadastrado');
+        cdsTabelaItensCODPROD.Clear;
+        if ( dbProduto.Visible and dbProduto.Enabled ) then
+          dbProduto.SetFocus;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.HabilitarDesabilitar_Btns;
+begin
+  if ( pgcGuias.ActivePage = tbsCadastro ) then
+  begin
+    btbtnFinalizar.Enabled := (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
+//    btbtnGerarNFe.Enabled  := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+  end
+  else
+  begin
+    btbtnFinalizar.Enabled := False;
+//    btbtnGerarNFe.Enabled  := False;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.IbDtstTabelaBeforeCancel(DataSet: TDataSet);
+begin
+  inherited;
+  AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnExcluirClick(Sender: TObject);
+var
+  sMsg : String;
+begin
+  if ( IbDtstTabelaSTATUS.AsInteger > STATUS_CMP_ABR ) then
+  begin
+    Case IbDtstTabelaSTATUS.AsInteger of
+      STATUS_CMP_FIN : sMsg := 'Esta entrada não pode ser alterada porque está finalizada.';
+      STATUS_CMP_CAN : sMsg := 'Esta entrada não pode ser alterada porque está cancelada';
+    end;
+
+    ShowWarning(sMsg);
+    Abort;
+  end
+  else
+  begin
+    inherited;
+    if ( not OcorreuErro ) then
+    begin
+      AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    end;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.btnProdutoInserirClick(Sender: TObject);
+begin
+  if ( IbDtstTabelaTOTALPROD.AsCurrency = 0 ) then
+  begin
+    ShowWarning('Favor informar valor Total de Produtos');
+    dbTotalProduto.SetFocus;
+  end
+  else
+  if ( IbDtstTabelaTOTALNF.AsCurrency = 0 ) then
+  begin
+    ShowWarning('Favor informar valor Total da Nota Fiscal');
+    dbTotalNotaFiscal.SetFocus;
+  end
+  else
+  if ( cdsTabelaItens.Active ) then
+  begin
+    cdsTabelaItens.Append;
+    dbProduto.SetFocus;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.btnProdutoEditarClick(Sender: TObject);
+begin
+  if ( not cdsTabelaItens.IsEmpty ) then
+  begin
+    cdsTabelaItens.Edit;
+    dbProduto.SetFocus;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.btnProdutoExcluirClick(Sender: TObject);
+begin
+  if ( not cdsTabelaItens.IsEmpty ) then
+    if ( ShowConfirm('Deseja excluir o ítem selecionado?') ) then
+      cdsTabelaItens.Delete;
+end;
+
+procedure TfrmGeEntradaEstoque.btnProdutoSalvarClick(Sender: TObject);
+begin
+  if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+  begin
+    if ( cdsTabelaItensQTDE.Value < 0 ) then
+    begin
+      ShowWarning('QUantidade inválida.');
+      dbQuantidade.SetFocus;
+    end
+    else
+    if ( cdsTabelaItensPRECOUNIT.Value < 0 ) then
+    begin
+      ShowWarning('Valor unitário inválida.');
+      dbValorUnit.SetFocus;
+    end
+    else
+    if ( cdsTabelaItensVALOR_IPI.Value < 0 ) then
+    begin
+      ShowWarning('Valor IPI inválida.');
+      dbValorIPIProduto.SetFocus;
+    end
+    else
+    begin
+
+      cdsTabelaItens.Post;
+
+      if ( btnProdutoInserir.Visible and btnProdutoInserir.Enabled ) then
+        btnProdutoInserir.SetFocus;
+
+    end;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnSalvarClick(Sender: TObject);
+begin
+  if ( cdsTabelaItens.IsEmpty ) then
+    ShowWarning('Favor informar o(s) produto(s) da compra.')
+  else
+  begin
+    inherited;
+
+    if ( not OcorreuErro ) then
+    begin
+      if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+        cdsTabelaItens.Post;
+      cdsTabelaItens.ApplyUpdates;
+    end;
+
+    HabilitarDesabilitar_Btns;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.ControlEditExit(Sender: TObject);
+begin
+  inherited;
+
+  if ( Sender = dbProduto ) then
+    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+      CarregarDadosProduto( cdsTabelaItensCODPROD.AsString );
+
+  if ( Sender = dbQuantidade ) then
+    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+      cdsTabelaItensQTDEFINAL.Value := cdsTabelaItensQTDEANTES.Value + cdsTabelaItensQTDE.Value;
+
+  if ( Sender = dbValorUnit ) then
+    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+      cdsTabelaItensTOTAL_BRUTO.Value := cdsTabelaItensPRECOUNIT.Value * cdsTabelaItensQTDE.Value;
+
+  if ( Sender = dbTotalBruto ) then
+  begin
+    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+    begin
+      if ( IbDtstTabelaTOTALPROD.AsCurrency > 0 ) then
+      begin
+        cdsTabelaItensPERC_PARTICIPACAO.Value := cdsTabelaItensTOTAL_BRUTO.Value / IbDtstTabelaTOTALPROD.Value * 100;
+        cdsTabelaItensVALOR_FRETE.Value       := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaFRETE.Value / 100;
+        cdsTabelaItensVALOR_DESCONTO.Value    := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaDESCONTO.Value / 100;
+        cdsTabelaItensVALOR_OUTROS.Value      := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaOUTROSCUSTOS.Value / 100;
+
+        cdsTabelaItensCUSTOMEDIO.Value := cdsTabelaItensPRECOUNIT.Value    + cdsTabelaItensVALOR_FRETE.Value +
+                                          cdsTabelaItensVALOR_OUTROS.Value + cdsTabelaItensVALOR_IPI.Value   - cdsTabelaItensVALOR_DESCONTO.Value;
+      end;
+    end;
+
+    if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
+      btnProdutoSalvar.SetFocus;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.pgcGuiasChange(Sender: TObject);
+begin
+  AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnIncluirClick(Sender: TObject);
+begin
+  inherited;
+  if ( not OcorreuErro ) then
+  begin
+    AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnAlterarClick(Sender: TObject);
+var
+  sMsg : String;
+begin
+  if ( IbDtstTabelaSTATUS.AsInteger > STATUS_CMP_ABR ) then
+  begin
+    Case IbDtstTabelaSTATUS.AsInteger of
+      STATUS_CMP_FIN : sMsg := 'Esta entrada não pode ser alterada porque está finalizada.';
+      STATUS_CMP_CAN : sMsg := 'Esta entrada não pode ser alterada porque está cancelada';
+    end;
+
+    ShowWarning(sMsg);
+    Abort;
+  end
+  else
+  begin
+    inherited;
+    if ( not OcorreuErro ) then
+    begin
+      AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    end;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.dbProdutoButtonClick(Sender: TObject);
+var
+  iCodigo  ,
+  iCFOP    ,
+  iUnidade : Integer;
+  sCodigoAlfa,
+  sDescricao ,
+  sUnidade   ,
+  sCST       : String;
+  cAliquota  ,
+  cValorVenda,
+  cValorIPI  : Currency;
+begin
+  if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI) ) then
+    begin
+      cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
+      cdsTabelaItensDESCRI.AsString      := sDescricao;
+      cdsTabelaItensUNP_SIGLA.AsString   := sUnidade;
+
+      if ( iUnidade > 0 ) then
+        cdsTabelaItensUNID_COD.AsInteger := iUnidade;
+    end;
+end;
+
+procedure TfrmGeEntradaEstoque.dbCFOPButtonClick(Sender: TObject);
+begin
+  ;
+end;
+
+procedure TfrmGeEntradaEstoque.cdsTabelaItensNewRecord(DataSet: TDataSet);
+begin
+  cdsTabelaItensANO.Value        := IbDtstTabelaANO.Value;
+  cdsTabelaItensCODCONTROL.Value := IbDtstTabelaCODCONTROL.Value;
+  cdsTabelaItensDTENT.Value      := IbDtstTabelaDTENT.Value;
+  cdsTabelaItensCODEMP.Value     := IbDtstTabelaCODEMP.Value;
+  cdsTabelaItensCODFORN.Value    := IbDtstTabelaCODFORN.Value;
+  cdsTabelaItensNF.Value         := IbDtstTabelaNF.Value;
+  cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnFinalizarClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  IbDtstTabela.Edit;
+
+  if ( IbDtstTabelaCODFORN.AsInteger = 0 ) then
+  begin
+    ShowWarning('Favor informar o fornecedor');
+    dbFornecedor.SetFocus;
+  end
+  else
+  if ( IbDtstTabelaTOTALPROD.AsCurrency = 0 ) then
+  begin
+    ShowWarning('Favor informar valor Total de Produtos');
+    dbTotalProduto.SetFocus;
+  end
+  else
+  if ( IbDtstTabelaTOTALNF.AsCurrency = 0 ) then
+  begin
+    ShowWarning('Favor informar valor Total da Nota Fiscal');
+    dbTotalNotaFiscal.SetFocus;
+  end
+  else
+  if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 0 ) then
+  begin
+    ShowWarning('Favor informar a forma de pagamento');
+    dbFormaPagto.SetFocus;
+  end
+  else
+  if ( IbDtstTabelaCONDICAOPAGTO_COD.AsInteger = 0 ) then
+  begin
+    ShowWarning('Favor informar a condição de pagamento');
+    dbCondicaoPagto.SetFocus;
+  end
+  else
+  if ( ShowConfirm('Confirma a finalização da entrada selecionada?') ) then
+  begin
+    IbDtstTabelaSTATUS.Value               := STATUS_CMP_FIN;
+    IbDtstTabelaDTFINALIZACAO_COMPRA.Value := Now;
+    IbDtstTabela.Open;
+    IbDtstTabela.ApplyUpdates;
+
+    GerarDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+    ShowInformation('Entrada finalizada com sucesso !');
+
+    HabilitarDesabilitar_Btns;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.GerarDuplicatas(const AnoCompra: Smallint;
+  const ControleCompra: Integer);
+begin
+  try
+
+    try
+
+      UpdateSequence('GEN_CONTAPAG_NUM_' + IntToStr(AnoCompra), 'TBCONTPAG', 'NUMLANC', 'where ANOLANC = ' + IntToStr(AnoCompra));
+
+      with IbStrPrcGerarDuplicatas do
+      begin
+        ParamByName('anocompra').AsInteger := AnoCompra;
+        ParamByName('numcompra').AsInteger := ControleCompra;
+        ExecProc;
+      end;
+
+    except
+      On E : Exception do
+      begin
+        DMBusiness.ibtrnsctnBusiness.Rollback;
+        ShowError('Erro ao tentar gerar duplicatas.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.qryDuplicatasCalcFields(DataSet: TDataSet);
+begin
+//  qryTitulosLancamento.AsString := FormatFloat('0000', qryTitulosANOLANC.AsInteger) + FormatFloat('000000', qryTitulosNUMLANC.AsInteger);
+end;
+
+procedure TfrmGeEntradaEstoque.btnRegerarDuplicataClick(Sender: TObject);
+begin
+  if ( IbDtstTabelaSTATUS.AsInteger <> STATUS_CMP_FIN ) then
+    ShowWarning('É permitida a geração de duplicatas apenas para entradas finalizadas')
+  else
+  if ( not qryDuplicatas.IsEmpty ) then
+    ShowWarning('Já existe(m) duplicata(s) gerado(s) para esta entrada')
+  else
+  if ( ShowConfirm('Confirma geração do(s) duplicata(s) a receber da entrada?') ) then
+  begin
+    GerarDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  end;
+end;
 
 end.

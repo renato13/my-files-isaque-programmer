@@ -467,8 +467,10 @@ begin
       if not IsEmpty then
       begin
         cdsTabelaItensDESCRI.AsString      := FieldByName('Descri').AsString;
-        cdsTabelaItensUNID_COD.AsInteger   := FieldByName('Codunidade').AsInteger;
         cdsTabelaItensUNP_SIGLA.AsString   := FieldByName('Unp_sigla').AsString;
+
+        if ( FieldByName('Codunidade').AsInteger > 0 ) then
+          cdsTabelaItensUNID_COD.AsInteger   := FieldByName('Codunidade').AsInteger;
 
         if ( FieldByName('Codcfop').AsInteger > 0 ) then
           cdsTabelaItensCFOP_COD.AsInteger := FieldByName('Codcfop').AsInteger;
@@ -881,7 +883,7 @@ begin
 
     try
 
-      UpdateSequence('GEN_CONTAREC_NUM_' + IntToStr(AnoVenda), 'TBCONTREC', 'NUMLANC', 'where anovenda = ' + IntToStr(AnoVenda));
+      UpdateSequence('GEN_CONTAREC_NUM_' + IntToStr(AnoVenda), 'TBCONTREC', 'NUMLANC', 'where ANOLANC = ' + IntToStr(AnoVenda));
 
       with IbStrPrcGerarTitulos do
       begin
@@ -915,7 +917,7 @@ begin
   if ( not qryTitulos.IsEmpty ) then
     ShowWarning('Já existe(m) título(s) gerado(s) para esta venda')
   else
-  if ( ShowConfirm('Confirma geração do(s) títulos a receber da venda?') ) then
+  if ( ShowConfirm('Confirma geração do(s) título(s) a receber da venda?') ) then
   begin
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );

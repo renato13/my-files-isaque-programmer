@@ -132,7 +132,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto, UGeTeste;
+  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque;
 
 {$R *.dfm}
 
@@ -202,9 +202,10 @@ end;
 
 procedure TfrmPrinc.Entrada1Click(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGrEntradaEstoq, frmGrEntradaEstoq);
-  frmGrEntradaEstoq.ShowModal;
-  frmGrEntradaEstoq.Destroy;
+//  Application.CreateForm(TfrmGrEntradaEstoq, frmGrEntradaEstoq);
+//  frmGrEntradaEstoq.ShowModal;
+//  frmGrEntradaEstoq.Destroy;
+  MostrarControleCompras(Self);
 end;
 
 procedure TfrmPrinc.AjusteManual1Click(Sender: TObject);

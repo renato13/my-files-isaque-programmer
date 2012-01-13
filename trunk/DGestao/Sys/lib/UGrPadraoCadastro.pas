@@ -64,6 +64,8 @@ type
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure btbtnSelecionarClick(Sender: TObject);
+    procedure dbgDadosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     fDisplayFormat  ,
@@ -512,6 +514,14 @@ begin
 
   if ( (sGenerator <> EmptyStr) and (sTabela <> EmptyStr) and (sCampoCodigo <> EmptyStr) ) then
     UpdateSequence(sGenerator, sTabela, sCampoCodigo, sWhr);
+end;
+
+procedure TfrmGrPadraoCadastro.dbgDadosKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  // Impede a exclusão de um registro em um DBGRID através das teclas CTRL+DEL
+  if (Shift = [ssCtrl]) and (Key = 46) Then
+    Key := 0;
 end;
 
 end.

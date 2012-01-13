@@ -247,7 +247,7 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
     Top = 0
     Width = 620
     Height = 354
-    ActivePage = TabSheetDados
+    ActivePage = TabSheetLista
     Align = alClient
     DockSite = True
     HotTrack = True
@@ -1396,7 +1396,6 @@ object frmGrEntradaEstoq: TfrmGrEntradaEstoq
       '  CODCONTROL = :OLD_CODCONTROL')
     GeneratorField.Field = 'CODCONTROL'
     GeneratorField.Generator = 'GEN_TBCOMPRAS_ID'
-    Active = True
     Left = 40
     Top = 256
     object ibdtstComprasCODCONTROL: TIntegerField
