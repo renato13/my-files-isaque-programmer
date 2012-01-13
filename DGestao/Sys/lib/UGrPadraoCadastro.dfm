@@ -380,6 +380,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
         TitleFont.Style = [fsBold]
         OnDrawColumnCell = dbgDadosDrawColumnCell
         OnDblClick = dbgDadosDblClick
+        OnKeyDown = dbgDadosKeyDown
         OnKeyPress = dbgDadosKeyPress
       end
       object pnlFiltros: TPanel

@@ -91,7 +91,7 @@ object frmEntradaEstoq: TfrmEntradaEstoq
     Top = 41
     Width = 566
     Height = 353
-    ActivePage = TabSheetNota
+    ActivePage = TabSheetItens
     Align = alClient
     HotTrack = True
     TabOrder = 1

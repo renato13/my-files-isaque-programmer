@@ -100,6 +100,8 @@ var
   frmGeFornecedor: TfrmGeFornecedor;
 
   procedure MostrarTabelaFornecedores(const AOwner : TComponent);
+  function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
+  function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
 
 implementation
 
@@ -116,6 +118,32 @@ begin
   try
     frm.tbsDuplicatas.TabVisible := False; // Temporário
     frm.ShowModal;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean;
+var
+  frm : TfrmGeFornecedor;
+begin
+  frm := TfrmGeFornecedor.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean;
+var
+  frm : TfrmGeFornecedor;
+begin
+  frm := TfrmGeFornecedor.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+    if ( Result ) then
+      CNPJ := frm.IbDtstTabelaCNPJ.AsString;
   finally
     frm.Destroy;
   end;
