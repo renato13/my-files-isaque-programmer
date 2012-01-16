@@ -95,6 +95,9 @@ type
     dbReserva: TDBEdit;
     IbDtstTabelaRESERVA: TIntegerField;
     IbDtstTabelaDISPONIVEL: TLargeintField;
+    lblNCM_SH: TLabel;
+    dbNCM_SH: TDBEdit;
+    IbDtstTabelaNCM_SH: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);

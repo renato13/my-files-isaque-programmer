@@ -106,34 +106,14 @@ type
     IbUpdTabelaItens: TIBUpdateSQL;
     DtSrcTabelaItens: TDataSource;
     qryDuplicatas: TIBDataSet;
-    qryDuplicatasANOLANC: TSmallintField;
-    qryDuplicatasNUMLANC: TIntegerField;
-    qryDuplicatasPARCELA: TSmallintField;
-    qryDuplicatasCODBANCO: TIntegerField;
-    qryDuplicatasNOSSONUMERO: TIBStringField;
-    qryDuplicatasCNPJ: TIBStringField;
-    qryDuplicatasTIPPAG: TIBStringField;
-    qryDuplicatasDTEMISS: TDateField;
-    qryDuplicatasDTVENC: TDateField;
-    qryDuplicatasVALORREC: TIBBCDField;
-    qryDuplicatasPERCENTJUROS: TIBBCDField;
-    qryDuplicatasPERCENTMULTA: TIBBCDField;
-    qryDuplicatasPERCENTDESCONTO: TIBBCDField;
-    qryDuplicatasVALORRECTOT: TIBBCDField;
-    qryDuplicatasVALORSALDO: TIBBCDField;
-    qryDuplicatasDATAPROCESSOBOLETO: TDateField;
-    qryDuplicatasBAIXADO: TSmallintField;
-    qryDuplicatasBAIXADO_: TIBStringField;
-    qryDuplicatasDTREC: TDateField;
     qryDuplicatasLancamento: TStringField;
-    dtsTitulos: TDataSource;
+    dtsDuplicatas: TDataSource;
     IbStrPrcGerarDuplicatas: TIBStoredProc;
     GrpBxDadosProduto: TGroupBox;
     lblProduto: TLabel;
     lblQuantidade: TLabel;
     lblValorUnit: TLabel;
     lblUnidade: TLabel;
-    lblCFOP: TLabel;
     lblParticipacao: TLabel;
     lblTotalBruto: TLabel;
     lblValorIPIProduto: TLabel;
@@ -229,9 +209,33 @@ type
     cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     cdsTabelaItensVALOR_IPI: TIBBCDField;
-    dbCFOP: TRxDBComboEdit;
-    dbCFOPDescricao: TDBEdit;
     IbDtstTabelaDTFINALIZACAO_COMPRA: TDateTimeField;
+    qryDuplicatasANOLANC: TSmallintField;
+    qryDuplicatasNUMLANC: TIntegerField;
+    qryDuplicatasPARCELA: TSmallintField;
+    qryDuplicatasCODFORN: TSmallintField;
+    qryDuplicatasNOMEFORN: TIBStringField;
+    qryDuplicatasCNPJ: TIBStringField;
+    qryDuplicatasNOTFISC: TIBStringField;
+    qryDuplicatasTIPPAG: TIBStringField;
+    qryDuplicatasDTEMISS: TDateField;
+    qryDuplicatasDTVENC: TDateField;
+    qryDuplicatasVALORPAG: TIBBCDField;
+    qryDuplicatasBANCO: TSmallintField;
+    qryDuplicatasBCO_NOME: TIBStringField;
+    qryDuplicatasNUMCHQ: TIBStringField;
+    qryDuplicatasPAGO_: TIBStringField;
+    qryDuplicatasDOCBAIX: TIBStringField;
+    IbUpdDuplicatas: TIBUpdateSQL;
+    lblNCM_SH: TLabel;
+    dbNCM_SH: TDBEdit;
+    lblCST: TLabel;
+    dbCST: TDBEdit;
+    lblCFOPItem: TLabel;
+    dbCFOPItem: TDBEdit;
+    cdsTabelaItensNCM_SH: TIBStringField;
+    cdsTabelaItensCST: TIBStringField;
+    cdsTabelaItensCFOP: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -239,7 +243,6 @@ type
     procedure IbDtstTabelaSTATUSGetText(Sender: TField; var Text: String;
       DisplayText: Boolean);
     procedure dbCondicaoPagtoClick(Sender: TObject);
-    procedure dtsEmpresaStateChange(Sender: TObject);
     procedure DtSrcTabelaItensStateChange(Sender: TObject);
     procedure IbDtstTabelaBeforeCancel(DataSet: TDataSet);
     procedure btbtnExcluirClick(Sender: TObject);
@@ -253,11 +256,12 @@ type
     procedure btbtnIncluirClick(Sender: TObject);
     procedure btbtnAlterarClick(Sender: TObject);
     procedure dbProdutoButtonClick(Sender: TObject);
-    procedure dbCFOPButtonClick(Sender: TObject);
     procedure cdsTabelaItensNewRecord(DataSet: TDataSet);
     procedure btbtnFinalizarClick(Sender: TObject);
     procedure qryDuplicatasCalcFields(DataSet: TDataSet);
     procedure btnRegerarDuplicataClick(Sender: TObject);
+    procedure dbCFOPNFButtonClick(Sender: TObject);
+    procedure DtSrcTabelaStateChange(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -266,6 +270,7 @@ type
     procedure AbrirTabelaDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
     procedure GerarDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
     procedure CarregarDadosProduto( sCodigoAlfa : String);
+    procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
   public
     { Public declarations }
@@ -357,6 +362,7 @@ begin
   IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
   IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
   IbDtstTabelaNFCFOP.Value            := GetCfopIDDefault;
+  IbDtstTabelaCFOP_DESCRICAO.Value    := GetCfopNomeDefault;
   IbDtstTabelaNATUREZA.Value          := IntToStr( GetCfopIDDefault );
   IbDtstTabelaSTATUS.Value       := STATUS_CMP_ABR;
   IbDtstTabelaCOMPRA_PRAZO.Value := 0;
@@ -368,6 +374,8 @@ begin
   IbDtstTabelaOUTROSCUSTOS.Value   := 0;
   IbDtstTabelaIPI.Value            := 0;
   IbDtstTabelaDESCONTO.Value       := 0;
+  IbDtstTabelaTOTALNF.Value        := 0;
+  IbDtstTabelaTOTALPROD.Value      := 0;
 end;
 
 procedure TfrmGeEntradaEstoque.dbFornecedorButtonClick(Sender: TObject);
@@ -414,15 +422,6 @@ begin
     end;
 end;
 
-procedure TfrmGeEntradaEstoque.dtsEmpresaStateChange(Sender: TObject);
-begin
-  inherited;
-  pgcMaisDados.ActivePageIndex := 0;
-
-  DtSrcTabelaItens.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN );
-  DtSrcTabelaItensStateChange( DtSrcTabelaItens );
-end;
-
 procedure TfrmGeEntradaEstoque.DtSrcTabelaItensStateChange(
   Sender: TObject);
 begin
@@ -463,8 +462,8 @@ begin
   begin
     Clear;
     AddStrings( SQL_Duplicatas );
-    Add('where p.Anovenda = ' + IntToStr(AnoCompra));
-    Add('  and p.Numvenda = ' + IntToStr(ControleCompra));
+    Add('where p.AnoCompra = ' + IntToStr(AnoCompra));
+    Add('  and p.NumCompra = ' + IntToStr(ControleCompra));
     Add('order by p.numlanc, p.parcela');
   end;
 
@@ -642,6 +641,10 @@ procedure TfrmGeEntradaEstoque.ControlEditExit(Sender: TObject);
 begin
   inherited;
 
+  if ( Sender = dbCFOPNF ) then
+    if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+      CarregarDadosCFOP( IbDtstTabelaNFCFOP.AsInteger );
+
   if ( Sender = dbProduto ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
       CarregarDadosProduto( cdsTabelaItensCODPROD.AsString );
@@ -651,13 +654,11 @@ begin
       cdsTabelaItensQTDEFINAL.Value := cdsTabelaItensQTDEANTES.Value + cdsTabelaItensQTDE.Value;
 
   if ( Sender = dbValorUnit ) then
-    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-      cdsTabelaItensTOTAL_BRUTO.Value := cdsTabelaItensPRECOUNIT.Value * cdsTabelaItensQTDE.Value;
-
-  if ( Sender = dbTotalBruto ) then
   begin
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     begin
+      cdsTabelaItensTOTAL_BRUTO.Value := cdsTabelaItensPRECOUNIT.Value * cdsTabelaItensQTDE.Value;
+      
       if ( IbDtstTabelaTOTALPROD.AsCurrency > 0 ) then
       begin
         cdsTabelaItensPERC_PARTICIPACAO.Value := cdsTabelaItensTOTAL_BRUTO.Value / IbDtstTabelaTOTALPROD.Value * 100;
@@ -666,13 +667,18 @@ begin
         cdsTabelaItensVALOR_OUTROS.Value      := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaOUTROSCUSTOS.Value / 100;
 
         cdsTabelaItensCUSTOMEDIO.Value := cdsTabelaItensPRECOUNIT.Value    + cdsTabelaItensVALOR_FRETE.Value +
-                                          cdsTabelaItensVALOR_OUTROS.Value + cdsTabelaItensVALOR_IPI.Value   - cdsTabelaItensVALOR_DESCONTO.Value;
+                                          cdsTabelaItensVALOR_OUTROS.Value + cdsTabelaItensVALOR_IPI.Value   -
+                                          (cdsTabelaItensVALOR_DESCONTO.Value / cdsTabelaItensQTDE.AsInteger);
+
+        cdsTabelaItensTOTAL_LIQUIDO.Value := cdsTabelaItensCUSTOMEDIO.AsCurrency * cdsTabelaItensQTDE.AsInteger;
       end;
     end;
+  end;
 
+  if ( Sender = dbTotalBruto ) then
     if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
       btnProdutoSalvar.SetFocus;
-  end;
+
 end;
 
 procedure TfrmGeEntradaEstoque.pgcGuiasChange(Sender: TObject);
@@ -739,11 +745,6 @@ begin
       if ( iUnidade > 0 ) then
         cdsTabelaItensUNID_COD.AsInteger := iUnidade;
     end;
-end;
-
-procedure TfrmGeEntradaEstoque.dbCFOPButtonClick(Sender: TObject);
-begin
-  ;
 end;
 
 procedure TfrmGeEntradaEstoque.cdsTabelaItensNewRecord(DataSet: TDataSet);
@@ -840,7 +841,7 @@ end;
 
 procedure TfrmGeEntradaEstoque.qryDuplicatasCalcFields(DataSet: TDataSet);
 begin
-//  qryTitulosLancamento.AsString := FormatFloat('0000', qryTitulosANOLANC.AsInteger) + FormatFloat('000000', qryTitulosNUMLANC.AsInteger);
+  qryDuplicatasLancamento.AsString := FormatFloat('0000', qryDuplicatasANOLANC.AsInteger) + FormatFloat('000000', qryDuplicatasNUMLANC.AsInteger);
 end;
 
 procedure TfrmGeEntradaEstoque.btnRegerarDuplicataClick(Sender: TObject);
@@ -856,6 +857,53 @@ begin
     GerarDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   end;
+end;
+
+procedure TfrmGeEntradaEstoque.dbCFOPNFButtonClick(Sender: TObject);
+var
+  iCodigo : Integer;
+  sDescricao : String;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarCFOP(Self, iCodigo, sDescricao) ) then
+    begin
+      IbDtstTabelaNFCFOP.AsInteger        := iCodigo;
+      IbDtstTabelaCFOP_DESCRICAO.AsString := sDescricao;
+    end;
+end;
+
+procedure TfrmGeEntradaEstoque.CarregarDadosCFOP(iCodigo: Integer);
+begin
+  if ( not IbDtstTabela.Active ) then
+    Exit
+  else
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+  begin
+    with qryCFOP do
+    begin
+      Close;
+      ParamByName('Cfop_cod').AsInteger := iCodigo;
+      Open;
+      if not IsEmpty then
+        IbDtstTabelaCFOP_DESCRICAO.AsString := FieldByName('cfop_descricao').AsString
+      else
+      begin
+        ShowWarning('Código CFOP não cadastrado');
+        IbDtstTabelaNFCFOP.Clear;
+        if ( dbCFOPNF.Visible and dbCFOPNF.Enabled ) then
+          dbCFOPNF.SetFocus;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmGeEntradaEstoque.DtSrcTabelaStateChange(Sender: TObject);
+begin
+  inherited;
+  pgcMaisDados.ActivePageIndex := 0;
+
+  DtSrcTabelaItens.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN );
+  DtSrcTabelaItensStateChange( DtSrcTabelaItens );
 end;
 
 end.

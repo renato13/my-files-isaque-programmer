@@ -132,7 +132,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque;
+  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar;
 
 {$R *.dfm}
 
@@ -163,9 +163,7 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnCPagClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGrContPagar, frmGrContPagar);
-  frmGrContPagar.ShowModal;
-  frmGrContPagar.Destroy;
+  MostrarControleContasAPagar(Self);
 end;
 
 procedure TfrmPrinc.Fornecedor1Click(Sender: TObject);

@@ -539,15 +539,15 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       '')
     GeneratorField.ApplyEvent = gamOnPost
     UpdateObject = IbUpdTabela
-    Left = 656
-    Top = 40
+    Left = 624
+    Top = 8
   end
   object DtSrcTabela: TDataSource
     AutoEdit = False
     DataSet = IbDtstTabela
     OnStateChange = DtSrcTabelaStateChange
     Left = 688
-    Top = 40
+    Top = 8
   end
   object IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -615,11 +615,11 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       'where'
       '  BCO_COD = :OLD_BCO_COD')
     Left = 656
-    Top = 72
+    Top = 8
   end
   object ImgList: TImageList
-    Left = 624
-    Top = 40
+    Left = 592
+    Top = 8
     Bitmap = {
       494C010129002C00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       000000000000360000002800000040000000B0000000010020000000000000B0

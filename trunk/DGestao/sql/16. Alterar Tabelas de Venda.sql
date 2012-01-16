@@ -269,6 +269,14 @@ begin
       where p.Cod    = :Produto
         and p.Codemp = :Empresa;
 
+      -- Gravar posicao de estoque
+      Update TVENDASITENS i Set
+        i.Qtdefinal = :Estoque
+      where i.Ano        = new.Ano
+        and i.Codcontrol = new.Codcontrol
+        and i.Codemp     = new.Codemp
+        and i.Codprod    = :Produto;
+
       -- Gerar histórico
       Insert Into TBPRODHIST (
           Codempresa

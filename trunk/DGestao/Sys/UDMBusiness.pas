@@ -64,7 +64,8 @@ var
   function GetVendedorNomeDefault : String;
   function GetFormaPagtoNomeDefault : String;
   function GetCondicaoPagtoNomeDefault : String;
-  function GetNextID(NomeTabela, CampoChave : String) : Largeint;
+  function GetSenhaAutorizacao : String;
+  function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -295,13 +296,28 @@ begin
   end;
 end;
 
-function GetNextID(NomeTabela, CampoChave : String) : Largeint;
+function GetSenhaAutorizacao : String;
 begin
   with DMBusiness, qryBusca do
   begin
     Close;
     SQL.Clear;
-    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela);
+    SQL.Add('Select snh_descricao from TBSENHA_AUTORIZACAO');
+    Open;
+
+    Result := FieldByName('snh_descricao').AsString;
+
+    Close;
+  end;
+end;
+
+function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela + ' ' + sWhere);
     Open;
 
     Result := FieldByName('ID').AsInteger + 1;

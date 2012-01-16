@@ -1,6 +1,6 @@
 object frmGrContPagar: TfrmGrContPagar
-  Left = 273
-  Top = 169
+  Left = 493
+  Top = 284
   Width = 723
   Height = 382
   Caption = 'Contas a Pagar'
@@ -20,14 +20,14 @@ object frmGrContPagar: TfrmGrContPagar
     Left = 0
     Top = 0
     Width = 707
-    Height = 311
+    Height = 309
     Align = alClient
     TabOrder = 0
     object dbgrdContPag: TDBGrid
       Left = 1
       Top = 1
       Width = 705
-      Height = 290
+      Height = 288
       Align = alClient
       DataSource = dtsrcContPag
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect]
@@ -118,7 +118,7 @@ object frmGrContPagar: TfrmGrContPagar
     end
     object pnlBotaoGrid: TPanel
       Left = 1
-      Top = 291
+      Top = 289
       Width = 705
       Height = 19
       Align = alBottom
@@ -128,7 +128,7 @@ object frmGrContPagar: TfrmGrContPagar
   end
   object tlbrGridFornec: TToolBar
     Left = 0
-    Top = 311
+    Top = 309
     Width = 707
     Height = 35
     Align = alBottom
@@ -302,7 +302,6 @@ object frmGrContPagar: TfrmGrContPagar
     SelectSQL.Strings = (
       'select CODFORN, NOMEFORN from TBFORNECEDOR'
       'order by NOMEFORN')
-    Active = True
     Left = 320
     Top = 64
   end
@@ -380,7 +379,6 @@ object frmGrContPagar: TfrmGrContPagar
     GeneratorField.Field = 'NUMLANC'
     GeneratorField.Generator = 'GEN_TBCONTPAG_ID'
     GeneratorField.ApplyEvent = gamOnPost
-    Active = True
     Left = 64
     Top = 48
     object ibdtstContPagNUMLANC: TLargeintField
@@ -482,7 +480,6 @@ object frmGrContPagar: TfrmGrContPagar
     SelectSQL.Strings = (
       'select COD, NOME from TBBANCO'
       'order by NOME')
-    Active = True
     Left = 312
     Top = 144
   end
