@@ -68,7 +68,10 @@ uses
   UGeVenda in 'UGeVenda.pas' {frmGeVenda},
   UGeCondicaoPagto in 'UGeCondicaoPagto.pas' {frmGeCondicaoPagto},
   UGeTeste in 'UGeTeste.pas' {frmGeTeste},
-  UGeEntradaEstoque in 'UGeEntradaEstoque.pas' {frmGeEntradaEstoque};
+  UGeEntradaEstoque in 'UGeEntradaEstoque.pas' {frmGeEntradaEstoque},
+  UGeContasAPagar in 'UGeContasAPagar.pas' {frmGeContasAPagar},
+  UGrPadraoCadastroSimples in 'lib\UGrPadraoCadastroSimples.pas' {frmGrPadraoCadastroSimples},
+  UGeEfetuarPagtoPAG in 'UGeEfetuarPagtoPAG.pas' {frmGeEfetuarPagtoPAG};
 
 {$R *.res}
 

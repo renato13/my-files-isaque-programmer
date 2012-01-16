@@ -544,6 +544,14 @@ inherited frmGeProduto: TfrmGeProduto
           Caption = 'Al'#237'quota:'
           FocusControl = dbAliquotaTipo
         end
+        object lblNCM_SH: TLabel
+          Left = 672
+          Top = 24
+          Width = 43
+          Height = 13
+          Caption = 'NCM/SH:'
+          FocusControl = dbNCM_SH
+        end
         object dbOrigem: TDBLookupComboBox
           Left = 16
           Top = 40
@@ -566,7 +574,7 @@ inherited frmGeProduto: TfrmGeProduto
         object dbTipoTributacao: TDBLookupComboBox
           Left = 296
           Top = 40
-          Width = 465
+          Width = 369
           Height = 21
           DataField = 'CODTRIBUTACAO'
           DataSource = DtSrcTabela
@@ -654,7 +662,7 @@ inherited frmGeProduto: TfrmGeProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 2
+          TabOrder = 3
           OnButtonClick = dbCFOPButtonClick
         end
         object dbAliquota: TDBEdit
@@ -671,7 +679,7 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 5
         end
         object dbIPI: TDBEdit
           Left = 672
@@ -687,7 +695,7 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
         end
         object dbAliquotaTipo: TDBLookupComboBox
           Left = 480
@@ -706,7 +714,23 @@ inherited frmGeProduto: TfrmGeProduto
           ListField = 'DESCRICAO'
           ListSource = dtsAliquota
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 4
+        end
+        object dbNCM_SH: TDBEdit
+          Left = 672
+          Top = 40
+          Width = 89
+          Height = 21
+          CharCase = ecUpperCase
+          DataField = 'NCM_SH'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
         end
       end
       object pgcMaisDados: TPageControl
@@ -833,6 +857,7 @@ inherited frmGeProduto: TfrmGeProduto
           Width = 97
           Height = 21
           CharCase = ecUpperCase
+          Color = clMoneyGreen
           DataField = 'QTDE'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
@@ -841,6 +866,7 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
+          ReadOnly = True
           TabOrder = 1
         end
         object dbEstoqueMinimo: TDBEdit
@@ -919,6 +945,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Codorigem'
       '  , p.Codtributacao'
       '  , p.Cst'
+      '  , p.NCM_SH'
       '  , p.Codcfop'
       '  , p.Codbarra_ean'
       '  , p.Codunidade'
@@ -1043,6 +1070,12 @@ inherited frmGeProduto: TfrmGeProduto
       Origin = 'TBPRODUTO.CST'
       Size = 3
     end
+    object IbDtstTabelaNCM_SH: TIBStringField
+      DisplayLabel = 'NCM/SH'
+      FieldName = 'NCM_SH'
+      Origin = 'TBPRODUTO.NCM_SH'
+      Size = 10
+    end
     object IbDtstTabelaCODCFOP: TIntegerField
       DisplayLabel = 'CFOP'
       FieldName = 'CODCFOP'
@@ -1124,6 +1157,9 @@ inherited frmGeProduto: TfrmGeProduto
       Size = 8
     end
   end
+  inherited DtSrcTabela: TDataSource
+    Left = 720
+  end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
@@ -1144,12 +1180,14 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODORIGEM,'
       '  CODTRIBUTACAO,'
       '  CST,'
+      '  NCM_SH,'
       '  CODCFOP,'
       '  CODBARRA_EAN,'
       '  CODUNIDADE,'
       '  ALIQUOTA_TIPO,'
       '  ALIQUOTA,'
-      '  VALOR_IPI'
+      '  VALOR_IPI,'
+      '  RESERVA'
       'from TBPRODUTO '
       'where'
       '  CODIGO = :CODIGO')
@@ -1173,6 +1211,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODORIGEM = :CODORIGEM,'
       '  CODTRIBUTACAO = :CODTRIBUTACAO,'
       '  CST = :CST,'
+      '  NCM_SH = :NCM_SH,'
       '  CODCFOP = :CODCFOP,'
       '  CODBARRA_EAN = :CODBARRA_EAN,'
       '  CODUNIDADE = :CODUNIDADE,'
@@ -1190,8 +1229,9 @@ inherited frmGeProduto: TfrmGeProduto
         '   ESTOQMIN, CODGRUPO, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, ' +
         'CODTRIBUTACAO, '
       
-        '   CST, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUOTA_TIPO, ALIQUO' +
-        'TA, VALOR_IPI)'
+        '   CST, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUOTA_TIPO' +
+        ', ALIQUOTA, '
+      '   VALOR_IPI)'
       'values'
       
         '  (:CODIGO, :COD, :DESCRI, :MODELO, :PRECO, :REFERENCIA, :SECAO,' +
@@ -1200,13 +1240,15 @@ inherited frmGeProduto: TfrmGeProduto
         '   :UNIDADE, :ESTOQMIN, :CODGRUPO, :CUSTOMEDIO, :CODEMP, :CODSEC' +
         'AO, :CODORIGEM, '
       
-        '   :CODTRIBUTACAO, :CST, :CODCFOP, :CODBARRA_EAN, :CODUNIDADE, :' +
-        'ALIQUOTA_TIPO, '
-      '   :ALIQUOTA, :VALOR_IPI)')
+        '   :CODTRIBUTACAO, :CST, :NCM_SH, :CODCFOP, :CODBARRA_EAN, :CODU' +
+        'NIDADE, '
+      '   :ALIQUOTA_TIPO, :ALIQUOTA, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'
       '  CODIGO = :OLD_CODIGO')
+    Left = 688
+    Top = 40
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1290,13 +1332,13 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_TIPO_TRIBUTACAO'
     TableTypes = [ttView]
-    Left = 656
-    Top = 168
+    Left = 720
+    Top = 104
   end
   object dtsTributacao: TDataSource
     DataSet = tblTributacao
-    Left = 688
-    Top = 168
+    Left = 752
+    Top = 104
   end
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1318,12 +1360,12 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_TIPO_ALIQUOTA'
     TableTypes = [ttView]
-    Left = 656
-    Top = 200
+    Left = 720
+    Top = 136
   end
   object dtsAliquota: TDataSource
     DataSet = tblAliquota
-    Left = 688
-    Top = 200
+    Left = 752
+    Top = 136
   end
 end

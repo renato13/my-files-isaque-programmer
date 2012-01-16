@@ -319,6 +319,7 @@ declare variable P09 smallint;
 declare variable P10 smallint;
 declare variable P11 smallint;
 declare variable P12 smallint;
+declare variable VALOR_TOTAL_PARCELAS numeric(15,2);
 begin
   for
     Select
