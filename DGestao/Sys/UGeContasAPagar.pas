@@ -94,6 +94,7 @@ type
     procedure pgcGuiasChange(Sender: TObject);
     procedure btbtnAlterarClick(Sender: TObject);
     procedure btbtnExcluirClick(Sender: TObject);
+    procedure IbDtstTabelaBeforeEdit(DataSet: TDataSet);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -219,7 +220,7 @@ begin
 
   if ( Trim(sSenha) = EmptyStr ) then
     Exit;
-    
+
   if ( sSenha <> GetSenhaAutorizacao ) then
   begin
     ShowWarning('Senha de autorização inválida');
@@ -306,6 +307,13 @@ begin
     if ( not OcorreuErro ) then
       AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
   end;
+end;
+
+procedure TfrmGeContasAPagar.IbDtstTabelaBeforeEdit(DataSet: TDataSet);
+begin
+  inherited;
+  if ( Trim(IbDtstTabelaNOMEEMP.AsString) = EmptyStr ) then
+    IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
 end;
 
 end.

@@ -305,6 +305,9 @@ begin
     SQL.Add('Select snh_descricao from TBSENHA_AUTORIZACAO');
     Open;
 
+    if IsEmpty then
+      ShowWarning('Não existe senha de autorização gravada na base.' + #13#13 + 'Favor solicitação a geração de uma senha de autorização');
+
     Result := FieldByName('snh_descricao').AsString;
 
     Close;
