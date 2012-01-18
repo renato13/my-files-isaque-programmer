@@ -1,14 +1,14 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,252,1,1,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.dfm',0,1,1,1,1,0,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGrContPagar.pas',0,1,158,12,163,1,0
-File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UCdContPagar.pas',0,1,1,51,32,1,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\U_SenhaBaixa.pas',0,1,1,40,36,1,0
-File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEntradaEstoque.pas',0,1,526,1,530,1,0
-File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,125,7,153,1,0
-File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastroSimples.pas',0,1,1,1,1,1,0
-File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas',0,1,363,1,366,1,0
-File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas',0,1,401,1,408,1,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas',0,1,1,1,1,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,157,91,206,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas',0,1,51,31,84,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,1,1,1,0,0
+File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas',0,1,554,1,559,1,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,1,1,1,0,0
+File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEntradaEstoque.pas',0,1,640,1,670,1,0
+File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.dfm',0,1,1,1,1,0,0
+File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGrContPagar.pas',0,1,158,12,163,1,0
+File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UCdContPagar.pas',0,1,1,51,32,1,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
@@ -20,7 +20,7 @@ EditWindowCount=1
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
@@ -67,29 +67,29 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-CursorX=32
-CursorY=82
+CursorX=1
+CursorY=88
 TopLine=34
 LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=59
-CursorY=305
-TopLine=278
+CursorX=137
+CursorY=306
+TopLine=296
 LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 CursorX=1
-CursorY=166
-TopLine=161
+CursorY=194
+TopLine=160
 LeftCol=1
 
 [Watches]
@@ -122,12 +122,12 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=4
-Height=889
+Width=1
+Height=918
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=4
-ClientHeight=889
+ClientWidth=1
+ClientHeight=918
 TBDockHeight=383
 LRDockWidth=547
 Dockable=1
@@ -162,8 +162,8 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=
-ExpandedItems=
+SelectedItem=Name
+ExpandedItems=Configuracoes,Title
 HiddenCategories=
 
 [ObjectTree]
@@ -172,12 +172,12 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=4
-Height=889
+Width=1
+Height=918
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=4
-ClientHeight=889
+ClientWidth=1
+ClientHeight=918
 TBDockHeight=354
 LRDockWidth=190
 Dockable=1
@@ -187,13 +187,13 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=135
-Width=30
-Height=897
+Top=114
+Width=27
+Height=926
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=30
-ClientHeight=897
+ClientWidth=27
+ClientHeight=926
 0=ObjectTree
 1=ProjectManager
 DockCount=2
@@ -238,18 +238,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=713
+Height=801
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=713
+ClientHeight=801
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0

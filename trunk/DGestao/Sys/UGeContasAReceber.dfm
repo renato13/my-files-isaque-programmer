@@ -1,7 +1,7 @@
-inherited frmGeContasAPagar: TfrmGeContasAPagar
+inherited frmGeContasAReceber: TfrmGeContasAReceber
   Width = 950
   Height = 600
-  Caption = 'Controle de Contas A Pagar'
+  Caption = 'Controle de Contas A Receber'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
@@ -118,17 +118,20 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           end
           item
             Expanded = False
-            FieldName = 'NOMEFORN'
+            FieldName = 'NOME'
+            Title.Caption = 'Ciente'
+            Width = 280
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'VALORPAG'
+            FieldName = 'VALORREC'
             Font.Charset = ANSI_CHARSET
             Font.Color = clBlue
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
+            Title.Caption = 'A Receber (R$)'
             Title.Font.Charset = ANSI_CHARSET
             Title.Font.Color = clBlue
             Title.Font.Height = -11
@@ -153,13 +156,13 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           end
           item
             Expanded = False
-            FieldName = 'QUITADO'
-            Title.Caption = 'Situa'#231#227'o'
+            FieldName = 'PAGO_'
+            Title.Caption = 'Pago?'
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'DTPAG'
+            FieldName = 'DTREC'
             Title.Alignment = taCenter
             Width = 80
             Visible = True
@@ -206,7 +209,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     end
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
-        Top = 161
+        Top = 241
         Width = 926
       end
       object Bevel5: TBevel [1]
@@ -219,32 +222,32 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       end
       object Bevel6: TBevel [2]
         Left = 0
-        Top = 340
+        Top = 364
         Width = 926
         Height = 4
         Align = alBottom
         Shape = bsSpacer
       end
+      object Bevel9: TBevel [3]
+        Left = 0
+        Top = 161
+        Width = 926
+        Height = 4
+        Align = alTop
+        Shape = bsSpacer
+      end
       inherited GrpBxDadosNominais: TGroupBox
         Width = 926
         Height = 81
-        object lblEmpresa: TLabel [1]
-          Left = 88
+        object lblCliente: TLabel [1]
+          Left = 87
           Top = 24
-          Width = 45
+          Width = 37
           Height = 13
-          Caption = 'Empresa:'
-          FocusControl = dbEmpresa
+          Caption = 'Cliente:'
+          FocusControl = dbCliente
         end
-        object lblFornecedor: TLabel [2]
-          Left = 423
-          Top = 24
-          Width = 59
-          Height = 13
-          Caption = 'Fornecedor:'
-          FocusControl = dbFornecedor
-        end
-        object lblQuitado: TLabel [3]
+        object lblQuitado: TLabel [2]
           Left = 775
           Top = 24
           Width = 52
@@ -258,31 +261,40 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object lblCNPJ: TLabel [3]
+          Left = 440
+          Top = 24
+          Width = 58
+          Height = 13
+          Caption = 'CPF / CNPJ:'
+          FocusControl = dbCNPJ
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblVenda: TLabel [4]
+          Left = 648
+          Top = 24
+          Width = 58
+          Height = 13
+          Caption = 'No. Venda:'
+          FocusControl = daVenda
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'NUMLANC'
         end
-        object dbEmpresa: TDBEdit
-          Left = 88
-          Top = 40
-          Width = 329
-          Height = 21
-          TabStop = False
-          CharCase = ecUpperCase
-          Color = clMoneyGreen
-          DataField = 'NOMEEMP'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ReadOnly = True
-          TabOrder = 1
-        end
-        object dbFornecedor: TRxDBComboEdit
-          Left = 423
+        object dbCliente: TRxDBComboEdit
+          Left = 87
           Top = 40
           Width = 348
           Height = 21
@@ -290,7 +302,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           CharCase = ecUpperCase
           ClickKey = 16464
           Color = clMoneyGreen
-          DataField = 'NOMEFORN'
+          DataField = 'NOME'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -353,8 +365,8 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 2
-          OnButtonClick = dbFornecedorButtonClick
+          TabOrder = 1
+          OnButtonClick = dbClienteButtonClick
         end
         object dbQuitado: TDBEdit
           Left = 776
@@ -363,7 +375,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Height = 21
           TabStop = False
           Color = clMoneyGreen
-          DataField = 'QUITADO'
+          DataField = 'BAIXADO'
           DataSource = DtSrcTabela
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -372,7 +384,58 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Style = [fsBold]
           ParentFont = False
           ReadOnly = True
+          TabOrder = 5
+        end
+        object dbCNPJ: TDBEdit
+          Left = 440
+          Top = 40
+          Width = 201
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'CNPJ'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object daVenda: TDBEdit
+          Left = 648
+          Top = 40
+          Width = 41
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'ANOVENDA'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
           TabOrder = 3
+        end
+        object dnVenda: TDBEdit
+          Left = 696
+          Top = 40
+          Width = 73
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'NUMVENDA'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 4
         end
       end
       object GrpBxDadosValores: TGroupBox
@@ -381,7 +444,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Width = 926
         Height = 76
         Align = alTop
-        Caption = 'A Pagar'
+        Caption = 'A Receber'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -389,22 +452,8 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 1
-        object lblNotaFiscal: TLabel
-          Left = 16
-          Top = 24
-          Width = 63
-          Height = 13
-          Caption = 'Nota Fiscal:'
-          FocusControl = dbNotaFiscal
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-        end
         object lblParcela: TLabel
-          Left = 112
+          Left = 16
           Top = 24
           Width = 45
           Height = 13
@@ -418,7 +467,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentFont = False
         end
         object lblEmissao: TLabel
-          Left = 168
+          Left = 72
           Top = 24
           Width = 49
           Height = 13
@@ -432,7 +481,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentFont = False
         end
         object lblVencimento: TLabel
-          Left = 272
+          Left = 168
           Top = 24
           Width = 70
           Height = 13
@@ -445,13 +494,13 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object lblValorAPagar: TLabel
-          Left = 376
+        object lblValorAReceber: TLabel
+          Left = 264
           Top = 24
-          Width = 107
+          Width = 89
           Height = 13
-          Caption = 'Valor A Pagar (R$):'
-          FocusControl = dbValorAPagar
+          Caption = 'A Receber (R$):'
+          FocusControl = dbValorAReceber
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -460,38 +509,57 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentFont = False
         end
         object lblFormaPagto: TLabel
-          Left = 496
+          Left = 368
           Top = 24
           Width = 124
           Height = 13
           Caption = '&Forma de Pagamento:'
           FocusControl = dbFormaPagto
         end
-        object lblCondicaoPagto: TLabel
-          Left = 640
+        object lblValorMulta: TLabel
+          Left = 600
           Top = 24
-          Width = 139
+          Width = 63
           Height = 13
-          Caption = 'Condi'#231#227'o de Pagamento:'
-          FocusControl = dbCondicaoPagto
-        end
-        object dbNotaFiscal: TDBEdit
-          Left = 16
-          Top = 40
-          Width = 89
-          Height = 21
-          DataField = 'NOTFISC'
-          DataSource = DtSrcTabela
+          Caption = 'Multa (R$):'
+          FocusControl = dbValorMulta
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 0
+        end
+        object lblTotalAReceber: TLabel
+          Left = 768
+          Top = 24
+          Width = 115
+          Height = 13
+          Caption = 'Total Recebido (R$):'
+          FocusControl = dbTotalAReceber
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblPercDesconto: TLabel
+          Left = 704
+          Top = 24
+          Width = 49
+          Height = 13
+          Caption = '% Desc.:'
+          FocusControl = dbPercDesconto
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object dbParcela: TDBEdit
-          Left = 112
+          Left = 16
           Top = 40
           Width = 49
           Height = 21
@@ -503,12 +571,12 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 0
         end
         object dbEmissao: TDBEdit
-          Left = 168
+          Left = 72
           Top = 40
-          Width = 97
+          Width = 89
           Height = 21
           DataField = 'DTEMISS'
           DataSource = DtSrcTabela
@@ -518,12 +586,12 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 1
         end
         object dbVencimento: TDBEdit
-          Left = 272
+          Left = 168
           Top = 40
-          Width = 97
+          Width = 89
           Height = 21
           DataField = 'DTVENC'
           DataSource = DtSrcTabela
@@ -533,14 +601,14 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 2
         end
-        object dbValorAPagar: TDBEdit
-          Left = 376
+        object dbValorAReceber: TDBEdit
+          Left = 264
           Top = 40
-          Width = 113
+          Width = 97
           Height = 21
-          DataField = 'VALORPAG'
+          DataField = 'VALORREC'
           DataSource = DtSrcTabela
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
@@ -548,12 +616,13 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 3
+          OnExit = ControlEditExit
         end
         object dbFormaPagto: TDBLookupComboBox
-          Left = 496
+          Left = 368
           Top = 40
-          Width = 137
+          Width = 225
           Height = 21
           DataField = 'FORMA_PAGTO'
           DataSource = DtSrcTabela
@@ -567,44 +636,75 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ListField = 'DESCRI'
           ListSource = dtsFormaPagto
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 4
+          OnClick = dbFormaPagtoClick
         end
-        object dbCondicaoPagto: TDBLookupComboBox
-          Left = 640
+        object dbValorMulta: TDBEdit
+          Left = 600
           Top = 40
-          Width = 265
+          Width = 97
           Height = 21
-          DataField = 'CONDICAO_PAGTO'
+          DataField = 'VALORMULTA'
           DataSource = DtSrcTabela
-          DropDownRows = 10
-          Font.Charset = DEFAULT_CHARSET
+          Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          KeyField = 'COND_COD'
-          ListField = 'COND_DESCRICAO_FULL'
-          ListSource = dtsCondicaoPagto
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 5
+          OnExit = ControlEditExit
+        end
+        object dbTotalAReceber: TDBEdit
+          Left = 768
+          Top = 40
+          Width = 129
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'VALORRECTOT'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 7
+          OnExit = ControlEditExit
+        end
+        object dbPercDesconto: TDBEdit
+          Left = 704
+          Top = 40
+          Width = 57
+          Height = 21
+          DataField = 'PERCENTDESCONTO'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
           ParentFont = False
           TabOrder = 6
         end
       end
       object pgcMaisDados: TPageControl
         Left = 0
-        Top = 344
+        Top = 368
         Width = 926
-        Height = 146
+        Height = 122
         ActivePage = tbsHistorico
         Align = alBottom
         Style = tsFlatButtons
-        TabOrder = 3
+        TabOrder = 4
         object tbsHistorico: TTabSheet
           Caption = 'Hist'#243'rico'
           object dbObservacao: TDBMemo
             Left = 0
             Top = 0
             Width = 918
-            Height = 115
+            Height = 91
             Align = alClient
             DataField = 'HISTORIC'
             DataSource = DtSrcTabela
@@ -614,9 +714,9 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       end
       object dbgPagamentos: TDBGrid
         Left = 0
-        Top = 165
+        Top = 245
         Width = 926
-        Height = 175
+        Height = 119
         TabStop = False
         Align = alClient
         DataSource = dtsPagamentos
@@ -628,7 +728,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
         ParentFont = False
         ReadOnly = True
-        TabOrder = 2
+        TabOrder = 3
         TitleFont.Charset = ANSI_CHARSET
         TitleFont.Color = clBlack
         TitleFont.Height = -11
@@ -691,253 +791,559 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
             Visible = True
           end>
       end
+      object GrpBxDadosBoleto: TGroupBox
+        Left = 0
+        Top = 165
+        Width = 926
+        Height = 76
+        Align = alTop
+        Caption = 'Dados do Boleto'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        object lblBanco: TLabel
+          Left = 16
+          Top = 24
+          Width = 33
+          Height = 13
+          Caption = 'Banco:'
+          FocusControl = dbBanco
+        end
+        object lblNossoNumero: TLabel
+          Left = 272
+          Top = 24
+          Width = 73
+          Height = 13
+          Caption = 'Nosso N'#250'mero:'
+          FocusControl = dbNossoNumero
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblPercJuros: TLabel
+          Left = 384
+          Top = 24
+          Width = 44
+          Height = 13
+          Caption = '% Juros:'
+          FocusControl = dbPercJuros
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblPercMulta: TLabel
+          Left = 448
+          Top = 24
+          Width = 44
+          Height = 13
+          Caption = '% Multa:'
+          FocusControl = dbPercMulta
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblDataBoleto: TLabel
+          Left = 512
+          Top = 24
+          Width = 60
+          Height = 13
+          Caption = 'Data Boleto:'
+          FocusControl = dbDataBoleto
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblDataPagto: TLabel
+          Left = 616
+          Top = 24
+          Width = 62
+          Height = 13
+          Caption = 'Data Pagto.:'
+          FocusControl = dbDataPagto
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object dbBanco: TDBLookupComboBox
+          Left = 16
+          Top = 40
+          Width = 249
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'CODBANCO'
+          DataSource = DtSrcTabela
+          DropDownRows = 10
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          KeyField = 'BCO_COD'
+          ListField = 'BCO_NOME'
+          ListSource = dtsBanco
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object dbNossoNumero: TDBEdit
+          Left = 272
+          Top = 40
+          Width = 105
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'NOSSONUMERO'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object dbPercJuros: TDBEdit
+          Left = 384
+          Top = 40
+          Width = 57
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'PERCENTJUROS'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object dbPercMulta: TDBEdit
+          Left = 448
+          Top = 40
+          Width = 57
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'PERCENTMULTA'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 3
+        end
+        object dbDataBoleto: TDBEdit
+          Left = 512
+          Top = 40
+          Width = 97
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'DATAPROCESSOBOLETO'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 4
+        end
+        object dbDataPagto: TDBEdit
+          Left = 616
+          Top = 40
+          Width = 97
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'DTREC'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 5
+        end
+        object dbEnviado: TDBCheckBox
+          Left = 720
+          Top = 40
+          Width = 105
+          Height = 17
+          Caption = 'Boleto Enviado'
+          DataField = 'ENVIADO'
+          DataSource = DtSrcTabela
+          ReadOnly = True
+          TabOrder = 6
+          ValueChecked = 'True'
+          ValueUnchecked = 'False'
+        end
+      end
     end
   end
   inherited IbDtstTabela: TIBDataSet
-    BeforeEdit = IbDtstTabelaBeforeEdit
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'
-      '    p.Anolanc'
-      '  , p.Numlanc'
-      '  , p.Parcela'
-      '  , p.Codforn'
-      '  , p.Nomeemp'
-      '  , f.Nomeforn'
-      '  , f.Cnpj'
-      '  , p.Notfisc'
-      '  , p.Tippag'
-      '  , p.Dtemiss'
-      '  , p.Dtvenc'
-      '  , p.Dtpag'
-      '  , p.Valorpag'
-      '  , p.Banco'
-      '  , b.Bco_nome'
-      '  , p.Numchq'
-      '  , p.Historic'
-      '  , p.Forma_pagto'
-      '  , p.Condicao_pagto'
-      '  , Case when p.Quitado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
-      '  , p.Docbaix'
-      '  , p.Quitado'
-      'from TBCONTPAG p'
-      '  inner join TBFORNECEDOR f on (f.Codforn = p.Codforn)'
-      '  left join TBBANCO_BOLETO b on (b.Bco_cod = p.Banco)')
+      '    r.Anolanc'
+      '  , r.Numlanc'
+      '  , r.Parcela'
+      '  , r.Cnpj'
+      '  , r.Forma_pagto'
+      '  , r.Tippag'
+      '  , r.Historic'
+      '  , r.Numrec'
+      '  , r.Dtemiss'
+      '  , r.Dtvenc'
+      '  , r.Dtrec'
+      '  , r.Docbaix'
+      '  , r.Valorrec'
+      '  , r.Valormulta'
+      '  , r.Valorrectot'
+      '  , r.Numcontrato'
+      '  , r.Codbanco'
+      '  , r.Nossonumero'
+      '  , r.Remessa'
+      '  , r.Valorsaldo'
+      '  , r.Percentjuros'
+      '  , r.Percentmulta'
+      '  , r.Percentdesconto'
+      '  , r.Dataprocessoboleto'
+      '  , r.Baixado'
+      '  , r.Enviado'
+      '  , r.Anovenda'
+      '  , r.Numvenda'
+      '  , c.Nome'
+      '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
+      'from TBCONTREC r'
+      '  left join TBCLIENTE c on (c.Cnpj = r.Cnpj)')
     GeneratorField.Field = 'NUMLANC'
-    GeneratorField.Generator = 'GEN_CONTAPAG_NUM_2011'
+    GeneratorField.Generator = 'GEN_CONTAREC_NUM_2011'
+    Left = 768
     object IbDtstTabelaANOLANC: TSmallintField
       FieldName = 'ANOLANC'
-      Origin = 'TBCONTPAG.ANOLANC'
+      Origin = 'TBCONTREC.ANOLANC'
       Required = True
     end
     object IbDtstTabelaNUMLANC: TIntegerField
-      DisplayLabel = 'No. Lan'#231'amento'
+      DisplayLabel = 'No. Lanc.'
       FieldName = 'NUMLANC'
-      Origin = 'TBCONTPAG.NUMLANC'
+      Origin = 'TBCONTREC.NUMLANC'
       Required = True
     end
     object IbDtstTabelaPARCELA: TSmallintField
       Alignment = taCenter
       DisplayLabel = 'Parcela'
       FieldName = 'PARCELA'
-      Origin = 'TBCONTPAG.PARCELA'
-      DisplayFormat = '00'
-    end
-    object IbDtstTabelaCODFORN: TSmallintField
-      DisplayLabel = 'Fornecedor'
-      FieldName = 'CODFORN'
-      Origin = 'TBCONTPAG.CODFORN'
-    end
-    object IbDtstTabelaNOMEEMP: TIBStringField
-      DisplayLabel = 'Empresa'
-      FieldName = 'NOMEEMP'
-      Origin = 'TBCONTPAG.NOMEEMP'
-      Size = 40
-    end
-    object IbDtstTabelaNOMEFORN: TIBStringField
-      DisplayLabel = 'Fornecedor'
-      FieldName = 'NOMEFORN'
-      Origin = 'TBFORNECEDOR.NOMEFORN'
-      Size = 60
+      Origin = 'TBCONTREC.PARCELA'
     end
     object IbDtstTabelaCNPJ: TIBStringField
+      DisplayLabel = 'Cliente'
       FieldName = 'CNPJ'
-      Origin = 'TBFORNECEDOR.CNPJ'
+      Origin = 'TBCONTREC.CNPJ'
       Size = 18
     end
-    object IbDtstTabelaNOTFISC: TIBStringField
-      DisplayLabel = 'Nota Fiscal'
-      FieldName = 'NOTFISC'
-      Origin = 'TBCONTPAG.NOTFISC'
-      Size = 15
+    object IbDtstTabelaFORMA_PAGTO: TSmallintField
+      DisplayLabel = 'Forma de Pagamento'
+      FieldName = 'FORMA_PAGTO'
+      Origin = 'TBCONTREC.FORMA_PAGTO'
     end
     object IbDtstTabelaTIPPAG: TIBStringField
-      DisplayLabel = 'Tipo de Pagamento'
       FieldName = 'TIPPAG'
-      Origin = 'TBCONTPAG.TIPPAG'
+      Origin = 'TBCONTREC.TIPPAG'
       Size = 35
     end
+    object IbDtstTabelaHISTORIC: TMemoField
+      DisplayLabel = 'Hist'#243'rico'
+      FieldName = 'HISTORIC'
+      Origin = 'TBCONTREC.HISTORIC'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object IbDtstTabelaNUMREC: TIBStringField
+      DisplayLabel = 'No. Recebimento'
+      FieldName = 'NUMREC'
+      Origin = 'TBCONTREC.NUMREC'
+      Size = 15
+    end
     object IbDtstTabelaDTEMISS: TDateField
-      Alignment = taCenter
       DisplayLabel = 'Emiss'#227'o'
       FieldName = 'DTEMISS'
-      Origin = 'TBCONTPAG.DTEMISS'
+      Origin = 'TBCONTREC.DTEMISS'
       DisplayFormat = 'dd/mm/yyyy'
       EditMask = '!99/99/0000;1; '
     end
     object IbDtstTabelaDTVENC: TDateField
-      Alignment = taCenter
       DisplayLabel = 'Vencimento'
       FieldName = 'DTVENC'
-      Origin = 'TBCONTPAG.DTVENC'
+      Origin = 'TBCONTREC.DTVENC'
       DisplayFormat = 'dd/mm/yyyy'
       EditMask = '!99/99/0000;1; '
     end
-    object IbDtstTabelaDTPAG: TDateField
-      Alignment = taCenter
-      DisplayLabel = 'Data Pagto.'
-      FieldName = 'DTPAG'
-      Origin = 'TBCONTPAG.DTPAG'
+    object IbDtstTabelaDTREC: TDateField
+      DisplayLabel = 'Recebimento'
+      FieldName = 'DTREC'
+      Origin = 'TBCONTREC.DTREC'
       DisplayFormat = 'dd/mm/yyyy'
     end
-    object IbDtstTabelaVALORPAG: TIBBCDField
-      DisplayLabel = 'Valor A Pagar (R$)'
-      FieldName = 'VALORPAG'
-      Origin = 'TBCONTPAG.VALORPAG'
+    object IbDtstTabelaDOCBAIX: TIBStringField
+      DisplayLabel = 'Doc. Baixa'
+      FieldName = 'DOCBAIX'
+      Origin = 'TBCONTREC.DOCBAIX'
+      Size = 15
+    end
+    object IbDtstTabelaVALORREC: TIBBCDField
+      DisplayLabel = 'Valor A Receber (R$)'
+      FieldName = 'VALORREC'
+      Origin = 'TBCONTREC.VALORREC'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
-    object IbDtstTabelaBANCO: TSmallintField
-      DisplayLabel = 'Banco'
-      FieldName = 'BANCO'
-      Origin = 'TBCONTPAG.BANCO'
+    object IbDtstTabelaVALORMULTA: TIBBCDField
+      DisplayLabel = 'Valor Multa'
+      FieldName = 'VALORMULTA'
+      Origin = 'TBCONTREC.VALORMULTA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
     end
-    object IbDtstTabelaBCO_NOME: TIBStringField
-      DisplayLabel = 'Banco'
-      FieldName = 'BCO_NOME'
-      Origin = 'TBBANCO_BOLETO.BCO_NOME'
-      Size = 50
+    object IbDtstTabelaVALORRECTOT: TIBBCDField
+      DisplayLabel = 'Valor Total Recebido'
+      FieldName = 'VALORRECTOT'
+      Origin = 'TBCONTREC.VALORRECTOT'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
     end
-    object IbDtstTabelaNUMCHQ: TIBStringField
-      DisplayLabel = 'No. Cheque'
-      FieldName = 'NUMCHQ'
-      Origin = 'TBCONTPAG.NUMCHQ'
-      Size = 10
+    object IbDtstTabelaNUMCONTRATO: TIBStringField
+      DisplayLabel = 'No. Contrato'
+      FieldName = 'NUMCONTRATO'
+      Origin = 'TBCONTREC.NUMCONTRATO'
+      Size = 15
+    end
+    object IbDtstTabelaCODBANCO: TIntegerField
+      DisplayLabel = 'Banco'
+      FieldName = 'CODBANCO'
+      Origin = 'TBCONTREC.CODBANCO'
+    end
+    object IbDtstTabelaNOSSONUMERO: TIBStringField
+      DisplayLabel = 'Nosso N'#250'mero'
+      FieldName = 'NOSSONUMERO'
+      Origin = 'TBCONTREC.NOSSONUMERO'
+    end
+    object IbDtstTabelaREMESSA: TIntegerField
+      FieldName = 'REMESSA'
+      Origin = 'TBCONTREC.REMESSA'
+    end
+    object IbDtstTabelaVALORSALDO: TIBBCDField
+      DisplayLabel = 'Valor Saldo'
+      FieldName = 'VALORSALDO'
+      Origin = 'TBCONTREC.VALORSALDO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object IbDtstTabelaPERCENTJUROS: TIBBCDField
+      DisplayLabel = '% Juros'
+      FieldName = 'PERCENTJUROS'
+      Origin = 'TBCONTREC.PERCENTJUROS'
+      Precision = 9
+      Size = 2
+    end
+    object IbDtstTabelaPERCENTMULTA: TIBBCDField
+      DisplayLabel = '% Multa'
+      FieldName = 'PERCENTMULTA'
+      Origin = 'TBCONTREC.PERCENTMULTA'
+      Precision = 9
+      Size = 2
+    end
+    object IbDtstTabelaPERCENTDESCONTO: TIBBCDField
+      DisplayLabel = '% Desconto'
+      FieldName = 'PERCENTDESCONTO'
+      Origin = 'TBCONTREC.PERCENTDESCONTO'
+      Precision = 9
+      Size = 2
+    end
+    object IbDtstTabelaDATAPROCESSOBOLETO: TDateField
+      DisplayLabel = 'Proc. Boleto'
+      FieldName = 'DATAPROCESSOBOLETO'
+      Origin = 'TBCONTREC.DATAPROCESSOBOLETO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object IbDtstTabelaBAIXADO: TSmallintField
+      Alignment = taLeftJustify
+      FieldName = 'BAIXADO'
+      Origin = 'TBCONTREC.BAIXADO'
+      Required = True
+      OnGetText = IbDtstTabelaBAIXADOGetText
+    end
+    object IbDtstTabelaENVIADO: TSmallintField
+      Alignment = taLeftJustify
+      FieldName = 'ENVIADO'
+      Origin = 'TBCONTREC.ENVIADO'
+      Required = True
+    end
+    object IbDtstTabelaANOVENDA: TSmallintField
+      Alignment = taCenter
+      FieldName = 'ANOVENDA'
+      Origin = 'TBCONTREC.ANOVENDA'
+      DisplayFormat = '0000'
+    end
+    object IbDtstTabelaNUMVENDA: TIntegerField
+      Alignment = taCenter
+      FieldName = 'NUMVENDA'
+      Origin = 'TBCONTREC.NUMVENDA'
+      DisplayFormat = '0000000'
+    end
+    object IbDtstTabelaNOME: TIBStringField
+      FieldName = 'NOME'
+      Origin = 'TBCLIENTE.NOME'
+      Size = 60
     end
     object IbDtstTabelaPAGO_: TIBStringField
       Alignment = taCenter
-      DisplayLabel = 'Pago?'
+      DisplayLabel = 'Baixado?'
       FieldName = 'PAGO_'
       Required = True
       FixedChar = True
       Size = 1
     end
-    object IbDtstTabelaDOCBAIX: TIBStringField
-      DisplayLabel = 'Doc. Baixa'
-      FieldName = 'DOCBAIX'
-      Origin = 'TBCONTPAG.DOCBAIX'
-      Size = 15
-    end
-    object IbDtstTabelaHISTORIC: TMemoField
-      DisplayLabel = 'Hist'#243'rico'
-      FieldName = 'HISTORIC'
-      Origin = 'TBCONTPAG.HISTORIC'
-      BlobType = ftMemo
-      Size = 8
-    end
-    object IbDtstTabelaFORMA_PAGTO: TSmallintField
-      DisplayLabel = 'Forma de Pagamento'
-      FieldName = 'FORMA_PAGTO'
-      Origin = 'TBCONTPAG.FORMA_PAGTO'
-    end
-    object IbDtstTabelaCONDICAO_PAGTO: TSmallintField
-      DisplayLabel = 'Condi'#231#227'o de Pagamento'
-      FieldName = 'CONDICAO_PAGTO'
-      Origin = 'TBCONTPAG.CONDICAO_PAGTO'
-    end
-    object IbDtstTabelaQUITADO: TSmallintField
-      Alignment = taLeftJustify
-      FieldName = 'QUITADO'
-      Origin = 'TBCONTPAG.QUITADO'
-      Required = True
-      OnGetText = IbDtstTabelaQUITADOGetText
-    end
+  end
+  inherited DtSrcTabela: TDataSource
+    Left = 832
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
       '  ANOLANC,'
       '  NUMLANC,'
-      '  PARCELA,'
-      '  CODFORN,'
+      '  CNPJ,'
+      '  FORMA_PAGTO,'
       '  TIPPAG,'
       '  HISTORIC,'
-      '  NOTFISC,'
+      '  NUMREC,'
       '  DTEMISS,'
       '  DTVENC,'
-      '  DTPAG,'
+      '  DTREC,'
       '  DOCBAIX,'
-      '  VALORPAG,'
-      '  NOMEEMP,'
-      '  TIPOCATEG,'
-      '  BANCO,'
-      '  NUMCHQ,'
-      '  ANOCOMPRA,'
-      '  NUMCOMPRA,'
-      '  FORMA_PAGTO,'
-      '  CONDICAO_PAGTO,'
-      '  QUITADO'
-      'from TBCONTPAG '
+      '  VALORREC,'
+      '  VALORMULTA,'
+      '  VALORRECTOT,'
+      '  NUMCONTRATO,'
+      '  PARCELA,'
+      '  STATUS,'
+      '  CODBANCO,'
+      '  NOSSONUMERO,'
+      '  REMESSA,'
+      '  VALORSALDO,'
+      '  PERCENTJUROS,'
+      '  PERCENTMULTA,'
+      '  PERCENTDESCONTO,'
+      '  DATAPROCESSOBOLETO,'
+      '  BAIXADO,'
+      '  ENVIADO,'
+      '  ANOVENDA,'
+      '  NUMVENDA'
+      'from TBCONTREC '
       'where'
       '  ANOLANC = :ANOLANC and'
       '  NUMLANC = :NUMLANC')
     ModifySQL.Strings = (
-      'update TBCONTPAG'
+      'update TBCONTREC'
       'set'
       '  ANOLANC = :ANOLANC,'
       '  NUMLANC = :NUMLANC,'
-      '  PARCELA = :PARCELA,'
-      '  CODFORN = :CODFORN,'
+      '  CNPJ = :CNPJ,'
+      '  FORMA_PAGTO = :FORMA_PAGTO,'
       '  TIPPAG = :TIPPAG,'
       '  HISTORIC = :HISTORIC,'
-      '  NOTFISC = :NOTFISC,'
+      '  NUMREC = :NUMREC,'
       '  DTEMISS = :DTEMISS,'
       '  DTVENC = :DTVENC,'
-      '  DTPAG = :DTPAG,'
+      '  DTREC = :DTREC,'
       '  DOCBAIX = :DOCBAIX,'
-      '  VALORPAG = :VALORPAG,'
-      '  NOMEEMP = :NOMEEMP,'
-      '  BANCO = :BANCO,'
-      '  NUMCHQ = :NUMCHQ,'
-      '  FORMA_PAGTO = :FORMA_PAGTO,'
-      '  CONDICAO_PAGTO = :CONDICAO_PAGTO,'
-      '  QUITADO = :QUITADO'
+      '  VALORREC = :VALORREC,'
+      '  VALORMULTA = :VALORMULTA,'
+      '  VALORRECTOT = :VALORRECTOT,'
+      '  NUMCONTRATO = :NUMCONTRATO,'
+      '  PARCELA = :PARCELA,'
+      '  CODBANCO = :CODBANCO,'
+      '  NOSSONUMERO = :NOSSONUMERO,'
+      '  REMESSA = :REMESSA,'
+      '  VALORSALDO = :VALORSALDO,'
+      '  PERCENTJUROS = :PERCENTJUROS,'
+      '  PERCENTMULTA = :PERCENTMULTA,'
+      '  PERCENTDESCONTO = :PERCENTDESCONTO,'
+      '  DATAPROCESSOBOLETO = :DATAPROCESSOBOLETO,'
+      '  BAIXADO = :BAIXADO,'
+      '  ENVIADO = :ENVIADO,'
+      '  ANOVENDA = :ANOVENDA,'
+      '  NUMVENDA = :NUMVENDA'
       'where'
       '  ANOLANC = :OLD_ANOLANC and'
       '  NUMLANC = :OLD_NUMLANC')
     InsertSQL.Strings = (
-      'insert into TBCONTPAG'
+      'insert into TBCONTREC'
       
-        '  (ANOLANC, NUMLANC, PARCELA, CODFORN, TIPPAG, HISTORIC, NOTFISC' +
-        ', '
-      'DTEMISS, '
-      '   DTVENC, DTPAG, DOCBAIX, VALORPAG, NOMEEMP, BANCO, NUMCHQ, '
-      'FORMA_PAGTO, '
-      '   CONDICAO_PAGTO, QUITADO)'
+        '  (ANOLANC, NUMLANC, CNPJ, FORMA_PAGTO, TIPPAG, HISTORIC, NUMREC' +
+        ', DTEMISS, '
+      
+        '   DTVENC, DTREC, DOCBAIX, VALORREC, VALORMULTA, VALORRECTOT, NU' +
+        'MCONTRATO, '
+      
+        '   PARCELA, CODBANCO, NOSSONUMERO, REMESSA, VALORSALDO, PERCENTJ' +
+        'UROS, PERCENTMULTA, '
+      
+        '   PERCENTDESCONTO, DATAPROCESSOBOLETO, BAIXADO, ENVIADO, ANOVEN' +
+        'DA, NUMVENDA)'
       'values'
-      '  (:ANOLANC, :NUMLANC, :PARCELA, :CODFORN, :TIPPAG, :HISTORIC, '
-      ':NOTFISC, '
       
-        '   :DTEMISS, :DTVENC, :DTPAG, :DOCBAIX, :VALORPAG, :NOMEEMP, :BA' +
-        'NCO, '
-      ':NUMCHQ, '
-      '   :FORMA_PAGTO, :CONDICAO_PAGTO, :QUITADO)')
+        '  (:ANOLANC, :NUMLANC, :CNPJ, :FORMA_PAGTO, :TIPPAG, :HISTORIC, ' +
+        ':NUMREC, '
+      
+        '   :DTEMISS, :DTVENC, :DTREC, :DOCBAIX, :VALORREC, :VALORMULTA, ' +
+        ':VALORRECTOT, '
+      
+        '   :NUMCONTRATO, :PARCELA, :CODBANCO, :NOSSONUMERO, :REMESSA, :V' +
+        'ALORSALDO, '
+      
+        '   :PERCENTJUROS, :PERCENTMULTA, :PERCENTDESCONTO, :DATAPROCESSO' +
+        'BOLETO, '
+      '   :BAIXADO, :ENVIADO, :ANOVENDA, :NUMVENDA)')
     DeleteSQL.Strings = (
-      'delete from TBCONTPAG'
+      'delete from TBCONTREC'
       'where'
       '  ANOLANC = :OLD_ANOLANC and'
       '  NUMLANC = :OLD_NUMLANC')
+    Left = 800
+  end
+  inherited ImgList: TImageList
+    Left = 736
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1003,12 +1409,12 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       '  , p.Banco'
       '  , b.Bco_nome'
       '  , p.Documento_baixa'
-      'from TBCONTPAG_BAIXA p'
+      'from TBCONTREC_BAIXA p'
       '  left join TBFORMPAGTO f on (f.Cod = p.Forma_pagto)'
       '  left join TBBANCO_BOLETO b on (b.Bco_cod = p.Banco)')
     ModifySQL.Strings = (
       '')
-    Left = 624
+    Left = 768
     Top = 40
     object cdsPagamentosANOLANC: TSmallintField
       FieldName = 'ANOLANC'
@@ -1085,7 +1491,22 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object dtsPagamentos: TDataSource
     AutoEdit = False
     DataSet = cdsPagamentos
-    Left = 688
+    Left = 832
     Top = 40
+  end
+  object tblBanco: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'TBBANCO_BOLETO'
+    TableTypes = [ttView]
+    Left = 864
+    Top = 104
+  end
+  object dtsBanco: TDataSource
+    DataSet = tblBanco
+    Left = 896
+    Top = 104
   end
 end

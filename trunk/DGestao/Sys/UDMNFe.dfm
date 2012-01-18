@@ -1,0 +1,44 @@
+object DMNFe: TDMNFe
+  OldCreateOrder = False
+  Left = 633
+  Top = 375
+  Height = 317
+  Width = 419
+  object ACBrNFe: TACBrNFe
+    Configuracoes.Geral.PathSalvar = '..\Bin\'
+    Configuracoes.WebServices.UF = 'PA'
+    Configuracoes.WebServices.AguardarConsultaRet = 0
+    Configuracoes.WebServices.IntervaloTentativas = 0
+    Configuracoes.WebServices.AjustaAguardaConsultaRet = False
+    DANFE = rvDANFE
+    Left = 24
+    Top = 24
+  end
+  object rvDANFE: TACBrNFeDANFERave
+    ACBrNFe = ACBrNFe
+    PathPDF = '..\Bin\'
+    MostrarPreview = True
+    MostrarStatus = True
+    TipoDANFE = tiRetrato
+    NumCopias = 1
+    ImprimirDescPorc = False
+    ImprimirTotalLiquido = False
+    MargemInferior = 0.800000000000000000
+    MargemSuperior = 0.800000000000000000
+    MargemEsquerda = 0.600000000000000000
+    MargemDireita = 0.510000000000000000
+    CasasDecimais._qCom = 2
+    CasasDecimais._vUnCom = 2
+    ExibirResumoCanhoto = False
+    FormularioContinuo = False
+    TamanhoFonte_DemaisCampos = 10
+    ProdutosPorPagina = 0
+    ImprimirDetalhamentoEspecifico = True
+    NFeCancelada = False
+    EspessuraBorda = 1
+    TamanhoFonte_RazaoSocial = 12
+    TamanhoFonte_ANTT = 10
+    Left = 24
+    Top = 72
+  end
+end

@@ -653,22 +653,19 @@ begin
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
       cdsTabelaItensQTDEFINAL.Value := cdsTabelaItensQTDEANTES.Value + cdsTabelaItensQTDE.Value;
 
-  if ( Sender = dbValorUnit ) then
+  if ( (Sender = dbValorUnit) or (Sender = dbValorIPIProduto) ) then
   begin
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     begin
+      cdsTabelaItensCUSTOMEDIO.Value  := cdsTabelaItensPRECOUNIT.Value + cdsTabelaItensVALOR_IPI.Value;
       cdsTabelaItensTOTAL_BRUTO.Value := cdsTabelaItensPRECOUNIT.Value * cdsTabelaItensQTDE.Value;
-      
+
       if ( IbDtstTabelaTOTALPROD.AsCurrency > 0 ) then
       begin
         cdsTabelaItensPERC_PARTICIPACAO.Value := cdsTabelaItensTOTAL_BRUTO.Value / IbDtstTabelaTOTALPROD.Value * 100;
         cdsTabelaItensVALOR_FRETE.Value       := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaFRETE.Value / 100;
         cdsTabelaItensVALOR_DESCONTO.Value    := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaDESCONTO.Value / 100;
         cdsTabelaItensVALOR_OUTROS.Value      := cdsTabelaItensPERC_PARTICIPACAO.Value * IbDtstTabelaOUTROSCUSTOS.Value / 100;
-
-        cdsTabelaItensCUSTOMEDIO.Value := cdsTabelaItensPRECOUNIT.Value    + cdsTabelaItensVALOR_FRETE.Value +
-                                          cdsTabelaItensVALOR_OUTROS.Value + cdsTabelaItensVALOR_IPI.Value   -
-                                          (cdsTabelaItensVALOR_DESCONTO.Value / cdsTabelaItensQTDE.AsInteger);
 
         cdsTabelaItensTOTAL_LIQUIDO.Value := cdsTabelaItensCUSTOMEDIO.AsCurrency * cdsTabelaItensQTDE.AsInteger;
       end;
@@ -755,6 +752,7 @@ begin
   cdsTabelaItensCODEMP.Value     := IbDtstTabelaCODEMP.Value;
   cdsTabelaItensCODFORN.Value    := IbDtstTabelaCODFORN.Value;
   cdsTabelaItensNF.Value         := IbDtstTabelaNF.Value;
+  cdsTabelaItensCFOP.Value       := GetCfopIDDefault;
   cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
 end;
 

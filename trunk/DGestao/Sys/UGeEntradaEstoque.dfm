@@ -1749,9 +1749,9 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         object lblCustoMedio: TLabel
           Left = 904
           Top = 64
-          Width = 87
+          Width = 56
           Height = 13
-          Caption = 'Custo M'#233'dio (R$):'
+          Caption = 'Custo (R$):'
           FocusControl = dbCustoMedio
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -1998,6 +1998,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           Font.Style = []
           ParentFont = False
           TabOrder = 9
+          OnExit = ControlEditExit
         end
         object pnlBotoesProduto: TPanel
           Left = 6
@@ -2384,7 +2385,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         object dbCFOPItem: TDBEdit
           Left = 800
           Top = 40
-          Width = 89
+          Width = 57
           Height = 21
           Color = clWhite
           DataField = 'CFOP'
@@ -2470,7 +2471,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           item
             Expanded = False
             FieldName = 'CUSTOMEDIO'
-            Title.Caption = 'Custo M'#233'dio (R$)'
+            Title.Caption = 'Custo (R$)'
             Width = 110
             Visible = True
           end
@@ -3166,7 +3167,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       Size = 2
     end
     object cdsTabelaItensCUSTOMEDIO: TIBBCDField
-      DisplayLabel = 'Custo M'#233'dio'
+      DisplayLabel = 'Custo'
       FieldName = 'CUSTOMEDIO'
       Origin = 'TBCOMPRASITENS.CUSTOMEDIO'
       DisplayFormat = ',0.00'

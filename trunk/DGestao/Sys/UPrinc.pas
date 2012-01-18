@@ -79,6 +79,8 @@ type
     nmCondicaoPagto: TMenuItem;
     N6: TMenuItem;
     nmTabelaCFOP: TMenuItem;
+    nmSenhaAutorizacao: TMenuItem;
+    nmConfigurarNFe: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -132,7 +134,8 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar;
+  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
+  UGeContasAReceber;
 
 {$R *.dfm}
 
@@ -156,9 +159,10 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnCRecClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGrContReceb, frmGrContReceb);
-  frmGrContReceb.ShowModal;
-  frmGrContReceb.Destroy;
+//  Application.CreateForm(TfrmGrContReceb, frmGrContReceb);
+//  frmGrContReceb.ShowModal;
+//  frmGrContReceb.Destroy;
+  MostrarControleContasAReceber(Self);
 end;
 
 procedure TfrmPrinc.RxSpeedBtnCPagClick(Sender: TObject);
@@ -173,11 +177,8 @@ end;
 
 procedure TfrmPrinc.RxSpeedButton2Click(Sender: TObject);
 begin
-if Application.MessageBox('Deseja SAIR do Sistema?',
-      'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = idYes
-   then Application.Terminate;
-
-
+  if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
+    Application.Terminate;
 end;
 
 procedure TfrmPrinc.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -200,9 +201,6 @@ end;
 
 procedure TfrmPrinc.Entrada1Click(Sender: TObject);
 begin
-//  Application.CreateForm(TfrmGrEntradaEstoq, frmGrEntradaEstoq);
-//  frmGrEntradaEstoq.ShowModal;
-//  frmGrEntradaEstoq.Destroy;
   MostrarControleCompras(Self);
 end;
 
