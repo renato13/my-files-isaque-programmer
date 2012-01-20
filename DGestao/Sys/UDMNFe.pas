@@ -4,7 +4,8 @@ interface
 
 uses
   SysUtils, Classes, ACBrNFeDANFEClass, ACBrNFeDANFERave, ACBrNFe, DB,
-  IBCustomDataSet, IBQuery;
+  IBCustomDataSet, IBQuery, frxClass, frxDBSet, frxExportRTF, frxExportXLS,
+  frxExportPDF, frxExportMail;
 
 type
   TDMNFe = class(TDataModule)
@@ -86,6 +87,84 @@ type
     qryDuplicatasPERCENTDESCONTO: TIBBCDField;
     qryCalculoImporto: TIBQuery;
     qryDadosProduto: TIBQuery;
+    frdEmpresa: TfrxDBDataset;
+    frdCliente: TfrxDBDataset;
+    frrVenda: TfrxReport;
+    frdVenda: TfrxDBDataset;
+    frdItens: TfrxDBDataset;
+    frdTitulo: TfrxDBDataset;
+    qryCalculoImportoANO: TSmallintField;
+    qryCalculoImportoCODCONTROL: TIntegerField;
+    qryCalculoImportoCODEMP: TIBStringField;
+    qryCalculoImportoCODCLI: TIBStringField;
+    qryCalculoImportoDTVENDA: TDateTimeField;
+    qryCalculoImportoSTATUS: TSmallintField;
+    qryCalculoImportoDESCONTO: TIBBCDField;
+    qryCalculoImportoTOTALVENDA: TIBBCDField;
+    qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
+    qryCalculoImportoDTFINALIZACAO_VENDA: TDateField;
+    qryCalculoImportoOBS: TMemoField;
+    qryCalculoImportoFORMAPAG: TIBStringField;
+    qryCalculoImportoFATDIAS: TSmallintField;
+    qryCalculoImportoSERIE: TIBStringField;
+    qryCalculoImportoNFE: TLargeintField;
+    qryCalculoImportoDATAEMISSAO: TDateField;
+    qryCalculoImportoHORAEMISSAO: TTimeField;
+    qryCalculoImportoCFOP: TIntegerField;
+    qryCalculoImportoCFOP_DESCRICAO: TIBStringField;
+    qryCalculoImportoVERIFICADOR_NFE: TIBStringField;
+    qryCalculoImportoVENDEDOR_COD: TIntegerField;
+    qryCalculoImportoVENDEDOR_NOME: TIBStringField;
+    qryCalculoImportoVENDEDOR_CPF: TIBStringField;
+    qryCalculoImportoUSUARIO: TIBStringField;
+    qryCalculoImportoFORMAPAGTO_COD: TSmallintField;
+    qryCalculoImportoDESCRI: TIBStringField;
+    qryCalculoImportoACRESCIMO: TFloatField;
+    qryCalculoImportoCONDICAOPAGTO_COD: TSmallintField;
+    qryCalculoImportoCOND_DESCRICAO: TIBStringField;
+    qryCalculoImportoCOND_DESCRICAO_FULL: TIBStringField;
+    qryCalculoImportoVENDA_PRAZO: TSmallintField;
+    qryCalculoImportoPRAZO_01: TSmallintField;
+    qryCalculoImportoPRAZO_02: TSmallintField;
+    qryCalculoImportoPRAZO_03: TSmallintField;
+    qryCalculoImportoPRAZO_04: TSmallintField;
+    qryCalculoImportoPRAZO_05: TSmallintField;
+    qryCalculoImportoPRAZO_06: TSmallintField;
+    qryCalculoImportoPRAZO_07: TSmallintField;
+    qryCalculoImportoPRAZO_08: TSmallintField;
+    qryCalculoImportoPRAZO_09: TSmallintField;
+    qryCalculoImportoPRAZO_10: TSmallintField;
+    qryCalculoImportoPRAZO_11: TSmallintField;
+    qryCalculoImportoPRAZO_12: TSmallintField;
+    qryDadosProdutoANO: TSmallintField;
+    qryDadosProdutoCODCONTROL: TIntegerField;
+    qryDadosProdutoSEQ: TSmallintField;
+    qryDadosProdutoCODPROD: TIBStringField;
+    qryDadosProdutoDESCRI: TIBStringField;
+    qryDadosProdutoREFERENCIA: TIBStringField;
+    qryDadosProdutoCODEMP: TIBStringField;
+    qryDadosProdutoCODCLI: TIBStringField;
+    qryDadosProdutoDTVENDA: TDateTimeField;
+    qryDadosProdutoQTDE: TIntegerField;
+    qryDadosProdutoPUNIT: TIBBCDField;
+    qryDadosProdutoDESCONTO: TIBBCDField;
+    qryDadosProdutoPFINAL: TIBBCDField;
+    qryDadosProdutoQTDEFINAL: TIntegerField;
+    qryDadosProdutoUNID_COD: TSmallintField;
+    qryDadosProdutoUNP_DESCRICAO: TIBStringField;
+    qryDadosProdutoUNP_SIGLA: TIBStringField;
+    qryDadosProdutoCFOP_COD: TIntegerField;
+    qryDadosProdutoALIQUOTA: TIBBCDField;
+    qryDadosProdutoVALOR_IPI: TIBBCDField;
+    qryDadosProdutoESTOQUE: TIntegerField;
+    qryDadosProdutoRESERVA: TIntegerField;
+    qryDadosProdutoDISPONIVEL: TLargeintField;
+    qryDadosProdutoTOTAL_BRUTO: TIBBCDField;
+    qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField;
+    frxPDF: TfrxPDFExport;
+    frxXLS: TfrxXLSExport;
+    frxRTF: TfrxRTFExport;
+    frxMailExport: TfrxMailExport;
   private
     { Private declarations }
   public

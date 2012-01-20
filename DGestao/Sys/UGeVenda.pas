@@ -212,10 +212,6 @@ type
     dbCFOPVenda: TRxDBComboEdit;
     IbDtstTabelaCFOP: TIntegerField;
     cdsTabelaItensRESERVA: TIntegerField;
-    frrVenda: TfrxReport;
-    frdVenda: TfrxDBDataset;
-    frdItens: TfrxDBDataset;
-    frdTitulo: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -278,7 +274,7 @@ const
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils, IBQuery;
+  DateUtils, IBQuery, UDMNFe;
 
 {$R *.dfm}
 
@@ -966,14 +962,42 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
-  with DMBusiness, qryEmpresa do
+  with DMNFe do
   begin
-    Close;
-    ParamByName('Cnpj').AsString := IbDtstTabelaCODEMP.AsString;
-    Open;
-  end;
 
-  frrVenda.ShowReport;
+    with qryEmitente do
+    begin
+      Close;
+      ParamByName('Cnpj').AsString := IbDtstTabelaCODEMP.AsString;
+      Open;
+    end;
+
+    with qryDestinatario do
+    begin
+      Close;
+      ParamByName('Cnpj').AsString := IbDtstTabelaCODCLI.AsString;
+      Open;
+    end;
+
+    with qryCalculoImporto do
+    begin
+      Close;
+      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
+      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
+      Open;
+    end;
+
+    with qryDadosProduto do
+    begin
+      Close;
+      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
+      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
+      Open;
+    end;
+
+    frrVenda.ShowReport;
+
+  end;
 end;
 
 end.
