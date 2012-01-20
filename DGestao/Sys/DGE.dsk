@@ -11,15 +11,15 @@ File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.dfm',0,1,
 File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGrContPagar.pas',0,1,158,12,163,1,0
 
 [Modules]
-Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
 Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=5
 EditWindowCount=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -29,15 +29,15 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=1
+FormOnTop=0
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
 ModuleType=SourceModule
@@ -58,7 +58,7 @@ FormOnTop=0
 
 [EditWindow0]
 ViewCount=5
-CurrentView=2
+CurrentView=1
 View0=0
 View1=1
 View2=2
@@ -115,8 +115,8 @@ LeftCol=1
 
 [View4]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=1
-CursorY=707
+CursorX=30
+CursorY=716
 TopLine=704
 LeftCol=1
 
