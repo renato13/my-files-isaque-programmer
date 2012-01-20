@@ -172,7 +172,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Left = 488
           Width = 434
           inherited lbltFiltrar: TLabel
-            Left = 166
+            Left = 198
             Width = 73
             Caption = 'Lan'#231'amento:'
           end
@@ -182,18 +182,18 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           object lblData: TLabel [2]
             Left = 14
             Top = 25
-            Width = 30
+            Width = 70
             Height = 13
-            Caption = 'Data:'
+            Caption = 'Vencimento:'
             FocusControl = edData
           end
           inherited edtFiltrar: TEdit
-            Left = 248
-            Width = 137
+            Left = 280
+            Width = 105
             TabOrder = 1
           end
           object edData: TDateTimePicker
-            Left = 56
+            Left = 88
             Top = 21
             Width = 105
             Height = 21

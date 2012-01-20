@@ -3008,7 +3008,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       '  left join TBSECAOPROD s on (s.Scp_cod = p.Codsecao)'
       '  left join TBUNIDADEPROD u on (u.Unp_cod = p.Codunidade)'
       '  left join TBCFOP c on (c.Cfop_cod = p.Codcfop)'
-      'where p.Cod = :CodigoAlfa')
+      'where p.Codigo = :Codigo')
     ModifySQL.Strings = (
       '')
     Left = 864

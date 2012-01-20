@@ -73,7 +73,8 @@ uses
   UGrPadraoCadastroSimples in 'lib\UGrPadraoCadastroSimples.pas' {frmGrPadraoCadastroSimples},
   UGeEfetuarPagtoREC in 'UGeEfetuarPagtoREC.pas' {frmGeEfetuarPagtoREC},
   UGeContasAPagar in 'UGeContasAPagar.pas' {frmGeContasAPagar},
-  UGeEfetuarPagtoPAG in 'UGeEfetuarPagtoPAG.pas' {frmGeEfetuarPagtoPAG};
+  UGeEfetuarPagtoPAG in 'UGeEfetuarPagtoPAG.pas' {frmGeEfetuarPagtoPAG},
+  UDMNFe in 'UDMNFe.pas' {DMNFe: TDataModule};
 
 {$R *.res}
 
@@ -83,6 +84,7 @@ begin
   Application.Initialize;
   Application.Title := 'DGE - Sistema Integrado de Gestão Empresarial';
   Application.CreateForm(TDMBusiness, DMBusiness);
+  Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.Run;
 end.

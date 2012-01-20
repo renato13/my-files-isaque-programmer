@@ -122,7 +122,7 @@ var
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
-    const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+    var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 
 implementation
@@ -188,7 +188,7 @@ begin
 end;
 
 function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
-  const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+  var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 var
   frm : TfrmGeProduto;
   whr : String;
@@ -222,6 +222,9 @@ begin
       Aliquota   := frm.IbDtstTabelaALIQUOTA.AsCurrency;
       ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
       ValorIPI   := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
+
+      Estoque := frm.IbDtstTabelaQTDE.AsInteger;
+      Reserva := frm.IbDtstTabelaRESERVA.AsInteger;
     end;
   finally
     frm.Destroy;

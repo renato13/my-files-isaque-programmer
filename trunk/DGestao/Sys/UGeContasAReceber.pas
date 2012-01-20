@@ -86,7 +86,6 @@ type
     IbDtstTabelaENVIADO: TSmallintField;
     IbDtstTabelaANOVENDA: TSmallintField;
     IbDtstTabelaNUMVENDA: TIntegerField;
-    IbDtstTabelaNOME: TIBStringField;
     IbDtstTabelaPAGO_: TIBStringField;
     dnVenda: TDBEdit;
     Bevel9: TBevel;
@@ -113,6 +112,7 @@ type
     dbEnviado: TDBCheckBox;
     lblPercDesconto: TLabel;
     dbPercDesconto: TDBEdit;
+    IbDtstTabelaNOMECLIENTE: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure dbClienteButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -206,8 +206,8 @@ begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     if ( SelecionarCliente(Self, iCodigo, sCNPJ, sNome) ) then
     begin
-      IbDtstTabelaCNPJ.AsString := sCNPJ;
-      IbDtstTabelaNOME.AsString := sNome;
+      IbDtstTabelaCNPJ.AsString        := sCNPJ;
+      IbDtstTabelaNOMECLIENTE.AsString := sNome;
     end;
 end;
 
@@ -227,9 +227,12 @@ begin
   IbDtstTabelaTIPPAG.Value         := GetFormaPagtoNomeDefault;
   IbDtstTabelaVALORRECTOT.Value     := 0;
   IbDtstTabelaVALORSALDO.Value      := 0;
+  IbDtstTabelaVALORMULTA.Value      := 0;
   IbDtstTabelaPERCENTJUROS.Value    := 0;
   IbDtstTabelaPERCENTMULTA.Value    := 0;
   IbDtstTabelaPERCENTDESCONTO.Value := 0;
+  IbDtstTabelaBAIXADO.Value := 0;
+  IbDtstTabelaENVIADO.Value := 0;
 end;
 
 procedure TfrmGeContasAReceber.btbtnEfetuarPagtoClick(Sender: TObject);
@@ -251,7 +254,7 @@ begin
 //    Exit;
 //  end;
 
-  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaNOME.AsString) then
+  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaNOMECLIENTE.AsString) then
   begin
     iNumero := IbDtstTabelaNUMLANC.AsInteger;
 

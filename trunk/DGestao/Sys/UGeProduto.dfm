@@ -753,9 +753,9 @@ inherited frmGeProduto: TfrmGeProduto
           object lblCusto: TLabel
             Left = 16
             Top = 8
-            Width = 101
+            Width = 63
             Height = 13
-            Caption = 'Custo m'#233'dio (R$):'
+            Caption = 'Custo (R$):'
             FocusControl = dbCusto
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
@@ -970,6 +970,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  left join TBCFOP c on (c.Cfop_cod = p.Codcfop)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_PRODUTO_ID'
+    Left = 656
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -1248,7 +1249,9 @@ inherited frmGeProduto: TfrmGeProduto
       'where'
       '  CODIGO = :OLD_CODIGO')
     Left = 688
-    Top = 40
+  end
+  inherited ImgList: TImageList
+    Left = 624
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness

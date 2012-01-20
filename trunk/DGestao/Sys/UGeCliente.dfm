@@ -846,7 +846,6 @@ inherited frmGeCliente: TfrmGeCliente
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_CLIENTE_ID'
     Left = 640
-    Top = 8
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -997,8 +996,7 @@ inherited frmGeCliente: TfrmGeCliente
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
-    Left = 672
-    Top = 8
+    Left = 704
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -1027,7 +1025,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  PAIS_ID'
       'from TBCLIENTE '
       'where'
-      '  CODIGO = :CODIGO')
+      '  CNPJ = :CNPJ')
     ModifySQL.Strings = (
       'update TBCLIENTE'
       'set'
@@ -1054,20 +1052,21 @@ inherited frmGeCliente: TfrmGeCliente
       '  NUMERO_END = :NUMERO_END,'
       '  PAIS_ID = :PAIS_ID'
       'where'
-      '  CODIGO = :OLD_CODIGO')
+      '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBCLIENTE'
-      
-        '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, C' +
-        'OMPLEMENTO, '
+      '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, '
+      'COMPLEMENTO, '
       
         '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
-        ', BAI_COD, '
+        ', '
+      'BAI_COD, '
       '   CID_COD, EST_COD, NUMERO_END, PAIS_ID)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
-        'NDER, :COMPLEMENTO, '
+        'NDER, '
+      ':COMPLEMENTO, '
       
         '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :EMAIL, :SITE, :TLG_TIPO,' +
         ' :LOG_COD, '
@@ -1075,12 +1074,10 @@ inherited frmGeCliente: TfrmGeCliente
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
-      '  CODIGO = :OLD_CODIGO')
-    Left = 640
-    Top = 40
+      '  CNPJ = :OLD_CNPJ')
+    Left = 672
   end
   inherited ImgList: TImageList
     Left = 608
-    Top = 8
   end
 end
