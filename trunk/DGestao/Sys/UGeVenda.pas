@@ -713,7 +713,7 @@ begin
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
       CarregarDadosCFOP( cdsTabelaItensCFOP_COD.AsInteger );
 
-  if ( Sender = dbDesconto ) then
+  if ( (Sender = dbQuantidade) or (Sender = dbDesconto) ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     begin
       if ( cdsTabelaItensPUNIT.IsNull ) then

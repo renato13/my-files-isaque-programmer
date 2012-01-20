@@ -822,7 +822,7 @@ inherited frmGeVenda: TfrmGeVenda
           Top = 64
           Width = 88
           Height = 13
-          Caption = 'Valor L'#237'quido (R$):'
+          Caption = 'Total L'#237'quido (R$):'
           FocusControl = dbValorLiq
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -1011,6 +1011,7 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           TabOrder = 8
+          OnExit = ControlEditExit
         end
         object dbValorUnit: TDBEdit
           Left = 304
@@ -1028,6 +1029,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
           ReadOnly = True
           TabOrder = 9
+          OnExit = ControlEditExit
         end
         object dbDesconto: TDBEdit
           Left = 432
@@ -1052,7 +1054,7 @@ inherited frmGeVenda: TfrmGeVenda
           Width = 121
           Height = 21
           Color = clMoneyGreen
-          DataField = 'PFINAL'
+          DataField = 'TOTAL_LIQUIDO'
           DataSource = DtSrcTabelaItens
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
