@@ -118,9 +118,15 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           end
           item
             Expanded = False
-            FieldName = 'NOME'
+            FieldName = 'NOMECLIENTE'
             Title.Caption = 'Ciente'
-            Width = 280
+            Width = 250
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CNPJ'
+            Title.Caption = 'CPF / CNPJ'
             Visible = True
           end
           item
@@ -175,7 +181,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           Left = 488
           Width = 434
           inherited lbltFiltrar: TLabel
-            Left = 166
+            Left = 198
             Width = 73
             Caption = 'Lan'#231'amento:'
           end
@@ -185,18 +191,18 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           object lblData: TLabel [2]
             Left = 14
             Top = 25
-            Width = 30
+            Width = 70
             Height = 13
-            Caption = 'Data:'
+            Caption = 'Vencimento:'
             FocusControl = edData
           end
           inherited edtFiltrar: TEdit
-            Left = 248
-            Width = 137
+            Left = 280
+            Width = 105
             TabOrder = 1
           end
           object edData: TDateTimePicker
-            Left = 56
+            Left = 88
             Top = 21
             Width = 105
             Height = 21
@@ -302,7 +308,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           CharCase = ecUpperCase
           ClickKey = 16464
           Color = clMoneyGreen
-          DataField = 'NOME'
+          DataField = 'NOMECLIENTE'
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -1037,10 +1043,10 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  , r.Enviado'
       '  , r.Anovenda'
       '  , r.Numvenda'
-      '  , c.Nome'
+      '  , c.Nome as NomeCliente'
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
       'from TBCONTREC r'
-      '  left join TBCLIENTE c on (c.Cnpj = r.Cnpj)')
+      '  inner join TBCLIENTE c on (c.Cnpj = r.Cnpj)')
     GeneratorField.Field = 'NUMLANC'
     GeneratorField.Generator = 'GEN_CONTAREC_NUM_2011'
     Left = 768
@@ -1199,14 +1205,12 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       Alignment = taLeftJustify
       FieldName = 'BAIXADO'
       Origin = 'TBCONTREC.BAIXADO'
-      Required = True
       OnGetText = IbDtstTabelaBAIXADOGetText
     end
     object IbDtstTabelaENVIADO: TSmallintField
       Alignment = taLeftJustify
       FieldName = 'ENVIADO'
       Origin = 'TBCONTREC.ENVIADO'
-      Required = True
     end
     object IbDtstTabelaANOVENDA: TSmallintField
       Alignment = taCenter
@@ -1220,18 +1224,18 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       Origin = 'TBCONTREC.NUMVENDA'
       DisplayFormat = '0000000'
     end
-    object IbDtstTabelaNOME: TIBStringField
-      FieldName = 'NOME'
-      Origin = 'TBCLIENTE.NOME'
-      Size = 60
-    end
     object IbDtstTabelaPAGO_: TIBStringField
       Alignment = taCenter
       DisplayLabel = 'Baixado?'
       FieldName = 'PAGO_'
-      Required = True
       FixedChar = True
       Size = 1
+    end
+    object IbDtstTabelaNOMECLIENTE: TIBStringField
+      DisplayLabel = 'Cliente'
+      FieldName = 'NOMECLIENTE'
+      Origin = 'TBCLIENTE.NOME'
+      Size = 60
     end
   end
   inherited DtSrcTabela: TDataSource

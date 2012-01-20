@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider, IBStoredProc;
+  ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider, IBStoredProc,
+  frxClass, frxDBSet;
 
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
@@ -210,6 +211,11 @@ type
     lblCFOPVenda: TLabel;
     dbCFOPVenda: TRxDBComboEdit;
     IbDtstTabelaCFOP: TIntegerField;
+    cdsTabelaItensRESERVA: TIntegerField;
+    frrVenda: TfrxReport;
+    frdVenda: TfrxDBDataset;
+    frdItens: TfrxDBDataset;
+    frdTitulo: TfrxDBDataset;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -239,6 +245,8 @@ type
     procedure qryTitulosCalcFields(DataSet: TDataSet);
     procedure btnRegerarTituloClick(Sender: TObject);
     procedure dbCFOPVendaButtonClick(Sender: TObject);
+    procedure cdsTabelaItensBeforePost(DataSet: TDataSet);
+    procedure btbtnListaClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -246,11 +254,11 @@ type
     procedure AbrirTabelaItens(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure GerarTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
-    procedure CarregarDadosProduto( sCodigoAlfa : String);
+    procedure CarregarDadosProduto( Codigo : Integer );
     procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
 
-    function ValidarQuantidade(sCodigoAlfa : String; Quantidade : Integer) : Boolean;
+    function ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
   public
     { Public declarations }
   end;
@@ -270,7 +278,7 @@ const
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils;
+  DateUtils, IBQuery;
 
 {$R *.dfm}
 
@@ -452,7 +460,7 @@ begin
   qryTitulos.Open;
 end;
 
-procedure TfrmGeVenda.CarregarDadosProduto( sCodigoAlfa : String);
+procedure TfrmGeVenda.CarregarDadosProduto( Codigo : Integer);
 begin
   if ( not cdsTabelaItens.Active ) then
     Exit
@@ -462,10 +470,11 @@ begin
     with qryProduto do
     begin
       Close;
-      ParamByName('CodigoAlfa').AsString := sCodigoAlfa;
+      ParamByName('Codigo').AsInteger := Codigo;
       Open;
       if not IsEmpty then
       begin
+        cdsTabelaItensCODPROD.AsString     := FieldByName('Cod').AsString;
         cdsTabelaItensDESCRI.AsString      := FieldByName('Descri').AsString;
         cdsTabelaItensUNP_SIGLA.AsString   := FieldByName('Unp_sigla').AsString;
 
@@ -482,6 +491,9 @@ begin
 
         cdsTabelaItensPUNIT.AsCurrency     := FieldByName('Preco').AsCurrency;
         cdsTabelaItensVALOR_IPI.AsCurrency := FieldByName('Valor_ipi').AsCurrency;
+        
+        cdsTabelaItensESTOQUE.AsInteger    := FieldByName('Qtde').AsInteger;
+        cdsTabelaItensRESERVA.AsInteger    := FieldByName('Reserva').AsInteger;
       end
       else
       begin
@@ -533,7 +545,7 @@ begin
   end;
 end;
 
-function TfrmGeVenda.ValidarQuantidade(sCodigoAlfa : String; Quantidade : Integer) : Boolean;
+function TfrmGeVenda.ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
 var
   iEstoque ,
   iReserva : Integer;
@@ -541,7 +553,7 @@ begin
   with qryProduto do
   begin
     Close;
-    ParamByName('CodigoAlfa').AsString := sCodigoAlfa;
+    ParamByName('Codigo').AsInt64 := Codigo;
     Open;
 
     iEstoque := FieldByName('Qtde').AsInteger;
@@ -699,7 +711,7 @@ begin
 
   if ( Sender = dbProduto ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-      CarregarDadosProduto( cdsTabelaItensCODPROD.AsString );
+      CarregarDadosProduto( cdsTabelaItensCODPROD.AsInteger );
 
   if ( Sender = dbCFOP ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -774,7 +786,9 @@ procedure TfrmGeVenda.dbProdutoButtonClick(Sender: TObject);
 var
   iCodigo  ,
   iCFOP    ,
-  iUnidade : Integer;
+  iUnidade ,
+  iEstoque ,
+  iReserva : Integer;
   sCodigoAlfa,
   sDescricao ,
   sUnidade   ,
@@ -784,7 +798,7 @@ var
   cValorIPI  : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;
@@ -795,6 +809,9 @@ begin
       cdsTabelaItensPUNIT.AsCurrency     := cValorVenda;
       cdsTabelaItensPFINAL.AsCurrency    := cValorVenda;
       cdsTabelaItensVALOR_IPI.AsCurrency := cValorIPI;
+      
+      cdsTabelaItensESTOQUE.AsInteger := iEstoque;
+      cdsTabelaItensRESERVA.AsInteger := iReserva;
     end;
 end;
 
@@ -932,6 +949,31 @@ begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     if ( SelecionarCFOP(Self, iCodigo, sDescricao) ) then
       IbDtstTabelaCFOP.AsInteger := iCodigo;
+end;
+
+procedure TfrmGeVenda.cdsTabelaItensBeforePost(DataSet: TDataSet);
+begin
+  if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
+  begin
+    ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
+    Abort;
+  end;
+end;
+
+procedure TfrmGeVenda.btbtnListaClick(Sender: TObject);
+begin
+  inherited;
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  with DMBusiness, qryEmpresa do
+  begin
+    Close;
+    ParamByName('Cnpj').AsString := IbDtstTabelaCODEMP.AsString;
+    Open;
+  end;
+
+  frrVenda.ShowReport;
 end;
 
 end.

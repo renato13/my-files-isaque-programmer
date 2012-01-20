@@ -269,7 +269,7 @@ type
     procedure AbrirTabelaItens(const AnoCompra : Smallint; const ControleCompra : Integer);
     procedure AbrirTabelaDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
     procedure GerarDuplicatas(const AnoCompra : Smallint; const ControleCompra : Integer);
-    procedure CarregarDadosProduto( sCodigoAlfa : String);
+    procedure CarregarDadosProduto( Codigo : Integer);
     procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
   public
@@ -470,7 +470,7 @@ begin
   qryDuplicatas.Open;
 end;
 
-procedure TfrmGeEntradaEstoque.CarregarDadosProduto(sCodigoAlfa: String);
+procedure TfrmGeEntradaEstoque.CarregarDadosProduto(Codigo : Integer);
 begin
   if ( not cdsTabelaItens.Active ) then
     Exit
@@ -480,10 +480,11 @@ begin
     with qryProduto do
     begin
       Close;
-      ParamByName('CodigoAlfa').AsString := sCodigoAlfa;
+      ParamByName('Codigo').AsInteger := Codigo;
       Open;
       if not IsEmpty then
       begin
+        cdsTabelaItensCODPROD.AsString     := FieldByName('Cod').AsString;
         cdsTabelaItensDESCRI.AsString      := FieldByName('Descri').AsString;
         cdsTabelaItensUNP_SIGLA.AsString   := FieldByName('Unp_sigla').AsString;
         cdsTabelaItensQTDEANTES.AsInteger  := FieldByName('Qtde').AsInteger;
@@ -647,7 +648,7 @@ begin
 
   if ( Sender = dbProduto ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-      CarregarDadosProduto( cdsTabelaItensCODPROD.AsString );
+      CarregarDadosProduto( cdsTabelaItensCODPROD.AsInteger );
 
   if ( Sender = dbQuantidade ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -723,7 +724,9 @@ procedure TfrmGeEntradaEstoque.dbProdutoButtonClick(Sender: TObject);
 var
   iCodigo  ,
   iCFOP    ,
-  iUnidade : Integer;
+  iUnidade ,
+  iEstoque ,
+  iReserva : Integer;
   sCodigoAlfa,
   sDescricao ,
   sUnidade   ,
@@ -733,7 +736,7 @@ var
   cValorIPI  : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;
