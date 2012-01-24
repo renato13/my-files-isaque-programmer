@@ -74,7 +74,8 @@ uses
   UGeEfetuarPagtoREC in 'UGeEfetuarPagtoREC.pas' {frmGeEfetuarPagtoREC},
   UGeContasAPagar in 'UGeContasAPagar.pas' {frmGeContasAPagar},
   UGeEfetuarPagtoPAG in 'UGeEfetuarPagtoPAG.pas' {frmGeEfetuarPagtoPAG},
-  UDMNFe in 'UDMNFe.pas' {DMNFe: TDataModule};
+  UDMNFe in 'UDMNFe.pas' {DMNFe: TDataModule},
+  UGeVendaGerarNFe in 'UGeVendaGerarNFe.pas' {frmGeVendaGerarNFe};
 
 {$R *.res}
 
