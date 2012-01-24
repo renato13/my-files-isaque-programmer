@@ -1,6 +1,6 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas',0,1,1,1,12,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,1,1,1,1,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,1,1,1,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.dfm',0,1,1,1,1,0,0
 File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas',0,1,1,40,11,1,0
 File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,245,13,253,1,0
 File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,161,26,192,1,0
@@ -11,20 +11,21 @@ File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas',0,1,186,4
 File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.dfm',0,1,1,1,1,0,0
 
 [Modules]
-Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
 Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
 Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Count=5
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Count=6
 EditWindowCount=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -35,6 +36,11 @@ FormState=1
 FormOnTop=0
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -52,14 +58,19 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
+FormState=0
+FormOnTop=0
+
 [EditWindow0]
-ViewCount=5
-CurrentView=4
+ViewCount=6
+CurrentView=5
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
+View5=5
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -77,21 +88,21 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 CursorX=1
-CursorY=90
+CursorY=91
 TopLine=34
 LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=4
-CursorY=315
+CursorX=71
+CursorY=314
 TopLine=296
 LeftCol=1
 
@@ -116,8 +127,33 @@ CursorY=716
 TopLine=704
 LeftCol=1
 
+[View5]
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
+CursorX=1
+CursorY=51
+TopLine=22
+LeftCol=1
+
 [Watches]
 Count=0
+
+[WatchWindow]
+WatchColumnWidth=100
+WatchShowColumnHeaders=1
+Create=1
+Visible=0
+State=0
+Left=747
+Top=461
+Width=426
+Height=157
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=410
+ClientHeight=123
+TBDockHeight=157
+LRDockWidth=426
+Dockable=1
 
 [Breakpoints]
 Count=0
@@ -186,7 +222,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
@@ -262,26 +298,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=794
+Height=713
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=794
+ClientHeight=713
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=-11
-Top=-739
-Width=443
+Left=12
+Top=0
+Width=1690
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1690
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
