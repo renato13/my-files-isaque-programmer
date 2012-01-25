@@ -1,6 +1,9 @@
 inherited frmGeContasAPagar: TfrmGeContasAPagar
+  Left = 219
+  Top = 118
   Width = 950
   Height = 600
+  ActiveControl = dbgDados
   Caption = 'Controle de Contas A Pagar'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -92,6 +95,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   inherited pgcGuias: TPageControl
     Width = 934
     Height = 519
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -206,7 +210,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     end
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
-        Top = 161
+        Top = 197
         Width = 926
       end
       object Bevel5: TBevel [1]
@@ -379,7 +383,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Left = 0
         Top = 85
         Width = 926
-        Height = 76
+        Height = 112
         Align = alTop
         Caption = 'A Pagar'
         Font.Charset = ANSI_CHARSET
@@ -474,6 +478,20 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Height = 13
           Caption = 'Condi'#231#227'o de Pagamento:'
           FocusControl = dbCondicaoPagto
+        end
+        object Label1: TLabel
+          Left = 16
+          Top = 68
+          Width = 95
+          Height = 13
+          Caption = 'Tipo de Despesa:'
+          FocusControl = dbNotaFiscal
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object dbNotaFiscal: TDBEdit
           Left = 16
@@ -588,6 +606,25 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentFont = False
           TabOrder = 6
         end
+        object dbTipoDespesa: TDBLookupComboBox
+          Left = 16
+          Top = 84
+          Width = 249
+          Height = 21
+          DataField = 'CODTPDESP'
+          DataSource = DtSrcTabela
+          DropDownRows = 10
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          KeyField = 'COD'
+          ListField = 'TIPODESP'
+          ListSource = dtsrcTpDespesa
+          ParentFont = False
+          TabOrder = 7
+        end
       end
       object pgcMaisDados: TPageControl
         Left = 0
@@ -613,9 +650,9 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       end
       object dbgPagamentos: TDBGrid
         Left = 0
-        Top = 165
+        Top = 201
         Width = 926
-        Height = 175
+        Height = 139
         TabStop = False
         Align = alClient
         DataSource = dtsPagamentos
@@ -719,6 +756,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       '  , Case when p.Quitado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
       '  , p.Docbaix'
       '  , p.Quitado'
+      '  , p.Codtpdesp'
       'from TBCONTPAG p'
       '  inner join TBFORNECEDOR f on (f.Codforn = p.Codforn)'
       '  left join TBBANCO_BOLETO b on (b.Bco_cod = p.Banco)')
@@ -862,6 +900,10 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       Required = True
       OnGetText = IbDtstTabelaQUITADOGetText
     end
+    object IbDtstTabelaCODTPDESP: TSmallintField
+      FieldName = 'CODTPDESP'
+      Origin = 'TBCONTPAG.CODTPDESP'
+    end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -971,6 +1013,75 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     Transaction = DMBusiness.ibtrnsctnBusiness
     BufferChunks = 1000
     CachedUpdates = False
+    FieldDefs = <
+      item
+        Name = 'COND_COD'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_DESCRICAO'
+        DataType = ftString
+        Size = 80
+      end
+      item
+        Name = 'COND_PRAZO'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_01'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_02'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_03'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_04'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_05'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_06'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_07'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_08'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_09'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_10'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_11'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_PRAZO_12'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'COND_DESCRICAO_FULL'
+        Attributes = [faReadonly]
+        DataType = ftString
+        Size = 177
+      end>
+    StoreDefs = True
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 864
@@ -1086,5 +1197,22 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     DataSet = cdsPagamentos
     Left = 688
     Top = 40
+  end
+  object dtsrcTpDespesa: TDataSource
+    DataSet = ibqryTpDespesa
+    Left = 896
+    Top = 120
+  end
+  object ibqryTpDespesa: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'select * from TBTPDESPESA'
+      'order by tipodesp')
+    Left = 860
+    Top = 118
   end
 end

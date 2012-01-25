@@ -184,7 +184,8 @@ end;
 
 procedure TfrmPrinc.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
- Application.Terminate;
+  if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
+    Application.Terminate;
 end;
 
 procedure TfrmPrinc.FormasdePagamento1Click(Sender: TObject);

@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 585
-  Top = 283
+  Left = 279
+  Top = 128
   Width = 952
   Height = 500
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -23,7 +23,7 @@ object frmPrinc: TfrmPrinc
     Height = 19
     Panels = <
       item
-        Text = 'Masterdados - Fone: (91) 3031-7707 / 8129-1567'
+        Text = 'Masterdados - Fone: (91) 8717-1057/8129-1567'
         Width = 600
       end
       item
@@ -33,7 +33,7 @@ object frmPrinc: TfrmPrinc
       item
         Alignment = taCenter
         Bevel = pbNone
-        Text = 'Licenciado a Norte Placas'
+        Text = 'Licenciado a Pontoluz'
         Width = 50
       end>
   end
