@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, ToolEdit, RXDBCtrl, IBTable;
+  ToolWin, ToolEdit, RXDBCtrl, IBTable, IBQuery;
 
 type
   TfrmGeContasAPagar = class(TfrmGrPadraoCadastro)
@@ -83,6 +83,11 @@ type
     cdsPagamentosBANCO: TSmallintField;
     cdsPagamentosBCO_NOME: TIBStringField;
     cdsPagamentosDOCUMENTO_BAIXA: TIBStringField;
+    Label1: TLabel;
+    dbTipoDespesa: TDBLookupComboBox;
+    IbDtstTabelaCODTPDESP: TSmallintField;
+    dtsrcTpDespesa: TDataSource;
+    ibqryTpDespesa: TIBQuery;
     procedure FormCreate(Sender: TObject);
     procedure dbFornecedorButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -95,6 +100,7 @@ type
     procedure btbtnAlterarClick(Sender: TObject);
     procedure btbtnExcluirClick(Sender: TObject);
     procedure IbDtstTabelaBeforeEdit(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -314,6 +320,13 @@ begin
   inherited;
   if ( Trim(IbDtstTabelaNOMEEMP.AsString) = EmptyStr ) then
     IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
+end;
+
+procedure TfrmGeContasAPagar.FormShow(Sender: TObject);
+begin
+  inherited;
+ibqryTpDespesa.Prior;
+ibqryTpDespesa.Last;
 end;
 
 end.

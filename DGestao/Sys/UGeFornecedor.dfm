@@ -1,6 +1,6 @@
 inherited frmGeFornecedor: TfrmGeFornecedor
-  Left = 546
-  Top = 272
+  Left = 344
+  Top = 165
   Width = 763
   Height = 465
   Caption = 'Cadastro de Fornecedores'
@@ -744,7 +744,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
         Height = 118
         ActivePage = tbsContato
         Align = alClient
-        Style = tsFlatButtons
         TabOrder = 2
         object tbsContato: TTabSheet
           Caption = 'Contato'
@@ -897,7 +896,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
     GeneratorField.Field = 'CODFORN'
     GeneratorField.Generator = 'GEN_FORNECEDOR_ID'
     Left = 640
-    Top = 8
     object IbDtstTabelaCODFORN: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODFORN'
@@ -1059,7 +1057,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
     Left = 672
-    Top = 8
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -1147,7 +1144,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   end
   inherited ImgList: TImageList
     Left = 608
-    Top = 8
   end
   object tblGrupo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
