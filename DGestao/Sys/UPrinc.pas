@@ -80,7 +80,7 @@ type
     N6: TMenuItem;
     nmTabelaCFOP: TMenuItem;
     nmSenhaAutorizacao: TMenuItem;
-    nmConfigurarNFe: TMenuItem;
+    nmConfigurarNFeACBr: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -116,6 +116,7 @@ type
     procedure nmFormaPagtoClick(Sender: TObject);
     procedure Vendedor1Click(Sender: TObject);
     procedure nmCondicaoPagtoClick(Sender: TObject);
+    procedure nmConfigurarNFeACBrClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -135,7 +136,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
-  UGeContasAReceber;
+  UGeContasAReceber, UGeConfigurarNFeACBr;
 
 {$R *.dfm}
 
@@ -354,6 +355,11 @@ end;
 procedure TfrmPrinc.nmCondicaoPagtoClick(Sender: TObject);
 begin
   MostrarTabelaCondicoesPagto(Self);
+end;
+
+procedure TfrmPrinc.nmConfigurarNFeACBrClick(Sender: TObject);
+begin
+  ConfigurarNFeACBr(Self);
 end;
 
 end.
