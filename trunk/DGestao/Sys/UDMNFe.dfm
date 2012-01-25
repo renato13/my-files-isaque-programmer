@@ -1,5 +1,6 @@
 object DMNFe: TDMNFe
   OldCreateOrder = False
+  OnCreate = DataModuleCreate
   Left = 633
   Top = 375
   Height = 429

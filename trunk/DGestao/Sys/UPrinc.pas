@@ -136,7 +136,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
-  UGeContasAReceber, UGeConfigurarNFeACBr;
+  UGeContasAReceber, UDMNFe, UDMBusiness;
 
 {$R *.dfm}
 
@@ -359,7 +359,7 @@ end;
 
 procedure TfrmPrinc.nmConfigurarNFeACBrClick(Sender: TObject);
 begin
-  ConfigurarNFeACBr(Self);
+  ConfigurarNFeACBr;
 end;
 
 end.

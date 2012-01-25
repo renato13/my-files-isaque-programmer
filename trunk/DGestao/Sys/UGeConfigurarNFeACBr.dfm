@@ -25,6 +25,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
     Anchors = [akRight, akBottom]
     Caption = 'Salvar'
     TabOrder = 0
+    OnClick = btnSalvarClick
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
       18000000000000060000000000000000000000000000000000000000FF0000FF
@@ -141,7 +142,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       BEBEBCBCBCB8B8B8AEAEAEBBBBBB00FF0000FF0000FF0000FF00}
     NumGlyphs = 2
   end
-  object GroupBox1: TGroupBox
+  object grpBxConfigurar: TGroupBox
     Left = 0
     Top = 0
     Width = 284
@@ -168,14 +169,14 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 144
           Caption = 'Certificado'
           TabOrder = 0
-          object Label1: TLabel
+          object lbltCaminho: TLabel
             Left = 8
             Top = 16
             Width = 41
             Height = 13
             Caption = 'Caminho'
           end
-          object Label2: TLabel
+          object lbltSenha: TLabel
             Left = 8
             Top = 56
             Width = 30
@@ -201,8 +202,9 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
               B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
               3BB33773333773333773B333333B3333333B7333333733333337}
             NumGlyphs = 2
+            OnClick = sbtnCaminhoCertClick
           end
-          object Label25: TLabel
+          object lbltNumSerie: TLabel
             Left = 8
             Top = 96
             Width = 79
@@ -263,7 +265,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 269
           Caption = 'Geral'
           TabOrder = 0
-          object Label7: TLabel
+          object lbltLogoMarca: TLabel
             Left = 8
             Top = 176
             Width = 55
@@ -289,6 +291,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
               B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
               3BB33773333773333773B333333B3333333B7333333733333337}
             NumGlyphs = 2
+            OnClick = sbtnLogoMarcaClick
           end
           object sbtnPathSalvar: TSpeedButton
             Left = 235
@@ -309,6 +312,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
               B3333337FFFF77377FF333B000000333BB33337777777F3377FF3BB3333BB333
               3BB33773333773333773B333333B3333333B7333333733333337}
             NumGlyphs = 2
+            OnClick = sbtnPathSalvarClick
           end
           object edtLogoMarca: TEdit
             Left = 8
@@ -327,7 +331,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           object ckSalvar: TCheckBox
             Left = 8
             Top = 224
-            Width = 209
+            Width = 249
             Height = 15
             Caption = 'Salvar Arquivos de Envio e Resposta'
             Font.Charset = DEFAULT_CHARSET
@@ -379,7 +383,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 141
           Caption = 'WebService'
           TabOrder = 0
-          object Label6: TLabel
+          object lblUF: TLabel
             Left = 8
             Top = 16
             Width = 121
@@ -472,28 +476,28 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 105
           Caption = 'Proxy'
           TabOrder = 1
-          object Label8: TLabel
+          object lbltProxyHost: TLabel
             Left = 8
             Top = 16
             Width = 22
             Height = 13
             Caption = 'Host'
           end
-          object Label9: TLabel
+          object lbltProxyPorta: TLabel
             Left = 208
             Top = 16
             Width = 26
             Height = 13
             Caption = 'Porta'
           end
-          object Label10: TLabel
+          object lbltProxyUser: TLabel
             Left = 8
             Top = 56
             Width = 36
             Height = 13
             Caption = 'Usu'#225'rio'
           end
-          object Label11: TLabel
+          object lbltProxySenha: TLabel
             Left = 138
             Top = 56
             Width = 30
@@ -534,91 +538,91 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       object TabSheet4: TTabSheet
         Caption = 'Emitente'
         ImageIndex = 3
-        object Label12: TLabel
+        object lbltEmitCNPJ: TLabel
           Left = 8
           Top = 4
           Width = 25
           Height = 13
           Caption = 'CNPJ'
         end
-        object Label13: TLabel
+        object lbltEmitIE: TLabel
           Left = 136
           Top = 4
           Width = 43
           Height = 13
           Caption = 'Insc.Est.'
         end
-        object Label14: TLabel
+        object lbltEmitRazao: TLabel
           Left = 8
           Top = 44
           Width = 60
           Height = 13
           Caption = 'Raz'#227'o Social'
         end
-        object Label15: TLabel
+        object lbltEmitFantasia: TLabel
           Left = 8
           Top = 84
           Width = 41
           Height = 13
           Caption = 'Fantasia'
         end
-        object Label16: TLabel
+        object lbltEmitLogradouro: TLabel
           Left = 8
           Top = 164
           Width = 55
           Height = 13
           Caption = 'Logradouro'
         end
-        object Label17: TLabel
+        object lbltEmitNumero: TLabel
           Left = 208
           Top = 164
           Width = 37
           Height = 13
           Caption = 'N'#250'mero'
         end
-        object Label18: TLabel
+        object lbltEmitComp: TLabel
           Left = 8
           Top = 204
           Width = 65
           Height = 13
           Caption = 'Complemento'
         end
-        object Label19: TLabel
+        object lbltEmitBairro: TLabel
           Left = 136
           Top = 204
           Width = 28
           Height = 13
           Caption = 'Bairro'
         end
-        object Label20: TLabel
+        object lbltEmitCodCidade: TLabel
           Left = 8
           Top = 244
           Width = 62
           Height = 13
           Caption = 'C'#243'd. Cidade '
         end
-        object Label21: TLabel
+        object lbltEmitCidade: TLabel
           Left = 76
           Top = 244
           Width = 33
           Height = 13
           Caption = 'Cidade'
         end
-        object Label22: TLabel
+        object lbltEmitUF: TLabel
           Left = 225
           Top = 244
           Width = 13
           Height = 13
           Caption = 'UF'
         end
-        object Label23: TLabel
+        object lbltEmitCEP: TLabel
           Left = 136
           Top = 124
           Width = 19
           Height = 13
           Caption = 'CEP'
         end
-        object Label24: TLabel
+        object lbltEmitFone: TLabel
           Left = 8
           Top = 124
           Width = 24
@@ -727,42 +731,42 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 324
           Caption = 'Email'
           TabOrder = 0
-          object Label3: TLabel
+          object lbltSmtpHost: TLabel
             Left = 8
             Top = 16
             Width = 69
             Height = 13
             Caption = 'Servidor SMTP'
           end
-          object Label4: TLabel
+          object lbltSmtpPort: TLabel
             Left = 206
             Top = 16
             Width = 26
             Height = 13
             Caption = 'Porta'
           end
-          object Label5: TLabel
+          object lbltSmtpUser: TLabel
             Left = 8
             Top = 56
             Width = 36
             Height = 13
             Caption = 'Usu'#225'rio'
           end
-          object Label26: TLabel
+          object lbltSmtpPass: TLabel
             Left = 137
             Top = 56
             Width = 30
             Height = 13
             Caption = 'Senha'
           end
-          object Label27: TLabel
+          object lbltEmailAssunto: TLabel
             Left = 8
             Top = 96
             Width = 122
             Height = 13
             Caption = 'Assunto do email enviado'
           end
-          object Label28: TLabel
+          object lblEmailMsg: TLabel
             Left = 8
             Top = 168
             Width = 93
@@ -822,5 +826,14 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
         end
       end
     end
+  end
+  object opnDialog: TOpenDialog
+    DefaultExt = '*-nfe.XML'
+    Filter = 
+      'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|To' +
+      'dos os Arquivos (*.*)|*.*'
+    Title = 'Selecione a NFe'
+    Left = 8
+    Top = 392
   end
 end

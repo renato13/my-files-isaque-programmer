@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl;
+  ToolWin, IBTable, ToolEdit, RXDBCtrl, Menus, ExtDlgs;
 
 type
   TfrmGeEmpresa = class(TfrmGrPadraoCadastro)
@@ -79,6 +79,11 @@ type
     IbDtstTabelaEST_NOME: TIBStringField;
     IbDtstTabelaCID_NOME: TIBStringField;
     IbDtstTabelaPAIS_NOME: TIBStringField;
+    dbLogo: TDBImage;
+    ppmLogo: TPopupMenu;
+    ppmCarregarImagem: TMenuItem;
+    ppmLimparImagem: TMenuItem;
+    opnDialogImage: TOpenPictureDialog;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -89,6 +94,8 @@ type
     procedure DtSrcTabelaStateChange(Sender: TObject);
     procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
     procedure btbtnSalvarClick(Sender: TObject);
+    procedure ppmCarregarImagemClick(Sender: TObject);
+    procedure ppmLimparImagemClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -231,6 +238,9 @@ end;
 procedure TfrmGeEmpresa.DtSrcTabelaStateChange(Sender: TObject);
 begin
   inherited;
+  ppmCarregarImagem.Enabled := (IbDtstTabela.State in [dsEdit, dsInsert]);
+  ppmLimparImagem.Enabled   := (IbDtstTabela.State in [dsEdit, dsInsert]);
+
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
   begin
     pgcMaisDados.ActivePageIndex := 0;
@@ -272,6 +282,19 @@ begin
     end;
 
   inherited;
+end;
+
+procedure TfrmGeEmpresa.ppmCarregarImagemClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( opnDialogImage.Execute ) then
+      IbDtstTabelaLOGO.LoadFromFile( opnDialogImage.FileName );
+end;
+
+procedure TfrmGeEmpresa.ppmLimparImagemClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    IbDtstTabelaLOGO.Clear;
 end;
 
 end.
