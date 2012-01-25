@@ -11,21 +11,21 @@ type
     Bevel1: TBevel;
     btnSalvar: TBitBtn;
     btnCancelar: TBitBtn;
-    GroupBox1: TGroupBox;
+    grpBxConfigurar: TGroupBox;
     pgcGuias: TPageControl;
     TabSheet1: TTabSheet;
     GroupBox2: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
+    lbltCaminho: TLabel;
+    lbltSenha: TLabel;
     sbtnCaminhoCert: TSpeedButton;
-    Label25: TLabel;
+    lbltNumSerie: TLabel;
     sbtnGetCert: TSpeedButton;
     edtCaminho: TEdit;
     edtSenha: TEdit;
     edtNumSerie: TEdit;
     TabSheet2: TTabSheet;
     GroupBox3: TGroupBox;
-    Label7: TLabel;
+    lbltLogoMarca: TLabel;
     sbtnLogoMarca: TSpeedButton;
     sbtnPathSalvar: TSpeedButton;
     edtLogoMarca: TEdit;
@@ -35,33 +35,33 @@ type
     rgFormaEmissao: TRadioGroup;
     TabSheet3: TTabSheet;
     GroupBox4: TGroupBox;
-    Label6: TLabel;
+    lblUF: TLabel;
     ckVisualizar: TCheckBox;
     cbUF: TComboBox;
     rgTipoAmb: TRadioGroup;
     gbProxy: TGroupBox;
-    Label8: TLabel;
-    Label9: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
+    lbltProxyHost: TLabel;
+    lbltProxyPorta: TLabel;
+    lbltProxyUser: TLabel;
+    lbltProxySenha: TLabel;
     edtProxyHost: TEdit;
     edtProxyPorta: TEdit;
     edtProxyUser: TEdit;
     edtProxySenha: TEdit;
     TabSheet4: TTabSheet;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
-    Label23: TLabel;
-    Label24: TLabel;
+    lbltEmitCNPJ: TLabel;
+    lbltEmitIE: TLabel;
+    lbltEmitRazao: TLabel;
+    lbltEmitFantasia: TLabel;
+    lbltEmitLogradouro: TLabel;
+    lbltEmitNumero: TLabel;
+    lbltEmitComp: TLabel;
+    lbltEmitBairro: TLabel;
+    lbltEmitCodCidade: TLabel;
+    lbltEmitCidade: TLabel;
+    lbltEmitUF: TLabel;
+    lbltEmitCEP: TLabel;
+    lbltEmitFone: TLabel;
     edtEmitCNPJ: TEdit;
     edtEmitIE: TEdit;
     edtEmitRazao: TEdit;
@@ -77,12 +77,12 @@ type
     edtEmitUF: TEdit;
     TabSheet5: TTabSheet;
     GroupBox5: TGroupBox;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label26: TLabel;
-    Label27: TLabel;
-    Label28: TLabel;
+    lbltSmtpHost: TLabel;
+    lbltSmtpPort: TLabel;
+    lbltSmtpUser: TLabel;
+    lbltSmtpPass: TLabel;
+    lbltEmailAssunto: TLabel;
+    lblEmailMsg: TLabel;
     edtSmtpHost: TEdit;
     edtSmtpPort: TEdit;
     edtSmtpUser: TEdit;
@@ -90,8 +90,13 @@ type
     edtEmailAssunto: TEdit;
     cbEmailSSL: TCheckBox;
     mmEmailMsg: TMemo;
+    opnDialog: TOpenDialog;
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure btnSalvarClick(Sender: TObject);
+    procedure sbtnCaminhoCertClick(Sender: TObject);
+    procedure sbtnLogoMarcaClick(Sender: TObject);
+    procedure sbtnPathSalvarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,25 +106,11 @@ type
 var
   frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr;
 
-  procedure ConfigurarNFeACBr(const AOwer : TComponent);
-
 implementation
 
-uses UDMNFe;
+uses UDMNFe, FileCtrl;
 
 {$R *.dfm}
-
-procedure ConfigurarNFeACBr(const AOwer : TComponent);
-var
-  frm : TfrmGeConfigurarNFeACBr;
-begin
-  frm := TfrmGeConfigurarNFeACBr.Create(AOwer);
-  try
-    frm.ShowModal;
-  finally
-    frm.Free;
-  end;
-end;
 
 procedure TfrmGeConfigurarNFeACBr.btnCancelarClick(Sender: TObject);
 begin
@@ -130,6 +121,52 @@ procedure TfrmGeConfigurarNFeACBr.FormCreate(Sender: TObject);
 begin
   inherited;
   pgcGuias.ActivePageIndex := 0;
+end;
+
+procedure TfrmGeConfigurarNFeACBr.btnSalvarClick(Sender: TObject);
+begin
+  ModalResult := mrOk;
+end;
+
+procedure TfrmGeConfigurarNFeACBr.sbtnCaminhoCertClick(Sender: TObject);
+begin
+  with opnDialog do
+  begin
+    Title      := 'Selecione o Certificado';
+    DefaultExt := '*.pfx';
+    Filter     := 'Arquivos PFX (*.pfx)|*.pfx|Todos os Arquivos (*.*)|*.*';
+    InitialDir := ExtractFileDir(application.ExeName);
+
+    if Execute then
+      edtCaminho.Text := FileName;
+  end;
+end;
+
+procedure TfrmGeConfigurarNFeACBr.sbtnLogoMarcaClick(Sender: TObject);
+begin
+  with opnDialog do
+  begin
+    Title      := 'Selecione o Logo';
+    DefaultExt := '*.bmp';
+    Filter     := 'Arquivos BMP (*.bmp)|*.bmp|Todos os Arquivos (*.*)|*.*';
+    InitialDir := ExtractFileDir(application.ExeName);
+
+    if Execute then
+      edtLogoMarca.Text := FileName;
+  end;
+end;
+
+procedure TfrmGeConfigurarNFeACBr.sbtnPathSalvarClick(Sender: TObject);
+var
+  Dir : String;
+begin
+  if Length(edtPathLogs.Text) <= 0 then
+     Dir := ExtractFileDir(application.ExeName)
+  else
+     Dir := edtPathLogs.Text;
+
+  if SelectDirectory(Dir, [sdAllowCreate, sdPerformCreate, sdPrompt], SELDIRHELP) then
+    edtPathLogs.Text := Dir;
 end;
 
 end.

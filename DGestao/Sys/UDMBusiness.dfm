@@ -179,7 +179,7 @@ object DMBusiness: TDMBusiness
     Top = 88
   end
   object raveReport: TRvProject
-    Left = 448
-    Top = 88
+    Left = 40
+    Top = 120
   end
 end

@@ -1,37 +1,25 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,1,1,1,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.dfm',0,1,1,1,1,0,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas',0,1,1,40,11,1,0
-File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,245,13,253,1,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,161,26,192,1,0
-File_5=SourceModule,'c:\program files (x86)\borland\delphi7\Rx\Units\ToolEdit.pas',0,1,1500,1,1532,0,0
-File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,85,1,117,1,0
-File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEntradaEstoque.pas',0,1,709,2,743,1,0
-File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas',0,1,186,41,227,1,0
-File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.dfm',0,1,1,1,1,0,0
+File_0=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeConfiguracoes.pas',0,1,449,10,472,0,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas',0,1,704,30,716,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas',0,1,22,41,22,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoPAG.pas',0,1,1,1,1,1,0
+File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.dfm',0,1,1,1,1,0,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas',0,1,1,40,11,1,0
+File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,245,13,253,1,0
+File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,161,26,192,1,0
+File_8=SourceModule,'c:\program files (x86)\borland\delphi7\Rx\Units\ToolEdit.pas',0,1,1500,1,1532,0,0
+File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,85,1,117,1,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Count=7
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Count=5
 EditWindowCount=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=1
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -46,7 +34,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -64,20 +52,14 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
-FormState=0
-FormOnTop=0
-
 [EditWindow0]
-ViewCount=7
-CurrentView=6
+ViewCount=5
+CurrentView=4
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
-View5=5
-View6=6
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -108,44 +90,30 @@ LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=71
-CursorY=314
-TopLine=296
+CursorX=33
+CursorY=334
+TopLine=330
 LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=42
-CursorY=41
-TopLine=98
+CursorX=3
+CursorY=187
+TopLine=158
 LeftCol=1
 
 [View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-CursorX=25
+CursorX=20
 CursorY=362
-TopLine=360
+TopLine=334
 LeftCol=1
 
 [View4]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=30
-CursorY=716
-TopLine=704
-LeftCol=1
-
-[View5]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-CursorX=1
-CursorY=51
-TopLine=22
-LeftCol=1
-
-[View6]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas
-CursorX=19
-CursorY=39
-TopLine=1
+CursorX=14
+CursorY=168
+TopLine=140
 LeftCol=1
 
 [Watches]
@@ -219,7 +187,7 @@ Dockable=1
 SplitPos=123
 ArrangeBy=Name
 SelectedItem=Name
-ExpandedItems=Anchors
+ExpandedItems=
 HiddenCategories=
 
 [ObjectTree]

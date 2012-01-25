@@ -736,6 +736,18 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             TabOrder = 2
             OnKeyPress = ProximoCampoKeyPress
           end
+          object dbLogo: TDBImage
+            Left = 640
+            Top = 0
+            Width = 91
+            Height = 87
+            Align = alRight
+            DataField = 'LOGO'
+            DataSource = DtSrcTabela
+            PopupMenu = ppmLogo
+            Stretch = True
+            TabOrder = 3
+          end
         end
         object tbsParametros: TTabSheet
           Caption = 'Par'#226'metros p/ NF-e'
@@ -894,7 +906,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_EMPRESA_ID'
     Left = 640
-    Top = 8
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -1065,8 +1076,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
-    Left = 672
-    Top = 8
+    Left = 704
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -1155,11 +1165,28 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       'delete from TBEMPRESA'
       'where'
       '  CODIGO = :OLD_CODIGO')
-    Left = 640
-    Top = 40
+    Left = 672
   end
   inherited ImgList: TImageList
     Left = 608
-    Top = 8
+  end
+  object ppmLogo: TPopupMenu
+    Images = ImgList
+    Left = 656
+    Top = 297
+    object ppmCarregarImagem: TMenuItem
+      Caption = 'Carregar Imagem'
+      OnClick = ppmCarregarImagemClick
+    end
+    object ppmLimparImagem: TMenuItem
+      Caption = 'Limpar Imagem'
+      OnClick = ppmLimparImagemClick
+    end
+  end
+  object opnDialogImage: TOpenPictureDialog
+    Filter = 'Imagens BMP (*.bmp)|*.bmp'
+    Title = 'Selecionar Arquivo de Imagem'
+    Left = 688
+    Top = 297
   end
 end
