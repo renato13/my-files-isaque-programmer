@@ -659,7 +659,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         Height = 118
         ActivePage = tbsContato
         Align = alClient
-        Style = tsFlatButtons
         TabOrder = 2
         object tbsContato: TTabSheet
           Caption = 'Contato'
@@ -740,7 +739,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             Left = 640
             Top = 0
             Width = 91
-            Height = 87
+            Height = 90
             Align = alRight
             DataField = 'LOGO'
             DataSource = DtSrcTabela
