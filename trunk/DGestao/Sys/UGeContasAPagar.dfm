@@ -596,7 +596,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Height = 146
         ActivePage = tbsHistorico
         Align = alBottom
-        Style = tsFlatButtons
         TabOrder = 3
         object tbsHistorico: TTabSheet
           Caption = 'Hist'#243'rico'
@@ -604,7 +603,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
             Left = 0
             Top = 0
             Width = 918
-            Height = 115
+            Height = 118
             Align = alClient
             DataField = 'HISTORIC'
             DataSource = DtSrcTabela

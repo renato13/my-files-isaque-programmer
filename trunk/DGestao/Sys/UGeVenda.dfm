@@ -1514,13 +1514,12 @@ inherited frmGeVenda: TfrmGeVenda
         Height = 155
         ActivePage = tbsRecebimento
         Align = alBottom
-        Style = tsFlatButtons
         TabOrder = 3
         object tbsRecebimento: TTabSheet
           Caption = 'Recebimento'
           DesignSize = (
             1013
-            124)
+            127)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
@@ -1532,7 +1531,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblFormaPagto: TLabel
             Left = 0
-            Top = 81
+            Top = 84
             Width = 106
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1541,7 +1540,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblCondicaoPagto: TLabel
             Left = 160
-            Top = 81
+            Top = 84
             Width = 120
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1550,7 +1549,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo01: TLabel
             Left = 440
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1565,7 +1564,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo02: TLabel
             Left = 488
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1580,7 +1579,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo03: TLabel
             Left = 536
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1595,7 +1594,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo04: TLabel
             Left = 584
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1610,7 +1609,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo05: TLabel
             Left = 632
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1625,7 +1624,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo06: TLabel
             Left = 680
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1640,7 +1639,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo07: TLabel
             Left = 728
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1655,7 +1654,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo08: TLabel
             Left = 776
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1670,7 +1669,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo09: TLabel
             Left = 824
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1685,7 +1684,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo10: TLabel
             Left = 872
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1700,7 +1699,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo11: TLabel
             Left = 920
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1715,7 +1714,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblPrazo12: TLabel
             Left = 968
-            Top = 81
+            Top = 84
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1732,7 +1731,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 0
             Top = 13
             Width = 1013
-            Height = 64
+            Height = 67
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
             DataField = 'OBS'
@@ -1741,7 +1740,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbFormaPagto: TDBLookupComboBox
             Left = 0
-            Top = 97
+            Top = 100
             Width = 153
             Height = 21
             Anchors = [akLeft, akBottom]
@@ -1762,7 +1761,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbCondicaoPagto: TDBLookupComboBox
             Left = 160
-            Top = 97
+            Top = 100
             Width = 273
             Height = 21
             Anchors = [akLeft, akBottom]
@@ -1783,7 +1782,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo01: TDBEdit
             Left = 440
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1802,7 +1801,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo02: TDBEdit
             Left = 488
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1821,7 +1820,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo03: TDBEdit
             Left = 536
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1840,7 +1839,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo04: TDBEdit
             Left = 584
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1859,7 +1858,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo05: TDBEdit
             Left = 632
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1878,7 +1877,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo06: TDBEdit
             Left = 680
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1897,7 +1896,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo07: TDBEdit
             Left = 728
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1916,7 +1915,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo08: TDBEdit
             Left = 776
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1935,7 +1934,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo09: TDBEdit
             Left = 824
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1954,7 +1953,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo10: TDBEdit
             Left = 872
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1973,7 +1972,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo11: TDBEdit
             Left = 920
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False
@@ -1992,7 +1991,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbPrazo12: TDBEdit
             Left = 968
-            Top = 97
+            Top = 100
             Width = 41
             Height = 21
             TabStop = False

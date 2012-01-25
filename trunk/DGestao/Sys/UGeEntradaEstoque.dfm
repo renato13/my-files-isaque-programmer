@@ -940,13 +940,12 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         Height = 146
         ActivePage = tbsPagamento
         Align = alBottom
-        Style = tsFlatButtons
         TabOrder = 4
         object tbsPagamento: TTabSheet
           Caption = 'Pagamento'
           DesignSize = (
             1042
-            115)
+            118)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
@@ -958,7 +957,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblFormaPagto: TLabel
             Left = 0
-            Top = 72
+            Top = 75
             Width = 106
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -967,7 +966,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblCondicaoPagto: TLabel
             Left = 160
-            Top = 72
+            Top = 75
             Width = 120
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -976,7 +975,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo01: TLabel
             Left = 472
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -991,7 +990,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo02: TLabel
             Left = 520
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1006,7 +1005,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo03: TLabel
             Left = 568
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1021,7 +1020,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo04: TLabel
             Left = 616
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1036,7 +1035,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo05: TLabel
             Left = 664
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1051,7 +1050,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo06: TLabel
             Left = 712
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1066,7 +1065,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo07: TLabel
             Left = 760
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1081,7 +1080,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo08: TLabel
             Left = 808
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1096,7 +1095,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo09: TLabel
             Left = 856
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1111,7 +1110,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo10: TLabel
             Left = 904
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1126,7 +1125,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo11: TLabel
             Left = 952
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1141,7 +1140,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object lblPrazo12: TLabel
             Left = 1000
-            Top = 72
+            Top = 75
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1158,7 +1157,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Left = 0
             Top = 13
             Width = 1042
-            Height = 55
+            Height = 58
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
             DataField = 'OBS'
@@ -1167,7 +1166,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbFormaPagto: TDBLookupComboBox
             Left = 0
-            Top = 88
+            Top = 91
             Width = 153
             Height = 21
             Anchors = [akLeft, akBottom]
@@ -1187,7 +1186,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbCondicaoPagto: TDBLookupComboBox
             Left = 160
-            Top = 88
+            Top = 91
             Width = 305
             Height = 21
             Anchors = [akLeft, akBottom]
@@ -1208,7 +1207,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo01: TDBEdit
             Left = 472
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1227,7 +1226,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo02: TDBEdit
             Left = 520
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1246,7 +1245,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo03: TDBEdit
             Left = 568
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1265,7 +1264,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo04: TDBEdit
             Left = 616
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1284,7 +1283,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo05: TDBEdit
             Left = 664
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1303,7 +1302,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo06: TDBEdit
             Left = 712
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1322,7 +1321,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo07: TDBEdit
             Left = 760
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1341,7 +1340,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo08: TDBEdit
             Left = 808
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1360,7 +1359,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo09: TDBEdit
             Left = 856
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1379,7 +1378,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo10: TDBEdit
             Left = 904
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1398,7 +1397,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo11: TDBEdit
             Left = 952
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
@@ -1417,7 +1416,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           end
           object dbPrazo12: TDBEdit
             Left = 1000
-            Top = 88
+            Top = 91
             Width = 41
             Height = 21
             TabStop = False
