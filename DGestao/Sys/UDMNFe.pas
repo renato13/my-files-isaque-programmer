@@ -7,7 +7,7 @@ uses
   IBCustomDataSet, IBQuery, frxClass, frxDBSet, frxExportRTF, frxExportXLS,
   frxExportPDF, frxExportMail, UGeConfigurarNFeACBr,
 
-  ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar;
+  ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, SHDocVw;
 
 type
   TDMNFe = class(TDataModule)
@@ -168,6 +168,7 @@ type
     frxRTF: TfrxRTFExport;
     frxMailExport: TfrxMailExport;
     procedure SelecionarCertificado(Sender : TObject);
+    procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -175,6 +176,7 @@ type
   public
     { Public declarations }
     property ConfigACBr : TfrmGeConfigurarNFeACBr read frmACBr write frmACBr;
+    procedure LoadXML(MyMemo: TStringList; MyWebBrowser: TWebBrowser);
 
     procedure LerConfiguracao;
     procedure GravarConfiguracao;
@@ -248,6 +250,7 @@ begin
   ConfigACBr := TfrmGeConfigurarNFeACBr.Create(Application);
 
   ConfigACBr.sbtnGetCert.OnClick := SelecionarCertificado;
+  ConfigACBr.btnServico.OnClick  := TestarServico;
 
   LerConfiguracao;
 end;
@@ -437,6 +440,55 @@ begin
   {$IFNDEF ACBrNFeOpenSSL}
   ConfigACBr.edtNumSerie.Text := ACBrNFe.Configuracoes.Certificados.SelecionarCertificado;
   {$ENDIF}
+end;
+
+procedure TDMNFe.TestarServico(Sender: TObject);
+var
+  memResp  ,
+  memRespWS,
+  memInfo : TStringList;
+begin
+  memResp   := TStringList.Create;
+  memRespWS := TStringList.Create;
+  memInfo   := TStringList.Create;
+  try
+
+    with ConfigACBr, ACBrNFe, memInfo do
+    begin
+
+      WebServices.StatusServico.Executar;
+
+      memResp.Add  ( UTF8Encode(WebServices.StatusServico.RetWS) );
+      memRespWS.Add( UTF8Encode(WebServices.StatusServico.RetornoWS) );
+
+      LoadXML(memResp, WBResposta);
+
+      Add('');
+      Add('Status Serviço');
+      Add('tpAmb : '    + TpAmbToStr(WebServices.StatusServico.tpAmb));
+      Add('verAplic : ' + WebServices.StatusServico.verAplic);
+      Add('cStat : '    + IntToStr(WebServices.StatusServico.cStat));
+      Add('xMotivo : '  + WebServices.StatusServico.xMotivo);
+      Add('cUF : '      + IntToStr(WebServices.StatusServico.cUF));
+      Add('dhRecbto : ' + DateTimeToStr(WebServices.StatusServico.dhRecbto));
+      Add('tMed : '     + IntToStr(WebServices.StatusServico.TMed));
+      Add('dhRetorno : '+ DateTimeToStr(WebServices.StatusServico.dhRetorno));
+      Add('xObs : '     + WebServices.StatusServico.xObs);
+
+    end;
+
+    ShowInformation( '' );
+  finally
+    memResp.Free;
+    memRespWS.Free;
+    memInfo.Free;
+  end;
+end;
+
+procedure TDMNFe.LoadXML(MyMemo: TStringList; MyWebBrowser: TWebBrowser);
+begin
+  MyMemo.SaveToFile( PathWithDelim(ExtractFileDir(application.ExeName))     + 'temp.xml' );
+  MyWebBrowser.Navigate( PathWithDelim(ExtractFileDir(application.ExeName)) + 'temp.xml' );
 end;
 
 end.
