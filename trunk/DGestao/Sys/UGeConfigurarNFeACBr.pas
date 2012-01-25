@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UGrPadrao, StdCtrls, Buttons, ExtCtrls, ComCtrls;
+  Dialogs, UGrPadrao, StdCtrls, Buttons, ExtCtrls, ComCtrls, OleCtrls,
+  SHDocVw;
 
 type
   TfrmGeConfigurarNFeACBr = class(TfrmGrPadrao)
@@ -91,6 +92,8 @@ type
     cbEmailSSL: TCheckBox;
     mmEmailMsg: TMemo;
     opnDialog: TOpenDialog;
+    btnServico: TBitBtn;
+    WBResposta: TWebBrowser;
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
