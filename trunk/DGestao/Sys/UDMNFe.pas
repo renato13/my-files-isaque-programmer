@@ -474,10 +474,11 @@ begin
       Add('tMed : '     + IntToStr(WebServices.StatusServico.TMed));
       Add('dhRetorno : '+ DateTimeToStr(WebServices.StatusServico.dhRetorno));
       Add('xObs : '     + WebServices.StatusServico.xObs);
+      Add('');
 
     end;
 
-    ShowInformation( '' );
+    ShowInformation( memInfo.Text );
   finally
     memResp.Free;
     memRespWS.Free;

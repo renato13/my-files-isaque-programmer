@@ -25,7 +25,7 @@ type
     Relatrio1: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;
-    US1: TMenuItem;
+    nmUsuario: TMenuItem;
     Entrada1: TMenuItem;
     Empresa1: TMenuItem;
     SpeedBar1: TSpeedBar;
@@ -41,7 +41,7 @@ type
     Panel1: TPanel;
     Fornecedor1: TMenuItem;
     Image1: TImage;
-    FormasdePagamento1: TMenuItem;
+    nmTipoDespesa: TMenuItem;
     RxSpeedButton2: TRxSpeedButton;
     N3: TMenuItem;
     RxSpeedButton1: TRxSpeedButton;
@@ -81,6 +81,8 @@ type
     nmTabelaCFOP: TMenuItem;
     nmSenhaAutorizacao: TMenuItem;
     nmConfigurarNFeACBr: TMenuItem;
+    N7: TMenuItem;
+    N8: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -89,7 +91,6 @@ type
     procedure Fornecedor1Click(Sender: TObject);
     procedure RxSpeedButton2Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure FormasdePagamento1Click(Sender: TObject);
     procedure RxSpeedBtnProdClick(Sender: TObject);
     procedure Entrada1Click(Sender: TObject);
     procedure AjusteManual1Click(Sender: TObject);
@@ -186,14 +187,6 @@ procedure TfrmPrinc.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
     Application.Terminate;
-end;
-
-procedure TfrmPrinc.FormasdePagamento1Click(Sender: TObject);
-begin
-   Application.CreateForm(TfrmGridFornec, frmGridFornec);
-  frmGridFornec.ShowModal;
-  frmGridFornec.Destroy;
-
 end;
 
 procedure TfrmPrinc.RxSpeedBtnProdClick(Sender: TObject);

@@ -1,9 +1,8 @@
 inherited frmGeContasAPagar: TfrmGeContasAPagar
-  Left = 219
-  Top = 118
+  Left = 448
+  Top = 228
   Width = 950
   Height = 600
-  ActiveControl = dbgDados
   Caption = 'Controle de Contas A Pagar'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -95,7 +94,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   inherited pgcGuias: TPageControl
     Width = 934
     Height = 519
-    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -210,7 +208,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     end
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
-        Top = 197
+        Top = 201
         Width = 926
       end
       object Bevel5: TBevel [1]
@@ -383,7 +381,7 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
         Left = 0
         Top = 85
         Width = 926
-        Height = 112
+        Height = 116
         Align = alTop
         Caption = 'A Pagar'
         Font.Charset = ANSI_CHARSET
@@ -464,24 +462,24 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ParentFont = False
         end
         object lblFormaPagto: TLabel
-          Left = 496
-          Top = 24
+          Left = 16
+          Top = 64
           Width = 124
           Height = 13
           Caption = '&Forma de Pagamento:'
           FocusControl = dbFormaPagto
         end
         object lblCondicaoPagto: TLabel
-          Left = 640
-          Top = 24
+          Left = 168
+          Top = 64
           Width = 139
           Height = 13
           Caption = 'Condi'#231#227'o de Pagamento:'
           FocusControl = dbCondicaoPagto
         end
-        object Label1: TLabel
-          Left = 16
-          Top = 68
+        object lblTipoDespesa: TLabel
+          Left = 496
+          Top = 24
           Width = 95
           Height = 13
           Caption = 'Tipo de Despesa:'
@@ -569,9 +567,9 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           TabOrder = 4
         end
         object dbFormaPagto: TDBLookupComboBox
-          Left = 496
-          Top = 40
-          Width = 137
+          Left = 16
+          Top = 80
+          Width = 145
           Height = 21
           DataField = 'FORMA_PAGTO'
           DataSource = DtSrcTabela
@@ -585,12 +583,12 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ListField = 'DESCRI'
           ListSource = dtsFormaPagto
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
         end
         object dbCondicaoPagto: TDBLookupComboBox
-          Left = 640
-          Top = 40
-          Width = 265
+          Left = 168
+          Top = 80
+          Width = 321
           Height = 21
           DataField = 'CONDICAO_PAGTO'
           DataSource = DtSrcTabela
@@ -604,12 +602,12 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           ListField = 'COND_DESCRICAO_FULL'
           ListSource = dtsCondicaoPagto
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 7
         end
         object dbTipoDespesa: TDBLookupComboBox
-          Left = 16
-          Top = 84
-          Width = 249
+          Left = 496
+          Top = 40
+          Width = 409
           Height = 21
           DataField = 'CODTPDESP'
           DataSource = DtSrcTabela
@@ -621,9 +619,9 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
           Font.Style = []
           KeyField = 'COD'
           ListField = 'TIPODESP'
-          ListSource = dtsrcTpDespesa
+          ListSource = dtsTpDespesa
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 5
         end
       end
       object pgcMaisDados: TPageControl
@@ -650,9 +648,9 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       end
       object dbgPagamentos: TDBGrid
         Left = 0
-        Top = 201
+        Top = 205
         Width = 926
-        Height = 139
+        Height = 135
         TabStop = False
         Align = alClient
         DataSource = dtsPagamentos
@@ -1198,21 +1196,20 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     Left = 688
     Top = 40
   end
-  object dtsrcTpDespesa: TDataSource
-    DataSet = ibqryTpDespesa
+  object dtsTpDespesa: TDataSource
+    DataSet = qryTpDespesa
     Left = 896
-    Top = 120
+    Top = 104
   end
-  object ibqryTpDespesa: TIBQuery
+  object qryTpDespesa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
       'select * from TBTPDESPESA'
       'order by tipodesp')
-    Left = 860
-    Top = 118
+    Left = 864
+    Top = 104
   end
 end

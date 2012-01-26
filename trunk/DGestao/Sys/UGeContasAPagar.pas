@@ -83,11 +83,11 @@ type
     cdsPagamentosBANCO: TSmallintField;
     cdsPagamentosBCO_NOME: TIBStringField;
     cdsPagamentosDOCUMENTO_BAIXA: TIBStringField;
-    Label1: TLabel;
+    lblTipoDespesa: TLabel;
     dbTipoDespesa: TDBLookupComboBox;
     IbDtstTabelaCODTPDESP: TSmallintField;
-    dtsrcTpDespesa: TDataSource;
-    ibqryTpDespesa: TIBQuery;
+    dtsTpDespesa: TDataSource;
+    qryTpDespesa: TIBQuery;
     procedure FormCreate(Sender: TObject);
     procedure dbFornecedorButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -159,6 +159,7 @@ begin
   tblEmpresa.Open;
   tblFormaPagto.Open;
   tblCondicaoPagto.Open;
+  qryTpDespesa.Open;
 
   DisplayFormatCodigo := '###0000000';
   NomeTabela     := 'TBCONTPAG';
@@ -325,8 +326,8 @@ end;
 procedure TfrmGeContasAPagar.FormShow(Sender: TObject);
 begin
   inherited;
-ibqryTpDespesa.Prior;
-ibqryTpDespesa.Last;
+  qryTpDespesa.Prior;
+  qryTpDespesa.Last;
 end;
 
 end.
