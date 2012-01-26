@@ -30,6 +30,32 @@ type
     Bevel2: TBevel;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
+    lblBaseICMS: TLabel;
+    dbBaseICMS: TDBEdit;
+    lblValorICMS: TLabel;
+    dbValorICMS: TDBEdit;
+    lblBaseICMSSubs: TLabel;
+    dbBaseICMSSubs: TDBEdit;
+    lblValorICMSSubs: TLabel;
+    dbValorICMSSubs: TDBEdit;
+    lblValorPIS: TLabel;
+    dbValorPIS: TDBEdit;
+    lblTotalProduto: TLabel;
+    dbTotalProduto: TDBEdit;
+    lblFrete: TLabel;
+    dbFrete: TDBEdit;
+    lblSeguro: TLabel;
+    dbSeguro: TDBEdit;
+    lblDesconto: TLabel;
+    dbDesconto: TDBEdit;
+    lblOutrasDespesas: TLabel;
+    dbOutrasDespesas: TDBEdit;
+    lblValorIPI: TLabel;
+    dbValorIPI: TDBEdit;
+    lblValorCOFINS: TLabel;
+    dbValorCOFINS: TDBEdit;
+    lblTotalNota: TLabel;
+    dbTotalNota: TDBEdit;
     procedure btnCancelarClick(Sender: TObject);
   private
     { Private declarations }
