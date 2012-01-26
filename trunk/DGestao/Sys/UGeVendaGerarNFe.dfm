@@ -623,12 +623,12 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
   end
   object btnConfirmar: TBitBtn
-    Left = 425
+    Left = 408
     Top = 377
-    Width = 83
+    Width = 92
     Height = 33
     Anchors = [akRight, akBottom]
-    Caption = 'Gerar NF-e'
+    Caption = '&Gerar NF-e'
     TabOrder = 2
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
@@ -684,9 +684,9 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     NumGlyphs = 2
   end
   object btnCancelar: TBitBtn
-    Left = 513
+    Left = 504
     Top = 377
-    Width = 83
+    Width = 92
     Height = 33
     Anchors = [akRight, akBottom]
     Cancel = True

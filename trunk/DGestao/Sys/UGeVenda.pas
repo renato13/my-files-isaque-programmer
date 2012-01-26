@@ -274,7 +274,7 @@ const
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils, IBQuery, UDMNFe;
+  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe;
 
 {$R *.dfm}
 
@@ -886,7 +886,7 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
-  if ( GerarNFe(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+  if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
     ;
 //  ShowInformation('Esta rotina está em fase de desenvolvimento');
 end;
