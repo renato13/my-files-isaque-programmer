@@ -26,7 +26,7 @@ type
     lblHoraEmissao: TLabel;
     dbHoraEmissao: TDBEdit;
     Bevel1: TBevel;
-    GrpBxTributacao: TGroupBox;
+    GrpBxImposto: TGroupBox;
     Bevel2: TBevel;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
@@ -66,11 +66,33 @@ type
 var
   frmGeVendaGerarNFe: TfrmGeVendaGerarNFe;
 
+  function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer) : Boolean;
+
 implementation
 
 uses UDMBusiness, UDMNFe;
 
 {$R *.dfm}
+
+function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer) : Boolean;
+var
+  frm : TfrmGeVendaGerarNFe;
+begin
+  frm := TfrmGeVendaGerarNFe.Create(AOwer);
+  try
+    with frm do
+    begin
+      cdsVenda.Close;
+      cdsVenda.ParamByName('anovenda').AsShort   := Ano;
+      cdsVenda.ParamByName('numvenda').AsInteger := Numero;
+      cdsVenda.Open;
+      
+      Result := (ShowModal = mrOk);
+    end;
+  finally
+    frm.Free;
+  end;
+end;
 
 procedure TfrmGeVendaGerarNFe.btnCancelarClick(Sender: TObject);
 begin

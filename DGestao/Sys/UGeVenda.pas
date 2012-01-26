@@ -886,7 +886,9 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
-  ShowInformation('Esta rotina está em fase de desenvolvimento');  
+  if ( GerarNFe(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+    ;
+//  ShowInformation('Esta rotina está em fase de desenvolvimento');
 end;
 
 procedure TfrmGeVenda.GerarTitulos(const AnoVenda: Smallint;
