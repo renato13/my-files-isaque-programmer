@@ -1,4 +1,5 @@
 inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
+  ActiveControl = dbBaseICMS
   BorderStyle = bsDialog
   BorderWidth = 4
   Caption = 'Gerar NF-e'
@@ -226,7 +227,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       TabOrder = 5
     end
   end
-  object GrpBxTributacao: TGroupBox
+  object GrpBxImposto: TGroupBox
     Left = 0
     Top = 77
     Width = 596
