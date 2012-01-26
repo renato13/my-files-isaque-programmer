@@ -2,8 +2,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   BorderStyle = bsDialog
   BorderWidth = 4
   Caption = 'Gerar NF-e'
-  ClientHeight = 447
-  ClientWidth = 602
+  ClientHeight = 410
+  ClientWidth = 596
   Font.Charset = ANSI_CHARSET
   Font.Name = 'Tahoma'
   OldCreateOrder = True
@@ -12,15 +12,15 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   object Bevel1: TBevel
     Left = 0
     Top = 73
-    Width = 602
+    Width = 596
     Height = 4
     Align = alTop
     Shape = bsSpacer
   end
   object Bevel2: TBevel
     Left = 0
-    Top = 409
-    Width = 602
+    Top = 372
+    Width = 596
     Height = 4
     Align = alTop
     Shape = bsSpacer
@@ -28,7 +28,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   object GrpBxControle: TGroupBox
     Left = 0
     Top = 0
-    Width = 602
+    Width = 596
     Height = 73
     Align = alTop
     Caption = 'Controle da Venda'
@@ -82,7 +82,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       ParentFont = False
     end
     object lblNFe: TLabel
-      Left = 288
+      Left = 280
       Top = 24
       Width = 28
       Height = 13
@@ -96,7 +96,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       ParentFont = False
     end
     object lblDataEmissao: TLabel
-      Left = 416
+      Left = 408
       Top = 24
       Width = 79
       Height = 13
@@ -110,7 +110,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       ParentFont = False
     end
     object lblHoraEmissao: TLabel
-      Left = 504
+      Left = 496
       Top = 24
       Width = 79
       Height = 13
@@ -160,7 +160,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     object dbSerie: TDBEdit
       Left = 240
       Top = 40
-      Width = 41
+      Width = 33
       Height = 21
       TabStop = False
       Color = clMoneyGreen
@@ -175,7 +175,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       TabOrder = 2
     end
     object dbNFe: TDBEdit
-      Left = 288
+      Left = 280
       Top = 40
       Width = 121
       Height = 21
@@ -192,7 +192,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       TabOrder = 3
     end
     object dbDataEmissao: TDBEdit
-      Left = 416
+      Left = 408
       Top = 40
       Width = 81
       Height = 21
@@ -209,7 +209,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       TabOrder = 4
     end
     object dbHoraEmissao: TDBEdit
-      Left = 504
+      Left = 496
       Top = 40
       Width = 81
       Height = 21
@@ -229,22 +229,401 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   object GrpBxTributacao: TGroupBox
     Left = 0
     Top = 77
-    Width = 602
-    Height = 332
+    Width = 596
+    Height = 295
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Caption = '?'
+    Caption = 'C'#225'lculo do Imposto'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -11
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 1
+    object lblBaseICMS: TLabel
+      Left = 40
+      Top = 32
+      Width = 121
+      Height = 16
+      Caption = 'Base C'#225'lculo ICMS:'
+      FocusControl = dbBaseICMS
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorICMS: TLabel
+      Left = 216
+      Top = 32
+      Width = 75
+      Height = 16
+      Caption = 'Valor ICMS:'
+      FocusControl = dbValorICMS
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblBaseICMSSubs: TLabel
+      Left = 392
+      Top = 32
+      Width = 160
+      Height = 16
+      Caption = 'Base C'#225'lculo ICMS Subs.:'
+      FocusControl = dbBaseICMSSubs
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorICMSSubs: TLabel
+      Left = 40
+      Top = 80
+      Width = 114
+      Height = 16
+      Caption = 'Valor ICMS Subs.:'
+      FocusControl = dbValorICMSSubs
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorPIS: TLabel
+      Left = 216
+      Top = 80
+      Width = 84
+      Height = 16
+      Caption = 'Valor do PIS:'
+      FocusControl = dbValorPIS
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalProduto: TLabel
+      Left = 392
+      Top = 80
+      Width = 165
+      Height = 16
+      Caption = 'Valor Total dos Produtos:'
+      FocusControl = dbTotalProduto
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblFrete: TLabel
+      Left = 40
+      Top = 128
+      Width = 97
+      Height = 16
+      Caption = 'Valor do Frete:'
+      FocusControl = dbFrete
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblSeguro: TLabel
+      Left = 216
+      Top = 128
+      Width = 109
+      Height = 16
+      Caption = 'Valor do Seguro:'
+      FocusControl = dbSeguro
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblDesconto: TLabel
+      Left = 392
+      Top = 128
+      Width = 66
+      Height = 16
+      Caption = 'Desconto:'
+      FocusControl = dbDesconto
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblOutrasDespesas: TLabel
+      Left = 40
+      Top = 176
+      Width = 115
+      Height = 16
+      Caption = 'Outras Despesas:'
+      FocusControl = dbOutrasDespesas
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorIPI: TLabel
+      Left = 216
+      Top = 176
+      Width = 117
+      Height = 16
+      Caption = 'Valor Total do IPI:'
+      FocusControl = dbValorIPI
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblValorCOFINS: TLabel
+      Left = 392
+      Top = 176
+      Width = 107
+      Height = 16
+      Caption = 'Valor do COFINS:'
+      FocusControl = dbValorCOFINS
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalNota: TLabel
+      Left = 392
+      Top = 224
+      Width = 129
+      Height = 16
+      Caption = 'Valor Total da Nota:'
+      FocusControl = dbTotalNota
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object dbBaseICMS: TDBEdit
+      Left = 40
+      Top = 48
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+    end
+    object dbValorICMS: TDBEdit
+      Left = 216
+      Top = 48
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+    end
+    object dbBaseICMSSubs: TDBEdit
+      Left = 392
+      Top = 48
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+    end
+    object dbValorICMSSubs: TDBEdit
+      Left = 40
+      Top = 96
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+    end
+    object dbValorPIS: TDBEdit
+      Left = 216
+      Top = 96
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+    end
+    object dbTotalProduto: TDBEdit
+      Left = 392
+      Top = 96
+      Width = 169
+      Height = 24
+      Color = clMoneyGreen
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 5
+    end
+    object dbFrete: TDBEdit
+      Left = 40
+      Top = 144
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 6
+    end
+    object dbSeguro: TDBEdit
+      Left = 216
+      Top = 144
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 7
+    end
+    object dbDesconto: TDBEdit
+      Left = 392
+      Top = 144
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 8
+    end
+    object dbOutrasDespesas: TDBEdit
+      Left = 40
+      Top = 192
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 9
+    end
+    object dbValorIPI: TDBEdit
+      Left = 216
+      Top = 192
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 10
+    end
+    object dbValorCOFINS: TDBEdit
+      Left = 392
+      Top = 192
+      Width = 169
+      Height = 24
+      Color = clWhite
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 11
+    end
+    object dbTotalNota: TDBEdit
+      Left = 392
+      Top = 240
+      Width = 169
+      Height = 24
+      Color = clMoneyGreen
+      DataSource = dtsVenda
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 12
+    end
   end
   object btnConfirmar: TBitBtn
-    Left = 431
-    Top = 414
+    Left = 425
+    Top = 377
     Width = 83
     Height = 33
     Anchors = [akRight, akBottom]
@@ -304,8 +683,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     NumGlyphs = 2
   end
   object btnCancelar: TBitBtn
-    Left = 519
-    Top = 414
+    Left = 513
+    Top = 377
     Width = 83
     Height = 33
     Anchors = [akRight, akBottom]
@@ -456,8 +835,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '')
     GeneratorField.Field = 'CODCONTROL'
     UpdateObject = updVenda
-    Left = 32
-    Top = 16
+    Left = 16
+    Top = 304
   end
   object updVenda: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -586,13 +965,13 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')
-    Left = 64
-    Top = 16
+    Left = 48
+    Top = 304
   end
   object dtsVenda: TDataSource
     AutoEdit = False
     DataSet = cdsVenda
-    Left = 96
-    Top = 16
+    Left = 80
+    Top = 304
   end
 end
