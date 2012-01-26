@@ -12,9 +12,9 @@ File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas'
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
 Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
 Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
 Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=6
 EditWindowCount=1
@@ -29,7 +29,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -39,7 +39,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -53,11 +53,11 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
@@ -87,9 +87,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -121,16 +121,16 @@ LeftCol=1
 
 [View4]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=6
-CursorY=890
+CursorX=23
+CursorY=889
 TopLine=884
 LeftCol=1
 
 [View5]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-CursorX=18
-CursorY=77
-TopLine=40
+CursorX=21
+CursorY=88
+TopLine=61
 LeftCol=1
 
 [Watches]
@@ -203,7 +203,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Name
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=
 
@@ -279,26 +279,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=794
+Height=713
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=794
+ClientHeight=713
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=-11
-Top=-739
-Width=443
+Left=12
+Top=0
+Width=1690
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1690
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
