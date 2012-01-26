@@ -2900,6 +2900,13 @@ object frmPrinc: TfrmPrinc
           Caption = 'Tributa'#231#245'es'
           Enabled = False
         end
+        object N8: TMenuItem
+          Caption = '-'
+        end
+        object nmTipoDespesa: TMenuItem
+          Caption = 'Tipos de Despesas'
+          Enabled = False
+        end
         object nmFormaPagto: TMenuItem
           Caption = 'Formas de Pagamento'
           OnClick = nmFormaPagtoClick
@@ -3362,11 +3369,6 @@ object frmPrinc: TfrmPrinc
         Caption = 'Banco'
         OnClick = mnBancoClick
       end
-      object FormasdePagamento1: TMenuItem
-        Caption = 'Formas de Pagamento'
-        Visible = False
-        OnClick = FormasdePagamento1Click
-      end
       object N2: TMenuItem
         Caption = '-'
       end
@@ -3590,7 +3592,10 @@ object frmPrinc: TfrmPrinc
         Caption = 'Gerar Senhas de Autoriza'#231#245'es'
         Enabled = False
       end
-      object US1: TMenuItem
+      object N7: TMenuItem
+        Caption = '-'
+      end
+      object nmUsuario: TMenuItem
         Caption = 'Usu'#225'rio'
       end
     end

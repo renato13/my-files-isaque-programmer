@@ -28,7 +28,6 @@ uses
   UPesq in 'UPesq.pas' {frmPesq},
   UPesqProd in 'UPesqProd.pas' {frmPesqProd},
   UCdFornecedor in 'UCdFornecedor.pas' {frmCdFornecedor},
-  UGridFornec in 'UGridFornec.pas' {frmGridFornec},
   UFormPagto in 'UFormPagto.pas' {frmFormPagto},
   UGrupoProd in 'UGrupoProd.pas' {frmGrupoProd},
   UEntradaEstoq in 'UEntradaEstoq.pas' {frmEntradaEstoq},
