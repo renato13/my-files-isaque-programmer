@@ -131,6 +131,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'CODCONTROL'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -148,6 +149,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'DTFINALIZACAO_VENDA'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -165,6 +167,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'SERIE'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -182,6 +185,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'NFE'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -199,6 +203,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'DATAEMISSAO'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -216,6 +221,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Height = 21
       TabStop = False
       Color = clMoneyGreen
+      DataField = 'HORAEMISSAO'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -430,6 +436,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_BASE_ICMS'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -445,6 +452,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_ICMS'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -460,6 +468,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_BASE_ICMS_SUBST'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -475,6 +484,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_ICMS_SUBST'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -490,6 +500,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_PIS'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -505,6 +516,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clMoneyGreen
+      DataField = 'NFE_VALOR_TOTAL_PRODUTO'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -521,6 +533,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_FRETE'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -536,6 +549,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_SEGURO'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -551,6 +565,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_DESCONTO'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -566,6 +581,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_OUTROS'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -581,6 +597,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_TOTAL_IPI'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -596,6 +613,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clWhite
+      DataField = 'NFE_VALOR_COFINS'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -611,6 +629,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Width = 169
       Height = 24
       Color = clMoneyGreen
+      DataField = 'NFE_VALOR_TOTAL_NOTA'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -766,6 +785,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Totalvenda'
       '  , v.Serie'
       '  , v.Nfe'
+      '  , v.Status'
       '  , v.Nfe_valor_base_icms'
       '  , v.Nfe_valor_icms'
       '  , v.Nfe_valor_base_icms_subst'
@@ -818,6 +838,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Totalvenda'
       '  , v.Serie'
       '  , v.Nfe'
+      '  , v.Status'
       '  , v.Nfe_valor_base_icms'
       '  , v.Nfe_valor_icms'
       '  , v.Nfe_valor_base_icms_subst'
@@ -838,6 +859,209 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     UpdateObject = updVenda
     Left = 16
     Top = 304
+    object cdsVendaANO: TSmallintField
+      Alignment = taCenter
+      FieldName = 'ANO'
+      Origin = 'TBVENDAS.ANO'
+      Required = True
+      DisplayFormat = '0000'
+    end
+    object cdsVendaCODCONTROL: TIntegerField
+      Alignment = taCenter
+      FieldName = 'CODCONTROL'
+      Origin = 'TBVENDAS.CODCONTROL'
+      Required = True
+      DisplayFormat = '###0000000'
+    end
+    object cdsVendaDTVENDA: TDateTimeField
+      FieldName = 'DTVENDA'
+      Origin = 'TBVENDAS.DTVENDA'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object cdsVendaDTFINALIZACAO_VENDA: TDateField
+      Alignment = taCenter
+      FieldName = 'DTFINALIZACAO_VENDA'
+      Origin = 'TBVENDAS.DTFINALIZACAO_VENDA'
+      DisplayFormat = 'dd/mm/yyyy hh:mm'
+    end
+    object cdsVendaDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = 'TBVENDAS.DATAEMISSAO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object cdsVendaHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = 'TBVENDAS.HORAEMISSAO'
+      DisplayFormat = 'hh:mm:ss'
+    end
+    object cdsVendaDESCONTO: TIBBCDField
+      FieldName = 'DESCONTO'
+      Origin = 'TBVENDAS.DESCONTO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaTOTALVENDA: TIBBCDField
+      FieldName = 'TOTALVENDA'
+      Origin = 'TBVENDAS.TOTALVENDA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaSERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = 'TBVENDAS.SERIE'
+      Size = 4
+    end
+    object cdsVendaNFE: TLargeintField
+      FieldName = 'NFE'
+      Origin = 'TBVENDAS.NFE'
+    end
+    object cdsVendaSTATUS: TSmallintField
+      FieldName = 'STATUS'
+      Origin = 'TBVENDAS.STATUS'
+      Required = True
+    end
+    object cdsVendaNFE_VALOR_BASE_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS'
+      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS'
+      Origin = 'TBVENDAS.NFE_VALOR_ICMS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS_SUBST'
+      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS_SUBST'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS_SUBST'
+      Origin = 'TBVENDAS.NFE_VALOR_ICMS_SUBST'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_TOTAL_PRODUTO: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_PRODUTO'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_PRODUTO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_FRETE: TIBBCDField
+      FieldName = 'NFE_VALOR_FRETE'
+      Origin = 'TBVENDAS.NFE_VALOR_FRETE'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_SEGURO: TIBBCDField
+      FieldName = 'NFE_VALOR_SEGURO'
+      Origin = 'TBVENDAS.NFE_VALOR_SEGURO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_DESCONTO: TIBBCDField
+      FieldName = 'NFE_VALOR_DESCONTO'
+      Origin = 'TBVENDAS.NFE_VALOR_DESCONTO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_TOTAL_II: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_II'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_II'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_TOTAL_IPI: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_IPI'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_IPI'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_PIS: TIBBCDField
+      FieldName = 'NFE_VALOR_PIS'
+      Origin = 'TBVENDAS.NFE_VALOR_PIS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_COFINS: TIBBCDField
+      FieldName = 'NFE_VALOR_COFINS'
+      Origin = 'TBVENDAS.NFE_VALOR_COFINS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_OUTROS: TIBBCDField
+      FieldName = 'NFE_VALOR_OUTROS'
+      Origin = 'TBVENDAS.NFE_VALOR_OUTROS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaNFE_VALOR_TOTAL_NOTA: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_NOTA'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_NOTA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaVALOR_TOTAL_IPI: TIBBCDField
+      FieldName = 'VALOR_TOTAL_IPI'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_BRUTO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_DESCONTO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 4
+    end
+    object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_LIQUIDO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField
+      FieldName = 'VALOR_TOTAL_ICMS_NORMAL_ENTRADA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 4
+    end
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField
+      FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 4
+    end
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 4
+    end
   end
   object updVenda: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -902,6 +1126,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  ANO = :ANO,'
       '  CODCONTROL = :CODCONTROL,'
       '  DTVENDA = :DTVENDA,'
+      '  STATUS = :STATUS,'
       '  DESCONTO = :DESCONTO,'
       '  TOTALVENDA = :TOTALVENDA,'
       '  DTFINALIZACAO_VENDA = :DTFINALIZACAO_VENDA,'
@@ -929,8 +1154,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     InsertSQL.Strings = (
       'insert into TBVENDAS'
       
-        '  (ANO, CODCONTROL, DTVENDA, DESCONTO, TOTALVENDA, DTFINALIZACAO' +
-        '_VENDA, '
+        '  (ANO, CODCONTROL, DTVENDA, STATUS, DESCONTO, TOTALVENDA, DTFIN' +
+        'ALIZACAO_VENDA, '
       
         '   SERIE, NFE, DATAEMISSAO, HORAEMISSAO, NFE_VALOR_BASE_ICMS, NF' +
         'E_VALOR_ICMS, '
@@ -946,8 +1171,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '   NFE_VALOR_TOTAL_NOTA)'
       'values'
       
-        '  (:ANO, :CODCONTROL, :DTVENDA, :DESCONTO, :TOTALVENDA, :DTFINAL' +
-        'IZACAO_VENDA, '
+        '  (:ANO, :CODCONTROL, :DTVENDA, :STATUS, :DESCONTO, :TOTALVENDA,' +
+        ' :DTFINALIZACAO_VENDA, '
       
         '   :SERIE, :NFE, :DATAEMISSAO, :HORAEMISSAO, :NFE_VALOR_BASE_ICM' +
         'S, :NFE_VALOR_ICMS, '
