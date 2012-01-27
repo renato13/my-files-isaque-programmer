@@ -12,9 +12,9 @@ File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas'
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
 Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
 Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=6
 EditWindowCount=1
@@ -22,14 +22,9 @@ EditWindowCount=1
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=1
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -43,6 +38,11 @@ FormOnTop=0
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
 ModuleType=SourceModule
@@ -87,9 +87,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -128,9 +128,9 @@ LeftCol=1
 
 [View5]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-CursorX=21
-CursorY=88
-TopLine=61
+CursorX=84
+CursorY=124
+TopLine=111
 LeftCol=1
 
 [Watches]
@@ -279,26 +279,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=713
+Height=794
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=713
+ClientHeight=794
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
-Left=12
-Top=0
-Width=1690
+Left=-11
+Top=-739
+Width=443
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1690
+ClientWidth=443
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
