@@ -84,6 +84,23 @@ type
     ppmCarregarImagem: TMenuItem;
     ppmLimparImagem: TMenuItem;
     opnDialogImage: TOpenPictureDialog;
+    IbDtstTabelaTIPO_REGIME_NFE: TSmallintField;
+    IbDtstTabelaSERIE_NFE: TSmallintField;
+    IbDtstTabelaNUMERO_NFE: TIntegerField;
+    tblTipoRegimeNFe: TIBTable;
+    dtsTipoRegimeNFe: TDataSource;
+    lblTipoRegime: TLabel;
+    dbTipoRegime: TDBLookupComboBox;
+    lblSerieNFe: TLabel;
+    dbSerieNFe: TDBEdit;
+    lblNumeroNFe: TLabel;
+    dbNumeroNFe: TDBEdit;
+    IbDtstTabelaLOTE_ANO_NFE: TSmallintField;
+    IbDtstTabelaLOTE_NUM_NFE: TIntegerField;
+    lblLoteAno: TLabel;
+    dbLoteAno: TDBEdit;
+    lblLoteNumero: TLabel;
+    dbLoteNumero: TDBEdit;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -96,6 +113,7 @@ type
     procedure btbtnSalvarClick(Sender: TObject);
     procedure ppmCarregarImagemClick(Sender: TObject);
     procedure ppmLimparImagemClick(Sender: TObject);
+    procedure btbtnAlterarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -110,7 +128,7 @@ var
 implementation
 
 uses UDMBusiness, UGeBairro, UGeCidade, UGeDistrito, UGeEstado,
-  UGeLogradouro;
+  UGeLogradouro, DateUtils;
 
 {$R *.dfm}
 
@@ -129,6 +147,8 @@ end;
 procedure TfrmGeEmpresa.FormCreate(Sender: TObject);
 begin
   inherited;
+  tblTipoRegimeNFe.Open;
+
   ControlFirstEdit := dbPessoaFisica;
 
   NomeTabela     := 'TBEMPRESA';
@@ -233,6 +253,11 @@ begin
   IbDtstTabelaPESSOA_FISICA.AsInteger := 0;
   IbDtstTabelaPAIS_ID.AsString        := GetPaisIDDefault;
   IbDtstTabelaPAIS_NOME.AsString      := GetPaisNomeDefault;
+  
+  IbDtstTabelaSERIE_NFE.Value    := 1;
+  IbDtstTabelaNUMERO_NFE.Value   := 0;
+  IbDtstTabelaLOTE_ANO_NFE.Value := YearOf(Date);
+  IbDtstTabelaLOTE_NUM_NFE.Value := 0;
 end;
 
 procedure TfrmGeEmpresa.DtSrcTabelaStateChange(Sender: TObject);
@@ -295,6 +320,25 @@ procedure TfrmGeEmpresa.ppmLimparImagemClick(Sender: TObject);
 begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     IbDtstTabelaLOGO.Clear;
+end;
+
+procedure TfrmGeEmpresa.btbtnAlterarClick(Sender: TObject);
+begin
+  inherited;
+  if ( IbDtstTabela.State = dsEdit ) then
+  begin
+    if ( IbDtstTabelaSERIE_NFE.IsNull ) then
+      IbDtstTabelaSERIE_NFE.Value    := 1;
+
+    if ( IbDtstTabelaNUMERO_NFE.IsNull ) then
+      IbDtstTabelaNUMERO_NFE.Value   := 0;
+
+    if ( IbDtstTabelaLOTE_ANO_NFE.IsNull ) then
+      IbDtstTabelaLOTE_ANO_NFE.Value := YearOf(Date);
+
+    if ( IbDtstTabelaLOTE_NUM_NFE.IsNull ) then
+      IbDtstTabelaLOTE_NUM_NFE.Value := 0;
+  end;
 end;
 
 end.

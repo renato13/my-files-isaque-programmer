@@ -86,6 +86,11 @@ object DMNFe: TDMNFe
       '  , e.Email'
       '  , e.Home_page'
       '  , e.Chave_acesso_nfe'
+      '  , e.Tipo_Regime_nfe'
+      '  , e.Serie_nfe'
+      '  , e.Numero_nfe'
+      '  , e.Lote_Ano_nfe'
+      '  , e.Lote_Num_nfe'
       '  , e.Pais_id'
       '  , pa.Pais_nome'
       'from TBEMPRESA e'
@@ -251,6 +256,26 @@ object DMNFe: TDMNFe
       FieldName = 'CHAVE_ACESSO_NFE'
       Origin = 'TBEMPRESA.CHAVE_ACESSO_NFE'
       Size = 250
+    end
+    object qryEmitenteTIPO_REGIME_NFE: TSmallintField
+      FieldName = 'TIPO_REGIME_NFE'
+      Origin = 'TBEMPRESA.TIPO_REGIME_NFE'
+    end
+    object qryEmitenteSERIE_NFE: TSmallintField
+      FieldName = 'SERIE_NFE'
+      Origin = 'TBEMPRESA.SERIE_NFE'
+    end
+    object qryEmitenteNUMERO_NFE: TIntegerField
+      FieldName = 'NUMERO_NFE'
+      Origin = 'TBEMPRESA.NUMERO_NFE'
+    end
+    object qryEmitenteLOTE_ANO_NFE: TSmallintField
+      FieldName = 'LOTE_ANO_NFE'
+      Origin = 'TBEMPRESA.LOTE_ANO_NFE'
+    end
+    object qryEmitenteLOTE_NUM_NFE: TIntegerField
+      FieldName = 'LOTE_NUM_NFE'
+      Origin = 'TBEMPRESA.LOTE_NUM_NFE'
     end
     object qryEmitentePAIS_ID: TIBStringField
       FieldName = 'PAIS_ID'
@@ -590,6 +615,20 @@ object DMNFe: TDMNFe
       '  , v.Prazo_10'
       '  , v.Prazo_11'
       '  , v.Prazo_12'
+      '  , v.Nfe_valor_base_icms'
+      '  , v.Nfe_valor_icms'
+      '  , v.Nfe_valor_base_icms_subst'
+      '  , v.Nfe_valor_icms_subst'
+      '  , v.Nfe_valor_total_produto'
+      '  , v.Nfe_valor_frete'
+      '  , v.Nfe_valor_seguro'
+      '  , v.Nfe_valor_desconto'
+      '  , v.Nfe_valor_total_ii'
+      '  , v.Nfe_valor_total_ipi'
+      '  , v.Nfe_valor_pis'
+      '  , v.Nfe_valor_cofins'
+      '  , v.Nfe_valor_outros'
+      '  , v.Nfe_valor_total_nota'
       ''
       'from TBVENDAS v'
       '  inner join TBCFOP cf on (cf.Cfop_cod = v.Cfop)'
@@ -814,6 +853,90 @@ object DMNFe: TDMNFe
       FieldName = 'PRAZO_12'
       Origin = 'TBVENDAS.PRAZO_12'
     end
+    object qryCalculoImportoNFE_VALOR_BASE_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS'
+      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS'
+      Origin = 'TBVENDAS.NFE_VALOR_ICMS'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS_SUBST'
+      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS_SUBST'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS_SUBST'
+      Origin = 'TBVENDAS.NFE_VALOR_ICMS_SUBST'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_TOTAL_PRODUTO: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_PRODUTO'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_PRODUTO'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_FRETE: TIBBCDField
+      FieldName = 'NFE_VALOR_FRETE'
+      Origin = 'TBVENDAS.NFE_VALOR_FRETE'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_SEGURO: TIBBCDField
+      FieldName = 'NFE_VALOR_SEGURO'
+      Origin = 'TBVENDAS.NFE_VALOR_SEGURO'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_DESCONTO: TIBBCDField
+      FieldName = 'NFE_VALOR_DESCONTO'
+      Origin = 'TBVENDAS.NFE_VALOR_DESCONTO'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_TOTAL_II: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_II'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_II'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_TOTAL_IPI: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_IPI'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_IPI'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_PIS: TIBBCDField
+      FieldName = 'NFE_VALOR_PIS'
+      Origin = 'TBVENDAS.NFE_VALOR_PIS'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_COFINS: TIBBCDField
+      FieldName = 'NFE_VALOR_COFINS'
+      Origin = 'TBVENDAS.NFE_VALOR_COFINS'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField
+      FieldName = 'NFE_VALOR_OUTROS'
+      Origin = 'TBVENDAS.NFE_VALOR_OUTROS'
+      Precision = 18
+      Size = 2
+    end
+    object qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_NOTA'
+      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_NOTA'
+      Precision = 18
+      Size = 2
+    end
   end
   object qryDadosProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
@@ -826,8 +949,13 @@ object DMNFe: TDMNFe
       '  , i.Codcontrol'
       '  , i.Seq'
       '  , i.Codprod'
+      '  , p.Codbarra_ean'
       '  , p.Descri'
       '  , p.Referencia'
+      '  , p.Ncm_sh'
+      '  , p.Codorigem'
+      '  , p.Codtributacao'
+      '  , p.Cst'
       '  , i.Codemp'
       '  , i.Codcli'
       '  , i.Dtvenda'
@@ -888,6 +1016,11 @@ object DMNFe: TDMNFe
       Required = True
       Size = 10
     end
+    object qryDadosProdutoCODBARRA_EAN: TIBStringField
+      FieldName = 'CODBARRA_EAN'
+      Origin = 'TBPRODUTO.CODBARRA_EAN'
+      Size = 15
+    end
     object qryDadosProdutoDESCRI: TIBStringField
       FieldName = 'DESCRI'
       Origin = 'TBPRODUTO.DESCRI'
@@ -897,6 +1030,26 @@ object DMNFe: TDMNFe
       FieldName = 'REFERENCIA'
       Origin = 'TBPRODUTO.REFERENCIA'
       Size = 15
+    end
+    object qryDadosProdutoNCM_SH: TIBStringField
+      FieldName = 'NCM_SH'
+      Origin = 'TBPRODUTO.NCM_SH'
+      Size = 10
+    end
+    object qryDadosProdutoCODORIGEM: TIBStringField
+      FieldName = 'CODORIGEM'
+      Origin = 'TBPRODUTO.CODORIGEM'
+      Size = 1
+    end
+    object qryDadosProdutoCODTRIBUTACAO: TIBStringField
+      FieldName = 'CODTRIBUTACAO'
+      Origin = 'TBPRODUTO.CODTRIBUTACAO'
+      Size = 2
+    end
+    object qryDadosProdutoCST: TIBStringField
+      FieldName = 'CST'
+      Origin = 'TBPRODUTO.CST'
+      Size = 3
     end
     object qryDadosProdutoCODEMP: TIBStringField
       FieldName = 'CODEMP'
