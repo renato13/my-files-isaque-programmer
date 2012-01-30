@@ -88,7 +88,10 @@ type
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField;
+    btnCalcular: TBitBtn;
     procedure btnCancelarClick(Sender: TObject);
+    procedure btnCalcularClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
   private
     { Private declarations }
     procedure RecalcularTotalNota;
@@ -124,20 +127,17 @@ begin
       begin
         cdsVenda.Edit;
 
-        cdsVendaDATAEMISSAO.Value := Date;
-        cdsVendaHORAEMISSAO.Value := Time;
-        
-        cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_TOTAL_LIQUIDO.Value;
-        cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO.Value;
+        cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_TOTAL_LIQUIDO.AsCurrency;
+        cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO.AsCurrency;
         cdsVendaNFE_VALOR_BASE_ICMS_SUBST.Value := 0;
         cdsVendaNFE_VALOR_ICMS_SUBST.Value      := 0;
         cdsVendaNFE_VALOR_PIS.Value             := 0;
-        cdsVendaNFE_VALOR_TOTAL_PRODUTO.Value   := cdsVendaVALOR_TOTAL_BRUTO.Value;
+        cdsVendaNFE_VALOR_TOTAL_PRODUTO.Value   := cdsVendaVALOR_TOTAL_BRUTO.AsCurrency;
         cdsVendaNFE_VALOR_FRETE.Value      := 0;
         cdsVendaNFE_VALOR_SEGURO.Value     := 0;
-        cdsVendaNFE_VALOR_DESCONTO.Value   := cdsVendaVALOR_TOTAL_DESCONTO.Value;
+        cdsVendaNFE_VALOR_DESCONTO.Value   := cdsVendaVALOR_TOTAL_DESCONTO.AsCurrency;
         cdsVendaNFE_VALOR_OUTROS.Value     := 0;
-        cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.Value;
+        cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.AsCurrency;
         cdsVendaNFE_VALOR_COFINS.Value     := 0;
         cdsVendaNFE_VALOR_TOTAL_II.Value   := 0;
 
@@ -163,6 +163,9 @@ begin
     if ( cdsVenda.State <> dsEdit ) then
       cdsVenda.Edit;
 
+      cdsVendaDATAEMISSAO.Value := Date;
+      cdsVendaHORAEMISSAO.Value := Time;
+
 //    cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_TOTAL_LIQUIDO.Value;
 //    cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO.Value;
 //    cdsVendaNFE_VALOR_BASE_ICMS_SUBST.Value := 0;
@@ -176,8 +179,29 @@ begin
 //    cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.Value;
 //    cdsVendaNFE_VALOR_COFINS.Value     := 0;
 //    cdsVendaNFE_VALOR_TOTAL_II.Value   := 0;
-    cdsVendaNFE_VALOR_TOTAL_NOTA.Value := cdsVendaTOTALVENDA.Value + cdsVendaNFE_VALOR_ICMS_SUBST.Value + cdsVendaNFE_VALOR_FRETE.Value +
-                                          cdsVendaNFE_VALOR_SEGURO.Value + cdsVendaNFE_VALOR_OUTROS.Value;
+    cdsVendaNFE_VALOR_TOTAL_NOTA.AsCurrency := cdsVendaTOTALVENDA.AsCurrency + cdsVendaNFE_VALOR_ICMS_SUBST.AsCurrency + cdsVendaNFE_VALOR_FRETE.AsCurrency +
+                                               cdsVendaNFE_VALOR_SEGURO.AsCurrency + cdsVendaNFE_VALOR_OUTROS.AsCurrency;
+  end;
+end;
+
+procedure TfrmGeVendaGerarNFe.btnCalcularClick(Sender: TObject);
+begin
+  RecalcularTotalNota;
+  if ( (dbTotalNota.Visible) and (dbTotalNota.Enabled) ) then
+    dbTotalNota.SetFocus;
+end;
+
+procedure TfrmGeVendaGerarNFe.btnConfirmarClick(Sender: TObject);
+begin
+  if ( ShowConfirm('Confirma a geração da NF-e?') ) then
+  begin
+    if ( cdsVenda.State = dsEdit ) then
+    begin
+      cdsVenda.Post;
+      cdsVenda.ApplyUpdates;
+    end;
+
+    
   end;
 end;
 

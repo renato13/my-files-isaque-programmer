@@ -657,7 +657,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         Top = 237
         Width = 739
         Height = 118
-        ActivePage = tbsContato
+        ActivePage = tbsParametros
         Align = alClient
         TabOrder = 2
         object tbsContato: TTabSheet
@@ -766,6 +766,70 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             Caption = 'Descri'#231#227'o da Chave de Acesso'
             FocusControl = dbChave
           end
+          object lblTipoRegime: TLabel
+            Left = 8
+            Top = 40
+            Width = 62
+            Height = 13
+            Caption = 'Tipo Regime:'
+            FocusControl = dbTipoRegime
+          end
+          object lblSerieNFe: TLabel
+            Left = 152
+            Top = 40
+            Width = 54
+            Height = 13
+            Caption = 'S'#233'rie NF-e:'
+            FocusControl = dbSerieNFe
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblNumeroNFe: TLabel
+            Left = 224
+            Top = 40
+            Width = 67
+            Height = 13
+            Caption = 'N'#250'mero NF-e:'
+            FocusControl = dbNumeroNFe
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblLoteAno: TLabel
+            Left = 336
+            Top = 40
+            Width = 47
+            Height = 13
+            Caption = 'Ano Lote:'
+            FocusControl = dbLoteAno
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblLoteNumero: TLabel
+            Left = 408
+            Top = 40
+            Width = 65
+            Height = 13
+            Caption = 'N'#250'mero Lote:'
+            FocusControl = dbLoteNumero
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
           object dbPais: TRxDBComboEdit
             Left = 8
             Top = 16
@@ -857,6 +921,95 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             ParentFont = False
             TabOrder = 1
           end
+          object dbTipoRegime: TDBLookupComboBox
+            Left = 8
+            Top = 56
+            Width = 137
+            Height = 21
+            DataField = 'TIPO_REGIME_NFE'
+            DataSource = DtSrcTabela
+            DropDownRows = 10
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            KeyField = 'CODIGO'
+            ListField = 'DESCRICAO'
+            ListSource = dtsTipoRegimeNFe
+            ParentFont = False
+            TabOrder = 2
+          end
+          object dbSerieNFe: TDBEdit
+            Left = 152
+            Top = 56
+            Width = 65
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'SERIE_NFE'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object dbNumeroNFe: TDBEdit
+            Left = 224
+            Top = 56
+            Width = 105
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clMoneyGreen
+            DataField = 'NUMERO_NFE'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 4
+          end
+          object dbLoteAno: TDBEdit
+            Left = 336
+            Top = 56
+            Width = 65
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clMoneyGreen
+            DataField = 'LOTE_ANO_NFE'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 5
+          end
+          object dbLoteNumero: TDBEdit
+            Left = 408
+            Top = 56
+            Width = 105
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clMoneyGreen
+            DataField = 'LOTE_NUM_NFE'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 6
+          end
         end
       end
     end
@@ -889,6 +1042,11 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  , e.Email'
       '  , e.Home_page'
       '  , e.Chave_acesso_nfe'
+      '  , e.Tipo_Regime_nfe'
+      '  , e.Serie_nfe'
+      '  , e.Numero_nfe'
+      '  , e.Lote_Ano_nfe'
+      '  , e.Lote_Num_nfe'
       '  , e.Pais_id'
       
         '  , cast(coalesce(coalesce(t.Tlg_sigla, t.Tlg_descricao) || '#39' '#39',' +
@@ -1046,6 +1204,29 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       Origin = 'TBEMPRESA.CHAVE_ACESSO_NFE'
       Size = 250
     end
+    object IbDtstTabelaTIPO_REGIME_NFE: TSmallintField
+      DisplayLabel = 'Tipo Regime'
+      FieldName = 'TIPO_REGIME_NFE'
+      Origin = 'TBEMPRESA.TIPO_REGIME_NFE'
+    end
+    object IbDtstTabelaSERIE_NFE: TSmallintField
+      DisplayLabel = 'S'#233'rie NF-e'
+      FieldName = 'SERIE_NFE'
+      Origin = 'TBEMPRESA.SERIE_NFE'
+    end
+    object IbDtstTabelaNUMERO_NFE: TIntegerField
+      DisplayLabel = 'N'#250'mero NF-e'
+      FieldName = 'NUMERO_NFE'
+      Origin = 'TBEMPRESA.NUMERO_NFE'
+    end
+    object IbDtstTabelaLOTE_ANO_NFE: TSmallintField
+      FieldName = 'LOTE_ANO_NFE'
+      Origin = 'TBEMPRESA.LOTE_ANO_NFE'
+    end
+    object IbDtstTabelaLOTE_NUM_NFE: TIntegerField
+      FieldName = 'LOTE_NUM_NFE'
+      Origin = 'TBEMPRESA.LOTE_NUM_NFE'
+    end
     object IbDtstTabelaPAIS_ID: TIBStringField
       DisplayLabel = 'Pa'#237's'
       FieldName = 'PAIS_ID'
@@ -1104,6 +1285,11 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  EMAIL,'
       '  HOME_PAGE,'
       '  CHAVE_ACESSO_NFE,'
+      '  TIPO_REGIME_NFE,'
+      '  SERIE_NFE,'
+      '  NUMERO_NFE,'
+      '  LOTE_ANO_NFE,'
+      '  LOTE_NUM_NFE,'
       '  PAIS_ID'
       'from TBEMPRESA '
       'where'
@@ -1135,6 +1321,11 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  EMAIL = :EMAIL,'
       '  HOME_PAGE = :HOME_PAGE,'
       '  CHAVE_ACESSO_NFE = :CHAVE_ACESSO_NFE,'
+      '  TIPO_REGIME_NFE = :TIPO_REGIME_NFE,'
+      '  SERIE_NFE = :SERIE_NFE,'
+      '  NUMERO_NFE = :NUMERO_NFE,'
+      '  LOTE_ANO_NFE = :LOTE_ANO_NFE,'
+      '  LOTE_NUM_NFE = :LOTE_NUM_NFE,'
       '  PAIS_ID = :PAIS_ID'
       'where'
       '  CODIGO = :OLD_CODIGO')
@@ -1147,8 +1338,9 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         '   BAIRRO, CEP, CIDADE, UF, FONE, LOGO, TLG_TIPO, LOG_COD, BAI_C' +
         'OD, CID_COD, '
       
-        '   EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAVE_ACESSO_NFE, PAIS' +
-        '_ID)'
+        '   EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAVE_ACESSO_NFE, TIPO' +
+        '_REGIME_NFE, '
+      '   SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE, LOTE_NUM_NFE, PAIS_ID)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :RZSOC, :NMFANT, :IE, :IM, :E' +
@@ -1159,6 +1351,9 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       
         '   :CID_COD, :EST_COD, :NUMERO_END, :EMAIL, :HOME_PAGE, :CHAVE_A' +
         'CESSO_NFE, '
+      
+        '   :TIPO_REGIME_NFE, :SERIE_NFE, :NUMERO_NFE, :LOTE_ANO_NFE, :LO' +
+        'TE_NUM_NFE, '
       '   :PAIS_ID)')
     DeleteSQL.Strings = (
       'delete from TBEMPRESA'
@@ -1187,5 +1382,20 @@ inherited frmGeEmpresa: TfrmGeEmpresa
     Title = 'Selecionar Arquivo de Imagem'
     Left = 688
     Top = 297
+  end
+  object tblTipoRegimeNFe: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'VW_TIPO_REGIME_NFE'
+    TableTypes = [ttView]
+    Left = 544
+    Top = 8
+  end
+  object dtsTipoRegimeNFe: TDataSource
+    DataSet = tblTipoRegimeNFe
+    Left = 576
+    Top = 8
   end
 end
