@@ -1,25 +1,25 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,207,143,232,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendedor.pas',0,1,26,1,64,1,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas',0,1,245,53,258,1,0
-File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas',0,1,114,10,8,1,0
-File_4=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeNotasFiscais.pas',0,1,180,1,208,0,0
-File_5=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,260,1,264,0,0
-File_6=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnConversao.pas',0,1,70,1,106,0,0
-File_7=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnNFe.pas',0,1,192,1,220,0,0
-File_8=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeConfiguracoes.pas',0,1,355,1,398,0,0
-File_9=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeWebServices.pas',0,1,1190,1,1222,0,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoDespesa.pas',0,1,24,1,48,1,0
+File_1=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeConfiguracoes.pas',0,1,370,1,398,0,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas',0,1,207,143,232,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendedor.pas',0,1,26,1,64,1,0
+File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas',0,1,245,53,258,1,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeConfigurarNFeACBr.pas',0,1,114,10,8,1,0
+File_6=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeNotasFiscais.pas',0,1,180,1,208,0,0
+File_7=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,260,1,264,0,0
+File_8=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnConversao.pas',0,1,70,1,106,0,0
+File_9=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnNFe.pas',0,1,192,1,220,0,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoDespesa.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UEnviarLoteNFe.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UEnviarLoteNFe.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
 Count=9
 EditWindowCount=1
 
@@ -28,12 +28,22 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoDespesa.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UEnviarLoteNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -43,12 +53,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UEnviarLoteNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -63,20 +68,15 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
 [C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
@@ -109,9 +109,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -122,23 +122,23 @@ LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=1
-CursorY=77
-TopLine=32
+CursorX=27
+CursorY=61
+TopLine=52
 LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=57
-CursorY=497
-TopLine=453
+CursorX=13
+CursorY=947
+TopLine=1174
 LeftCol=1
 
 [View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-CursorX=29
-CursorY=365
-TopLine=363
+CursorX=115
+CursorY=372
+TopLine=352
 LeftCol=1
 
 [View4]
@@ -170,10 +170,10 @@ TopLine=41
 LeftCol=1
 
 [View8]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoDespesa.pas
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas
 CursorX=1
-CursorY=43
-TopLine=19
+CursorY=49
+TopLine=48
 LeftCol=1
 
 [Watches]
@@ -193,8 +193,8 @@ Left=0
 Top=0
 Width=1920
 Height=144
-MaxLeft=-8
-MaxTop=-8
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -206,19 +206,19 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=1
-Height=918
+Width=4
+Height=889
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1
-ClientHeight=918
+ClientWidth=4
+ClientHeight=889
 TBDockHeight=383
 LRDockWidth=547
 Dockable=1
 
 [AlignmentPalette]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=200
 Top=146
@@ -246,7 +246,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Connected
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
@@ -256,12 +256,12 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=1
-Height=918
+Width=4
+Height=889
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1
-ClientHeight=918
+ClientWidth=4
+ClientHeight=889
 TBDockHeight=354
 LRDockWidth=190
 Dockable=1
@@ -271,13 +271,13 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=114
-Width=27
-Height=926
+Top=121
+Width=30
+Height=897
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=27
-ClientHeight=926
+ClientWidth=30
+ClientHeight=897
 0=ObjectTree
 1=ProjectManager
 DockCount=2
@@ -322,18 +322,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=801
+Height=713
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=801
+ClientHeight=713
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=12
 Top=0

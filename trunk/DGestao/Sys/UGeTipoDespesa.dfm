@@ -1,10 +1,33 @@
 inherited frmGeTipoDespesa: TfrmGeTipoDespesa
+  Width = 757
+  Height = 447
   Caption = 'Cadastro de Tipos de Despesas'
+  OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
+  inherited Bevel1: TBevel
+    Top = 405
+    Width = 741
+  end
+  inherited Bevel3: TBevel
+    Top = 366
+    Width = 741
+  end
+  inherited tlbBotoes: TToolBar
+    Top = 370
+    Width = 741
+  end
   inherited pgcGuias: TPageControl
+    Width = 741
+    Height = 366
     inherited tbsTabela: TTabSheet
+      inherited Bevel4: TBevel
+        Top = 271
+        Width = 733
+      end
       inherited dbgDados: TDBGrid
+        Width = 733
+        Height = 271
         Columns = <
           item
             Expanded = False
@@ -20,8 +43,10 @@ inherited frmGeTipoDespesa: TfrmGeTipoDespesa
           end>
       end
       inherited pnlFiltros: TPanel
+        Top = 275
+        Width = 733
         inherited grpBxFiltro: TGroupBox
-          Left = 424
+          Left = 439
           Width = 290
           inherited lbltFiltrar: TLabel
             Width = 78
@@ -40,8 +65,10 @@ inherited frmGeTipoDespesa: TfrmGeTipoDespesa
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 81
+        Width = 733
       end
       inherited GrpBxDadosNominais: TGroupBox
+        Width = 733
         Height = 81
         object lblDescricao: TLabel [1]
           Left = 88
@@ -49,6 +76,7 @@ inherited frmGeTipoDespesa: TfrmGeTipoDespesa
           Width = 50
           Height = 13
           Caption = 'Descri'#231#227'o:'
+          FocusControl = dbDescricao
         end
         inherited dbCodigo: TDBEdit
           DataField = 'COD'
@@ -60,6 +88,74 @@ inherited frmGeTipoDespesa: TfrmGeTipoDespesa
           Height = 21
           CharCase = ecUpperCase
           DataField = 'TIPODESP'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object GrpBxDadosClassificacao: TGroupBox
+        Left = 0
+        Top = 85
+        Width = 733
+        Height = 81
+        Align = alTop
+        Caption = 'Classifica'#231#227'o Cont'#225'bil'
+        TabOrder = 1
+        Visible = False
+        object lblNumeroContaContabil: TLabel
+          Left = 16
+          Top = 24
+          Width = 115
+          Height = 13
+          Caption = 'N'#250'mero Conta Cont'#225'bil:'
+          FocusControl = dbNumeroContaContabil
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object lblNumeroResumido: TLabel
+          Left = 160
+          Top = 24
+          Width = 90
+          Height = 13
+          Caption = 'N'#250'mero Resumido:'
+          FocusControl = dbNumeroResumido
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object dbNumeroContaContabil: TDBEdit
+          Left = 16
+          Top = 40
+          Width = 137
+          Height = 21
+          CharCase = ecUpperCase
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+        object dbNumeroResumido: TDBEdit
+          Left = 160
+          Top = 40
+          Width = 137
+          Height = 21
+          CharCase = ecUpperCase
           DataSource = DtSrcTabela
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
