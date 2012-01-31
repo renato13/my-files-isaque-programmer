@@ -864,7 +864,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       Alignment = taCenter
       DisplayLabel = 'Pago?'
       FieldName = 'PAGO_'
-      Required = True
       FixedChar = True
       Size = 1
     end
@@ -926,7 +925,8 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       '  NUMCOMPRA,'
       '  FORMA_PAGTO,'
       '  CONDICAO_PAGTO,'
-      '  QUITADO'
+      '  QUITADO,'
+      '  CODTPDESP'
       'from TBCONTPAG '
       'where'
       '  ANOLANC = :ANOLANC and'
@@ -951,7 +951,8 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       '  NUMCHQ = :NUMCHQ,'
       '  FORMA_PAGTO = :FORMA_PAGTO,'
       '  CONDICAO_PAGTO = :CONDICAO_PAGTO,'
-      '  QUITADO = :QUITADO'
+      '  QUITADO = :QUITADO,'
+      '  CODTPDESP = :CODTPDESP'
       'where'
       '  ANOLANC = :OLD_ANOLANC and'
       '  NUMLANC = :OLD_NUMLANC')
@@ -959,19 +960,19 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       'insert into TBCONTPAG'
       
         '  (ANOLANC, NUMLANC, PARCELA, CODFORN, TIPPAG, HISTORIC, NOTFISC' +
-        ', '
-      'DTEMISS, '
-      '   DTVENC, DTPAG, DOCBAIX, VALORPAG, NOMEEMP, BANCO, NUMCHQ, '
-      'FORMA_PAGTO, '
-      '   CONDICAO_PAGTO, QUITADO)'
+        ', DTEMISS, '
+      
+        '   DTVENC, DTPAG, DOCBAIX, VALORPAG, NOMEEMP, BANCO, NUMCHQ, FOR' +
+        'MA_PAGTO, '
+      '   CONDICAO_PAGTO, QUITADO, CODTPDESP)'
       'values'
-      '  (:ANOLANC, :NUMLANC, :PARCELA, :CODFORN, :TIPPAG, :HISTORIC, '
-      ':NOTFISC, '
+      
+        '  (:ANOLANC, :NUMLANC, :PARCELA, :CODFORN, :TIPPAG, :HISTORIC, :' +
+        'NOTFISC, '
       
         '   :DTEMISS, :DTVENC, :DTPAG, :DOCBAIX, :VALORPAG, :NOMEEMP, :BA' +
-        'NCO, '
-      ':NUMCHQ, '
-      '   :FORMA_PAGTO, :CONDICAO_PAGTO, :QUITADO)')
+        'NCO, :NUMCHQ, '
+      '   :FORMA_PAGTO, :CONDICAO_PAGTO, :QUITADO, :CODTPDESP)')
     DeleteSQL.Strings = (
       'delete from TBCONTPAG'
       'where'

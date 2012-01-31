@@ -6,7 +6,6 @@ object DMBusiness: TDMBusiness
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'

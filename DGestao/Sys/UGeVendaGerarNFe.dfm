@@ -848,6 +848,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       'Select'
       '    v.Ano'
       '  , v.Codcontrol'
+      '  , v.Codemp'
+      '  , v.Codcli'
       '  , v.Dtvenda'
       '  , v.Dtfinalizacao_venda'
       '  , v.Dataemissao'
@@ -878,8 +880,15 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
         ' valor_total_desconto'
       '  , sum( coalesce(i.Qtde, 0) * i.Pfinal ) as valor_total_liquido'
       
+        '  , sum( case when coalesce(p.Aliquota, 0) = 0 then 0 else coale' +
+        'sce(i.Qtde, 0) * p.Customedio end ) as valor_base_icms_normal_en' +
+        'trada'
+      
         '  , sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
         'a, 0) / 100 ) as valor_total_icms_normal_entrada'
+      
+        '  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coale' +
+        'sce(i.Qtde, 0) * i.Punit end ) as valor_base_icms_normal_saida'
       
         '  , sum( coalesce(i.Qtde, 0) * i.Punit * coalesce(i.Aliquota, 0)' +
         ' / 100 ) as valor_total_icms_normal_saida'
@@ -901,6 +910,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       'Group by'
       '    v.Ano'
       '  , v.Codcontrol'
+      '  , v.Codemp'
+      '  , v.Codcli'
       '  , v.Dtvenda'
       '  , v.Dtfinalizacao_venda'
       '  , v.Dataemissao'
@@ -943,6 +954,16 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Origin = 'TBVENDAS.CODCONTROL'
       Required = True
       DisplayFormat = '###0000000'
+    end
+    object cdsVendaCODEMP: TIBStringField
+      FieldName = 'CODEMP'
+      Origin = 'TBVENDAS.CODEMP'
+      Size = 18
+    end
+    object cdsVendaCODCLI: TIBStringField
+      FieldName = 'CODCLI'
+      Origin = 'TBVENDAS.CODCLI'
+      Size = 18
     end
     object cdsVendaDTVENDA: TDateTimeField
       FieldName = 'DTVENDA'
@@ -1093,43 +1114,46 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
     object cdsVendaVALOR_TOTAL_IPI: TIBBCDField
       FieldName = 'VALOR_TOTAL_IPI'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_BRUTO'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'
-      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField
+      FieldName = 'VALOR_BASE_ICMS_NORMAL_ENTRADA'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_ENTRADA'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
+    object cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField
+      FieldName = 'VALOR_BASE_ICMS_NORMAL_SAIDA'
+      Precision = 18
+      Size = 2
+    end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
-      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end

@@ -156,7 +156,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       Top = 15
       Width = 280
       Height = 367
-      ActivePage = TabSheet1
+      ActivePage = TabSheet2
       Align = alClient
       MultiLine = True
       TabOrder = 0
@@ -319,14 +319,14 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
             Top = 192
             Width = 228
             Height = 21
-            TabOrder = 0
+            TabOrder = 2
           end
           object edtPathLogs: TEdit
             Left = 8
             Top = 240
             Width = 228
             Height = 21
-            TabOrder = 1
+            TabOrder = 4
           end
           object ckSalvar: TCheckBox
             Left = 8
@@ -340,7 +340,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 3
           end
           object rgTipoDanfe: TRadioGroup
             Left = 8
@@ -353,7 +353,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
             Items.Strings = (
               'Retrato'
               'Paisagem')
-            TabOrder = 3
+            TabOrder = 0
           end
           object rgFormaEmissao: TRadioGroup
             Left = 8
@@ -369,8 +369,21 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
               'SCAN'
               'DPEC'
               'FSDA')
-            TabOrder = 4
+            TabOrder = 1
           end
+        end
+        object rgModoGerarNFe: TRadioGroup
+          Left = 0
+          Top = 280
+          Width = 265
+          Height = 49
+          Caption = 'Modo de Gerar a NF-e'
+          Columns = 2
+          ItemIndex = 0
+          Items.Strings = (
+            'Off Line'
+            'On Line')
+          TabOrder = 1
         end
       end
       object TabSheet3: TTabSheet
@@ -909,7 +922,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|To' +
       'dos os Arquivos (*.*)|*.*'
     Title = 'Selecione a NFe'
-    Left = 8
-    Top = 344
+    Left = 40
+    Top = 352
   end
 end

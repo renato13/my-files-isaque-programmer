@@ -74,6 +74,13 @@ const
   DB_USER_PASSWORD = 'masterkey';
   DB_LC_CTYPE      = 'ISO8859_2';
 
+  STATUS_VND_AND = 1;
+  STATUS_VND_ABR = 2;
+  STATUS_VND_FIN = 3;
+  STATUS_VND_NFE = 4;
+  STATUS_VND_CAN = 5;
+
+
 implementation
 
 {$R *.dfm}

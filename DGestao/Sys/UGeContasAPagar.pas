@@ -211,6 +211,7 @@ begin
   IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
   IbDtstTabelaPARCELA.Value := 0;
   IbDtstTabelaDTEMISS.Value := Date;
+  IbDtstTabelaQUITADO.Value := 0;
   IbDtstTabelaFORMA_PAGTO.Value    := GetFormaPagtoIDDefault;
   IbDtstTabelaCONDICAO_PAGTO.Value := GetCondicaoPagtoIDDefault;
 end;

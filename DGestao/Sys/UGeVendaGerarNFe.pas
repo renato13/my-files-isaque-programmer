@@ -81,14 +81,18 @@ type
     cdsVendaNFE_VALOR_COFINS: TIBBCDField;
     cdsVendaNFE_VALOR_OUTROS: TIBBCDField;
     cdsVendaNFE_VALOR_TOTAL_NOTA: TIBBCDField;
+    btnCalcular: TBitBtn;
+    cdsVendaCODEMP: TIBStringField;
+    cdsVendaCODCLI: TIBStringField;
     cdsVendaVALOR_TOTAL_IPI: TIBBCDField;
     cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField;
     cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
     cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField;
+    cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField;
+    cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField;
-    btnCalcular: TBitBtn;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -127,8 +131,8 @@ begin
       begin
         cdsVenda.Edit;
 
-        cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_TOTAL_LIQUIDO.AsCurrency;
-        cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO.AsCurrency;
+        cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA.AsCurrency;
+        cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA.AsCurrency;
         cdsVendaNFE_VALOR_BASE_ICMS_SUBST.Value := 0;
         cdsVendaNFE_VALOR_ICMS_SUBST.Value      := 0;
         cdsVendaNFE_VALOR_PIS.Value             := 0;
@@ -192,6 +196,8 @@ begin
 end;
 
 procedure TfrmGeVendaGerarNFe.btnConfirmarClick(Sender: TObject);
+var
+  bOK : Boolean;
 begin
   if ( ShowConfirm('Confirma a geração da NF-e?') ) then
   begin
@@ -201,7 +207,16 @@ begin
       cdsVenda.ApplyUpdates;
     end;
 
-    
+    if ( DMNFe.GerarNFeOnLine ) then
+      bOK := DMNFe.GerarNFeOnLineACBr ( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger)
+    else
+      bOK := DMNFe.GerarNFeOffLineACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger);
+
+    if ( bOK ) then
+    begin
+
+      ModalResult := mrOk;
+    end;
   end;
 end;
 

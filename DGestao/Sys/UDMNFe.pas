@@ -7,7 +7,8 @@ uses
   IBCustomDataSet, IBQuery, frxClass, frxDBSet, frxExportRTF, frxExportXLS,
   frxExportPDF, frxExportMail, UGeConfigurarNFeACBr,
 
-  ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, ACBrNFeUtil, SHDocVw;
+  ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, ACBrNFeUtil, SHDocVw,
+  IBUpdateSQL;
 
 type
   TDMNFe = class(TDataModule)
@@ -95,49 +96,6 @@ type
     frdVenda: TfrxDBDataset;
     frdItens: TfrxDBDataset;
     frdTitulo: TfrxDBDataset;
-    qryCalculoImportoANO: TSmallintField;
-    qryCalculoImportoCODCONTROL: TIntegerField;
-    qryCalculoImportoCODEMP: TIBStringField;
-    qryCalculoImportoCODCLI: TIBStringField;
-    qryCalculoImportoDTVENDA: TDateTimeField;
-    qryCalculoImportoSTATUS: TSmallintField;
-    qryCalculoImportoDESCONTO: TIBBCDField;
-    qryCalculoImportoTOTALVENDA: TIBBCDField;
-    qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
-    qryCalculoImportoDTFINALIZACAO_VENDA: TDateField;
-    qryCalculoImportoOBS: TMemoField;
-    qryCalculoImportoFORMAPAG: TIBStringField;
-    qryCalculoImportoFATDIAS: TSmallintField;
-    qryCalculoImportoSERIE: TIBStringField;
-    qryCalculoImportoNFE: TLargeintField;
-    qryCalculoImportoDATAEMISSAO: TDateField;
-    qryCalculoImportoHORAEMISSAO: TTimeField;
-    qryCalculoImportoCFOP: TIntegerField;
-    qryCalculoImportoCFOP_DESCRICAO: TIBStringField;
-    qryCalculoImportoVERIFICADOR_NFE: TIBStringField;
-    qryCalculoImportoVENDEDOR_COD: TIntegerField;
-    qryCalculoImportoVENDEDOR_NOME: TIBStringField;
-    qryCalculoImportoVENDEDOR_CPF: TIBStringField;
-    qryCalculoImportoUSUARIO: TIBStringField;
-    qryCalculoImportoFORMAPAGTO_COD: TSmallintField;
-    qryCalculoImportoDESCRI: TIBStringField;
-    qryCalculoImportoACRESCIMO: TFloatField;
-    qryCalculoImportoCONDICAOPAGTO_COD: TSmallintField;
-    qryCalculoImportoCOND_DESCRICAO: TIBStringField;
-    qryCalculoImportoCOND_DESCRICAO_FULL: TIBStringField;
-    qryCalculoImportoVENDA_PRAZO: TSmallintField;
-    qryCalculoImportoPRAZO_01: TSmallintField;
-    qryCalculoImportoPRAZO_02: TSmallintField;
-    qryCalculoImportoPRAZO_03: TSmallintField;
-    qryCalculoImportoPRAZO_04: TSmallintField;
-    qryCalculoImportoPRAZO_05: TSmallintField;
-    qryCalculoImportoPRAZO_06: TSmallintField;
-    qryCalculoImportoPRAZO_07: TSmallintField;
-    qryCalculoImportoPRAZO_08: TSmallintField;
-    qryCalculoImportoPRAZO_09: TSmallintField;
-    qryCalculoImportoPRAZO_10: TSmallintField;
-    qryCalculoImportoPRAZO_11: TSmallintField;
-    qryCalculoImportoPRAZO_12: TSmallintField;
     qryDadosProdutoANO: TSmallintField;
     qryDadosProdutoCODCONTROL: TIntegerField;
     qryDadosProdutoSEQ: TSmallintField;
@@ -175,6 +133,59 @@ type
     qryDadosProdutoCODORIGEM: TIBStringField;
     qryDadosProdutoCODTRIBUTACAO: TIBStringField;
     qryDadosProdutoCST: TIBStringField;
+    qryEmitenteLOTE_ANO_NFE: TSmallintField;
+    qryEmitenteLOTE_NUM_NFE: TIntegerField;
+    updEmitente: TIBUpdateSQL;
+    updCalculoImporto: TIBUpdateSQL;
+    qryCalculoImportoANO: TSmallintField;
+    qryCalculoImportoCODCONTROL: TIntegerField;
+    qryCalculoImportoCODEMP: TIBStringField;
+    qryCalculoImportoCODCLI: TIBStringField;
+    qryCalculoImportoDTVENDA: TDateTimeField;
+    qryCalculoImportoSTATUS: TSmallintField;
+    qryCalculoImportoDESCONTO: TIBBCDField;
+    qryCalculoImportoTOTALVENDA: TIBBCDField;
+    qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
+    qryCalculoImportoDTFINALIZACAO_VENDA: TDateField;
+    qryCalculoImportoOBS: TMemoField;
+    qryCalculoImportoFORMAPAG: TIBStringField;
+    qryCalculoImportoFATDIAS: TSmallintField;
+    qryCalculoImportoSERIE: TIBStringField;
+    qryCalculoImportoNFE: TLargeintField;
+    qryCalculoImportoLOTE_NFE_ANO: TSmallintField;
+    qryCalculoImportoLOTE_NFE_NUMERO: TIntegerField;
+    qryCalculoImportoDATAEMISSAO: TDateField;
+    qryCalculoImportoHORAEMISSAO: TTimeField;
+    qryCalculoImportoCANCEL_DATAHORA: TDateTimeField;
+    qryCalculoImportoCANCEL_MOTIVO: TMemoField;
+    qryCalculoImportoCFOP: TIntegerField;
+    qryCalculoImportoCFOP_DESCRICAO: TIBStringField;
+    qryCalculoImportoVERIFICADOR_NFE: TIBStringField;
+    qryCalculoImportoXML_NFE_FILENAME: TIBStringField;
+    qryCalculoImportoXML_NFE: TMemoField;
+    qryCalculoImportoVENDEDOR_COD: TIntegerField;
+    qryCalculoImportoVENDEDOR_NOME: TIBStringField;
+    qryCalculoImportoVENDEDOR_CPF: TIBStringField;
+    qryCalculoImportoUSUARIO: TIBStringField;
+    qryCalculoImportoFORMAPAGTO_COD: TSmallintField;
+    qryCalculoImportoDESCRI: TIBStringField;
+    qryCalculoImportoACRESCIMO: TFloatField;
+    qryCalculoImportoCONDICAOPAGTO_COD: TSmallintField;
+    qryCalculoImportoCOND_DESCRICAO: TIBStringField;
+    qryCalculoImportoCOND_DESCRICAO_FULL: TIBStringField;
+    qryCalculoImportoVENDA_PRAZO: TSmallintField;
+    qryCalculoImportoPRAZO_01: TSmallintField;
+    qryCalculoImportoPRAZO_02: TSmallintField;
+    qryCalculoImportoPRAZO_03: TSmallintField;
+    qryCalculoImportoPRAZO_04: TSmallintField;
+    qryCalculoImportoPRAZO_05: TSmallintField;
+    qryCalculoImportoPRAZO_06: TSmallintField;
+    qryCalculoImportoPRAZO_07: TSmallintField;
+    qryCalculoImportoPRAZO_08: TSmallintField;
+    qryCalculoImportoPRAZO_09: TSmallintField;
+    qryCalculoImportoPRAZO_10: TSmallintField;
+    qryCalculoImportoPRAZO_11: TSmallintField;
+    qryCalculoImportoPRAZO_12: TSmallintField;
     qryCalculoImportoNFE_VALOR_BASE_ICMS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_ICMS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField;
@@ -189,8 +200,7 @@ type
     qryCalculoImportoNFE_VALOR_COFINS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
-    qryEmitenteLOTE_ANO_NFE: TSmallintField;
-    qryEmitenteLOTE_NUM_NFE: TIntegerField;
+    qryCalculoImportoNFE_ENVIADA: TSmallintField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -199,6 +209,9 @@ type
     frmACBr : TfrmGeConfigurarNFeACBr;
     procedure UpdateNumeroNFe(const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const Ano, Numero : Integer);
+    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String; const Enviada : Smallint = 0);
+
+    procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Imprimir : Boolean = FALSE; const OnLine : Boolean = FALSE);
   public
     { Public declarations }
     property ConfigACBr : TfrmGeConfigurarNFeACBr read frmACBr write frmACBr;
@@ -211,12 +224,15 @@ type
     procedure AbrirDestinatario(sCNPJ : String);
     procedure AbrirVenda(AnoVenda, NumeroVenda : Integer);
 
-    function GerarNFe(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String) : Boolean;
+    function GerarNFeOnLine : Boolean;
+    
+    function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
+    function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
   end;
 
 var
   DMNFe: TDMNFe;
-  
+
 const
   SELDIRHELP = 1000;
 
@@ -340,6 +356,7 @@ begin
       WriteString( 'Geral', 'LogoMarca'   ,edtLogoMarca.Text) ;
       WriteBool(   'Geral', 'Salvar'      ,ckSalvar.Checked) ;
       WriteString( 'Geral', 'PathSalvar'  ,edtPathLogs.Text) ;
+      WriteInteger( 'Geral', 'ModoGerarNFe',rgModoGerarNFe.ItemIndex) ;
 
       WriteString ( 'WebService', 'UF'        ,cbUF.Text) ;
       WriteInteger( 'WebService', 'Ambiente'  ,rgTipoAmb.ItemIndex) ;
@@ -396,15 +413,15 @@ begin
     begin
 
       {$IFDEF ACBrNFeOpenSSL}
-         edtCaminho.Text  := ReadString( 'Certificado','Caminho' ,'') ;
-         edtSenha.Text    := ReadString( 'Certificado','Senha'   ,'') ;
+         edtCaminho.Text  := ReadString( 'Certificado', 'Caminho' , '') ;
+         edtSenha.Text    := ReadString( 'Certificado', 'Senha'   , '') ;
          ACBrNFe.Configuracoes.Certificados.Certificado  := edtCaminho.Text;
          ACBrNFe.Configuracoes.Certificados.Senha        := edtSenha.Text;
          edtNumSerie.Visible := False;
          Label25.Visible     := False;
          sbtnGetCert.Visible := False;
       {$ELSE}
-         edtNumSerie.Text := ReadString( 'Certificado','NumSerie','') ;
+         edtNumSerie.Text := ReadString( 'Certificado', 'NumSerie', '') ;
          ACBrNFe.Configuracoes.Certificados.NumeroSerie := edtNumSerie.Text;
          edtNumSerie.Text := ACBrNFe.Configuracoes.Certificados.NumeroSerie;
          lbltCaminho.Caption := 'Informe o número de série do certificado'#13+
@@ -418,7 +435,8 @@ begin
          sbtnCaminhoCert.Visible := False;
       {$ENDIF}
 
-      rgFormaEmissao.ItemIndex := ReadInteger( 'Geral','FormaEmissao',0) ;
+      rgFormaEmissao.ItemIndex := ReadInteger( 'Geral', 'FormaEmissao', 0) ;
+      rgModoGerarNFe.ItemIndex := ReadInteger( 'Geral', 'ModoGerarNFe', 0) ;
       ckSalvar.Checked    := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
       edtPathLogs.Text    := ReadString( 'Geral', 'PathSalvar'  ,'') ;
 
@@ -427,8 +445,8 @@ begin
       ACBrNFe.Configuracoes.Geral.PathSalvar   := edtPathLogs.Text;
 
       cbUF.ItemIndex       := cbUF.Items.IndexOf(ReadString( 'WebService','UF','SP')) ;
-      rgTipoAmb.ItemIndex  := ReadInteger( 'WebService', 'Ambiente'  ,0) ;
-      ckVisualizar.Checked := ReadBool    ( 'WebService', 'Visualizar',False) ;
+      rgTipoAmb.ItemIndex  := ReadInteger( 'WebService', 'Ambiente'  , 0) ;
+      ckVisualizar.Checked := ReadBool   ( 'WebService', 'Visualizar', False) ;
 
       ACBrNFe.Configuracoes.WebServices.UF         := cbUF.Text;
       ACBrNFe.Configuracoes.WebServices.Ambiente   := StrToTpAmb(Ok,IntToStr(rgTipoAmb.ItemIndex + 1));
@@ -449,7 +467,7 @@ begin
 
       if ACBrNFe.DANFE <> nil then
       begin
-        ACBrNFe.DANFE.TipoDANFE := StrToTpImp(OK,IntToStr(rgTipoDanfe.ItemIndex+1));
+        ACBrNFe.DANFE.TipoDANFE := StrToTpImp(OK, IntToStr(rgTipoDanfe.ItemIndex + 1));
         ACBrNFe.DANFE.Logo      := edtLogoMarca.Text;
       end;
 
@@ -476,7 +494,7 @@ begin
 
       StreamMemo := TMemoryStream.Create;
 
-      ReadBinaryStream( 'Email', 'Mensagem',StreamMemo) ;
+      ReadBinaryStream( 'Email', 'Mensagem', StreamMemo ) ;
 
       mmEmailMsg.Lines.LoadFromStream(StreamMemo);
       StreamMemo.Free;
@@ -560,10 +578,121 @@ begin
   MyWebBrowser.Navigate( PathWithDelim(ExtractFileDir(application.ExeName)) + 'temp.xml' );
 end;
 
-function TDMNFe.GerarNFe(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer;
-  var iSerieNFe, iNumeroNFe: Integer; var FileNameXML : String): Boolean;
+function TDMNFe.GerarNFeOnLine : Boolean;
+begin
+  Result := ( ConfigACBr.rgModoGerarNFe.ItemIndex = 1 );
+end;
+
+function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer): Boolean;
 var
-  NumeroLote : Int64;
+  NumeroLote  : Int64;
+begin
+
+  try
+
+    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, True, True);
+
+    NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+
+    Result := ACBrNFe.Enviar( NumeroLote );
+
+    if ( Result ) then
+      UpdateLoteNFe(qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
+end;
+
+function TDMNFe.GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
+var
+  NumeroLote  : Int64;
+begin
+
+  try
+
+    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, True, False);
+
+    Result := True;
+    
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOffLineACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
+end;
+
+procedure TDMNFe.UpdateLoteNFe(const Ano, Numero: Integer);
+begin
+  if ( qryEmitente.IsEmpty ) then
+    Exit;
+
+  with qryEmitente do
+  begin
+    Exit;
+    qryEmitenteLOTE_ANO_NFE.AsInteger := Ano;
+    qryEmitenteLOTE_NUM_NFE.AsInteger := Numero + 1;
+    Post;
+    ApplyUpdates;
+  end;
+end;
+
+procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String;
+  const Enviada : Smallint = 0);
+begin
+  if ( qryCalculoImporto.IsEmpty ) then
+    Exit;
+
+  with qryCalculoImporto do
+  begin
+    Exit;
+
+    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
+    qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
+    qryCalculoImportoNFE.Value      := NumeroNFE;
+    qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
+    qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+    qryCalculoImportoNFE_ENVIADA.Value := Enviada;
+    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+
+    Post;
+    ApplyUpdates;
+  end;
+end;
+
+procedure TDMNFe.UpdateNumeroNFe(const Serie, Numero: Integer);
+begin
+  if ( qryEmitente.IsEmpty ) then
+    Exit;
+
+  with qryEmitente do
+  begin
+    Exit;
+
+    qryEmitenteSERIE_NFE.AsInteger  := Serie;
+    qryEmitenteNUMERO_NFE.AsInteger := Numero + 1;
+
+    Post;
+    ApplyUpdates;
+  end;
+end;
+
+procedure TDMNFe.GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario: String;
+  const iAnoVenda, iNumVenda: Integer; const Imprimir : Boolean = FALSE; const OnLine : Boolean = FALSE);
+var
+  iSerieNFe  ,
+  iNumeroNFe : Integer;
+  FileNameXML : String;
+  DtHoraEmiss : TDateTime;
 begin
 
   try
@@ -574,9 +703,9 @@ begin
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
 
-    iSerieNFe  := qryEmitenteSERIE_NFE.AsInteger;
-    iNumeroNFe := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
-    NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+    iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
+    iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
+    DtHoraEmiss := Now;
 
     with ACBrNFe.NotasFiscais.Add.NFe do
     begin
@@ -591,17 +720,17 @@ begin
       Ide.modelo    := 55;
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
-      Ide.dEmi      := Date;
-      Ide.dSaiEnt   := Date;
-      Ide.hSaiEnt   := Now;
+      Ide.dEmi      := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+      Ide.dSaiEnt   := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+      Ide.hSaiEnt   := StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
       Ide.tpNF      := tnSaida;
       Ide.tpEmis    := ACBrNFe.Configuracoes.Geral.FormaEmissao;
-      Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;  
+      Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;
       Ide.verProc   := GetExeVersion( ParamStr(0) ); // Versão do seu sistema
       Ide.cUF       := NotaUtil.UFtoCUF( qryEmitenteEST_SIGLA.AsString );
       Ide.cMunFG    := qryEmitenteCID_IBGE.AsInteger ;
       Ide.finNFe    := fnNormal;
-                       
+
   //     Ide.dhCont := date;
   //     Ide.xJust  := 'Justificativa Contingencia';
 
@@ -851,7 +980,7 @@ begin
               ICMS.vICMSST := 0;
               ICMS.pRedBC  := 0;
             end;
-  
+
             with IPI do
             begin
                  CST      := ipi99 ;
@@ -1010,11 +1139,11 @@ begin
       while not qryDuplicatas.Eof do
       begin
         with Cobr.Dup.Add do
-         begin
-           nDup  := FormatFloat('0000', qryDuplicatasANOLANC.AsInteger) + '/' + FormatFloat('0000000', qryDuplicatasNUMLANC.AsInteger);
-           dVenc := qryDuplicatasDTVENC.AsDateTime;
-           vDup  := qryDuplicatasVALORREC.AsCurrency;
-         end;
+        begin
+          nDup  := FormatFloat('0000', qryDuplicatasANOLANC.AsInteger) + '/' + FormatFloat('0000000', qryDuplicatasNUMLANC.AsInteger);
+          dVenc := qryDuplicatasDTVENC.AsDateTime;
+          vDup  := qryDuplicatasVALORREC.AsCurrency;
+        end;
 
         qryDuplicatas.Next;
       end;
@@ -1048,34 +1177,29 @@ begin
       compra.xPed  := '';
       compra.xCont := '';
 
-      ACBrNFe.Enviar( NumeroLote );
+      ACBrNFe.NotasFiscais.Assinar;
+      ACBrNFe.NotasFiscais.Valida;
 
       ACBrNFe.NotasFiscais.Items[0].SaveToFile;
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
+      if ( OnLine ) then
+        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, 1)
+      else
+        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, 0);
+
       UpdateNumeroNFe(iSerieNFe, iNumeroNFe);
-      UpdateLoteNFe(qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+
+      if ( Imprimir ) then
+        ACBrNFe.NotasFiscais.Imprimir;
     end;
 
   except
     On E : Exception do
-    begin
-      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + e.Message);
-      Result := False;
-    end;
+      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFEACBr() --> ' + e.Message);
   end;
 
-end;
-
-procedure TDMNFe.UpdateLoteNFe(const Ano, Numero: Integer);
-begin
-  ;
-end;
-
-procedure TDMNFe.UpdateNumeroNFe(const Serie, Numero: Integer);
-begin
-  ;
 end;
 
 end.

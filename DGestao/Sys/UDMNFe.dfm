@@ -101,6 +101,7 @@ object DMNFe: TDMNFe
       '  left join TBTIPO_LoGRADOURO tl on (tl.Tlg_cod = e.Tlg_tipo)'
       '  left Join TBPAIS pa on (pa.Pais_id = e.Pais_id)'
       'where e.Cnpj = :Cnpj')
+    UpdateObject = updEmitente
     Left = 144
     Top = 24
     ParamData = <
@@ -587,11 +588,19 @@ object DMNFe: TDMNFe
       '  , v.Fatdias'
       '  , v.Serie'
       '  , v.Nfe'
+      '  , v.Lote_nfe_ano'
+      '  , v.Lote_nfe_numero'
+      '  , v.Nfe_enviada'
       '  , v.Dataemissao'
       '  , v.Horaemissao'
+      '  , v.Cancel_usuario'
+      '  , v.Cancel_datahora'
+      '  , v.Cancel_motivo'
       '  , v.Cfop'
       '  , cf.Cfop_descricao'
       '  , v.Verificador_nfe'
+      '  , v.Xml_nfe_filename'
+      '  , v.Xml_nfe'
       '  , v.Vendedor_cod'
       '  , vd.Nome as vendedor_nome'
       '  , vd.Cpf as vendedor_cpf'
@@ -640,6 +649,7 @@ object DMNFe: TDMNFe
       'where v.Ano = :anovenda'
       '  and v.Codcontrol = :numvenda'
       '')
+    UpdateObject = updCalculoImporto
     Left = 144
     Top = 120
     ParamData = <
@@ -729,6 +739,19 @@ object DMNFe: TDMNFe
       FieldName = 'NFE'
       Origin = 'TBVENDAS.NFE'
     end
+    object qryCalculoImportoLOTE_NFE_ANO: TSmallintField
+      FieldName = 'LOTE_NFE_ANO'
+      Origin = 'TBVENDAS.LOTE_NFE_ANO'
+    end
+    object qryCalculoImportoLOTE_NFE_NUMERO: TIntegerField
+      FieldName = 'LOTE_NFE_NUMERO'
+      Origin = 'TBVENDAS.LOTE_NFE_NUMERO'
+    end
+    object qryCalculoImportoNFE_ENVIADA: TSmallintField
+      FieldName = 'NFE_ENVIADA'
+      Origin = 'TBVENDAS.NFE_ENVIADA'
+      Required = True
+    end
     object qryCalculoImportoDATAEMISSAO: TDateField
       FieldName = 'DATAEMISSAO'
       Origin = 'TBVENDAS.DATAEMISSAO'
@@ -736,6 +759,16 @@ object DMNFe: TDMNFe
     object qryCalculoImportoHORAEMISSAO: TTimeField
       FieldName = 'HORAEMISSAO'
       Origin = 'TBVENDAS.HORAEMISSAO'
+    end
+    object qryCalculoImportoCANCEL_DATAHORA: TDateTimeField
+      FieldName = 'CANCEL_DATAHORA'
+      Origin = 'TBVENDAS.CANCEL_DATAHORA'
+    end
+    object qryCalculoImportoCANCEL_MOTIVO: TMemoField
+      FieldName = 'CANCEL_MOTIVO'
+      Origin = 'TBVENDAS.CANCEL_MOTIVO'
+      BlobType = ftMemo
+      Size = 8
     end
     object qryCalculoImportoCFOP: TIntegerField
       FieldName = 'CFOP'
@@ -750,6 +783,17 @@ object DMNFe: TDMNFe
       FieldName = 'VERIFICADOR_NFE'
       Origin = 'TBVENDAS.VERIFICADOR_NFE'
       Size = 250
+    end
+    object qryCalculoImportoXML_NFE_FILENAME: TIBStringField
+      FieldName = 'XML_NFE_FILENAME'
+      Origin = 'TBVENDAS.XML_NFE_FILENAME'
+      Size = 250
+    end
+    object qryCalculoImportoXML_NFE: TMemoField
+      FieldName = 'XML_NFE'
+      Origin = 'TBVENDAS.XML_NFE'
+      BlobType = ftMemo
+      Size = 8
     end
     object qryCalculoImportoVENDEDOR_COD: TIntegerField
       FieldName = 'VENDEDOR_COD'
@@ -2413,5 +2457,143 @@ object DMNFe: TDMNFe
     UseIniFile = True
     Left = 24
     Top = 312
+  end
+  object updEmitente: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  CODIGO,'
+      '  PESSOA_FISICA,'
+      '  CNPJ,'
+      '  RZSOC,'
+      '  NMFANT,'
+      '  IE,'
+      '  IM,'
+      '  ENDER,'
+      '  COMPLEMENTO,'
+      '  BAIRRO,'
+      '  CEP,'
+      '  CIDADE,'
+      '  UF,'
+      '  FONE,'
+      '  LOGO,'
+      '  TLG_TIPO,'
+      '  LOG_COD,'
+      '  BAI_COD,'
+      '  CID_COD,'
+      '  EST_COD,'
+      '  NUMERO_END,'
+      '  EMAIL,'
+      '  HOME_PAGE,'
+      '  CHAVE_ACESSO_NFE,'
+      '  TIPO_REGIME_NFE,'
+      '  SERIE_NFE,'
+      '  NUMERO_NFE,'
+      '  LOTE_ANO_NFE,'
+      '  LOTE_NUM_NFE,'
+      '  PAIS_ID'
+      'from TBEMPRESA '
+      'where'
+      '  CODIGO = :CODIGO')
+    ModifySQL.Strings = (
+      'update TBEMPRESA'
+      'set'
+      '  CHAVE_ACESSO_NFE = :CHAVE_ACESSO_NFE,'
+      '  SERIE_NFE = :SERIE_NFE,'
+      '  NUMERO_NFE = :NUMERO_NFE,'
+      '  LOTE_ANO_NFE = :LOTE_ANO_NFE,'
+      '  LOTE_NUM_NFE = :LOTE_NUM_NFE'
+      'where'
+      '  CODIGO = :OLD_CODIGO')
+    InsertSQL.Strings = (
+      '')
+    Left = 224
+    Top = 24
+  end
+  object updCalculoImporto: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  ANO,'
+      '  CODCONTROL,'
+      '  CODEMP,'
+      '  CODCLI,'
+      '  DTVENDA,'
+      '  STATUS,'
+      '  DESCONTO,'
+      '  TOTALVENDA,'
+      '  DTFINALIZACAO_VENDA,'
+      '  OBS,'
+      '  FORMAPAG,'
+      '  FATDIAS,'
+      '  SERIE,'
+      '  NFE,'
+      '  LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO,'
+      '  NFE_ENVIADA,'
+      '  DATAEMISSAO,'
+      '  HORAEMISSAO,'
+      '  CANCEL_USUARIO,'
+      '  CANCEL_DATAHORA,'
+      '  CANCEL_MOTIVO,'
+      '  CFOP,'
+      '  VERIFICADOR_NFE,'
+      '  XML_NFE_FILENAME,'
+      '  XML_NFE,'
+      '  VENDEDOR_COD,'
+      '  USUARIO,'
+      '  FORMAPAGTO_COD,'
+      '  CONDICAOPAGTO_COD,'
+      '  VENDA_PRAZO,'
+      '  PRAZO_01,'
+      '  PRAZO_02,'
+      '  PRAZO_03,'
+      '  PRAZO_04,'
+      '  PRAZO_05,'
+      '  PRAZO_06,'
+      '  PRAZO_07,'
+      '  PRAZO_08,'
+      '  PRAZO_09,'
+      '  PRAZO_10,'
+      '  PRAZO_11,'
+      '  PRAZO_12,'
+      '  NFE_VALOR_BASE_ICMS,'
+      '  NFE_VALOR_ICMS,'
+      '  NFE_VALOR_BASE_ICMS_SUBST,'
+      '  NFE_VALOR_ICMS_SUBST,'
+      '  NFE_VALOR_TOTAL_PRODUTO,'
+      '  NFE_VALOR_FRETE,'
+      '  NFE_VALOR_SEGURO,'
+      '  NFE_VALOR_DESCONTO,'
+      '  NFE_VALOR_TOTAL_II,'
+      '  NFE_VALOR_TOTAL_IPI,'
+      '  NFE_VALOR_PIS,'
+      '  NFE_VALOR_COFINS,'
+      '  NFE_VALOR_OUTROS,'
+      '  NFE_VALOR_TOTAL_NOTA'
+      'from TBVENDAS '
+      'where'
+      '  ANO = :ANO and'
+      '  CODCONTROL = :CODCONTROL')
+    ModifySQL.Strings = (
+      'update TBVENDAS'
+      'set'
+      '  STATUS = :STATUS,'
+      '  SERIE = :SERIE,'
+      '  NFE = :NFE,'
+      '  LOTE_NFE_ANO = :LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO = :LOTE_NFE_NUMERO,'
+      '  NFE_ENVIADA = :NFE_ENVIADA,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  CANCEL_USUARIO = :CANCEL_USUARIO,'
+      '  CANCEL_DATAHORA = :CANCEL_DATAHORA,'
+      '  CANCEL_MOTIVO = :CANCEL_MOTIVO,'
+      '  VERIFICADOR_NFE = :VERIFICADOR_NFE,'
+      '  XML_NFE_FILENAME = :XML_NFE_FILENAME,'
+      '  XML_NFE = :XML_NFE'
+      'where'
+      '  ANO = :OLD_ANO and'
+      '  CODCONTROL = :OLD_CODCONTROL')
+    Left = 216
+    Top = 120
   end
 end

@@ -212,6 +212,12 @@ type
     dbCFOPVenda: TRxDBComboEdit;
     IbDtstTabelaCFOP: TIntegerField;
     cdsTabelaItensRESERVA: TIntegerField;
+    IbDtstTabelaLOTE_NFE_ANO: TSmallintField;
+    IbDtstTabelaLOTE_NFE_NUMERO: TIntegerField;
+    IbDtstTabelaNFE_ENVIADA: TSmallintField;
+    IbDtstTabelaCANCEL_DATAHORA: TDateTimeField;
+    IbDtstTabelaCANCEL_MOTIVO: TMemoField;
+    btbtnCancelarVND: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -243,6 +249,7 @@ type
     procedure dbCFOPVendaButtonClick(Sender: TObject);
     procedure cdsTabelaItensBeforePost(DataSet: TDataSet);
     procedure btbtnListaClick(Sender: TObject);
+    procedure btbtnCancelarVNDClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -262,19 +269,12 @@ type
 var
   frmGeVenda: TfrmGeVenda;
 
-const
-  STATUS_VND_AND = 1;
-  STATUS_VND_ABR = 2;
-  STATUS_VND_FIN = 3;
-  STATUS_VND_NFE = 4;
-  STATUS_VND_CAN = 5;
-
   procedure MostrarControleVendas(const AOwner : TComponent);
 
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe;
+  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar;
 
 {$R *.dfm}
 
@@ -355,6 +355,12 @@ begin
   IbDtstTabelaSTATUS.Value      := STATUS_VND_AND;
   IbDtstTabelaDESCONTO.Value    := 0;
   IbDtstTabelaTOTALVENDA.Value  := 0;
+  IbDtstTabelaNFE_ENVIADA.Value := 0;
+
+  IbDtstTabelaSERIE.Clear;
+  IbDtstTabelaNFE.Clear;
+  IbDtstTabelaLOTE_NFE_ANO.Clear;
+  IbDtstTabelaLOTE_NFE_NUMERO.Clear;
 end;
 
 procedure TfrmGeVenda.dbClienteButtonClick(Sender: TObject);
@@ -531,13 +537,15 @@ procedure TfrmGeVenda.HabilitarDesabilitar_Btns;
 begin
   if ( pgcGuias.ActivePage = tbsCadastro ) then
   begin
-    btbtnFinalizar.Enabled := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
-    btbtnGerarNFe.Enabled  := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
   end
   else
   begin
-    btbtnFinalizar.Enabled := False;
-    btbtnGerarNFe.Enabled  := False;
+    btbtnFinalizar.Enabled   := False;
+    btbtnGerarNFe.Enabled    := False;
+    btbtnCancelarVND.Enabled := False;
   end;
 end;
 
@@ -882,13 +890,23 @@ begin
 end;
 
 procedure TfrmGeVenda.btbtnGerarNFeClick(Sender: TObject);
+var
+ iNumero : Integer;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
   if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
-    ;
-//  ShowInformation('Esta rotina está em fase de desenvolvimento');
+    with IbDtstTabela do
+    begin
+      iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      IbDtstTabela.Refresh;
+
+      IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+
+      ShowInformation('Nota Fiscal gerada com sucesso.' + #13#13 + 'Série/Número: ' + IbDtstTabelaSERIE.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaNFE.Value));
+    end;
 end;
 
 procedure TfrmGeVenda.GerarTitulos(const AnoVenda: Smallint;
@@ -1000,6 +1018,26 @@ begin
     frrVenda.ShowReport;
 
   end;
+end;
+
+procedure TfrmGeVenda.btbtnCancelarVNDClick(Sender: TObject);
+var
+ iNumero : Integer;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  if ( CancelarVND(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+    with IbDtstTabela do
+    begin
+      iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      IbDtstTabela.Refresh;
+
+      IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+
+      ShowInformation('Venda cancelada com sucesso.' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
+    end;
 end;
 
 end.
