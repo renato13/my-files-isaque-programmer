@@ -3,6 +3,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
   Height = 474
   BorderWidth = 4
   Caption = 'Cancelar Venda'
+  OldCreateOrder = True
   DesignSize = (
     593
     428)
@@ -10,7 +11,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 73
+    Top = 121
     Width = 593
     Height = 4
     Align = alTop
@@ -18,7 +19,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
   end
   object Bevel2: TBevel
     Left = 0
-    Top = 390
+    Top = 389
     Width = 593
     Height = 4
     Align = alTop
@@ -28,7 +29,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     Left = 0
     Top = 0
     Width = 593
-    Height = 73
+    Height = 121
     Align = alTop
     Caption = 'Controle da Venda'
     Font.Charset = ANSI_CHARSET
@@ -52,13 +53,13 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblDataHora: TLabel
+    object lblCliente: TLabel
       Left = 112
       Top = 24
-      Width = 63
+      Width = 42
       Height = 13
-      Caption = 'Data/Hora:'
-      FocusControl = dbDataHora
+      Caption = 'Cliente:'
+      FocusControl = dbCliente
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -67,8 +68,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ParentFont = False
     end
     object lblSerie: TLabel
-      Left = 240
-      Top = 24
+      Left = 16
+      Top = 64
       Width = 32
       Height = 13
       Caption = 'S'#233'rie:'
@@ -81,8 +82,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ParentFont = False
     end
     object lblNFe: TLabel
-      Left = 280
-      Top = 24
+      Left = 56
+      Top = 64
       Width = 28
       Height = 13
       Caption = 'NF-e:'
@@ -95,8 +96,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ParentFont = False
     end
     object lblDataEmissao: TLabel
-      Left = 408
-      Top = 24
+      Left = 184
+      Top = 64
       Width = 79
       Height = 13
       Caption = 'Data Emiss'#227'o:'
@@ -109,8 +110,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ParentFont = False
     end
     object lblHoraEmissao: TLabel
-      Left = 496
-      Top = 24
+      Left = 272
+      Top = 64
       Width = 79
       Height = 13
       Caption = 'Hora Emiss'#227'o:'
@@ -140,14 +141,14 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ReadOnly = True
       TabOrder = 0
     end
-    object dbDataHora: TDBEdit
+    object dbCliente: TDBEdit
       Left = 112
       Top = 40
-      Width = 121
+      Width = 465
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'DTFINALIZACAO_VENDA'
+      DataField = 'NOME'
       DataSource = dtsVenda
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
@@ -159,8 +160,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       TabOrder = 1
     end
     object dbSerie: TDBEdit
-      Left = 240
-      Top = 40
+      Left = 16
+      Top = 80
       Width = 33
       Height = 21
       TabStop = False
@@ -177,8 +178,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       TabOrder = 2
     end
     object dbNFe: TDBEdit
-      Left = 280
-      Top = 40
+      Left = 56
+      Top = 80
       Width = 121
       Height = 21
       TabStop = False
@@ -195,8 +196,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       TabOrder = 3
     end
     object dbDataEmissao: TDBEdit
-      Left = 408
-      Top = 40
+      Left = 184
+      Top = 80
       Width = 81
       Height = 21
       TabStop = False
@@ -213,8 +214,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       TabOrder = 4
     end
     object dbHoraEmissao: TDBEdit
-      Left = 496
-      Top = 40
+      Left = 272
+      Top = 80
       Width = 81
       Height = 21
       TabStop = False
@@ -233,9 +234,9 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
   end
   object GrpBxImposto: TGroupBox
     Left = 0
-    Top = 77
+    Top = 125
     Width = 593
-    Height = 313
+    Height = 264
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'Dados do Cancelamento'
@@ -248,7 +249,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     TabOrder = 1
     DesignSize = (
       593
-      313)
+      264)
     object lblCancelUsuario: TLabel
       Left = 16
       Top = 24
@@ -295,7 +296,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Left = 16
       Top = 80
       Width = 561
-      Height = 217
+      Height = 168
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
       Font.Charset = ANSI_CHARSET
@@ -482,96 +483,141 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       '  , v.Codemp'
       '  , v.Codcli'
       '  , v.Dtvenda'
-      '  , v.Dtfinalizacao_venda'
-      '  , v.Dataemissao'
-      '  , v.Horaemissao'
+      '  , v.Status'
       '  , v.Desconto'
       '  , v.Totalvenda'
       '  , v.Serie'
       '  , v.Nfe'
-      '  , v.Status'
-      '  , v.Nfe_valor_base_icms'
-      '  , v.Nfe_valor_icms'
-      '  , v.Nfe_valor_base_icms_subst'
-      '  , v.Nfe_valor_icms_subst'
-      '  , v.Nfe_valor_total_produto'
-      '  , v.Nfe_valor_frete'
-      '  , v.Nfe_valor_seguro'
-      '  , v.Nfe_valor_desconto'
-      '  , v.Nfe_valor_total_ii'
-      '  , v.Nfe_valor_total_ipi'
-      '  , v.Nfe_valor_pis'
-      '  , v.Nfe_valor_cofins'
-      '  , v.Nfe_valor_outros'
-      '  , v.Nfe_valor_total_nota'
-      '  , sum( coalesce(i.Valor_ipi, 0) ) as valor_total_IPI'
-      '  , sum( coalesce(i.Qtde, 0) * i.Punit ) as valor_total_bruto'
-      
-        '  , sum( coalesce(i.Qtde, 0) * (i.Punit * i.Desconto / 100) ) as' +
-        ' valor_total_desconto'
-      '  , sum( coalesce(i.Qtde, 0) * i.Pfinal ) as valor_total_liquido'
-      
-        '  , sum( case when coalesce(p.Aliquota, 0) = 0 then 0 else coale' +
-        'sce(i.Qtde, 0) * p.Customedio end ) as valor_base_icms_normal_en' +
-        'trada'
-      
-        '  , sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
-        'a, 0) / 100 ) as valor_total_icms_normal_entrada'
-      
-        '  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coale' +
-        'sce(i.Qtde, 0) * i.Punit end ) as valor_base_icms_normal_saida'
-      
-        '  , sum( coalesce(i.Qtde, 0) * i.Punit * coalesce(i.Aliquota, 0)' +
-        ' / 100 ) as valor_total_icms_normal_saida'
-      
-        '  , sum( coalesce(i.Qtde, 0) * i.Punit * coalesce(i.Aliquota, 0)' +
-        ' / 100 ) -'
-      
-        '    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
-        'a, 0) / 100 ) as valor_total_icms_normal_devido'
+      '  , v.Lote_nfe_ano'
+      '  , v.Lote_nfe_numero'
+      '  , v.Nfe_enviada'
+      '  , v.Dataemissao'
+      '  , v.Horaemissao'
+      '  , v.Cancel_datahora'
+      '  , v.Cancel_motivo'
+      '  , v.Cfop'
+      '  , v.Verificador_nfe'
+      '  , v.Xml_nfe'
+      '  , c.Nome'
       'from TBVENDAS v'
-      
-        '  inner join TVENDASITENS i on (i.Ano = v.Ano and i.Codcontrol =' +
-        ' v.Codcontrol)'
-      '  inner join TBPRODUTO p on (p.Cod = i.Codprod)'
-      ''
+      '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
       'where v.Ano = :anovenda'
       '  and v.Codcontrol = :numvenda'
-      ''
-      'Group by'
-      '    v.Ano'
-      '  , v.Codcontrol'
-      '  , v.Codemp'
-      '  , v.Codcli'
-      '  , v.Dtvenda'
-      '  , v.Dtfinalizacao_venda'
-      '  , v.Dataemissao'
-      '  , v.Horaemissao'
-      '  , v.Desconto'
-      '  , v.Totalvenda'
-      '  , v.Serie'
-      '  , v.Nfe'
-      '  , v.Status'
-      '  , v.Nfe_valor_base_icms'
-      '  , v.Nfe_valor_icms'
-      '  , v.Nfe_valor_base_icms_subst'
-      '  , v.Nfe_valor_icms_subst'
-      '  , v.Nfe_valor_total_produto'
-      '  , v.Nfe_valor_frete'
-      '  , v.Nfe_valor_seguro'
-      '  , v.Nfe_valor_desconto'
-      '  , v.Nfe_valor_total_ii'
-      '  , v.Nfe_valor_total_ipi'
-      '  , v.Nfe_valor_pis'
-      '  , v.Nfe_valor_cofins'
-      '  , v.Nfe_valor_outros'
-      '  , v.Nfe_valor_total_nota')
+      '')
     ModifySQL.Strings = (
       '')
     GeneratorField.Field = 'CODCONTROL'
     UpdateObject = updVenda
     Left = 480
     Top = 96
+    object cdsVendaANO: TSmallintField
+      FieldName = 'ANO'
+      Origin = 'TBVENDAS.ANO'
+      Required = True
+    end
+    object cdsVendaCODCONTROL: TIntegerField
+      Alignment = taCenter
+      FieldName = 'CODCONTROL'
+      Origin = 'TBVENDAS.CODCONTROL'
+      Required = True
+      DisplayFormat = '###0000000'
+    end
+    object cdsVendaCODEMP: TIBStringField
+      FieldName = 'CODEMP'
+      Origin = 'TBVENDAS.CODEMP'
+      Size = 18
+    end
+    object cdsVendaCODCLI: TIBStringField
+      FieldName = 'CODCLI'
+      Origin = 'TBVENDAS.CODCLI'
+      Size = 18
+    end
+    object cdsVendaDTVENDA: TDateTimeField
+      FieldName = 'DTVENDA'
+      Origin = 'TBVENDAS.DTVENDA'
+    end
+    object cdsVendaSTATUS: TSmallintField
+      FieldName = 'STATUS'
+      Origin = 'TBVENDAS.STATUS'
+      Required = True
+    end
+    object cdsVendaDESCONTO: TIBBCDField
+      FieldName = 'DESCONTO'
+      Origin = 'TBVENDAS.DESCONTO'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaTOTALVENDA: TIBBCDField
+      FieldName = 'TOTALVENDA'
+      Origin = 'TBVENDAS.TOTALVENDA'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaSERIE: TIBStringField
+      Alignment = taCenter
+      FieldName = 'SERIE'
+      Origin = 'TBVENDAS.SERIE'
+      Size = 4
+    end
+    object cdsVendaNFE: TLargeintField
+      Alignment = taCenter
+      FieldName = 'NFE'
+      Origin = 'TBVENDAS.NFE'
+      DisplayFormat = '###0000000'
+    end
+    object cdsVendaLOTE_NFE_ANO: TSmallintField
+      FieldName = 'LOTE_NFE_ANO'
+      Origin = 'TBVENDAS.LOTE_NFE_ANO'
+    end
+    object cdsVendaLOTE_NFE_NUMERO: TIntegerField
+      FieldName = 'LOTE_NFE_NUMERO'
+      Origin = 'TBVENDAS.LOTE_NFE_NUMERO'
+    end
+    object cdsVendaNFE_ENVIADA: TSmallintField
+      FieldName = 'NFE_ENVIADA'
+      Origin = 'TBVENDAS.NFE_ENVIADA'
+      Required = True
+    end
+    object cdsVendaDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = 'TBVENDAS.DATAEMISSAO'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object cdsVendaHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = 'TBVENDAS.HORAEMISSAO'
+      DisplayFormat = 'hh:mm:ss'
+    end
+    object cdsVendaCANCEL_DATAHORA: TDateTimeField
+      FieldName = 'CANCEL_DATAHORA'
+      Origin = 'TBVENDAS.CANCEL_DATAHORA'
+    end
+    object cdsVendaCANCEL_MOTIVO: TMemoField
+      FieldName = 'CANCEL_MOTIVO'
+      Origin = 'TBVENDAS.CANCEL_MOTIVO'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object cdsVendaCFOP: TIntegerField
+      FieldName = 'CFOP'
+      Origin = 'TBVENDAS.CFOP'
+    end
+    object cdsVendaVERIFICADOR_NFE: TIBStringField
+      FieldName = 'VERIFICADOR_NFE'
+      Origin = 'TBVENDAS.VERIFICADOR_NFE'
+      Size = 250
+    end
+    object cdsVendaXML_NFE: TMemoField
+      FieldName = 'XML_NFE'
+      Origin = 'TBVENDAS.XML_NFE'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object cdsVendaNOME: TIBStringField
+      FieldName = 'NOME'
+      Origin = 'TBCLIENTE.NOME'
+      Size = 60
+    end
   end
   object updVenda: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -590,10 +636,17 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       '  FATDIAS,'
       '  SERIE,'
       '  NFE,'
+      '  LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO,'
+      '  NFE_ENVIADA,'
       '  DATAEMISSAO,'
       '  HORAEMISSAO,'
+      '  CANCEL_USUARIO,'
+      '  CANCEL_DATAHORA,'
+      '  CANCEL_MOTIVO,'
       '  CFOP,'
       '  VERIFICADOR_NFE,'
+      '  XML_NFE_FILENAME,'
       '  XML_NFE,'
       '  VENDEDOR_COD,'
       '  USUARIO,'
@@ -635,69 +688,24 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       'set'
       '  ANO = :ANO,'
       '  CODCONTROL = :CODCONTROL,'
+      '  CODEMP = :CODEMP,'
+      '  CODCLI = :CODCLI,'
       '  DTVENDA = :DTVENDA,'
       '  STATUS = :STATUS,'
       '  DESCONTO = :DESCONTO,'
       '  TOTALVENDA = :TOTALVENDA,'
-      '  DTFINALIZACAO_VENDA = :DTFINALIZACAO_VENDA,'
       '  SERIE = :SERIE,'
       '  NFE = :NFE,'
+      '  LOTE_NFE_ANO = :LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO = :LOTE_NFE_NUMERO,'
+      '  NFE_ENVIADA = :NFE_ENVIADA,'
       '  DATAEMISSAO = :DATAEMISSAO,'
       '  HORAEMISSAO = :HORAEMISSAO,'
-      '  NFE_VALOR_BASE_ICMS = :NFE_VALOR_BASE_ICMS,'
-      '  NFE_VALOR_ICMS = :NFE_VALOR_ICMS,'
-      '  NFE_VALOR_BASE_ICMS_SUBST = :NFE_VALOR_BASE_ICMS_SUBST,'
-      '  NFE_VALOR_ICMS_SUBST = :NFE_VALOR_ICMS_SUBST,'
-      '  NFE_VALOR_TOTAL_PRODUTO = :NFE_VALOR_TOTAL_PRODUTO,'
-      '  NFE_VALOR_FRETE = :NFE_VALOR_FRETE,'
-      '  NFE_VALOR_SEGURO = :NFE_VALOR_SEGURO,'
-      '  NFE_VALOR_DESCONTO = :NFE_VALOR_DESCONTO,'
-      '  NFE_VALOR_TOTAL_II = :NFE_VALOR_TOTAL_II,'
-      '  NFE_VALOR_TOTAL_IPI = :NFE_VALOR_TOTAL_IPI,'
-      '  NFE_VALOR_PIS = :NFE_VALOR_PIS,'
-      '  NFE_VALOR_COFINS = :NFE_VALOR_COFINS,'
-      '  NFE_VALOR_OUTROS = :NFE_VALOR_OUTROS,'
-      '  NFE_VALOR_TOTAL_NOTA = :NFE_VALOR_TOTAL_NOTA'
-      'where'
-      '  ANO = :OLD_ANO and'
-      '  CODCONTROL = :OLD_CODCONTROL')
-    InsertSQL.Strings = (
-      'insert into TBVENDAS'
-      
-        '  (ANO, CODCONTROL, DTVENDA, STATUS, DESCONTO, TOTALVENDA, DTFIN' +
-        'ALIZACAO_VENDA, '
-      
-        '   SERIE, NFE, DATAEMISSAO, HORAEMISSAO, NFE_VALOR_BASE_ICMS, NF' +
-        'E_VALOR_ICMS, '
-      
-        '   NFE_VALOR_BASE_ICMS_SUBST, NFE_VALOR_ICMS_SUBST, NFE_VALOR_TO' +
-        'TAL_PRODUTO, '
-      
-        '   NFE_VALOR_FRETE, NFE_VALOR_SEGURO, NFE_VALOR_DESCONTO, NFE_VA' +
-        'LOR_TOTAL_II, '
-      
-        '   NFE_VALOR_TOTAL_IPI, NFE_VALOR_PIS, NFE_VALOR_COFINS, NFE_VAL' +
-        'OR_OUTROS, '
-      '   NFE_VALOR_TOTAL_NOTA)'
-      'values'
-      
-        '  (:ANO, :CODCONTROL, :DTVENDA, :STATUS, :DESCONTO, :TOTALVENDA,' +
-        ' :DTFINALIZACAO_VENDA, '
-      
-        '   :SERIE, :NFE, :DATAEMISSAO, :HORAEMISSAO, :NFE_VALOR_BASE_ICM' +
-        'S, :NFE_VALOR_ICMS, '
-      
-        '   :NFE_VALOR_BASE_ICMS_SUBST, :NFE_VALOR_ICMS_SUBST, :NFE_VALOR' +
-        '_TOTAL_PRODUTO, '
-      
-        '   :NFE_VALOR_FRETE, :NFE_VALOR_SEGURO, :NFE_VALOR_DESCONTO, :NF' +
-        'E_VALOR_TOTAL_II, '
-      
-        '   :NFE_VALOR_TOTAL_IPI, :NFE_VALOR_PIS, :NFE_VALOR_COFINS, :NFE' +
-        '_VALOR_OUTROS, '
-      '   :NFE_VALOR_TOTAL_NOTA)')
-    DeleteSQL.Strings = (
-      'delete from TBVENDAS'
+      '  CANCEL_DATAHORA = :CANCEL_DATAHORA,'
+      '  CANCEL_MOTIVO = :CANCEL_MOTIVO,'
+      '  CFOP = :CFOP,'
+      '  VERIFICADOR_NFE = :VERIFICADOR_NFE,'
+      '  XML_NFE = :XML_NFE'
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')

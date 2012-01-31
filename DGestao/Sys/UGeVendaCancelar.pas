@@ -14,13 +14,13 @@ type
     dtsVenda: TDataSource;
     GrpBxControle: TGroupBox;
     lblCodigo: TLabel;
-    lblDataHora: TLabel;
+    lblCliente: TLabel;
     lblSerie: TLabel;
     lblNFe: TLabel;
     lblDataEmissao: TLabel;
     lblHoraEmissao: TLabel;
     dbCodigo: TDBEdit;
-    dbDataHora: TDBEdit;
+    dbCliente: TDBEdit;
     dbSerie: TDBEdit;
     dbNFe: TDBEdit;
     dbDataEmissao: TDBEdit;
@@ -36,6 +36,27 @@ type
     dbMotivo: TMemo;
     dbCancelUsuario: TEdit;
     dbCancelDataHora: TEdit;
+    cdsVendaANO: TSmallintField;
+    cdsVendaCODCONTROL: TIntegerField;
+    cdsVendaCODEMP: TIBStringField;
+    cdsVendaCODCLI: TIBStringField;
+    cdsVendaDTVENDA: TDateTimeField;
+    cdsVendaSTATUS: TSmallintField;
+    cdsVendaDESCONTO: TIBBCDField;
+    cdsVendaTOTALVENDA: TIBBCDField;
+    cdsVendaSERIE: TIBStringField;
+    cdsVendaNFE: TLargeintField;
+    cdsVendaLOTE_NFE_ANO: TSmallintField;
+    cdsVendaLOTE_NFE_NUMERO: TIntegerField;
+    cdsVendaNFE_ENVIADA: TSmallintField;
+    cdsVendaDATAEMISSAO: TDateField;
+    cdsVendaHORAEMISSAO: TTimeField;
+    cdsVendaCANCEL_DATAHORA: TDateTimeField;
+    cdsVendaCANCEL_MOTIVO: TMemoField;
+    cdsVendaCFOP: TIntegerField;
+    cdsVendaVERIFICADOR_NFE: TIBStringField;
+    cdsVendaXML_NFE: TMemoField;
+    cdsVendaNOME: TIBStringField;
     procedure btFecharClick(Sender: TObject);
   private
     { Private declarations }
