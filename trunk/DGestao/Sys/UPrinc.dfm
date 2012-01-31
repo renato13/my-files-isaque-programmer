@@ -2905,7 +2905,7 @@ object frmPrinc: TfrmPrinc
         end
         object nmTipoDespesa: TMenuItem
           Caption = 'Tipos de Despesas'
-          Enabled = False
+          OnClick = nmTipoDespesaClick
         end
         object nmFormaPagto: TMenuItem
           Caption = 'Formas de Pagamento'
@@ -3733,6 +3733,15 @@ object frmPrinc: TfrmPrinc
           5DC9FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         Caption = 'Vendas'
         OnClick = Vendas2Click
+      end
+      object N9: TMenuItem
+        Caption = '-'
+      end
+      object nmNotaFiscal: TMenuItem
+        Caption = 'Notas Fiscais'
+        object nmEnviarLoteNFe: TMenuItem
+          Caption = 'Enviar Lote NF-e'
+        end
       end
     end
     object Financeiro1: TMenuItem

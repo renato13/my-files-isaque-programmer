@@ -75,7 +75,10 @@ uses
   UGeEfetuarPagtoPAG in 'UGeEfetuarPagtoPAG.pas' {frmGeEfetuarPagtoPAG},
   UDMNFe in 'UDMNFe.pas' {DMNFe: TDataModule},
   UGeVendaGerarNFe in 'UGeVendaGerarNFe.pas' {frmGeVendaGerarNFe},
-  UGeConfigurarNFeACBr in 'UGeConfigurarNFeACBr.pas' {frmGeConfigurarNFeACBr};
+  UGeConfigurarNFeACBr in 'UGeConfigurarNFeACBr.pas' {frmGeConfigurarNFeACBr},
+  UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
+  UEnviarLoteNFe in 'UEnviarLoteNFe.pas' {frmEnviarLoteNFe},
+  UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa};
 
 {$R *.res}
 

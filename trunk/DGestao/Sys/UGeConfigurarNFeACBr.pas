@@ -94,6 +94,7 @@ type
     opnDialog: TOpenDialog;
     btnServico: TBitBtn;
     WBResposta: TWebBrowser;
+    rgModoGerarNFe: TRadioGroup;
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);

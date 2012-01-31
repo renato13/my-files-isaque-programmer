@@ -83,6 +83,9 @@ type
     nmConfigurarNFeACBr: TMenuItem;
     N7: TMenuItem;
     N8: TMenuItem;
+    nmNotaFiscal: TMenuItem;
+    N9: TMenuItem;
+    nmEnviarLoteNFe: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -118,6 +121,7 @@ type
     procedure Vendedor1Click(Sender: TObject);
     procedure nmCondicaoPagtoClick(Sender: TObject);
     procedure nmConfigurarNFeACBrClick(Sender: TObject);
+    procedure nmTipoDespesaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -137,7 +141,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
-  UGeContasAReceber, UDMNFe, UDMBusiness;
+  UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa;
 
 {$R *.dfm}
 
@@ -354,6 +358,11 @@ end;
 procedure TfrmPrinc.nmConfigurarNFeACBrClick(Sender: TObject);
 begin
   ConfigurarNFeACBr;
+end;
+
+procedure TfrmPrinc.nmTipoDespesaClick(Sender: TObject);
+begin
+  MostrarTipoDespesas(Self);
 end;
 
 end.
