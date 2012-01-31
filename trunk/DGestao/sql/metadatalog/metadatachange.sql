@@ -25,16 +25,7 @@ add constraint FK_TBCONTPAG_1
 foreign key (CODTPDESP)
 references TBTPDESPESA(COD);
 
-<<<<<<< .mine
-=======
-/*!!! Error occured !!!
-Invalid token.
-Dynamic SQL Error.
-SQL error code = -104.
-Token unknown - line 31, column 64.
-as.
 
-*/
 
 
 ALTER TABLE TBEMPRESA
