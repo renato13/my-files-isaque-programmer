@@ -341,8 +341,8 @@ end;
 procedure TfrmGeVenda.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-  IbDtstTabelaAno.Value     := YearOf(Now);
-  IbDtstTabelaDTVENDA.Value := Now;
+  IbDtstTabelaAno.Value     := YearOf(GetDateTimeDB);
+  IbDtstTabelaDTVENDA.Value := GetDateTimeDB;
   IbDtstTabelaCODEMP.Value  := GetEmpresaIDDefault;
   IbDtstTabelaCODCLI.Value  := GetClienteIDDefault;
   IbDtstTabelaNOME.Value    := GetClienteNomeDefault;

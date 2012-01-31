@@ -72,6 +72,7 @@ var
   function GetCondicaoPagtoNomeDefault : String;
   function GetSenhaAutorizacao : String;
   function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
+  function GetDateTimeDB : TDateTime;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -535,6 +536,19 @@ begin
     Open;
 
     Result := FieldByName('ID').AsInteger + 1;
+  end;
+end;
+
+function GetDateTimeDB : TDateTime;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select First 1 Current_timestamp as DataHora from TBEMPRESA');
+    Open;
+
+    Result := FieldByName('DataHora').AsDateTime;
   end;
 end;
 
