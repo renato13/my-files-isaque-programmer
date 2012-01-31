@@ -1,30 +1,32 @@
 
+/*------ SYSDBA 25/01/2012 13:26:00 --------*/
 
-
-/*------ SYSDBA 21/01/2012 18:50:59 --------*/
-
-CREATE TABLE TBTESTE (
-    COD INTEGER NOT NULL,
-    NOME VARCHAR(10));
-alter table TBTESTE
-add constraint PK_TBTESTE
+CREATE TABLE TBTPDESPESA (
+    COD SMALLINT NOT NULL,
+    TIPODESP VARCHAR(25));
+alter table TBTPDESPESA
+add constraint PK_TBTPDESPESA
 primary key (COD);
+CREATE SEQUENCE GEN_TBTPDESPESA_ID;
 
 
 
-/*------ SYSDBA 21/01/2012 18:51:46 --------*/
+/*------ SYSDBA 25/01/2012 13:26:29 --------*/
 
-DROP TABLE TBTESTE;
+ALTER TABLE TBCONTPAG
+    ADD CODTPDESP SMALLINT;
 
-/*!!! Error occured !!!
-Invalid token.
-Dynamic SQL Error.
-SQL error code = -104.
-Token unknown - line 32, column 81.
-as.
 
-*/
 
+/*------ SYSDBA 25/01/2012 13:26:57 --------*/
+
+alter table TBCONTPAG
+add constraint FK_TBCONTPAG_1
+foreign key (CODTPDESP)
+references TBTPDESPESA(COD);
+
+<<<<<<< .mine
+=======
 /*!!! Error occured !!!
 Invalid token.
 Dynamic SQL Error.
@@ -266,3 +268,4 @@ CREATE SEQUENCE GEN_NUMERO_LOTE_NFE_2017;
 CREATE SEQUENCE GEN_NUMERO_LOTE_NFE_2018;
 CREATE SEQUENCE GEN_NUMERO_LOTE_NFE_2019;
 CREATE SEQUENCE GEN_NUMERO_LOTE_NFE_2020;
+>>>>>>> .r61
