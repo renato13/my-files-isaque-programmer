@@ -210,9 +210,11 @@ type
     procedure UpdateNumeroNFe(const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const Ano, Numero : Integer);
     procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String); overload;
-    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
+    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
 
-    procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Imprimir : Boolean = FALSE; const OnLine : Boolean = FALSE);
+    procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+      var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String;
+      const Imprimir : Boolean = TRUE);
   public
     { Public declarations }
     property ConfigACBr : TfrmGeConfigurarNFeACBr read frmACBr write frmACBr;
@@ -226,7 +228,7 @@ type
     procedure AbrirVenda(AnoVenda, NumeroVenda : Integer);
 
     function GerarNFeOnLine : Boolean;
-    
+
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
   end;
@@ -242,7 +244,7 @@ const
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
-  ACBrNFeNotasFiscais;
+  ACBrNFeNotasFiscais, ACBrNFeWebServices;
 
 {$R *.dfm}
 
@@ -586,19 +588,29 @@ end;
 
 function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer): Boolean;
 var
+  DtHoraEmiss : TDateTime;
+  iSerieNFe,
+  iNumeroNFe  : Integer;
+  FileNameXML ,
+  ChaveNFE    : String;
   NumeroLote  : Int64;
 begin
 
   try
 
-    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, True, True);
+    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
     NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
 
     Result := ACBrNFe.Enviar( NumeroLote );
 
     if ( Result ) then
-      UpdateLoteNFe(qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+    begin
+      ChaveNFE := ACBrNFe.WebServices.Retorno.ChaveNFe;
+
+      UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+      UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+    end;
 
   except
     On E : Exception do
@@ -612,15 +624,21 @@ end;
 
 function TDMNFe.GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
 var
-  NumeroLote  : Int64;
+  DtHoraEmiss : TDateTime;
+  iSerieNFe,
+  iNumeroNFe  : Integer;
+  FileNameXML ,
+  ChaveNFE    : String;
 begin
 
   try
 
-    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, True, False);
+    GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
     Result := True;
-    
+
+    UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
+
   except
     On E : Exception do
     begin
@@ -653,7 +671,7 @@ begin
 
   with qryCalculoImporto do
   begin
-    Exit;
+    Edit;
 
     qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
     qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
@@ -669,15 +687,15 @@ begin
   end;
 end;
 
-procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String;
-  const AnoLoteNFE, NumeroLoteNFE : Integer); 
+procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime;
+  const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer);
 begin
   if ( qryCalculoImporto.IsEmpty ) then
     Exit;
 
   with qryCalculoImporto do
   begin
-    Exit;
+    Edit;
 
     qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
     qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
@@ -687,6 +705,7 @@ begin
     qryCalculoImportoNFE_ENVIADA.Value := 1;
     qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
     qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
+    qryCalculoImportoVERIFICADOR_NFE.Value := ChaveNFE;
     qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
     qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
 
@@ -712,14 +731,9 @@ begin
   end;
 end;
 
-procedure TDMNFe.GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario: String;
-  const iAnoVenda, iNumVenda: Integer; const Imprimir : Boolean = FALSE; const OnLine : Boolean = FALSE);
-var
-  iSerieNFe  ,
-  iNumeroNFe : Integer;
-  NumeroLote : Int64;
-  FileNameXML : String;
-  DtHoraEmiss : TDateTime;
+procedure TDMNFe.GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+  var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String;
+  const Imprimir : Boolean = TRUE);
 begin
 
   try
@@ -732,7 +746,7 @@ begin
 
     iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
     iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
-    DtHoraEmiss := Now;
+    DtHoraEmiss := GetDateTimeDB;
 
     with ACBrNFe.NotasFiscais.Add.NFe do
     begin
@@ -944,7 +958,7 @@ begin
               dVal  := now ;
               vPMC  := 0 ;
             end;  }
-            
+
   //Campos específicos para venda de armamento
   {         with Prod.arma.Add do
             begin
@@ -1213,15 +1227,15 @@ begin
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
-      if ( OnLine ) then
-      begin
-        NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
-        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
-      end
-      else
-        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
-
-      UpdateNumeroNFe(iSerieNFe, iNumeroNFe);
+//      if ( OnLine ) then
+//      begin
+//        NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+//        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+//      end
+//      else
+//        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
+//
+//      UpdateNumeroNFe(iSerieNFe, iNumeroNFe);
 
       if ( Imprimir ) then
         ACBrNFe.NotasFiscais.Imprimir;
