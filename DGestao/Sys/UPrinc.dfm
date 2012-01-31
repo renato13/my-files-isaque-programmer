@@ -3741,6 +3741,15 @@ object frmPrinc: TfrmPrinc
         Caption = 'Notas Fiscais'
         object nmEnviarLoteNFe: TMenuItem
           Caption = 'Enviar Lote NF-e'
+          Enabled = False
+        end
+        object nmCancelarNFe: TMenuItem
+          Caption = 'Cancelar NF-e'
+          Enabled = False
+        end
+        object nmInutilizarNumeroNFe: TMenuItem
+          Caption = 'Inutilizar Numera'#231#227'o NF-e'
+          Enabled = False
         end
       end
     end
@@ -4157,6 +4166,13 @@ object frmPrinc: TfrmPrinc
       object esouraria1: TMenuItem
         Caption = 'Tesouraria'
         Visible = False
+      end
+      object N10: TMenuItem
+        Caption = '-'
+      end
+      object nmGerarBoleto: TMenuItem
+        Caption = 'Gera'#231#227'o de Boletos'
+        Enabled = False
       end
     end
     object Relatrio1: TMenuItem

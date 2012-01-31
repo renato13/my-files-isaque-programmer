@@ -14,6 +14,11 @@ type
     dbDescricao: TDBEdit;
     IbDtstTabelaCOD: TSmallintField;
     IbDtstTabelaTIPODESP: TIBStringField;
+    GrpBxDadosClassificacao: TGroupBox;
+    lblNumeroContaContabil: TLabel;
+    dbNumeroContaContabil: TDBEdit;
+    dbNumeroResumido: TDBEdit;
+    lblNumeroResumido: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
   private

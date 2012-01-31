@@ -86,6 +86,10 @@ type
     nmNotaFiscal: TMenuItem;
     N9: TMenuItem;
     nmEnviarLoteNFe: TMenuItem;
+    N10: TMenuItem;
+    nmGerarBoleto: TMenuItem;
+    nmCancelarNFe: TMenuItem;
+    nmInutilizarNumeroNFe: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);

@@ -209,7 +209,8 @@ type
     frmACBr : TfrmGeConfigurarNFeACBr;
     procedure UpdateNumeroNFe(const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const Ano, Numero : Integer);
-    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String; const Enviada : Smallint = 0);
+    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String); overload;
+    procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Imprimir : Boolean = FALSE; const OnLine : Boolean = FALSE);
   public
@@ -645,8 +646,7 @@ begin
   end;
 end;
 
-procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String;
-  const Enviada : Smallint = 0);
+procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String);
 begin
   if ( qryCalculoImporto.IsEmpty ) then
     Exit;
@@ -660,7 +660,33 @@ begin
     qryCalculoImportoNFE.Value      := NumeroNFE;
     qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
     qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
-    qryCalculoImportoNFE_ENVIADA.Value := Enviada;
+    qryCalculoImportoNFE_ENVIADA.Value := 0;
+    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+
+    Post;
+    ApplyUpdates;
+  end;
+end;
+
+procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String;
+  const AnoLoteNFE, NumeroLoteNFE : Integer); 
+begin
+  if ( qryCalculoImporto.IsEmpty ) then
+    Exit;
+
+  with qryCalculoImporto do
+  begin
+    Exit;
+
+    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
+    qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
+    qryCalculoImportoNFE.Value      := NumeroNFE;
+    qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
+    qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+    qryCalculoImportoNFE_ENVIADA.Value := 1;
+    qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
+    qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
     qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
     qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
 
@@ -691,6 +717,7 @@ procedure TDMNFe.GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario: String;
 var
   iSerieNFe  ,
   iNumeroNFe : Integer;
+  NumeroLote : Int64;
   FileNameXML : String;
   DtHoraEmiss : TDateTime;
 begin
@@ -722,7 +749,7 @@ begin
       Ide.nNF       := iNumeroNFe;
       Ide.dEmi      := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
       Ide.dSaiEnt   := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-      Ide.hSaiEnt   := StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
+      Ide.hSaiEnt   := DtHoraEmiss;
       Ide.tpNF      := tnSaida;
       Ide.tpEmis    := ACBrNFe.Configuracoes.Geral.FormaEmissao;
       Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;
@@ -839,7 +866,7 @@ begin
 
         with Det.Add do
         begin
-          Prod.nItem    := 1; // Número sequencial, para cada item deve ser incrementado
+          Prod.nItem    := qryDadosProdutoSEQ.AsInteger;   // Número sequencial, para cada item deve ser incrementado
           Prod.cProd    := qryDadosProdutoCODPROD.AsString;
           Prod.cEAN     := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.xProd    := qryDadosProdutoDESCRI.AsString;
@@ -851,7 +878,7 @@ begin
           Prod.vUnCom   := qryDadosProdutoPUNIT.AsCurrency;
           Prod.vProd    := qryDadosProdutoPUNIT.AsCurrency;
 
-          Prod.cEANTrib  := '';
+          Prod.cEANTrib  := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.uTrib     := qryDadosProdutoUNP_SIGLA.AsString;
           Prod.qTrib     := qryDadosProdutoQTDE.AsCurrency;
           Prod.vUnTrib   := qryDadosProdutoPUNIT.AsCurrency;
@@ -860,7 +887,7 @@ begin
           Prod.vSeg      := 0;
           Prod.vDesc     := qryDadosProdutoPUNIT.AsCurrency - qryDadosProdutoDESCONTO.AsFloat / 100;
 
-          infAdProd      := ''; // 'Informação Adicional do Produto';
+          infAdProd      := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString; // 'Informação Adicional do Produto';
 
   //Declaração de Importação. Pode ser adicionada várias através do comando Prod.DI.Add
   {         with Prod.DI.Add do
@@ -917,6 +944,7 @@ begin
               dVal  := now ;
               vPMC  := 0 ;
             end;  }
+            
   //Campos específicos para venda de armamento
   {         with Prod.arma.Add do
             begin
@@ -925,6 +953,7 @@ begin
               nCano  := 0 ;
               descr  := '' ;
             end;      }
+
   //Campos específicos para venda de combustível(distribuidoras)
   {         with Prod.comb do
             begin
@@ -983,18 +1012,18 @@ begin
 
             with IPI do
             begin
-                 CST      := ipi99 ;
-                 clEnq    := '999';
-                 CNPJProd := '';
-                 cSelo    := '';
-                 qSelo    := 0;
-                 cEnq     := '';
+              CST      := ipi99 ;
+              clEnq    := '999';
+              CNPJProd := '';
+              cSelo    := '';
+              qSelo    := 0;
+              cEnq     := '';
 
-                 vBC    := qryDadosProdutoPUNIT.AsCurrency;
-                 qUnid  := 0;
-                 vUnid  := 0;
-                 pIPI   := 0; // Percentual IPI
-                 vIPI   := 0; // Valor IPI
+              vBC    := qryDadosProdutoPUNIT.AsCurrency;
+              qUnid  := 0;
+              vUnid  := 0;
+              pIPI   := 0; // Percentual IPI
+              vIPI   := 0; // Valor IPI
             end;
   {
               with II do
@@ -1185,9 +1214,12 @@ begin
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
       if ( OnLine ) then
-        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, 1)
+      begin
+        NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+      end
       else
-        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, 0);
+        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
 
       UpdateNumeroNFe(iSerieNFe, iNumeroNFe);
 
