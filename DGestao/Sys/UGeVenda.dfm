@@ -1,24 +1,24 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 485
-  Top = 265
-  Width = 1045
-  Height = 698
+  Left = 138
+  Top = 116
+  Width = 1123
+  Height = 608
   ActiveControl = nil
   Caption = 'Controle de Vendas'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
-    Top = 656
-    Width = 1029
+    Top = 566
+    Width = 1107
   end
   inherited Bevel3: TBevel
-    Top = 617
-    Width = 1029
+    Top = 527
+    Width = 1107
   end
   inherited tlbBotoes: TToolBar
-    Top = 621
-    Width = 1029
+    Top = 531
+    Width = 1107
     inherited btbtnLista: TBitBtn
       Caption = 'Im&primir'
       Visible = True
@@ -243,17 +243,18 @@ inherited frmGeVenda: TfrmGeVenda
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 1029
-    Height = 617
+    Width = 1107
+    Height = 527
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 522
-        Width = 1021
+        Top = 432
+        Width = 1099
       end
       inherited dbgDados: TDBGrid
-        Width = 1021
-        Height = 522
+        Width = 1099
+        Height = 432
         Columns = <
           item
             Expanded = False
@@ -313,10 +314,10 @@ inherited frmGeVenda: TfrmGeVenda
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 526
-        Width = 1021
+        Top = 436
+        Width = 1099
         inherited grpBxFiltro: TGroupBox
-          Left = 600
+          Left = 678
           Width = 417
           DesignSize = (
             417
@@ -357,26 +358,26 @@ inherited frmGeVenda: TfrmGeVenda
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 233
-        Width = 1021
+        Width = 1099
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 113
-        Width = 1021
+        Width = 1099
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       object Bevel6: TBevel [2]
         Left = 0
-        Top = 429
-        Width = 1021
+        Top = 339
+        Width = 1099
         Height = 4
         Align = alBottom
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 1021
+        Width = 1099
         Height = 113
         Caption = 'Dados da venda'
         inherited lblCodigo: TLabel
@@ -837,7 +838,7 @@ inherited frmGeVenda: TfrmGeVenda
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 117
-        Width = 1021
+        Width = 1099
         Height = 116
         Align = alTop
         Caption = 'Dados do produto'
@@ -1584,8 +1585,8 @@ inherited frmGeVenda: TfrmGeVenda
       end
       object pgcMaisDados: TPageControl
         Left = 0
-        Top = 433
-        Width = 1021
+        Top = 343
+        Width = 1099
         Height = 155
         ActivePage = tbsRecebimento
         Align = alBottom
@@ -1593,12 +1594,12 @@ inherited frmGeVenda: TfrmGeVenda
         object tbsRecebimento: TTabSheet
           Caption = 'Recebimento'
           DesignSize = (
-            1013
+            1091
             127)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
-            Width = 1013
+            Width = 1091
             Height = 13
             Align = alTop
             Caption = '&Observa'#231#245'es:'
@@ -1805,7 +1806,7 @@ inherited frmGeVenda: TfrmGeVenda
           object dbObservacao: TDBMemo
             Left = 0
             Top = 13
-            Width = 1013
+            Width = 1091
             Height = 67
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
@@ -2282,8 +2283,8 @@ inherited frmGeVenda: TfrmGeVenda
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 237
-        Width = 1021
-        Height = 192
+        Width = 1099
+        Height = 102
         TabStop = False
         Align = alClient
         DataSource = DtSrcTabelaItens

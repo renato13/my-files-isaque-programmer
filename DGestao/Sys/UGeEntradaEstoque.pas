@@ -632,6 +632,7 @@ begin
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
       cdsTabelaItens.ApplyUpdates;
+      DMBusiness.ibtrnsctnBusiness.CommitRetaining;
     end;
 
     HabilitarDesabilitar_Btns;
@@ -802,6 +803,7 @@ begin
     IbDtstTabelaDTFINALIZACAO_COMPRA.Value := Now;
     IbDtstTabela.Open;
     IbDtstTabela.ApplyUpdates;
+    DMBusiness.ibtrnsctnBusiness.CommitRetaining;
 
     GerarDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );

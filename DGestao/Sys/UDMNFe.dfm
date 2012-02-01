@@ -1,8 +1,8 @@
 object DMNFe: TDMNFe
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 633
-  Top = 375
+  Left = 598
+  Top = 180
   Height = 429
   Width = 419
   object ACBrNFe: TACBrNFe
@@ -45,6 +45,7 @@ object DMNFe: TDMNFe
   object qryEmitente: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -567,6 +568,7 @@ object DMNFe: TDMNFe
   object qryCalculoImporto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -985,6 +987,7 @@ object DMNFe: TDMNFe
   object qryDadosProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -1455,7 +1458,7 @@ object DMNFe: TDMNFe
       end
       object bndMasterData: TfrxMasterData
         Height = 18.897650000000000000
-        Top = 234.330860000000000000
+        Top = 245.669450000000000000
         Width = 718.110700000000000000
         DataSet = frdItens
         DataSetName = 'frdItens'
@@ -1633,7 +1636,7 @@ object DMNFe: TDMNFe
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 665.197280000000000000
+        Top = 646.299630000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -1654,8 +1657,14 @@ object DMNFe: TDMNFe
         end
       end
       object bndHeader: TfrxHeader
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Lucida Console'
+        Font.Style = []
         Height = 83.149660000000000000
-        Top = 105.826840000000000000
+        ParentFont = False
+        Top = 139.842610000000000000
         Width = 718.110700000000000000
         object frdVendaNOME: TfrxMemoView
           Top = 11.338590000000000000
@@ -1666,7 +1675,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -9
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
@@ -1680,7 +1689,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -1695,7 +1704,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -1713,7 +1722,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -9
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
@@ -1728,7 +1737,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           HAlign = haRight
@@ -1748,7 +1757,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -9
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = []
           HAlign = haRight
@@ -1853,9 +1862,9 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo22: TfrxMemoView
-          Left = 343.937230000000000000
+          Left = 348.937230000000000000
           Top = 64.252010000000000000
-          Width = 64.252010000000000000
+          Width = 56.692950000000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1940,7 +1949,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -9
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
@@ -1959,7 +1968,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -11
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -1970,11 +1979,11 @@ object DMNFe: TDMNFe
       end
       object bndReportSummary: TfrxReportSummary
         Height = 298.582870000000000000
-        Top = 298.582870000000000000
+        Top = 325.039580000000000000
         Width = 718.110700000000000000
         object SysMemo1: TfrxSysMemoView
-          Left = 642.520100000000000000
-          Width = 75.590600000000000000
+          Left = 623.622450000000000000
+          Width = 94.488250000000000000
           Height = 18.897650000000000000
           ShowHint = False
           Color = 14211288
@@ -1994,14 +2003,14 @@ object DMNFe: TDMNFe
           WordWrap = False
         end
         object Memo14: TfrxMemoView
-          Left = 514.016080000000000000
-          Width = 128.504020000000000000
+          Left = 480.000310000000000000
+          Width = 143.622140000000000000
           Height = 18.897650000000000000
           ShowHint = False
           Color = 14211288
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Frame.Typ = [ftTop]
@@ -2022,7 +2031,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             ' [frdVenda."VENDEDOR_NOME"]')
           ParentFont = False
@@ -2060,7 +2069,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             ' [frdVenda."DESCRI"]')
           ParentFont = False
@@ -2073,7 +2082,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -2093,7 +2102,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             ' [frdVenda."COND_DESCRICAO_FULL"]')
           ParentFont = False
@@ -2107,7 +2116,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -2127,7 +2136,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
             '[FormatFloat('#39',0.00'#39',<frdVenda."TOTALVENDABRUTA">)] ')
@@ -2143,7 +2152,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           HAlign = haRight
@@ -2164,7 +2173,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
             '[FormatFloat('#39',0.00'#39',<frdVenda."DESCONTO">)] ')
@@ -2180,7 +2189,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           HAlign = haRight
@@ -2201,7 +2210,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
             '[FormatFloat('#39',0.00'#39',<frdVenda."TOTALVENDA">)] ')
@@ -2217,7 +2226,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           HAlign = haRight
@@ -2237,7 +2246,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftBottom]
           HAlign = haCenter
           Memo.UTF8 = (
@@ -2252,7 +2261,7 @@ object DMNFe: TDMNFe
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -9
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop]
@@ -2283,11 +2292,11 @@ object DMNFe: TDMNFe
           Left = 37.795300000000000000
           Top = 154.960730000000000000
           Width = 623.622450000000000000
-          Height = 60.472480000000000000
+          Height = 34.015770000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -16
+          Font.Height = -13
           Font.Name = 'Arial'
           Font.Style = []
           HAlign = haBlock

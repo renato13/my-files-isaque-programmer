@@ -703,6 +703,7 @@ begin
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
       cdsTabelaItens.ApplyUpdates;
+      DMBusiness.ibtrnsctnBusiness.CommitRetaining;
     end;
 
     HabilitarDesabilitar_Btns;
@@ -879,6 +880,7 @@ begin
     IbDtstTabelaDTFINALIZACAO_VENDA.Value := Date;
     IbDtstTabela.Open;
     IbDtstTabela.ApplyUpdates;
+    DMBusiness.ibtrnsctnBusiness.CommitRetaining;
 
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );

@@ -1,11 +1,12 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 521
-  Top = 368
+  Left = 435
+  Top = 218
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
+    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'
@@ -20,7 +21,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = False
+    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -175,8 +176,8 @@ object DMBusiness: TDMBusiness
     Transaction = ibtrnsctnBusiness
     BufferChunks = 1000
     CachedUpdates = False
-    Left = 320
-    Top = 88
+    Left = 240
+    Top = 64
   end
   object raveReport: TRvProject
     Left = 40
