@@ -1,9 +1,12 @@
 inherited frmGrPadraoCadastroSimples: TfrmGrPadraoCadastroSimples
+  Left = 588
+  Top = 262
   Width = 593
   Height = 408
   Caption = 'Padr'#227'o Cadastro Simples'
   Font.Charset = ANSI_CHARSET
   Font.Name = 'Tahoma'
+  OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
