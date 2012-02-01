@@ -1,9 +1,9 @@
 inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
-  Left = 540
-  Top = 234
+  Left = 157
+  Top = 61
   Width = 1074
   Height = 716
-  ActiveControl = dbEmpresa
+  ActiveControl = dbgDados
   Caption = 'Controle de Entradas no Estoque'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -94,6 +94,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   inherited pgcGuias: TPageControl
     Width = 1058
     Height = 635
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -130,6 +131,11 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           item
             Expanded = False
             FieldName = 'DTEMISS'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'STATUS'
             Visible = True
           end
           item
@@ -940,6 +946,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         Height = 146
         ActivePage = tbsPagamento
         Align = alBottom
+        HotTrack = True
         TabOrder = 4
         object tbsPagamento: TTabSheet
           Caption = 'Pagamento'
@@ -1441,7 +1448,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Left = 89
             Top = 0
             Width = 4
-            Height = 115
+            Height = 118
             Align = alLeft
             Shape = bsSpacer
             Visible = False
@@ -1450,7 +1457,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Left = 0
             Top = 0
             Width = 4
-            Height = 115
+            Height = 118
             Align = alLeft
             Shape = bsSpacer
             Visible = False
@@ -1459,7 +1466,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Left = 4
             Top = 0
             Width = 85
-            Height = 115
+            Height = 118
             Align = alLeft
             AutoSize = True
             BevelOuter = bvNone
@@ -1515,7 +1522,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Left = 93
             Top = 0
             Width = 949
-            Height = 115
+            Height = 118
             TabStop = False
             Align = alClient
             DataSource = dtsDuplicatas
