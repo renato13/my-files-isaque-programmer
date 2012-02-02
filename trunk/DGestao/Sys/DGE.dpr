@@ -79,7 +79,9 @@ uses
   UGeEntradaEstoqueCancelar in 'UGeEntradaEstoqueCancelar.pas' {frmGeEntradaEstoqueCancelar},
   UEnviarLoteNFe in 'UEnviarLoteNFe.pas' {frmEnviarLoteNFe},
   UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa},
+  UfrmAcessoSistema in 'UfrmAcessoSistema.pas' {frmAcessoSistema};
   UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar};
+
 
 {$R *.res}
 
@@ -91,5 +93,6 @@ begin
   Application.CreateForm(TDMBusiness, DMBusiness);
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
+  Application.CreateForm(TfrmAcessoSistema, frmAcessoSistema);
   Application.Run;
 end.
