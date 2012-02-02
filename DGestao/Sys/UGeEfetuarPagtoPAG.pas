@@ -151,6 +151,7 @@ begin
       
       cdsPagamentos.Post;
       cdsPagamentos.ApplyUpdates;
+      CommitTransaction;
 
       ModalResult := mrOk;
     end;

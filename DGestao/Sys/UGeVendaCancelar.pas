@@ -57,7 +57,9 @@ type
     cdsVendaVERIFICADOR_NFE: TIBStringField;
     cdsVendaXML_NFE: TMemoField;
     cdsVendaNOME: TIBStringField;
+    cdsVendaCANCEL_USUARIO: TIBStringField;
     procedure btFecharClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -88,14 +90,8 @@ begin
       cdsVenda.ParamByName('numvenda').AsInteger := Numero;
       cdsVenda.Open;
 
-      dbCancelUsuario.Text  := 'SYSDBA';
+      dbCancelUsuario.Text  := GetUserApp;
       dbCancelDataHora.Text := FormatDateTime('dd/mm/yyyy hh:mm:ss', Now);
-
-//      if ( not cdsVenda.IsEmpty ) then
-//      begin
-//        cdsVenda.Edit;
-//
-//      end;
 
       Result := (ShowModal = mrOk);
     end;
@@ -107,6 +103,52 @@ end;
 procedure TfrmGeVendaCancelar.btFecharClick(Sender: TObject);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TfrmGeVendaCancelar.btnCancelarClick(Sender: TObject);
+var
+  sMsg : String;
+  Cont : Boolean;
+begin
+  if ( cdsVenda.IsEmpty ) then
+    Exit;
+
+  if ( Trim(dbMotivo.Lines.Text) = EmptyStr ) then
+  begin
+    ShowWarning('Favor informar o motivo de cancelamento da venda');
+    dbMotivo.SetFocus;
+  end
+  else
+  begin
+    if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
+      sMsg := 'Esta venda possui Nota Fiscal Emitida e ao cancelar a venda a NF-e será cancelada.'#13#13'Confirma o cancelamento da venda?'
+    else
+      sMsg := 'Confirma o cancelamento da venda?';
+
+    Cont := ShowConfirm(sMsg);
+
+    if ( Cont ) then
+      if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
+        Cont := DMNFe.CancelarNFeACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString,
+                cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger, UpperCase(Trim(dbMotivo.Lines.Text)) );
+
+    if ( Cont ) then
+      with cdsVenda do
+      begin
+        Edit;
+
+        cdsVendaSTATUS.Value          := STATUS_VND_CAN;
+        cdsVendaCANCEL_DATAHORA.Value := StrToDateTime( Trim(dbCancelDataHora.Text) );
+        cdsVendaCANCEL_USUARIO.Value  := UpperCase( Trim(dbCancelUsuario.Text) );
+        cdsVendaCANCEL_MOTIVO.Value   := UpperCase( Trim(dbMotivo.Lines.Text) );
+
+        Post;
+        ApplyUpdates;
+        CommitTransaction;
+
+        ModalResult := mrOk;
+      end;
+  end;
 end;
 
 end.

@@ -6,7 +6,6 @@ object DMBusiness: TDMBusiness
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'
@@ -21,7 +20,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = True
+    Active = False
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'

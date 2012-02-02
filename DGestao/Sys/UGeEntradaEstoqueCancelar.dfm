@@ -1,9 +1,9 @@
-inherited frmGeVendaCancelar: TfrmGeVendaCancelar
+inherited frmGeEntradaEstoqueCancelar: TfrmGeEntradaEstoqueCancelar
   Width = 617
   Height = 474
   ActiveControl = dbMotivo
   BorderWidth = 4
-  Caption = 'Cancelar Venda'
+  Caption = 'Cancelar Entrada no Estoque'
   OldCreateOrder = True
   DesignSize = (
     593
@@ -32,7 +32,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     Width = 593
     Height = 121
     Align = alTop
-    Caption = 'Controle da Venda'
+    Caption = 'Controle da Entrada'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -43,9 +43,9 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     object lblCodigo: TLabel
       Left = 16
       Top = 24
-      Width = 58
+      Width = 67
       Height = 13
-      Caption = 'No. Venda:'
+      Caption = 'No. Entrada:'
       FocusControl = dbCodigo
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -54,13 +54,13 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblCliente: TLabel
+    object lblFornecedor: TLabel
       Left = 112
       Top = 24
-      Width = 42
+      Width = 67
       Height = 13
-      Caption = 'Cliente:'
-      FocusControl = dbCliente
+      Caption = 'Fornecedor:'
+      FocusControl = dbFornecedor
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -85,9 +85,9 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     object lblNFe: TLabel
       Left = 56
       Top = 64
-      Width = 28
+      Width = 63
       Height = 13
-      Caption = 'NF-e:'
+      Caption = 'Nota Fiscal:'
       FocusControl = dbNFe
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -96,13 +96,13 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblDataEmissao: TLabel
+    object lblDataEntrada: TLabel
       Left = 184
       Top = 64
-      Width = 79
+      Width = 77
       Height = 13
-      Caption = 'Data Emiss'#227'o:'
-      FocusControl = dbDataEmissao
+      Caption = 'Data Entrada:'
+      FocusControl = dbDataEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -110,13 +110,13 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblHoraEmissao: TLabel
+    object lblTotalNota: TLabel
       Left = 272
       Top = 64
-      Width = 79
+      Width = 95
       Height = 13
-      Caption = 'Hora Emiss'#227'o:'
-      FocusControl = dbHoraEmissao
+      Caption = 'Total Nota Fiscal:'
+      FocusControl = dbTotalNota
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -132,7 +132,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       TabStop = False
       Color = clMoneyGreen
       DataField = 'CODCONTROL'
-      DataSource = dtsVenda
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -142,15 +142,15 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ReadOnly = True
       TabOrder = 0
     end
-    object dbCliente: TDBEdit
+    object dbFornecedor: TDBEdit
       Left = 112
       Top = 40
       Width = 465
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'NOME'
-      DataSource = dtsVenda
+      DataField = 'NOMEFORN'
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -167,8 +167,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'SERIE'
-      DataSource = dtsVenda
+      DataField = 'NFSERIE'
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -185,8 +185,8 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'NFE'
-      DataSource = dtsVenda
+      DataField = 'NF'
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -196,15 +196,15 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ReadOnly = True
       TabOrder = 3
     end
-    object dbDataEmissao: TDBEdit
+    object dbDataEntrada: TDBEdit
       Left = 184
       Top = 80
       Width = 81
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'DATAEMISSAO'
-      DataSource = dtsVenda
+      DataField = 'DTENT'
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -214,15 +214,15 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ReadOnly = True
       TabOrder = 4
     end
-    object dbHoraEmissao: TDBEdit
+    object dbTotalNota: TDBEdit
       Left = 272
       Top = 80
-      Width = 81
+      Width = 97
       Height = 21
       TabStop = False
       Color = clMoneyGreen
-      DataField = 'HORAEMISSAO'
-      DataSource = dtsVenda
+      DataField = 'TOTALNF'
+      DataSource = dtsEntrada
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -470,7 +470,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00}
     NumGlyphs = 2
   end
-  object cdsVenda: TIBDataSet
+  object cdsEntrada: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
@@ -480,180 +480,316 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       '')
     SelectSQL.Strings = (
       'Select'
-      '    v.Ano'
-      '  , v.Codcontrol'
-      '  , v.Codemp'
-      '  , v.Codcli'
-      '  , v.Dtvenda'
-      '  , v.Status'
-      '  , v.Desconto'
-      '  , v.Totalvenda'
-      '  , v.Serie'
-      '  , v.Nfe'
-      '  , v.Lote_nfe_ano'
-      '  , v.Lote_nfe_numero'
-      '  , v.Nfe_enviada'
-      '  , v.Dataemissao'
-      '  , v.Horaemissao'
-      '  , v.Cancel_usuario'
-      '  , v.Cancel_datahora'
-      '  , v.Cancel_motivo'
-      '  , v.Cfop'
-      '  , v.Verificador_nfe'
-      '  , v.Xml_nfe'
-      '  , c.Nome'
-      'from TBVENDAS v'
-      '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
-      'where v.Ano = :anovenda'
-      '  and v.Codcontrol = :numvenda'
+      '    c.ANO'
+      '  , c.CODCONTROL'
+      '  , c.CODEMP'
+      '  , c.CODFORN'
+      '  , c.NF'
+      '  , c.NFSERIE'
+      '  , c.DTLANCAMENTO'
+      '  , c.DTEMISS'
+      '  , c.DTENT'
+      '  , c.DTFINALIZACAO_COMPRA'
+      '  , c.NFCFOP'
+      '  , c.NATUREZA'
+      '  , c.STATUS'
+      '  , c.IPI'
+      '  , c.ICMSBASE'
+      '  , c.ICMSVALOR'
+      '  , c.ICMSSUBSTBASE'
+      '  , c.ICMSSUBSTVALOR'
+      '  , c.FRETE'
+      '  , c.OUTROSCUSTOS'
+      '  , c.DESCONTO'
+      '  , c.TOTALNF'
+      '  , c.TOTALPROD'
+      '  , c.OBS'
+      '  , c.USUARIO'
+      '  , c.FORMAPAGTO_COD'
+      '  , c.CONDICAOPAGTO_COD'
+      '  , c.COMPRA_PRAZO'
+      '  , c.PRAZO_01'
+      '  , c.PRAZO_02'
+      '  , c.PRAZO_03'
+      '  , c.PRAZO_04'
+      '  , c.PRAZO_05'
+      '  , c.PRAZO_06'
+      '  , c.PRAZO_07'
+      '  , c.PRAZO_08'
+      '  , c.PRAZO_09'
+      '  , c.PRAZO_10'
+      '  , c.PRAZO_11'
+      '  , c.PRAZO_12'
+      '  , c.Cancel_usuario'
+      '  , c.Cancel_datahora'
+      '  , c.Cancel_motivo'
+      '  , f.Nomeforn'
+      '  , f.Cnpj'
+      'from TBCOMPRAS c'
+      '  inner join TBFORNECEDOR f on (f.Codforn = c.Codforn)'
+      'where c.Ano = :anocompra'
+      '  and c.Codcontrol = :numcompra'
       '')
     ModifySQL.Strings = (
       '')
     GeneratorField.Field = 'CODCONTROL'
-    UpdateObject = updVenda
+    UpdateObject = updEntrada
     Left = 480
     Top = 96
-    object cdsVendaANO: TSmallintField
+    object cdsEntradaANO: TSmallintField
       FieldName = 'ANO'
-      Origin = 'TBVENDAS.ANO'
+      Origin = 'TBCOMPRAS.ANO'
       Required = True
     end
-    object cdsVendaCODCONTROL: TIntegerField
+    object cdsEntradaCODCONTROL: TIntegerField
       Alignment = taCenter
       FieldName = 'CODCONTROL'
-      Origin = 'TBVENDAS.CODCONTROL'
+      Origin = 'TBCOMPRAS.CODCONTROL'
       Required = True
       DisplayFormat = '###0000000'
     end
-    object cdsVendaCODEMP: TIBStringField
+    object cdsEntradaCODEMP: TIBStringField
       FieldName = 'CODEMP'
-      Origin = 'TBVENDAS.CODEMP'
+      Origin = 'TBCOMPRAS.CODEMP'
+      Required = True
       Size = 18
     end
-    object cdsVendaCODCLI: TIBStringField
-      FieldName = 'CODCLI'
-      Origin = 'TBVENDAS.CODCLI'
-      Size = 18
+    object cdsEntradaCODFORN: TIntegerField
+      FieldName = 'CODFORN'
+      Origin = 'TBCOMPRAS.CODFORN'
     end
-    object cdsVendaDTVENDA: TDateTimeField
-      FieldName = 'DTVENDA'
-      Origin = 'TBVENDAS.DTVENDA'
-    end
-    object cdsVendaSTATUS: TSmallintField
-      FieldName = 'STATUS'
-      Origin = 'TBVENDAS.STATUS'
+    object cdsEntradaNF: TIntegerField
+      FieldName = 'NF'
+      Origin = 'TBCOMPRAS.NF'
       Required = True
     end
-    object cdsVendaDESCONTO: TIBBCDField
-      FieldName = 'DESCONTO'
-      Origin = 'TBVENDAS.DESCONTO'
-      Precision = 18
-      Size = 2
-    end
-    object cdsVendaTOTALVENDA: TIBBCDField
-      FieldName = 'TOTALVENDA'
-      Origin = 'TBVENDAS.TOTALVENDA'
-      Precision = 18
-      Size = 2
-    end
-    object cdsVendaSERIE: TIBStringField
+    object cdsEntradaNFSERIE: TIBStringField
       Alignment = taCenter
-      FieldName = 'SERIE'
-      Origin = 'TBVENDAS.SERIE'
-      Size = 4
+      FieldName = 'NFSERIE'
+      Origin = 'TBCOMPRAS.NFSERIE'
+      FixedChar = True
+      Size = 1
     end
-    object cdsVendaNFE: TLargeintField
-      Alignment = taCenter
-      FieldName = 'NFE'
-      Origin = 'TBVENDAS.NFE'
-      DisplayFormat = '###0000000'
+    object cdsEntradaDTLANCAMENTO: TDateTimeField
+      FieldName = 'DTLANCAMENTO'
+      Origin = 'TBCOMPRAS.DTLANCAMENTO'
     end
-    object cdsVendaLOTE_NFE_ANO: TSmallintField
-      FieldName = 'LOTE_NFE_ANO'
-      Origin = 'TBVENDAS.LOTE_NFE_ANO'
+    object cdsEntradaDTEMISS: TDateField
+      FieldName = 'DTEMISS'
+      Origin = 'TBCOMPRAS.DTEMISS'
     end
-    object cdsVendaLOTE_NFE_NUMERO: TIntegerField
-      FieldName = 'LOTE_NFE_NUMERO'
-      Origin = 'TBVENDAS.LOTE_NFE_NUMERO'
-    end
-    object cdsVendaNFE_ENVIADA: TSmallintField
-      FieldName = 'NFE_ENVIADA'
-      Origin = 'TBVENDAS.NFE_ENVIADA'
-      Required = True
-    end
-    object cdsVendaDATAEMISSAO: TDateField
-      FieldName = 'DATAEMISSAO'
-      Origin = 'TBVENDAS.DATAEMISSAO'
+    object cdsEntradaDTENT: TDateField
+      FieldName = 'DTENT'
+      Origin = 'TBCOMPRAS.DTENT'
       DisplayFormat = 'dd/mm/yyyy'
     end
-    object cdsVendaHORAEMISSAO: TTimeField
-      FieldName = 'HORAEMISSAO'
-      Origin = 'TBVENDAS.HORAEMISSAO'
-      DisplayFormat = 'hh:mm:ss'
+    object cdsEntradaDTFINALIZACAO_COMPRA: TDateTimeField
+      FieldName = 'DTFINALIZACAO_COMPRA'
+      Origin = 'TBCOMPRAS.DTFINALIZACAO_COMPRA'
     end
-    object cdsVendaCANCEL_USUARIO: TIBStringField
-      FieldName = 'CANCEL_USUARIO'
-      Origin = 'TBVENDAS.CANCEL_USUARIO'
+    object cdsEntradaNFCFOP: TIntegerField
+      FieldName = 'NFCFOP'
+      Origin = 'TBCOMPRAS.NFCFOP'
+    end
+    object cdsEntradaNATUREZA: TIBStringField
+      FieldName = 'NATUREZA'
+      Origin = 'TBCOMPRAS.NATUREZA'
+      Size = 4
+    end
+    object cdsEntradaSTATUS: TSmallintField
+      FieldName = 'STATUS'
+      Origin = 'TBCOMPRAS.STATUS'
+      Required = True
+    end
+    object cdsEntradaIPI: TIBBCDField
+      FieldName = 'IPI'
+      Origin = 'TBCOMPRAS.IPI'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaICMSBASE: TIBBCDField
+      FieldName = 'ICMSBASE'
+      Origin = 'TBCOMPRAS.ICMSBASE'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaICMSVALOR: TIBBCDField
+      FieldName = 'ICMSVALOR'
+      Origin = 'TBCOMPRAS.ICMSVALOR'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaICMSSUBSTBASE: TIBBCDField
+      FieldName = 'ICMSSUBSTBASE'
+      Origin = 'TBCOMPRAS.ICMSSUBSTBASE'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaICMSSUBSTVALOR: TIBBCDField
+      FieldName = 'ICMSSUBSTVALOR'
+      Origin = 'TBCOMPRAS.ICMSSUBSTVALOR'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaFRETE: TIBBCDField
+      FieldName = 'FRETE'
+      Origin = 'TBCOMPRAS.FRETE'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaOUTROSCUSTOS: TIBBCDField
+      FieldName = 'OUTROSCUSTOS'
+      Origin = 'TBCOMPRAS.OUTROSCUSTOS'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaDESCONTO: TIBBCDField
+      FieldName = 'DESCONTO'
+      Origin = 'TBCOMPRAS.DESCONTO'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaTOTALNF: TIBBCDField
+      FieldName = 'TOTALNF'
+      Origin = 'TBCOMPRAS.TOTALNF'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaTOTALPROD: TIBBCDField
+      FieldName = 'TOTALPROD'
+      Origin = 'TBCOMPRAS.TOTALPROD'
+      Precision = 18
+      Size = 2
+    end
+    object cdsEntradaOBS: TMemoField
+      FieldName = 'OBS'
+      Origin = 'TBCOMPRAS.OBS'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object cdsEntradaUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = 'TBCOMPRAS.USUARIO'
       Size = 50
     end
-    object cdsVendaCANCEL_DATAHORA: TDateTimeField
+    object cdsEntradaFORMAPAGTO_COD: TSmallintField
+      FieldName = 'FORMAPAGTO_COD'
+      Origin = 'TBCOMPRAS.FORMAPAGTO_COD'
+    end
+    object cdsEntradaCONDICAOPAGTO_COD: TSmallintField
+      FieldName = 'CONDICAOPAGTO_COD'
+      Origin = 'TBCOMPRAS.CONDICAOPAGTO_COD'
+    end
+    object cdsEntradaCOMPRA_PRAZO: TSmallintField
+      FieldName = 'COMPRA_PRAZO'
+      Origin = 'TBCOMPRAS.COMPRA_PRAZO'
+      Required = True
+    end
+    object cdsEntradaPRAZO_01: TSmallintField
+      FieldName = 'PRAZO_01'
+      Origin = 'TBCOMPRAS.PRAZO_01'
+    end
+    object cdsEntradaPRAZO_02: TSmallintField
+      FieldName = 'PRAZO_02'
+      Origin = 'TBCOMPRAS.PRAZO_02'
+    end
+    object cdsEntradaPRAZO_03: TSmallintField
+      FieldName = 'PRAZO_03'
+      Origin = 'TBCOMPRAS.PRAZO_03'
+    end
+    object cdsEntradaPRAZO_04: TSmallintField
+      FieldName = 'PRAZO_04'
+      Origin = 'TBCOMPRAS.PRAZO_04'
+    end
+    object cdsEntradaPRAZO_05: TSmallintField
+      FieldName = 'PRAZO_05'
+      Origin = 'TBCOMPRAS.PRAZO_05'
+    end
+    object cdsEntradaPRAZO_06: TSmallintField
+      FieldName = 'PRAZO_06'
+      Origin = 'TBCOMPRAS.PRAZO_06'
+    end
+    object cdsEntradaPRAZO_07: TSmallintField
+      FieldName = 'PRAZO_07'
+      Origin = 'TBCOMPRAS.PRAZO_07'
+    end
+    object cdsEntradaPRAZO_08: TSmallintField
+      FieldName = 'PRAZO_08'
+      Origin = 'TBCOMPRAS.PRAZO_08'
+    end
+    object cdsEntradaPRAZO_09: TSmallintField
+      FieldName = 'PRAZO_09'
+      Origin = 'TBCOMPRAS.PRAZO_09'
+    end
+    object cdsEntradaPRAZO_10: TSmallintField
+      FieldName = 'PRAZO_10'
+      Origin = 'TBCOMPRAS.PRAZO_10'
+    end
+    object cdsEntradaPRAZO_11: TSmallintField
+      FieldName = 'PRAZO_11'
+      Origin = 'TBCOMPRAS.PRAZO_11'
+    end
+    object cdsEntradaPRAZO_12: TSmallintField
+      FieldName = 'PRAZO_12'
+      Origin = 'TBCOMPRAS.PRAZO_12'
+    end
+    object cdsEntradaCANCEL_USUARIO: TIBStringField
+      FieldName = 'CANCEL_USUARIO'
+      Origin = 'TBCOMPRAS.CANCEL_USUARIO'
+      Size = 50
+    end
+    object cdsEntradaCANCEL_DATAHORA: TDateTimeField
       FieldName = 'CANCEL_DATAHORA'
-      Origin = 'TBVENDAS.CANCEL_DATAHORA'
+      Origin = 'TBCOMPRAS.CANCEL_DATAHORA'
     end
-    object cdsVendaCANCEL_MOTIVO: TMemoField
+    object cdsEntradaCANCEL_MOTIVO: TMemoField
       FieldName = 'CANCEL_MOTIVO'
-      Origin = 'TBVENDAS.CANCEL_MOTIVO'
+      Origin = 'TBCOMPRAS.CANCEL_MOTIVO'
       BlobType = ftMemo
       Size = 8
     end
-    object cdsVendaCFOP: TIntegerField
-      FieldName = 'CFOP'
-      Origin = 'TBVENDAS.CFOP'
-    end
-    object cdsVendaVERIFICADOR_NFE: TIBStringField
-      FieldName = 'VERIFICADOR_NFE'
-      Origin = 'TBVENDAS.VERIFICADOR_NFE'
-      Size = 250
-    end
-    object cdsVendaXML_NFE: TMemoField
-      FieldName = 'XML_NFE'
-      Origin = 'TBVENDAS.XML_NFE'
-      BlobType = ftMemo
-      Size = 8
-    end
-    object cdsVendaNOME: TIBStringField
-      FieldName = 'NOME'
-      Origin = 'TBCLIENTE.NOME'
+    object cdsEntradaNOMEFORN: TIBStringField
+      FieldName = 'NOMEFORN'
+      Origin = 'TBFORNECEDOR.NOMEFORN'
       Size = 60
     end
+    object cdsEntradaCNPJ: TIBStringField
+      FieldName = 'CNPJ'
+      Origin = 'TBFORNECEDOR.CNPJ'
+      Size = 18
+    end
   end
-  object updVenda: TIBUpdateSQL
+  object updEntrada: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
       '  ANO,'
       '  CODCONTROL,'
       '  CODEMP,'
-      '  CODCLI,'
-      '  DTVENDA,'
+      '  CODFORN,'
+      '  NF,'
+      '  NFSERIE,'
+      '  DTLANCAMENTO,'
+      '  DTEMISS,'
+      '  DTENT,'
+      '  NFCFOP,'
+      '  NATUREZA,'
       '  STATUS,'
+      '  IPI,'
+      '  ICMSBASE,'
+      '  ICMSVALOR,'
+      '  ICMSSUBSTBASE,'
+      '  ICMSSUBSTVALOR,'
+      '  FRETE,'
+      '  OUTROSCUSTOS,'
       '  DESCONTO,'
-      '  TOTALVENDA,'
-      '  DTFINALIZACAO_VENDA,'
+      '  TOTALNF,'
+      '  TOTALPROD,'
       '  OBS,'
-      '  FORMAPAG,'
-      '  FATDIAS,'
-      '  SERIE,'
-      '  NFE,'
-      '  DATAEMISSAO,'
-      '  HORAEMISSAO,'
-      '  CFOP,'
-      '  VERIFICADOR_NFE,'
-      '  XML_NFE,'
-      '  VENDEDOR_COD,'
       '  USUARIO,'
       '  FORMAPAGTO_COD,'
       '  CONDICAOPAGTO_COD,'
-      '  VENDA_PRAZO,'
+      '  COMPRA_PRAZO,'
       '  PRAZO_01,'
       '  PRAZO_02,'
       '  PRAZO_03,'
@@ -666,33 +802,16 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       '  PRAZO_10,'
       '  PRAZO_11,'
       '  PRAZO_12,'
-      '  LOTE_NFE_ANO,'
-      '  LOTE_NFE_NUMERO,'
-      '  NFE_ENVIADA,'
+      '  DTFINALIZACAO_COMPRA,'
       '  CANCEL_USUARIO,'
       '  CANCEL_DATAHORA,'
-      '  CANCEL_MOTIVO,'
-      '  XML_NFE_FILENAME,'
-      '  NFE_VALOR_BASE_ICMS,'
-      '  NFE_VALOR_ICMS,'
-      '  NFE_VALOR_BASE_ICMS_SUBST,'
-      '  NFE_VALOR_ICMS_SUBST,'
-      '  NFE_VALOR_TOTAL_PRODUTO,'
-      '  NFE_VALOR_FRETE,'
-      '  NFE_VALOR_SEGURO,'
-      '  NFE_VALOR_DESCONTO,'
-      '  NFE_VALOR_TOTAL_II,'
-      '  NFE_VALOR_TOTAL_IPI,'
-      '  NFE_VALOR_PIS,'
-      '  NFE_VALOR_COFINS,'
-      '  NFE_VALOR_OUTROS,'
-      '  NFE_VALOR_TOTAL_NOTA'
-      'from TBVENDAS '
+      '  CANCEL_MOTIVO'
+      'from TBCOMPRAS '
       'where'
       '  ANO = :ANO and'
       '  CODCONTROL = :CODCONTROL')
     ModifySQL.Strings = (
-      'update TBVENDAS'
+      'update TBCOMPRAS'
       'set'
       '  STATUS = :STATUS,'
       '  CANCEL_USUARIO = :CANCEL_USUARIO,'
@@ -701,14 +820,14 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')
-    InsertSQL.Strings = (
+    DeleteSQL.Strings = (
       '')
     Left = 512
     Top = 96
   end
-  object dtsVenda: TDataSource
+  object dtsEntrada: TDataSource
     AutoEdit = False
-    DataSet = cdsVenda
+    DataSet = cdsEntrada
     Left = 544
     Top = 96
   end

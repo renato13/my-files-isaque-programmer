@@ -230,7 +230,7 @@ begin
     begin
       IbDtstTabela.Delete;
       IbDtstTabela.ApplyUpdates;
-      DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+      CommitTransaction;
     end;
   except
     On E : Exception do
@@ -257,7 +257,7 @@ begin
       begin
         IbDtstTabela.Post;
         IbDtstTabela.ApplyUpdates;
-        DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+        CommitTransaction;
       end;
     except
       On E : Exception do

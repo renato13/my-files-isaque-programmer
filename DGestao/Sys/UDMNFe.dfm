@@ -45,7 +45,6 @@ object DMNFe: TDMNFe
   object qryEmitente: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -568,7 +567,6 @@ object DMNFe: TDMNFe
   object qryCalculoImporto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -987,7 +985,6 @@ object DMNFe: TDMNFe
   object qryDadosProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -1502,7 +1499,7 @@ object DMNFe: TDMNFe
         end
         object frdItensDESCRI: TfrxMemoView
           Left = 83.149660000000000000
-          Width = 260.787570000000000000
+          Width = 268.346630000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -1519,8 +1516,8 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo4: TfrxMemoView
-          Left = 343.937230000000000000
-          Width = 64.252010000000000000
+          Left = 352.716760000000000000
+          Width = 56.692950000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -1693,7 +1690,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' C i e n t e :')
+            ' Cliente:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -1708,7 +1705,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' C P F   /   C N P J . :')
+            ' CPF/CNPJ.:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -1742,7 +1739,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            ' D a t a : ')
+            'Data: ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -1862,9 +1859,9 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo22: TfrxMemoView
-          Left = 348.937230000000000000
+          Left = 352.716760000000000000
           Top = 64.252010000000000000
-          Width = 56.692950000000000000
+          Width = 56.692913390000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1917,7 +1914,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' P r o d . ')
+            ' P r o d.')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -1925,7 +1922,7 @@ object DMNFe: TDMNFe
         object Memo25: TfrxMemoView
           Left = 83.149660000000000000
           Top = 64.252010000000000000
-          Width = 260.787570000000000000
+          Width = 268.346454250000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1972,7 +1969,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' E n d e r e '#195#167' o :')
+            ' Endere'#195#167'o:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2048,7 +2045,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' V e n d e d o r :')
+            ' Vendedor:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2086,7 +2083,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' F o r m a   d e   P a g a m e n t o :')
+            ' Forma de Pagamento:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2120,7 +2117,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' C o n d i '#195#167' '#195#163' o   d e   P a g a m e n t o :')
+            ' Condi'#195#167#195#163'o de Pagamento:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2157,7 +2154,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            ' T o t a l   V e n d a : ')
+            ' Total Venda: ')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2194,7 +2191,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            ' D e s c o n t o : ')
+            ' Desconto: ')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2231,7 +2228,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            ' T o t a l   L i q . : ')
+            ' Total L'#195#173'quido: ')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2266,7 +2263,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           Frame.Typ = [ftLeft, ftRight, ftTop]
           Memo.UTF8 = (
-            ' O b s e r v a '#195#167' '#195#163' o :')
+            ' Observa'#195#167#195#163'o:')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -2292,11 +2289,11 @@ object DMNFe: TDMNFe
           Left = 37.795300000000000000
           Top = 154.960730000000000000
           Width = 623.622450000000000000
-          Height = 34.015770000000000000
+          Height = 52.913420000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -13
+          Font.Height = -16
           Font.Name = 'Arial'
           Font.Style = []
           HAlign = haBlock
