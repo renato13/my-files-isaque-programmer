@@ -205,6 +205,7 @@ begin
     begin
       cdsVenda.Post;
       cdsVenda.ApplyUpdates;
+      CommitTransaction;
     end;
 
     if ( DMNFe.GerarNFeOnLine ) then

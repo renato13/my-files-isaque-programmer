@@ -76,9 +76,10 @@ uses
   UDMNFe in 'UDMNFe.pas' {DMNFe: TDataModule},
   UGeVendaGerarNFe in 'UGeVendaGerarNFe.pas' {frmGeVendaGerarNFe},
   UGeConfigurarNFeACBr in 'UGeConfigurarNFeACBr.pas' {frmGeConfigurarNFeACBr},
-  UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
+  UGeEntradaEstoqueCancelar in 'UGeEntradaEstoqueCancelar.pas' {frmGeEntradaEstoqueCancelar},
   UEnviarLoteNFe in 'UEnviarLoteNFe.pas' {frmEnviarLoteNFe},
-  UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa};
+  UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa},
+  UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar};
 
 {$R *.res}
 

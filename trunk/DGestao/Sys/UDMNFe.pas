@@ -231,6 +231,7 @@ type
 
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
+    function CancelarNFeACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Motivo : String) : Boolean;
   end;
 
 var
@@ -350,25 +351,25 @@ begin
 
     with ConfigACBr, FileINI do
     begin
-      WriteString( 'Certificado', 'Caminho' ,edtCaminho.Text) ;
-      WriteString( 'Certificado', 'Senha'   ,edtSenha.Text) ;
-      WriteString( 'Certificado', 'NumSerie',edtNumSerie.Text) ;
+      WriteString( 'Certificado', 'Caminho' , edtCaminho.Text) ;
+      WriteString( 'Certificado', 'Senha'   , edtSenha.Text) ;
+      WriteString( 'Certificado', 'NumSerie', edtNumSerie.Text) ;
 
-      WriteInteger( 'Geral', 'DANFE'       ,rgTipoDanfe.ItemIndex) ;
-      WriteInteger( 'Geral', 'FormaEmissao',rgFormaEmissao.ItemIndex) ;
-      WriteString( 'Geral', 'LogoMarca'   ,edtLogoMarca.Text) ;
-      WriteBool(   'Geral', 'Salvar'      ,ckSalvar.Checked) ;
-      WriteString( 'Geral', 'PathSalvar'  ,edtPathLogs.Text) ;
-      WriteInteger( 'Geral', 'ModoGerarNFe',rgModoGerarNFe.ItemIndex) ;
+      WriteInteger( 'Geral', 'DANFE'       , rgTipoDanfe.ItemIndex) ;
+      WriteInteger( 'Geral', 'FormaEmissao', rgFormaEmissao.ItemIndex) ;
+      WriteString ( 'Geral', 'LogoMarca'   , edtLogoMarca.Text) ;
+      WriteBool   ( 'Geral', 'Salvar'      , ckSalvar.Checked) ;
+      WriteString ( 'Geral', 'PathSalvar'  , edtPathLogs.Text) ;
+      WriteInteger( 'Geral', 'ModoGerarNFe', rgModoGerarNFe.ItemIndex) ;
 
       WriteString ( 'WebService', 'UF'        ,cbUF.Text) ;
       WriteInteger( 'WebService', 'Ambiente'  ,rgTipoAmb.ItemIndex) ;
       WriteBool   ( 'WebService', 'Visualizar',ckVisualizar.Checked) ;
 
-      WriteString( 'Proxy', 'Host'   ,edtProxyHost.Text) ;
-      WriteString( 'Proxy', 'Porta'  ,edtProxyPorta.Text) ;
-      WriteString( 'Proxy', 'User'   ,edtProxyUser.Text) ;
-      WriteString( 'Proxy', 'Pass'   ,edtProxySenha.Text) ;
+      WriteString( 'Proxy', 'Host'   , edtProxyHost.Text) ;
+      WriteString( 'Proxy', 'Porta'  , edtProxyPorta.Text) ;
+      WriteString( 'Proxy', 'User'   , edtProxyUser.Text) ;
+      WriteString( 'Proxy', 'Pass'   , edtProxySenha.Text) ;
 
       WriteString( 'Emitente', 'CNPJ'       ,edtEmitCNPJ.Text) ;
       WriteString( 'Emitente', 'IE'         ,edtEmitIE.Text) ;
@@ -439,7 +440,7 @@ begin
       {$ENDIF}
 
       rgFormaEmissao.ItemIndex := ReadInteger( 'Geral', 'FormaEmissao', 0) ;
-      rgModoGerarNFe.ItemIndex := ReadInteger( 'Geral', 'ModoGerarNFe', 0) ;
+      rgModoGerarNFe.ItemIndex := 1; // ReadInteger( 'Geral', 'ModoGerarNFe', 1) ;
       ckSalvar.Checked    := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
       edtPathLogs.Text    := ReadString( 'Geral', 'PathSalvar'  ,'') ;
 
@@ -649,6 +650,42 @@ begin
 
 end;
 
+function TDMNFe.CancelarNFeACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Motivo : String) : Boolean;
+var
+  FileNameXML ,
+  ChaveNFE    : String;
+begin
+
+  try
+
+    AbrirEmitente( sCNPJEmitente );
+    AbrirDestinatario( sCNPJDestinatario );
+    AbrirVenda( iAnoVenda, iNumVenda );
+
+    FileNameXML := ExtractFilePath( ParamStr(0) ) + qryCalculoImportoXML_NFE_FILENAME.AsString;
+
+    ForceDirectories( ExtractFilePath(FileNameXML) );
+
+    qryCalculoImportoXML_NFE.SaveToFile( FileNameXML );
+
+    with ACBrNFe do
+    begin
+      NotasFiscais.Clear;
+      NotasFiscais.LoadFromFile( FileNameXML );
+      
+      Result := Cancelamento( Motivo );
+    end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar cancelar NF-e.' + #13#13 + 'CancelarNFeACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
+end;
+
 procedure TDMNFe.UpdateLoteNFe(const Ano, Numero: Integer);
 begin
   if ( qryEmitente.IsEmpty ) then
@@ -661,6 +698,7 @@ begin
     qryEmitenteLOTE_NUM_NFE.AsInteger := Numero + 1;
     Post;
     ApplyUpdates;
+    CommitTransaction;
   end;
 end;
 
@@ -684,6 +722,7 @@ begin
 
     Post;
     ApplyUpdates;
+    CommitTransaction;
   end;
 end;
 
@@ -711,6 +750,7 @@ begin
 
     Post;
     ApplyUpdates;
+    CommitTransaction;
   end;
 end;
 
@@ -728,6 +768,7 @@ begin
 
     Post;
     ApplyUpdates;
+    CommitTransaction;
   end;
 end;
 

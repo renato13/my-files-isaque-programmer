@@ -665,6 +665,12 @@ begin
       dbDesconto.SetFocus;
     end
     else
+    if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
+    begin
+      ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
+      dbQuantidade.SetFocus;
+    end
+    else
     begin
 
       case cdsTabelaItens.State of
@@ -703,7 +709,7 @@ begin
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
       cdsTabelaItens.ApplyUpdates;
-      DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+      CommitTransaction;
     end;
 
     HabilitarDesabilitar_Btns;
@@ -880,12 +886,12 @@ begin
     IbDtstTabelaDTFINALIZACAO_VENDA.Value := Date;
     IbDtstTabela.Open;
     IbDtstTabela.ApplyUpdates;
-    DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+    CommitTransaction;
 
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
-    ShowInformation('Venda finalizada com sucesso !');
+    ShowInformation('Venda finalizada com sucesso !' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
 
     HabilitarDesabilitar_Btns;
   end;
@@ -893,7 +899,7 @@ end;
 
 procedure TfrmGeVenda.btbtnGerarNFeClick(Sender: TObject);
 var
- iNumero : Integer;
+  iNumero : Integer;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
@@ -903,11 +909,14 @@ begin
     begin
       iNumero := IbDtstTabelaCODCONTROL.AsInteger;
 
-      IbDtstTabela.Refresh;
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
 
       IbDtstTabela.Locate(CampoCodigo, iNumero, []);
 
       ShowInformation('Nota Fiscal gerada com sucesso.' + #13#13 + 'Série/Número: ' + IbDtstTabelaSERIE.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaNFE.Value));
+
+      HabilitarDesabilitar_Btns;
     end;
 end;
 
@@ -925,6 +934,7 @@ begin
         ParamByName('anovenda').AsInteger := AnoVenda;
         ParamByName('numvenda').AsInteger := ControleVenda;
         ExecProc;
+        CommitTransaction;
       end;
 
     except
@@ -971,11 +981,11 @@ end;
 
 procedure TfrmGeVenda.cdsTabelaItensBeforePost(DataSet: TDataSet);
 begin
-  if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
-  begin
-    ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
-    Abort;
-  end;
+//  if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
+//  begin
+//    ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
+//    Abort;
+//  end;
 end;
 
 procedure TfrmGeVenda.btbtnListaClick(Sender: TObject);
@@ -1034,11 +1044,14 @@ begin
     begin
       iNumero := IbDtstTabelaCODCONTROL.AsInteger;
 
-      IbDtstTabela.Refresh;
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
 
       IbDtstTabela.Locate(CampoCodigo, iNumero, []);
 
       ShowInformation('Venda cancelada com sucesso.' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
+
+      HabilitarDesabilitar_Btns;
     end;
 end;
 

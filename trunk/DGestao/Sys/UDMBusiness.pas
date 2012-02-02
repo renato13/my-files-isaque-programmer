@@ -43,6 +43,7 @@ var
   procedure ShowWarning(sMsg : String);
   procedure ShowError(sMsg : String);
   procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
+  procedure CommitTransaction;
 
   function ShowConfirm(sMsg : String; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
   function GetPaisIDDefault : String;
@@ -73,6 +74,7 @@ var
   function GetSenhaAutorizacao : String;
   function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
   function GetDateTimeDB : TDateTime;
+  function GetUserApp : String;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -85,6 +87,9 @@ const
   STATUS_VND_NFE = 4;
   STATUS_VND_CAN = 5;
 
+  STATUS_CMP_ABR = 1;
+  STATUS_CMP_FIN = 2;
+  STATUS_CMP_CAN = 3;
 
 implementation
 
@@ -122,6 +127,16 @@ begin
     SQL.Clear;
     SQL.Add('ALTER SEQUENCE ' + GeneratorName + ' RESTART WITH ' + IntToStr(ID));
     ExecSQL;
+
+    CommitTransaction;
+  end;
+end;
+
+procedure CommitTransaction;
+begin
+  with DMBusiness do
+  begin
+    ibtrnsctnBusiness.CommitRetaining;
   end;
 end;
 
@@ -549,6 +564,19 @@ begin
     Open;
 
     Result := FieldByName('DataHora').AsDateTime;
+  end;
+end;
+
+function GetUserApp : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select First 1 user as Usr from TBEMPRESA');
+    Open;
+
+    Result := FieldByName('Usr').AsString;
   end;
 end;
 

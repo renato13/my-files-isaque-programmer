@@ -236,6 +236,7 @@ type
     cdsTabelaItensNCM_SH: TIBStringField;
     cdsTabelaItensCST: TIBStringField;
     cdsTabelaItensCFOP: TIntegerField;
+    btbtnCancelarENT: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -262,6 +263,7 @@ type
     procedure btnRegerarDuplicataClick(Sender: TObject);
     procedure dbCFOPNFButtonClick(Sender: TObject);
     procedure DtSrcTabelaStateChange(Sender: TObject);
+    procedure btbtnCancelarENTClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -279,17 +281,12 @@ type
 var
   frmGeEntradaEstoque: TfrmGeEntradaEstoque;
 
-const
-  STATUS_CMP_ABR = 1;
-  STATUS_CMP_FIN = 2;
-  STATUS_CMP_CAN = 3;
-
   procedure MostrarControleCompras(const AOwner : TComponent);
 
 implementation
 
 uses DateUtils, UDMBusiness, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  UGeFornecedor;
+  UGeFornecedor, UGeEntradaEstoqueCancelar;
 
 {$R *.dfm}
 
@@ -507,13 +504,13 @@ procedure TfrmGeEntradaEstoque.HabilitarDesabilitar_Btns;
 begin
   if ( pgcGuias.ActivePage = tbsCadastro ) then
   begin
-    btbtnFinalizar.Enabled := (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
-//    btbtnGerarNFe.Enabled  := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnCancelarENT.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
   end
   else
   begin
-    btbtnFinalizar.Enabled := False;
-//    btbtnGerarNFe.Enabled  := False;
+    btbtnFinalizar.Enabled   := False;
+    btbtnCancelarENT.Enabled := False;
   end;
 end;
 
@@ -632,7 +629,7 @@ begin
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
       cdsTabelaItens.ApplyUpdates;
-      DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+      CommitTransaction;
     end;
 
     HabilitarDesabilitar_Btns;
@@ -801,9 +798,9 @@ begin
   begin
     IbDtstTabelaSTATUS.Value               := STATUS_CMP_FIN;
     IbDtstTabelaDTFINALIZACAO_COMPRA.Value := Now;
-    IbDtstTabela.Open;
+    IbDtstTabela.Post;
     IbDtstTabela.ApplyUpdates;
-    DMBusiness.ibtrnsctnBusiness.CommitRetaining;
+    CommitTransaction;
 
     GerarDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaDuplicatas( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
@@ -828,6 +825,7 @@ begin
         ParamByName('anocompra').AsInteger := AnoCompra;
         ParamByName('numcompra').AsInteger := ControleCompra;
         ExecProc;
+        CommitTransaction;
       end;
 
     except
@@ -907,6 +905,29 @@ begin
 
   DtSrcTabelaItens.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN );
   DtSrcTabelaItensStateChange( DtSrcTabelaItens );
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnCancelarENTClick(Sender: TObject);
+var
+ iNumero : Integer;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  if ( CancelarENT(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+    with IbDtstTabela do
+    begin
+      iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
+
+      IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+
+      ShowInformation('Entrada cancelada com sucesso.' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
+
+      HabilitarDesabilitar_Btns;
+    end;
 end;
 
 end.

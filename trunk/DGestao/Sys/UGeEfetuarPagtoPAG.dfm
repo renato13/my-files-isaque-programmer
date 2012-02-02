@@ -6,6 +6,7 @@ inherited frmGeEfetuarPagtoPAG: TfrmGeEfetuarPagtoPAG
   ClientWidth = 531
   Font.Charset = ANSI_CHARSET
   Font.Name = 'Tahoma'
+  OldCreateOrder = True
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

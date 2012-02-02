@@ -1,24 +1,24 @@
 inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
-  Left = 157
-  Top = 61
-  Width = 1074
+  Left = 573
+  Top = 214
+  Width = 1077
   Height = 716
-  ActiveControl = dbgDados
+  ActiveControl = dbEmpresa
   Caption = 'Controle de Entradas no Estoque'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
     Top = 674
-    Width = 1058
+    Width = 1061
   end
   inherited Bevel3: TBevel
     Top = 635
-    Width = 1058
+    Width = 1061
   end
   inherited tlbBotoes: TToolBar
     Top = 639
-    Width = 1058
+    Width = 1061
     object btbtnFinalizar: TBitBtn
       Left = 726
       Top = 2
@@ -83,8 +83,73 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF}
       NumGlyphs = 2
     end
-    object Bevel12: TBevel
+    object btbtnCancelarENT: TBitBtn
       Left = 846
+      Top = 2
+      Width = 120
+      Height = 31
+      Hint = 'Cancelar Entrada Selecionada'
+      Caption = 'Cancelar Entrada'
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+      OnClick = btbtnCancelarENTClick
+      Glyph.Data = {
+        36060000424D3606000000000000360000002800000020000000100000000100
+        180000000000000600000000000000000000000000000000000000FF0000FF00
+        00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+        0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+        FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+        00FF0000FF0000FF0000FF00707070505850000000D0C0AE00FF0000FF0000FF
+        0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0070707054
+        5454000000BCBCBC00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+        00FF00B0A0907C644DAD957FA0A0A0FFFFFF5090B0101010988A767B61496048
+        3060483000FF0000FF0000FF0000FF0000FF009C9C9C5F5F5F909090A0A0A0FF
+        FFFF9393931010108585855C5C5C43434343434300FF0000FF0000FF0000FF00
+        00FF00D6BAA8FFFFFFF0E8E0A0A0A090B8C070D0E05098B0101010A09890B0A0
+        9060483000FF0000FF0000FF0000FF0000FF00B7B7B7FFFFFFE6E6E6A0A0A0B6
+        B6B6CBCBCB9898981010109696969C9C9C43434300FF0000FF0000FF00B7B3DA
+        0E2BDFB8ABBDFFFFFFFFFFFFE0E0E050A0B060A8E060C0D05098B01010109090
+        907A5F4600FF0000FF0000FF00BFBFBF5E5E5EB1B1B1FFFFFFFFFFFFE0E0E09C
+        9C9CB1B1B1BBBBBB9898981010109090905A5A5A00FF0000FF0000FF000028FF
+        0020F04050D0FFFFFFFFFFFFFFFFFF4050E00010B090E0F060C0D05098B01010
+        108B7D7200FF0000FF0000FF006464645B5B5B747474FFFFFFFFFFFFFFFFFF79
+        79793E3E3EDCDCDCBBBBBB9898981010107B7B7B00FF0000FF0000FF002D51FC
+        1038FF0028FFF0F8FFFFFFFF9098F00018C06078E060A8B090E0F060C0D05098
+        B0101010CBAF9800FF0000FF008080806F6F6F646464F9F9F9FFFFFFB1B1B148
+        4848949494A3A3A3DCDCDCBBBBBB989898101010AAAAAA00FF0000FF00E7D7DB
+        3050FF2040FF90A0F0C0C8F00028F04058F0FFF8F0D0D8E070B0C090E0F070C8
+        E0808880303890B1959500FF00D9D9D9818181767676B6B6B6D3D3D360606083
+        8383F6F6F6D9D9D9AEAEAEDCDCDCC6C6C684848451515197979700FF0000FF00
+        DCD0DC4060FF3050FF2040FF3050FFFFF8FFFFFFFFFFF8F0D0D8E080B0C0D0B8
+        B07088D06070B030389000FF0000FF00D4D4D48C8C8C818181767676818181FA
+        FAFAFFFFFFF6F6F6D9D9D9B0B0B0B8B8B89B9B9B81818151515100FF0000FF00
+        00FF00B8B5D14068FF4060FFD0D8FFFFFFFFFFFFFFFFF8FFF0F0F0D0D8D06070
+        B07090E06078D06070B000FF0000FF0000FF00BDBDBD9191918C8C8CE2E2E2FF
+        FFFFFFFFFFFAFAFAF0F0F0D4D4D4818181A4A4A490909081818100FF0000FF00
+        C6C4E26078FF6078FF6080FF5070FFF0F0FFFFFFFFFFFFFFFFF8F0F0F0F0B0A0
+        A06070B06070B0D1B2A500FF0000FF00CDCDCD9E9E9E9E9E9EA2A2A2979797F4
+        F4F4FFFFFFFFFFFFF6F6F6F0F0F0A1A1A1818181818181B1B1B100FF00B1B6E9
+        5078FF5078FFC0D0FFFFFFFF7088FF6078FFD0E0FFFFFFFFFFFFFFB0A090B0A0
+        9096785E00FF0000FF0000FF00C4C4C49C9C9C9C9C9CDCDCDCFFFFFFA9A9A99E
+        9E9EE7E7E7FFFFFFFFFFFF9C9C9C9C9C9C73737300FF0000FF00859BF35078FF
+        5078FFC8BED1FFFFFFFFFFFFFFFFFFB0C8FF8098FFFFFFFFB0A0908068508060
+        5060483000FF0000FF00B3B3B39C9C9C9C9C9CC4C4C4FFFFFFFFFFFFFFFFFFD6
+        D6D6B4B4B4FFFFFF9C9C9C6363635E5E5E43434300FF0000FF00859BF36585FA
+        DCD2DCD8C7B6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C08068
+        50DEBAA500FF0000FF00B3B3B3A4A4A4D6D6D6C3C3C3FFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFA3A3A3C6C6C6636363B7B7B700FF0000FF0000FF0000FF00
+        00FF00D0C0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0807060DFBD
+        A700FF0000FF0000FF0000FF0000FF0000FF00BCBCBCFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFA8A8A86C6C6CB9B9B900FF0000FF0000FF0000FF0000FF00
+        00FF00E0C0B0E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0E0BEAA00FF
+        0000FF0000FF0000FF0000FF0000FF0000FF00BEBEBEBEBEBEBEBEBEBEBEBEBE
+        BEBEBCBCBCB8B8B8AEAEAEBBBBBB00FF0000FF0000FF0000FF00}
+      NumGlyphs = 2
+    end
+    object Bevel12: TBevel
+      Left = 966
       Top = 2
       Width = 4
       Height = 31
@@ -92,17 +157,16 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 1058
+    Width = 1061
     Height = 635
-    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 540
-        Width = 1050
+        Width = 1053
       end
       inherited dbgDados: TDBGrid
-        Width = 1050
+        Width = 1053
         Height = 540
         Columns = <
           item
@@ -136,6 +200,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           item
             Expanded = False
             FieldName = 'STATUS'
+            Width = 85
             Visible = True
           end
           item
@@ -163,9 +228,9 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       end
       inherited pnlFiltros: TPanel
         Top = 544
-        Width = 1050
+        Width = 1053
         inherited grpBxFiltro: TGroupBox
-          Left = 613
+          Left = 616
           Width = 433
           inherited lbltFiltrar: TLabel
             Left = 166
@@ -203,12 +268,12 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 113
-        Width = 1050
+        Width = 1053
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 313
-        Width = 1050
+        Width = 1053
         Height = 4
         Align = alTop
         Shape = bsSpacer
@@ -216,7 +281,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object Bevel9: TBevel [2]
         Left = 0
         Top = 456
-        Width = 1050
+        Width = 1053
         Height = 4
         Align = alBottom
         Shape = bsSpacer
@@ -224,13 +289,13 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object Bevel11: TBevel [3]
         Left = 0
         Top = 193
-        Width = 1050
+        Width = 1053
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 1050
+        Width = 1053
         Height = 113
         Caption = 'Dados nominais da NF'
         inherited lblCodigo: TLabel
@@ -642,7 +707,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object GrpBxDadosValores: TGroupBox
         Left = 0
         Top = 117
-        Width = 1050
+        Width = 1053
         Height = 76
         Align = alTop
         Caption = 'Valores (R$)'
@@ -942,7 +1007,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 460
-        Width = 1050
+        Width = 1053
         Height = 146
         ActivePage = tbsPagamento
         Align = alBottom
@@ -951,12 +1016,12 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
         object tbsPagamento: TTabSheet
           Caption = 'Pagamento'
           DesignSize = (
-            1042
+            1045
             118)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
-            Width = 1042
+            Width = 1045
             Height = 13
             Align = alTop
             Caption = '&Observa'#231#245'es:'
@@ -1163,7 +1228,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           object dbObservacao: TDBMemo
             Left = 0
             Top = 13
-            Width = 1042
+            Width = 1045
             Height = 58
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
@@ -1605,7 +1670,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 197
-        Width = 1050
+        Width = 1053
         Height = 116
         Align = alTop
         Caption = 'Dados do produto'
@@ -2409,7 +2474,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 317
-        Width = 1050
+        Width = 1053
         Height = 139
         TabStop = False
         Align = alClient
