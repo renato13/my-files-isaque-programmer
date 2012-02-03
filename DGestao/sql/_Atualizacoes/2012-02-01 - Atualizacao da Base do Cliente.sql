@@ -1,16 +1,3 @@
-/* Server version: WI-V6.3.4.18393 Firebird 2.1 
-SET CLIENTLIB 'fbclient.dll';
-   SQLDialect: 3. ODS: 11.1. Forced writes: On. Sweep inteval: 20000.
-   Page size: 8192. Cache pages: 2048 (16384 Kb). Read-only: False. */
-
-SET NAMES ISO8859_2;
-
-SET SQL DIALECT 3;
-
-CONNECT 'E:\Projetos\Dorivaldo\DGESTAO\db\BUSINESS_CLIENTE.FDB' USER 'SYSDBA' PASSWORD 'masterkey';
-
-SET AUTODDL ON;
-
 /* Create Domains... */
 CREATE DOMAIN DMN_FUNCAOACESSO AS CHAR(2) CHECK(value in('VE','GV','DI','OF','OC','ES','GF','TI'));
 
