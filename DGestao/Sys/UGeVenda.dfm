@@ -1,7 +1,7 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 279
-  Top = 116
-  Width = 1051
+  Left = 265
+  Top = 128
+  Width = 1137
   Height = 608
   ActiveControl = nil
   Caption = 'Controle de Vendas'
@@ -11,15 +11,15 @@ inherited frmGeVenda: TfrmGeVenda
   TextHeight = 13
   inherited Bevel1: TBevel
     Top = 566
-    Width = 1035
+    Width = 1121
   end
   inherited Bevel3: TBevel
     Top = 527
-    Width = 1035
+    Width = 1121
   end
   inherited tlbBotoes: TToolBar
     Top = 531
-    Width = 1035
+    Width = 1121
     inherited btbtnLista: TBitBtn
       Caption = 'Im&primir'
       Visible = True
@@ -244,16 +244,17 @@ inherited frmGeVenda: TfrmGeVenda
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 1035
+    Width = 1121
     Height = 527
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 432
-        Width = 1027
+        Width = 1113
       end
       inherited dbgDados: TDBGrid
-        Width = 1027
+        Width = 1113
         Height = 432
         Columns = <
           item
@@ -271,13 +272,13 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'STATUS'
-            Width = 120
+            Width = 112
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'NOME'
-            Width = 350
+            Width = 321
             Visible = True
           end
           item
@@ -311,13 +312,18 @@ inherited frmGeVenda: TfrmGeVenda
             Expanded = False
             FieldName = 'NFE'
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'FORMAPAG'
+            Visible = True
           end>
       end
       inherited pnlFiltros: TPanel
         Top = 436
-        Width = 1027
+        Width = 1113
         inherited grpBxFiltro: TGroupBox
-          Left = 606
+          Left = 692
           Width = 417
           DesignSize = (
             417
@@ -358,12 +364,12 @@ inherited frmGeVenda: TfrmGeVenda
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 233
-        Width = 1027
+        Width = 1113
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 113
-        Width = 1027
+        Width = 1113
         Height = 4
         Align = alTop
         Shape = bsSpacer
@@ -371,13 +377,13 @@ inherited frmGeVenda: TfrmGeVenda
       object Bevel6: TBevel [2]
         Left = 0
         Top = 339
-        Width = 1027
+        Width = 1113
         Height = 4
         Align = alBottom
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 1027
+        Width = 1113
         Height = 113
         Caption = 'Dados da venda'
         inherited lblCodigo: TLabel
@@ -838,7 +844,7 @@ inherited frmGeVenda: TfrmGeVenda
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 117
-        Width = 1027
+        Width = 1113
         Height = 116
         Align = alTop
         Caption = 'Dados do produto'
@@ -1586,7 +1592,7 @@ inherited frmGeVenda: TfrmGeVenda
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 343
-        Width = 1027
+        Width = 1113
         Height = 155
         ActivePage = tbsRecebimento
         Align = alBottom
@@ -1595,12 +1601,12 @@ inherited frmGeVenda: TfrmGeVenda
           BorderWidth = 4
           Caption = 'Recebimento'
           DesignSize = (
-            1011
+            1097
             119)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
-            Width = 1011
+            Width = 1097
             Height = 13
             Align = alTop
             Caption = '&Observa'#231#245'es:'
@@ -1807,7 +1813,7 @@ inherited frmGeVenda: TfrmGeVenda
           object dbObservacao: TDBMemo
             Left = 0
             Top = 13
-            Width = 1011
+            Width = 1097
             Height = 59
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
@@ -2284,7 +2290,7 @@ inherited frmGeVenda: TfrmGeVenda
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 237
-        Width = 1027
+        Width = 1113
         Height = 102
         TabStop = False
         Align = alClient
