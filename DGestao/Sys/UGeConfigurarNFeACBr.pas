@@ -95,6 +95,8 @@ type
     btnServico: TBitBtn;
     WBResposta: TWebBrowser;
     rgModoGerarNFe: TRadioGroup;
+    lblInfoFisco: TLabel;
+    edInfoFisco: TEdit;
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);

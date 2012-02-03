@@ -156,7 +156,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       Top = 15
       Width = 280
       Height = 367
-      ActivePage = TabSheet2
+      ActivePage = TabSheet4
       Align = alClient
       MultiLine = True
       TabOrder = 0
@@ -657,6 +657,13 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 13
           Caption = 'Fone'
         end
+        object lblInfoFisco: TLabel
+          Left = 8
+          Top = 284
+          Width = 101
+          Height = 13
+          Caption = 'Informa'#231#227'o ao Fisco:'
+        end
         object edtEmitCNPJ: TEdit
           Left = 8
           Top = 20
@@ -747,6 +754,17 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Width = 35
           Height = 21
           TabOrder = 12
+        end
+        object edInfoFisco: TEdit
+          Left = 8
+          Top = 300
+          Width = 249
+          Height = 21
+          CharCase = ecUpperCase
+          TabOrder = 13
+          Text = 
+            'EMPRESA OPTANTE PELO SIMPLES DE ACORDO COM A LEI COMPLEMENTAR 12' +
+            '3, DE DEZEMBRO DE 2006'
         end
       end
       object TabSheet5: TTabSheet
