@@ -11,15 +11,15 @@ inherited frmGeVenda: TfrmGeVenda
   TextHeight = 13
   inherited Bevel1: TBevel
     Top = 566
-    Width = 1121
+    Width = 1035
   end
   inherited Bevel3: TBevel
     Top = 527
-    Width = 1121
+    Width = 1035
   end
   inherited tlbBotoes: TToolBar
     Top = 531
-    Width = 1121
+    Width = 1035
     inherited btbtnLista: TBitBtn
       Caption = 'Im&primir'
       PopupMenu = ppImprimir
@@ -245,17 +245,16 @@ inherited frmGeVenda: TfrmGeVenda
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 1121
+    Width = 1035
     Height = 527
-    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 432
-        Width = 1113
+        Width = 1027
       end
       inherited dbgDados: TDBGrid
-        Width = 1113
+        Width = 1027
         Height = 432
         Columns = <
           item
@@ -322,9 +321,9 @@ inherited frmGeVenda: TfrmGeVenda
       end
       inherited pnlFiltros: TPanel
         Top = 436
-        Width = 1113
+        Width = 1027
         inherited grpBxFiltro: TGroupBox
-          Left = 692
+          Left = 606
           Width = 417
           DesignSize = (
             417
@@ -365,12 +364,12 @@ inherited frmGeVenda: TfrmGeVenda
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 233
-        Width = 1113
+        Width = 1027
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 113
-        Width = 1113
+        Width = 1027
         Height = 4
         Align = alTop
         Shape = bsSpacer
@@ -378,13 +377,13 @@ inherited frmGeVenda: TfrmGeVenda
       object Bevel6: TBevel [2]
         Left = 0
         Top = 339
-        Width = 1113
+        Width = 1027
         Height = 4
         Align = alBottom
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 1113
+        Width = 1027
         Height = 113
         Caption = 'Dados da venda'
         inherited lblCodigo: TLabel
@@ -845,7 +844,7 @@ inherited frmGeVenda: TfrmGeVenda
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 117
-        Width = 1113
+        Width = 1027
         Height = 116
         Align = alTop
         Caption = 'Dados do produto'
@@ -1593,7 +1592,7 @@ inherited frmGeVenda: TfrmGeVenda
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 343
-        Width = 1113
+        Width = 1027
         Height = 155
         ActivePage = tbsRecebimento
         Align = alBottom
@@ -1602,12 +1601,12 @@ inherited frmGeVenda: TfrmGeVenda
           BorderWidth = 4
           Caption = 'Recebimento'
           DesignSize = (
-            1097
+            1011
             119)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
-            Width = 1097
+            Width = 1011
             Height = 13
             Align = alTop
             Caption = '&Observa'#231#245'es:'
@@ -1814,7 +1813,7 @@ inherited frmGeVenda: TfrmGeVenda
           object dbObservacao: TDBMemo
             Left = 0
             Top = 13
-            Width = 1097
+            Width = 1011
             Height = 59
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
@@ -2291,7 +2290,7 @@ inherited frmGeVenda: TfrmGeVenda
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 237
-        Width = 1113
+        Width = 1027
         Height = 102
         TabStop = False
         Align = alClient
@@ -3506,8 +3505,8 @@ inherited frmGeVenda: TfrmGeVenda
       end>
   end
   object ppImprimir: TPopupMenu
-    Left = 456
-    Top = 424
+    Left = 392
+    Top = 504
     object nmImprimirVenda: TMenuItem
       Caption = 'Or'#231'amento / Venda'
       OnClick = nmImprimirVendaClick
