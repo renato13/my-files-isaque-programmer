@@ -25,6 +25,7 @@ type
     procedure BitBtn2Click(Sender: TObject);
     procedure bttnRelCCClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,7 +37,8 @@ var
 
 implementation
 
-uses UDMBusiness, UGrEntradaEstoq, UEntradaEstoq;
+uses UDMBusiness, UGrEntradaEstoq, UEntradaEstoq, UPrinc,
+  UfrmAcessoSistema;
 
 {$R *.dfm}
 
@@ -75,6 +77,13 @@ end;
 procedure TfrmPesq.FormShow(Sender: TObject);
 begin
  edt.Clear;
+end;
+
+procedure TfrmPesq.FormCreate(Sender: TObject);
+begin
+ frmPrinc.show;
+ frmAcessoSistema := TfrmAcessoSistema.create(self);
+ frmAcessoSistema.Show;
 end;
 
 end.

@@ -6,6 +6,7 @@ object DMBusiness: TDMBusiness
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
+    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'
@@ -20,7 +21,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = False
+    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -181,5 +182,66 @@ object DMBusiness: TDMBusiness
   object raveReport: TRvProject
     Left = 40
     Top = 120
+  end
+  object ibdtstUsers: TIBDataSet
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from TBUSERS'
+      'where'
+      '  NOME = :OLD_NOME')
+    InsertSQL.Strings = (
+      'insert into TBUSERS'
+      '  (NOME, SENHA, NOMECOMPLETO, CODFUNCAO)'
+      'values'
+      '  (:NOME, :SENHA, :NOMECOMPLETO, :CODFUNCAO)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  NOME,'
+      '  SENHA,'
+      '  NOMECOMPLETO,'
+      '  CODFUNCAO'
+      'from TBUSERS '
+      'where'
+      '  NOME = :NOME')
+    SelectSQL.Strings = (
+      'select * from TBUSERS')
+    ModifySQL.Strings = (
+      'update TBUSERS'
+      'set'
+      '  NOME = :NOME,'
+      '  SENHA = :SENHA,'
+      '  NOMECOMPLETO = :NOMECOMPLETO,'
+      '  CODFUNCAO = :CODFUNCAO'
+      'where'
+      '  NOME = :OLD_NOME')
+    Active = True
+    Left = 144
+    Top = 120
+    object ibdtstUsersNOME: TIBStringField
+      FieldName = 'NOME'
+      Origin = 'TBUSERS.NOME'
+      Required = True
+      Size = 12
+    end
+    object ibdtstUsersSENHA: TIBStringField
+      FieldName = 'SENHA'
+      Origin = 'TBUSERS.SENHA'
+      Required = True
+      Size = 16
+    end
+    object ibdtstUsersNOMECOMPLETO: TIBStringField
+      FieldName = 'NOMECOMPLETO'
+      Origin = 'TBUSERS.NOMECOMPLETO'
+      Required = True
+      Size = 60
+    end
+    object ibdtstUsersCODFUNCAO: TSmallintField
+      FieldName = 'CODFUNCAO'
+      Origin = 'TBUSERS.CODFUNCAO'
+      Required = True
+    end
   end
 end

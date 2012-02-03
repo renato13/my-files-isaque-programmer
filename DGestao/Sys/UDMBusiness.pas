@@ -27,6 +27,11 @@ type
     ibdtstAjustEstoqLookFornec: TStringField;
     qryBusca: TIBQuery;
     raveReport: TRvProject;
+    ibdtstUsers: TIBDataSet;
+    ibdtstUsersNOME: TIBStringField;
+    ibdtstUsersSENHA: TIBStringField;
+    ibdtstUsersNOMECOMPLETO: TIBStringField;
+    ibdtstUsersCODFUNCAO: TSmallintField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -594,7 +599,7 @@ begin
       Params.Add('lc_ctype='  + DB_LC_CTYPE);
       Connected    := True;
     end;
-
+  ibdtstUsers.Open;
   except
     On E : Exception do
       ShowError('Erro ao tentar conectar no Servidor/Base.' + #13#13 + E.Message);

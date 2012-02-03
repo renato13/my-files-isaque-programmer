@@ -1,34 +1,37 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 483
-  Top = 265
-  Width = 800
+  Left = 285
+  Top = 141
+  Width = 886
   Height = 545
+  ActiveControl = dbgDados
   Caption = 'Cadastro de Produtos'
   OldCreateOrder = True
+  OnActivate = FormActivate
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
     Top = 503
-    Width = 784
+    Width = 870
   end
   inherited Bevel3: TBevel
     Top = 464
-    Width = 784
+    Width = 870
   end
   inherited tlbBotoes: TToolBar
     Top = 468
-    Width = 784
+    Width = 870
   end
   inherited pgcGuias: TPageControl
-    Width = 784
+    Width = 870
     Height = 464
+    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 369
-        Width = 776
+        Width = 862
       end
       inherited dbgDados: TDBGrid
-        Width = 776
+        Width = 862
         Height = 369
         Columns = <
           item
@@ -74,8 +77,8 @@ inherited frmGeProduto: TfrmGeProduto
           item
             Expanded = False
             FieldName = 'CUSTOMEDIO'
-            Width = 90
-            Visible = True
+            Width = -1
+            Visible = False
           end
           item
             Expanded = False
@@ -92,13 +95,18 @@ inherited frmGeProduto: TfrmGeProduto
             Title.Font.Style = [fsBold]
             Width = 90
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRICAO_GRUPO'
+            Visible = True
           end>
       end
       inherited pnlFiltros: TPanel
         Top = 373
-        Width = 776
+        Width = 862
         inherited grpBxFiltro: TGroupBox
-          Left = 512
+          Left = 598
           Width = 260
           inherited lbltFiltrar: TLabel
             Width = 48
@@ -117,12 +125,12 @@ inherited frmGeProduto: TfrmGeProduto
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 113
-        Width = 776
+        Width = 862
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 313
-        Width = 776
+        Width = 862
         Height = 4
         Align = alTop
         Shape = bsSpacer
@@ -130,13 +138,13 @@ inherited frmGeProduto: TfrmGeProduto
       object Bevel6: TBevel [2]
         Left = 0
         Top = 233
-        Width = 776
+        Width = 862
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 776
+        Width = 862
         Height = 113
         object lblDescricao: TLabel [1]
           Left = 208
@@ -491,7 +499,7 @@ inherited frmGeProduto: TfrmGeProduto
       object GrpBxDadosTributo: TGroupBox
         Left = 0
         Top = 117
-        Width = 776
+        Width = 862
         Height = 116
         Align = alTop
         Caption = 'Dados fiscais'
@@ -736,7 +744,7 @@ inherited frmGeProduto: TfrmGeProduto
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 317
-        Width = 776
+        Width = 862
         Height = 118
         ActivePage = tbsValores
         Align = alClient
@@ -814,7 +822,7 @@ inherited frmGeProduto: TfrmGeProduto
       object GrpBxDadosEstoque: TGroupBox
         Left = 0
         Top = 237
-        Width = 776
+        Width = 862
         Height = 76
         Align = alTop
         Caption = 'Dados estoque'
@@ -1370,5 +1378,17 @@ inherited frmGeProduto: TfrmGeProduto
     DataSet = tblAliquota
     Left = 752
     Top = 136
+  end
+  object EvUA: TEvUserAccess
+    Consents.Strings = (
+      'btbtnAlterar=D1,2,3,5,11,12'
+      'btbtnCancelar=D1,2,3,5,11,12'
+      'btbtnExcluir=D1,2,3,5,11,12'
+      'btbtnIncluir=D1,2,3,5,11,12'
+      'btbtnSalvar=D1,2,3,5,11,12'
+      'dbCusto=H1,2,3,5,11,12'
+      'lblCusto=H1,2,3,5,11,12')
+    Left = 52
+    Top = 89
   end
 end

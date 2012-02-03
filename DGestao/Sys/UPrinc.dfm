@@ -1,8 +1,8 @@
 object frmPrinc: TfrmPrinc
-  Left = 279
-  Top = 128
-  Width = 952
-  Height = 500
+  Left = 302
+  Top = 185
+  Width = 943
+  Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -13,22 +13,21 @@ object frmPrinc: TfrmPrinc
   Menu = BcBarMainMenu
   OldCreateOrder = False
   WindowState = wsMaximized
-  OnClose = FormClose
+  OnActivate = FormActivate
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 423
-    Width = 936
+    Top = 412
+    Width = 927
     Height = 19
     Panels = <
       item
         Text = 'Masterdados - Fone: (91) 8717-1057/8129-1567'
-        Width = 600
+        Width = 400
       end
       item
-        Text = 'dorivaldo@masterdados.com.br'
-        Width = 400
+        Width = 450
       end
       item
         Alignment = taCenter
@@ -40,7 +39,7 @@ object frmPrinc: TfrmPrinc
   object SpeedBar1: TSpeedBar
     Left = 0
     Top = 0
-    Width = 936
+    Width = 927
     Height = 64
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1172,14 +1171,31 @@ object frmPrinc: TfrmPrinc
       OnClick = Vendas2Click
     end
     object SpeedbarSection1: TSpeedbarSection
-      Caption = 'Untitled (0)'
+      Caption = 'sn01'
+    end
+    object SpeedbarSection2: TSpeedbarSection
+      Caption = 'Untitled (1)'
+    end
+    object SpeedItem1: TSpeedItem
+      Caption = 'SpeedItem1'
+      Hint = 'SpeedItem1|'
+      Spacing = 1
+      Top = 6
+      SectionName = 'sn01'
+    end
+    object SpeedItem2: TSpeedItem
+      Caption = 'SpeedItem2'
+      Hint = 'SpeedItem2|'
+      Spacing = 1
+      Top = 6
+      SectionName = 'sn01'
     end
   end
   object Panel1: TPanel
     Left = 0
     Top = 64
-    Width = 936
-    Height = 359
+    Width = 927
+    Height = 348
     Align = alClient
     BevelOuter = bvLowered
     Color = clBlack
@@ -1187,8 +1203,8 @@ object frmPrinc: TfrmPrinc
     object Image1: TImage
       Left = 1
       Top = 1
-      Width = 934
-      Height = 357
+      Width = 925
+      Height = 346
       Align = alClient
       AutoSize = True
       Center = True
@@ -3599,7 +3615,7 @@ object frmPrinc: TfrmPrinc
         Caption = 'Usu'#225'rio'
       end
     end
-    object Vendas1: TMenuItem
+    object Estoque1: TMenuItem
       Caption = '&Estoque'
       object Entrada1: TMenuItem
         Bitmap.Data = {
@@ -4303,5 +4319,19 @@ object frmPrinc: TfrmPrinc
       Caption = 'Kardex'
       OnClick = Kardex1Click
     end
+  end
+  object EvUAfrmPrinc: TEvUserAccess
+    Consents.Strings = (
+      'Cadastro1=D1,2,3,5,6,8,9,11,12'
+      'Faturamento1=D'
+      'Financeiro1=D1,3,5,7,8,11,12'
+      'Relatrio1=D'
+      'nmConfigurarNFeACBr=D1,2,3,5,11,12'
+      'Estoque1=D1,2,3,5,6,11,12'
+      'Entradas1=D1,2,3,5,6,11,12'
+      'AjusteEstoque1=D1,2,3,5,6,11,12'
+      'Kardex2=D1,2,3,5,6,11,12')
+    Left = 104
+    Top = 96
   end
 end

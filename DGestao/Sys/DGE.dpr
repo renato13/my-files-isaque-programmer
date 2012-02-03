@@ -82,7 +82,6 @@ uses
   UfrmAcessoSistema in 'UfrmAcessoSistema.pas' {frmAcessoSistema},
   UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar};
 
-
 {$R *.res}
 
 begin
@@ -93,7 +92,6 @@ begin
   Application.CreateForm(TDMBusiness, DMBusiness);
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
-  Application.CreateForm(TfrmAcessoSistema, frmAcessoSistema);
-  Application.CreateForm(TfrmGeVendaCancelar, frmGeVendaCancelar);
+  Application.CreateForm(TfrmPesq, frmPesq);
   Application.Run;
 end.

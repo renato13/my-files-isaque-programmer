@@ -1672,7 +1672,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -12
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
@@ -1719,7 +1719,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -12
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
@@ -1754,7 +1754,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -12
           Font.Name = 'Lucida Console'
           Font.Style = []
           HAlign = haRight
@@ -1946,7 +1946,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdVenda'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -12
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
