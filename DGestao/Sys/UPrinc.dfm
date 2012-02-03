@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 302
-  Top = 185
+  Left = 433
+  Top = 218
   Width = 943
   Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -16,7 +16,7 @@ object frmPrinc: TfrmPrinc
   OnActivate = FormActivate
   PixelsPerInch = 96
   TextHeight = 13
-  object StatusBar1: TStatusBar
+  object stbMain: TStatusBar
     Left = 0
     Top = 412
     Width = 927
@@ -368,7 +368,7 @@ object frmPrinc: TfrmPrinc
         FDFDFDFDFDFDFDFDFDFDFDFD00000052FDFDFDFDFDFDFDFDFDFD}
       ParentFont = False
       Transparent = True
-      OnClick = Fornecedor1Click
+      OnClick = nmFornecedorClick
     end
     object RxSpeedButton5: TRxSpeedButton
       Left = 451
@@ -1168,7 +1168,7 @@ object frmPrinc: TfrmPrinc
       ParentFont = False
       Spacing = 3
       Transparent = True
-      OnClick = Vendas2Click
+      OnClick = nmVendasClick
     end
     object SpeedbarSection1: TSpeedbarSection
       Caption = 'sn01'
@@ -1191,7 +1191,7 @@ object frmPrinc: TfrmPrinc
       SectionName = 'sn01'
     end
   end
-  object Panel1: TPanel
+  object pnlMain: TPanel
     Left = 0
     Top = 64
     Width = 927
@@ -2846,7 +2846,7 @@ object frmPrinc: TfrmPrinc
     MenuFont.Style = []
     Left = 176
     Top = 96
-    object Cadastro1: TMenuItem
+    object menuCadastro: TMenuItem
       Caption = '&Cadastro'
       Checked = True
       object mnTabelasAuxiliares: TMenuItem
@@ -2935,7 +2935,7 @@ object frmPrinc: TfrmPrinc
       object N4: TMenuItem
         Caption = '-'
       end
-      object Empresa1: TMenuItem
+      object nmEmpresa: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100
           2000000000000010000000000000000000000000000000000000FF00FF00FF00
@@ -3070,7 +3070,7 @@ object frmPrinc: TfrmPrinc
         Caption = 'Empresa'
         OnClick = RxSpeedButtonEmpresaClick
       end
-      object Cliente1: TMenuItem
+      object nmCliente: TMenuItem
         Bitmap.Data = {
           B6100000424DB610000000000000B60000002800000020000000200000000100
           2000000000000010000000000000000000001000000000000000000000000000
@@ -3207,7 +3207,7 @@ object frmPrinc: TfrmPrinc
         Caption = 'Cliente'
         OnClick = RxSpeedBtnClienteClick
       end
-      object Fornecedor1: TMenuItem
+      object nmFornecedor: TMenuItem
         Bitmap.Data = {
           36180000424D3618000000000000360800002800000020000000200000000100
           2000000000000010000000000000000000000001000000000000000000000000
@@ -3372,11 +3372,11 @@ object frmPrinc: TfrmPrinc
           FF0000000000000000000000000040404000FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Fornecedor'
-        OnClick = Fornecedor1Click
+        OnClick = nmFornecedorClick
       end
-      object Vendedor1: TMenuItem
+      object nmVendedor: TMenuItem
         Caption = 'Vendedor'
-        OnClick = Vendedor1Click
+        OnClick = nmVendedorClick
       end
       object N1: TMenuItem
         Caption = '-'
@@ -3400,7 +3400,7 @@ object frmPrinc: TfrmPrinc
         Caption = 'Unidades'
         OnClick = nmUnidadeClick
       end
-      object Produto1: TMenuItem
+      object nmProduto: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100
           2000000000000010000000000000000000000000000000000000FF00FF00FF00
@@ -3615,9 +3615,9 @@ object frmPrinc: TfrmPrinc
         Caption = 'Usu'#225'rio'
       end
     end
-    object Estoque1: TMenuItem
+    object menuEstoque: TMenuItem
       Caption = '&Estoque'
-      object Entrada1: TMenuItem
+      object nmEntrada: TMenuItem
         Bitmap.Data = {
           F6060000424DF606000000000000360000002800000018000000180000000100
           180000000000C0060000C20E0000C20E00000000000000000000FF00FFFF00FF
@@ -3676,20 +3676,20 @@ object frmPrinc: TfrmPrinc
           FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         Caption = 'Entradas'
-        OnClick = Entrada1Click
+        OnClick = nmEntradaClick
       end
-      object AjusteManual1: TMenuItem
+      object nmAjusteManual: TMenuItem
         Caption = 'Ajuste Manual'
-        OnClick = AjusteManual1Click
+        OnClick = nmAjusteManualClick
       end
-      object Kardex1: TMenuItem
+      object nmKardex: TMenuItem
         Caption = 'Kardex'
-        OnClick = Kardex1Click
+        OnClick = nmKardexClick
       end
     end
-    object Faturamento1: TMenuItem
+    object menuFaturamento: TMenuItem
       Caption = 'Faturamento'
-      object Vendas2: TMenuItem
+      object nmVendas: TMenuItem
         Bitmap.Data = {
           F6060000424DF606000000000000360000002800000018000000180000000100
           180000000000C0060000120B0000120B00000000000000000000FF00FFFF00FF
@@ -3748,13 +3748,20 @@ object frmPrinc: TfrmPrinc
           C90D5DC90D5DC90D5DC90D5DC90D5DC90D5DC90D5DC90D5DC90D5DC90D5DC90D
           5DC9FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
         Caption = 'Vendas'
-        OnClick = Vendas2Click
+        OnClick = nmVendasClick
       end
       object N9: TMenuItem
         Caption = '-'
       end
       object nmNotaFiscal: TMenuItem
         Caption = 'Notas Fiscais'
+        object nmImprimirDANFE: TMenuItem
+          Caption = 'Imprimir DANFE'
+          Enabled = False
+        end
+        object N11: TMenuItem
+          Caption = '-'
+        end
         object nmEnviarLoteNFe: TMenuItem
           Caption = 'Enviar Lote NF-e'
           Enabled = False
@@ -3769,9 +3776,9 @@ object frmPrinc: TfrmPrinc
         end
       end
     end
-    object Financeiro1: TMenuItem
+    object menuFinanceiro: TMenuItem
       Caption = '&Financeiro'
-      object ContasaPagar1: TMenuItem
+      object nmContasAPagar: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100
           2000000000000010000000000000000000000000000000000000FF00FF00FF00
@@ -3903,10 +3910,10 @@ object frmPrinc: TfrmPrinc
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
-        Caption = 'Contas a Pagar'
+        Caption = 'Contas A Pagar'
         OnClick = RxSpeedBtnCPagClick
       end
-      object ContasaReceber1: TMenuItem
+      object nmContasAReceber: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100
           2000000000000010000000000000000000000000000000000000000080000000
@@ -4038,14 +4045,14 @@ object frmPrinc: TfrmPrinc
           0000000000000000000000008000000080000000800000008000000080000000
           8000000080000000000080808000000080000000800000008000000080000000
           8000000080000000800000008000000080000000800000008000}
-        Caption = 'Contas a Receber'
+        Caption = 'Contas A Receber'
         OnClick = RxSpeedBtnCRecClick
       end
-      object Depistos1: TMenuItem
+      object nmDeposito: TMenuItem
         Caption = 'Dep'#243'sito'
         Visible = False
       end
-      object FluxodeCaixa1: TMenuItem
+      object nmFluxoDeCaixa: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100
           2000000000000010000000000000000000000000000000000000FF00FF00FF00
@@ -4179,7 +4186,7 @@ object frmPrinc: TfrmPrinc
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Fluxo de Caixa'
       end
-      object esouraria1: TMenuItem
+      object nmTesouraria: TMenuItem
         Caption = 'Tesouraria'
         Visible = False
       end
@@ -4191,48 +4198,48 @@ object frmPrinc: TfrmPrinc
         Enabled = False
       end
     end
-    object Relatrio1: TMenuItem
+    object menuRelatorio: TMenuItem
       Caption = '&Relat'#243'rio'
-      object Cliente2: TMenuItem
+      object nmRelatorioCliente: TMenuItem
         Caption = 'Clientes'
-        OnClick = Cliente2Click
+        OnClick = nmRelatorioClienteClick
       end
-      object Fornecedor2: TMenuItem
+      object nmRelatorioFornecedor: TMenuItem
         Caption = 'Fornecedores'
-        OnClick = Fornecedor2Click
+        OnClick = nmRelatorioFornecedorClick
       end
-      object Produto2: TMenuItem
+      object nmRelatorioProduto: TMenuItem
         Caption = 'Produtos'
-        OnClick = Produto2Click
+        OnClick = nmRelatorioProdutoClick
       end
-      object Vendas3: TMenuItem
+      object nmRelatorioVenda: TMenuItem
         Caption = 'Vendas'
-        OnClick = Vendas3Click
+        OnClick = nmRelatorioVendaClick
       end
-      object Financeiro2: TMenuItem
+      object nmRelatorioFinanceiro: TMenuItem
         Caption = 'Financeiro'
-        object ContasaReceber2: TMenuItem
-          Caption = 'Contas a Receber'
-          OnClick = ContasaReceber2Click
+        object nmRelatorioContasAReceber: TMenuItem
+          Caption = 'Contas A Receber'
+          OnClick = nmRelatorioContasAReceberClick
         end
-        object ContasaPagar2: TMenuItem
-          Caption = 'Contas a Pagar'
-          OnClick = ContasaPagar2Click
+        object nmRelatorioContasAPagar: TMenuItem
+          Caption = 'Contas A Pagar'
+          OnClick = nmRelatorioContasAPagarClick
         end
       end
     end
-    object Sobre1: TMenuItem
+    object menuSobre: TMenuItem
       Caption = '&Sobre'
-      object oDGESTO1: TMenuItem
+      object nmAbout: TMenuItem
         Caption = 'o DGE'
-        OnClick = oDGESTO1Click
+        OnClick = nmAboutClick
       end
     end
   end
   object ppEstoque: TPopupMenu
     Left = 144
     Top = 96
-    object Entradas1: TMenuItem
+    object popEntrada: TMenuItem
       Bitmap.Data = {
         36090000424D3609000000000000360000002800000018000000180000000100
         2000000000000009000000000000000000000000000000000000FF00FF00FF00
@@ -4309,15 +4316,15 @@ object frmPrinc: TfrmPrinc
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
       Caption = 'Entradas'
-      OnClick = Entrada1Click
+      OnClick = nmEntradaClick
     end
-    object AjusteEstoque1: TMenuItem
+    object popAjusteEstoque: TMenuItem
       Caption = 'Ajuste Estoque'
-      OnClick = AjusteManual1Click
+      OnClick = nmAjusteManualClick
     end
-    object Kardex2: TMenuItem
+    object popKardex: TMenuItem
       Caption = 'Kardex'
-      OnClick = Kardex1Click
+      OnClick = nmKardexClick
     end
   end
   object EvUAfrmPrinc: TEvUserAccess
@@ -4331,7 +4338,7 @@ object frmPrinc: TfrmPrinc
       'Entradas1=D1,2,3,5,6,11,12'
       'AjusteEstoque1=D1,2,3,5,6,11,12'
       'Kardex2=D1,2,3,5,6,11,12')
-    Left = 104
+    Left = 112
     Top = 96
   end
 end

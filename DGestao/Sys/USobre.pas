@@ -26,11 +26,25 @@ type
 var
   frmSobre: TfrmSobre;
 
+  procedure ShowAbout(const AOwer : TComponent);
+
 implementation
 
 uses UDMBusiness;
 
 {$R *.dfm}
+
+procedure ShowAbout(const AOwer : TComponent);
+var
+  frm : TfrmSobre;
+begin
+  frm := TfrmSobre.Create(AOwer);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
+end;
 
 procedure TfrmSobre.FormCreate(Sender: TObject);
 var

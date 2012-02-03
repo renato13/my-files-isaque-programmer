@@ -379,7 +379,8 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
           Height = 49
           Caption = 'Modo de Gerar a NF-e'
           Columns = 2
-          ItemIndex = 0
+          Enabled = False
+          ItemIndex = 1
           Items.Strings = (
             'Off Line'
             'On Line')

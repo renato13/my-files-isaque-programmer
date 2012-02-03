@@ -8,16 +8,16 @@ uses
 
 type
   TfrmAcessoSistema = class(TfrmGrPadrao)
-    iblnome: TLabel;
-    iblsenha: TLabel;
-    Image2: TImage;
-    edtNome: TEdit;
-    edtSenha: TEdit;
+    lblNome: TLabel;
+    lblSenha: TLabel;
+    imgLogo: TImage;
+    edNome: TEdit;
+    edSenha: TEdit;
     pnlMensagem: TPanel;
     Bevel1: TBevel;
     btbtnEntrar: TBitBtn;
     procedure spdbtnEntrarClick(Sender: TObject);
-    procedure edtNomeExit(Sender: TObject);
+    procedure edNomeExit(Sender: TObject);
     procedure btbtnEntrarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -38,36 +38,37 @@ var Contador :integer;
 {$R *.dfm}
 
 procedure TfrmAcessoSistema.spdbtnEntrarClick(Sender: TObject);
-var vSenha :TstringField;
+var
+  vSenha : TstringField;
 begin
   inherited;
 
- if not DMBusiness.ibdtstUsers.Locate('NOME',edtNome.Text,[]) then
+ if not DMBusiness.ibdtstUsers.Locate('NOME',edNome.Text,[]) then
    begin
     pnlMensagem.Caption:='Entrada recusada ... USUÁRIO DESCONHECIDO!';
     inc(Contador);
     if contador=3 then frmPrinc.close;
-    edtNome.setfocus;
+    edNome.setfocus;
     Exit;
    end;
 
  vSenha := DMBusiness.ibdtstUsersSENHA as tStringfield;
 
- if vSenha.Value<>edtSenha.Text then
+ if vSenha.Value<> edSenha.Text then
    begin
     pnlMensagem.Caption:='Entrada recusada ... SENHA INVÁLIDA!';
     inc(Contador);
     if Contador=3 then frmPrinc.close;
-    edtSenha.setfocus;
+    edSenha.setfocus;
     Exit;
    end;
  frmPrinc.Enabled := True;
- frmPrinc.StatusBar1.Panels[1].Text := 'Usuário: ' + edtNome.Text;
+ frmPrinc.stbMain.Panels[1].Text := 'Usuário: ' + edNome.Text;
  frmAcessoSistema.Release;
 
 end;
 
-procedure TfrmAcessoSistema.edtNomeExit(Sender: TObject);
+procedure TfrmAcessoSistema.edNomeExit(Sender: TObject);
 begin
   inherited;
  pnlMensagem.Caption :=''
@@ -78,27 +79,27 @@ var vSenha :TstringField;
 begin
   inherited;
 
- if not DMBusiness.ibdtstUsers.Locate('NOME',edtNome.Text,[]) then
+ if not DMBusiness.ibdtstUsers.Locate('NOME',edNome.Text,[]) then
    begin
     pnlMensagem.Caption:='Entrada recusada ... USUÁRIO DESCONHECIDO!';
     inc(Contador);
     if contador=3 then frmPrinc.close;
-    edtNome.setfocus;
+    edNome.setfocus;
     Exit;
    end;
 
  vSenha := DMBusiness.ibdtstUsersSENHA as tStringfield;
 
- if vSenha.Value<>edtSenha.Text then
+ if vSenha.Value<>edSenha.Text then
    begin
     pnlMensagem.Caption:='Entrada recusada ... SENHA INVÁLIDA!';
     inc(Contador);
     if Contador=3 then frmPrinc.close;
-    edtSenha.setfocus;
+    edSenha.setfocus;
     Exit;
    end;
  frmPrinc.Enabled := True;
- frmPrinc.StatusBar1.Panels[1].Text := 'Usuário: ' + edtNome.Text;
+ frmPrinc.stbMain.Panels[1].Text := 'Usuário: ' + edNome.Text;
  frmAcessoSistema.Release;
 
 end;

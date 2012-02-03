@@ -10,25 +10,25 @@ uses
 type
   TfrmPrinc = class(TForm)
     BcBarMainMenu: TBcBarMainMenu;
-    StatusBar1: TStatusBar;
-    Cadastro1: TMenuItem;
-    Cliente1: TMenuItem;
-    Produto1: TMenuItem;
-    Vendedor1: TMenuItem;
+    stbMain: TStatusBar;
+    menuCadastro: TMenuItem;
+    nmCliente: TMenuItem;
+    nmProduto: TMenuItem;
+    nmVendedor: TMenuItem;
     mnBanco: TMenuItem;
-    Estoque1: TMenuItem;
-    Financeiro1: TMenuItem;
-    ContasaPagar1: TMenuItem;
-    ContasaReceber1: TMenuItem;
-    Depistos1: TMenuItem;
-    FluxodeCaixa1: TMenuItem;
-    esouraria1: TMenuItem;
-    Relatrio1: TMenuItem;
+    menuEstoque: TMenuItem;
+    menuFinanceiro: TMenuItem;
+    nmContasAPagar: TMenuItem;
+    nmContasAReceber: TMenuItem;
+    nmDeposito: TMenuItem;
+    nmFluxoDeCaixa: TMenuItem;
+    nmTesouraria: TMenuItem;
+    menuRelatorio: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;
     nmUsuario: TMenuItem;
-    Entrada1: TMenuItem;
-    Empresa1: TMenuItem;
+    nmEntrada: TMenuItem;
+    nmEmpresa: TMenuItem;
     SpeedBar1: TSpeedBar;
     RxSpeedButtonEmpresa: TRxSpeedButton;
     RxSpeedBtnCRec: TRxSpeedButton;
@@ -38,31 +38,31 @@ type
     RxSpeedBtnProd: TRxSpeedButton;
     RxSpeedBtnCliente: TRxSpeedButton;
     SpeedbarSection1: TSpeedbarSection;
-    Sobre1: TMenuItem;
-    Panel1: TPanel;
-    Fornecedor1: TMenuItem;
+    menuSobre: TMenuItem;
+    pnlMain: TPanel;
+    nmFornecedor: TMenuItem;
     Image1: TImage;
     nmTipoDespesa: TMenuItem;
     RxSpeedButton2: TRxSpeedButton;
     N3: TMenuItem;
     RxSpeedButton1: TRxSpeedButton;
     ppEstoque: TPopupMenu;
-    Entradas1: TMenuItem;
-    AjusteManual1: TMenuItem;
-    Kardex1: TMenuItem;
-    AjusteEstoque1: TMenuItem;
-    Kardex2: TMenuItem;
-    Faturamento1: TMenuItem;
-    Vendas2: TMenuItem;
-    Cliente2: TMenuItem;
-    Fornecedor2: TMenuItem;
-    Produto2: TMenuItem;
-    Financeiro2: TMenuItem;
-    ContasaReceber2: TMenuItem;
-    ContasaPagar2: TMenuItem;
+    popEntrada: TMenuItem;
+    nmAjusteManual: TMenuItem;
+    nmKardex: TMenuItem;
+    popAjusteEstoque: TMenuItem;
+    popKardex: TMenuItem;
+    menuFaturamento: TMenuItem;
+    nmVendas: TMenuItem;
+    nmRelatorioCliente: TMenuItem;
+    nmRelatorioFornecedor: TMenuItem;
+    nmRelatorioProduto: TMenuItem;
+    nmRelatorioFinanceiro: TMenuItem;
+    nmRelatorioContasAReceber: TMenuItem;
+    nmRelatorioContasAPagar: TMenuItem;
     RxSpeedButton3: TRxSpeedButton;
-    oDGESTO1: TMenuItem;
-    Vendas3: TMenuItem;
+    nmAbout: TMenuItem;
+    nmRelatorioVenda: TMenuItem;
     mnTabelasAuxiliares: TMenuItem;
     nmEstados: TMenuItem;
     nmCidades: TMenuItem;
@@ -95,25 +95,27 @@ type
     SpeedbarSection2: TSpeedbarSection;
     SpeedItem1: TSpeedItem;
     SpeedItem2: TSpeedItem;
+    nmImprimirDANFE: TMenuItem;
+    N11: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
     procedure RxSpeedBtnCRecClick(Sender: TObject);
     procedure RxSpeedBtnCPagClick(Sender: TObject);
-    procedure Fornecedor1Click(Sender: TObject);
+    procedure nmFornecedorClick(Sender: TObject);
     procedure RxSpeedButton2Click(Sender: TObject);
     procedure RxSpeedBtnProdClick(Sender: TObject);
-    procedure Entrada1Click(Sender: TObject);
-    procedure AjusteManual1Click(Sender: TObject);
-    procedure Kardex1Click(Sender: TObject);
-    procedure Vendas2Click(Sender: TObject);
-    procedure Cliente2Click(Sender: TObject);
-    procedure Fornecedor2Click(Sender: TObject);
-    procedure Produto2Click(Sender: TObject);
-    procedure ContasaReceber2Click(Sender: TObject);
-    procedure ContasaPagar2Click(Sender: TObject);
-    procedure oDGESTO1Click(Sender: TObject);
-    procedure Vendas3Click(Sender: TObject);
+    procedure nmEntradaClick(Sender: TObject);
+    procedure nmAjusteManualClick(Sender: TObject);
+    procedure nmKardexClick(Sender: TObject);
+    procedure nmVendasClick(Sender: TObject);
+    procedure nmRelatorioClienteClick(Sender: TObject);
+    procedure nmRelatorioFornecedorClick(Sender: TObject);
+    procedure nmRelatorioProdutoClick(Sender: TObject);
+    procedure nmRelatorioContasAReceberClick(Sender: TObject);
+    procedure nmRelatorioContasAPagarClick(Sender: TObject);
+    procedure nmAboutClick(Sender: TObject);
+    procedure nmRelatorioVendaClick(Sender: TObject);
     procedure mnBancoClick(Sender: TObject);
     procedure nmTiposdeLogradourosClick(Sender: TObject);
     procedure nmEstadosClick(Sender: TObject);
@@ -126,7 +128,7 @@ type
     procedure nmUnidadeClick(Sender: TObject);
     procedure nmTabelaCFOPClick(Sender: TObject);
     procedure nmFormaPagtoClick(Sender: TObject);
-    procedure Vendedor1Click(Sender: TObject);
+    procedure nmVendedorClick(Sender: TObject);
     procedure nmCondicaoPagtoClick(Sender: TObject);
     procedure nmConfigurarNFeACBrClick(Sender: TObject);
     procedure nmTipoDespesaClick(Sender: TObject);
@@ -168,17 +170,11 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnClienteClick(Sender: TObject);
 begin
-// Application.CreateForm(TfrmGrCliente, frmGrCliente);
-// frmGrCliente.ShowModal;
-// frmGrCliente.Destroy;
   MostrarTabelaClientes(Self);
 end;
 
 procedure TfrmPrinc.RxSpeedBtnCRecClick(Sender: TObject);
 begin
-//  Application.CreateForm(TfrmGrContReceb, frmGrContReceb);
-//  frmGrContReceb.ShowModal;
-//  frmGrContReceb.Destroy;
   MostrarControleContasAReceber(Self);
 end;
 
@@ -187,7 +183,7 @@ begin
   MostrarControleContasAPagar(Self);
 end;
 
-procedure TfrmPrinc.Fornecedor1Click(Sender: TObject);
+procedure TfrmPrinc.nmFornecedorClick(Sender: TObject);
 begin
   MostrarTabelaFornecedores(Self);
 end;
@@ -203,34 +199,31 @@ begin
   MostrarTabelaProdutos(Self);
 end;
 
-procedure TfrmPrinc.Entrada1Click(Sender: TObject);
+procedure TfrmPrinc.nmEntradaClick(Sender: TObject);
 begin
   MostrarControleCompras(Self);
 end;
 
-procedure TfrmPrinc.AjusteManual1Click(Sender: TObject);
+procedure TfrmPrinc.nmAjusteManualClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmAjustEstoq, frmAjustEstoq);
   frmAjustEstoq.ShowModal;
   frmAjustEstoq.Destroy;
 end;
 
-procedure TfrmPrinc.Kardex1Click(Sender: TObject);
+procedure TfrmPrinc.nmKardexClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmKardex, frmKardex);
   frmKardex.ShowModal;
   frmKardex.Destroy;
 end;
 
-procedure TfrmPrinc.Vendas2Click(Sender: TObject);
+procedure TfrmPrinc.nmVendasClick(Sender: TObject);
 begin
-//  Application.CreateForm(TfrmGrVendas, frmGrVendas);
-//  frmGrVendas.ShowModal;
-//  frmGrVendas.Destroy;
   MostrarControleVendas(Self);
 end;
 
-procedure TfrmPrinc.Cliente2Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioClienteClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmRelCli, frmRelCli);
   frmRelCli.IBQuery1.Open;
@@ -241,7 +234,7 @@ begin
   frmRelCli.Destroy;
 end;
 
-procedure TfrmPrinc.Fornecedor2Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioFornecedorClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmRelFornec, frmRelFornec);
   frmRelFornec.IBQuery1.Open;
@@ -252,7 +245,7 @@ begin
   frmRelFornec.Destroy;
 end;
 
-procedure TfrmPrinc.Produto2Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioProdutoClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmRelProdutos, frmRelProdutos);
   frmRelProdutos.IBQuery1.Open;
@@ -263,28 +256,26 @@ begin
   frmRelProdutos.Destroy;
 end;
 
-procedure TfrmPrinc.ContasaReceber2Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioContasAReceberClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmGerRelCR, frmGerRelCR);
   frmGerRelCR.ShowModal;
   frmGerRelCR.Destroy;
 end;
 
-procedure TfrmPrinc.ContasaPagar2Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioContasAPagarClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmGerRelCP, frmGerRelCP);
   frmGerRelCP.ShowModal;
   frmGerRelCP.Destroy;
 end;
 
-procedure TfrmPrinc.oDGESTO1Click(Sender: TObject);
+procedure TfrmPrinc.nmAboutClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmSobre, frmSobre);
-  frmSobre.ShowModal;
-  frmSobre.Destroy;
+  ShowAbout(Self);
 end;
 
-procedure TfrmPrinc.Vendas3Click(Sender: TObject);
+procedure TfrmPrinc.nmRelatorioVendaClick(Sender: TObject);
 begin
  frmRelVendas.IBQuery1.Open;
  frmRelVendas.qckrp.Preview;
@@ -350,7 +341,7 @@ begin
   MostrarTabelaFormaPagtos(Self);
 end;
 
-procedure TfrmPrinc.Vendedor1Click(Sender: TObject);
+procedure TfrmPrinc.nmVendedorClick(Sender: TObject);
 begin
   MostrarTabelaVendedores(Self);
 end;
@@ -372,40 +363,44 @@ end;
 
 procedure TfrmPrinc.Button1Click(Sender: TObject);
 begin
-frmAcessoSistema.ShowModal
+  frmAcessoSistema.ShowModal
 end;
 
 procedure TfrmPrinc.FormActivate(Sender: TObject);
 begin
 
  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
-   1: EvUAfrmPrinc.UserID := 1 ;  //Diretoria
-   2: begin
-       EvUAfrmPrinc.UserID := 2;   // Gerente de Vendas
-       RxSpeedButton5.Enabled := false;
-       RxSpeedBtnCRec.Enabled := false;
-       RxSpeedBtnCPag.Enabled := false;
-      end;
-   3: EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
-   4: begin
-       EvUAfrmPrinc.UserID := 4;   // Vendedor
-       RxSpeedButtonEmpresa.Visible := false;
-       RxSpeedBtnProd.Enabled := false;
-       RxSpeedButton4.Enabled := false;
-       RxSpeedButton1.Enabled := false;
-       RxSpeedButton5.Enabled := false;
-       RxSpeedBtnCRec.Enabled := false;
-       RxSpeedBtnCPag.Enabled := false;
-      end;
-   5: EvUAfrmPrinc.UserID := 5;   // Gerente ADM
-   6: EvUAfrmPrinc.UserID := 6;   // Caixa
-   7: EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
-   8: EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
-   9: EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
-   10: EvUAfrmPrinc.UserID := 10;   // Estoquista
-   11: EvUAfrmPrinc.UserID := 11;   // TI
-   12: EvUAfrmPrinc.UserID := 12;   // Masterdados-Supervisor
- else ShowMessage('Falta cruzar nova função com UserID!');
+   1 : EvUAfrmPrinc.UserID := 1 ;  //Diretoria
+
+   2 : begin
+         EvUAfrmPrinc.UserID := 2;   // Gerente de Vendas
+         RxSpeedButton5.Enabled := false;
+         RxSpeedBtnCRec.Enabled := false;
+         RxSpeedBtnCPag.Enabled := false;
+       end;
+   3 : EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
+
+   4 : begin
+         EvUAfrmPrinc.UserID := 4;   // Vendedor
+         RxSpeedButtonEmpresa.Visible := false;
+         RxSpeedBtnProd.Enabled := false;
+         RxSpeedButton4.Enabled := false;
+         RxSpeedButton1.Enabled := false;
+         RxSpeedButton5.Enabled := false;
+         RxSpeedBtnCRec.Enabled := false;
+         RxSpeedBtnCPag.Enabled := false;
+       end;
+       
+   5 : EvUAfrmPrinc.UserID := 5;   // Gerente ADM
+   6 : EvUAfrmPrinc.UserID := 6;   // Caixa
+   7 : EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
+   8 : EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
+   9 : EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
+   10: EvUAfrmPrinc.UserID := 10;  // Estoquista
+   11: EvUAfrmPrinc.UserID := 11;  // TI
+   12: EvUAfrmPrinc.UserID := 12;  // Masterdados-Supervisor
+ else
+   ShowWarning('Falta cruzar nova função com UserID!');
  end;
 
 end;

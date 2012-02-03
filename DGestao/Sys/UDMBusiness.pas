@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
-  IBQuery, RpDefine, RpRave, frxClass, frxDBSet;
+  IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg;
 
 type
   TDMBusiness = class(TDataModule)
@@ -32,6 +32,7 @@ type
     ibdtstUsersSENHA: TIBStringField;
     ibdtstUsersNOMECOMPLETO: TIBStringField;
     ibdtstUsersCODFUNCAO: TSmallintField;
+    EvMsgDialog: TEvMsgDlg;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -50,7 +51,7 @@ var
   procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
   procedure CommitTransaction;
 
-  function ShowConfirm(sMsg : String; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
+  function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
   function GetPaisIDDefault : String;
   function GetEstadoIDDefault : Integer;
   function GetCidadeIDDefault : Integer;
@@ -145,7 +146,7 @@ begin
   end;
 end;
 
-function ShowConfirm(sMsg : String; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
+function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
 begin
   Result := ( Application.MessageBox(PChar(sMsg), 'Confirmar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES );
 end;
@@ -576,12 +577,13 @@ function GetUserApp : String;
 begin
   with DMBusiness, qryBusca do
   begin
-    Close;
-    SQL.Clear;
-    SQL.Add('Select First 1 user as Usr from TBEMPRESA');
-    Open;
-
-    Result := FieldByName('Usr').AsString;
+//    Close;
+//    SQL.Clear;
+//    SQL.Add('Select First 1 user as Usr from TBEMPRESA');
+//    Open;
+//
+//    Result := FieldByName('Usr').AsString;
+    Result := UpperCase( Trim(ibdtstUsersNOME.AsString) );
   end;
 end;
 

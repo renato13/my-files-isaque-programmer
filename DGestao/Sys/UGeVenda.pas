@@ -7,7 +7,7 @@ uses
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
   ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider, IBStoredProc,
-  frxClass, frxDBSet;
+  frxClass, frxDBSet, Menus;
 
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
@@ -218,6 +218,11 @@ type
     IbDtstTabelaCANCEL_DATAHORA: TDateTimeField;
     IbDtstTabelaCANCEL_MOTIVO: TMemoField;
     btbtnCancelarVND: TBitBtn;
+    ppImprimir: TPopupMenu;
+    nmImprimirVenda: TMenuItem;
+    nmImprimirDANFE: TMenuItem;
+    nmImprimirDANFEPDF: TMenuItem;
+    N1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -251,6 +256,8 @@ type
     procedure btbtnListaClick(Sender: TObject);
     procedure btbtnCancelarVNDClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure nmImprimirVendaClick(Sender: TObject);
+    procedure nmImprimirDANFEClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -541,12 +548,18 @@ begin
     btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
+
+    nmImprimirDANFE.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
+    nmImprimirDANFEPDF.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
   end
   else
   begin
     btbtnFinalizar.Enabled   := False;
     btbtnGerarNFe.Enabled    := False;
     btbtnCancelarVND.Enabled := False;
+
+    nmImprimirDANFE.Enabled    := False;
+    nmImprimirDANFEPDF.Enabled := False;
   end;
 end;
 
@@ -992,45 +1005,7 @@ end;
 procedure TfrmGeVenda.btbtnListaClick(Sender: TObject);
 begin
   inherited;
-  if ( IbDtstTabela.IsEmpty ) then
-    Exit;
-
-  with DMNFe do
-  begin
-
-    with qryEmitente do
-    begin
-      Close;
-      ParamByName('Cnpj').AsString := IbDtstTabelaCODEMP.AsString;
-      Open;
-    end;
-
-    with qryDestinatario do
-    begin
-      Close;
-      ParamByName('Cnpj').AsString := IbDtstTabelaCODCLI.AsString;
-      Open;
-    end;
-
-    with qryCalculoImporto do
-    begin
-      Close;
-      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
-      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
-      Open;
-    end;
-
-    with qryDadosProduto do
-    begin
-      Close;
-      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
-      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
-      Open;
-    end;
-
-    frrVenda.ShowReport;
-
-  end;
+  ppImprimir.Popup(btbtnLista.ClientOrigin.X, btbtnLista.ClientOrigin.Y + btbtnLista.Height);
 end;
 
 procedure TfrmGeVenda.btbtnCancelarVNDClick(Sender: TObject);
@@ -1084,6 +1059,62 @@ begin
 //   12: EvUAfrmPrinc.UserID := 12;   // Masterdados-Supervisor
 // else ShowMessage('Falta cruzar nova função com UserID!');
 end
+end;
+
+procedure TfrmGeVenda.nmImprimirVendaClick(Sender: TObject);
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  with DMNFe do
+  begin
+
+    with qryEmitente do
+    begin
+      Close;
+      ParamByName('Cnpj').AsString := IbDtstTabelaCODEMP.AsString;
+      Open;
+    end;
+
+    with qryDestinatario do
+    begin
+      Close;
+      ParamByName('Cnpj').AsString := IbDtstTabelaCODCLI.AsString;
+      Open;
+    end;
+
+    with qryCalculoImporto do
+    begin
+      Close;
+      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
+      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
+      Open;
+    end;
+
+    with qryDadosProduto do
+    begin
+      Close;
+      ParamByName('anovenda').AsInteger := IbDtstTabelaANO.AsInteger;
+      ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.AsInteger;
+      Open;
+    end;
+
+    frrVenda.ShowReport;
+
+  end;
+end;
+
+procedure TfrmGeVenda.nmImprimirDANFEClick(Sender: TObject);
+var
+  isPDF : Boolean;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  isPDF := ( Sender = nmImprimirDANFEPDF );
+
+  DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString,
+    IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
 
 end.

@@ -37,8 +37,7 @@ var
 
 implementation
 
-uses UDMBusiness, UGrEntradaEstoq, UEntradaEstoq, UPrinc,
-  UfrmAcessoSistema;
+uses UDMBusiness, UGrEntradaEstoq, UEntradaEstoq, UPrinc, UfrmAcessoSistema;
 
 {$R *.dfm}
 
