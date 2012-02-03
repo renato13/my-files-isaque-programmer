@@ -445,8 +445,8 @@ begin
 
       rgFormaEmissao.ItemIndex := ReadInteger( 'Geral', 'FormaEmissao', 0) ;
       rgModoGerarNFe.ItemIndex := 1; // ReadInteger( 'Geral', 'ModoGerarNFe', 1) ;
-      ckSalvar.Checked    := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
-      edtPathLogs.Text    := ReadString( 'Geral', 'PathSalvar'  ,'') ;
+      ckSalvar.Checked := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
+      edtPathLogs.Text := ReadString( 'Geral', 'PathSalvar'  ,'') ;
 
       ACBrNFe.Configuracoes.Geral.FormaEmissao := StrToTpEmis(OK, IntToStr(rgFormaEmissao.ItemIndex + 1));
       ACBrNFe.Configuracoes.Geral.Salvar       := ckSalvar.Checked;
@@ -460,18 +460,18 @@ begin
       ACBrNFe.Configuracoes.WebServices.Ambiente   := StrToTpAmb(Ok,IntToStr(rgTipoAmb.ItemIndex + 1));
       ACBrNFe.Configuracoes.WebServices.Visualizar := ckVisualizar.Checked;
 
-      edtProxyHost.Text  := ReadString( 'Proxy', 'Host'   ,'') ;
-      edtProxyPorta.Text := ReadString( 'Proxy', 'Porta'  ,'') ;
-      edtProxyUser.Text  := ReadString( 'Proxy', 'User'   ,'') ;
-      edtProxySenha.Text := ReadString( 'Proxy', 'Pass'   ,'') ;
+      edtProxyHost.Text  := ReadString( 'Proxy', 'Host'  , '') ;
+      edtProxyPorta.Text := ReadString( 'Proxy', 'Porta' , '') ;
+      edtProxyUser.Text  := ReadString( 'Proxy', 'User'  , '') ;
+      edtProxySenha.Text := ReadString( 'Proxy', 'Pass'  , '') ;
 
       ACBrNFe.Configuracoes.WebServices.ProxyHost := edtProxyHost.Text;
       ACBrNFe.Configuracoes.WebServices.ProxyPort := edtProxyPorta.Text;
       ACBrNFe.Configuracoes.WebServices.ProxyUser := edtProxyUser.Text;
       ACBrNFe.Configuracoes.WebServices.ProxyPass := edtProxySenha.Text;
 
-      rgTipoDanfe.ItemIndex := ReadInteger( 'Geral', 'DANFE'       ,0) ;
-      edtLogoMarca.Text     := ReadString ( 'Geral', 'LogoMarca'   ,'') ;
+      rgTipoDanfe.ItemIndex := ReadInteger( 'Geral', 'DANFE'     , 0) ;
+      edtLogoMarca.Text     := ReadString ( 'Geral', 'LogoMarca' , '') ;
 
       if ACBrNFe.DANFE <> nil then
       begin
