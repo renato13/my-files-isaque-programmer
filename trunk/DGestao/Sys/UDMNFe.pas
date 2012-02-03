@@ -232,6 +232,8 @@ type
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
     function CancelarNFeACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Motivo : String) : Boolean;
+    function ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; 
+      const IsPDF : Boolean = FALSE) : Boolean;
   end;
 
 var
@@ -672,7 +674,7 @@ begin
     begin
       NotasFiscais.Clear;
       NotasFiscais.LoadFromFile( FileNameXML );
-      
+
       Result := Cancelamento( Motivo );
     end;
 
@@ -680,6 +682,55 @@ begin
     On E : Exception do
     begin
       ShowError('Erro ao tentar cancelar NF-e.' + #13#13 + 'CancelarNFeACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
+end;
+
+function TDMNFe.ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; 
+  const IsPDF : Boolean = FALSE) : Boolean;
+var
+  FileNameXML : String;
+begin
+
+  try
+
+    AbrirEmitente( sCNPJEmitente );
+    AbrirDestinatario( sCNPJDestinatario );
+    AbrirVenda( iAnoVenda, iNumVenda );
+
+    FileNameXML := ExtractFilePath( ParamStr(0) ) + qryCalculoImportoXML_NFE_FILENAME.AsString;
+
+    ForceDirectories( ExtractFilePath(FileNameXML) );
+
+    qryCalculoImportoXML_NFE.SaveToFile( FileNameXML );
+
+    with ACBrNFe do
+    begin
+      NotasFiscais.Clear;
+      NotasFiscais.LoadFromFile( FileNameXML );
+
+      if NotasFiscais.Items[0].NFe.Ide.tpEmis = teDPEC then
+      begin
+       WebServices.ConsultaDPEC.NFeChave := NotasFiscais.Items[0].NFe.infNFe.ID;
+       WebServices.ConsultaDPEC.Executar;
+
+       DANFE.ProtocoloNFe := WebServices.ConsultaDPEC.nRegDPEC +' '+ DateTimeToStr(WebServices.ConsultaDPEC.dhRegDPEC);
+      end;
+
+      if ( IsPDF ) then
+        NotasFiscais.ImprimirPDF
+      else
+        NotasFiscais.Imprimir;
+
+      Result := True;
+    end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar imprimir DANFE.' + #13#13 + 'ImprimirDANFEACBr() --> ' + e.Message);
       Result := False;
     end;
   end;

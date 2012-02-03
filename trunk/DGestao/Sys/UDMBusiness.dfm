@@ -6,7 +6,6 @@ object DMBusiness: TDMBusiness
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'
@@ -21,7 +20,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = True
+    Active = False
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -217,7 +216,6 @@ object DMBusiness: TDMBusiness
       '  CODFUNCAO = :CODFUNCAO'
       'where'
       '  NOME = :OLD_NOME')
-    Active = True
     Left = 144
     Top = 120
     object ibdtstUsersNOME: TIBStringField
@@ -243,5 +241,19 @@ object DMBusiness: TDMBusiness
       Origin = 'TBUSERS.CODFUNCAO'
       Required = True
     end
+  end
+  object EvMsgDialog: TEvMsgDlg
+    ButtonFont.Charset = ANSI_CHARSET
+    ButtonFont.Color = clWindowText
+    ButtonFont.Height = -11
+    ButtonFont.Name = 'Tahoma'
+    ButtonFont.Style = []
+    MessageFont.Charset = DEFAULT_CHARSET
+    MessageFont.Color = clWindowText
+    MessageFont.Height = -11
+    MessageFont.Name = 'MS Sans Serif'
+    MessageFont.Style = []
+    Left = 336
+    Top = 144
   end
 end

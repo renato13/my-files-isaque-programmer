@@ -1,7 +1,7 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 265
-  Top = 128
-  Width = 1137
+  Left = 359
+  Top = 134
+  Width = 1051
   Height = 608
   ActiveControl = nil
   Caption = 'Controle de Vendas'
@@ -22,6 +22,7 @@ inherited frmGeVenda: TfrmGeVenda
     Width = 1121
     inherited btbtnLista: TBitBtn
       Caption = 'Im&primir'
+      PopupMenu = ppImprimir
       Visible = True
       OnClick = btbtnListaClick
     end
@@ -3503,5 +3504,26 @@ inherited frmGeVenda: TfrmGeVenda
         Name = 'NUMVENDA'
         ParamType = ptInput
       end>
+  end
+  object ppImprimir: TPopupMenu
+    Left = 456
+    Top = 424
+    object nmImprimirVenda: TMenuItem
+      Caption = 'Or'#231'amento / Venda'
+      OnClick = nmImprimirVendaClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object nmImprimirDANFE: TMenuItem
+      Caption = 'Imprimir DANFE'
+      Enabled = False
+      OnClick = nmImprimirDANFEClick
+    end
+    object nmImprimirDANFEPDF: TMenuItem
+      Caption = 'Imprimir DANFE (PDF)'
+      Enabled = False
+      OnClick = nmImprimirDANFEClick
+    end
   end
 end

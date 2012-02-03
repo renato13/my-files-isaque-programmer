@@ -1,43 +1,57 @@
 inherited frmAcessoSistema: TfrmAcessoSistema
-  Left = 375
-  Top = 213
+  Left = 411
+  Top = 306
   Width = 370
   Height = 211
+  ActiveControl = edNome
   BorderIcons = [biSystemMenu]
   Caption = 'Acesso ao DGE'
   Color = clWhite
+  Font.Charset = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = [fsBold]
   OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
   PixelsPerInch = 96
-  TextHeight = 13
-  object iblnome: TLabel
-    Left = 96
+  TextHeight = 16
+  object Bevel1: TBevel
+    Left = 88
+    Top = 12
+    Width = 257
+    Height = 77
+    Shape = bsFrame
+  end
+  object lblNome: TLabel
+    Left = 104
     Top = 23
-    Width = 88
+    Width = 53
     Height = 16
-    Caption = 'USU'#193'RIO:'
+    Caption = '&Usu'#225'rio:'
+    FocusControl = edNome
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Lucida Console'
+    Font.Height = -13
+    Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object iblsenha: TLabel
-    Left = 96
+  object lblSenha: TLabel
+    Left = 104
     Top = 60
-    Width = 66
+    Width = 45
     Height = 16
-    Caption = 'SENHA:'
+    Caption = '&Senha:'
+    FocusControl = edSenha
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Lucida Console'
+    Font.Height = -13
+    Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Image2: TImage
+  object imgLogo: TImage
     Left = 13
     Top = 17
     Width = 65
@@ -460,40 +474,33 @@ inherited frmAcessoSistema: TfrmAcessoSistema
       FFFFFFFFFFFFFFFFFFFFFFFFFF00}
     IsControl = True
   end
-  object Bevel1: TBevel
-    Left = 86
-    Top = 12
-    Width = 256
-    Height = 74
-    Shape = bsFrame
-  end
-  object edtNome: TEdit
-    Left = 192
+  object edNome: TEdit
+    Left = 168
     Top = 19
-    Width = 137
-    Height = 24
+    Width = 161
+    Height = 27
     CharCase = ecUpperCase
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Lucida Console'
+    Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
-    OnExit = edtNomeExit
+    OnExit = edNomeExit
   end
-  object edtSenha: TEdit
-    Left = 192
+  object edSenha: TEdit
+    Left = 168
     Top = 53
-    Width = 136
-    Height = 24
+    Width = 160
+    Height = 27
     CharCase = ecUpperCase
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
-    Font.Name = 'Lucida Console'
+    Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
     PasswordChar = '*'
@@ -517,14 +524,14 @@ inherited frmAcessoSistema: TfrmAcessoSistema
   object btbtnEntrar: TBitBtn
     Left = 209
     Top = 96
-    Width = 105
-    Height = 30
+    Width = 136
+    Height = 41
     Hint = 'Entrar no DGE'
     Caption = 'Entrar'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
-    Font.Name = 'Lucida Console'
+    Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
     ParentShowHint = False
