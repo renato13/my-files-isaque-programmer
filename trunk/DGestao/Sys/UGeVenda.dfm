@@ -1,11 +1,12 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 380
-  Top = 214
+  Left = 279
+  Top = 116
   Width = 1051
   Height = 608
   ActiveControl = nil
   Caption = 'Controle de Vendas'
   OldCreateOrder = True
+  OnActivate = FormActivate
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel

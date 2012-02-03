@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl;
+  ToolWin, IBTable, ToolEdit, RXDBCtrl, EUserAcs;
 
 type
   TAliquota = (taICMS, taISS);
@@ -98,6 +98,7 @@ type
     lblNCM_SH: TLabel;
     dbNCM_SH: TDBEdit;
     IbDtstTabelaNCM_SH: TIBStringField;
+    EvUA: TEvUserAccess;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -107,6 +108,7 @@ type
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
     procedure FormShow(Sender: TObject);
     procedure DtSrcTabelaStateChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -404,6 +406,27 @@ begin
   inherited;
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     pgcMaisDados.ActivePageIndex := 0;
+end;
+
+procedure TfrmGeProduto.FormActivate(Sender: TObject);
+begin
+  inherited;
+
+ case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+   1: EvUA.UserID := 1 ;  //Diretoria
+   2: EvUA.UserID := 2;   // Gerente de Vendas
+   3: EvUA.UserID := 3;   // Gerente Financeiro
+   4: EvUA.UserID := 4;   // Vendedor
+   5: EvUA.UserID := 5;   // Gerente ADM
+   6: EvUA.UserID := 6;   // Caixa
+   7: EvUA.UserID := 7;   // Aux.Financeiro 1
+   8: EvUA.UserID := 8;   // Aux.Financeiro 2
+   9: EvUA.UserID := 9;   // Supervisor Caixa
+   10: EvUA.UserID := 10;   // Estoquista
+   11: EvUA.UserID := 11;   // TI
+   12: EvUA.UserID := 12;   // Masterdados-Supervisor
+ else ShowMessage('Falta cruzar nova função com EvUserID!');
+end
 end;
 
 end.

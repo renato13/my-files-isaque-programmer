@@ -16,7 +16,7 @@ type
     Produto1: TMenuItem;
     Vendedor1: TMenuItem;
     mnBanco: TMenuItem;
-    Vendas1: TMenuItem;
+    Estoque1: TMenuItem;
     Financeiro1: TMenuItem;
     ContasaPagar1: TMenuItem;
     ContasaReceber1: TMenuItem;
@@ -91,6 +91,10 @@ type
     nmGerarBoleto: TMenuItem;
     nmCancelarNFe: TMenuItem;
     nmInutilizarNumeroNFe: TMenuItem;
+    EvUAfrmPrinc: TEvUserAccess;
+    SpeedbarSection2: TSpeedbarSection;
+    SpeedItem1: TSpeedItem;
+    SpeedItem2: TSpeedItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -98,7 +102,6 @@ type
     procedure RxSpeedBtnCPagClick(Sender: TObject);
     procedure Fornecedor1Click(Sender: TObject);
     procedure RxSpeedButton2Click(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure RxSpeedBtnProdClick(Sender: TObject);
     procedure Entrada1Click(Sender: TObject);
     procedure AjusteManual1Click(Sender: TObject);
@@ -128,6 +131,7 @@ type
     procedure nmConfigurarNFeACBrClick(Sender: TObject);
     procedure nmTipoDespesaClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -189,12 +193,6 @@ begin
 end;
 
 procedure TfrmPrinc.RxSpeedButton2Click(Sender: TObject);
-begin
-  if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
-    Application.Terminate;
-end;
-
-procedure TfrmPrinc.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
     Application.Terminate;
@@ -375,6 +373,41 @@ end;
 procedure TfrmPrinc.Button1Click(Sender: TObject);
 begin
 frmAcessoSistema.ShowModal
+end;
+
+procedure TfrmPrinc.FormActivate(Sender: TObject);
+begin
+
+ case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+   1: EvUAfrmPrinc.UserID := 1 ;  //Diretoria
+   2: begin
+       EvUAfrmPrinc.UserID := 2;   // Gerente de Vendas
+       RxSpeedButton5.Enabled := false;
+       RxSpeedBtnCRec.Enabled := false;
+       RxSpeedBtnCPag.Enabled := false;
+      end;
+   3: EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
+   4: begin
+       EvUAfrmPrinc.UserID := 4;   // Vendedor
+       RxSpeedButtonEmpresa.Visible := false;
+       RxSpeedBtnProd.Enabled := false;
+       RxSpeedButton4.Enabled := false;
+       RxSpeedButton1.Enabled := false;
+       RxSpeedButton5.Enabled := false;
+       RxSpeedBtnCRec.Enabled := false;
+       RxSpeedBtnCPag.Enabled := false;
+      end;
+   5: EvUAfrmPrinc.UserID := 5;   // Gerente ADM
+   6: EvUAfrmPrinc.UserID := 6;   // Caixa
+   7: EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
+   8: EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
+   9: EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
+   10: EvUAfrmPrinc.UserID := 10;   // Estoquista
+   11: EvUAfrmPrinc.UserID := 11;   // TI
+   12: EvUAfrmPrinc.UserID := 12;   // Masterdados-Supervisor
+ else ShowMessage('Falta cruzar nova função com UserID!');
+ end;
+
 end;
 
 end.
