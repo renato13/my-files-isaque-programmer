@@ -1303,13 +1303,20 @@ begin
       with InfAdic.obsCont.Add do
       begin
         xCampo := 'ObsCont';
+        xTexto := 'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger) +
+                  ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString;
+      end;
+
+      with InfAdic.obsCont.Add do
+      begin
+        xCampo := 'ObsCont';
         xTexto := 'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString;
       end;
 
       with InfAdic.obsFisco.Add do
       begin
         xCampo := 'ObsFisco';
-        xTexto := GetInformacaoFisco; // 'Texto';
+        xTexto := GetInformacaoFisco; 
       end;
 
   //Processo referenciado

@@ -888,13 +888,13 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
         'a, 0) / 100 ) as valor_total_icms_normal_entrada'
       
         '  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coale' +
-        'sce(i.Qtde, 0) * i.Punit end ) as valor_base_icms_normal_saida'
+        'sce(i.Qtde, 0) * i.Pfinal end ) as valor_base_icms_normal_saida'
       
-        '  , sum( coalesce(i.Qtde, 0) * i.Punit * coalesce(i.Aliquota, 0)' +
-        ' / 100 ) as valor_total_icms_normal_saida'
+        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota, 0' +
+        ') / 100 ) as valor_total_icms_normal_saida'
       
-        '  , sum( coalesce(i.Qtde, 0) * i.Punit * coalesce(i.Aliquota, 0)' +
-        ' / 100 ) -'
+        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota, 0' +
+        ') / 100 ) -'
       
         '    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
         'a, 0) / 100 ) as valor_total_icms_normal_devido'
