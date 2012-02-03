@@ -1,9 +1,8 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 285
-  Top = 141
+  Left = 562
+  Top = 252
   Width = 886
   Height = 545
-  ActiveControl = dbgDados
   Caption = 'Cadastro de Produtos'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -24,7 +23,6 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 870
     Height = 464
-    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 369
@@ -77,7 +75,6 @@ inherited frmGeProduto: TfrmGeProduto
           item
             Expanded = False
             FieldName = 'CUSTOMEDIO'
-            Width = -1
             Visible = False
           end
           item
