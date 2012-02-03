@@ -228,6 +228,7 @@ type
     procedure AbrirVenda(AnoVenda, NumeroVenda : Integer);
 
     function GerarNFeOnLine : Boolean;
+    function GetInformacaoFisco : String;
 
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
@@ -247,7 +248,7 @@ const
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
-  ACBrNFeNotasFiscais, ACBrNFeWebServices;
+  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls;
 
 {$R *.dfm}
 
@@ -373,19 +374,20 @@ begin
       WriteString( 'Proxy', 'User'   , edtProxyUser.Text) ;
       WriteString( 'Proxy', 'Pass'   , edtProxySenha.Text) ;
 
-      WriteString( 'Emitente', 'CNPJ'       ,edtEmitCNPJ.Text) ;
-      WriteString( 'Emitente', 'IE'         ,edtEmitIE.Text) ;
-      WriteString( 'Emitente', 'RazaoSocial',edtEmitRazao.Text) ;
-      WriteString( 'Emitente', 'Fantasia'   ,edtEmitFantasia.Text) ;
-      WriteString( 'Emitente', 'Fone'       ,edtEmitFone.Text) ;
-      WriteString( 'Emitente', 'CEP'        ,edtEmitCEP.Text) ;
-      WriteString( 'Emitente', 'Logradouro' ,edtEmitLogradouro.Text) ;
-      WriteString( 'Emitente', 'Numero'     ,edtEmitNumero.Text) ;
-      WriteString( 'Emitente', 'Complemento',edtEmitComp.Text) ;
-      WriteString( 'Emitente', 'Bairro'     ,edtEmitBairro.Text) ;
-      WriteString( 'Emitente', 'CodCidade'  ,edtEmitCodCidade.Text) ;
-      WriteString( 'Emitente', 'Cidade'     ,edtEmitCidade.Text) ;
-      WriteString( 'Emitente', 'UF'         ,edtEmitUF.Text) ;
+      WriteString( 'Emitente', 'CNPJ'       , edtEmitCNPJ.Text) ;
+      WriteString( 'Emitente', 'IE'         , edtEmitIE.Text) ;
+      WriteString( 'Emitente', 'RazaoSocial', edtEmitRazao.Text) ;
+      WriteString( 'Emitente', 'Fantasia'   , edtEmitFantasia.Text) ;
+      WriteString( 'Emitente', 'Fone'       , edtEmitFone.Text) ;
+      WriteString( 'Emitente', 'CEP'        , edtEmitCEP.Text) ;
+      WriteString( 'Emitente', 'Logradouro' , edtEmitLogradouro.Text) ;
+      WriteString( 'Emitente', 'Numero'     , edtEmitNumero.Text) ;
+      WriteString( 'Emitente', 'Complemento', edtEmitComp.Text) ;
+      WriteString( 'Emitente', 'Bairro'     , edtEmitBairro.Text) ;
+      WriteString( 'Emitente', 'CodCidade'  , edtEmitCodCidade.Text) ;
+      WriteString( 'Emitente', 'Cidade'     , edtEmitCidade.Text) ;
+      WriteString( 'Emitente', 'UF'         , edtEmitUF.Text) ;
+      WriteString( 'Emitente', 'InfoFisco'  , edInfoFisco.Text) ;
 
       WriteString( 'Email', 'Host'    ,edtSmtpHost.Text) ;
       WriteString( 'Email', 'Port'    ,edtSmtpPort.Text) ;
@@ -477,19 +479,20 @@ begin
         ACBrNFe.DANFE.Logo      := edtLogoMarca.Text;
       end;
 
-      edtEmitCNPJ.Text       := ReadString( 'Emitente', 'CNPJ'       ,'') ;
-      edtEmitIE.Text         := ReadString( 'Emitente', 'IE'         ,'') ;
-      edtEmitRazao.Text      := ReadString( 'Emitente', 'RazaoSocial','') ;
-      edtEmitFantasia.Text   := ReadString( 'Emitente', 'Fantasia'   ,'') ;
-      edtEmitFone.Text       := ReadString( 'Emitente', 'Fone'       ,'') ;
-      edtEmitCEP.Text        := ReadString( 'Emitente', 'CEP'        ,'') ;
-      edtEmitLogradouro.Text := ReadString( 'Emitente', 'Logradouro' ,'') ;
-      edtEmitNumero.Text     := ReadString( 'Emitente', 'Numero'     ,'') ;
-      edtEmitComp.Text       := ReadString( 'Emitente', 'Complemento','') ;
-      edtEmitBairro.Text     := ReadString( 'Emitente', 'Bairro'     ,'') ;
-      edtEmitCodCidade.Text  := ReadString( 'Emitente', 'CodCidade'  ,'') ;
-      edtEmitCidade.Text     := ReadString( 'Emitente', 'Cidade'     ,'') ;
-      edtEmitUF.Text         := ReadString( 'Emitente', 'UF'         ,'') ;
+      edtEmitCNPJ.Text       := ReadString( 'Emitente', 'CNPJ'       , '' ) ;
+      edtEmitIE.Text         := ReadString( 'Emitente', 'IE'         , '' ) ;
+      edtEmitRazao.Text      := ReadString( 'Emitente', 'RazaoSocial', '' ) ;
+      edtEmitFantasia.Text   := ReadString( 'Emitente', 'Fantasia'   , '' ) ;
+      edtEmitFone.Text       := ReadString( 'Emitente', 'Fone'       , '' ) ;
+      edtEmitCEP.Text        := ReadString( 'Emitente', 'CEP'        , '' ) ;
+      edtEmitLogradouro.Text := ReadString( 'Emitente', 'Logradouro' , '' ) ;
+      edtEmitNumero.Text     := ReadString( 'Emitente', 'Numero'     , '' ) ;
+      edtEmitComp.Text       := ReadString( 'Emitente', 'Complemento', '' ) ;
+      edtEmitBairro.Text     := ReadString( 'Emitente', 'Bairro'     , '' ) ;
+      edtEmitCodCidade.Text  := ReadString( 'Emitente', 'CodCidade'  , '' ) ;
+      edtEmitCidade.Text     := ReadString( 'Emitente', 'Cidade'     , '' ) ;
+      edtEmitUF.Text         := ReadString( 'Emitente', 'UF'         , '' ) ;
+      edInfoFisco.Text       := ReadString( 'Emitente', 'InfoFisco'  , 'EMPRESA OPTANTE PELO SIMPLES DE ACORDO COM A LEI COMPLEMENTAR 123, DE DEZEMBRO DE 2006' ) ;
 
       edtSmtpHost.Text      := ReadString( 'Email', 'Host'   ,'') ;
       edtSmtpPort.Text      := ReadString( 'Email', 'Port'   ,'') ;
@@ -587,6 +590,11 @@ end;
 function TDMNFe.GerarNFeOnLine : Boolean;
 begin
   Result := ( ConfigACBr.rgModoGerarNFe.ItemIndex = 1 );
+end;
+
+function TDMNFe.GetInformacaoFisco : String;
+begin
+  Result := ( ConfigACBr.edInfoFisco.Text );
 end;
 
 function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer): Boolean;
@@ -1283,8 +1291,8 @@ begin
         qryDuplicatas.Next;
       end;
 
-      InfAdic.infCpl     :=  '';
-      InfAdic.infAdFisco :=  '';
+      InfAdic.infCpl     :=  'Informações Complementares: ';
+      InfAdic.infAdFisco :=  'Inf. Fisco: ';
 
       with InfAdic.obsCont.Add do
       begin
@@ -1292,10 +1300,16 @@ begin
         xTexto := qryCalculoImportoOBS.AsString;
       end;
 
+      with InfAdic.obsCont.Add do
+      begin
+        xCampo := 'ObsCont';
+        xTexto := 'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString;
+      end;
+
       with InfAdic.obsFisco.Add do
       begin
         xCampo := 'ObsFisco';
-        xTexto := EmptyStr; // 'Texto';
+        xTexto := GetInformacaoFisco; // 'Texto';
       end;
 
   //Processo referenciado
