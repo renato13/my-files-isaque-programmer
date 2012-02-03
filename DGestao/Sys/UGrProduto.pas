@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ComCtrls, StdCtrls, Buttons, ToolWin, Grids, DBGrids, ExtCtrls,
-  DB, IBCustomDataSet, Mask, DBCtrls, IBQuery;
+  DB, IBCustomDataSet, Mask, DBCtrls, IBQuery, EUserAcs;
 
 type
   TfrmGrProdutos = class(TForm)
@@ -74,6 +74,7 @@ type
     ibdtstProdLookEmp: TStringField;
     Label10: TLabel;
     DBLookupComboBox2: TDBLookupComboBox;
+    EvUserAccess1: TEvUserAccess;
     procedure btbtnIncluirClick(Sender: TObject);
     procedure btbtnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);

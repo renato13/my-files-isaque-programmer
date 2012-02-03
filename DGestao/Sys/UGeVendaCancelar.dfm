@@ -1,4 +1,6 @@
 inherited frmGeVendaCancelar: TfrmGeVendaCancelar
+  Left = 387
+  Top = 193
   Width = 617
   Height = 474
   ActiveControl = dbMotivo
