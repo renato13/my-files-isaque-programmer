@@ -1288,13 +1288,13 @@ begin
 
       with InfAdic.obsCont.Add do
       begin
-        xCampo := EmptyStr; // 'ObsCont';
-        xTexto := EmptyStr; // 'Texto';
+        xCampo := 'ObsCont';
+        xTexto := qryCalculoImportoOBS.AsString;
       end;
 
       with InfAdic.obsFisco.Add do
       begin
-        xCampo := EmptyStr; // 'ObsFisco';
+        xCampo := 'ObsFisco';
         xTexto := EmptyStr; // 'Texto';
       end;
 
