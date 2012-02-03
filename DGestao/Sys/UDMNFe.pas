@@ -1115,7 +1115,7 @@ begin
               ICMS.vICMSST := 0;
               ICMS.pRedBC  := 0;
             end;
-
+  {
             with IPI do
             begin
               CST      := ipi99 ;
@@ -1131,7 +1131,7 @@ begin
               pIPI   := 0; // Percentual IPI
               vIPI   := 0; // Valor IPI
             end;
-  {
+
               with II do
                begin
                  vBc      := 0;
