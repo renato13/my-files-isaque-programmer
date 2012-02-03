@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ComCtrls, BarMenus, SpeedBar, RXCtrls, ExtCtrls, jpeg;
+  Dialogs, Menus, ComCtrls, BarMenus, SpeedBar, RXCtrls, ExtCtrls, jpeg,
+  EUserAcs, StdCtrls, Buttons;
 
 type
   TfrmPrinc = class(TForm)
@@ -126,6 +127,7 @@ type
     procedure nmCondicaoPagtoClick(Sender: TObject);
     procedure nmConfigurarNFeACBrClick(Sender: TObject);
     procedure nmTipoDespesaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -145,7 +147,8 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
-  UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa;
+  UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
+  UfrmAcessoSistema;
 
 {$R *.dfm}
 
@@ -367,6 +370,11 @@ end;
 procedure TfrmPrinc.nmTipoDespesaClick(Sender: TObject);
 begin
   MostrarTipoDespesas(Self);
+end;
+
+procedure TfrmPrinc.Button1Click(Sender: TObject);
+begin
+frmAcessoSistema.ShowModal
 end;
 
 end.

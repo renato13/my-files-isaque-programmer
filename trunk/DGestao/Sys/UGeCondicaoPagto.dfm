@@ -1,4 +1,6 @@
 inherited frmGeCondicaoPagto: TfrmGeCondicaoPagto
+  Left = 408
+  Top = 232
   ActiveControl = dbNome
   Caption = 'Tabela de Condi'#231#245'es de Pagamento'
   OldCreateOrder = True

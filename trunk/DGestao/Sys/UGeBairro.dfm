@@ -1,11 +1,13 @@
 inherited frmGeBairro: TfrmGeBairro
-  Left = 508
-  Top = 284
+  Left = 306
+  Top = 195
+  ActiveControl = dbgDados
   Caption = 'Tabela de Bairros'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <

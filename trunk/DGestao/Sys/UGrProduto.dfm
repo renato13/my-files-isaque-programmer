@@ -291,7 +291,7 @@ object frmGrProdutos: TfrmGrProdutos
     Top = 0
     Width = 721
     Height = 205
-    ActivePage = TabSheetDados
+    ActivePage = TabSheetLista
     Align = alClient
     DockSite = True
     HotTrack = True
@@ -702,7 +702,6 @@ object frmGrProdutos: TfrmGrProdutos
       'where'
       '  COD = :OLD_COD')
     GeneratorField.ApplyEvent = gamOnPost
-    Active = True
     Left = 48
     Top = 176
     object ibdtstProdDESCRI: TIBStringField
@@ -837,7 +836,6 @@ object frmGrProdutos: TfrmGrProdutos
       'where'
       '  COD = :OLD_COD')
     GeneratorField.ApplyEvent = gamOnPost
-    Active = True
     Left = 272
     Top = 176
   end
@@ -848,8 +846,11 @@ object frmGrProdutos: TfrmGrProdutos
     CachedUpdates = False
     SelectSQL.Strings = (
       'select CNPJ, RZSOC from TBEMPRESA')
-    Active = True
     Left = 192
     Top = 184
+  end
+  object EvUserAccess1: TEvUserAccess
+    Left = 92
+    Top = 48
   end
 end
