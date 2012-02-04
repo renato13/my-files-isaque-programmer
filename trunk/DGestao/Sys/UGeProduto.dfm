@@ -1,8 +1,9 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 562
-  Top = 252
+  Left = 315
+  Top = 126
   Width = 886
   Height = 545
+  ActiveControl = dbgDados
   Caption = 'Cadastro de Produtos'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -23,6 +24,7 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 870
     Height = 464
+    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 369
@@ -975,7 +977,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  left join TBCFOP c on (c.Cfop_cod = p.Codcfop)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_PRODUTO_ID'
-    Left = 656
+    Left = 680
+    Top = 64
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -1164,7 +1167,8 @@ inherited frmGeProduto: TfrmGeProduto
     end
   end
   inherited DtSrcTabela: TDataSource
-    Left = 720
+    Left = 744
+    Top = 64
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -1253,10 +1257,12 @@ inherited frmGeProduto: TfrmGeProduto
       'delete from TBPRODUTO'
       'where'
       '  CODIGO = :OLD_CODIGO')
-    Left = 688
+    Left = 712
+    Top = 64
   end
   inherited ImgList: TImageList
-    Left = 624
+    Left = 648
+    Top = 64
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
