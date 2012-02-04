@@ -1,11 +1,12 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 435
-  Top = 218
+  Left = 343
+  Top = 217
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
+    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=sysdba'
@@ -193,15 +194,16 @@ object DMBusiness: TDMBusiness
       '  NOME = :OLD_NOME')
     InsertSQL.Strings = (
       'insert into TBUSERS'
-      '  (NOME, SENHA, NOMECOMPLETO, CODFUNCAO)'
+      '  (NOME, SENHA, NOMECOMPLETO, CODFUNCAO, LIMIDESC)'
       'values'
-      '  (:NOME, :SENHA, :NOMECOMPLETO, :CODFUNCAO)')
+      '  (:NOME, :SENHA, :NOMECOMPLETO, :CODFUNCAO, :LIMIDESC)')
     RefreshSQL.Strings = (
       'Select '
       '  NOME,'
       '  SENHA,'
       '  NOMECOMPLETO,'
-      '  CODFUNCAO'
+      '  CODFUNCAO,'
+      '  LIMIDESC'
       'from TBUSERS '
       'where'
       '  NOME = :NOME')
@@ -213,7 +215,8 @@ object DMBusiness: TDMBusiness
       '  NOME = :NOME,'
       '  SENHA = :SENHA,'
       '  NOMECOMPLETO = :NOMECOMPLETO,'
-      '  CODFUNCAO = :CODFUNCAO'
+      '  CODFUNCAO = :CODFUNCAO,'
+      '  LIMIDESC = :LIMIDESC'
       'where'
       '  NOME = :OLD_NOME')
     Left = 144
@@ -241,6 +244,12 @@ object DMBusiness: TDMBusiness
       Origin = 'TBUSERS.CODFUNCAO'
       Required = True
     end
+    object ibdtstUsersLIMIDESC: TIBBCDField
+      FieldName = 'LIMIDESC'
+      Origin = 'TBUSERS.LIMIDESC'
+      Precision = 9
+      Size = 2
+    end
   end
   object EvMsgDialog: TEvMsgDlg
     ButtonFont.Charset = ANSI_CHARSET
@@ -255,5 +264,10 @@ object DMBusiness: TDMBusiness
     MessageFont.Style = []
     Left = 336
     Top = 144
+  end
+  object dtsrcUsers: TDataSource
+    DataSet = ibdtstUsers
+    Left = 208
+    Top = 120
   end
 end
