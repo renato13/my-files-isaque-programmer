@@ -445,6 +445,7 @@ begin
 
       rgFormaEmissao.ItemIndex := ReadInteger( 'Geral', 'FormaEmissao', 0) ;
       rgModoGerarNFe.ItemIndex := 1; // ReadInteger( 'Geral', 'ModoGerarNFe', 1) ;
+      
       ckSalvar.Checked := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
       edtPathLogs.Text := ReadString( 'Geral', 'PathSalvar'  ,'') ;
 
@@ -905,6 +906,12 @@ begin
       Emit.xNome             := qryEmitenteRZSOC.AsString;
       Emit.xFant             := qryEmitenteNMFANT.AsString;
 
+      case qryEmitenteTIPO_REGIME_NFE.AsInteger of
+        0 : Emit.CRT := crtSimplesNacional;
+        1 : Emit.CRT := crtSimplesExcessoReceita;
+        2 : Emit.CRT := crtRegimeNormal;
+      end;
+
       Emit.EnderEmit.fone    := qryEmitenteFONE.AsString;
       Emit.EnderEmit.CEP     := StrToInt( qryEmitenteCEP.AsString );
       Emit.EnderEmit.xLgr    := Trim( qryEmitenteTLG_SIGLA.AsString + ' ' + qryEmitenteLOG_NOME.AsString );
@@ -921,7 +928,6 @@ begin
       Emit.IM                := ''; // Preencher no caso de existir serviços na nota
       Emit.CNAE              := ''; // Verifique na cidade do emissor da NFe se é permitido
                                     // a inclusão de serviços na NFe
-      Emit.CRT               := TpcnCRT( qryEmitenteTIPO_REGIME_NFE.AsInteger ); // (1 - crtSimplesNacional, 2 - crtSimplesExcessoReceita, 3 - crtRegimeNormal)
 
   //Para NFe Avulsa preencha os campos abaixo
   {      Avulsa.CNPJ    := '';
@@ -1292,7 +1298,7 @@ begin
       end;
 
       InfAdic.infCpl     :=  'Informações Complementares: ';
-      InfAdic.infAdFisco :=  'Inf. Fisco: ';
+      InfAdic.infAdFisco :=  '';
 
       with InfAdic.obsCont.Add do
       begin
@@ -1313,14 +1319,20 @@ begin
         xTexto := 'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString;
       end;
 
+      with InfAdic.obsCont.Add do
+      begin
+        xCampo := 'ObsCont';
+        xTexto := 'Info. Fisco: ' + GetInformacaoFisco;
+      end;
+  {
       with InfAdic.obsFisco.Add do
       begin
         xCampo := 'ObsFisco';
-        xTexto := GetInformacaoFisco; 
+        xTexto := GetInformacaoFisco;
       end;
 
   //Processo referenciado
-  {     with InfAdic.procRef.Add do
+       with InfAdic.procRef.Add do
          begin
            nProc := '';
            indProc := ipSEFAZ;

@@ -487,3 +487,30 @@ ALTER TABLE TBCOMPRAS
     ADD CANCEL_USUARIO VARCHAR(50),
     ADD CANCEL_DATAHORA TIMESTAMP,
     ADD CANCEL_MOTIVO DMN_TEXTO;
+
+
+DROP VIEW VW_TIPO_REGIME_NFE;
+CREATE VIEW VW_TIPO_REGIME_NFE(
+    CODIGO,
+    DESCRICAO)
+AS
+Select First 1
+    0 as Codigo
+  , 'Simples Nacional (1)' as Descricao
+from TBORIGEMPROD
+
+union
+
+Select First 1
+    1 as Codigo
+  , 'Simples Excesso Receita (2)' as Descricao
+from TBORIGEMPROD
+
+union
+
+Select First 1
+    2 as Codigo
+  , 'Regime Normal (3)' as Descricao
+from TBORIGEMPROD
+;
+GRANT SELECT, UPDATE, DELETE, INSERT, REFERENCES ON VW_TIPO_REGIME_NFE TO "PUBLIC";
