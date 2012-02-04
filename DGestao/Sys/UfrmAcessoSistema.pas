@@ -20,6 +20,8 @@ type
     procedure edNomeExit(Sender: TObject);
     procedure btbtnEntrarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure edSenhaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -109,6 +111,13 @@ procedure TfrmAcessoSistema.FormClose(Sender: TObject;
 begin
   inherited;
   Application.Terminate;
+end;
+
+procedure TfrmAcessoSistema.edSenhaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+ if key=13 then btbtnEntrarClick(Sender);
 end;
 
 end.
