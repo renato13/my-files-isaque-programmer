@@ -33,6 +33,8 @@ type
     ibdtstUsersNOMECOMPLETO: TIBStringField;
     ibdtstUsersCODFUNCAO: TSmallintField;
     EvMsgDialog: TEvMsgDlg;
+    dtsrcUsers: TDataSource;
+    ibdtstUsersLIMIDESC: TIBBCDField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
