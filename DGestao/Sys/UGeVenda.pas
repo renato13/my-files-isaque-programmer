@@ -731,6 +731,7 @@ begin
 end;
 
 procedure TfrmGeVenda.ControlEditExit(Sender: TObject);
+var limitedesc, perc : variant;
 begin
   inherited;
 
@@ -761,7 +762,16 @@ begin
   if ( Sender = dbValorLiq ) then
     if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
       btnProdutoSalvar.SetFocus;
-      
+
+  limitedesc := DMBusiness.ibdtstUsersLIMIDESC.Value;
+  perc := dbDesconto.Text;
+
+  if  (perc > limitedesc) then
+  begin
+    MessageDlg ('Limite de Desconto = ' + VarToStr(limitedesc)+ '%', mtWarning, [mbOk],0);
+    dbDesconto.SetFocus
+  end;
+
 end;
 
 procedure TfrmGeVenda.pgcGuiasChange(Sender: TObject);
