@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 433
-  Top = 218
+  Left = 254
+  Top = 145
   Width = 943
   Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -4337,7 +4337,15 @@ object frmPrinc: TfrmPrinc
       'Estoque1=D1,2,3,5,6,11,12'
       'Entradas1=D1,2,3,5,6,11,12'
       'AjusteEstoque1=D1,2,3,5,6,11,12'
-      'Kardex2=D1,2,3,5,6,11,12')
+      'Kardex2=D1,2,3,5,6,11,12'
+      'menuCadastro=D1,2,3,5,7,8,11,12'
+      'menuEstoque=D1,2,3,5,7,8,11,12'
+      'menuFaturamento=D1,2,3,4,5,6,7,8,11,12'
+      'menuFinanceiro=D1,3,7,8,11,12'
+      'popAjusteEstoque=D1,2,3,5,7,8,11,12'
+      'popEntrada=D1,2,3,5,7,8,11,12'
+      'popKardex=D1,2,3,5,7,8,11,12'
+      'nmRelatorioFinanceiro=D1,3,7,8,11,12')
     Left = 112
     Top = 96
   end
