@@ -26,9 +26,9 @@ inherited frmAcessoSistema: TfrmAcessoSistema
   object lblNome: TLabel
     Left = 104
     Top = 23
-    Width = 53
+    Width = 62
     Height = 16
-    Caption = '&Usu'#225'rio:'
+    Caption = '&USU'#193'RIO:'
     FocusControl = edNome
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -39,10 +39,10 @@ inherited frmAcessoSistema: TfrmAcessoSistema
   end
   object lblSenha: TLabel
     Left = 104
-    Top = 60
-    Width = 45
+    Top = 58
+    Width = 47
     Height = 16
-    Caption = '&Senha:'
+    Caption = '&SENHA:'
     FocusControl = edSenha
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -475,9 +475,9 @@ inherited frmAcessoSistema: TfrmAcessoSistema
     IsControl = True
   end
   object edNome: TEdit
-    Left = 168
+    Left = 173
     Top = 19
-    Width = 161
+    Width = 156
     Height = 27
     CharCase = ecUpperCase
     Color = clWhite
@@ -491,9 +491,9 @@ inherited frmAcessoSistema: TfrmAcessoSistema
     OnExit = edNomeExit
   end
   object edSenha: TEdit
-    Left = 168
+    Left = 173
     Top = 53
-    Width = 160
+    Width = 155
     Height = 27
     CharCase = ecUpperCase
     Color = clWhite
@@ -505,6 +505,7 @@ inherited frmAcessoSistema: TfrmAcessoSistema
     ParentFont = False
     PasswordChar = '*'
     TabOrder = 1
+    OnKeyDown = edSenhaKeyDown
   end
   object pnlMensagem: TPanel
     Left = 0
@@ -522,10 +523,10 @@ inherited frmAcessoSistema: TfrmAcessoSistema
     TabOrder = 3
   end
   object btbtnEntrar: TBitBtn
-    Left = 209
+    Left = 232
     Top = 96
-    Width = 136
-    Height = 41
+    Width = 112
+    Height = 32
     Hint = 'Entrar no DGE'
     Caption = 'Entrar'
     Font.Charset = ANSI_CHARSET
