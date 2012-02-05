@@ -83,6 +83,7 @@ var
   function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
   function GetDateTimeDB : TDateTime;
   function GetUserApp : String;
+  function GetLimiteDescontoUser : Currency;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -577,16 +578,14 @@ end;
 
 function GetUserApp : String;
 begin
-  with DMBusiness, qryBusca do
-  begin
-//    Close;
-//    SQL.Clear;
-//    SQL.Add('Select First 1 user as Usr from TBEMPRESA');
-//    Open;
-//
-//    Result := FieldByName('Usr').AsString;
+  with DMBusiness, ibdtstUsers do
     Result := UpperCase( Trim(ibdtstUsersNOME.AsString) );
-  end;
+end;
+
+function GetLimiteDescontoUser : Currency;
+begin
+  with DMBusiness, ibdtstUsers do
+    Result := ibdtstUsersLIMIDESC.AsCurrency;
 end;
 
 procedure TDMBusiness.DataModuleCreate(Sender: TObject);
@@ -601,9 +600,12 @@ begin
       Params.Add('user_name=' + DB_USER_NAME);
       Params.Add('password='  + DB_USER_PASSWORD);
       Params.Add('lc_ctype='  + DB_LC_CTYPE);
-      Connected    := True;
+      Connected := True;
+
+      if ( Connected ) then
+        ibdtstUsers.Open;
     end;
-  ibdtstUsers.Open;
+
   except
     On E : Exception do
       ShowError('Erro ao tentar conectar no Servidor/Base.' + #13#13 + E.Message);

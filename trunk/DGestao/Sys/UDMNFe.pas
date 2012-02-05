@@ -1392,16 +1392,6 @@ begin
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
-//      if ( OnLine ) then
-//      begin
-//        NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
-//        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
-//      end
-//      else
-//        UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
-//
-//      UpdateNumeroNFe(iSerieNFe, iNumeroNFe);
-
       if ( Imprimir ) then
         ACBrNFe.NotasFiscais.Imprimir;
     end;
