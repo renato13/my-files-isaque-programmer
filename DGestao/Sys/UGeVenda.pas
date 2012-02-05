@@ -501,6 +501,9 @@ begin
         if ( Trim(FieldByName('Cst').AsString) <> EmptyStr ) then
           cdsTabelaItensCST.AsString       := FieldByName('Cst').AsString;
 
+        if ( Trim(FieldByName('Csosn').AsString) <> EmptyStr ) then
+          cdsTabelaItensCSOSN.AsString     := FieldByName('Csosn').AsString;
+
         cdsTabelaItensPUNIT.AsCurrency     := FieldByName('Preco').AsCurrency;
         cdsTabelaItensVALOR_IPI.AsCurrency := FieldByName('Valor_ipi').AsCurrency;
         
@@ -687,6 +690,12 @@ begin
       dbQuantidade.SetFocus;
     end
     else
+    if ( cdsTabelaItensDESCONTO.AsCurrency > GetLimiteDescontoUser ) then
+    begin
+      ShowWarning('Limite de Desconto = ' + FormatFloat('0.00', GetLimiteDescontoUser) + '%');
+      dbDesconto.SetFocus;
+    end
+    else
     begin
 
       case cdsTabelaItens.State of
@@ -764,15 +773,6 @@ begin
   if ( Sender = dbValorLiq ) then
     if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
       btnProdutoSalvar.SetFocus;
-
-  limitedesc := DMBusiness.ibdtstUsersLIMIDESC.Value;
-  perc := dbDesconto.Text;
-
-  if  (perc > limitedesc) then
-  begin
-    MessageDlg ('Limite de Desconto = ' + VarToStr(limitedesc)+ '%', mtWarning, [mbOk],0);
-    dbDesconto.SetFocus
-  end;
 
 end;
 

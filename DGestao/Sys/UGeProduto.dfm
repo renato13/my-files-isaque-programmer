@@ -1183,8 +1183,10 @@ inherited frmGeProduto: TfrmGeProduto
       Size = 2
     end
     object IbDtstTabelaALIQUOTA_CSOSN: TIBBCDField
+      DisplayLabel = '% Al'#237'quota SN'
       FieldName = 'ALIQUOTA_CSOSN'
       Origin = 'TBPRODUTO.ALIQUOTA_CSOSN'
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
