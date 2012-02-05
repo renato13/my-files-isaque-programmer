@@ -2327,12 +2327,18 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'DESCRI'
+            Width = 290
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'CST'
             Title.Alignment = taCenter
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CSOSN'
             Visible = True
           end
           item
@@ -2914,7 +2920,6 @@ inherited frmGeVenda: TfrmGeVenda
   object cdsTabelaItens: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BeforePost = cdsTabelaItensBeforePost
     OnNewRecord = cdsTabelaItensNewRecord
     BufferChunks = 1000
     CachedUpdates = True
@@ -2937,6 +2942,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Unid_cod'
       '  , i.Cfop_cod'
       '  , i.Aliquota'
+      '  , i.Aliquota_csosn'
       '  , i.Valor_ipi'
       '  , p.Descri'
       '  , p.Qtde as Estoque'
@@ -2948,6 +2954,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Qtde * i.Pfinal as total_liquido'
       '  , o.Cfop_descricao'
       '  , p.Cst'
+      '  , p.Csosn'
       'from TVENDASITENS i'
       '  inner join TBPRODUTO p on (p.Cod = i.Codprod)'
       '  left join TBUNIDADEPROD u on (u.Unp_cod = p.Codunidade)'
@@ -3047,6 +3054,13 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
+    object cdsTabelaItensALIQUOTA_CSOSN: TIBBCDField
+      FieldName = 'ALIQUOTA_CSOSN'
+      Origin = 'TVENDASITENS.ALIQUOTA_CSOSN'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsTabelaItensVALOR_IPI: TIBBCDField
       FieldName = 'VALOR_IPI'
       Origin = 'TVENDASITENS.VALOR_IPI'
@@ -3109,6 +3123,12 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TBPRODUTO.CST'
       Size = 3
     end
+    object cdsTabelaItensCSOSN: TIBStringField
+      Alignment = taCenter
+      FieldName = 'CSOSN'
+      Origin = 'TBPRODUTO.CSOSN'
+      Size = 3
+    end
   end
   object IbUpdTabelaItens: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -3128,6 +3148,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  UNID_COD,'
       '  CFOP_COD,'
       '  ALIQUOTA,'
+      '  ALIQUOTA_CSOSN,'
       '  VALOR_IPI'
       'from TVENDASITENS '
       'where'
@@ -3153,6 +3174,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  UNID_COD = :UNID_COD,'
       '  CFOP_COD = :CFOP_COD,'
       '  ALIQUOTA = :ALIQUOTA,'
+      '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
       '  VALOR_IPI = :VALOR_IPI'
       'where'
       '  ANO = :OLD_ANO and'
@@ -3165,8 +3187,9 @@ inherited frmGeVenda: TfrmGeVenda
         '  (ANO, CODCONTROL, SEQ, CODPROD, CODEMP, CODCLI, DTVENDA, QTDE,' +
         ' PUNIT, '
       
-        '   DESCONTO, PFINAL, QTDEFINAL, UNID_COD, CFOP_COD, ALIQUOTA, VA' +
-        'LOR_IPI)'
+        '   DESCONTO, PFINAL, QTDEFINAL, UNID_COD, CFOP_COD, ALIQUOTA, AL' +
+        'IQUOTA_CSOSN, '
+      '   VALOR_IPI)'
       'values'
       
         '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
@@ -3174,7 +3197,7 @@ inherited frmGeVenda: TfrmGeVenda
       
         '   :PUNIT, :DESCONTO, :PFINAL, :QTDEFINAL, :UNID_COD, :CFOP_COD,' +
         ' :ALIQUOTA, '
-      '   :VALOR_IPI)')
+      '   :ALIQUOTA_CSOSN, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'

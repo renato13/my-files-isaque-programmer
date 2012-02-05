@@ -1000,6 +1000,7 @@ object DMNFe: TDMNFe
       '  , p.Codorigem'
       '  , p.Codtributacao'
       '  , p.Cst'
+      '  , p.Csosn'
       '  , i.Codemp'
       '  , i.Codcli'
       '  , i.Dtvenda'
@@ -1013,6 +1014,7 @@ object DMNFe: TDMNFe
       '  , u.Unp_sigla'
       '  , i.Cfop_cod'
       '  , i.Aliquota'
+      '  , i.Aliquota_csosn'
       '  , i.Valor_ipi'
       '  , i.Qtde * i.Punit as Total_bruto'
       '  , i.Qtde * i.Pfinal as Total_liquido'
@@ -1185,6 +1187,17 @@ object DMNFe: TDMNFe
     end
     object qryDadosProdutoDISPONIVEL: TLargeintField
       FieldName = 'DISPONIVEL'
+    end
+    object qryDadosProdutoCSOSN: TIBStringField
+      FieldName = 'CSOSN'
+      Origin = 'TBPRODUTO.CSOSN'
+      Size = 3
+    end
+    object qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField
+      FieldName = 'ALIQUOTA_CSOSN'
+      Origin = 'TVENDASITENS.ALIQUOTA_CSOSN'
+      Precision = 18
+      Size = 2
     end
   end
   object frdEmpresa: TfrxDBDataset
