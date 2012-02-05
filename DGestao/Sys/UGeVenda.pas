@@ -223,6 +223,8 @@ type
     nmImprimirDANFE: TMenuItem;
     nmImprimirDANFEPDF: TMenuItem;
     N1: TMenuItem;
+    cdsTabelaItensALIQUOTA_CSOSN: TIBBCDField;
+    cdsTabelaItensCSOSN: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -252,7 +254,6 @@ type
     procedure qryTitulosCalcFields(DataSet: TDataSet);
     procedure btnRegerarTituloClick(Sender: TObject);
     procedure dbCFOPVendaButtonClick(Sender: TObject);
-    procedure cdsTabelaItensBeforePost(DataSet: TDataSet);
     procedure btbtnListaClick(Sender: TObject);
     procedure btbtnCancelarVNDClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -494,7 +495,8 @@ begin
         if ( FieldByName('Codcfop').AsInteger > 0 ) then
           cdsTabelaItensCFOP_COD.AsInteger := FieldByName('Codcfop').AsInteger;
 
-        cdsTabelaItensALIQUOTA.AsCurrency  := FieldByName('Aliquota').AsCurrency;
+        cdsTabelaItensALIQUOTA.AsCurrency       := FieldByName('Aliquota').AsCurrency;
+        cdsTabelaItensALIQUOTA_CSOSN.AsCurrency := FieldByName('Aliquota_csosn').AsCurrency;
 
         if ( Trim(FieldByName('Cst').AsString) <> EmptyStr ) then
           cdsTabelaItensCST.AsString       := FieldByName('Cst').AsString;
@@ -1003,15 +1005,6 @@ begin
       IbDtstTabelaCFOP.AsInteger := iCodigo;
 end;
 
-procedure TfrmGeVenda.cdsTabelaItensBeforePost(DataSet: TDataSet);
-begin
-//  if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
-//  begin
-//    ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
-//    Abort;
-//  end;
-end;
-
 procedure TfrmGeVenda.btbtnListaClick(Sender: TObject);
 begin
   inherited;
@@ -1044,21 +1037,21 @@ end;
 procedure TfrmGeVenda.FormActivate(Sender: TObject);
 begin
   inherited;
- case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
 // 1: EvUAfrmPrinc.UserID := 1 ;  //Diretoria
-   2: begin
+    2: begin
     // EvUAfrmPrinc.UserID := 4;   // Gerente de Vendas
-       btbtnFinalizar.Visible := false;
-       btbtnGerarNFe.Visible := False;
-       btbtnCancelarVND.Visible := False;
-      end;
+         btbtnFinalizar.Visible   := False;
+         btbtnGerarNFe.Visible    := False;
+         btbtnCancelarVND.Visible := False;
+       end;
 // 3: EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
-   4: begin
+    4: begin
     //   EvUAfrmPrinc.UserID := 4;   // Vendedor
-       btbtnFinalizar.Visible := false;
-       btbtnGerarNFe.Visible := False;
-       btbtnCancelarVND.Visible := False;
-      end;
+         btbtnFinalizar.Visible   := false;
+         btbtnGerarNFe.Visible    := False;
+         btbtnCancelarVND.Visible := False;
+       end;
 //   5: EvUAfrmPrinc.UserID := 5;   // Gerente ADM
 //   6: EvUAfrmPrinc.UserID := 6;   // Caixa
 //   7: EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
@@ -1068,7 +1061,7 @@ begin
  //  11: EvUAfrmPrinc.UserID := 11;   // TI
 //   12: EvUAfrmPrinc.UserID := 12;   // Masterdados-Supervisor
 // else ShowMessage('Falta cruzar nova função com UserID!');
-end
+  end
 end;
 
 procedure TfrmGeVenda.nmImprimirVendaClick(Sender: TObject);
@@ -1123,8 +1116,7 @@ begin
 
   isPDF := ( Sender = nmImprimirDANFEPDF );
 
-  DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString,
-    IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
+  DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
 
 end.

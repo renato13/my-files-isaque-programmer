@@ -51,8 +51,8 @@ type
     GrpBxDadosTributo: TGroupBox;
     lblOrigem: TLabel;
     dbOrigem: TDBLookupComboBox;
-    lblTipoTributacao: TLabel;
-    dbTipoTributacao: TDBLookupComboBox;
+    lblTipoTributacaoNM: TLabel;
+    dbTipoTributacaoNM: TDBLookupComboBox;
     lblCFOP: TLabel;
     dbCFOP: TRxDBComboEdit;
     lblAliquota: TLabel;
@@ -63,8 +63,8 @@ type
     Bevel5: TBevel;
     tblOrigem: TIBTable;
     dtsOrigem: TDataSource;
-    tblTributacao: TIBTable;
-    dtsTributacao: TDataSource;
+    tblTributacaoNM: TIBTable;
+    dtsTributacaoNM: TDataSource;
     pgcMaisDados: TPageControl;
     tbsValores: TTabSheet;
     tbsHistorico: TTabSheet;
@@ -99,6 +99,14 @@ type
     dbNCM_SH: TDBEdit;
     IbDtstTabelaNCM_SH: TIBStringField;
     EvUA: TEvUserAccess;
+    tblTributacaoSN: TIBTable;
+    dtsTributacaoSN: TDataSource;
+    IbDtstTabelaCSOSN: TIBStringField;
+    IbDtstTabelaALIQUOTA_CSOSN: TIBBCDField;
+    lblTipoTributacaoSN: TLabel;
+    dbTipoTributacaoSN: TDBLookupComboBox;
+    lblAliquotaSN: TLabel;
+    dbAliquotaSN: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -172,14 +180,6 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
-//    with frm, IbDtstTabela do
-//    begin
-//      Close;
-//      SelectSQL.Add('where ' + whr);
-//      SelectSQL.Add('order by ' + CampoOrdenacao);
-//      Open;
-//    end;
-
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
     if ( Result ) then
@@ -203,14 +203,6 @@ begin
     frm.dbAliquotaTipo.Enabled  := False;
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
-
-//    with frm, IbDtstTabela do
-//    begin
-//      Close;
-//      SelectSQL.Add('where ' + whr);
-//      SelectSQL.Add('order by ' + CampoDescricao);
-//      Open;
-//    end;
 
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
@@ -247,14 +239,6 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
-//    with frm, IbDtstTabela do
-//    begin
-//      Close;
-//      SelectSQL.Add('where ' + whr);
-//      SelectSQL.Add('order by ' + CampoOrdenacao);
-//      Open;
-//    end;
-
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
     if ( Result ) then
@@ -277,7 +261,8 @@ begin
 
   tblEmpresa.Open;
   tblOrigem.Open;
-  tblTributacao.Open;
+  tblTributacaoNM.Open;
+  tblTributacaoSN.Open;
   tblAliquota.Open;
 
   DisplayFormatCodigo := '###0000000';
@@ -374,8 +359,8 @@ begin
   if ( not tblOrigem.IsEmpty ) then
     IbDtstTabelaCODORIGEM.Value := tblOrigem.FieldByName('ORP_COD').AsString;
 
-  if ( not tblTributacao.IsEmpty ) then
-    IbDtstTabelaCODTRIBUTACAO.Value := tblTributacao.FieldByName('TPT_COD').AsString;
+  if ( not tblTributacaoNM.IsEmpty ) then
+    IbDtstTabelaCODTRIBUTACAO.Value := tblTributacaoNM.FieldByName('TPT_COD').AsString;
 
   IbDtstTabelaCST.Value      := IbDtstTabelaCODORIGEM.AsString + IbDtstTabelaCODTRIBUTACAO.AsString;
   IbDtstTabelaESTOQMIN.Value := 0;
@@ -412,20 +397,21 @@ procedure TfrmGeProduto.FormActivate(Sender: TObject);
 begin
   inherited;
 
- case DMBusiness.ibdtstUsersCODFUNCAO.Value of
-   1: EvUA.UserID := 1 ;  //Diretoria
-   2: EvUA.UserID := 2;   // Gerente de Vendas
-   3: EvUA.UserID := 3;   // Gerente Financeiro
-   4: EvUA.UserID := 4;   // Vendedor
-   5: EvUA.UserID := 5;   // Gerente ADM
-   6: EvUA.UserID := 6;   // Caixa
-   7: EvUA.UserID := 7;   // Aux.Financeiro 1
-   8: EvUA.UserID := 8;   // Aux.Financeiro 2
-   9: EvUA.UserID := 9;   // Supervisor Caixa
-   10: EvUA.UserID := 10;   // Estoquista
-   11: EvUA.UserID := 11;   // TI
-   12: EvUA.UserID := 12;   // Masterdados-Supervisor
- else ShowMessage('Falta cruzar nova função com EvUserID!');
+  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+    1 : EvUA.UserID := 1;   // Diretoria
+    2 : EvUA.UserID := 2;   // Gerente de Vendas
+    3 : EvUA.UserID := 3;   // Gerente Financeiro
+    4 : EvUA.UserID := 4;   // Vendedor
+    5 : EvUA.UserID := 5;   // Gerente ADM
+    6 : EvUA.UserID := 6;   // Caixa
+    7 : EvUA.UserID := 7;   // Aux.Financeiro 1
+    8 : EvUA.UserID := 8;   // Aux.Financeiro 2
+    9 : EvUA.UserID := 9;   // Supervisor Caixa
+    10: EvUA.UserID := 10;  // Estoquista
+    11: EvUA.UserID := 11;  // TI
+    12: EvUA.UserID := 12;  // Masterdados-Supervisor
+  else
+    ShowWarning('Falta cruzar nova função com EvUserID!');
 end
 end;
 

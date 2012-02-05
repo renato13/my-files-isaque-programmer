@@ -201,6 +201,8 @@ type
     qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
     qryCalculoImportoNFE_ENVIADA: TSmallintField;
+    qryDadosProdutoCSOSN: TIBStringField;
+    qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -248,7 +250,7 @@ const
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
-  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls;
+  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe;
 
 {$R *.dfm}
 
@@ -1103,24 +1105,52 @@ begin
           begin
             with ICMS do
             begin
-              Case qryDadosProdutoCODTRIBUTACAO.AsInteger of
-                 0 : CST := cst00;
-                10 : CST := cst10;
-                20 : CST := cst20;
-                30 : CST := cst30;
-                40 : CST := cst40;
-                41 : CST := cst41;
-                50 : CST := cst50;
-                51 : CST := cst51;
-                60 : CST := cst60;
-                70 : CST := cst70;
-                else CST := cst90;
+              if ( Emit.CRT = crtSimplesNacional ) then
+              begin
+
+                // csosnVazio,csosn101, csosn102, csosn103, csosn201, csosn202, csosn203, csosn300, csosn400, csosn500, csosn900
+                Case qryDadosProdutoCSOSN.AsInteger of
+                  101 : CSOSN := csosn101; 
+                  102 : CSOSN := csosn102;
+                  103 : CSOSN := csosn103;
+                  201 : CSOSN := csosn201;
+                  202 : CSOSN := csosn202;
+                  203 : CSOSN := csosn203;
+                  300 : CSOSN := csosn300;
+                  400 : CSOSN := csosn400;
+                  500 : CSOSN := csosn500;
+                  else
+                    CSOSN := csosn900;
+                end;
+                pCredSN     := qryDadosProdutoALIQUOTA_CSOSN.AsCurrency;
+                vCredICMSSN := qryDadosProdutoPFINAL.AsCurrency * pCredSN / 100;
+                
+              end
+              else
+              begin
+
+                Case qryDadosProdutoCODTRIBUTACAO.AsInteger of
+                   0 : CST := cst00;
+                  10 : CST := cst10;
+                  20 : CST := cst20;
+                  30 : CST := cst30;
+                  40 : CST := cst40;
+                  41 : CST := cst41;
+                  50 : CST := cst50;
+                  51 : CST := cst51;
+                  60 : CST := cst60;
+                  70 : CST := cst70;
+                  else
+                    CST := cst90;
+                end;
+                ICMS.pICMS   := qryDadosProdutoALIQUOTA.AsCurrency;
+                ICMS.vICMS   := qryDadosProdutoPFINAL.AsCurrency * ICMS.pICMS / 100;
+
               end;
+
               ICMS.orig    := TpcnOrigemMercadoria( qryDadosProdutoCODORIGEM.AsInteger );
               ICMS.modBC   := dbiValorOperacao;
-              ICMS.vBC     := qryDadosProdutoPUNIT.AsCurrency;
-              ICMS.pICMS   := qryDadosProdutoALIQUOTA.AsCurrency;                                         // Percentual ICMS
-              ICMS.vICMS   := qryDadosProdutoPUNIT.AsCurrency * qryDadosProdutoALIQUOTA.AsCurrency / 100; // Valor ICMS
+              ICMS.vBC     := qryDadosProdutoPFINAL.AsCurrency;
               ICMS.modBCST := dbisMargemValorAgregado;
               ICMS.pMVAST  := 0;
               ICMS.pRedBCST:= 0;
@@ -1129,6 +1159,36 @@ begin
               ICMS.vICMSST := 0;
               ICMS.pRedBC  := 0;
             end;
+
+            with PIS do
+            begin
+              if ( Emit.CRT = crtSimplesNacional ) then
+              begin
+                CST      := pis99;
+                PIS.vBC  := 0;
+                PIS.pPIS := 0;
+                PIS.vPIS := 0;
+
+                PIS.qBCProd   := 0;
+                PIS.vAliqProd := 0;
+                PIS.vPIS      := 0;
+              end;
+            end;
+
+            with COFINS do
+            begin
+              if ( Emit.CRT = crtSimplesNacional ) then
+              begin
+                CST            := cof99;
+                COFINS.vBC     := 0;
+                COFINS.pCOFINS := 0;
+                COFINS.vCOFINS := 0;
+
+                COFINS.qBCProd   := 0;
+                COFINS.vAliqProd := 0;
+              end;
+            end;
+
   {
             with IPI do
             begin
@@ -1154,18 +1214,6 @@ begin
                  vIOF     := 0;
                end;
 
-              with PIS do
-               begin
-                 CST      := pis99;
-                 PIS.vBC  := 0;
-                 PIS.pPIS := 0;
-                 PIS.vPIS := 0;
-
-                 PIS.qBCProd   := 0;
-                 PIS.vAliqProd := 0;
-                 PIS.vPIS      := 0;
-               end;
-
               with PISST do
                begin
                  vBc       := 0;
@@ -1173,17 +1221,6 @@ begin
                  qBCProd   := 0;
                  vAliqProd := 0;
                  vPIS      := 0;
-               end;
-
-              with COFINS do
-               begin
-                 CST            := cof99;
-                 COFINS.vBC     := 0;
-                 COFINS.pCOFINS := 0;
-                 COFINS.vCOFINS := 0;
-
-                 COFINS.qBCProd   := 0;
-                 COFINS.vAliqProd := 0;
                end;
 
               with COFINSST do
