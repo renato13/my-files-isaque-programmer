@@ -1122,9 +1122,10 @@ begin
                   else
                     CSOSN := csosn900;
                 end;
+                
                 pCredSN     := qryDadosProdutoALIQUOTA_CSOSN.AsCurrency;
                 vCredICMSSN := qryDadosProdutoPFINAL.AsCurrency * pCredSN / 100;
-                
+
               end
               else
               begin
@@ -1143,21 +1144,23 @@ begin
                   else
                     CST := cst90;
                 end;
+
+                ICMS.modBC   := dbiValorOperacao;
+                ICMS.vBC     := qryDadosProdutoPFINAL.AsCurrency;
+                ICMS.pRedBC  := 0;
                 ICMS.pICMS   := qryDadosProdutoALIQUOTA.AsCurrency;
                 ICMS.vICMS   := qryDadosProdutoPFINAL.AsCurrency * ICMS.pICMS / 100;
-
+                
               end;
 
               ICMS.orig    := TpcnOrigemMercadoria( qryDadosProdutoCODORIGEM.AsInteger );
-              ICMS.modBC   := dbiValorOperacao;
-              ICMS.vBC     := qryDadosProdutoPFINAL.AsCurrency;
               ICMS.modBCST := dbisMargemValorAgregado;
               ICMS.pMVAST  := 0;
               ICMS.pRedBCST:= 0;
               ICMS.vBCST   := 0;
               ICMS.pICMSST := 0;
               ICMS.vICMSST := 0;
-              ICMS.pRedBC  := 0;
+
             end;
 
             with PIS do
