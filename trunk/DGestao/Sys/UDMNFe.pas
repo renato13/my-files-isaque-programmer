@@ -1337,20 +1337,20 @@ begin
         qryDuplicatas.Next;
       end;
 
-      InfAdic.infCpl     :=  'Informações Complementares: ';
-
-      InfAdic.infAdFisco := 'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
+      InfAdic.infCpl     := 'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
                             ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString + #13 +
                             'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString + #13 +
                             'Obserações : ' + qryCalculoImportoOBS.AsString;
 
+      InfAdic.infAdFisco := 'Info. Fisco: ' + GetInformacaoFisco;
+
+  {
       with InfAdic.obsCont.Add do
       begin
         xCampo := 'ObsCont';
         xTexto := 'Info. Fisco: ' + GetInformacaoFisco;
       end;
 
-  {
       with InfAdic.obsCont.Add do
       begin
         xCampo := 'ObsCont';
