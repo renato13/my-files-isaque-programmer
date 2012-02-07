@@ -1,4 +1,6 @@
 inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
+  Left = 397
+  Top = 144
   ActiveControl = dbBaseICMS
   BorderStyle = bsDialog
   BorderWidth = 4
