@@ -616,6 +616,8 @@ begin
 
     NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
 
+    ACBrNFe.NotasFiscais.GerarNFe;
+
     Result := ACBrNFe.Enviar( NumeroLote );
 
     if ( Result ) then
