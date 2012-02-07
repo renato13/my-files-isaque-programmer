@@ -114,9 +114,9 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=86
-CursorY=1144
-TopLine=1115
+CursorX=1
+CursorY=612
+TopLine=603
 LeftCol=1
 
 [View3]
@@ -135,8 +135,8 @@ LeftCol=1
 
 [View5]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-CursorX=72
-CursorY=347
+CursorX=91
+CursorY=346
 TopLine=334
 LeftCol=1
 
@@ -217,7 +217,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=OnCreate
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
