@@ -243,7 +243,8 @@ var
   DMNFe: TDMNFe;
 
 const
-  SELDIRHELP = 1000;
+  SELDIRHELP   = 1000;
+  FILENAME_NFE = 'Report\NotaFiscalEletronica.rav';
 
   procedure ConfigurarNFeACBr;
 
@@ -416,6 +417,7 @@ procedure TDMNFe.LerConfiguracao;
 Var
   Ok : Boolean;
   StreamMemo : TMemoryStream;
+  sFileNFE : String;
 begin
   try
 
@@ -529,6 +531,13 @@ begin
       end;
     end;
 
+    sFileNFE := ExtractFilePath(ParamStr(0)) + FILENAME_NFE;
+
+    if ( not FileExists(sFileNFE) ) then
+      ShowError( 'Arquivo ' + QuotedStr(sFileNFE) + ' não encontrado!' )
+    else
+      rvDANFE.RavFile := sFileNFE;
+    
   finally
   end;
 end;
@@ -616,8 +625,8 @@ begin
 
     NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
 
-    ACBrNFe.NotasFiscais.GerarNFe;
-
+//    ACBrNFe.NotasFiscais.GerarNFe;
+//
     Result := ACBrNFe.Enviar( NumeroLote );
 
     if ( Result ) then
@@ -849,9 +858,18 @@ begin
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
 
-    iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
-    iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
-    DtHoraEmiss := GetDateTimeDB;
+    if ( qryCalculoImportoNFE.AsLargeInt = 0 ) then
+    begin
+      iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
+      iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
+      DtHoraEmiss := GetDateTimeDB;
+    end
+    else
+    begin
+      iSerieNFe   := qryCalculoImportoSERIE.AsInteger;
+      iNumeroNFe  := qryCalculoImportoNFE.AsLargeInt;
+      DtHoraEmiss := qryCalculoImportoDATAEMISSAO.AsDateTime;
+    end;
 
     with ACBrNFe.NotasFiscais.Add.NFe do
     begin
@@ -1394,6 +1412,7 @@ begin
 
       ACBrNFe.NotasFiscais.Assinar;
       ACBrNFe.NotasFiscais.Valida;
+      ACBrNFe.NotasFiscais.GerarNFe;
 
       ACBrNFe.NotasFiscais.Items[0].SaveToFile;
 
