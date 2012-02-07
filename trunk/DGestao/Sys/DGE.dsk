@@ -12,10 +12,10 @@ File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UPesq.pas',0,1,46,15,85,1
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
 Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
 Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
 Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=7
 EditWindowCount=1
@@ -30,12 +30,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -45,7 +45,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -114,9 +114,9 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=1
-CursorY=1395
-TopLine=1360
+CursorX=86
+CursorY=1144
+TopLine=1115
 LeftCol=1
 
 [View3]
@@ -142,9 +142,9 @@ LeftCol=1
 
 [View6]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=65
-CursorY=505
-TopLine=471
+CursorX=1
+CursorY=748
+TopLine=744
 LeftCol=1
 
 [Watches]
@@ -166,9 +166,9 @@ Width=1920
 Height=144
 MaxLeft=-1
 MaxTop=-1
-MaxWidth=1936
+MaxWidth=1932
 MaxHeight=122
-ClientWidth=1920
+ClientWidth=1916
 ClientHeight=84
 
 [ProjectManager]
@@ -217,7 +217,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Connected
+SelectedItem=OnCreate
 ExpandedItems=
 HiddenCategories=
 
