@@ -1,6 +1,6 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 544
-  Top = 204
+  Left = 292
+  Top = 115
   Width = 886
   Height = 575
   Caption = 'Cadastro de Produtos'
