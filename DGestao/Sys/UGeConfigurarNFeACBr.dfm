@@ -1,4 +1,6 @@
 inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
+  Left = 461
+  Top = 154
   BorderStyle = bsDialog
   BorderWidth = 4
   Caption = 'Configurar NF-e (ACBr)'
@@ -156,7 +158,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
       Top = 15
       Width = 280
       Height = 367
-      ActivePage = TabSheet4
+      ActivePage = TabSheet1
       Align = alClient
       MultiLine = True
       TabOrder = 0
