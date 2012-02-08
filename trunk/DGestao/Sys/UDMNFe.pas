@@ -536,10 +536,11 @@ begin
     sFileNFE := ExtractFilePath(ParamStr(0)) + FILENAME_NFE;
 
     if ( not FileExists(sFileNFE) ) then
-      ShowError( 'Arquivo ' + QuotedStr(sFileNFE) + ' não encontrado!' )
-    else
-      rvDANFE.RavFile := sFileNFE;
-    
+      ShowError( 'Arquivo ' + QuotedStr(sFileNFE) + ' não encontrado!' );
+
+    rvDANFE.TamanhoFonte_RazaoSocial := 10;
+    rvDANFE.RavFile                  := sFileNFE;
+
   finally
   end;
 end;
@@ -637,6 +638,14 @@ begin
       ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
       ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
       ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
+
+//      if ( ACBrNFe.Consultar ) then
+//      begin
+//        ACBrNFe.NotasFiscais.Items[0].SaveToFile( FileNameXML );
+//
+//        ChaveNFE     := ACBrNFe.WebServices.Consulta.NFeChave;
+//        ProtocoloNFE := ACBrNFe.WebServices.Consulta.Protocolo;
+//      end;
 
       UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
@@ -747,10 +756,10 @@ begin
 
       if NotasFiscais.Items[0].NFe.Ide.tpEmis = teDPEC then
       begin
-       WebServices.ConsultaDPEC.NFeChave := NotasFiscais.Items[0].NFe.infNFe.ID;
-       WebServices.ConsultaDPEC.Executar;
+        WebServices.ConsultaDPEC.NFeChave := NotasFiscais.Items[0].NFe.infNFe.ID;
+        WebServices.ConsultaDPEC.Executar;
 
-       DANFE.ProtocoloNFe := WebServices.ConsultaDPEC.nRegDPEC +' '+ DateTimeToStr(WebServices.ConsultaDPEC.dhRegDPEC);
+        DANFE.ProtocoloNFe := WebServices.ConsultaDPEC.nRegDPEC + ' ' + DateTimeToStr(WebServices.ConsultaDPEC.dhRegDPEC);
       end;
 
       if ( IsPDF ) then
@@ -802,8 +811,12 @@ begin
     qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
     qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
     qryCalculoImportoNFE_ENVIADA.Value := 0;
-    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
-    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+
+    if ( FileExists(FileNameNFE) ) then
+    begin
+      qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+      qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+    end;
 
     Post;
     ApplyUpdates;
@@ -1042,7 +1055,10 @@ begin
           //Prod.vDesc     := qryDadosProdutoPUNIT.AsCurrency * qryDadosProdutoDESCONTO.AsFloat / 100;
 
           // Informação Adicional do Produto
-          infAdProd      := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString;
+          if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
+            infAdProd    := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString
+          else
+            infAdProd    := EmptyStr;  
 
   //Declaração de Importação. Pode ser adicionada várias através do comando Prod.DI.Add
   {         with Prod.DI.Add do
