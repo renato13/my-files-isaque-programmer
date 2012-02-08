@@ -214,6 +214,7 @@ type
     procedure UpdateLoteNFe(const Ano, Numero : Integer);
     procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String); overload;
     procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
+    procedure UpdateVendaNFe(const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
@@ -635,7 +636,7 @@ begin
 
     if ( Result ) then
     begin
-      UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+      UpdateVendaNFe(FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
       ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
@@ -831,6 +832,29 @@ begin
     qryCalculoImportoNFE.Value      := NumeroNFE;
     qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
     qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+    qryCalculoImportoNFE_ENVIADA.Value := 1;
+    qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
+    qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
+    qryCalculoImportoVERIFICADOR_NFE.Value := ChaveNFE;
+    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+
+    Post;
+    ApplyUpdates;
+    CommitTransaction;
+  end;
+end;
+
+procedure TDMNFe.UpdateVendaNFe(const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); 
+begin
+  if ( qryCalculoImporto.IsEmpty ) then
+    Exit;
+
+  with qryCalculoImporto do
+  begin
+    Edit;
+
+    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
     qryCalculoImportoNFE_ENVIADA.Value := 1;
     qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
     qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
@@ -1448,6 +1472,8 @@ begin
         qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
         qryCalculoImportoSERIE.AsString := FormatFloat('##00', iSerieNFe);
         qryCalculoImportoNFE.Value      := iNumeroNFe;
+        qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+        qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
 
         Post;
         ApplyUpdates;
