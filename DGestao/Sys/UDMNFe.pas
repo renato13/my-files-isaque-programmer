@@ -1052,7 +1052,6 @@ begin
           Prod.vFrete    := 0;
           Prod.vSeg      := 0;
           Prod.vDesc     := qryDadosProdutoVALOR_DESCONTO.AsCurrency;
-          //Prod.vDesc     := qryDadosProdutoPUNIT.AsCurrency * qryDadosProdutoDESCONTO.AsFloat / 100;
 
           // Informação Adicional do Produto
           if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
