@@ -899,9 +899,9 @@ begin
       Ide.modelo    := 55;
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
-      Ide.dEmi      := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-      Ide.dSaiEnt   := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-      Ide.hSaiEnt   := DtHoraEmiss;
+      Ide.dEmi      := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+      Ide.dSaiEnt   := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+      Ide.hSaiEnt   := GetTimeDB; // DtHoraEmiss;
       Ide.tpNF      := tnSaida;
       Ide.tpEmis    := ACBrNFe.Configuracoes.Geral.FormaEmissao;
       Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;
@@ -1215,14 +1215,14 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
-                CST      := pis99;
-                PIS.vBC  := 0;
-                PIS.pPIS := 0;
-                PIS.vPIS := 0;
-
-                PIS.qBCProd   := 0;
-                PIS.vAliqProd := 0;
-                PIS.vPIS      := 0;
+//                CST      := pis99;
+//                PIS.vBC  := 0;
+//                PIS.pPIS := 0;
+//                PIS.vPIS := 0;
+//
+//                PIS.qBCProd   := 0;
+//                PIS.vAliqProd := 0;
+//                PIS.vPIS      := 0;
               end;
             end;
 
@@ -1230,13 +1230,13 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
-                CST            := cof99;
-                COFINS.vBC     := 0;
-                COFINS.pCOFINS := 0;
-                COFINS.vCOFINS := 0;
-
-                COFINS.qBCProd   := 0;
-                COFINS.vAliqProd := 0;
+//                CST            := cof99;
+//                COFINS.vBC     := 0;
+//                COFINS.pCOFINS := 0;
+//                COFINS.vCOFINS := 0;
+//
+//                COFINS.qBCProd   := 0;
+//                COFINS.vAliqProd := 0;
               end;
             end;
 
