@@ -650,8 +650,12 @@ begin
       UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
-      if ( Imprimir ) then
-        ACBrNFe.NotasFiscais.Imprimir;
+      try
+        if ( Imprimir ) then
+          ACBrNFe.NotasFiscais.Imprimir;
+      except
+      end;
+
     end;
 
   except
