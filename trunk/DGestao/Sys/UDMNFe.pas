@@ -203,6 +203,7 @@ type
     qryCalculoImportoNFE_ENVIADA: TSmallintField;
     qryDadosProdutoCSOSN: TIBStringField;
     qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField;
+    qryDadosProdutoVALOR_DESCONTO: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -215,8 +216,7 @@ type
     procedure UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); overload;
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
-      var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String;
-      const Imprimir : Boolean = TRUE);
+      var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
   public
     { Public declarations }
     property ConfigACBr : TfrmGeConfigurarNFeACBr read frmACBr write frmACBr;
@@ -232,8 +232,10 @@ type
     function GerarNFeOnLine : Boolean;
     function GetInformacaoFisco : String;
 
-    function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
-    function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
+    function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+      const Imprimir : Boolean = TRUE) : Boolean;
+    function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+      const Imprimir : Boolean = TRUE) : Boolean;
     function CancelarNFeACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Motivo : String) : Boolean;
     function ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; 
       const IsPDF : Boolean = FALSE) : Boolean;
@@ -609,13 +611,16 @@ begin
   Result := ( ConfigACBr.edInfoFisco.Text );
 end;
 
-function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer): Boolean;
+function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda: Integer;
+  const Imprimir : Boolean = TRUE): Boolean;
 var
   DtHoraEmiss : TDateTime;
   iSerieNFe,
   iNumeroNFe  : Integer;
   FileNameXML ,
-  ChaveNFE    : String;
+  ChaveNFE    ,
+  ProtocoloNFE,
+  ReciboNFE   : String;
   NumeroLote  : Int64;
 begin
 
@@ -625,16 +630,19 @@ begin
 
     NumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
 
-//    ACBrNFe.NotasFiscais.GerarNFe;
-//
     Result := ACBrNFe.Enviar( NumeroLote );
 
     if ( Result ) then
     begin
-      ChaveNFE := ACBrNFe.WebServices.Retorno.ChaveNFe;
+      ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
+      ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
+      ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
 
       UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+
+      if ( Imprimir ) then
+        ACBrNFe.NotasFiscais.Imprimir;
     end;
 
   except
@@ -647,7 +655,8 @@ begin
 
 end;
 
-function TDMNFe.GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer) : Boolean;
+function TDMNFe.GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+  const Imprimir : Boolean = TRUE) : Boolean;
 var
   DtHoraEmiss : TDateTime;
   iSerieNFe,
@@ -660,10 +669,13 @@ begin
 
     GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
-    Result := True;
-
     UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML);
 
+    Result := True;
+
+    if ( Imprimir ) then
+      ACBrNFe.NotasFiscais.Imprimir;
+      
   except
     On E : Exception do
     begin
@@ -846,8 +858,7 @@ begin
 end;
 
 procedure TDMNFe.GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
-  var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String;
-  const Imprimir : Boolean = TRUE);
+  var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
 begin
 
   try
@@ -858,18 +869,9 @@ begin
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
 
-    if ( qryCalculoImportoNFE.AsLargeInt = 0 ) then
-    begin
-      iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
-      iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
-      DtHoraEmiss := GetDateTimeDB;
-    end
-    else
-    begin
-      iSerieNFe   := qryCalculoImportoSERIE.AsInteger;
-      iNumeroNFe  := qryCalculoImportoNFE.AsLargeInt;
-      DtHoraEmiss := qryCalculoImportoDATAEMISSAO.AsDateTime;
-    end;
+    iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
+    iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
+    DtHoraEmiss := GetDateTimeDB;
 
     with ACBrNFe.NotasFiscais.Add.NFe do
     begin
@@ -965,9 +967,18 @@ begin
         Avulsa.dPag    := now;             }
 
       Dest.CNPJCPF           := qryDestinatarioCNPJ.AsString; // FormatFloat('00000000000000', qryDestinatarioCNPJ.AsInteger);
-      Dest.IE                := qryDestinatarioINSCEST.AsString;
-      Dest.ISUF              := '';
       Dest.xNome             := qryDestinatarioNOME.AsString;
+
+      if ( qryDestinatarioPESSOA_FISICA.AsInteger = 0 ) then
+      begin
+        Dest.IE              := qryDestinatarioINSCEST.AsString;
+        Dest.ISUF            := EmptyStr;
+      end
+      else
+      begin
+        Dest.IE              := EmptyStr;
+        Dest.ISUF            := EmptyStr;
+      end;
 
       Dest.EnderDest.Fone    := qryDestinatarioFONE.AsString;
       Dest.EnderDest.CEP     := qryDestinatarioCEP.AsInteger;
@@ -1027,9 +1038,11 @@ begin
 
           Prod.vFrete    := 0;
           Prod.vSeg      := 0;
-          Prod.vDesc     := qryDadosProdutoPUNIT.AsCurrency - qryDadosProdutoDESCONTO.AsFloat / 100;
+          Prod.vDesc     := qryDadosProdutoVALOR_DESCONTO.AsCurrency;
+          //Prod.vDesc     := qryDadosProdutoPUNIT.AsCurrency * qryDadosProdutoDESCONTO.AsFloat / 100;
 
-          infAdProd      := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString; // 'Informação Adicional do Produto';
+          // Informação Adicional do Produto
+          infAdProd      := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString;
 
   //Declaração de Importação. Pode ser adicionada várias através do comando Prod.DI.Add
   {         with Prod.DI.Add do
@@ -1130,7 +1143,7 @@ begin
 
                 // csosnVazio,csosn101, csosn102, csosn103, csosn201, csosn202, csosn203, csosn300, csosn400, csosn500, csosn900
                 Case qryDadosProdutoCSOSN.AsInteger of
-                  101 : CSOSN := csosn101; 
+                  101 : CSOSN := csosn101;
                   102 : CSOSN := csosn102;
                   103 : CSOSN := csosn103;
                   201 : CSOSN := csosn201;
@@ -1142,7 +1155,7 @@ begin
                   else
                     CSOSN := csosn900;
                 end;
-                
+
                 pCredSN     := qryDadosProdutoALIQUOTA_CSOSN.AsCurrency;
                 vCredICMSSN := qryDadosProdutoPFINAL.AsCurrency * pCredSN / 100;
 
@@ -1170,7 +1183,7 @@ begin
                 ICMS.pRedBC  := 0;
                 ICMS.pICMS   := qryDadosProdutoALIQUOTA.AsCurrency;
                 ICMS.vICMS   := qryDadosProdutoPFINAL.AsCurrency * ICMS.pICMS / 100;
-                
+
               end;
 
               ICMS.orig    := TpcnOrigemMercadoria( qryDadosProdutoCODORIGEM.AsInteger );
@@ -1325,19 +1338,20 @@ begin
            UF    := '';
            RNTC  := '';
          end;}
+                            
+      if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
+        with Transp.Vol.Add do
+        begin
+          qVol  := qryDadosProduto.RecordCount;
+          esp   := 'Especie';
+          marca := 'Marca';
+          nVol  := 'Numero';
+          pesoL := qryDadosProduto.RecordCount * 1;
+          pesoB := qryDadosProduto.RecordCount * 0.1;
 
-      with Transp.Vol.Add do
-      begin
-        qVol  := qryDadosProduto.RecordCount;
-        esp   := 'Especie';
-        marca := 'Marca';
-        nVol  := 'Numero';
-        pesoL := qryDadosProduto.RecordCount * 1;
-        pesoB := qryDadosProduto.RecordCount * 0.1;
-
-        //Lacres do volume. Pode ser adicionado vários
-        //Lacres.Add.nLacre := '';
-      end;
+          //Lacres do volume. Pode ser adicionado vários
+          //Lacres.Add.nLacre := '';
+        end;
 
       Cobr.Fat.nFat  := FormatFloat('0000', qryCalculoImportoANO.AsInteger) + '/' + FormatFloat('0000000', qryCalculoImportoCODCONTROL.AsInteger);
       Cobr.Fat.vOrig := qryCalculoImportoTOTALVENDABRUTA.AsCurrency;
@@ -1357,7 +1371,8 @@ begin
         qryDuplicatas.Next;
       end;
 
-      InfAdic.infCpl     := 'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
+      InfAdic.infCpl     := #13 +
+                            'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
                             ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString + #13 +
                             'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString + #13 +
                             'Obserações : ' + qryCalculoImportoOBS.AsString;
@@ -1413,13 +1428,10 @@ begin
       ACBrNFe.NotasFiscais.Assinar;
       ACBrNFe.NotasFiscais.Valida;
       ACBrNFe.NotasFiscais.GerarNFe;
-
+      
       ACBrNFe.NotasFiscais.Items[0].SaveToFile;
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
-
-      if ( Imprimir ) then
-        ACBrNFe.NotasFiscais.Imprimir;
     end;
 
   except

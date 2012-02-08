@@ -1007,6 +1007,7 @@ object DMNFe: TDMNFe
       '  , i.Qtde'
       '  , i.Punit'
       '  , i.Desconto'
+      '  , i.Punit * coalesce(i.Desconto, 0) / 100 as valor_desconto'
       '  , i.Pfinal'
       '  , i.Qtdefinal'
       '  , i.Unid_cod'
@@ -1126,6 +1127,11 @@ object DMNFe: TDMNFe
       Origin = 'TVENDASITENS.DESCONTO'
       Precision = 18
       Size = 2
+    end
+    object qryDadosProdutoVALOR_DESCONTO: TIBBCDField
+      FieldName = 'VALOR_DESCONTO'
+      Precision = 18
+      Size = 4
     end
     object qryDadosProdutoPFINAL: TIBBCDField
       FieldName = 'PFINAL'
