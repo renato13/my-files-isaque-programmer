@@ -1473,7 +1473,7 @@ begin
         qryCalculoImportoSERIE.AsString := FormatFloat('##00', iSerieNFe);
         qryCalculoImportoNFE.Value      := iNumeroNFe;
         qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-        qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
+        qryCalculoImportoHORAEMISSAO.Value := Time; //StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
 
         Post;
         ApplyUpdates;
