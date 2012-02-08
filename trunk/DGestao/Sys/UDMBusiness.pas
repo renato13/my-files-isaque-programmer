@@ -26,7 +26,6 @@ type
     ibdtstAjustEstoqLookProdQtde: TIntegerField;
     ibdtstAjustEstoqLookFornec: TStringField;
     qryBusca: TIBQuery;
-    raveReport: TRvProject;
     ibdtstUsers: TIBDataSet;
     ibdtstUsersNOME: TIBStringField;
     ibdtstUsersSENHA: TIBStringField;
@@ -35,6 +34,7 @@ type
     EvMsgDialog: TEvMsgDlg;
     dtsrcUsers: TDataSource;
     ibdtstUsersLIMIDESC: TIBBCDField;
+    raveReport: TRvProject;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

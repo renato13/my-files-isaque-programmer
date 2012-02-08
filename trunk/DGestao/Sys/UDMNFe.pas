@@ -947,7 +947,7 @@ begin
       Emit.EnderEmit.UF      := qryEmitenteEST_SIGLA.AsString;
       Emit.enderEmit.cPais   := qryEmitentePAIS_ID.AsInteger;
       Emit.enderEmit.xPais   := qryEmitentePAIS_NOME.AsString;
-
+      
       Emit.IEST              := '';
       Emit.IM                := ''; // Preencher no caso de existir serviços na nota
       Emit.CNAE              := ''; // Verifique na cidade do emissor da NFe se é permitido
@@ -1346,8 +1346,8 @@ begin
           esp   := 'Especie';
           marca := 'Marca';
           nVol  := 'Numero';
-          pesoL := qryDadosProduto.RecordCount * 1;
-          pesoB := qryDadosProduto.RecordCount * 0.1;
+          pesoB := qryDadosProduto.RecordCount * 1;
+          pesoL := qryDadosProduto.RecordCount * 1.01;
 
           //Lacres do volume. Pode ser adicionado vários
           //Lacres.Add.nLacre := '';
@@ -1358,17 +1358,20 @@ begin
       Cobr.Fat.vDesc := qryCalculoImportoDESCONTO.AsCurrency ;
       Cobr.Fat.vLiq  := qryCalculoImportoTOTALVENDA.AsCurrency ;
 
-      qryDuplicatas.First;
-      while not qryDuplicatas.Eof do
+      if ( qryCalculoImportoVENDA_PRAZO.AsInteger = 1 ) then
       begin
-        with Cobr.Dup.Add do
+        qryDuplicatas.First;
+        while not qryDuplicatas.Eof do
         begin
-          nDup  := FormatFloat('0000', qryDuplicatasANOLANC.AsInteger) + '/' + FormatFloat('0000000', qryDuplicatasNUMLANC.AsInteger);
-          dVenc := qryDuplicatasDTVENC.AsDateTime;
-          vDup  := qryDuplicatasVALORREC.AsCurrency;
-        end;
+          with Cobr.Dup.Add do
+          begin
+            nDup  := FormatFloat('0000', qryDuplicatasANOLANC.AsInteger) + '/' + FormatFloat('0000000', qryDuplicatasNUMLANC.AsInteger);
+            dVenc := qryDuplicatasDTVENC.AsDateTime;
+            vDup  := qryDuplicatasVALORREC.AsCurrency;
+          end;
 
-        qryDuplicatas.Next;
+          qryDuplicatas.Next;
+        end;
       end;
 
       InfAdic.infCpl     := #13 +

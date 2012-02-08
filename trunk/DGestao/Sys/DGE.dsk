@@ -12,11 +12,11 @@ File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UPesq.pas',0,1,46,15,85,1
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
 Module6=C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas
 Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=8
@@ -27,17 +27,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -47,7 +42,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -115,16 +115,16 @@ LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=110
-CursorY=568
+CursorX=93
+CursorY=569
 TopLine=561
 LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=7
-CursorY=1429
-TopLine=1387
+CursorX=54
+CursorY=1350
+TopLine=1321
 LeftCol=1
 
 [View3]
@@ -152,7 +152,7 @@ LeftCol=1
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
 CursorX=91
 CursorY=346
-TopLine=334
+TopLine=337
 LeftCol=1
 
 [View7]
@@ -178,7 +178,7 @@ State=2
 Left=0
 Top=0
 Width=1920
-Height=122
+Height=144
 MaxLeft=-1
 MaxTop=-1
 MaxWidth=1932
@@ -257,7 +257,7 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=114
+Top=135
 Width=30
 Height=897
 MaxLeft=-1
