@@ -639,14 +639,6 @@ begin
       ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
       ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
 
-//      if ( ACBrNFe.Consultar ) then
-//      begin
-//        ACBrNFe.NotasFiscais.Items[0].SaveToFile( FileNameXML );
-//
-//        ChaveNFE     := ACBrNFe.WebServices.Consulta.NFeChave;
-//        ProtocoloNFE := ACBrNFe.WebServices.Consulta.Protocolo;
-//      end;
-
       UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
@@ -900,8 +892,8 @@ begin
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
       Ide.dEmi      := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-      Ide.dSaiEnt   := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-      Ide.hSaiEnt   := GetTimeDB; // DtHoraEmiss;
+//      Ide.dSaiEnt   := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+//      Ide.hSaiEnt   := GetTimeDB; // DtHoraEmiss;
       Ide.tpNF      := tnSaida;
       Ide.tpEmis    := ACBrNFe.Configuracoes.Geral.FormaEmissao;
       Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;
@@ -1215,14 +1207,14 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
-//                CST      := pis99;
-//                PIS.vBC  := 0;
-//                PIS.pPIS := 0;
-//                PIS.vPIS := 0;
-//
-//                PIS.qBCProd   := 0;
-//                PIS.vAliqProd := 0;
-//                PIS.vPIS      := 0;
+                CST      := pis99;
+                PIS.vBC  := 0;
+                PIS.pPIS := 0;
+                PIS.vPIS := 0;
+
+                PIS.qBCProd   := 0;
+                PIS.vAliqProd := 0;
+                PIS.vPIS      := 0;
               end;
             end;
 
@@ -1230,13 +1222,13 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
-//                CST            := cof99;
-//                COFINS.vBC     := 0;
-//                COFINS.pCOFINS := 0;
-//                COFINS.vCOFINS := 0;
-//
-//                COFINS.qBCProd   := 0;
-//                COFINS.vAliqProd := 0;
+                CST            := cof99;
+                COFINS.vBC     := 0;
+                COFINS.pCOFINS := 0;
+                COFINS.vCOFINS := 0;
+
+                COFINS.qBCProd   := 0;
+                COFINS.vAliqProd := 0;
               end;
             end;
 
