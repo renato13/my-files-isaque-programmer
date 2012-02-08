@@ -473,6 +473,12 @@ end;
 
 procedure TfrmGeVenda.CarregarDadosProduto( Codigo : Integer);
 begin
+  if ( Codigo = 0 ) then
+  begin
+    ShowWarning('Favor informar o código do produto');
+    Exit;
+  end;
+
   if ( not cdsTabelaItens.Active ) then
     Exit
   else
@@ -666,6 +672,12 @@ procedure TfrmGeVenda.btnProdutoSalvarClick(Sender: TObject);
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
   begin
+    if ( Trim(cdsTabelaItensCODPROD.AsString) = EmptyStr ) then
+    begin
+      ShowWarning('Favor informar o código do produto.');
+      dbProduto.SetFocus;
+    end
+    else
     if ( cdsTabelaItensQTDE.Value < 0 ) then
     begin
       ShowWarning('QUantidade inválida.');
@@ -722,6 +734,8 @@ begin
 end;
 
 procedure TfrmGeVenda.btbtnSalvarClick(Sender: TObject);
+var
+  iNumero : Integer;
 begin
   if ( cdsTabelaItens.IsEmpty ) then
     ShowWarning('Favor informar o(s) produto(s) da venda.')
@@ -733,8 +747,16 @@ begin
     begin
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
+
       cdsTabelaItens.ApplyUpdates;
       CommitTransaction;
+
+      iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
+
+      IbDtstTabela.Locate(CampoCodigo, iNumero, []);
     end;
 
     HabilitarDesabilitar_Btns;
@@ -748,7 +770,7 @@ begin
 
   if ( Sender = dbProduto ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-      CarregarDadosProduto( cdsTabelaItensCODPROD.AsInteger );
+      CarregarDadosProduto( StrToIntDef(cdsTabelaItensCODPROD.AsString, 0) );
 
   if ( Sender = dbCFOP ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -908,10 +930,14 @@ begin
   else
   if ( ShowConfirm('Confirma a finalização da venda selecionada?') ) then
   begin
+    IbDtstTabela.Edit;
+
     IbDtstTabelaSTATUS.Value              := STATUS_VND_FIN;
     IbDtstTabelaDTFINALIZACAO_VENDA.Value := Date;
-    IbDtstTabela.Open;
+
+    IbDtstTabela.Post;
     IbDtstTabela.ApplyUpdates;
+
     CommitTransaction;
 
     GerarTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
