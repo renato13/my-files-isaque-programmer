@@ -647,11 +647,11 @@ begin
     end;
 
   except
-    On E : Exception do
-    begin
-      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
-      Result := False;
-    end;
+//    On E : Exception do
+//    begin
+//      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
+//      Result := False;
+//    end;
   end;
 
 end;
