@@ -81,6 +81,7 @@ end;
 procedure TfrmPesq.FormCreate(Sender: TObject);
 begin
  frmPrinc.show;
+ frmPrinc.Enabled := false;
  frmAcessoSistema := TfrmAcessoSistema.create(self);
  frmAcessoSistema.Show;
 end;
