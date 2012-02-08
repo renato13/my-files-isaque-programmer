@@ -635,12 +635,12 @@ begin
 
     if ( Result ) then
     begin
+      UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+      UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+
       ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
       ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
       ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
-
-      UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
-      UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
       if ( Imprimir ) then
         ACBrNFe.NotasFiscais.Imprimir;
@@ -892,8 +892,6 @@ begin
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
       Ide.dEmi      := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-//      Ide.dSaiEnt   := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-//      Ide.hSaiEnt   := GetTimeDB; // DtHoraEmiss;
       Ide.tpNF      := tnSaida;
       Ide.tpEmis    := ACBrNFe.Configuracoes.Geral.FormaEmissao;
       Ide.tpAmb     := ACBrNFe.Configuracoes.WebServices.Ambiente;
@@ -1442,6 +1440,19 @@ begin
       ACBrNFe.NotasFiscais.Items[0].SaveToFile;
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
+
+      with qryCalculoImporto do
+      begin
+        Edit;
+
+        qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
+        qryCalculoImportoSERIE.AsString := FormatFloat('##00', iSerieNFe);
+        qryCalculoImportoNFE.Value      := iNumeroNFe;
+
+        Post;
+        ApplyUpdates;
+        CommitTransaction;
+      end;
     end;
 
   except
