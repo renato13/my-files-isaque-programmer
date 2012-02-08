@@ -648,11 +648,11 @@ begin
     end;
 
   except
-//    On E : Exception do
-//    begin
-//      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
-//      Result := False;
-//    end;
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
+      Result := False;
+    end;
   end;
 
 end;
@@ -775,114 +775,147 @@ end;
 
 procedure TDMNFe.UpdateLoteNFe(const Ano, Numero: Integer);
 begin
-  if ( qryEmitente.IsEmpty ) then
-    Exit;
+  try
+    if ( qryEmitente.IsEmpty ) then
+      Exit;
 
-  with qryEmitente do
-  begin
-    Exit;
-    qryEmitenteLOTE_ANO_NFE.AsInteger := Ano;
-    qryEmitenteLOTE_NUM_NFE.AsInteger := Numero + 1;
-    Post;
-    ApplyUpdates;
-    CommitTransaction;
+    with qryEmitente do
+    begin
+      Exit;
+      qryEmitenteLOTE_ANO_NFE.AsInteger := Ano;
+      qryEmitenteLOTE_NUM_NFE.AsInteger := Numero + 1;
+      Post;
+      ApplyUpdates;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('UpdateLoteNFe --> ' + E.Message);
   end;
 end;
 
 procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime; const FileNameNFE : String);
 begin
-  if ( qryCalculoImporto.IsEmpty ) then
-    Exit;
+  try
+    if ( qryCalculoImporto.IsEmpty ) then
+      Exit;
 
-  with qryCalculoImporto do
-  begin
-    Edit;
-
-    qryCalculoImportoSTATUS.Value      := STATUS_VND_NFE;
-    qryCalculoImportoSERIE.AsString    := FormatFloat('##00', SerieNFE);
-    qryCalculoImportoNFE.Value         := NumeroNFE;
-    qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
-    qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
-    qryCalculoImportoNFE_ENVIADA.Value := 0;
-
-    if ( FileExists(FileNameNFE) ) then
+    with qryCalculoImporto do
     begin
-      qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
-      qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
-    end;
+      Edit;
 
-    Post;
-    ApplyUpdates;
-    CommitTransaction;
+      qryCalculoImportoSTATUS.Value      := STATUS_VND_NFE;
+      qryCalculoImportoSERIE.AsString    := FormatFloat('##00', SerieNFE);
+      qryCalculoImportoNFE.Value         := NumeroNFE;
+      qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
+      qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+      qryCalculoImportoNFE_ENVIADA.Value := 0;
+
+      if ( FileExists(FileNameNFE) ) then
+      begin
+        qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+        qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+      end;
+
+      Post;
+      ApplyUpdates;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('UpdateVendaNFe --> ' + E.Message);
   end;
 end;
 
 procedure TDMNFe.UpdateVendaNFe(const SerieNFE : Integer; const NumeroNFE : Int64; const DataHoraEmissao : TDateTime;
   const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer);
 begin
-  if ( qryCalculoImporto.IsEmpty ) then
-    Exit;
+  try
+    if ( qryCalculoImporto.IsEmpty ) then
+      Exit;
 
-  with qryCalculoImporto do
-  begin
-    Edit;
+    with qryCalculoImporto do
+    begin
+      Edit;
 
-    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
-    qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
-    qryCalculoImportoNFE.Value      := NumeroNFE;
-    qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
-    qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
-    qryCalculoImportoNFE_ENVIADA.Value := 1;
-    qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
-    qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
-    qryCalculoImportoVERIFICADOR_NFE.Value := ChaveNFE;
-    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
-    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+      qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
+      qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
+      qryCalculoImportoNFE.Value      := NumeroNFE;
+      qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
+      qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+      qryCalculoImportoNFE_ENVIADA.Value := 1;
+      qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
+      qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
+      qryCalculoImportoVERIFICADOR_NFE.Value := ChaveNFE;
 
-    Post;
-    ApplyUpdates;
-    CommitTransaction;
+      if ( FileExists(FileNameNFE) ) then
+      begin
+        qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+        qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+      end;
+
+      Post;
+      ApplyUpdates;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('UpdateVendaNFe --> ' + E.Message);
   end;
 end;
 
-procedure TDMNFe.UpdateVendaNFe(const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer); 
+procedure TDMNFe.UpdateVendaNFe(const FileNameNFE, ChaveNFE : String; const AnoLoteNFE, NumeroLoteNFE : Integer);
 begin
-  if ( qryCalculoImporto.IsEmpty ) then
-    Exit;
+  try
+    if ( qryCalculoImporto.IsEmpty ) then
+      Exit;
 
-  with qryCalculoImporto do
-  begin
-    Edit;
+    with qryCalculoImporto do
+    begin
+      Edit;
 
-    qryCalculoImportoSTATUS.Value           := STATUS_VND_NFE;
-    qryCalculoImportoNFE_ENVIADA.Value      := 1;
-    qryCalculoImportoLOTE_NFE_ANO.Value     := AnoLoteNFE;
-    qryCalculoImportoLOTE_NFE_NUMERO.Value  := NumeroLoteNFE;
-    qryCalculoImportoVERIFICADOR_NFE.Value  := ChaveNFE;
-    qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
-    qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+      qryCalculoImportoSTATUS.Value           := STATUS_VND_NFE;
+      qryCalculoImportoNFE_ENVIADA.Value      := 1;
+      qryCalculoImportoLOTE_NFE_ANO.Value     := AnoLoteNFE;
+      qryCalculoImportoLOTE_NFE_NUMERO.Value  := NumeroLoteNFE;
+      qryCalculoImportoVERIFICADOR_NFE.Value  := ChaveNFE;
 
-    Post;
-    ApplyUpdates;
-    CommitTransaction;
+      if ( FileExists(FileNameNFE) ) then
+      begin
+        qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
+        qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
+      end;
+
+      Post;
+      ApplyUpdates;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('UpdateVendaNFe --> ' + E.Message);
   end;
 end;
 
 procedure TDMNFe.UpdateNumeroNFe(const Serie, Numero: Integer);
 begin
-  if ( qryEmitente.IsEmpty ) then
-    Exit;
+  try
+    if ( qryEmitente.IsEmpty ) then
+      Exit;
 
-  with qryEmitente do
-  begin
-    Exit;
+    with qryEmitente do
+    begin
+      Exit;
 
-    qryEmitenteSERIE_NFE.AsInteger  := Serie;
-    qryEmitenteNUMERO_NFE.AsInteger := Numero + 1;
+      qryEmitenteSERIE_NFE.AsInteger  := Serie;
+      qryEmitenteNUMERO_NFE.AsInteger := Numero + 1;
 
-    Post;
-    ApplyUpdates;
-    CommitTransaction;
+      Post;
+      ApplyUpdates;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('UpdateNumeroNFe --> ' + E.Message);
   end;
 end;
 
