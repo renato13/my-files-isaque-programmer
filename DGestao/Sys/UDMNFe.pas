@@ -650,18 +650,14 @@ begin
       UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
       UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
-      try
-        if ( Imprimir ) then
-          ACBrNFe.NotasFiscais.Imprimir;
-      except
-      end;
-
+      if ( Imprimir ) then
+        ACBrNFe.NotasFiscais.Imprimir;
     end;
 
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + e.Message);
+      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
       Result := False;
     end;
   end;
