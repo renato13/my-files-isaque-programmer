@@ -17,11 +17,13 @@ object DMNFe: TDMNFe
   end
   object rvDANFE: TACBrNFeDANFERave
     ACBrNFe = ACBrNFe
+    Sistema = 'MASTERDADOS'
     PathPDF = '..\Bin\'
     MostrarPreview = True
     MostrarStatus = True
     TipoDANFE = tiRetrato
     NumCopias = 1
+    Site = 'http://www.masterdados.com.br/'
     ImprimirDescPorc = False
     ImprimirTotalLiquido = False
     MargemInferior = 0.800000000000000000

@@ -178,10 +178,6 @@ object DMBusiness: TDMBusiness
     Left = 240
     Top = 64
   end
-  object raveReport: TRvProject
-    Left = 40
-    Top = 120
-  end
   object ibdtstUsers: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
@@ -267,6 +263,10 @@ object DMBusiness: TDMBusiness
   object dtsrcUsers: TDataSource
     DataSet = ibdtstUsers
     Left = 208
+    Top = 120
+  end
+  object raveReport: TRvProject
+    Left = 40
     Top = 120
   end
 end
