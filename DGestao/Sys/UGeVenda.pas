@@ -966,7 +966,7 @@ begin
 
       IbDtstTabela.Locate(CampoCodigo, iNumero, []);
 
-//      ShowInformation('Nota Fiscal gerada com sucesso.' + #13#13 + 'Série/Número: ' + IbDtstTabelaSERIE.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaNFE.Value));
+      ShowInformation('Nota Fiscal gerada com sucesso.' + #13#13 + 'Série/Número: ' + IbDtstTabelaSERIE.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaNFE.Value));
 
       HabilitarDesabilitar_Btns;
     end;
