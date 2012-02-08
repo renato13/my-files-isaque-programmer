@@ -636,12 +636,12 @@ begin
 
     if ( Result ) then
     begin
-      UpdateVendaNFe(FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
-      UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
-
       ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
       ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
       ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
+
+      UpdateVendaNFe(iSerieNFe, iNumeroNFe, DtHoraEmiss, FileNameXML, ChaveNFE, qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
+      UpdateLoteNFe (qryEmitenteLOTE_ANO_NFE.AsInteger, NumeroLote);
 
       if ( Imprimir ) then
         ACBrNFe.NotasFiscais.Imprimir;
@@ -798,11 +798,11 @@ begin
   begin
     Edit;
 
-    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
-    qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
-    qryCalculoImportoNFE.Value      := NumeroNFE;
+    qryCalculoImportoSTATUS.Value      := STATUS_VND_NFE;
+    qryCalculoImportoSERIE.AsString    := FormatFloat('##00', SerieNFE);
+    qryCalculoImportoNFE.Value         := NumeroNFE;
     qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
-    qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+    qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
     qryCalculoImportoNFE_ENVIADA.Value := 0;
 
     if ( FileExists(FileNameNFE) ) then
@@ -831,7 +831,7 @@ begin
     qryCalculoImportoSERIE.AsString := FormatFloat('##00', SerieNFE);
     qryCalculoImportoNFE.Value      := NumeroNFE;
     qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DataHoraEmissao) );
-    qryCalculoImportoHORAEMISSAO.Value := StrToDate( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
+    qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DataHoraEmissao) );
     qryCalculoImportoNFE_ENVIADA.Value := 1;
     qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
     qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
@@ -854,11 +854,11 @@ begin
   begin
     Edit;
 
-    qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
-    qryCalculoImportoNFE_ENVIADA.Value := 1;
-    qryCalculoImportoLOTE_NFE_ANO.Value    := AnoLoteNFE;
-    qryCalculoImportoLOTE_NFE_NUMERO.Value := NumeroLoteNFE;
-    qryCalculoImportoVERIFICADOR_NFE.Value := ChaveNFE;
+    qryCalculoImportoSTATUS.Value           := STATUS_VND_NFE;
+    qryCalculoImportoNFE_ENVIADA.Value      := 1;
+    qryCalculoImportoLOTE_NFE_ANO.Value     := AnoLoteNFE;
+    qryCalculoImportoLOTE_NFE_NUMERO.Value  := NumeroLoteNFE;
+    qryCalculoImportoVERIFICADOR_NFE.Value  := ChaveNFE;
     qryCalculoImportoXML_NFE_FILENAME.Value := ExtractFileName( FileNameNFE );
     qryCalculoImportoXML_NFE.LoadFromFile( FileNameNFE );
 
@@ -1465,20 +1465,20 @@ begin
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
-      with qryCalculoImporto do
-      begin
-        Edit;
-
-        qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
-        qryCalculoImportoSERIE.AsString := FormatFloat('##00', iSerieNFe);
-        qryCalculoImportoNFE.Value      := iNumeroNFe;
-        qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
-        qryCalculoImportoHORAEMISSAO.Value := Time; //StrToDate( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
-
-        Post;
-        ApplyUpdates;
-        CommitTransaction;
-      end;
+//      with qryCalculoImporto do
+//      begin
+//        Edit;
+//
+//        qryCalculoImportoSTATUS.Value   := STATUS_VND_NFE;
+//        qryCalculoImportoSERIE.AsString := FormatFloat('##00', iSerieNFe);
+//        qryCalculoImportoNFE.Value      := iNumeroNFe;
+//        qryCalculoImportoDATAEMISSAO.Value := StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
+//        qryCalculoImportoHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss',   DtHoraEmiss) );
+//
+//        Post;
+//        ApplyUpdates;
+//        CommitTransaction;
+//      end;
     end;
 
   except
