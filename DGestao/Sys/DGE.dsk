@@ -12,37 +12,17 @@ File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UPesq.pas',0,1,46,15,85,1
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module1=C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
+Module6=C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas
 Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=8
 EditWindowCount=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -55,6 +35,26 @@ FormOnTop=0
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas]
+ModuleType=SourceModule
+FormState=0
 FormOnTop=0
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
@@ -122,9 +122,9 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=26
-CursorY=247
-TopLine=215
+CursorX=7
+CursorY=1429
+TopLine=1387
 LeftCol=1
 
 [View3]
@@ -157,8 +157,8 @@ LeftCol=1
 
 [View7]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=1
-CursorY=748
+CursorX=141
+CursorY=762
 TopLine=744
 LeftCol=1
 
@@ -178,9 +178,9 @@ State=2
 Left=0
 Top=0
 Width=1920
-Height=144
-MaxLeft=-8
-MaxTop=-8
+Height=122
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1932
 MaxHeight=122
 ClientWidth=1916
@@ -257,7 +257,7 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=135
+Top=114
 Width=30
 Height=897
 MaxLeft=-1
