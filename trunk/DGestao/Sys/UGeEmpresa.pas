@@ -101,6 +101,9 @@ type
     dbLoteAno: TDBEdit;
     lblLoteNumero: TLabel;
     dbLoteNumero: TDBEdit;
+    lblCNAE: TLabel;
+    dbCNAE: TDBEdit;
+    IbDtstTabelaCNAE: TIBStringField;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);

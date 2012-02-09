@@ -1836,6 +1836,7 @@ object DMNFe: TDMNFe
       '  , e.Nmfant'
       '  , e.Ie'
       '  , e.Im'
+      '  , e.Cnae'
       ''
       '  , e.Fone'
       '  , e.Logo'
@@ -1918,6 +1919,11 @@ object DMNFe: TDMNFe
       FieldName = 'IM'
       Origin = 'TBEMPRESA.IM'
       Size = 12
+    end
+    object qryEmitenteCNAE: TIBStringField
+      FieldName = 'CNAE'
+      Origin = 'TBEMPRESA.CNAE'
+      Size = 11
     end
     object qryEmitenteFONE: TIBStringField
       FieldName = 'FONE'

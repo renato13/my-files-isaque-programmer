@@ -204,6 +204,7 @@ type
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
     IBSQL: TIBSQL;
     qryDadosProdutoVALOR_DESCONTO: TIBBCDField;
+    qryEmitenteCNAE: TIBStringField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -869,10 +870,11 @@ begin
           RefECF.nCOO    := '';          // |
         end;
   }
-      Emit.CNPJCPF           := qryEmitenteCNPJ.AsString;
-      Emit.IE                := Trim(qryEmitenteIE.AsString);
-      Emit.xNome             := qryEmitenteRZSOC.AsString;
-      Emit.xFant             := qryEmitenteNMFANT.AsString;
+      Emit.CNPJCPF := qryEmitenteCNPJ.AsString;
+      Emit.IE      := Trim(qryEmitenteIE.AsString);
+      Emit.CNAE    := Trim(qryEmitenteCNAE.AsString);
+      Emit.xNome   := qryEmitenteRZSOC.AsString;
+      Emit.xFant   := qryEmitenteNMFANT.AsString;
 
       case qryEmitenteTIPO_REGIME_NFE.AsInteger of
         0 : Emit.CRT := crtSimplesNacional;
@@ -884,7 +886,7 @@ begin
       Emit.EnderEmit.CEP     := StrToInt( qryEmitenteCEP.AsString );
       Emit.EnderEmit.xLgr    := Trim( qryEmitenteTLG_SIGLA.AsString + ' ' + qryEmitenteLOG_NOME.AsString );
       Emit.EnderEmit.nro     := qryEmitenteNUMERO_END.AsString;
-      Emit.EnderEmit.xCpl    := qryEmitenteCOMPLEMENTO.AsString;
+      Emit.EnderEmit.xCpl    := qryEmitenteCOMPLEMENTO.AsString + '.';
       Emit.EnderEmit.xBairro := qryEmitenteBAI_NOME.AsString;
       Emit.EnderEmit.cMun    := qryEmitenteCID_IBGE.AsInteger;
       Emit.EnderEmit.xMun    := qryEmitenteCID_NOME.AsString;
