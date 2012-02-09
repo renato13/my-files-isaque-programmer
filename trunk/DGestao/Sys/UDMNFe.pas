@@ -1376,9 +1376,12 @@ begin
       compra.xPed  := '';
       compra.xCont := '';
 
+//      ACBrNFe.NotasFiscais.Assinar;
+//      ACBrNFe.NotasFiscais.Valida;
+//      ACBrNFe.NotasFiscais.GerarNFe;
+      ACBrNFe.NotasFiscais.GerarNFe;
       ACBrNFe.NotasFiscais.Assinar;
       ACBrNFe.NotasFiscais.Valida;
-      ACBrNFe.NotasFiscais.GerarNFe;
 
       ACBrNFe.NotasFiscais.Items[0].SaveToFile;
 
