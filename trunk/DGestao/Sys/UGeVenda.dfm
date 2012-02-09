@@ -1,5 +1,5 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 359
+  Left = 219
   Top = 134
   Width = 1051
   Height = 608
@@ -2438,6 +2438,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , v.Cancel_motivo'
       '  , v.Cfop'
       '  , v.Verificador_nfe'
+      '  , v.Xml_nfe_filename'
       '  , v.Xml_nfe'
       '  , v.Vendedor_cod'
       '  , v.Usuario'
@@ -2540,6 +2541,7 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TBVENDAS.FATDIAS'
     end
     object IbDtstTabelaSERIE: TIBStringField
+      Alignment = taCenter
       DisplayLabel = 'S'#233'rie'
       FieldName = 'SERIE'
       Origin = 'TBVENDAS.SERIE'
@@ -2549,6 +2551,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'NF-e'
       FieldName = 'NFE'
       Origin = 'TBVENDAS.NFE'
+      DisplayFormat = '###0000000'
     end
     object IbDtstTabelaLOTE_NFE_ANO: TSmallintField
       FieldName = 'LOTE_NFE_ANO'
@@ -2593,6 +2596,11 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Verificador'
       FieldName = 'VERIFICADOR_NFE'
       Origin = 'TBVENDAS.VERIFICADOR_NFE'
+      Size = 250
+    end
+    object IbDtstTabelaXML_NFE_FILENAME: TIBStringField
+      FieldName = 'XML_NFE_FILENAME'
+      Origin = 'TBVENDAS.XML_NFE_FILENAME'
       Size = 250
     end
     object IbDtstTabelaXML_NFE: TMemoField
@@ -2716,16 +2724,10 @@ inherited frmGeVenda: TfrmGeVenda
       '  FATDIAS,'
       '  SERIE,'
       '  NFE,'
-      '  LOTE_NFE_ANO,'
-      '  LOTE_NFE_NUMERO,'
-      '  NFE_ENVIADA,'
       '  DATAEMISSAO,'
       '  HORAEMISSAO,'
-      '  CANCEL_DATAHORA,'
-      '  CANCEL_MOTIVO,'
       '  CFOP,'
       '  VERIFICADOR_NFE,'
-      '  XML_NFE_FILENAME,'
       '  XML_NFE,'
       '  VENDEDOR_COD,'
       '  USUARIO,'
@@ -2744,6 +2746,13 @@ inherited frmGeVenda: TfrmGeVenda
       '  PRAZO_10,'
       '  PRAZO_11,'
       '  PRAZO_12,'
+      '  LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO,'
+      '  NFE_ENVIADA,'
+      '  CANCEL_USUARIO,'
+      '  CANCEL_DATAHORA,'
+      '  CANCEL_MOTIVO,'
+      '  XML_NFE_FILENAME,'
       '  NFE_VALOR_BASE_ICMS,'
       '  NFE_VALOR_ICMS,'
       '  NFE_VALOR_BASE_ICMS_SUBST,'
@@ -2788,6 +2797,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  CANCEL_MOTIVO = :CANCEL_MOTIVO,'
       '  CFOP = :CFOP,'
       '  VERIFICADOR_NFE = :VERIFICADOR_NFE,'
+      '  XML_NFE_FILENAME = :XML_NFE_FILENAME,'
       '  XML_NFE = :XML_NFE,'
       '  VENDEDOR_COD = :VENDEDOR_COD,'
       '  USUARIO = :USUARIO,'
@@ -2821,11 +2831,11 @@ inherited frmGeVenda: TfrmGeVenda
         '   LOTE_NFE_NUMERO, NFE_ENVIADA, DATAEMISSAO, HORAEMISSAO, CANCE' +
         'L_DATAHORA, '
       
-        '   CANCEL_MOTIVO, CFOP, VERIFICADOR_NFE, XML_NFE, VENDEDOR_COD, ' +
-        'USUARIO, '
+        '   CANCEL_MOTIVO, CFOP, VERIFICADOR_NFE, XML_NFE_FILENAME, XML_N' +
+        'FE, VENDEDOR_COD, '
       
-        '   FORMAPAGTO_COD, CONDICAOPAGTO_COD, VENDA_PRAZO, PRAZO_01, PRA' +
-        'ZO_02, '
+        '   USUARIO, FORMAPAGTO_COD, CONDICAOPAGTO_COD, VENDA_PRAZO, PRAZ' +
+        'O_01, PRAZO_02, '
       
         '   PRAZO_03, PRAZO_04, PRAZO_05, PRAZO_06, PRAZO_07, PRAZO_08, P' +
         'RAZO_09, '
@@ -2841,15 +2851,15 @@ inherited frmGeVenda: TfrmGeVenda
         '   :LOTE_NFE_NUMERO, :NFE_ENVIADA, :DATAEMISSAO, :HORAEMISSAO, :' +
         'CANCEL_DATAHORA, '
       
-        '   :CANCEL_MOTIVO, :CFOP, :VERIFICADOR_NFE, :XML_NFE, :VENDEDOR_' +
-        'COD, :USUARIO, '
+        '   :CANCEL_MOTIVO, :CFOP, :VERIFICADOR_NFE, :XML_NFE_FILENAME, :' +
+        'XML_NFE, '
       
-        '   :FORMAPAGTO_COD, :CONDICAOPAGTO_COD, :VENDA_PRAZO, :PRAZO_01,' +
-        ' :PRAZO_02, '
+        '   :VENDEDOR_COD, :USUARIO, :FORMAPAGTO_COD, :CONDICAOPAGTO_COD,' +
+        ' :VENDA_PRAZO, '
       
-        '   :PRAZO_03, :PRAZO_04, :PRAZO_05, :PRAZO_06, :PRAZO_07, :PRAZO' +
-        '_08, :PRAZO_09, '
-      '   :PRAZO_10, :PRAZO_11, :PRAZO_12)')
+        '   :PRAZO_01, :PRAZO_02, :PRAZO_03, :PRAZO_04, :PRAZO_05, :PRAZO' +
+        '_06, :PRAZO_07, '
+      '   :PRAZO_08, :PRAZO_09, :PRAZO_10, :PRAZO_11, :PRAZO_12)')
     DeleteSQL.Strings = (
       'delete from TBVENDAS'
       'where'
@@ -3544,10 +3554,162 @@ inherited frmGeVenda: TfrmGeVenda
       Enabled = False
       OnClick = nmImprimirDANFEClick
     end
-    object nmImprimirDANFEPDF: TMenuItem
-      Caption = 'Imprimir DANFE (PDF)'
+    object nmGerarDANFEXML: TMenuItem
+      Caption = 'Gerar/Salvar XML da NF-e'
       Enabled = False
       OnClick = nmImprimirDANFEClick
     end
+  end
+  object qryNFE: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    SelectSQL.Strings = (
+      'Select'
+      '    n.ANOVENDA'
+      '  , n.NUMVENDA'
+      '  , n.DATAEMISSAO'
+      '  , n.HORAEMISSAO'
+      '  , n.SERIE'
+      '  , n.NUMERO'
+      '  , n.CHAVE'
+      '  , n.PROTOCOLO'
+      '  , n.RECIBO'
+      '  , n.XML_FILENAME'
+      '  , n.XML_FILE'
+      '  , n.LOTE_ANO'
+      '  , n.LOTE_NUM'
+      'from TBNFE_ENVIADA n'
+      'where n.ANOVENDA = :anovenda'
+      '  and n.NUMVENDA = :numvenda')
+    UpdateObject = updNFE
+    Left = 932
+    Top = 142
+    object qryNFEANOVENDA: TSmallintField
+      FieldName = 'ANOVENDA'
+      Origin = 'TBNFE_ENVIADA.ANOVENDA'
+      Required = True
+    end
+    object qryNFENUMVENDA: TIntegerField
+      FieldName = 'NUMVENDA'
+      Origin = 'TBNFE_ENVIADA.NUMVENDA'
+    end
+    object qryNFEDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = 'TBNFE_ENVIADA.DATAEMISSAO'
+    end
+    object qryNFEHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = 'TBNFE_ENVIADA.HORAEMISSAO'
+    end
+    object qryNFESERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = 'TBNFE_ENVIADA.SERIE'
+      Required = True
+      Size = 4
+    end
+    object qryNFENUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = 'TBNFE_ENVIADA.NUMERO'
+      Required = True
+    end
+    object qryNFECHAVE: TIBStringField
+      FieldName = 'CHAVE'
+      Origin = 'TBNFE_ENVIADA.CHAVE'
+      Size = 250
+    end
+    object qryNFEPROTOCOLO: TIBStringField
+      FieldName = 'PROTOCOLO'
+      Origin = 'TBNFE_ENVIADA.PROTOCOLO'
+      Size = 250
+    end
+    object qryNFERECIBO: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = 'TBNFE_ENVIADA.RECIBO'
+      Size = 250
+    end
+    object qryNFEXML_FILENAME: TIBStringField
+      FieldName = 'XML_FILENAME'
+      Origin = 'TBNFE_ENVIADA.XML_FILENAME'
+      Size = 250
+    end
+    object qryNFEXML_FILE: TMemoField
+      FieldName = 'XML_FILE'
+      Origin = 'TBNFE_ENVIADA.XML_FILE'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryNFELOTE_ANO: TSmallintField
+      FieldName = 'LOTE_ANO'
+      Origin = 'TBNFE_ENVIADA.LOTE_ANO'
+    end
+    object qryNFELOTE_NUM: TIntegerField
+      FieldName = 'LOTE_NUM'
+      Origin = 'TBNFE_ENVIADA.LOTE_NUM'
+      Required = True
+    end
+  end
+  object updNFE: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  ANOVENDA,'
+      '  NUMVENDA,'
+      '  DATAEMISSAO,'
+      '  HORAEMISSAO,'
+      '  SERIE,'
+      '  NUMERO,'
+      '  CHAVE,'
+      '  PROTOCOLO,'
+      '  RECIBO,'
+      '  XML_FILENAME,'
+      '  XML_FILE,'
+      '  LOTE_ANO,'
+      '  LOTE_NUM'
+      'from TBNFE_ENVIADA '
+      'where'
+      '  SERIE = :SERIE and'
+      '  NUMERO = :NUMERO')
+    ModifySQL.Strings = (
+      'update TBNFE_ENVIADA'
+      'set'
+      '  ANOVENDA = :ANOVENDA,'
+      '  NUMVENDA = :NUMVENDA,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  SERIE = :SERIE,'
+      '  NUMERO = :NUMERO,'
+      '  CHAVE = :CHAVE,'
+      '  PROTOCOLO = :PROTOCOLO,'
+      '  RECIBO = :RECIBO,'
+      '  XML_FILENAME = :XML_FILENAME,'
+      '  XML_FILE = :XML_FILE,'
+      '  LOTE_ANO = :LOTE_ANO,'
+      '  LOTE_NUM = :LOTE_NUM'
+      'where'
+      '  SERIE = :OLD_SERIE and'
+      '  NUMERO = :OLD_NUMERO')
+    InsertSQL.Strings = (
+      'insert into TBNFE_ENVIADA'
+      
+        '  (ANOVENDA, NUMVENDA, DATAEMISSAO, HORAEMISSAO, SERIE, NUMERO, ' +
+        'CHAVE, '
+      
+        '   PROTOCOLO, RECIBO, XML_FILENAME, XML_FILE, LOTE_ANO, LOTE_NUM' +
+        ')'
+      'values'
+      
+        '  (:ANOVENDA, :NUMVENDA, :DATAEMISSAO, :HORAEMISSAO, :SERIE, :NU' +
+        'MERO, :CHAVE, '
+      
+        '   :PROTOCOLO, :RECIBO, :XML_FILENAME, :XML_FILE, :LOTE_ANO, :LO' +
+        'TE_NUM)')
+    DeleteSQL.Strings = (
+      'delete from TBNFE_ENVIADA'
+      'where'
+      '  SERIE = :OLD_SERIE and'
+      '  NUMERO = :OLD_NUMERO')
+    Left = 964
+    Top = 142
   end
 end
