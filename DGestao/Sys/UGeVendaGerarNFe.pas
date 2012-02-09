@@ -93,11 +93,20 @@ type
     cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField;
+    lblInforme: TLabel;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
+    iSerieNFe,
+    iNumeroNFe  : Integer;
+    sFileNameXML ,
+    sChaveNFE    ,
+    sProtocoloNFE,
+    sReciboNFE   : String;
+    iNumeroLote  : Int64;
     procedure RecalcularTotalNota;
   public
     { Public declarations }
@@ -106,7 +115,8 @@ type
 var
   frmGeVendaGerarNFe: TfrmGeVendaGerarNFe;
 
-  function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer) : Boolean;
+  function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer;
+    var SerieNFe, NumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE   : String; var NumeroLote  : Int64) : Boolean;
 
 implementation
 
@@ -114,7 +124,8 @@ uses UDMBusiness, UDMNFe;
 
 {$R *.dfm}
 
-function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer) : Boolean;
+function GerarNFe(const AOwer : TComponent; Ano : Smallint; Numero : Integer;
+  var SerieNFe, NumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE   : String; var NumeroLote  : Int64) : Boolean;
 var
   frm : TfrmGeVendaGerarNFe;
 begin
@@ -149,6 +160,17 @@ begin
       end;
 
       Result := (ShowModal = mrOk);
+
+      if ( Result ) then
+      begin
+        SerieNFe     := iSerieNFe;
+        NumeroNFe    := iNumeroNFe;
+        FileNameXML  := sFileNameXML;
+        ChaveNFE     := sChaveNFE;
+        ProtocoloNFE := sProtocoloNFE;
+        ReciboNFE    := sReciboNFE;
+        NumeroLote   := iNumeroLote;
+      end;
     end;
   finally
     frm.Free;
@@ -170,19 +192,6 @@ begin
       cdsVendaDATAEMISSAO.Value := Date;
       cdsVendaHORAEMISSAO.Value := Time;
 
-//    cdsVendaNFE_VALOR_BASE_ICMS.Value := cdsVendaVALOR_TOTAL_LIQUIDO.Value;
-//    cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO.Value;
-//    cdsVendaNFE_VALOR_BASE_ICMS_SUBST.Value := 0;
-//    cdsVendaNFE_VALOR_ICMS_SUBST.Value      := 0;
-//    cdsVendaNFE_VALOR_PIS.Value             := 0;
-//    cdsVendaNFE_VALOR_TOTAL_PRODUTO.Value   := cdsVendaVALOR_TOTAL_BRUTO.Value;
-//    cdsVendaNFE_VALOR_FRETE.Value      := 0;
-//    cdsVendaNFE_VALOR_SEGURO.Value     := 0;
-//    cdsVendaNFE_VALOR_DESCONTO.Value   := cdsVendaVALOR_TOTAL_DESCONTO.Value;
-//    cdsVendaNFE_VALOR_OUTROS.Value     := 0;
-//    cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.Value;
-//    cdsVendaNFE_VALOR_COFINS.Value     := 0;
-//    cdsVendaNFE_VALOR_TOTAL_II.Value   := 0;
     cdsVendaNFE_VALOR_TOTAL_NOTA.AsCurrency := cdsVendaTOTALVENDA.AsCurrency + cdsVendaNFE_VALOR_ICMS_SUBST.AsCurrency + cdsVendaNFE_VALOR_FRETE.AsCurrency +
                                                cdsVendaNFE_VALOR_SEGURO.AsCurrency + cdsVendaNFE_VALOR_OUTROS.AsCurrency;
   end;
@@ -208,17 +217,32 @@ begin
       CommitTransaction;
     end;
 
+    lblInforme.Caption := 'Consulta/Gerando NF-e junto a SEFA. Aguarde . . . ';
+    Application.ProcessMessages;
+    
     if ( DMNFe.GerarNFeOnLine ) then
-      bOK := DMNFe.GerarNFeOnLineACBr ( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger)
+      bOK := DMNFe.GerarNFeOnLineACBr ( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
+               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote)
     else
-      bOK := DMNFe.GerarNFeOffLineACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger);
+      bOK := DMNFe.GerarNFeOffLineACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
+               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE);
 
     if ( bOK ) then
-    begin
-
       ModalResult := mrOk;
-    end;
   end;
+end;
+
+procedure TfrmGeVendaGerarNFe.FormCreate(Sender: TObject);
+begin
+  inherited;
+  iSerieNFe     := 0;
+  iNumeroNFe    := 0;
+  sFileNameXML  := EmptyStr;
+  sChaveNFE     := EmptyStr;
+  sProtocoloNFE := EmptyStr;
+  sReciboNFE    := EmptyStr;
+  iNumeroLote   := 0;
+  lblInforme.Caption := EmptyStr;
 end;
 
 end.

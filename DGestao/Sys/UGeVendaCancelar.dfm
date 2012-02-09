@@ -28,6 +28,20 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     Align = alTop
     Shape = bsSpacer
   end
+  object lblInforme: TLabel
+    Left = 0
+    Top = 400
+    Width = 216
+    Height = 18
+    Anchors = [akTop, akBottom]
+    Caption = 'Andamento do processo . . . . '
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clRed
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object GrpBxControle: TGroupBox
     Left = 0
     Top = 0

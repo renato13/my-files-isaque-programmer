@@ -58,8 +58,10 @@ type
     cdsVendaXML_NFE: TMemoField;
     cdsVendaNOME: TIBStringField;
     cdsVendaCANCEL_USUARIO: TIBStringField;
+    lblInforme: TLabel;
     procedure btFecharClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -119,6 +121,12 @@ begin
     dbMotivo.SetFocus;
   end
   else
+  if ( Length(Trim(dbMotivo.Lines.Text)) < 15 ) then
+  begin
+    ShowWarning('Motivo de cancelamento da venda deve possuir 15 caracteres no mínimo.');
+    dbMotivo.SetFocus;
+  end
+  else
   begin
     if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
       sMsg := 'Esta venda possui Nota Fiscal Emitida e ao cancelar a venda a NF-e será cancelada.'#13#13'Confirma o cancelamento da venda?'
@@ -129,8 +137,13 @@ begin
 
     if ( Cont ) then
       if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
+      begin
+        lblInforme.Caption := 'Cancelando NF-e junto a SEFA. Aguarde . . . ';
+        Application.ProcessMessages;
+
         Cont := DMNFe.CancelarNFeACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString,
                 cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger, UpperCase(Trim(dbMotivo.Lines.Text)) );
+      end;
 
     if ( Cont ) then
       with cdsVenda do
@@ -149,6 +162,12 @@ begin
         ModalResult := mrOk;
       end;
   end;
+end;
+
+procedure TfrmGeVendaCancelar.FormCreate(Sender: TObject);
+begin
+  inherited;
+  lblInforme.Caption := EmptyStr;
 end;
 
 end.

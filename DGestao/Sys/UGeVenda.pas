@@ -221,10 +221,26 @@ type
     ppImprimir: TPopupMenu;
     nmImprimirVenda: TMenuItem;
     nmImprimirDANFE: TMenuItem;
-    nmImprimirDANFEPDF: TMenuItem;
+    nmGerarDANFEXML: TMenuItem;
     N1: TMenuItem;
     cdsTabelaItensALIQUOTA_CSOSN: TIBBCDField;
     cdsTabelaItensCSOSN: TIBStringField;
+    IbDtstTabelaXML_NFE_FILENAME: TIBStringField;
+    qryNFE: TIBDataSet;
+    updNFE: TIBUpdateSQL;
+    qryNFEANOVENDA: TSmallintField;
+    qryNFENUMVENDA: TIntegerField;
+    qryNFEDATAEMISSAO: TDateField;
+    qryNFEHORAEMISSAO: TTimeField;
+    qryNFESERIE: TIBStringField;
+    qryNFENUMERO: TIntegerField;
+    qryNFECHAVE: TIBStringField;
+    qryNFEPROTOCOLO: TIBStringField;
+    qryNFERECIBO: TIBStringField;
+    qryNFEXML_FILENAME: TIBStringField;
+    qryNFEXML_FILE: TMemoField;
+    qryNFELOTE_ANO: TSmallintField;
+    qryNFELOTE_NUM: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -560,8 +576,8 @@ begin
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
 
-    nmImprimirDANFE.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
-    nmImprimirDANFEPDF.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
+    nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
+    nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
   end
   else
   begin
@@ -569,8 +585,8 @@ begin
     btbtnGerarNFe.Enabled    := False;
     btbtnCancelarVND.Enabled := False;
 
-    nmImprimirDANFE.Enabled    := False;
-    nmImprimirDANFEPDF.Enabled := False;
+    nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
+    nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
   end;
 end;
 
@@ -952,14 +968,56 @@ end;
 procedure TfrmGeVenda.btbtnGerarNFeClick(Sender: TObject);
 var
   iNumero : Integer;
+  iSerieNFe,
+  iNumeroNFe  : Integer;
+  sFileNameXML ,
+  sChaveNFE    ,
+  sProtocoloNFE,
+  sReciboNFE   : String;
+  iNumeroLote  : Int64;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
-  if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+  if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
+                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
+  ) ) then
     with IbDtstTabela do
     begin
       iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      with qryNFE do
+      begin
+        Close;
+        ParamByName('anovenda').AsInteger := IbDtstTabelaANO.Value;
+        ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.Value;
+        Open;
+
+        Append;
+
+        qryNFEANOVENDA.Value    := IbDtstTabelaANO.Value;
+        qryNFENUMVENDA.Value    := IbDtstTabelaCODCONTROL.Value;
+        qryNFESERIE.Value       := FormatFloat('#00', iSerieNFe);
+        qryNFENUMERO.Value      := iNumeroNFe;
+        qryNFEDATAEMISSAO.Value := GetDateDB;
+        qryNFEHORAEMISSAO.Value := GetTimeDB;
+        qryNFECHAVE.Value     := sChaveNFE;
+        qryNFEPROTOCOLO.Value := sProtocoloNFE;
+        qryNFERECIBO.Value    := sReciboNFE;
+        qryNFELOTE_ANO.Value  := IbDtstTabelaANO.Value;
+        qryNFELOTE_NUM.Value  := iNumeroLote;
+
+        if ( FileExists(sFileNameXML) ) then
+        begin
+          qryNFEXML_FILENAME.Value := ExtractFileName( sFileNameXML );
+          qryNFEXML_FILE.LoadFromFile( sFileNameXML );
+        end;
+
+        Post;
+        ApplyUpdates;
+
+        CommitTransaction;
+      end;
 
       IbDtstTabela.Close;
       IbDtstTabela.Open;
@@ -1140,7 +1198,7 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
-  isPDF := ( Sender = nmImprimirDANFEPDF );
+  isPDF := ( Sender = nmGerarDANFEXML );
 
   DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
