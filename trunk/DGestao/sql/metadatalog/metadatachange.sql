@@ -1,46 +1,98 @@
 
 
-SET TERM ^ ;
 
-CREATE Trigger Tg_vendasitens_total_venda For Tvendasitens
-Active After Insert Or Update Or Delete Position 10
-AS
-  declare variable anovenda Smallint;
-  declare variable numvenda Integer;
-  declare variable total_bruto Dmn_money;
-  declare variable total_desconto Dmn_money;
-begin
-  if ( (Inserting) or (Updating) ) then
-  begin
-    anovenda = new.Ano;
-    numvenda = new.Codcontrol;
-  end
-  else
-  begin
-    anovenda = old.Ano;
-    numvenda = old.Codcontrol;
-  end
+/*------ 09/02/2012 10:23:41: Creating domain DMN_MONEY_DESCONTO... --------*/
 
-  Select
-      sum( coalesce(i.Qtde, 0) * coalesce(i.Punit, 0) )
-    , sum( coalesce(i.Qtde, 0) * (coalesce(i.Punit, 0) - coalesce(i.Pfinal, 0)) )
-  from TVENDASITENS i
-  where i.Ano = :Anovenda
-    and i.Codcontrol = :Numvenda
-  into
-      Total_bruto
-    , Total_desconto;
+CREATE DOMAIN DMN_MONEY_DESCONTO AS
+  NUMERIC(15, 3)
+  DEFAULT 0;
 
-  Total_bruto    = coalesce(:Total_bruto, 0);
-  Total_desconto = coalesce(:Total_desconto, 0);
 
-  Update TBVENDAS v Set
-      v.Desconto = :Total_desconto
-    , v.Totalvenda = :Total_bruto - :Total_desconto
-  where v.Ano = :Anovenda
-    and v.Codcontrol = :Numvenda;
-end
-^
 
-SET TERM ; ^
 
+
+
+/*------ 09/02/2012 12:54:08: Adding field DESCONTO_VALOR to table... --------*/
+
+ALTER TABLE TVENDASITENS ADD DESCONTO_VALOR DMN_MONEY_DESCONTO;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN DESCONTO_VALOR
+POSITION 11;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN PFINAL
+POSITION 12;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN QTDEFINAL
+POSITION 13;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN UNID_COD
+POSITION 14;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN CFOP_COD
+POSITION 15;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN ALIQUOTA
+POSITION 16;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN ALIQUOTA_CSOSN
+POSITION 17;
+
+
+
+/*------ 09/02/2012 12:54:22: Executing statement... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN VALOR_IPI
+POSITION 18;
+
+
+
+/*------ 09/02/2012 12:54:56: Setting description for DESCONTO_VALOR... --------*/
+
+UPDATE RDB$RELATION_FIELDS SET
+RDB$DESCRIPTION = :VALUE
+WHERE RDB$RELATION_NAME = 'TVENDASITENS'
+AND RDB$FIELD_NAME = 'DESCONTO_VALOR';
+
+
+
+/*------ 09/02/2012 13:22:35: Changing domain for field DESCONTO_VALOR... --------*/
+
+ALTER TABLE TVENDASITENS
+ALTER COLUMN DESCONTO_VALOR
+TYPE DMN_MONEY;
