@@ -162,3 +162,58 @@ alter table TBEMPRESA
 alter LOTE_ANO_NFE position 30;
 alter table TBEMPRESA
 alter LOTE_NUM_NFE position 31;
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendasitens_reservar For Tvendasitens
+Active After Insert Or Update Or Delete Position 1
+AS
+  --declare variable status_venda Smallint;
+  declare variable reserva integer;
+begin
+  /*
+  Select
+    v.Status
+  from TBVENDAS v
+  where v.Ano = new.Ano
+    and v.Codcontrol = new.Codcontrol
+  into
+    status_venda;
+  */
+
+  Exit; -- Descontinuada RESERVA
+
+  if ( Inserting or Updating  ) then
+  begin
+      Select
+         coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0) + coalesce(new.Qtde, 0)
+      from TBPRODUTO p
+      where p.Cod    = new.Codprod
+        and p.Codemp = new.Codemp
+      into
+        Reserva;
+  end
+
+  else
+
+  if ( Deleting  ) then
+  begin
+      Select
+         coalesce(p.Reserva, 0) - coalesce(old.Qtde, 0)
+      from TBPRODUTO p
+      where p.Cod    = old.Codprod
+        and p.Codemp = old.Codemp
+      into
+        Reserva;
+  end
+
+  Update TBPRODUTO Set
+    Reserva = :Reserva
+  where Cod    = new.Codprod
+    and Codemp = new.Codemp;
+end
+^
+
+SET TERM ; ^
+
