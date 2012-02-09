@@ -892,8 +892,8 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , sum( coalesce(i.Valor_ipi, 0) ) as valor_total_IPI'
       '  , sum( coalesce(i.Qtde, 0) * i.Punit ) as valor_total_bruto'
       
-        '  , sum( coalesce(i.Qtde, 0) * (i.Punit * i.Desconto / 100) ) as' +
-        ' valor_total_desconto'
+        '  , sum( coalesce(i.Qtde, 0) * coalesce(i.Desconto_valor, 0) ) a' +
+        's valor_total_desconto'
       '  , sum( coalesce(i.Qtde, 0) * i.Pfinal ) as valor_total_liquido'
       
         '  , sum( case when coalesce(p.Aliquota, 0) = 0 then 0 else coale' +
@@ -1141,7 +1141,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
       Precision = 18
-      Size = 4
+      Size = 2
     end
     object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'

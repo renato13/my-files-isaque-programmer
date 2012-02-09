@@ -178,8 +178,6 @@ type
     cdsTabelaItensESTOQUE: TIntegerField;
     cdsTabelaItensUNP_SIGLA: TIBStringField;
     cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
-    cdsTabelaItensVALOR_DESCONTO: TIBBCDField;
-    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     cdsTabelaItensCFOP_DESCRICAO: TIBStringField;
     cdsTabelaItensCST: TIBStringField;
@@ -241,6 +239,8 @@ type
     qryNFEXML_FILE: TMemoField;
     qryNFELOTE_ANO: TSmallintField;
     qryNFELOTE_NUM: TIntegerField;
+    cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
+    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -801,10 +801,10 @@ begin
       if ( cdsTabelaItensDESCONTO.IsNull ) then
         cdsTabelaItensDESCONTO.AsCurrency := 0;
 
-      cdsTabelaItensVALOR_DESCONTO.Value  := cdsTabelaItensPUNIT.AsCurrency * cdsTabelaItensDESCONTO.AsCurrency / 100;
-      cdsTabelaItensPFINAL.Value          := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensVALOR_DESCONTO.Value;
+      cdsTabelaItensDESCONTO_VALOR.Value  := cdsTabelaItensPUNIT.AsCurrency * cdsTabelaItensDESCONTO.AsCurrency / 100;
+      cdsTabelaItensPFINAL.Value          := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
       cdsTabelaItensTOTAL_BRUTO.Value     := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
-      cdsTabelaItensTOTAL_DESCONTO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensVALOR_DESCONTO.AsCurrency;
+      cdsTabelaItensTOTAL_DESCONTO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
       cdsTabelaItensTOTAL_LIQUIDO.Value   := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
 
@@ -828,7 +828,7 @@ begin
   begin
     AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
-  end;  
+  end;
 end;
 
 procedure TfrmGeVenda.btbtnAlterarClick(Sender: TObject);

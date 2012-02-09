@@ -98,7 +98,7 @@ var
 implementation
 
 uses UDMBusiness, UGeBairro, UGeCidade, UGeDistrito, UGeEstado,
-  UGeLogradouro, UGrPadrao;
+  UGeLogradouro, UGrPadrao, ChkDgVer;
 
 {$R *.dfm}
 
@@ -286,11 +286,19 @@ begin
     end;
 
   if ( IbDtstTabelaPESSOA_FISICA.AsInteger = 0 ) then
+  begin
     if ( not FuncoesString.StrIsCNPJ(IbDtstTabelaCNPJ.AsString) ) then
     begin
       ShowWarning('Favor informar um CNPJ válido.');
       Abort;
     end;
+
+    if ( not ChkInscEstadual(Trim(IbDtstTabelaINSCEST.AsString), Trim(IbDtstTabelaUF.AsString)) ) then
+    begin
+      ShowWarning('Favor informar uma Inscrição Estadual válida.');
+      Abort;
+    end;
+  end;
 
   inherited;
 end;

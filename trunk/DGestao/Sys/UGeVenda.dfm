@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 219
-  Top = 134
+  Left = 379
+  Top = 141
   Width = 1051
   Height = 608
   ActiveControl = nil
@@ -2383,7 +2383,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
-            FieldName = 'VALOR_DESCONTO'
+            FieldName = 'DESCONTO_VALOR'
             Title.Caption = 'Valor Desc.'
             Width = 85
             Visible = True
@@ -2947,6 +2947,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Qtde'
       '  , i.Punit'
       '  , i.Desconto'
+      '  , i.Desconto_valor'
       '  , i.Pfinal'
       '  , i.Qtdefinal'
       '  , i.Unid_cod'
@@ -2959,8 +2960,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , p.Reserva'
       '  , u.Unp_sigla'
       '  , i.Qtde * i.Punit  as total_bruto'
-      '  , i.Punit * i.Desconto / 100 as valor_desconto'
-      '  , i.Qtde * (i.Punit * i.Desconto / 100) as total_desconto'
+      '  , i.Qtde * i.Desconto_valor as total_desconto'
       '  , i.Qtde * i.Pfinal as total_liquido'
       '  , o.Cfop_descricao'
       '  , p.Cst'
@@ -3035,6 +3035,14 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
+    object cdsTabelaItensDESCONTO_VALOR: TIBBCDField
+      DisplayLabel = 'Valor Desconto (R$)'
+      FieldName = 'DESCONTO_VALOR'
+      Origin = 'TVENDASITENS.DESCONTO_VALOR'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsTabelaItensPFINAL: TIBBCDField
       DisplayLabel = 'Valor L'#237'quido'
       FieldName = 'PFINAL'
@@ -3104,17 +3112,11 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
-    object cdsTabelaItensVALOR_DESCONTO: TIBBCDField
-      FieldName = 'VALOR_DESCONTO'
-      DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 4
-    end
     object cdsTabelaItensTOTAL_DESCONTO: TIBBCDField
       FieldName = 'TOTAL_DESCONTO'
       DisplayFormat = ',0.00'
       Precision = 18
-      Size = 4
+      Size = 2
     end
     object cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField
       FieldName = 'TOTAL_LIQUIDO'
@@ -3153,6 +3155,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  QTDE,'
       '  PUNIT,'
       '  DESCONTO,'
+      '  DESCONTO_VALOR,'
       '  PFINAL,'
       '  QTDEFINAL,'
       '  UNID_COD,'
@@ -3179,6 +3182,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  QTDE = :QTDE,'
       '  PUNIT = :PUNIT,'
       '  DESCONTO = :DESCONTO,'
+      '  DESCONTO_VALOR = :DESCONTO_VALOR,'
       '  PFINAL = :PFINAL,'
       '  QTDEFINAL = :QTDEFINAL,'
       '  UNID_COD = :UNID_COD,'
@@ -3197,17 +3201,17 @@ inherited frmGeVenda: TfrmGeVenda
         '  (ANO, CODCONTROL, SEQ, CODPROD, CODEMP, CODCLI, DTVENDA, QTDE,' +
         ' PUNIT, '
       
-        '   DESCONTO, PFINAL, QTDEFINAL, UNID_COD, CFOP_COD, ALIQUOTA, AL' +
-        'IQUOTA_CSOSN, '
-      '   VALOR_IPI)'
+        '   DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, UNID_COD, CFOP_C' +
+        'OD, ALIQUOTA, '
+      '   ALIQUOTA_CSOSN, VALOR_IPI)'
       'values'
       
         '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
         ', :QTDE, '
       
-        '   :PUNIT, :DESCONTO, :PFINAL, :QTDEFINAL, :UNID_COD, :CFOP_COD,' +
-        ' :ALIQUOTA, '
-      '   :ALIQUOTA_CSOSN, :VALOR_IPI)')
+        '   :PUNIT, :DESCONTO, :DESCONTO_VALOR, :PFINAL, :QTDEFINAL, :UNI' +
+        'D_COD, '
+      '   :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'
