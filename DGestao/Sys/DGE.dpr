@@ -79,7 +79,8 @@ uses
   UEnviarLoteNFe in 'UEnviarLoteNFe.pas' {frmEnviarLoteNFe},
   UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa},
   UfrmAcessoSistema in 'UfrmAcessoSistema.pas' {frmAcessoSistema},
-  UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar};
+  UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
+  ChkDgVer in 'lib\ChkDgVer.pas';
 
 {$R *.res}
 
