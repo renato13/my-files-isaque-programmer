@@ -131,7 +131,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           FocusControl = dbFantasia
         end
         object lblIE: TLabel [4]
-          Left = 408
+          Left = 352
           Top = 64
           Width = 91
           Height = 13
@@ -139,12 +139,20 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           FocusControl = dbIE
         end
         object lblIM: TLabel [5]
-          Left = 568
+          Left = 488
           Top = 64
           Width = 93
           Height = 13
           Caption = 'Inscri'#231#227'o Municipal:'
           FocusControl = dbIM
+        end
+        object lblCNAE: TLabel [6]
+          Left = 624
+          Top = 64
+          Width = 60
+          Height = 13
+          Caption = 'CNAE Fiscal:'
+          FocusControl = dbCNAE
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -197,7 +205,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         object dbFantasia: TDBEdit
           Left = 16
           Top = 80
-          Width = 385
+          Width = 329
           Height = 21
           CharCase = ecUpperCase
           DataField = 'NMFANT'
@@ -211,9 +219,9 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           TabOrder = 4
         end
         object dbIE: TDBEdit
-          Left = 408
+          Left = 352
           Top = 80
-          Width = 153
+          Width = 129
           Height = 21
           CharCase = ecUpperCase
           DataField = 'IE'
@@ -227,9 +235,9 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           TabOrder = 5
         end
         object dbIM: TDBEdit
-          Left = 568
+          Left = 488
           Top = 80
-          Width = 153
+          Width = 129
           Height = 21
           CharCase = ecUpperCase
           DataField = 'IM'
@@ -241,6 +249,22 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           Font.Style = []
           ParentFont = False
           TabOrder = 6
+        end
+        object dbCNAE: TDBEdit
+          Left = 624
+          Top = 80
+          Width = 97
+          Height = 21
+          CharCase = ecUpperCase
+          DataField = 'CNAE'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
         end
       end
       object GroupBox1: TGroupBox
@@ -1025,6 +1049,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  , e.Nmfant'
       '  , e.Ie'
       '  , e.Im'
+      '  , e.Cnae'
       '  , e.Ender'
       '  , e.Complemento'
       '  , e.Numero_end'
@@ -1105,6 +1130,11 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       FieldName = 'IM'
       Origin = 'TBEMPRESA.IM'
       Size = 12
+    end
+    object IbDtstTabelaCNAE: TIBStringField
+      FieldName = 'CNAE'
+      Origin = 'TBEMPRESA.CNAE'
+      Size = 11
     end
     object IbDtstTabelaENDER: TIBStringField
       DisplayLabel = 'Endere'#231'o'
@@ -1268,6 +1298,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  NMFANT,'
       '  IE,'
       '  IM,'
+      '  CNAE,'
       '  ENDER,'
       '  COMPLEMENTO,'
       '  BAIRRO,'
@@ -1285,12 +1316,12 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  EMAIL,'
       '  HOME_PAGE,'
       '  CHAVE_ACESSO_NFE,'
+      '  PAIS_ID,'
       '  TIPO_REGIME_NFE,'
       '  SERIE_NFE,'
       '  NUMERO_NFE,'
       '  LOTE_ANO_NFE,'
-      '  LOTE_NUM_NFE,'
-      '  PAIS_ID'
+      '  LOTE_NUM_NFE'
       'from TBEMPRESA '
       'where'
       '  CODIGO = :CODIGO')
@@ -1304,6 +1335,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  NMFANT = :NMFANT,'
       '  IE = :IE,'
       '  IM = :IM,'
+      '  CNAE = :CNAE,'
       '  ENDER = :ENDER,'
       '  COMPLEMENTO = :COMPLEMENTO,'
       '  BAIRRO = :BAIRRO,'
@@ -1321,40 +1353,40 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  EMAIL = :EMAIL,'
       '  HOME_PAGE = :HOME_PAGE,'
       '  CHAVE_ACESSO_NFE = :CHAVE_ACESSO_NFE,'
+      '  PAIS_ID = :PAIS_ID,'
       '  TIPO_REGIME_NFE = :TIPO_REGIME_NFE,'
       '  SERIE_NFE = :SERIE_NFE,'
       '  NUMERO_NFE = :NUMERO_NFE,'
       '  LOTE_ANO_NFE = :LOTE_ANO_NFE,'
-      '  LOTE_NUM_NFE = :LOTE_NUM_NFE,'
-      '  PAIS_ID = :PAIS_ID'
+      '  LOTE_NUM_NFE = :LOTE_NUM_NFE'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
       'insert into TBEMPRESA'
       
-        '  (CODIGO, PESSOA_FISICA, CNPJ, RZSOC, NMFANT, IE, IM, ENDER, CO' +
-        'MPLEMENTO, '
+        '  (CODIGO, PESSOA_FISICA, CNPJ, RZSOC, NMFANT, IE, IM, CNAE, END' +
+        'ER, COMPLEMENTO, '
       
         '   BAIRRO, CEP, CIDADE, UF, FONE, LOGO, TLG_TIPO, LOG_COD, BAI_C' +
         'OD, CID_COD, '
       
-        '   EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAVE_ACESSO_NFE, TIPO' +
-        '_REGIME_NFE, '
-      '   SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE, LOTE_NUM_NFE, PAIS_ID)'
+        '   EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAVE_ACESSO_NFE, PAIS' +
+        '_ID, TIPO_REGIME_NFE, '
+      '   SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE, LOTE_NUM_NFE)'
       'values'
       
-        '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :RZSOC, :NMFANT, :IE, :IM, :E' +
-        'NDER, :COMPLEMENTO, '
+        '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :RZSOC, :NMFANT, :IE, :IM, :C' +
+        'NAE, :ENDER, '
       
-        '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :LOGO, :TLG_TIPO, :LOG_CO' +
-        'D, :BAI_COD, '
+        '   :COMPLEMENTO, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :LOGO, :TLG' +
+        '_TIPO, '
       
-        '   :CID_COD, :EST_COD, :NUMERO_END, :EMAIL, :HOME_PAGE, :CHAVE_A' +
-        'CESSO_NFE, '
+        '   :LOG_COD, :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :EMAIL, ' +
+        ':HOME_PAGE, '
       
-        '   :TIPO_REGIME_NFE, :SERIE_NFE, :NUMERO_NFE, :LOTE_ANO_NFE, :LO' +
-        'TE_NUM_NFE, '
-      '   :PAIS_ID)')
+        '   :CHAVE_ACESSO_NFE, :PAIS_ID, :TIPO_REGIME_NFE, :SERIE_NFE, :N' +
+        'UMERO_NFE, '
+      '   :LOTE_ANO_NFE, :LOTE_NUM_NFE)')
     DeleteSQL.Strings = (
       'delete from TBEMPRESA'
       'where'
