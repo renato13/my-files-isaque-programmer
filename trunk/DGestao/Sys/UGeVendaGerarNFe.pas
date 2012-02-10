@@ -222,10 +222,10 @@ begin
     
     if ( DMNFe.GerarNFeOnLine ) then
       bOK := DMNFe.GerarNFeOnLineACBr ( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
-               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote)
+               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote, False)
     else
       bOK := DMNFe.GerarNFeOffLineACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
-               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE);
+               iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, False);
 
     if ( bOK ) then
       ModalResult := mrOk;
