@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 379
-  Top = 141
+  Left = 121
+  Top = 136
   Width = 1051
   Height = 608
   ActiveControl = nil
@@ -2383,8 +2383,8 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
-            FieldName = 'DESCONTO_VALOR'
-            Title.Caption = 'Valor Desc.'
+            FieldName = 'TOTAL_DESCONTO'
+            Title.Caption = 'Total Desc.'
             Width = 85
             Visible = True
           end
@@ -3113,6 +3113,7 @@ inherited frmGeVenda: TfrmGeVenda
       Size = 2
     end
     object cdsTabelaItensTOTAL_DESCONTO: TIBBCDField
+      DisplayLabel = 'Total Desc,'
       FieldName = 'TOTAL_DESCONTO'
       DisplayFormat = ',0.00'
       Precision = 18

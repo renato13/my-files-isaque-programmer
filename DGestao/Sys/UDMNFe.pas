@@ -995,7 +995,8 @@ begin
 
           Prod.vFrete    := 0;                                        // I15 - Valor Total do Frete
           Prod.vSeg      := 0;                                        // I16 - Valor Total do Seguro
-          Prod.vDesc     := qryDadosProdutoDESCONTO_VALOR.AsCurrency; // I17 - Valor do Desconto
+          Prod.vDesc     := qryDadosProdutoTOTAL_DESCONTO.AsCurrency; // I17 - Valor do Desconto
+          //Prod.vDesc     := qryDadosProdutoDESCONTO_VALOR.AsCurrency; // I17 - Valor do Desconto
 
           // Informação Adicional do Produto
           if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
