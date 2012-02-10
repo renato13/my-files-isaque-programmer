@@ -241,6 +241,8 @@ type
     qryNFELOTE_NUM: TIntegerField;
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
+    BitBtn1: TBitBtn;
+    Bevel13: TBevel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -275,6 +277,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure nmImprimirVendaClick(Sender: TObject);
     procedure nmImprimirDANFEClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -1123,6 +1126,8 @@ end;
 procedure TfrmGeVenda.FormActivate(Sender: TObject);
 begin
   inherited;
+  HabilitarDesabilitar_Btns;
+  
   case DMBusiness.ibdtstUsersCODFUNCAO.Value of
 // 1: EvUAfrmPrinc.UserID := 1 ;  //Diretoria
     2: begin
@@ -1203,6 +1208,12 @@ begin
   isPDF := ( Sender = nmGerarDANFEXML );
 
   DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
+end;
+
+procedure TfrmGeVenda.BitBtn1Click(Sender: TObject);
+begin
+  inherited;
+MostrarTabelaProdutos(Self);
 end;
 
 end.

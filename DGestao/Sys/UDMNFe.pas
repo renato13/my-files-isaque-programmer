@@ -629,7 +629,7 @@ begin
 
     iNumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
 
-    Result := ACBrNFe.Enviar( iNumeroLote );
+    Result := ACBrNFe.Enviar( iNumeroLote, Imprimir );
 
     if ( Result ) then
     begin
@@ -639,9 +639,6 @@ begin
 
       UpdateNumeroNFe(sCNPJEmitente, qryEmitenteSERIE_NFE.AsInteger, iNumeroNFe);
       UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
-
-      if ( Imprimir ) then
-        ACBrNFe.NotasFiscais.Imprimir;
     end;
 
   except
@@ -709,7 +706,7 @@ begin
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar cancelar NF-e.' + #13#13 + 'CancelarNFeACBr() --> ' + e.Message);
+      ShowError('Erro ao tentar cancelar NF-e.'+ #13#13 + 'CancelarNFeACBr() --> ' + e.Message);
       Result := False;
     end;
   end;
@@ -821,6 +818,8 @@ begin
     iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);
     DtHoraEmiss := GetDateTimeDB;
 
+    ACBrNFe.NotasFiscais.Clear;
+    
     with ACBrNFe.NotasFiscais.Add.NFe do
     begin
       Ide.cNF       := iNumeroNFe; // Caso não seja preenchido será gerado um número aleatório pelo componente
@@ -1301,7 +1300,7 @@ begin
            UF    := '';
            RNTC  := '';
          end;}
-                            
+
       if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
         with Transp.Vol.Add do
         begin
@@ -1337,10 +1336,10 @@ begin
         end;
       end;
 
-      InfAdic.infCpl     := #13 +
+      InfAdic.infCpl     := ' * * * ' + #13 +
                             'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
-                            ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString + #13 +
-                            'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString + #13 +
+                            ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString + ' * * * ' + #13 +
+                            'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString + ' * * * ' + #13 +
                             'Obserações : ' + qryCalculoImportoOBS.AsString;
 
       InfAdic.infAdFisco := 'Info. Fisco: ' + GetInformacaoFisco;
@@ -1391,14 +1390,11 @@ begin
       compra.xPed  := '';
       compra.xCont := '';
 
-//      ACBrNFe.NotasFiscais.Assinar;
-//      ACBrNFe.NotasFiscais.Valida;
-//      ACBrNFe.NotasFiscais.GerarNFe;
       ACBrNFe.NotasFiscais.GerarNFe;
       ACBrNFe.NotasFiscais.Assinar;
       ACBrNFe.NotasFiscais.Valida;
 
-      ACBrNFe.NotasFiscais.Items[0].SaveToFile;
+      ACBrNFe.NotasFiscais.Items[0].SaveToFile( EmptyStr );
 
       FileNameXML := ACBrNFe.NotasFiscais.Items[0].NomeArq;
 
