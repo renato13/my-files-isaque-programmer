@@ -343,7 +343,7 @@ object DMNFe: TDMNFe
       '  , i.Qtde'
       '  , i.Punit'
       '  , i.Desconto'
-      '  , i.Punit * coalesce(i.Desconto_valor, 0) as valor_desconto'
+      '  , i.Desconto_valor'
       '  , i.Pfinal'
       '  , i.Qtdefinal'
       '  , i.Unid_cod'
@@ -355,6 +355,7 @@ object DMNFe: TDMNFe
       '  , i.Valor_ipi'
       '  , i.Qtde * i.Punit as Total_bruto'
       '  , i.Qtde * i.Pfinal as Total_liquido'
+      '  , i.Qtde * i.Desconto_valor as Total_desconto'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
       '  , coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0) as Disponivel'
@@ -434,6 +435,11 @@ object DMNFe: TDMNFe
       Origin = 'TBPRODUTO.CST'
       Size = 3
     end
+    object qryDadosProdutoCSOSN: TIBStringField
+      FieldName = 'CSOSN'
+      Origin = 'TBPRODUTO.CSOSN'
+      Size = 3
+    end
     object qryDadosProdutoCODEMP: TIBStringField
       FieldName = 'CODEMP'
       Origin = 'TVENDASITENS.CODEMP'
@@ -464,16 +470,17 @@ object DMNFe: TDMNFe
       Precision = 18
       Size = 2
     end
+    object qryDadosProdutoDESCONTO_VALOR: TIBBCDField
+      FieldName = 'DESCONTO_VALOR'
+      Origin = 'TVENDASITENS.DESCONTO_VALOR'
+      Precision = 18
+      Size = 2
+    end
     object qryDadosProdutoPFINAL: TIBBCDField
       FieldName = 'PFINAL'
       Origin = 'TVENDASITENS.PFINAL'
       Precision = 18
       Size = 2
-    end
-    object qryDadosProdutoVALOR_DESCONTO: TIBBCDField
-      FieldName = 'VALOR_DESCONTO'
-      Precision = 18
-      Size = 4
     end
     object qryDadosProdutoQTDEFINAL: TIntegerField
       FieldName = 'QTDEFINAL'
@@ -503,6 +510,12 @@ object DMNFe: TDMNFe
       Precision = 18
       Size = 2
     end
+    object qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField
+      FieldName = 'ALIQUOTA_CSOSN'
+      Origin = 'TVENDASITENS.ALIQUOTA_CSOSN'
+      Precision = 18
+      Size = 2
+    end
     object qryDadosProdutoVALOR_IPI: TIBBCDField
       FieldName = 'VALOR_IPI'
       Origin = 'TVENDASITENS.VALOR_IPI'
@@ -519,6 +532,11 @@ object DMNFe: TDMNFe
       Precision = 18
       Size = 2
     end
+    object qryDadosProdutoTOTAL_DESCONTO: TIBBCDField
+      FieldName = 'TOTAL_DESCONTO'
+      Precision = 18
+      Size = 2
+    end
     object qryDadosProdutoESTOQUE: TIntegerField
       FieldName = 'ESTOQUE'
       Origin = 'TBPRODUTO.QTDE'
@@ -529,17 +547,6 @@ object DMNFe: TDMNFe
     end
     object qryDadosProdutoDISPONIVEL: TLargeintField
       FieldName = 'DISPONIVEL'
-    end
-    object qryDadosProdutoCSOSN: TIBStringField
-      FieldName = 'CSOSN'
-      Origin = 'TBPRODUTO.CSOSN'
-      Size = 3
-    end
-    object qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField
-      FieldName = 'ALIQUOTA_CSOSN'
-      Origin = 'TVENDASITENS.ALIQUOTA_CSOSN'
-      Precision = 18
-      Size = 2
     end
   end
   object frdEmpresa: TfrxDBDataset

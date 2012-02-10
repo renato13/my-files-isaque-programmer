@@ -61,42 +61,10 @@ type
     frdVenda: TfrxDBDataset;
     frdItens: TfrxDBDataset;
     frdTitulo: TfrxDBDataset;
-    qryDadosProdutoANO: TSmallintField;
-    qryDadosProdutoCODCONTROL: TIntegerField;
-    qryDadosProdutoSEQ: TSmallintField;
-    qryDadosProdutoCODPROD: TIBStringField;
-    qryDadosProdutoDESCRI: TIBStringField;
-    qryDadosProdutoREFERENCIA: TIBStringField;
-    qryDadosProdutoCODEMP: TIBStringField;
-    qryDadosProdutoCODCLI: TIBStringField;
-    qryDadosProdutoDTVENDA: TDateTimeField;
-    qryDadosProdutoQTDE: TIntegerField;
-    qryDadosProdutoPUNIT: TIBBCDField;
-    qryDadosProdutoDESCONTO: TIBBCDField;
-    qryDadosProdutoPFINAL: TIBBCDField;
-    qryDadosProdutoQTDEFINAL: TIntegerField;
-    qryDadosProdutoUNID_COD: TSmallintField;
-    qryDadosProdutoUNP_DESCRICAO: TIBStringField;
-    qryDadosProdutoUNP_SIGLA: TIBStringField;
-    qryDadosProdutoCFOP_COD: TIntegerField;
-    qryDadosProdutoALIQUOTA: TIBBCDField;
-    qryDadosProdutoVALOR_IPI: TIBBCDField;
-    qryDadosProdutoESTOQUE: TIntegerField;
-    qryDadosProdutoRESERVA: TIntegerField;
-    qryDadosProdutoDISPONIVEL: TLargeintField;
-    qryDadosProdutoTOTAL_BRUTO: TIBBCDField;
-    qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField;
     frxPDF: TfrxPDFExport;
     frxXLS: TfrxXLSExport;
     frxRTF: TfrxRTFExport;
     frxMailExport: TfrxMailExport;
-    qryDadosProdutoCODBARRA_EAN: TIBStringField;
-    qryDadosProdutoNCM_SH: TIBStringField;
-    qryDadosProdutoCODORIGEM: TIBStringField;
-    qryDadosProdutoCODTRIBUTACAO: TIBStringField;
-    qryDadosProdutoCST: TIBStringField;
-    qryDadosProdutoCSOSN: TIBStringField;
-    qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField;
     qryEmitente: TIBDataSet;
     qryEmitenteCODIGO: TIntegerField;
     qryEmitentePESSOA_FISICA: TSmallintField;
@@ -203,8 +171,41 @@ type
     qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
     IBSQL: TIBSQL;
-    qryDadosProdutoVALOR_DESCONTO: TIBBCDField;
     qryEmitenteCNAE: TIBStringField;
+    qryDadosProdutoANO: TSmallintField;
+    qryDadosProdutoCODCONTROL: TIntegerField;
+    qryDadosProdutoSEQ: TSmallintField;
+    qryDadosProdutoCODPROD: TIBStringField;
+    qryDadosProdutoCODBARRA_EAN: TIBStringField;
+    qryDadosProdutoDESCRI: TIBStringField;
+    qryDadosProdutoREFERENCIA: TIBStringField;
+    qryDadosProdutoNCM_SH: TIBStringField;
+    qryDadosProdutoCODORIGEM: TIBStringField;
+    qryDadosProdutoCODTRIBUTACAO: TIBStringField;
+    qryDadosProdutoCST: TIBStringField;
+    qryDadosProdutoCSOSN: TIBStringField;
+    qryDadosProdutoCODEMP: TIBStringField;
+    qryDadosProdutoCODCLI: TIBStringField;
+    qryDadosProdutoDTVENDA: TDateTimeField;
+    qryDadosProdutoQTDE: TIntegerField;
+    qryDadosProdutoPUNIT: TIBBCDField;
+    qryDadosProdutoDESCONTO: TIBBCDField;
+    qryDadosProdutoDESCONTO_VALOR: TIBBCDField;
+    qryDadosProdutoPFINAL: TIBBCDField;
+    qryDadosProdutoQTDEFINAL: TIntegerField;
+    qryDadosProdutoUNID_COD: TSmallintField;
+    qryDadosProdutoUNP_DESCRICAO: TIBStringField;
+    qryDadosProdutoUNP_SIGLA: TIBStringField;
+    qryDadosProdutoCFOP_COD: TIntegerField;
+    qryDadosProdutoALIQUOTA: TIBBCDField;
+    qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField;
+    qryDadosProdutoVALOR_IPI: TIBBCDField;
+    qryDadosProdutoTOTAL_BRUTO: TIBBCDField;
+    qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField;
+    qryDadosProdutoTOTAL_DESCONTO: TIBBCDField;
+    qryDadosProdutoESTOQUE: TIntegerField;
+    qryDadosProdutoRESERVA: TIntegerField;
+    qryDadosProdutoDISPONIVEL: TLargeintField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -872,7 +873,7 @@ begin
   }
       Emit.CNPJCPF := qryEmitenteCNPJ.AsString;
       Emit.IE      := Trim(qryEmitenteIE.AsString);
-      Emit.CNAE    := Trim(qryEmitenteCNAE.AsString);
+      Emit.CNAE    := Trim(qryEmitenteCNAE.AsString);  // C20 - CNAE fiscal Este campo deve ser informado quando o campo NFe.Emit.IM for informado.
       Emit.xNome   := qryEmitenteRZSOC.AsString;
       Emit.xFant   := qryEmitenteNMFANT.AsString;
 
@@ -965,26 +966,36 @@ begin
 
         with Det.Add do
         begin
-          Prod.nItem    := qryDadosProdutoSEQ.AsInteger;   // Número sequencial, para cada item deve ser incrementado
+          Prod.nItem    := qryDadosProdutoSEQ.AsInteger;              // Número sequencial, para cada item deve ser incrementado
           Prod.cProd    := qryDadosProdutoCODPROD.AsString;
-          Prod.cEAN     := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.xProd    := qryDadosProdutoDESCRI.AsString;
-          Prod.NCM      := qryDadosProdutoNCM_SH.AsString; // Tabela NCM disponível em  http://www.receita.fazenda.gov.br/Aliquotas/DownloadArqTIPI.htm
+          Prod.NCM      := qryDadosProdutoNCM_SH.AsString;            // Tabela NCM disponível em  http://www.receita.fazenda.gov.br/Aliquotas/DownloadArqTIPI.htm
           Prod.EXTIPI   := '';
           Prod.CFOP     := qryDadosProdutoCFOP_COD.AsString;
+
+          Prod.cEAN     := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.uCom     := qryDadosProdutoUNP_SIGLA.AsString;
           Prod.qCom     := qryDadosProdutoQTDE.AsCurrency;
-          Prod.vUnCom   := qryDadosProdutoPUNIT.AsCurrency;
-          Prod.vProd    := qryDadosProdutoPUNIT.AsCurrency;
+          Prod.vUnCom   := qryDadosProdutoPUNIT.AsCurrency;           // I10a  Valor Unitário de comercialização
+          Prod.vProd    := qryDadosProdutoTOTAL_BRUTO.AsCurrency;     // I11 - Valor Total Bruto dos Produtos ou Serviços
 
           Prod.cEANTrib  := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.uTrib     := qryDadosProdutoUNP_SIGLA.AsString;
           Prod.qTrib     := qryDadosProdutoQTDE.AsCurrency;
-          Prod.vUnTrib   := qryDadosProdutoPUNIT.AsCurrency;
+          Prod.vUnTrib   := qryDadosProdutoPUNIT.AsCurrency;          // I14a  Valor Unitário de tributação
 
-          Prod.vFrete    := 0;
-          Prod.vSeg      := 0;
-          Prod.vDesc     := qryDadosProdutoVALOR_DESCONTO.AsCurrency;
+(* EXEMPLO *)
+          // NFe.Det[i].Prod.uCom    := 'CX';                                                   = 'UN'
+          // NFe.Det[i].Prod.qCom    :=    2;   Vendidas 2 caixas ( com 10 unidades cada )      = 20
+          // NFe.Det[i].Prod.vUnCom  :=   50;   R$ 50,00 cada caixa                             = 50,00 / 10 = 5,00
+          // NFe.Det[i].Prod.vProd   :=  100;   R$ 100,00 Valor dos produtos                    = 20 * 5,00 = 100,00
+          // NFe.Det[i].Prod.uTrib   := 'UN';                                                   = 'UN'
+          // NFe.Det[i].Prod.qTrib   :=   20;   2 caixas X 10 unidades por caixa = 20 unidades  = 20
+          // NFe.Det[i].Prod.vUnTrib :=    5;   R$ 100,00 / 20 unidades = R$ 5,00 cada unidade  = 100,00 / 20 = 5,00
+
+          Prod.vFrete    := 0;                                        // I15 - Valor Total do Frete
+          Prod.vSeg      := 0;                                        // I16 - Valor Total do Seguro
+          Prod.vDesc     := qryDadosProdutoDESCONTO_VALOR.AsCurrency; // I17 - Valor do Desconto
 
           // Informação Adicional do Produto
           if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
