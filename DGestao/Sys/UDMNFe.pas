@@ -1272,7 +1272,10 @@ begin
         Total.retTrib.vBCRetPrev := 0;
         Total.retTrib.vRetPrev   := 0;}
 
-      Transp.modFrete := mfContaEmitente;
+      Transp.modFrete            := mfSemFrete; // X02 - Modalidade do frete
+                                                //         (0)=mfContaEmitente     – por conta do emitente;
+                                                //         (1)=mfContaDestinatario – por conta do destinatário)
+                                                //       TAG de grupo Transportador - <transporta> - Ocorrência 0-1
       Transp.Transporta.CNPJCPF  := '';
       Transp.Transporta.xNome    := '';
       Transp.Transporta.IE       := '';
