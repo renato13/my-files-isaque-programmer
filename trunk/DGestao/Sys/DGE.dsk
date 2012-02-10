@@ -13,8 +13,8 @@ File_9=SourceModule,'C:\Delphi\MyLib\ACBr\Fontes\ACBrNFe2\ACBrNFeDANFERave.pas',
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
 Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module3=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module2=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=5
 EditWindowCount=1
@@ -29,14 +29,14 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas]
 ModuleType=SourceModule
 FormState=0
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
 FormOnTop=0
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
@@ -73,9 +73,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -86,23 +86,23 @@ LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=99
-CursorY=573
+CursorX=89
+CursorY=582
 TopLine=553
 LeftCol=1
 
 [View2]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=37
-CursorY=572
-TopLine=558
+CursorX=116
+CursorY=1278
+TopLine=966
 LeftCol=1
 
 [View3]
 Module=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
-CursorX=91
-CursorY=897
-TopLine=849
+CursorX=116
+CursorY=814
+TopLine=807
 LeftCol=1
 
 [View4]
@@ -142,12 +142,12 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=1
-Height=911
+Width=4
+Height=889
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1
-ClientHeight=911
+ClientWidth=4
+ClientHeight=889
 TBDockHeight=383
 LRDockWidth=547
 Dockable=1
@@ -182,7 +182,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Caption
+SelectedItem=Connected
 ExpandedItems=
 HiddenCategories=
 
@@ -192,12 +192,12 @@ Visible=1
 State=0
 Left=0
 Top=0
-Width=1
-Height=911
+Width=4
+Height=889
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1
-ClientHeight=911
+ClientWidth=4
+ClientHeight=889
 TBDockHeight=354
 LRDockWidth=190
 Dockable=1
@@ -207,13 +207,13 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=121
-Width=27
-Height=919
+Top=135
+Width=30
+Height=897
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=27
-ClientHeight=919
+ClientWidth=30
+ClientHeight=897
 0=ObjectTree
 1=ProjectManager
 DockCount=2
@@ -258,26 +258,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=794
+Height=713
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=794
+ClientHeight=713
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=-11
-Top=-739
-Width=443
+Left=12
+Top=0
+Width=1690
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1690
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
