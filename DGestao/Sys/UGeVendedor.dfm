@@ -123,6 +123,7 @@ inherited frmGeVendedor: TfrmGeVendedor
       DisplayLabel = 'Nome'
       FieldName = 'NOME'
       Origin = 'TBVENDEDOR.NOME'
+      Required = True
       Size = 60
     end
     object IbDtstTabelaCPF: TIBStringField

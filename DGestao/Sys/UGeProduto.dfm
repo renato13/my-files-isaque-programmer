@@ -1,9 +1,8 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 292
-  Top = 115
+  Left = 625
+  Top = 236
   Width = 886
   Height = 575
-  ActiveControl = dbgDados
   Caption = 'Cadastro de Produtos'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -24,7 +23,6 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 870
     Height = 494
-    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 399
@@ -1061,6 +1059,7 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'Descri'#231#227'o'
       FieldName = 'DESCRI'
       Origin = 'TBPRODUTO.DESCRI'
+      Required = True
       Size = 50
     end
     object IbDtstTabelaMODELO: TIBStringField
@@ -1132,28 +1131,33 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'Origem'
       FieldName = 'CODORIGEM'
       Origin = 'TBPRODUTO.CODORIGEM'
+      Required = True
       Size = 1
     end
     object IbDtstTabelaCODTRIBUTACAO: TIBStringField
       DisplayLabel = 'Tipo Tributa'#231#227'o'
       FieldName = 'CODTRIBUTACAO'
       Origin = 'TBPRODUTO.CODTRIBUTACAO'
+      Required = True
       Size = 2
     end
     object IbDtstTabelaCST: TIBStringField
       FieldName = 'CST'
       Origin = 'TBPRODUTO.CST'
+      Required = True
       Size = 3
     end
     object IbDtstTabelaCSOSN: TIBStringField
       FieldName = 'CSOSN'
       Origin = 'TBPRODUTO.CSOSN'
+      Required = True
       Size = 3
     end
     object IbDtstTabelaNCM_SH: TIBStringField
       DisplayLabel = 'NCM/SH'
       FieldName = 'NCM_SH'
       Origin = 'TBPRODUTO.NCM_SH'
+      Required = True
       Size = 10
     end
     object IbDtstTabelaCODCFOP: TIntegerField
@@ -1175,12 +1179,14 @@ inherited frmGeProduto: TfrmGeProduto
     object IbDtstTabelaALIQUOTA_TIPO: TSmallintField
       FieldName = 'ALIQUOTA_TIPO'
       Origin = 'TBPRODUTO.ALIQUOTA_TIPO'
+      Required = True
       DisplayFormat = 'Al'#237'quota'
     end
     object IbDtstTabelaALIQUOTA: TIBBCDField
       DisplayLabel = '% Al'#237'quota'
       FieldName = 'ALIQUOTA'
       Origin = 'TBPRODUTO.ALIQUOTA'
+      Required = True
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
@@ -1189,6 +1195,7 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = '% Al'#237'quota SN'
       FieldName = 'ALIQUOTA_CSOSN'
       Origin = 'TBPRODUTO.ALIQUOTA_CSOSN'
+      Required = True
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2

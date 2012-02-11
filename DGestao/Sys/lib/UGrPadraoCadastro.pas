@@ -81,6 +81,7 @@ type
     procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
     procedure CentralizarCodigo;
     procedure SetWhereAdditional(Value : String);
+    procedure ClearFieldEmptyStr;
   public
     { Public declarations }
     property DisplayFormatCodigo : String read fDisplayFormat write fDisplayFormat;
@@ -252,6 +253,8 @@ procedure TfrmGrPadraoCadastro.btbtnSalvarClick(Sender: TObject);
 begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     try
+      ClearFieldEmptyStr;
+      
       fOcorreuErro := False;
       if ( Application.MessageBox('Deseja salvar a inserção/edição do registro?', 'Salvar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
       begin
@@ -524,6 +527,18 @@ begin
   // Impede a exclusão de um registro em um DBGRID através das teclas CTRL+DEL
   if (Shift = [ssCtrl]) and (Key = 46) Then
     Key := 0;
+end;
+
+procedure TfrmGrPadraoCadastro.ClearFieldEmptyStr;
+var
+  I : Integer;
+begin
+
+  for I := 0 to IbDtstTabela.Fields.Count - 1 do
+    if ( IbDtstTabela.Fields[I].Required ) then
+      if ( Trim(IbDtstTabela.Fields[I].AsString) = EmptyStr ) then
+        IbDtstTabela.Fields[I].Clear;
+        
 end;
 
 end.

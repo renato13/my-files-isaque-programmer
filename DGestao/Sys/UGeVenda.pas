@@ -241,8 +241,10 @@ type
     qryNFELOTE_NUM: TIntegerField;
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
-    BitBtn1: TBitBtn;
+    btnConsultarProduto: TBitBtn;
     Bevel13: TBevel;
+    lblDescontoValor: TLabel;
+    dbDescontoValor: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -277,9 +279,10 @@ type
     procedure FormActivate(Sender: TObject);
     procedure nmImprimirVendaClick(Sender: TObject);
     procedure nmImprimirDANFEClick(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
+    procedure btnConsultarProdutoClick(Sender: TObject);
   private
     { Private declarations }
+    iSeq : Integer;
     SQL_Itens   ,
     SQL_Titulos : TStringList;
     procedure AbrirTabelaItens(const AnoVenda : Smallint; const ControleVenda : Integer);
@@ -351,6 +354,7 @@ begin
   tblFormaPagto.Open;
   tblCondicaoPagto.Open;
 
+  pgcMaisDados.Height := 150;
   DisplayFormatCodigo := '###0000000';
   NomeTabela     := 'TBVENDAS';
   CampoCodigo    := 'Codcontrol';
@@ -652,10 +656,23 @@ begin
 end;
 
 procedure TfrmGeVenda.btnProdutoInserirClick(Sender: TObject);
+
+  procedure GerarSequencial(var Seq : Integer);
+  begin
+    Seq := cdsTabelaItens.RecordCount + 1;
+    if ( cdsTabelaItens.Locate('SEQ', Seq, []) ) then
+      Seq := Seq + 1;
+  end;
+
+var
+  Sequencial : Integer;
 begin
   if ( cdsTabelaItens.Active ) then
   begin
+    GerarSequencial(Sequencial);
+
     cdsTabelaItens.Append;
+    cdsTabelaItensSEQ.Value := Sequencial;
     dbProduto.SetFocus;
   end;
 end;
@@ -715,12 +732,12 @@ begin
       dbDesconto.SetFocus;
     end
     else
-    if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
-    begin
-      ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
-      dbQuantidade.SetFocus;
-    end
-    else
+//    if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
+//    begin
+//      ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
+//      dbQuantidade.SetFocus;
+//    end
+//    else
     if ( cdsTabelaItensDESCONTO.AsCurrency > GetLimiteDescontoUser ) then
     begin
       ShowWarning('Limite de Desconto = ' + FormatFloat('0.00', GetLimiteDescontoUser) + '%');
@@ -795,7 +812,7 @@ begin
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
       CarregarDadosCFOP( cdsTabelaItensCFOP_COD.AsInteger );
 
-  if ( (Sender = dbQuantidade) or (Sender = dbDesconto) ) then
+  if ( (Sender = dbQuantidade) or (Sender = dbDesconto) or (Sender = dbDescontoValor) ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     begin
       if ( cdsTabelaItensPUNIT.IsNull ) then
@@ -804,7 +821,15 @@ begin
       if ( cdsTabelaItensDESCONTO.IsNull ) then
         cdsTabelaItensDESCONTO.AsCurrency := 0;
 
-      cdsTabelaItensDESCONTO_VALOR.Value  := cdsTabelaItensPUNIT.AsCurrency * cdsTabelaItensDESCONTO.AsCurrency / 100;
+      if ( cdsTabelaItensDESCONTO_VALOR.IsNull ) then
+        cdsTabelaItensDESCONTO_VALOR.AsCurrency := 0;
+
+      if ( (cdsTabelaItensDESCONTO.AsCurrency > 0) and (cdsTabelaItensDESCONTO_VALOR.AsCurrency = 0) ) then
+        cdsTabelaItensDESCONTO_VALOR.Value  := cdsTabelaItensPUNIT.AsCurrency * cdsTabelaItensDESCONTO.AsCurrency / 100;
+
+      if ( (cdsTabelaItensDESCONTO.AsCurrency = 0) and (cdsTabelaItensDESCONTO_VALOR.AsCurrency > 0) ) then
+        cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
+
       cdsTabelaItensPFINAL.Value          := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
       cdsTabelaItensTOTAL_BRUTO.Value     := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
       cdsTabelaItensTOTAL_DESCONTO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
@@ -913,16 +938,36 @@ begin
   cdsTabelaItensDTVENDA.Value    := IbDtstTabelaDTVENDA.Value;
   cdsTabelaItensCODEMP.Value     := IbDtstTabelaCODEMP.Value;
   cdsTabelaItensCODCLI.Value     := IbDtstTabelaCODCLI.Value;
-  cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
+//  cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
   cdsTabelaItensCFOP_COD.Value       := GetCfopIDDefault;
   cdsTabelaItensCFOP_DESCRICAO.Value := GetCfopNomeDefault;
   cdsTabelaItensCST.Value            := '000';
   cdsTabelaItensALIQUOTA.Value       := 0;
   cdsTabelaItensQTDE.Value           := 1;
   cdsTabelaItensDESCONTO.Value       := 0;
+  cdsTabelaItensDESCONTO_VALOR.Value := 0;
 end;
 
 procedure TfrmGeVenda.btbtnFinalizarClick(Sender: TObject);
+
+  function QuantidadeInvalida : Boolean;
+  var
+    Return : Boolean;
+  begin
+    Return := False;
+
+    cdsTabelaItens.First;
+    while not cdsTabelaItens.Eof do
+    begin
+      Return := ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) );
+      if ( Return ) then
+        Break;
+      cdsTabelaItens.Next;
+    end;
+
+    Result := Return;
+  end;
+
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
@@ -933,6 +978,13 @@ begin
   begin
     ShowWarning('Favor informar o vendedor');
     dbVendedor.SetFocus;
+  end
+  else
+  if ( QuantidadeInvalida ) then
+  begin
+    ShowWarning('Quantidade informada para o ítem ' + FormatFloat('#00', cdsTabelaItensSEQ.AsInteger) + ' está acima da quantidade disponível no estoque.');
+    if ( btnProdutoEditar.Visible and btnProdutoEditar.Enabled ) then
+      btnProdutoEditar.SetFocus;
   end
   else
   if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 0 ) then
@@ -1210,10 +1262,9 @@ begin
   DMNFe.ImprimirDANFEACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODCLI.AsString, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
 
-procedure TfrmGeVenda.BitBtn1Click(Sender: TObject);
+procedure TfrmGeVenda.btnConsultarProdutoClick(Sender: TObject);
 begin
-  inherited;
-MostrarTabelaProdutos(Self);
+  MostrarTabelaProdutos(Self);
 end;
 
 end.
