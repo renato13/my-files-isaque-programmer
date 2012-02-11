@@ -249,6 +249,10 @@ var
 const
   SELDIRHELP   = 1000;
   FILENAME_NFE = 'Report\NotaFiscalEletronica.rav';
+  
+  DIRECTORY_CANCEL = 'NFe\Canceladas\';
+  DIRECTORY_PRINT  = 'NFe\Imprimir\';
+  DIRECTORY_CLIENT = 'NFe\Clientes\';
 
   procedure ConfigurarNFeACBr;
 
@@ -689,7 +693,7 @@ begin
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
 
-    FileNameXML := ExtractFilePath( ParamStr(0) ) + qryCalculoImportoXML_NFE_FILENAME.AsString;
+    FileNameXML := ExtractFilePath( ParamStr(0) ) + DIRECTORY_CANCEL + qryCalculoImportoXML_NFE_FILENAME.AsString;
 
     ForceDirectories( ExtractFilePath(FileNameXML) );
 
@@ -725,7 +729,10 @@ begin
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
 
-    FileNameXML := ExtractFilePath( ParamStr(0) ) + qryCalculoImportoXML_NFE_FILENAME.AsString;
+    if ( IsPDF ) then
+      FileNameXML := ExtractFilePath( ParamStr(0) ) + DIRECTORY_CLIENT + qryCalculoImportoXML_NFE_FILENAME.AsString
+    else
+      FileNameXML := ExtractFilePath( ParamStr(0) ) + DIRECTORY_PRINT  + qryCalculoImportoXML_NFE_FILENAME.AsString;
 
     ForceDirectories( ExtractFilePath(FileNameXML) );
 
@@ -995,7 +1002,6 @@ begin
           Prod.vFrete    := 0;                                        // I15 - Valor Total do Frete
           Prod.vSeg      := 0;                                        // I16 - Valor Total do Seguro
           Prod.vDesc     := qryDadosProdutoTOTAL_DESCONTO.AsCurrency; // I17 - Valor do Desconto
-          //Prod.vDesc     := qryDadosProdutoDESCONTO_VALOR.AsCurrency; // I17 - Valor do Desconto
 
           // Informação Adicional do Produto
           if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then

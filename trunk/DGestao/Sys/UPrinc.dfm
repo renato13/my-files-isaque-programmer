@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 254
-  Top = 145
+  Left = 451
+  Top = 179
   Width = 943
   Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -14,6 +14,7 @@ object frmPrinc: TfrmPrinc
   OldCreateOrder = False
   WindowState = wsMaximized
   OnActivate = FormActivate
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object stbMain: TStatusBar
@@ -21,13 +22,18 @@ object frmPrinc: TfrmPrinc
     Top = 412
     Width = 927
     Height = 19
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
     Panels = <
       item
         Text = 'Masterdados - Fone: (91) 8717-1057/8129-1567'
-        Width = 400
+        Width = 300
       end
       item
-        Width = 450
+        Width = 400
       end
       item
         Alignment = taCenter
@@ -35,6 +41,7 @@ object frmPrinc: TfrmPrinc
         Text = 'Licenciado a Pontoluz'
         Width = 50
       end>
+    UseSystemFont = False
   end
   object SpeedBar1: TSpeedBar
     Left = 0

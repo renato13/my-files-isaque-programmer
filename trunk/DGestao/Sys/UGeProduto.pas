@@ -371,6 +371,7 @@ begin
   IbDtstTabelaCFOP_DESCRICAO.Value := GetCfopNomeDefault;
   IbDtstTabelaALIQUOTA_TIPO.Value  := Ord(fAliquota);
   IbDtstTabelaALIQUOTA.Value       := 0;
+  IbDtstTabelaALIQUOTA_CSOSN.Value := 0;
   IbDtstTabelaVALOR_IPI.Value      := 0;
   IbDtstTabelaRESERVA.Value        := 0; 
 end;
@@ -412,7 +413,8 @@ begin
     12: EvUA.UserID := 12;  // Masterdados-Supervisor
   else
     ShowWarning('Falta cruzar nova função com EvUserID!');
-end
+  end;
+  
 end;
 
 end.

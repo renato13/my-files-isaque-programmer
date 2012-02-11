@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 158
-  Top = 98
+  Left = 445
+  Top = 163
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -27,30 +27,34 @@ inherited frmGeVenda: TfrmGeVenda
       Visible = True
       OnClick = btbtnListaClick
     end
-    object Bevel13: TBevel [9]
-      Left = 462
+    inherited bvlToolExpandir: TBevel
+      Width = 12
+    end
+    inherited btbtnSelecionar: TBitBtn
+      Left = 553
+      Width = 32
+    end
+    inherited bvlTool4: TBevel
+      Left = 585
+    end
+    object Bevel13: TBevel
+      Left = 589
       Top = 2
       Width = 4
       Height = 31
       Shape = bsSpacer
     end
-    inherited bvlTool3: TBevel
-      Left = 466
-    end
-    inherited btbtnFechar: TBitBtn
-      Left = 470
-    end
-    object BitBtn1: TBitBtn [12]
-      Left = 545
+    object btnConsultarProduto: TBitBtn
+      Left = 593
       Top = 2
       Width = 75
       Height = 31
       Hint = 'Consulta Produtos'
-      Caption = 'Produtos'
+      Caption = 'P&rodutos'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
-      OnClick = BitBtn1Click
+      OnClick = btnConsultarProdutoClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000120B0000120B00000000000000000000FF00FFFF00FF
@@ -78,17 +82,6 @@ inherited frmGeVenda: TfrmGeVenda
         CC731ACC731ACC731ACC731ACC731ACC731ACC741ACD751BCC7318CD751BCA72
         1AC8721EFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-    end
-    inherited bvlToolExpandir: TBevel
-      Left = 620
-      Width = 12
-    end
-    inherited btbtnSelecionar: TBitBtn
-      Left = 632
-      Width = 32
-    end
-    inherited bvlTool4: TBevel
-      Left = 664
     end
     object Bevel11: TBevel
       Left = 668
@@ -448,7 +441,7 @@ inherited frmGeVenda: TfrmGeVenda
       end
       object Bevel6: TBevel [2]
         Left = 0
-        Top = 480
+        Top = 460
         Width = 1091
         Height = 4
         Align = alBottom
@@ -620,7 +613,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbCliente: TRxDBComboEdit
           Left = 672
           Top = 40
-          Width = 329
+          Width = 401
           Height = 21
           ButtonHint = 'Pesquisar Cliente (Ctrl+P)'
           CharCase = ecUpperCase
@@ -785,7 +778,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbVendedor: TDBLookupComboBox
           Left = 768
           Top = 80
-          Width = 233
+          Width = 305
           Height = 21
           DataField = 'VENDEDOR_COD'
           DataSource = DtSrcTabela
@@ -972,7 +965,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorLiq: TLabel
-          Left = 512
+          Left = 592
           Top = 64
           Width = 88
           Height = 13
@@ -1036,7 +1029,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorIPI: TLabel
-          Left = 752
+          Left = 720
           Top = 64
           Width = 69
           Height = 13
@@ -1057,6 +1050,20 @@ inherited frmGeVenda: TfrmGeVenda
           Height = 99
           Align = alLeft
           Shape = bsSpacer
+        end
+        object lblDescontoValor: TLabel
+          Left = 504
+          Top = 64
+          Width = 58
+          Height = 13
+          Caption = 'Valor Desc.:'
+          FocusControl = dbDescontoValor
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
         end
         object dbProduto: TRxDBComboEdit
           Left = 88
@@ -1204,7 +1211,7 @@ inherited frmGeVenda: TfrmGeVenda
           OnExit = ControlEditExit
         end
         object dbValorLiq: TDBEdit
-          Left = 512
+          Left = 592
           Top = 80
           Width = 121
           Height = 21
@@ -1218,7 +1225,7 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 12
+          TabOrder = 13
           OnExit = ControlEditExit
         end
         object dbUnidade: TDBEdit
@@ -1242,7 +1249,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbCFOP: TRxDBComboEdit
           Left = 640
           Top = 40
-          Width = 89
+          Width = 73
           Height = 21
           ButtonHint = 'Pesquisar CFOP (Ctrl+P)'
           CharCase = ecUpperCase
@@ -1351,7 +1358,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 7
         end
         object dbValorIPI: TDBEdit
-          Left = 752
+          Left = 720
           Top = 80
           Width = 97
           Height = 21
@@ -1365,13 +1372,13 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 11
+          TabOrder = 12
           Visible = False
         end
         object dbCFOPDescricao: TDBEdit
-          Left = 736
+          Left = 720
           Top = 40
-          Width = 265
+          Width = 352
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -1662,12 +1669,29 @@ inherited frmGeVenda: TfrmGeVenda
             NumGlyphs = 2
           end
         end
+        object dbDescontoValor: TDBEdit
+          Left = 504
+          Top = 80
+          Width = 81
+          Height = 21
+          Color = clWhite
+          DataField = 'DESCONTO_VALOR'
+          DataSource = DtSrcTabelaItens
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 11
+          OnExit = ControlEditExit
+        end
       end
       object pgcMaisDados: TPageControl
         Left = 0
-        Top = 484
+        Top = 464
         Width = 1091
-        Height = 130
+        Height = 150
         ActivePage = tbsRecebimento
         Align = alBottom
         TabOrder = 3
@@ -1676,7 +1700,7 @@ inherited frmGeVenda: TfrmGeVenda
           Caption = 'Recebimento'
           DesignSize = (
             1075
-            94)
+            114)
           object lblObservacao: TLabel
             Left = 0
             Top = 0
@@ -1688,7 +1712,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object lblFormaPagto: TLabel
             Left = 0
-            Top = 51
+            Top = 71
             Width = 106
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1696,8 +1720,8 @@ inherited frmGeVenda: TfrmGeVenda
             FocusControl = dbFormaPagto
           end
           object lblCondicaoPagto: TLabel
-            Left = 160
-            Top = 51
+            Left = 200
+            Top = 71
             Width = 120
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1705,8 +1729,8 @@ inherited frmGeVenda: TfrmGeVenda
             FocusControl = dbCondicaoPagto
           end
           object lblPrazo01: TLabel
-            Left = 440
-            Top = 51
+            Left = 504
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1720,8 +1744,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo02: TLabel
-            Left = 488
-            Top = 51
+            Left = 552
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1735,8 +1759,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo03: TLabel
-            Left = 536
-            Top = 51
+            Left = 600
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1750,8 +1774,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo04: TLabel
-            Left = 584
-            Top = 51
+            Left = 648
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1765,8 +1789,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo05: TLabel
-            Left = 632
-            Top = 51
+            Left = 696
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1780,8 +1804,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo06: TLabel
-            Left = 680
-            Top = 51
+            Left = 744
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1795,8 +1819,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo07: TLabel
-            Left = 728
-            Top = 51
+            Left = 792
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1810,8 +1834,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo08: TLabel
-            Left = 776
-            Top = 51
+            Left = 840
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1825,8 +1849,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo09: TLabel
-            Left = 824
-            Top = 51
+            Left = 888
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1840,8 +1864,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo10: TLabel
-            Left = 872
-            Top = 51
+            Left = 936
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1855,8 +1879,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo11: TLabel
-            Left = 920
-            Top = 51
+            Left = 984
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1870,8 +1894,8 @@ inherited frmGeVenda: TfrmGeVenda
             ParentFont = False
           end
           object lblPrazo12: TLabel
-            Left = 968
-            Top = 51
+            Left = 1032
+            Top = 71
             Width = 24
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1888,7 +1912,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 0
             Top = 13
             Width = 1075
-            Height = 33
+            Height = 56
             Align = alTop
             Anchors = [akLeft, akTop, akRight, akBottom]
             DataField = 'OBS'
@@ -1897,8 +1921,8 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object dbFormaPagto: TDBLookupComboBox
             Left = 0
-            Top = 67
-            Width = 153
+            Top = 87
+            Width = 193
             Height = 21
             Anchors = [akLeft, akBottom]
             DataField = 'FORMAPAGTO_COD'
@@ -1917,9 +1941,9 @@ inherited frmGeVenda: TfrmGeVenda
             OnClick = dbFormaPagtoClick
           end
           object dbCondicaoPagto: TDBLookupComboBox
-            Left = 160
-            Top = 67
-            Width = 273
+            Left = 200
+            Top = 87
+            Width = 297
             Height = 21
             Anchors = [akLeft, akBottom]
             DataField = 'CONDICAOPAGTO_COD'
@@ -1938,8 +1962,8 @@ inherited frmGeVenda: TfrmGeVenda
             OnClick = dbCondicaoPagtoClick
           end
           object dbPrazo01: TDBEdit
-            Left = 440
-            Top = 67
+            Left = 504
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -1957,8 +1981,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 3
           end
           object dbPrazo02: TDBEdit
-            Left = 488
-            Top = 67
+            Left = 552
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -1976,8 +2000,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 4
           end
           object dbPrazo03: TDBEdit
-            Left = 536
-            Top = 67
+            Left = 600
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -1995,8 +2019,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 5
           end
           object dbPrazo04: TDBEdit
-            Left = 584
-            Top = 67
+            Left = 648
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2014,8 +2038,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 6
           end
           object dbPrazo05: TDBEdit
-            Left = 632
-            Top = 67
+            Left = 696
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2033,8 +2057,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 7
           end
           object dbPrazo06: TDBEdit
-            Left = 680
-            Top = 67
+            Left = 744
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2052,8 +2076,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 8
           end
           object dbPrazo07: TDBEdit
-            Left = 728
-            Top = 67
+            Left = 792
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2071,8 +2095,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 9
           end
           object dbPrazo08: TDBEdit
-            Left = 776
-            Top = 67
+            Left = 840
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2090,8 +2114,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 10
           end
           object dbPrazo09: TDBEdit
-            Left = 824
-            Top = 67
+            Left = 888
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2109,8 +2133,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 11
           end
           object dbPrazo10: TDBEdit
-            Left = 872
-            Top = 67
+            Left = 936
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2128,8 +2152,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 12
           end
           object dbPrazo11: TDBEdit
-            Left = 920
-            Top = 67
+            Left = 984
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2147,8 +2171,8 @@ inherited frmGeVenda: TfrmGeVenda
             TabOrder = 13
           end
           object dbPrazo12: TDBEdit
-            Left = 968
-            Top = 67
+            Left = 1032
+            Top = 87
             Width = 41
             Height = 21
             TabStop = False
@@ -2173,7 +2197,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 74
             Top = 0
             Width = 4
-            Height = 102
+            Height = 122
             Align = alLeft
             Shape = bsSpacer
             Visible = False
@@ -2182,7 +2206,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 0
             Top = 0
             Width = 4
-            Height = 102
+            Height = 122
             Align = alLeft
             Shape = bsSpacer
             Visible = False
@@ -2191,7 +2215,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 4
             Top = 0
             Width = 70
-            Height = 102
+            Height = 122
             Align = alLeft
             AutoSize = True
             BevelOuter = bvNone
@@ -2279,7 +2303,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 78
             Top = 0
             Width = 1005
-            Height = 102
+            Height = 122
             TabStop = False
             Align = alClient
             DataSource = dtsTitulos
@@ -2365,7 +2389,7 @@ inherited frmGeVenda: TfrmGeVenda
         Left = 0
         Top = 237
         Width = 1091
-        Height = 243
+        Height = 223
         TabStop = False
         Align = alClient
         DataSource = DtSrcTabelaItens
@@ -2538,8 +2562,7 @@ inherited frmGeVenda: TfrmGeVenda
     GeneratorField.Field = 'CODCONTROL'
     GeneratorField.Generator = 'GEN_VENDAS_CONTROLE_2011'
     GeneratorField.ApplyEvent = gamOnNewRecord
-    Left = 928
-    Top = 72
+    Left = 992
     object IbDtstTabelaANO: TSmallintField
       FieldName = 'ANO'
       Origin = 'TBVENDAS.ANO'
@@ -2626,7 +2649,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'NF-e'
       FieldName = 'NFE'
       Origin = 'TBVENDAS.NFE'
-      DisplayFormat = '###00000'
+      DisplayFormat = '###0000000'
     end
     object IbDtstTabelaLOTE_NFE_ANO: TSmallintField
       FieldName = 'LOTE_NFE_ANO'
@@ -2780,8 +2803,7 @@ inherited frmGeVenda: TfrmGeVenda
     end
   end
   inherited DtSrcTabela: TDataSource
-    Left = 992
-    Top = 72
+    Left = 1056
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -2941,8 +2963,7 @@ inherited frmGeVenda: TfrmGeVenda
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')
-    Left = 960
-    Top = 72
+    Left = 1024
   end
   inherited ImgList: TImageList
     Left = 896
@@ -3050,8 +3071,8 @@ inherited frmGeVenda: TfrmGeVenda
     ModifySQL.Strings = (
       '')
     UpdateObject = IbUpdTabelaItens
-    Left = 928
-    Top = 104
+    Left = 992
+    Top = 40
     object cdsTabelaItensANO: TSmallintField
       FieldName = 'ANO'
       Origin = 'TVENDASITENS.ANO'
@@ -3298,15 +3319,15 @@ inherited frmGeVenda: TfrmGeVenda
       '  CODCONTROL = :OLD_CODCONTROL and'
       '  SEQ = :OLD_SEQ and'
       '  CODPROD = :OLD_CODPROD')
-    Left = 960
-    Top = 104
+    Left = 1024
+    Top = 40
   end
   object DtSrcTabelaItens: TDataSource
     AutoEdit = False
     DataSet = cdsTabelaItens
     OnStateChange = DtSrcTabelaItensStateChange
-    Left = 992
-    Top = 104
+    Left = 1056
+    Top = 40
   end
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -3414,8 +3435,8 @@ inherited frmGeVenda: TfrmGeVenda
       'from TBCONTREC r')
     ModifySQL.Strings = (
       '')
-    Left = 928
-    Top = 136
+    Left = 992
+    Top = 72
     object qryTitulosANOLANC: TSmallintField
       FieldName = 'ANOLANC'
       Origin = 'TBCONTREC.ANOLANC'
@@ -3551,15 +3572,15 @@ inherited frmGeVenda: TfrmGeVenda
     AutoEdit = False
     DataSet = qryTitulos
     OnStateChange = DtSrcTabelaItensStateChange
-    Left = 992
-    Top = 136
+    Left = 1056
+    Top = 72
   end
   object IbStrPrcGerarTitulos: TIBStoredProc
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     StoredProcName = 'SET_GERAR_TITULOS'
-    Left = 928
-    Top = 168
+    Left = 1024
+    Top = 72
     ParamData = <
       item
         DataType = ftString
@@ -3623,8 +3644,8 @@ inherited frmGeVenda: TfrmGeVenda
       end>
   end
   object ppImprimir: TPopupMenu
-    Left = 392
-    Top = 504
+    Left = 384
+    Top = 608
     object nmImprimirVenda: TMenuItem
       Caption = 'Or'#231'amento / Venda'
       OnClick = nmImprimirVendaClick
@@ -3667,8 +3688,8 @@ inherited frmGeVenda: TfrmGeVenda
       'where n.ANOVENDA = :anovenda'
       '  and n.NUMVENDA = :numvenda')
     UpdateObject = updNFE
-    Left = 932
-    Top = 206
+    Left = 992
+    Top = 104
     object qryNFEANOVENDA: TSmallintField
       FieldName = 'ANOVENDA'
       Origin = 'TBNFE_ENVIADA.ANOVENDA'
@@ -3792,7 +3813,7 @@ inherited frmGeVenda: TfrmGeVenda
       'where'
       '  SERIE = :OLD_SERIE and'
       '  NUMERO = :OLD_NUMERO')
-    Left = 964
-    Top = 206
+    Left = 1024
+    Top = 104
   end
 end

@@ -134,6 +134,7 @@ type
     procedure nmTipoDespesaClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -367,20 +368,28 @@ begin
 end;
 
 procedure TfrmPrinc.FormActivate(Sender: TObject);
+var
+  sCNPJ : String;
 begin
+  if ( StrIsCNPJ(GetEmpresaIDDefault) ) then
+    sCNPJ := ' CPF.: ' + StrFormatarCnpj(GetEmpresaIDDefault)
+  else
+    sCNPJ := ' CNPJ.: ' + StrFormatarCpf(GetEmpresaIDDefault);
 
- case DMBusiness.ibdtstUsersCODFUNCAO.Value of
-   1 : EvUAfrmPrinc.UserID := 1 ;  //Diretoria
+  stbMain.Panels.Items[2].Text := 'Licenciado a empresa ' + GetEmpresaNomeDefault + sCNPJ;
 
-   2 : begin
+  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+    1 : EvUAfrmPrinc.UserID := 1 ;  //Diretoria
+
+    2 : begin
          EvUAfrmPrinc.UserID := 2;   // Gerente de Vendas
          RxSpeedButton5.Enabled := false;
          RxSpeedBtnCRec.Enabled := false;
          RxSpeedBtnCPag.Enabled := false;
        end;
-   3 : EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
+    3 : EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
 
-   4 : begin
+    4 : begin
          EvUAfrmPrinc.UserID := 4;   // Vendedor
          RxSpeedButtonEmpresa.Visible := false;
          RxSpeedBtnProd.Enabled := false;
@@ -390,19 +399,24 @@ begin
          RxSpeedBtnCRec.Enabled := false;
          RxSpeedBtnCPag.Enabled := false;
        end;
-       
-   5 : EvUAfrmPrinc.UserID := 5;   // Gerente ADM
-   6 : EvUAfrmPrinc.UserID := 6;   // Caixa
-   7 : EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
-   8 : EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
-   9 : EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
-   10: EvUAfrmPrinc.UserID := 10;  // Estoquista
-   11: EvUAfrmPrinc.UserID := 11;  // TI
-   12: EvUAfrmPrinc.UserID := 12;  // Masterdados-Supervisor
- else
-   ShowWarning('Falta cruzar nova função com UserID!');
- end;
 
+    5 : EvUAfrmPrinc.UserID := 5;   // Gerente ADM
+    6 : EvUAfrmPrinc.UserID := 6;   // Caixa
+    7 : EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
+    8 : EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
+    9 : EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
+    10: EvUAfrmPrinc.UserID := 10;  // Estoquista
+    11: EvUAfrmPrinc.UserID := 11;  // TI
+    12: EvUAfrmPrinc.UserID := 12;  // Masterdados-Supervisor
+  else
+    ShowWarning('Falta cruzar nova função com UserID!');
+  end;
+
+end;
+
+procedure TfrmPrinc.FormCreate(Sender: TObject);
+begin
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion( Application.ExeName ) + ' ]';
 end;
 
 end.
