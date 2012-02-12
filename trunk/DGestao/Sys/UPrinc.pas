@@ -376,7 +376,7 @@ begin
   else
     sCNPJ := ' CNPJ.: ' + StrFormatarCpf(GetEmpresaIDDefault);
 
-  stbMain.Panels.Items[2].Text := 'Licenciado a empresa ' + GetEmpresaNomeDefault + sCNPJ;
+  stbMain.Panels.Items[2].Text := 'Licenciado a empresa ' + GetEmpresaNomeDefault;
 
   case DMBusiness.ibdtstUsersCODFUNCAO.Value of
     1 : EvUAfrmPrinc.UserID := 1 ;  //Diretoria
@@ -409,7 +409,10 @@ begin
     11: EvUAfrmPrinc.UserID := 11;  // TI
     12: EvUAfrmPrinc.UserID := 12;  // Masterdados-Supervisor
   else
-    ShowWarning('Falta cruzar nova função com UserID!');
+    begin
+     ShowWarning('Falta cruzar nova função com UserID!');
+     Application.Terminate;
+    end
   end;
 
 end;
