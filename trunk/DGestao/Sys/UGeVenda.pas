@@ -243,8 +243,8 @@ type
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     btnConsultarProduto: TBitBtn;
     Bevel13: TBevel;
-    dbDescontoValor: TRxDBComboEdit;
-    lblDescontoValor: TLabel;
+    dbTotalDesconto: TRxDBComboEdit;
+    lblTotalDesconto: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -280,7 +280,7 @@ type
     procedure nmImprimirVendaClick(Sender: TObject);
     procedure nmImprimirDANFEClick(Sender: TObject);
     procedure btnConsultarProdutoClick(Sender: TObject);
-    procedure dbDescontoValorButtonClick(Sender: TObject);
+    procedure dbTotalDescontoButtonClick(Sender: TObject);
   private
     { Private declarations }
     iSeq : Integer;
@@ -829,22 +829,22 @@ begin
       cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
 
-  if ( (Sender = dbQuantidade) or (Sender = dbDescontoValor) ) then
-    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    begin
-      if ( cdsTabelaItensPUNIT.IsNull ) then
-        cdsTabelaItensPUNIT.AsCurrency := 0;
-
-      if ( cdsTabelaItensDESCONTO_VALOR.IsNull ) then
-        cdsTabelaItensDESCONTO_VALOR.AsCurrency := 0;
-
-      cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
-      cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
-      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
-      cdsTabelaItensTOTAL_DESCONTO.Value := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
-    end;
-
+//  if ( (Sender = dbQuantidade) or (Sender = dbDescontoValor) ) then
+//    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
+//    begin
+//      if ( cdsTabelaItensPUNIT.IsNull ) then
+//        cdsTabelaItensPUNIT.AsCurrency := 0;
+//
+//      if ( cdsTabelaItensDESCONTO_VALOR.IsNull ) then
+//        cdsTabelaItensDESCONTO_VALOR.AsCurrency := 0;
+//
+//      cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
+//      cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
+//      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
+//      cdsTabelaItensTOTAL_DESCONTO.Value := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
+//      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+//    end;
+//
   if ( Sender = dbValorLiq ) then
     if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
       btnProdutoSalvar.SetFocus;
@@ -1276,23 +1276,24 @@ begin
   MostrarTabelaProdutos(Self);
 end;
 
-procedure TfrmGeVenda.dbDescontoValorButtonClick(Sender: TObject);
+procedure TfrmGeVenda.dbTotalDescontoButtonClick(Sender: TObject);
 var
   sValor : String;
   cValor : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
   begin
-    sValor := InputBox('Desconto (R$)', 'Favor informar o Valor Unitário de Desconto:', FormatFloat(',0.00', dbDescontoValor.Field.AsCurrency));
+    sValor := InputBox('Tptal Desconto (R$)', 'Favor informar o Valor Total de Desconto:', FormatFloat(',0.00', dbDescontoValor.Field.AsCurrency));
     sValor := Trim(StringReplace(sValor, '.', '', [rfReplaceAll]));
     cValor := StrToCurrDef(sValor, 0);
     if ( cValor > 0 ) then
     begin
-      cdsTabelaItensDESCONTO_VALOR.AsCurrency := cValor;
-      cdsTabelaItensDESCONTO.AsCurrency       := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
-      cdsTabelaItensPFINAL.Value              := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
-      cdsTabelaItensTOTAL_DESCONTO.Value      := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.Value       := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+      cdsTabelaItensDESCONTO_VALOR.AsCurrency := cValor / cdsTabelaItensQTDE.AsInteger;
+      cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
+      cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
+      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
+      cdsTabelaItensTOTAL_DESCONTO.Value := cValor; // cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
+      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
   end;
 end;

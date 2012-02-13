@@ -937,7 +937,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorUnit: TLabel
-          Left = 304
+          Left = 288
           Top = 64
           Width = 92
           Height = 13
@@ -951,7 +951,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblDesconto: TLabel
-          Left = 424
+          Left = 408
           Top = 64
           Width = 45
           Height = 13
@@ -1051,13 +1051,13 @@ inherited frmGeVenda: TfrmGeVenda
           Align = alLeft
           Shape = bsSpacer
         end
-        object lblDescontoValor: TLabel
-          Left = 496
+        object lblTotalDesconto: TLabel
+          Left = 480
           Top = 64
-          Width = 58
+          Width = 82
           Height = 13
-          Caption = 'Valor Desc.:'
-          FocusControl = dbDescontoValor
+          Caption = 'Total Desc. (R$):'
+          FocusControl = dbTotalDesconto
         end
         object dbProduto: TRxDBComboEdit
           Left = 88
@@ -1155,7 +1155,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbQuantidade: TDBEdit
           Left = 208
           Top = 80
-          Width = 89
+          Width = 73
           Height = 21
           Color = clWhite
           DataField = 'QTDE'
@@ -1170,7 +1170,7 @@ inherited frmGeVenda: TfrmGeVenda
           OnExit = ControlEditExit
         end
         object dbValorUnit: TDBEdit
-          Left = 304
+          Left = 288
           Top = 80
           Width = 113
           Height = 21
@@ -1188,7 +1188,7 @@ inherited frmGeVenda: TfrmGeVenda
           OnExit = ControlEditExit
         end
         object dbDesconto: TDBEdit
-          Left = 424
+          Left = 408
           Top = 80
           Width = 65
           Height = 21
@@ -1663,16 +1663,16 @@ inherited frmGeVenda: TfrmGeVenda
             NumGlyphs = 2
           end
         end
-        object dbDescontoValor: TRxDBComboEdit
-          Left = 496
+        object dbTotalDesconto: TRxDBComboEdit
+          Left = 480
           Top = 80
-          Width = 89
+          Width = 105
           Height = 21
-          ButtonHint = 'Lan'#231'ar Valor Descontp (Ctrl+D)'
+          ButtonHint = 'Lan'#231'ar Valor Total do Desconto (Ctrl+D)'
           CharCase = ecUpperCase
           ClickKey = 16452
           Color = clMoneyGreen
-          DataField = 'DESCONTO_VALOR'
+          DataField = 'TOTAL_DESCONTO'
           DataSource = DtSrcTabelaItens
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
@@ -1736,7 +1736,7 @@ inherited frmGeVenda: TfrmGeVenda
           ReadOnly = True
           ShowHint = True
           TabOrder = 11
-          OnButtonClick = dbDescontoValorButtonClick
+          OnButtonClick = dbTotalDescontoButtonClick
           OnExit = ControlEditExit
         end
       end
