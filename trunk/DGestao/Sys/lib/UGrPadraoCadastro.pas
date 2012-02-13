@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, UGrPadrao, IBCustomDataSet, StdCtrls, Buttons, ExtCtrls, Grids,
-  DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList, TypInfo;
+  DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList, TypInfo,
+  DBClient;
 
 type
   TfrmGrPadraoCadastro = class(TfrmGrPadrao)
@@ -106,7 +107,7 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses UDMBusiness, UGrCampoRequisitado;
 
 {$R *.dfm}
 
@@ -142,17 +143,22 @@ procedure TfrmGrPadraoCadastro.dbgDadosDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn;
   State: TGridDrawState);
 begin
- TDbGrid(Sender).Canvas.font.Color := clBlack;
+  TDbGrid(Sender).Canvas.font.Color := clBlack;
 
- if gdSelected in State then
-   with (Sender as TDBGrid).Canvas do
-   begin
-     Brush.Color :=  clMoneyGreen;
-     FillRect(Rect);
-     Font.Style  := [fsbold]
-   end;
+  if odd(IbDtstTabela.RecNo) then
+    TDBGrid(Sender).Canvas.Brush.Color:= clMenuBar
+  else
+    TDBGrid(Sender).Canvas.Brush.Color:= clCream;
 
- TDbGrid(Sender).DefaultDrawDataCell(Rect, TDbGrid(Sender).columns[datacol].field, State);
+  if gdSelected in State then
+    with (Sender as TDBGrid).Canvas do
+    begin
+      Brush.Color :=  clMoneyGreen;
+      FillRect(Rect);
+      Font.Style  := [fsbold]
+    end;
+
+  TDbGrid(Sender).DefaultDrawDataCell(Rect, TDbGrid(Sender).columns[datacol].field, State);
 end;
 
 procedure TfrmGrPadraoCadastro.dbgDadosKeyPress(Sender: TObject; var Key: Char);
@@ -254,7 +260,9 @@ begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     try
       ClearFieldEmptyStr;
-      
+      if ( CamposRequiridos(Self, TClientDataSet(IbDtstTabela), Self.Caption) ) then
+        Exit;
+
       fOcorreuErro := False;
       if ( Application.MessageBox('Deseja salvar a inserção/edição do registro?', 'Salvar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
       begin
