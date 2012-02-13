@@ -1283,7 +1283,7 @@ var
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
   begin
-    sValor := InputBox('Tptal Desconto (R$)', 'Favor informar o Valor Total de Desconto:', FormatFloat(',0.00', dbDescontoValor.Field.AsCurrency));
+    sValor := InputBox('Tptal Desconto (R$)', 'Favor informar o Valor Total de Desconto:', FormatFloat(',0.00', dbTotalDesconto.Field.AsCurrency));
     sValor := Trim(StringReplace(sValor, '.', '', [rfReplaceAll]));
     cValor := StrToCurrDef(sValor, 0);
     if ( cValor > 0 ) then
