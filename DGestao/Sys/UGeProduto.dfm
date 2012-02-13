@@ -1052,7 +1052,6 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'C'#243'digo'
       FieldName = 'COD'
       Origin = 'TBPRODUTO.COD'
-      Required = True
       Size = 10
     end
     object IbDtstTabelaDESCRI: TIBStringField
@@ -1148,6 +1147,7 @@ inherited frmGeProduto: TfrmGeProduto
       Size = 3
     end
     object IbDtstTabelaCSOSN: TIBStringField
+      DisplayLabel = 'Tipo Tributa'#231#227'o ICMS (SN)'
       FieldName = 'CSOSN'
       Origin = 'TBPRODUTO.CSOSN'
       Required = True

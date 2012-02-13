@@ -134,6 +134,8 @@ OriginalFilename=DGE.EXE
 ProductName=DGE - Sistema de Gestão Empresarial
 ProductVersion=1.0.0
 Comments=
+[Excluded Packages]
+C:\Delphi\MyLib\DevExpress.v42\Delphi 7 Library\dxPScxScheduler3LnkD7.bpl=ExpressPrinting System ReportLink for ExpressScheduler 3 by Developer Express Inc.
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

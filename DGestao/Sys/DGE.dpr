@@ -80,7 +80,8 @@ uses
   UGeTipoDespesa in 'UGeTipoDespesa.pas' {frmGeTipoDespesa},
   UfrmAcessoSistema in 'UfrmAcessoSistema.pas' {frmAcessoSistema},
   UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
-  ChkDgVer in 'lib\ChkDgVer.pas';
+  ChkDgVer in 'lib\ChkDgVer.pas',
+  UGrCampoRequisitado in 'lib\UGrCampoRequisitado.pas' {frmCampoRequisitado};
 
 {$R *.res}
 
