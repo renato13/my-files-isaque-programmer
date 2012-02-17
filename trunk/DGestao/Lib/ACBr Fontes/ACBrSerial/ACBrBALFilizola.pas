@@ -109,21 +109,21 @@ begin
      fpUltimaResposta := fpDevice.Serial.RecvPacket( MillisecTimeOut );
 
      { Retira STX, ETX }
-      Resposta := fpUltimaResposta;
-      if copy(Resposta, 1, 1) = STX then
-         Resposta := copy(Resposta, 2, Length(Resposta));
+     Resposta := fpUltimaResposta;
+     if copy(Resposta, 1, 1) = STX then
+        Resposta := copy(Resposta, 2, Length(Resposta));
 
-      if copy(Resposta, Length(Resposta), 1) = ETX then
-         Resposta := copy(Resposta, 1, Length(Resposta) - 1);
+     if copy(Resposta, Length(Resposta), 1) = ETX then
+        Resposta := copy(Resposta, 1, Length(Resposta) - 1);
      
-      { Ajustando o separador de Decimal corretamente }
-      Resposta := StringReplace(Resposta, '.', DecimalSeparator, [rfReplaceAll]);
-      Resposta := StringReplace(Resposta, ',', DecimalSeparator, [rfReplaceAll]);
+     { Ajustando o separador de Decimal corretamente }
+     Resposta := StringReplace(Resposta, '.', DecimalSeparator, [rfReplaceAll]);
+     Resposta := StringReplace(Resposta, ',', DecimalSeparator, [rfReplaceAll]);
 
      try
-         if Length(Resposta) > 10 then
-            fpUltimoPesoLido := StrToFloat(copy(Resposta, 1, 6)) / 1000
-         else if pos(DecimalSeparator, Resposta) > 0 then
+        if Length(Resposta) > 10 then
+           fpUltimoPesoLido := StrToFloat(copy(Resposta, 1, 6)) / 1000
+        else if pos(DecimalSeparator, Resposta) > 0 then
            fpUltimoPesoLido := StrToFloat(Resposta)
         else
            fpUltimoPesoLido := StrToInt(Resposta) / 1000
