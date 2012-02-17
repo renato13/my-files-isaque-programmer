@@ -97,6 +97,24 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+Data: 11/02/2012
+-- ACBrECFFiscNet --
+[-] Correção de Fechamento de Cupom com Identificação de Consumidor e Identifi-
+    cação de PAF-ECF (DSA)
+
+-- ACBrBALDigitron --
+[+] Novo modelo de Balança adicionado (Digitron).
+    http://www.djsystem.com.br/acbr/forum/viewtopic.php?f=10&t=2287
+
+-- ACBrBALUrano --
+[-] Correção para Leitura de Peso em alguns modelos (por: DSA)
+    http://www.djsystem.com.br/acbr/forum/viewtopic.php?f=10&t=3905
+
+Data: 09/02/2012
+-- ACBrECFSwedaSTX --
+[-] Correçao da interpretação na leitura de DataMovimento, que não considerava o
+    Ano com 4 dígitos (DSA)
+
 Data: 04/02/2012
 -- ACBrECFFiscNet --
 [-] Correçao de Fechamento de Cupom com Mensagem promocional em DataRegis. (DSA)
