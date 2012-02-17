@@ -1,9 +1,11 @@
 inherited frmGeVendedor: TfrmGeVendedor
+  ActiveControl = dbgDados
   Caption = 'Cadastro de Vendedores'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
