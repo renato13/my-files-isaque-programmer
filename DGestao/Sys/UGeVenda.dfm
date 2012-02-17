@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 445
-  Top = 163
+  Left = 223
+  Top = 37
   Width = 1115
   Height = 724
   ActiveControl = nil
