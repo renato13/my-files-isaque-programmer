@@ -4202,7 +4202,7 @@ object frmPrinc: TfrmPrinc
       end
       object nmGerarBoleto: TMenuItem
         Caption = 'Gera'#231#227'o de Boletos'
-        Enabled = False
+        OnClick = nmGerarBoletoClick
       end
     end
     object menuRelatorio: TMenuItem

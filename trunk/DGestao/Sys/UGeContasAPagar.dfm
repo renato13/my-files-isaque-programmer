@@ -728,7 +728,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
     end
   end
   inherited IbDtstTabela: TIBDataSet
-    BeforeEdit = IbDtstTabelaBeforeEdit
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'

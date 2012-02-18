@@ -135,6 +135,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure nmGerarBoletoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -155,7 +156,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
-  UfrmAcessoSistema;
+  UfrmAcessoSistema, UGeGerarBoletos;
 
 {$R *.dfm}
 
@@ -420,6 +421,11 @@ end;
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion( Application.ExeName ) + ' ]';
+end;
+
+procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
+begin
+  GerarBoleto(Self);
 end;
 
 end.

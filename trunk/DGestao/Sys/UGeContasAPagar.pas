@@ -99,7 +99,6 @@ type
     procedure pgcGuiasChange(Sender: TObject);
     procedure btbtnAlterarClick(Sender: TObject);
     procedure btbtnExcluirClick(Sender: TObject);
-    procedure IbDtstTabelaBeforeEdit(DataSet: TDataSet);
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }
@@ -298,7 +297,12 @@ begin
   begin
     inherited;
     if ( not OcorreuErro ) then
+    begin
+      if ( Trim(IbDtstTabelaNOMEEMP.AsString) = EmptyStr ) then
+        IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
+        
       AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+    end;
   end;
 end;
 
@@ -315,13 +319,6 @@ begin
     if ( not OcorreuErro ) then
       AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
   end;
-end;
-
-procedure TfrmGeContasAPagar.IbDtstTabelaBeforeEdit(DataSet: TDataSet);
-begin
-  inherited;
-  if ( Trim(IbDtstTabelaNOMEEMP.AsString) = EmptyStr ) then
-    IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
 end;
 
 procedure TfrmGeContasAPagar.FormShow(Sender: TObject);
