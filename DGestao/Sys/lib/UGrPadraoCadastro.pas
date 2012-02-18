@@ -490,7 +490,8 @@ begin
     dbgDados.Columns[0].Title.Alignment := taCenter;
     if ( Trim(CampoCodigo) <> EmptyStr ) then
     begin
-      IbDtstTabela.FieldByName(CampoCodigo).Alignment                    := taCenter;
+      IbDtstTabela.FieldByName(CampoCodigo).Alignment := taCenter;
+      IbDtstTabela.FieldByName(CampoCodigo).Required  := False;
       TIntegerField(IbDtstTabela.FieldByName(CampoCodigo)).DisplayFormat := DisplayFormatCodigo;
     end;
   end;

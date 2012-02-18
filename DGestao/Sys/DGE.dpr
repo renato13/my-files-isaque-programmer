@@ -81,7 +81,8 @@ uses
   UfrmAcessoSistema in 'UfrmAcessoSistema.pas' {frmAcessoSistema},
   UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
   ChkDgVer in 'lib\ChkDgVer.pas',
-  UGrCampoRequisitado in 'lib\UGrCampoRequisitado.pas' {frmCampoRequisitado};
+  UGrCampoRequisitado in 'lib\UGrCampoRequisitado.pas' {frmCampoRequisitado},
+  UGeGerarBoletos in 'UGeGerarBoletos.pas' {frmGeGerarBoleto};
 
 {$R *.res}
 

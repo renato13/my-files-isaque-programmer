@@ -281,6 +281,7 @@ type
     procedure nmImprimirDANFEClick(Sender: TObject);
     procedure btnConsultarProdutoClick(Sender: TObject);
     procedure dbTotalDescontoButtonClick(Sender: TObject);
+    procedure btnGerarBoletoClick(Sender: TObject);
   private
     { Private declarations }
     iSeq : Integer;
@@ -306,7 +307,8 @@ var
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar;
+  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
+  UGeGerarBoletos;
 
 {$R *.dfm}
 
@@ -583,6 +585,8 @@ begin
     btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
+
+    btnGerarBoleto.Enabled   := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = 1);
 
     nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
     nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
@@ -1026,14 +1030,19 @@ begin
     ShowInformation('Venda finalizada com sucesso !' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
 
     HabilitarDesabilitar_Btns;
+
+    // Forma de Pagamento: BOLETA BANCÁRIA
+    if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 1 ) then
+      if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
+        btnGerarBoleto.Click;
   end;
 end;
 
 procedure TfrmGeVenda.btbtnGerarNFeClick(Sender: TObject);
 var
-  iNumero : Integer;
-  iSerieNFe,
-  iNumeroNFe  : Integer;
+  iNumero    ,
+  iSerieNFe  ,
+  iNumeroNFe : Integer;
   sFileNameXML ,
   sChaveNFE    ,
   sProtocoloNFE,
@@ -1295,6 +1304,15 @@ begin
       cdsTabelaItensTOTAL_DESCONTO.Value := cValor; // cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
       cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
+  end;
+end;
+
+procedure TfrmGeVenda.btnGerarBoletoClick(Sender: TObject);
+begin
+  if ( not qryTitulos.IsEmpty ) then
+  begin
+    GerarBoleto(Self, dbCliente.Text, IbDtstTabelaCODCLI.AsString);
+    AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   end;
 end;
 

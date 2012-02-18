@@ -21,31 +21,11 @@ inherited frmGeVenda: TfrmGeVenda
   inherited tlbBotoes: TToolBar
     Top = 647
     Width = 1099
-    inherited btbtnLista: TBitBtn
-      Caption = 'Im&primir'
-      PopupMenu = ppImprimir
-      Visible = True
-      OnClick = btbtnListaClick
+    inherited bvlTool2: TBevel [0]
+      Left = 0
     end
-    inherited bvlToolExpandir: TBevel
-      Width = 12
-    end
-    inherited btbtnSelecionar: TBitBtn
-      Left = 553
-      Width = 32
-    end
-    inherited bvlTool4: TBevel
-      Left = 585
-    end
-    object Bevel13: TBevel
-      Left = 589
-      Top = 2
-      Width = 4
-      Height = 31
-      Shape = bsSpacer
-    end
-    object btnConsultarProduto: TBitBtn
-      Left = 593
+    object btnConsultarProduto: TBitBtn [1]
+      Left = 4
       Top = 2
       Width = 75
       Height = 31
@@ -54,6 +34,7 @@ inherited frmGeVenda: TfrmGeVenda
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
+      TabStop = False
       OnClick = btnConsultarProdutoClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -83,12 +64,65 @@ inherited frmGeVenda: TfrmGeVenda
         1AC8721EFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
     end
+    inherited Bevel2: TBevel [2]
+      Left = 79
+    end
+    inherited btbtnIncluir: TBitBtn [3]
+      Left = 83
+    end
+    inherited btbtnAlterar: TBitBtn [4]
+      Left = 158
+    end
+    inherited btbtnExcluir: TBitBtn [5]
+      Left = 233
+    end
+    inherited bvlTool1: TBevel [6]
+      Left = 308
+    end
+    inherited btbtnCancelar: TBitBtn [7]
+      Left = 312
+    end
+    inherited btbtnSalvar: TBitBtn [8]
+      Left = 387
+    end
+    inherited bvlTool4: TBevel [9]
+      Left = 462
+    end
+    inherited btbtnLista: TBitBtn [10]
+      Left = 466
+      Caption = 'Im&primir'
+      PopupMenu = ppImprimir
+      Visible = True
+      OnClick = btbtnListaClick
+    end
+    inherited bvlTool3: TBevel [11]
+      Left = 541
+    end
+    inherited btbtnFechar: TBitBtn [12]
+      Left = 545
+    end
+    inherited bvlToolExpandir: TBevel [13]
+      Left = 620
+      Width = 12
+    end
+    inherited btbtnSelecionar: TBitBtn [14]
+      Left = 632
+      Width = 32
+    end
+    object Bevel13: TBevel
+      Left = 664
+      Top = 2
+      Width = 4
+      Height = 31
+      Shape = bsSpacer
+    end
     object Bevel11: TBevel
       Left = 668
       Top = 2
       Width = 28
       Height = 31
       Shape = bsSpacer
+      Visible = False
     end
     object btbtnFinalizar: TBitBtn
       Left = 696
@@ -1745,7 +1779,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 464
         Width = 1091
         Height = 150
-        ActivePage = tbsRecebimento
+        ActivePage = tbsITitulos
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -2253,7 +2287,6 @@ inherited frmGeVenda: TfrmGeVenda
             Height = 122
             Align = alLeft
             Shape = bsSpacer
-            Visible = False
           end
           object Bevel10: TBevel
             Left = 0
@@ -2262,7 +2295,6 @@ inherited frmGeVenda: TfrmGeVenda
             Height = 122
             Align = alLeft
             Shape = bsSpacer
-            Visible = False
           end
           object pnlBotoesTitulo: TPanel
             Left = 4
@@ -2279,7 +2311,6 @@ inherited frmGeVenda: TfrmGeVenda
             Font.Style = [fsBold]
             ParentFont = False
             TabOrder = 0
-            Visible = False
             object btnRegerarTitulo: TBitBtn
               Left = 0
               Top = 1
@@ -2287,6 +2318,7 @@ inherited frmGeVenda: TfrmGeVenda
               Height = 25
               Hint = 'Regerar T'#237'tulo(s)'
               Caption = 'T'#237'tulo(s)'
+              Enabled = False
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
@@ -2304,6 +2336,7 @@ inherited frmGeVenda: TfrmGeVenda
               ShowHint = True
               TabOrder = 1
               TabStop = False
+              OnClick = btnGerarBoletoClick
               NumGlyphs = 2
             end
             object btnTituloEditar: TBitBtn
@@ -2313,6 +2346,7 @@ inherited frmGeVenda: TfrmGeVenda
               Height = 25
               Hint = 'Editar T'#237'tulo'
               Caption = 'Editar'
+              Enabled = False
               ParentShowHint = False
               ShowHint = True
               TabOrder = 2
@@ -2326,10 +2360,10 @@ inherited frmGeVenda: TfrmGeVenda
               Height = 25
               Hint = 'Excluir T'#237'tulo'
               Caption = 'Excluir'
+              Enabled = False
               ParentShowHint = False
               ShowHint = True
               TabOrder = 3
-              Visible = False
               NumGlyphs = 2
             end
             object btnTituloQuitar: TBitBtn
@@ -2339,6 +2373,7 @@ inherited frmGeVenda: TfrmGeVenda
               Height = 25
               Hint = 'Baixar T'#237'tulo'
               Caption = 'Baixar'
+              Enabled = False
               Font.Charset = ANSI_CHARSET
               Font.Color = clGreen
               Font.Height = -11
@@ -2348,7 +2383,6 @@ inherited frmGeVenda: TfrmGeVenda
               ParentShowHint = False
               ShowHint = True
               TabOrder = 4
-              Visible = False
               NumGlyphs = 2
             end
           end
