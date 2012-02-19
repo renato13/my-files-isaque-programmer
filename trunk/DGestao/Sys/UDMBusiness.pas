@@ -63,12 +63,18 @@ var
   function GetVendedorIDDefault : Integer;
   function GetFormaPagtoIDDefault : Integer;
   function GetCondicaoPagtoIDDefault : Integer;
-  
+  function GetEmitirBoleto : Boolean;
+  function GetCondicaoPagtoIDBoleto : Integer;
+  function GetEmitirCupom : Boolean;
+  function GetModeloEmissaoCupom : Integer;
+
   function GetExeVersion(const FileName : TFileName) : String;
   function StrIsCNPJ(const Num: string): Boolean;
   function StrIsCPF(const Num: string): Boolean;
   function StrFormatarCnpj(sCnpj: String): String;
   function StrFormatarCpf(sCpf: String): String;
+  function StrFormatarCEP(sCEP: String): String;
+  function StrFormatarFONE(sFone: String): String;
 
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
@@ -199,6 +205,26 @@ end;
 function GetCondicaoPagtoIDDefault : Integer;
 begin
   Result := FileINI.ReadInteger('Default', 'CondicaoPagtoID', 1);
+end;
+
+function GetEmitirBoleto : Boolean;
+begin
+  Result := FileINI.ReadBool('Boleto', 'EmitirBoleto', False);
+end;
+
+function GetCondicaoPagtoIDBoleto : Integer;
+begin
+  Result := FileINI.ReadInteger('Boleto', 'FormaPagtoID', 1);
+end;
+
+function GetEmitirCupom : Boolean;
+begin
+  Result := FileINI.ReadBool('Cupom', 'EmitirCupom', False);
+end;
+
+function GetModeloEmissaoCupom : Integer;
+begin
+  Result := FileINI.ReadInteger('Cupom', 'ModeloEmissaoCupom', 0);
 end;
 
 function GetExeVersion(const FileName : TFileName) : String;
@@ -398,6 +424,38 @@ begin
   Result := S;
 end;
 
+function StrFormatarCEP(sCEP: String): String;
+var
+  S : String;
+begin
+  S := Trim(sCEP); // 00.000-000
+
+  if ( Copy(S, 3, 1) <> '.' ) then
+    S := Copy(S, 1, 2) + '.' + Copy(S, 3, Length(S));
+
+  if ( Copy(S, 7, 1) <> '-' ) then
+    S := Copy(S, 1, 6) + '-' + Copy(S, 7, Length(S));
+
+  Result := S;
+end;
+
+function StrFormatarFONE(sFone: String): String;
+var
+  S : String;
+begin
+  S := Trim(sFone); // (91)0123-4567
+
+  if ( Copy(S, 1, 1) <> '(' ) then
+    S := '(' + Copy(S, 1, Length(S));
+
+  if ( Copy(S, 4, 1) <> ')' ) then
+    S := Copy(S, 1, 3) + ')' + Copy(S, 4, Length(S));
+
+  if ( Copy(S, 9, 1) <> '-' ) then
+    S := Copy(S, 1, 8) + '-' + Copy(S, 9, Length(S));
+
+  Result := S;
+end;
 
 function GetPaisNomeDefault : String;
 begin
