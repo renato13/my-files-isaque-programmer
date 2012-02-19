@@ -586,7 +586,7 @@ begin
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
 
-    btnGerarBoleto.Enabled   := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = 1);
+    btnGerarBoleto.Enabled   := GetEmitirBoleto and (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto);
 
     nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
     nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
@@ -1032,7 +1032,7 @@ begin
     HabilitarDesabilitar_Btns;
 
     // Forma de Pagamento: BOLETA BANCÁRIA
-    if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 1 ) then
+    if ( GetEmitirBoleto and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto) ) then
       if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
         btnGerarBoleto.Click;
   end;
@@ -1263,7 +1263,17 @@ begin
       Open;
     end;
 
-    frrVenda.ShowReport;
+    if ( GetEmitirCupom ) then
+    begin
+      if ( GetModeloEmissaoCupom = 0 ) then
+      begin
+//        FrECFPooler.ShowReport;
+        FrECFPooler.PrepareReport;
+        FrECFPooler.Print;
+      end;
+    end
+    else
+      frrVenda.ShowReport;
 
   end;
 end;
@@ -1309,6 +1319,9 @@ end;
 
 procedure TfrmGeVenda.btnGerarBoletoClick(Sender: TObject);
 begin
+  if ( not GetEmitirBoleto ) then
+    Exit;
+
   if ( not qryTitulos.IsEmpty ) then
   begin
     GerarBoleto(Self, dbCliente.Text, IbDtstTabelaCODCLI.AsString);

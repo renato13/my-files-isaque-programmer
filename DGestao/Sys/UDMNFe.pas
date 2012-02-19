@@ -206,9 +206,12 @@ type
     qryDadosProdutoESTOQUE: TIntegerField;
     qryDadosProdutoRESERVA: TIntegerField;
     qryDadosProdutoDISPONIVEL: TLargeintField;
+    FrECFPooler: TfrxReport;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
+    procedure FrECFPoolerGetValue(const VarName: String;
+      var Value: Variant);
   private
     { Private declarations }
     frmACBr : TfrmGeConfigurarNFeACBr;
@@ -1411,6 +1414,19 @@ begin
       ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFEACBr() --> ' + e.Message);
   end;
 
+end;
+
+procedure TDMNFe.FrECFPoolerGetValue(const VarName: String;
+  var Value: Variant);
+begin
+  if ( VarName = 'CEPEmissor' ) then
+    Value := StrFormatarCEP(qryEmitenteCEP.AsString);
+
+  if ( VarName = 'CNPJEmissor' ) then
+    Value := StrFormatarCnpj(qryEmitenteCNPJ.AsString);
+
+  if ( VarName = 'FONEEmissor' ) then
+    Value := StrFormatarFONE(qryEmitenteFONE.AsString);
 end;
 
 end.

@@ -21,11 +21,24 @@ inherited frmGeVenda: TfrmGeVenda
   inherited tlbBotoes: TToolBar
     Top = 647
     Width = 1099
-    inherited bvlTool2: TBevel [0]
-      Left = 0
+    inherited btbtnLista: TBitBtn
+      Caption = 'Im&primir'
+      PopupMenu = ppImprimir
+      Visible = True
+      OnClick = btbtnListaClick
     end
-    object btnConsultarProduto: TBitBtn [1]
-      Left = 4
+    inherited bvlToolExpandir: TBevel
+      Width = 12
+    end
+    inherited btbtnSelecionar: TBitBtn
+      Left = 553
+      Width = 32
+    end
+    inherited bvlTool4: TBevel
+      Left = 585
+    end
+    object btnConsultarProduto: TBitBtn
+      Left = 589
       Top = 2
       Width = 75
       Height = 31
@@ -63,51 +76,6 @@ inherited frmGeVenda: TfrmGeVenda
         CC731ACC731ACC731ACC731ACC731ACC731ACC741ACD751BCC7318CD751BCA72
         1AC8721EFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-    end
-    inherited Bevel2: TBevel [2]
-      Left = 79
-    end
-    inherited btbtnIncluir: TBitBtn [3]
-      Left = 83
-    end
-    inherited btbtnAlterar: TBitBtn [4]
-      Left = 158
-    end
-    inherited btbtnExcluir: TBitBtn [5]
-      Left = 233
-    end
-    inherited bvlTool1: TBevel [6]
-      Left = 308
-    end
-    inherited btbtnCancelar: TBitBtn [7]
-      Left = 312
-    end
-    inherited btbtnSalvar: TBitBtn [8]
-      Left = 387
-    end
-    inherited bvlTool4: TBevel [9]
-      Left = 462
-    end
-    inherited btbtnLista: TBitBtn [10]
-      Left = 466
-      Caption = 'Im&primir'
-      PopupMenu = ppImprimir
-      Visible = True
-      OnClick = btbtnListaClick
-    end
-    inherited bvlTool3: TBevel [11]
-      Left = 541
-    end
-    inherited btbtnFechar: TBitBtn [12]
-      Left = 545
-    end
-    inherited bvlToolExpandir: TBevel [13]
-      Left = 620
-      Width = 12
-    end
-    inherited btbtnSelecionar: TBitBtn [14]
-      Left = 632
-      Width = 32
     end
     object Bevel13: TBevel
       Left = 664
