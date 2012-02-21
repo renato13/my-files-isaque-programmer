@@ -1427,6 +1427,12 @@ begin
 
   if ( VarName = 'FONEEmissor' ) then
     Value := StrFormatarFONE(qryEmitenteFONE.AsString);
+
+  if ( VarName = 'CNPJCliente' ) then
+    if ( qryDestinatarioPESSOA_FISICA.AsInteger = 0 ) then
+      Value := StrFormatarCnpj(qryDestinatarioCNPJ.AsString)
+    else
+      Value := StrFormatarCpf(qryDestinatarioCNPJ.AsString);
 end;
 
 end.

@@ -2528,7 +2528,7 @@ object DMNFe: TDMNFe
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40958.629806064810000000
-    ReportOptions.LastChange = 40958.656075405100000000
+    ReportOptions.LastChange = 40960.806519317130000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -2575,6 +2575,10 @@ object DMNFe: TDMNFe
       item
         Name = 'FONEEmissor'
         Value = #39'(91)0000-0000'#39
+      end
+      item
+        Name = 'CNPJCliente'
+        Value = #39'00.000.000/0000-00'#39
       end>
     Style = <>
     object Data: TfrxDataPage
@@ -2656,7 +2660,7 @@ object DMNFe: TDMNFe
       end
       object bndMasterData: TfrxMasterData
         Height = 30.236240000000000000
-        Top = 340.157700000000000000
+        Top = 374.173470000000000000
         Width = 249.448980000000000000
         DataSet = frdItens
         DataSetName = 'frdItens'
@@ -2764,11 +2768,11 @@ object DMNFe: TDMNFe
         end
       end
       object bndHeader: TfrxHeader
-        Height = 128.504020000000000000
+        Height = 147.401670000000000000
         Top = 181.417440000000000000
         Width = 249.448980000000000000
         object Memo13: TfrxMemoView
-          Top = 56.692950000000000000
+          Top = 75.590600000000000000
           Width = 249.448980000000000000
           Height = 30.236240000000000000
           ShowHint = False
@@ -2783,8 +2787,8 @@ object DMNFe: TDMNFe
           Memo.UTF8 = (
             
               '[IIF(<frdVenda."STATUS">=1,'#39'ORCAMENTO'#39',IIF(<frdVenda."STATUS">=2' +
-              ','#39'ORCAMENTO'#39',IIF(<frdVenda."STATUS">=3,'#39'CUPOM NAO FICAL'#39',IIF(<fr' +
-              'dVenda."STATUS">=4,'#39'CUPOM NAO FICAL'#39','#39'CUPOM CANCELADO'#39'))))]')
+              ','#39'ORCAMENTO'#39',IIF(<frdVenda."STATUS">=3,'#39'CUPOM NAO FISCAL'#39',IIF(<f' +
+              'rdVenda."STATUS">=4,'#39'CUPOM NAO FISCAL'#39','#39'CUPOM CANCELADO'#39'))))]')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2920,7 +2924,7 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo24: TfrxMemoView
-          Top = 86.929190000000000000
+          Top = 105.826840000000000000
           Width = 22.677180000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -2936,7 +2940,7 @@ object DMNFe: TDMNFe
         end
         object Memo25: TfrxMemoView
           Left = 22.677180000000000000
-          Top = 86.929190000000000000
+          Top = 105.826840000000000000
           Width = 37.795300000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -2952,7 +2956,7 @@ object DMNFe: TDMNFe
         end
         object Memo26: TfrxMemoView
           Left = 60.472480000000000000
-          Top = 86.929190000000000000
+          Top = 105.826840000000000000
           Width = 188.976500000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -2967,7 +2971,7 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo27: TfrxMemoView
-          Top = 105.826840000000000000
+          Top = 124.724490000000000000
           Width = 136.063080000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -2985,7 +2989,7 @@ object DMNFe: TDMNFe
         end
         object Memo28: TfrxMemoView
           Left = 136.063080000000000000
-          Top = 105.826840000000000000
+          Top = 124.724490000000000000
           Width = 56.692950000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -3003,7 +3007,7 @@ object DMNFe: TDMNFe
         end
         object Memo29: TfrxMemoView
           Left = 192.756030000000000000
-          Top = 105.826840000000000000
+          Top = 124.724490000000000000
           Width = 56.692950000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -3019,10 +3023,42 @@ object DMNFe: TDMNFe
           ParentFont = False
           VAlign = vaCenter
         end
+        object Memo35: TfrxMemoView
+          Top = 56.692950000000000000
+          Width = 52.913420000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial Narrow'
+          Font.Style = [fsBold]
+          Memo.UTF8 = (
+            'CPF/CNPJ:')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo36: TfrxMemoView
+          Left = 52.913420000000000000
+          Top = 56.692950000000000000
+          Width = 196.535560000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Arial Narrow'
+          Font.Style = []
+          Memo.UTF8 = (
+            '[CNPJCliente]')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
       end
       object bndReportSummary: TfrxReportSummary
         Height = 117.165430000000000000
-        Top = 396.850650000000000000
+        Top = 438.425480000000000000
         Width = 249.448980000000000000
         object Memo17: TfrxMemoView
           Width = 132.283550000000000000
