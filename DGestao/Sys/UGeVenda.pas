@@ -12,7 +12,7 @@ uses
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
     lblData: TLabel;
-    edData: TDateTimePicker;
+    edDataInicial: TDateTimePicker;
     tblEmpresa: TIBTable;
     dtsEmpresa: TDataSource;
     lblEmpresa: TLabel;
@@ -245,6 +245,7 @@ type
     Bevel13: TBevel;
     dbTotalDesconto: TRxDBComboEdit;
     lblTotalDesconto: TLabel;
+    edDataFinal: TDateTimePicker;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -319,7 +320,9 @@ var
 begin
   frm := TfrmGeVenda.Create(AOwner);
   try
-    whr := 'cast(v.dtvenda as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+    whr := 'cast(v.dtvenda as date) between ' +
+            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edDataInicial.Date) ) + ' and ' +
+            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edDataFinal.Date) );
 
     with frm, IbDtstTabela do
     begin
@@ -349,8 +352,9 @@ begin
   SQL_Titulos.Clear;
   SQL_Titulos.AddStrings( qryTitulos.SelectSQL );
 
-  edData.Date      := Date;
-  ControlFirstEdit := dbEmpresa;
+  edDataInicial.Date := Date;
+  edDataFinal.Date   := Date;
+  ControlFirstEdit   := dbEmpresa;
 
   tblEmpresa.Open;
   tblVendedor.Open;
@@ -369,7 +373,9 @@ end;
 
 procedure TfrmGeVenda.btnFiltrarClick(Sender: TObject);
 begin
-  WhereAdditional := 'cast(v.dtvenda as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+  WhereAdditional :=  'cast(v.dtvenda as date) between ' +
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', edDataInicial.Date) ) + ' and ' +
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', edDataFinal.Date) );
   inherited;
 end;
 

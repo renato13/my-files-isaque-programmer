@@ -502,7 +502,8 @@ end;
 
 function TfrmGeGerarBoleto.InserirBoleto(var Objeto: Variant): Boolean;
 var
-  sAppPath : String;
+  sAppPath   ,
+  sDocumento : String;
   Boleto   ,
   EmailSacado : Variant;
 begin
@@ -515,9 +516,10 @@ begin
 
     while not CdsTitulos.Eof do
     begin
-      Boleto := Objeto.DocumentosCobranca.Add;
+      Boleto     := Objeto.DocumentosCobranca.Add;
+      sDocumento := Copy(CdsTitulosANOLANC.AsString, 3, 2) + FormatFloat('00000000', CdsTitulosNUMLANC.AsInteger) + FormatFloat('000', CdsTitulosPARCELA.AsInteger);
 
-      Boleto.NumeroDocumento := FormatFloat('0000000000', CdsTitulosNUMLANC.AsInteger) + FormatFloat('000', CdsTitulosPARCELA.AsInteger);
+      Boleto.NumeroDocumento := sDocumento;
       Boleto.NomeSacado      := dbNome.Field.AsString;
 
       if Length(dbCPF.Field.AsString) > 11 then
