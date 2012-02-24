@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 223
-  Top = 37
+  Left = 457
+  Top = 180
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -390,40 +390,49 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 552
         Width = 1091
         inherited grpBxFiltro: TGroupBox
-          Left = 670
-          Width = 417
+          Left = 528
+          Width = 559
           DesignSize = (
-            417
+            559
             54)
           inherited lbltFiltrar: TLabel
-            Left = 158
+            Left = 286
             Width = 38
             Caption = 'Venda:'
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 372
+            Left = 514
           end
           object lblData: TLabel [2]
             Left = 14
             Top = 25
-            Width = 30
+            Width = 46
             Height = 13
-            Caption = 'Data:'
-            FocusControl = edData
+            Caption = 'Per'#237'odo:'
+            FocusControl = edDataInicial
           end
           inherited edtFiltrar: TEdit
-            Left = 200
-            Width = 168
-            TabOrder = 1
+            Left = 328
+            Width = 182
+            TabOrder = 2
           end
-          object edData: TDateTimePicker
-            Left = 48
+          object edDataInicial: TDateTimePicker
+            Left = 64
             Top = 21
             Width = 105
             Height = 21
             Date = 40913.000000000000000000
             Time = 40913.000000000000000000
             TabOrder = 0
+          end
+          object edDataFinal: TDateTimePicker
+            Left = 176
+            Top = 21
+            Width = 105
+            Height = 21
+            Date = 40913.000000000000000000
+            Time = 40913.000000000000000000
+            TabOrder = 1
           end
         end
       end
