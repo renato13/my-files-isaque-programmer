@@ -285,6 +285,7 @@ type
     procedure btnGerarBoletoClick(Sender: TObject);
   private
     { Private declarations }
+    sGeneratorName : String;
     iSeq : Integer;
     SQL_Itens   ,
     SQL_Titulos : TStringList;
@@ -340,7 +341,9 @@ end;
 
 procedure TfrmGeVenda.FormCreate(Sender: TObject);
 begin
-  IbDtstTabela.GeneratorField.Generator := 'GEN_VENDAS_CONTROLE_' + FormatFloat('0000', YearOf(Date));
+  sGeneratorName := 'GEN_VENDAS_CONTROLE_' + FormatFloat('0000', YearOf(GetDateDB));
+  
+//  IbDtstTabela.GeneratorField.Generator := sGeneratorName;
 
   inherited;
   
@@ -382,7 +385,7 @@ end;
 procedure TfrmGeVenda.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-  IbDtstTabelaAno.Value     := YearOf(GetDateTimeDB);
+//  IbDtstTabelaAno.Value     := YearOf(GetDateTimeDB);
   IbDtstTabelaDTVENDA.Value := GetDateTimeDB;
   IbDtstTabelaCODEMP.Value  := GetEmpresaIDDefault;
   IbDtstTabelaCODCLI.Value  := GetClienteIDDefault;
@@ -869,10 +872,19 @@ begin
 end;
 
 procedure TfrmGeVenda.btbtnIncluirClick(Sender: TObject);
+var
+  iAno ,
+  iNum : Integer;
 begin
+  iAno := YearOf(GetDateDB);
+  iNum := GetGeneratorID(sGeneratorName);
+
   inherited;
   if ( not OcorreuErro ) then
   begin
+    IbDtstTabelaANO.AsInteger        := iAno;
+    IbDtstTabelaCODCONTROL.AsInteger := iNum;
+
     AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   end;

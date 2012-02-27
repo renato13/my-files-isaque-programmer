@@ -2623,8 +2623,6 @@ inherited frmGeVenda: TfrmGeVenda
       'from TBVENDAS v'
       '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
       '')
-    GeneratorField.Field = 'CODCONTROL'
-    GeneratorField.Generator = 'GEN_VENDAS_CONTROLE_2011'
     GeneratorField.ApplyEvent = gamOnNewRecord
     Left = 992
     object IbDtstTabelaANO: TSmallintField
