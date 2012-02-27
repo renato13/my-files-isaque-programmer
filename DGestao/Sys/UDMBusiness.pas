@@ -76,6 +76,7 @@ var
   function StrFormatarCEP(sCEP: String): String;
   function StrFormatarFONE(sFone: String): String;
 
+  function GetGeneratorID(const GeneratorName : String) : Integer;
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
@@ -455,6 +456,23 @@ begin
     S := Copy(S, 1, 8) + '-' + Copy(S, 9, Length(S));
 
   Result := S;
+end;
+
+function GetGeneratorID(const GeneratorName : String) : Integer;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select first 1 GEN_ID(' + GeneratorName + ', 1) as ID from TBEMPRESA');
+    Open;
+
+    Result := FieldByName('ID').AsInteger;
+
+    CommitTransaction;
+    
+    Close;
+  end;
 end;
 
 function GetPaisNomeDefault : String;
