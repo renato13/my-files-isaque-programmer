@@ -10,21 +10,17 @@ File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas',0,1,1,1,59,1,
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeGerarBoletos.pas
-Module5=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Count=7
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeGerarBoletos.pas
+Module3=c:\program files (x86)\borland\delphi7\source\rtl\Win\Windows.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module6=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Count=8
 EditWindowCount=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=1
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -34,12 +30,22 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeGerarBoletos.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeGerarBoletos.pas]
+[c:\program files (x86)\borland\delphi7\source\rtl\Win\Windows.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -67,7 +73,7 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=7
+ViewCount=8
 CurrentView=1
 View0=0
 View1=1
@@ -76,6 +82,7 @@ View3=3
 View4=4
 View5=5
 View6=6
+View7=7
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -106,43 +113,50 @@ LeftCol=1
 
 [View1]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=59
-CursorY=464
-TopLine=455
+CursorX=15
+CursorY=137
+TopLine=129
 LeftCol=1
 
 [View2]
+Module=c:\program files (x86)\borland\delphi7\source\rtl\Win\Windows.pas
+CursorX=3
+CursorY=22133
+TopLine=22107
+LeftCol=1
+
+[View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
 CursorX=140
 CursorY=1420
 TopLine=1419
 LeftCol=1
 
-[View3]
+[View4]
 Module=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
 CursorX=116
 CursorY=814
 TopLine=807
 LeftCol=1
 
-[View4]
+[View5]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 CursorX=101
 CursorY=411
 TopLine=399
 LeftCol=1
 
-[View5]
+[View6]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=82
-CursorY=344
-TopLine=327
+CursorX=1
+CursorY=1284
+TopLine=1237
 LeftCol=1
 
-[View6]
+[View7]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeGerarBoletos.pas
-CursorX=83
-CursorY=520
+CursorX=117
+CursorY=565
 TopLine=527
 LeftCol=1
 
@@ -162,9 +176,9 @@ State=2
 Left=0
 Top=0
 Width=1920
-Height=144
-MaxLeft=-1
-MaxTop=-1
+Height=122
+MaxLeft=-8
+MaxTop=-8
 MaxWidth=1932
 MaxHeight=122
 ClientWidth=1916
@@ -216,7 +230,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Connected
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
@@ -241,7 +255,7 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=135
+Top=114
 Width=30
 Height=897
 MaxLeft=-1

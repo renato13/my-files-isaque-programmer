@@ -1281,7 +1281,8 @@ begin
       Open;
     end;
 
-    if ( GetEmitirCupom ) then
+//    if ( GetEmitirCupom ) then
+    if ( ShowConfirm('Deseja imprimir em formato CUPOM?', 'Impressão', MB_DEFBUTTON1) ) then
     begin
       if ( GetModeloEmissaoCupom = 0 ) then
       begin
