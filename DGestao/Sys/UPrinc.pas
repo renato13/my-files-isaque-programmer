@@ -97,6 +97,7 @@ type
     SpeedItem2: TSpeedItem;
     nmImprimirDANFE: TMenuItem;
     N11: TMenuItem;
+    nmRemessaBoleto: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);

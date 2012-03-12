@@ -4204,6 +4204,9 @@ object frmPrinc: TfrmPrinc
         Caption = 'Gera'#231#227'o de Boletos'
         OnClick = nmGerarBoletoClick
       end
+      object nmRemessaBoleto: TMenuItem
+        Caption = 'Gerar Remessa Boletos'
+      end
     end
     object menuRelatorio: TMenuItem
       Caption = '&Relat'#243'rio'

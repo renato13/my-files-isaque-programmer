@@ -143,7 +143,7 @@ type
     CobreBemX : Variant;
     procedure CarregarBancos;
     procedure GravarBoletosGerados;
-    procedure UpdateTitulo( iLancamento : Int64; iBanco : Integer; sNossoNumero : String; Data : TDateTime );
+    procedure UpdateTitulo( iAno : Smallint; iLancamento : Int64; iBanco : Integer; sNossoNumero : String; Data : TDateTime );
 
     function CarregarTitulos( cnpj : String ) : Boolean;
     function DefinirCedente( Banco, Carteira : Integer; var Objeto : Variant ) : Boolean;
@@ -583,24 +583,32 @@ end;
 
 procedure TfrmGeGerarBoleto.GravarBoletosGerados;
 var
-   I : Integer;
-   N : String;
+  Ano  ,
+  Lanc ,
+  I    : Integer;
+  N : String;
 begin
-  CdsTitulos.IndexFieldNames := 'NUMLANC';
+  CdsTitulos.IndexFieldNames := 'ANOLANC;NUMLANC';
 
   for I := 0 to CobreBemX.DocumentosCobranca.Count - 1 do
-    if CdsTitulos.FindKey( [StrToInt( Copy(CobreBemX.DocumentosCobranca[I].NumeroDocumento, 1, 10) )] ) then
+  begin
+    Ano  := 2000 + StrToInt( Copy(CobreBemX.DocumentosCobranca[I].NumeroDocumento, 1, 2));
+    Lanc := StrToInt(Copy(CobreBemX.DocumentosCobranca[I].NumeroDocumento, 3, 8));
+
+    if CdsTitulos.FindKey( [Ano, Lanc] ) then
       if ( CdsTitulosNOSSONUMERO.AsString <> CobreBemX.DocumentosCobranca[i].NossoNumero ) then
       begin
         CdsTitulos.Edit;
         CdsTitulosCODBANCO.Value    := IbTblBancosBCO_COD.Value;
         CdsTitulosNOSSONUMERO.Value := CobreBemX.DocumentosCobranca[i].NossoNumero;
+        CdsTitulosDATAPROCESSOBOLETO.Value := GetDateTimeDB;
         CdsTitulos.Post;
 
         CommitTransaction;
 
-        UpdateTitulo(CdsTitulosNUMLANC.Value, CdsTitulosCODBANCO.Value, CdsTitulosNOSSONUMERO.Value, Date);
+        UpdateTitulo(CdsTitulosANOLANC.Value, CdsTitulosNUMLANC.Value, CdsTitulosCODBANCO.Value, CdsTitulosNOSSONUMERO.Value, GetDateTimeDB);
       end;
+  end;
 
   cmbBancoChange(cmbBanco);
 
@@ -620,7 +628,7 @@ begin
   TableName := 'TBCONTREC';
 end;
 
-procedure TfrmGeGerarBoleto.UpdateTitulo(iLancamento: Int64; iBanco: Integer;
+procedure TfrmGeGerarBoleto.UpdateTitulo(iAno : Smallint; iLancamento: Int64; iBanco: Integer;
   sNossoNumero: String; Data: TDateTime);
 var
   sSQL : TStringList;
@@ -633,8 +641,9 @@ begin
     sSQL.Add( ' Update TBCONTREC Set ' );
     sSQL.Add( '     nossonumero = ' + QuotedStr(sNossoNumero) );
     sSQL.Add( '   , codbanco    = ' + IntToStr(iBanco) );
-    sSQL.Add( '   , dataprocessoboleto = ' + QuotedStr(FormatDateTime('yyyy-mm-dd', Date)) );
-    sSQL.Add( ' where numlanc = '   + IntToStr(iLancamento) );
+    sSQL.Add( '   , dataprocessoboleto = ' + QuotedStr(FormatDateTime('yyyy-mm-dd', Data)) );
+    sSQL.Add( ' where anolanc = '   + IntToStr(iAno) );
+    sSQL.Add( '   and numlanc = '   + IntToStr(iLancamento) );
     sSQL.EndUpdate;
 
     with UpdateLanc, SQL  do
