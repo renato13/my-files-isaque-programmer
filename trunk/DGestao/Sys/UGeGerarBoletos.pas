@@ -24,7 +24,6 @@ type
     IbQryClientesINSCEST: TIBStringField;
     IbQryClientesNOME: TIBStringField;
     IbQryClientesFONE: TIBStringField;
-    IbQryClientesENDER: TIBStringField;
     IbQryClientesBAIRRO: TIBStringField;
     IbQryClientesCIDADE: TIBStringField;
     IbQryClientesUF: TIBStringField;
@@ -115,6 +114,7 @@ type
     CdsTitulosNUMLANC: TIntegerField;
     CdsTitulosANOVENDA: TSmallintField;
     CdsTitulosNUMVENDA: TIntegerField;
+    IbQryClientesENDER: TIBStringField;
     procedure edtFiltrarKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;

@@ -912,12 +912,14 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       DisplayLabel = 'CPF / CNPJ'
       FieldName = 'CNPJ'
       Origin = 'TBFORNECEDOR.CNPJ'
+      Required = True
       Size = 18
     end
     object IbDtstTabelaNOMEFORN: TIBStringField
       DisplayLabel = 'Nome/Raz'#227'o Social'
       FieldName = 'NOMEFORN'
       Origin = 'TBFORNECEDOR.NOMEFORN'
+      Required = True
       Size = 60
     end
     object IbDtstTabelaINSCEST: TIBStringField
@@ -992,11 +994,13 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       DisplayLabel = 'Cidade'
       FieldName = 'CID_COD'
       Origin = 'TBFORNECEDOR.CID_COD'
+      Required = True
     end
     object IbDtstTabelaEST_COD: TSmallintField
-      DisplayLabel = 'UF'
+      DisplayLabel = 'Estado'
       FieldName = 'EST_COD'
       Origin = 'TBFORNECEDOR.EST_COD'
+      Required = True
     end
     object IbDtstTabelaEMAIL: TIBStringField
       DisplayLabel = 'E-mail'

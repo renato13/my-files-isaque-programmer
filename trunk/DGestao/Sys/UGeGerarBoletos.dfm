@@ -2098,7 +2098,7 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
       '  , c.inscest'
       '  , c.nome'
       '  , c.fone'
-      '  , c.ender'
+      '  , c.ender || '#39', '#39' || c.Numero_end as ender'
       '  , c.bairro'
       '  , c.cidade'
       '  , c.uf'
@@ -2141,8 +2141,7 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
     end
     object IbQryClientesENDER: TIBStringField
       FieldName = 'ENDER'
-      Origin = 'TBCLIENTE.ENDER'
-      Size = 80
+      Size = 262
     end
     object IbQryClientesBAIRRO: TIBStringField
       FieldName = 'BAIRRO'
