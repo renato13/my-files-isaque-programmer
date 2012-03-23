@@ -82,7 +82,9 @@ uses
   UGeVendaCancelar in 'UGeVendaCancelar.pas' {frmGeVendaCancelar},
   ChkDgVer in 'lib\ChkDgVer.pas',
   UGrCampoRequisitado in 'lib\UGrCampoRequisitado.pas' {frmCampoRequisitado},
-  UGeGerarBoletos in 'UGeGerarBoletos.pas' {frmGeGerarBoleto};
+  UGeGerarBoletos in 'UGeGerarBoletos.pas' {frmGeGerarBoleto},
+  UGeRemessaBoletos in 'UGeRemessaBoletos.pas' {frmGeRemessaBoleto},
+  UGeRetornoBoletos in 'UGeRetornoBoletos.pas' {frmGeRetornoBoleto};
 
 {$R *.res}
 

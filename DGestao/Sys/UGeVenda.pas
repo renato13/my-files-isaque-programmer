@@ -167,7 +167,6 @@ type
     cdsTabelaItensDTVENDA: TDateTimeField;
     cdsTabelaItensQTDE: TIntegerField;
     cdsTabelaItensPUNIT: TIBBCDField;
-    cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensPFINAL: TIBBCDField;
     cdsTabelaItensQTDEFINAL: TIntegerField;
     cdsTabelaItensUNID_COD: TSmallintField;
@@ -246,6 +245,7 @@ type
     dbTotalDesconto: TRxDBComboEdit;
     lblTotalDesconto: TLabel;
     edDataFinal: TDateTimePicker;
+    cdsTabelaItensDESCONTO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -869,6 +869,8 @@ begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+  pgcMaisDados.ActivePage := tbsITitulos;
 end;
 
 procedure TfrmGeVenda.btbtnIncluirClick(Sender: TObject);
@@ -1035,7 +1037,8 @@ begin
     IbDtstTabela.Edit;
 
     IbDtstTabelaSTATUS.Value              := STATUS_VND_FIN;
-    IbDtstTabelaDTFINALIZACAO_VENDA.Value := Date;
+    IbDtstTabelaDTVENDA.Value             := GetDateDB;
+    IbDtstTabelaDTFINALIZACAO_VENDA.Value := GetDateDB;
 
     IbDtstTabela.Post;
     IbDtstTabela.ApplyUpdates;
@@ -1050,6 +1053,7 @@ begin
     HabilitarDesabilitar_Btns;
 
     // Forma de Pagamento: BOLETA BANCÁRIA
+    
     if ( GetEmitirBoleto and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto) ) then
       if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
         btnGerarBoleto.Click;

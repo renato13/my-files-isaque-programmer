@@ -77,6 +77,7 @@ var
   function StrFormatarFONE(sFone: String): String;
 
   function GetGeneratorID(const GeneratorName : String) : Integer;
+  function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
@@ -87,7 +88,6 @@ var
   function GetFormaPagtoNomeDefault : String;
   function GetCondicaoPagtoNomeDefault : String;
   function GetSenhaAutorizacao : String;
-  function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
   function GetDateTimeDB : TDateTime;
   function GetDateDB : TDateTime;
   function GetTimeDB : TDateTime;
@@ -98,6 +98,10 @@ const
   DB_USER_NAME     = 'SYSDBA';
   DB_USER_PASSWORD = 'masterkey';
   DB_LC_CTYPE      = 'ISO8859_2';
+
+  BOLETO_ARQUIVO_LOGOTIPO = 'Imagens\Emitente.gif';
+  BOLETO_IMAGENS          = 'Imagens\';
+  BOLETO_LICENCAS         = 'Licencas\';
 
   STATUS_VND_AND = 1;
   STATUS_VND_ABR = 2;
@@ -470,8 +474,21 @@ begin
     Result := FieldByName('ID').AsInteger;
 
     CommitTransaction;
-    
+
     Close;
+  end;
+end;
+
+function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela + ' ' + sWhere);
+    Open;
+
+    Result := FieldByName('ID').AsInteger + 1;
   end;
 end;
 
@@ -625,19 +642,6 @@ begin
     Result := FieldByName('snh_descricao').AsString;
 
     Close;
-  end;
-end;
-
-function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
-begin
-  with DMBusiness, qryBusca do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('Select max(' + CampoChave + ') as ID from ' + NomeTabela + ' ' + sWhere);
-    Open;
-
-    Result := FieldByName('ID').AsInteger + 1;
   end;
 end;
 

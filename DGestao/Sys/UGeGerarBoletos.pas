@@ -365,17 +365,6 @@ procedure TfrmGeGerarBoleto.dbgTitulosKeyDown(Sender: TObject; var Key: Word;
 begin
   if ( Key = VK_SPACE ) then
     dbgTitulosDblClick(Sender);
-    
-//  if ( not CdsTitulos.IsEmpty ) then
-//    if ( Key = VK_SPACE ) then
-//    begin
-//      CdsTitulos.Edit;
-//      if ( CdsTitulosGERAR.AsString = '.' ) then
-//        CdsTitulosGERAR.Value := 'X'
-//      else
-//        CdsTitulosGERAR.Value := '.';
-//      CdsTitulos.Post;
-//    end;
 end;
 
 function TfrmGeGerarBoleto.DefinirCedente(Banco, Carteira : Integer; var Objeto: Variant): Boolean;
@@ -385,7 +374,7 @@ var
 begin
   try
     sAppPath     := ExtractFilePath(ParamStr(0));
-    sFileLisence := sAppPath + 'Licencas\' + FormatFloat('000', Banco)  + '-' + FormatFloat('00', Carteira) + '.conf';
+    sFileLisence := sAppPath + BOLETO_LICENCAS + FormatFloat('000', Banco)  + '-' + FormatFloat('00', Carteira) + '.conf';
 
     if ( not FileExists(sFileLisence) ) then
       raise Exception.Create('Arquivo de licença ' + QuotedStr(sFileLisence) + ' não encontrado');
@@ -407,8 +396,8 @@ begin
       Objeto.ProximoNossoNumero  := IbTblBancosBCO_NOSSO_NUM_PROXIMO.AsString;
 
 
-    Objeto.PadroesBoleto.PadroesBoletoImpresso.ArquivoLogotipo            := sAppPath + 'Imagens\Emitente.gif';
-    Objeto.PadroesBoleto.PadroesBoletoImpresso.CaminhoImagensCodigoBarras := sAppPath + 'Imagens\';
+    Objeto.PadroesBoleto.PadroesBoletoImpresso.ArquivoLogotipo            := sAppPath + BOLETO_ARQUIVO_LOGOTIPO;
+    Objeto.PadroesBoleto.PadroesBoletoImpresso.CaminhoImagensCodigoBarras := sAppPath + BOLETO_IMAGENS;
 
     Result := True;
   except

@@ -293,6 +293,12 @@ begin
       Abort;
     end;
 
+    if ( (Trim(IbDtstTabelaUF.AsString) = EmptyStr) or (IbDtstTabelaEST_COD.AsInteger = 0) ) then
+    begin
+      ShowWarning('Favor selecionar o Estado.');
+      Abort;
+    end;
+
     if ( not ChkInscEstadual(Trim(IbDtstTabelaINSCEST.AsString), Trim(IbDtstTabelaUF.AsString)) ) then
     begin
       ShowWarning('Favor informar uma Inscrição Estadual válida.');

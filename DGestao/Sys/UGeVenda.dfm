@@ -1756,7 +1756,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 464
         Width = 1091
         Height = 150
-        ActivePage = tbsITitulos
+        ActivePage = tbsRecebimento
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -3194,7 +3194,7 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TVENDASITENS.DESCONTO'
       DisplayFormat = ',0.00'
       Precision = 18
-      Size = 2
+      Size = 3
     end
     object cdsTabelaItensDESCONTO_VALOR: TIBBCDField
       DisplayLabel = 'Valor Desconto (R$)'
