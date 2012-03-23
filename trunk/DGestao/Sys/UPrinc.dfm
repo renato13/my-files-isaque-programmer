@@ -4206,6 +4206,11 @@ object frmPrinc: TfrmPrinc
       end
       object nmRemessaBoleto: TMenuItem
         Caption = 'Gerar Remessa Boletos'
+        OnClick = nmRemessaBoletoClick
+      end
+      object nmRetornoBoleto: TMenuItem
+        Caption = 'Processar Retorno Boletos'
+        OnClick = nmRetornoBoletoClick
       end
     end
     object menuRelatorio: TMenuItem

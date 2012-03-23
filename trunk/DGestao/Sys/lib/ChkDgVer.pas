@@ -973,15 +973,17 @@ var
 begin
   //
   Result:=False;
-  If (Trim(ie)='.') Then Exit;
+  If (Trim(ie) = '.') Then Exit;
   //
   duf := UpperCase(uf);
   die := UpperCase(alltrim(ie));
+
   if (copy(die,1,5) = 'ISENT') or (die = '') then
   begin
     Result := true;
     exit;
   end;
+  
   if duf = 'AC'  then Result := ChkIEAC(die) else
   if duf = 'AL'  then Result := ChkIEAL(die) else
   if duf = 'AP'  then Result := ChkIEAP(die) else
@@ -1008,8 +1010,7 @@ begin
   if duf = 'SC'  then Result := ChkIESC(die) else
   if duf = 'SP'  then Result := ChkIESP(die) else
   if duf = 'SE'  then Result := ChkIESE(die) else
-  if duf = 'TO'  then Result := ChkIETO(die) else
-  Result := false;
+  if duf = 'TO'  then Result := ChkIETO(die) else Result := false;
 end; // ChkInscEstadual
 
 end.

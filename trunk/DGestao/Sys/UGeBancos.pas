@@ -108,6 +108,7 @@ procedure TfrmGeBancos.IbDtstTabelaBeforePost(DataSet: TDataSet);
 begin
   try
     // Normalizando diretório de remessa
+
     IbDtstTabelaBCO_DIRETORIO_REMESSA.Value := Trim(IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString);
 
     if ( IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString = EmptyStr ) then
@@ -119,15 +120,16 @@ begin
     ForceDirectories(IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString);
 
     // Normalizando diretório de retorno
-    IbDtstTabelaBCO_DIRETORIO_REMESSA.Value := Trim(IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString);
 
-    if ( IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString = EmptyStr ) then
-      IbDtstTabelaBCO_DIRETORIO_REMESSA.Value := 'C:\Retorno\';
+    IbDtstTabelaBCO_DIRETORIO_RETORNO.Value := Trim(IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString);
 
-    if ( Copy(IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString, Length(IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString), 1) <> '\' ) then
-      IbDtstTabelaBCO_DIRETORIO_REMESSA.Value := IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString + '\';
+    if ( IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString = EmptyStr ) then
+      IbDtstTabelaBCO_DIRETORIO_RETORNO.Value := 'C:\Retorno\';
 
-    ForceDirectories(IbDtstTabelaBCO_DIRETORIO_REMESSA.AsString);
+    if ( Copy(IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString, Length(IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString), 1) <> '\' ) then
+      IbDtstTabelaBCO_DIRETORIO_RETORNO.Value := IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString + '\';
+
+    ForceDirectories(IbDtstTabelaBCO_DIRETORIO_RETORNO.AsString);
     
     inherited;
   except
