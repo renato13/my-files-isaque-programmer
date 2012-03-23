@@ -111,7 +111,6 @@ type
     qryCalculoImportoCODCLI: TIBStringField;
     qryCalculoImportoDTVENDA: TDateTimeField;
     qryCalculoImportoSTATUS: TSmallintField;
-    qryCalculoImportoDESCONTO: TIBBCDField;
     qryCalculoImportoTOTALVENDA: TIBBCDField;
     qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
     qryCalculoImportoDTFINALIZACAO_VENDA: TDateField;
@@ -189,7 +188,6 @@ type
     qryDadosProdutoDTVENDA: TDateTimeField;
     qryDadosProdutoQTDE: TIntegerField;
     qryDadosProdutoPUNIT: TIBBCDField;
-    qryDadosProdutoDESCONTO: TIBBCDField;
     qryDadosProdutoDESCONTO_VALOR: TIBBCDField;
     qryDadosProdutoPFINAL: TIBBCDField;
     qryDadosProdutoQTDEFINAL: TIntegerField;
@@ -207,6 +205,8 @@ type
     qryDadosProdutoRESERVA: TIntegerField;
     qryDadosProdutoDISPONIVEL: TLargeintField;
     FrECFPooler: TfrxReport;
+    qryCalculoImportoDESCONTO: TIBBCDField;
+    qryDadosProdutoDESCONTO: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);

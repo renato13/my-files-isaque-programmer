@@ -468,7 +468,7 @@ object DMNFe: TDMNFe
       FieldName = 'DESCONTO'
       Origin = 'TVENDASITENS.DESCONTO'
       Precision = 18
-      Size = 2
+      Size = 3
     end
     object qryDadosProdutoDESCONTO_VALOR: TIBBCDField
       FieldName = 'DESCONTO_VALOR'
@@ -993,7 +993,7 @@ object DMNFe: TDMNFe
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 646.299630000000000000
+        Top = 657.638220000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -1335,7 +1335,7 @@ object DMNFe: TDMNFe
         end
       end
       object bndReportSummary: TfrxReportSummary
-        Height = 298.582870000000000000
+        Height = 306.141930000000000000
         Top = 325.039580000000000000
         Width = 718.110700000000000000
         object SysMemo1: TfrxSysMemoView
@@ -1595,7 +1595,7 @@ object DMNFe: TDMNFe
         object Memo40: TfrxMemoView
           Top = 102.047310000000000000
           Width = 718.110700000000000000
-          Height = 30.236240000000000000
+          Height = 45.354360000000000000
           ShowHint = False
           DataSet = frdVenda
           DataSetName = 'frdVenda'
@@ -1629,7 +1629,7 @@ object DMNFe: TDMNFe
         end
         object Memo42: TfrxMemoView
           Left = 272.126160000000000000
-          Top = 272.126160000000000000
+          Top = 279.685220000000000000
           Width = 204.094620000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1647,7 +1647,7 @@ object DMNFe: TDMNFe
         end
         object Memo43: TfrxMemoView
           Left = 37.795300000000000000
-          Top = 154.960730000000000000
+          Top = 162.519790000000000000
           Width = 623.622450000000000000
           Height = 52.913420000000000000
           ShowHint = False
