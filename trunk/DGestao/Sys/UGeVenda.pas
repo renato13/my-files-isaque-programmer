@@ -870,7 +870,7 @@ begin
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
-  pgcMaisDados.ActivePage := tbsITitulos;
+  pgcMaisDados.ActivePage := tbsRecebimento;
 end;
 
 procedure TfrmGeVenda.btbtnIncluirClick(Sender: TObject);
