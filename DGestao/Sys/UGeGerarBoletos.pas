@@ -281,7 +281,10 @@ end;
 procedure TfrmGeGerarBoleto.dbgDadosKeyPress(Sender: TObject; var Key: Char);
 begin
   if ( Key = #13 ) then
-    pgcGuias.SelectNextPage(False)
+  begin
+    Key := #0;
+    pgcGuias.SelectNextPage(False);
+  end
   else
   if ( Key in [' ', 'a'..'z', 'A'..'Z'] ) then
   begin

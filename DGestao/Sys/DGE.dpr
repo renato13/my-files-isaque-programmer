@@ -84,7 +84,8 @@ uses
   UGrCampoRequisitado in 'lib\UGrCampoRequisitado.pas' {frmCampoRequisitado},
   UGeGerarBoletos in 'UGeGerarBoletos.pas' {frmGeGerarBoleto},
   UGeRemessaBoletos in 'UGeRemessaBoletos.pas' {frmGeRemessaBoleto},
-  UGeRetornoBoletos in 'UGeRetornoBoletos.pas' {frmGeRetornoBoleto};
+  UGeRetornoBoletos in 'UGeRetornoBoletos.pas' {frmGeRetornoBoleto},
+  UGeEntradaConfirmaDuplicatas in 'UGeEntradaConfirmaDuplicatas.pas' {frmGeEntradaConfirmaDuplicatas};
 
 {$R *.res}
 
