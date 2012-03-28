@@ -159,6 +159,7 @@ procedure TfrmGeCliente.ProximoCampoKeyPress(Sender: TObject;
 begin
   if ( Key = #13 ) then
   begin
+    Key := #0;
     if ( Sender = dbHome ) then
       pgcMaisDados.SelectNextPage(False);
   end;

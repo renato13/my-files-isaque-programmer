@@ -164,7 +164,10 @@ end;
 procedure TfrmGrPadraoCadastro.dbgDadosKeyPress(Sender: TObject; var Key: Char);
 begin
   if ( Key = #13 ) then
-    pgcGuias.SelectNextPage(False)
+  begin
+    Key := #0;
+    pgcGuias.SelectNextPage(False);
+  end
   else
   if ( Key in ['0'..'9', ' ', 'a'..'z', 'A'..'Z'] ) then
   begin

@@ -1586,7 +1586,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           object dbgTitulos: TDBGrid
             Left = 93
             Top = 0
-            Width = 949
+            Width = 952
             Height = 118
             TabStop = False
             Align = alClient
