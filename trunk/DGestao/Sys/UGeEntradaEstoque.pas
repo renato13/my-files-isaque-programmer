@@ -731,10 +731,11 @@ var
   sCST       : String;
   cAliquota  ,
   cValorVenda,
-  cValorIPI  : Currency;
+  cValorPromocao,
+  cValorIPI     : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI, iEstoque, iReserva) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;

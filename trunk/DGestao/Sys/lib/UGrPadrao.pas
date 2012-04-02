@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, HPL_Strings, StdCtrls, DBCtrls, IBCustomDataSet, DB, DBClient,
   ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, ToolEdit, RXDBCtrl,
-  ComCtrls;
+  ComCtrls, CurrEdit;
 
 type
   TfrmGrPadrao = class(TForm)
@@ -60,6 +60,10 @@ begin
       or (Frm.ActiveControl is TDBComboBox)
       or (Frm.ActiveControl is TDBLookupComboBox)
       or (Frm.ActiveControl is TDBLookupListBox)
+      // DB Controls RXLIB
+      or (Frm.ActiveControl is TDBDateEdit)
+      or (Frm.ActiveControl is TRxDBCalcEdit)
+      or (Frm.ActiveControl is TRxDBComboEdit)
     ) then
 
       if ( Assigned(TEdit(Frm.ActiveControl).OnKeyPress) or Assigned(TEdit(Frm.ActiveControl).OnKeyDown) ) then
@@ -407,6 +411,32 @@ begin
         TDBLookupComboBox(Win.Components[i]).OnEnter := ControlEditEnter;
       if ( not Assigned(TDBLookupComboBox(Win.Components[i]).OnExit) ) then
         TDBLookupComboBox(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    if ( Win.Components[i] is TRxDBComboEdit ) then
+    begin
+      if ( not Assigned(TRxDBComboEdit(Win.Components[i]).OnEnter) ) then
+        TRxDBComboEdit(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TRxDBComboEdit(Win.Components[i]).OnExit) ) then
+        TRxDBComboEdit(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    // Controls DB RXLIB
+
+    if ( Win.Components[i] is TDBDateEdit ) then
+    begin
+      if ( not Assigned(TDBDateEdit(Win.Components[i]).OnEnter) ) then
+        TDBDateEdit(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TDBDateEdit(Win.Components[i]).OnExit) ) then
+        TDBDateEdit(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    if ( Win.Components[i] is TRxDBCalcEdit ) then
+    begin
+      if ( not Assigned(TRxDBCalcEdit(Win.Components[i]).OnEnter) ) then
+        TRxDBCalcEdit(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TRxDBCalcEdit(Win.Components[i]).OnExit) ) then
+        TRxDBCalcEdit(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
     if ( Win.Components[i] is TRxDBComboEdit ) then

@@ -246,6 +246,8 @@ type
     lblTotalDesconto: TLabel;
     edDataFinal: TDateTimePicker;
     cdsTabelaItensDESCONTO: TIBBCDField;
+    cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField;
+    lblProdutoPromocao: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -283,6 +285,8 @@ type
     procedure btnConsultarProdutoClick(Sender: TObject);
     procedure dbTotalDescontoButtonClick(Sender: TObject);
     procedure btnGerarBoletoClick(Sender: TObject);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -341,10 +345,10 @@ end;
 
 procedure TfrmGeVenda.FormCreate(Sender: TObject);
 begin
+  Desativar_Promocoes;
+  
   sGeneratorName := 'GEN_VENDAS_CONTROLE_' + FormatFloat('0000', YearOf(GetDateDB));
   
-//  IbDtstTabela.GeneratorField.Generator := sGeneratorName;
-
   inherited;
   
   SQL_Itens := TStringList.Create;
@@ -814,7 +818,10 @@ begin
 end;
 
 procedure TfrmGeVenda.ControlEditExit(Sender: TObject);
-var limitedesc, perc : variant;
+var
+  limitedesc,
+  perc      : variant;
+  cPrecoVND : Currency;
 begin
   inherited;
 
@@ -829,15 +836,23 @@ begin
   if ( (Sender = dbQuantidade) or (Sender = dbDesconto) ) then
     if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     begin
+      if ( cdsTabelaItensPUNIT_PROMOCAO.IsNull ) then
+        cdsTabelaItensPUNIT_PROMOCAO.AsCurrency := 0;
+
       if ( cdsTabelaItensPUNIT.IsNull ) then
         cdsTabelaItensPUNIT.AsCurrency := 0;
 
       if ( cdsTabelaItensDESCONTO.IsNull ) then
         cdsTabelaItensDESCONTO.AsCurrency := 0;
 
-      cdsTabelaItensDESCONTO_VALOR.Value := cdsTabelaItensPUNIT.AsCurrency * cdsTabelaItensDESCONTO.AsCurrency / 100;
-      cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
-      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
+      if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
+        cPrecoVND := cdsTabelaItensPUNIT_PROMOCAO.AsCurrency
+      else
+        cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
+
+      cdsTabelaItensDESCONTO_VALOR.Value := cPrecoVND * cdsTabelaItensDESCONTO.AsCurrency / 100;
+      cdsTabelaItensPFINAL.Value         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.Value;
+      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cPrecoVND;
       cdsTabelaItensTOTAL_DESCONTO.Value := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
       cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
@@ -931,10 +946,11 @@ var
   sCST       : String;
   cAliquota  ,
   cValorVenda,
-  cValorIPI  : Currency;
+  cValorPromocao,
+  cValorIPI     : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorIPI, iEstoque, iReserva) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;
@@ -943,9 +959,10 @@ begin
       cdsTabelaItensCFOP_COD.AsInteger   := iCFOP;
       cdsTabelaItensALIQUOTA.AsCurrency  := cAliquota;
       cdsTabelaItensPUNIT.AsCurrency     := cValorVenda;
+      cdsTabelaItensPUNIT_PROMOCAO.AsCurrency := cValorPromocao;
       cdsTabelaItensPFINAL.AsCurrency    := cValorVenda;
       cdsTabelaItensVALOR_IPI.AsCurrency := cValorIPI;
-      
+
       cdsTabelaItensESTOQUE.AsInteger := iEstoque;
       cdsTabelaItensRESERVA.AsInteger := iReserva;
     end;
@@ -975,6 +992,7 @@ begin
   cdsTabelaItensCFOP_COD.Value       := GetCfopIDDefault;
   cdsTabelaItensCFOP_DESCRICAO.Value := GetCfopNomeDefault;
   cdsTabelaItensCST.Value            := '000';
+  cdsTabelaItensPUNIT_PROMOCAO.Value := 0.0;
   cdsTabelaItensALIQUOTA.Value       := 0;
   cdsTabelaItensQTDE.Value           := 1;
   cdsTabelaItensDESCONTO.Value       := 0;
@@ -1347,6 +1365,20 @@ begin
   begin
     GerarBoleto(Self, dbCliente.Text, IbDtstTabelaCODCLI.AsString);
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  end;
+end;
+
+procedure TfrmGeVenda.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  // Destacar produtos em Promocao
+  if ( Sender = dbgProdutos ) then
+  begin
+    if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
+      dbgProdutos.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
+    dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
   end;
 end;
 

@@ -1739,3 +1739,88 @@ SET TERM ; ^
 
 ALTER TABLE TBPROMOCAO
     ADD ATIVA DMN_LOGICO;
+
+
+ALTER TABLE TVENDASITENS
+    ADD PUNIT_PROMOCAO DMN_MONEY;
+alter table TVENDASITENS
+alter ANO position 1;
+alter table TVENDASITENS
+alter CODCONTROL position 2;
+alter table TVENDASITENS
+alter SEQ position 3;
+alter table TVENDASITENS
+alter CODPROD position 4;
+alter table TVENDASITENS
+alter CODEMP position 5;
+alter table TVENDASITENS
+alter CODCLI position 6;
+alter table TVENDASITENS
+alter DTVENDA position 7;
+alter table TVENDASITENS
+alter QTDE position 8;
+alter table TVENDASITENS
+alter PUNIT position 9;
+alter table TVENDASITENS
+alter PUNIT_PROMOCAO position 10;
+alter table TVENDASITENS
+alter DESCONTO position 11;
+alter table TVENDASITENS
+alter DESCONTO_VALOR position 12;
+alter table TVENDASITENS
+alter PFINAL position 13;
+alter table TVENDASITENS
+alter QTDEFINAL position 14;
+alter table TVENDASITENS
+alter UNID_COD position 15;
+alter table TVENDASITENS
+alter CFOP_COD position 16;
+alter table TVENDASITENS
+alter ALIQUOTA position 17;
+alter table TVENDASITENS
+alter ALIQUOTA_CSOSN position 18;
+alter table TVENDASITENS
+alter VALOR_IPI position 19;
+
+
+COMMENT ON COLUMN TVENDASITENS.PUNIT IS
+'Valor Unitario.';
+
+
+COMMENT ON COLUMN TVENDASITENS.PUNIT_PROMOCAO IS
+'Valor Unitario (Promocao).';
+
+
+SET TERM ^ ;
+
+CREATE Trigger Tg_promocao_produto For Tbpromocao
+Active After Update Position 10
+AS
+  declare variable produto varchar(10);
+  declare variable valor_prom numeric(15,2);
+begin
+  if ( coalesce(old.Ativa, 0) <> coalesce(new.Ativa, 0) ) then
+  begin
+
+    for
+      Select
+          p.Codigo_prod
+        , case when new.Ativa = 1 then p.Preco_promocao else null end
+      from TBPROMOCAO_PRODUTO p
+      where p.Codigo_prom = new.Codigo
+      into
+          produto
+        , valor_prom
+    do
+    begin
+      Update TBPRODUTO x Set
+        x.Preco_promocao = :Valor_prom
+      where x.Cod = :Produto;
+    end 
+
+  end 
+end
+^
+
+SET TERM ; ^
+

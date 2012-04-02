@@ -5,6 +5,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   Caption = 'Confirma'#231#227'o de Duplicadas'
   ClientHeight = 391
   ClientWidth = 491
+  OldCreateOrder = True
   OnShow = FormShow
   DesignSize = (
     491
