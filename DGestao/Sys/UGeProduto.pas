@@ -107,6 +107,10 @@ type
     dbTipoTributacaoSN: TDBLookupComboBox;
     lblAliquotaSN: TLabel;
     dbAliquotaSN: TDBEdit;
+    IbDtstTabelaPRECO_PROMOCAO: TIBBCDField;
+    lblPrecoPromocao: TLabel;
+    dbPrecoPromocao: TDBEdit;
+    lblProdutoPromocao: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -117,6 +121,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure DtSrcTabelaStateChange(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -131,9 +137,10 @@ var
   procedure MostrarTabelaProdutos(const AOwner : TComponent);
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
-  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI : Currency;
     var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, Unidade : String; var ValorVenda, ValorPromocao : Currency; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 
 implementation
 
@@ -189,7 +196,7 @@ begin
   end;
 end;
 
-function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorIPI : Currency;
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI : Currency;
   var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 var
   frm : TfrmGeProduto;
@@ -215,6 +222,7 @@ begin
       CFOP       := frm.IbDtstTabelaCODCFOP.AsInteger;
       Aliquota   := frm.IbDtstTabelaALIQUOTA.AsCurrency;
       ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
+      ValorPromocao := frm.IbDtstTabelaPRECO_PROMOCAO.AsCurrency;
       ValorIPI   := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
 
       Estoque := frm.IbDtstTabelaQTDE.AsInteger;
@@ -245,6 +253,34 @@ begin
     begin
       CodigoAlfa := frm.IbDtstTabelaCOD.Value;
       CodigoEAN  := frm.IbDtstTabelaCODBARRA_EAN.Value;
+    end;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, Unidade : String; var ValorVenda, ValorPromocao : Currency; const TipoAliquota : TAliquota = taICMS) : Boolean;
+var
+  frm : TfrmGeProduto;
+  whr : String;
+begin
+  frm := TfrmGeProduto.Create(AOwner);
+  try
+    frm.fAliquota := TipoAliquota;
+
+    frm.lblAliquotaTipo.Enabled := False;
+    frm.dbAliquotaTipo.Enabled  := False;
+
+    whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+    Result := frm.SelecionarRegistro(Codigo, Nome, whr);
+
+    if ( Result ) then
+    begin
+      CodigoAlfa := frm.IbDtstTabelaCOD.AsString;
+      Unidade    := frm.IbDtstTabelaUNIDADE.AsString;
+      ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
+      ValorPromocao := frm.IbDtstTabelaPRECO_PROMOCAO.AsCurrency;
     end;
   finally
     frm.Destroy;
@@ -415,6 +451,17 @@ begin
     ShowWarning('Falta cruzar nova função com EvUserID!');
   end;
   
+end;
+
+procedure TfrmGeProduto.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  // Destacar produtos em Promocao
+  if ( IbDtstTabelaPRECO_PROMOCAO.AsCurrency > 0 ) then
+    dbgDados.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
+  dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
 end;
 
 end.

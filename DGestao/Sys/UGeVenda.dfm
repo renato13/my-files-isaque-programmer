@@ -925,6 +925,9 @@ inherited frmGeVenda: TfrmGeVenda
         Align = alTop
         Caption = 'Dados do produto'
         TabOrder = 1
+        DesignSize = (
+          1091
+          116)
         object lblProduto: TLabel
           Left = 88
           Top = 24
@@ -1069,6 +1072,20 @@ inherited frmGeVenda: TfrmGeVenda
           Height = 13
           Caption = 'Total Desc. (R$):'
           FocusControl = dbTotalDesconto
+        end
+        object lblProdutoPromocao: TLabel
+          Left = 938
+          Top = 92
+          Width = 142
+          Height = 13
+          Anchors = [akRight, akBottom]
+          Caption = '* Produtos em Promo'#231#227'o'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         object dbProduto: TRxDBComboEdit
           Left = 88
@@ -3107,6 +3124,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Dtvenda'
       '  , i.Qtde'
       '  , i.Punit'
+      '  , i.Punit_Promocao'
       '  , i.Desconto'
       '  , i.Desconto_valor'
       '  , i.Pfinal'
@@ -3185,6 +3203,12 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'PUNIT'
       Origin = 'TVENDASITENS.PUNIT'
       DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField
+      FieldName = 'PUNIT_PROMOCAO'
+      Origin = 'TVENDASITENS.PUNIT_PROMOCAO'
       Precision = 18
       Size = 2
     end
@@ -3316,6 +3340,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  DTVENDA,'
       '  QTDE,'
       '  PUNIT,'
+      '  PUNIT_PROMOCAO,'
       '  DESCONTO,'
       '  DESCONTO_VALOR,'
       '  PFINAL,'
@@ -3343,6 +3368,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  DTVENDA = :DTVENDA,'
       '  QTDE = :QTDE,'
       '  PUNIT = :PUNIT,'
+      '  PUNIT_PROMOCAO = :PUNIT_PROMOCAO,'
       '  DESCONTO = :DESCONTO,'
       '  DESCONTO_VALOR = :DESCONTO_VALOR,'
       '  PFINAL = :PFINAL,'
@@ -3363,17 +3389,17 @@ inherited frmGeVenda: TfrmGeVenda
         '  (ANO, CODCONTROL, SEQ, CODPROD, CODEMP, CODCLI, DTVENDA, QTDE,' +
         ' PUNIT, '
       
-        '   DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, UNID_COD, CFOP_C' +
-        'OD, ALIQUOTA, '
-      '   ALIQUOTA_CSOSN, VALOR_IPI)'
+        '   PUNIT_PROMOCAO, DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, ' +
+        'UNID_COD, '
+      '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI)'
       'values'
       
         '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
         ', :QTDE, '
       
-        '   :PUNIT, :DESCONTO, :DESCONTO_VALOR, :PFINAL, :QTDEFINAL, :UNI' +
-        'D_COD, '
-      '   :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI)')
+        '   :PUNIT, :PUNIT_PROMOCAO, :DESCONTO, :DESCONTO_VALOR, :PFINAL,' +
+        ' :QTDEFINAL, '
+      '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'
@@ -3405,6 +3431,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , p.Descri'
       '  , p.Modelo'
       '  , p.Preco'
+      '  , p.Preco_Promocao'
       '  , p.Referencia'
       '  , p.Secao'
       '  , p.Qtde'

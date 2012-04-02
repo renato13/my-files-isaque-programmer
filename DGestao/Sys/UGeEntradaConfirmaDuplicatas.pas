@@ -123,9 +123,10 @@ procedure TfrmGeEntradaConfirmaDuplicatas.ControlEditEnter(
   Sender: TObject);
 begin
   inherited;
-  if ( Sender = dbDataVencimento ) then
+  if ( (Sender = dbDataVencimento) or (Sender = dbValor) ) then
     if ( not cdsDuplicatas.IsEmpty ) then
-      cdsDuplicatas.Edit;
+      if ( cdsDuplicatas.State <> dsEdit ) then
+        cdsDuplicatas.Edit;
 end;
 
 procedure TfrmGeEntradaConfirmaDuplicatas.ControlEditExit(Sender: TObject);

@@ -342,6 +342,7 @@ object DMNFe: TDMNFe
       '  , i.Dtvenda'
       '  , i.Qtde'
       '  , i.Punit'
+      '  , i.Punit_promocao'
       '  , i.Desconto'
       '  , i.Desconto_valor'
       '  , i.Pfinal'
@@ -461,6 +462,12 @@ object DMNFe: TDMNFe
     object qryDadosProdutoPUNIT: TIBBCDField
       FieldName = 'PUNIT'
       Origin = 'TVENDASITENS.PUNIT'
+      Precision = 18
+      Size = 2
+    end
+    object qryDadosProdutoPUNIT_PROMOCAO: TIBBCDField
+      FieldName = 'PUNIT_PROMOCAO'
+      Origin = 'TVENDASITENS.PUNIT_PROMOCAO'
       Precision = 18
       Size = 2
     end
@@ -878,8 +885,8 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo4: TfrxMemoView
-          Left = 352.716760000000000000
-          Width = 56.692950000000000000
+          Left = 348.937230000000000000
+          Width = 60.472480000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -1219,9 +1226,9 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo22: TfrxMemoView
-          Left = 352.716760000000000000
+          Left = 348.937230000000000000
           Top = 64.252010000000000000
-          Width = 56.692913390000000000
+          Width = 60.472443390000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1761,6 +1768,7 @@ object DMNFe: TDMNFe
       'DTVENDA=DTVENDA'
       'QTDE=QTDE'
       'PUNIT=PUNIT'
+      'PUNIT_PROMOCAO=PUNIT_PROMOCAO'
       'DESCONTO=DESCONTO'
       'DESCONTO_VALOR=DESCONTO_VALOR'
       'PFINAL=PFINAL'

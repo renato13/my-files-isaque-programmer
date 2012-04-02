@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 250
-  Top = 131
+  Left = 372
+  Top = 124
   Width = 943
   Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -3541,6 +3541,10 @@ object frmPrinc: TfrmPrinc
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Produto'
         OnClick = RxSpeedBtnProdClick
+      end
+      object nmPromocoes: TMenuItem
+        Caption = 'Promo'#231#245'es'
+        OnClick = nmPromocoesClick
       end
       object N3: TMenuItem
         Caption = '-'

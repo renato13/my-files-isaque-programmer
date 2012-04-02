@@ -1,9 +1,8 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 325
-  Top = 118
+  Left = 664
+  Top = 219
   Width = 886
   Height = 575
-  ActiveControl = dbgDados
   Caption = 'Cadastro de Produtos'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -24,7 +23,6 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 870
     Height = 494
-    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 399
@@ -105,6 +103,19 @@ inherited frmGeProduto: TfrmGeProduto
       inherited pnlFiltros: TPanel
         Top = 403
         Width = 862
+        object lblProdutoPromocao: TLabel [0]
+          Left = 2
+          Top = 4
+          Width = 142
+          Height = 13
+          Caption = '* Produtos em Promo'#231#227'o'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 598
           Width = 260
@@ -843,6 +854,20 @@ inherited frmGeProduto: TfrmGeProduto
             Caption = 'Pre'#231'o Venda (R$):'
             FocusControl = dbPreco
           end
+          object lblPrecoPromocao: TLabel
+            Left = 256
+            Top = 8
+            Width = 99
+            Height = 13
+            Caption = 'Pre'#231'o Prom. (R$):'
+            FocusControl = dbPrecoPromocao
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
           object dbCusto: TDBEdit
             Left = 16
             Top = 24
@@ -875,6 +900,23 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Style = []
             ParentFont = False
             TabOrder = 1
+          end
+          object dbPrecoPromocao: TDBEdit
+            Left = 256
+            Top = 24
+            Width = 113
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'PRECO_PROMOCAO'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 2
           end
         end
         object tbsHistorico: TTabSheet
@@ -1004,6 +1046,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Descri'
       '  , p.Modelo'
       '  , p.Preco'
+      '  , p.Preco_Promocao'
       '  , p.Referencia'
       '  , p.Secao'
       '  , p.Qtde'
@@ -1073,6 +1116,13 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'Pre'#231'o (R$)'
       FieldName = 'PRECO'
       Origin = 'TBPRODUTO.PRECO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object IbDtstTabelaPRECO_PROMOCAO: TIBBCDField
+      FieldName = 'PRECO_PROMOCAO'
+      Origin = 'TBPRODUTO.PRECO_PROMOCAO'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2

@@ -53,6 +53,8 @@ var
   procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
   procedure CommitTransaction;
 
+  procedure Desativar_Promocoes;
+
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
   function GetPaisIDDefault : String;
   function GetEstadoIDDefault : Integer;
@@ -159,6 +161,20 @@ begin
   with DMBusiness do
   begin
     ibtrnsctnBusiness.CommitRetaining;
+  end;
+end;
+
+procedure Desativar_Promocoes;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Update TBPROMOCAO Set Ativa = 0');
+    SQL.Add('where (Ativa = 1) and ((Data_inicio > Current_date) or (Data_final < Current_date))');
+    ExecSQL;
+
+    CommitTransaction;
   end;
 end;
 

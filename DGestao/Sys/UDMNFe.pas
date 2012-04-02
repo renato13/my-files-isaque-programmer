@@ -207,6 +207,7 @@ type
     FrECFPooler: TfrxReport;
     qryCalculoImportoDESCONTO: TIBBCDField;
     qryDadosProdutoDESCONTO: TIBBCDField;
+    qryDadosProdutoPUNIT_PROMOCAO: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -985,13 +986,22 @@ begin
           Prod.cEAN     := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.uCom     := qryDadosProdutoUNP_SIGLA.AsString;
           Prod.qCom     := qryDadosProdutoQTDE.AsCurrency;
-          Prod.vUnCom   := qryDadosProdutoPUNIT.AsCurrency;           // I10a  Valor Unitário de comercialização
+
+          if ( qryDadosProdutoPUNIT_PROMOCAO.AsCurrency > 0 ) then
+            Prod.vUnCom := qryDadosProdutoPUNIT_PROMOCAO.AsCurrency   // I10a  Valor Unitário de comercialização
+          else
+            Prod.vUnCom := qryDadosProdutoPUNIT.AsCurrency;           // I10a  Valor Unitário de comercialização
+
           Prod.vProd    := qryDadosProdutoTOTAL_BRUTO.AsCurrency;     // I11 - Valor Total Bruto dos Produtos ou Serviços
 
           Prod.cEANTrib  := qryDadosProdutoCODBARRA_EAN.AsString;
           Prod.uTrib     := qryDadosProdutoUNP_SIGLA.AsString;
           Prod.qTrib     := qryDadosProdutoQTDE.AsCurrency;
-          Prod.vUnTrib   := qryDadosProdutoPUNIT.AsCurrency;          // I14a  Valor Unitário de tributação
+
+          if ( qryDadosProdutoPUNIT_PROMOCAO.AsCurrency > 0 ) then
+            Prod.vUnTrib := qryDadosProdutoPUNIT_PROMOCAO.AsCurrency  // I14a  Valor Unitário de tributação
+          else
+            Prod.vUnTrib := qryDadosProdutoPUNIT.AsCurrency;          // I14a  Valor Unitário de tributação
 
 (* EXEMPLO *)
           // NFe.Det[i].Prod.uCom    := 'CX';                                                   = 'UN'
