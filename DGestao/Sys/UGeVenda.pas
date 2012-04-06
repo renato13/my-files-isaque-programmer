@@ -7,7 +7,7 @@ uses
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
   ToolWin, IBTable, ToolEdit, RXDBCtrl, DBClient, Provider, IBStoredProc,
-  frxClass, frxDBSet, Menus;
+  frxClass, frxDBSet, Menus, IBQuery;
 
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
@@ -248,6 +248,11 @@ type
     cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField;
     lblProdutoPromocao: TLabel;
+    qryTotalComprasAbertas: TIBQuery;
+    qryTotalComprasAbertasVALOR_LIMITE: TIBBCDField;
+    qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField;
+    qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField;
+    cdsTotalComprasAbertas: TDataSource;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -299,6 +304,7 @@ type
     procedure CarregarDadosProduto( Codigo : Integer );
     procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
+    procedure GetComprasAbertas(sCNPJ : String);
 
     function ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
   public
@@ -313,7 +319,7 @@ var
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  DateUtils, IBQuery, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
+  DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
   UGeGerarBoletos;
 
 {$R *.dfm}
@@ -1052,6 +1058,16 @@ begin
   else
   if ( ShowConfirm('Confirma a finalização da venda selecionada?') ) then
   begin
+    if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 1 ) then
+    begin
+      GetComprasAbertas( IbDtstTabelaCODCLI.AsString );
+      if ( IbDtstTabelaTOTALVENDA.AsCurrency > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
+      begin
+        ShowWarning('O Valor Total da venda está acima do Valor Limite disponível para o cliente.' + #13#13 + 'Favor comunicar ao setor financeiro.');
+        Exit;
+      end;
+    end;
+
     IbDtstTabela.Edit;
 
     IbDtstTabelaSTATUS.Value              := STATUS_VND_FIN;
@@ -1379,6 +1395,16 @@ begin
     if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
       dbgProdutos.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
     dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
+  end;
+end;
+
+procedure TfrmGeVenda.GetComprasAbertas(sCNPJ: String);
+begin
+  with qryTotalComprasAbertas do
+  begin
+    Close;
+    ParamByName('cnpj').AsString := sCNPJ;
+    Open;
   end;
 end;
 
