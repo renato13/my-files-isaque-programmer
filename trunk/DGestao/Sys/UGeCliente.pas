@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl;
+  ToolWin, IBTable, ToolEdit, RXDBCtrl, IBQuery;
 
 type
   TfrmGeCliente = class(TfrmGrPadraoCadastro)
@@ -45,7 +45,7 @@ type
     dbEstado: TRxDBComboEdit;
     pgcMaisDados: TPageControl;
     tbsContato: TTabSheet;
-    tbsCondicoes: TTabSheet;
+    tbsFinanceiro: TTabSheet;
     lblBairro: TLabel;
     dbBairro: TRxDBComboEdit;
     lblLogradouro: TLabel;
@@ -72,6 +72,18 @@ type
     IbDtstTabelaSITE: TIBStringField;
     lblPais: TLabel;
     dbPais: TRxDBComboEdit;
+    lblValorLimiteCompra: TLabel;
+    dbValorLimiteCompra: TDBEdit;
+    IbDtstTabelaVALOR_LIMITE_COMPRA: TIBBCDField;
+    lblTotalCompras: TLabel;
+    dbTotalCompras: TDBEdit;
+    qryTotalComprasAbertas: TIBQuery;
+    cdsTotalComprasAbertas: TDataSource;
+    qryTotalComprasAbertasVALOR_LIMITE: TIBBCDField;
+    qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField;
+    qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField;
+    lblLimiteDisponivel: TLabel;
+    dbLimiteDisponivel: TDBEdit;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -82,8 +94,10 @@ type
     procedure DtSrcTabelaStateChange(Sender: TObject);
     procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
     procedure btbtnSalvarClick(Sender: TObject);
+    procedure pgcGuiasChange(Sender: TObject);
   private
     { Private declarations }
+    procedure GetComprasAbertas(sCNPJ : String);
   public
     { Public declarations }
   end;
@@ -245,9 +259,10 @@ end;
 procedure TfrmGeCliente.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-  IbDtstTabelaPESSOA_FISICA.AsInteger := 1;
-  IbDtstTabelaPAIS_ID.AsString        := GetPaisIDDefault;
-  IbDtstTabelaPAIS_NOME.AsString      := GetPaisNomeDefault;
+  IbDtstTabelaPESSOA_FISICA.AsInteger   := 1;
+  IbDtstTabelaVALOR_LIMITE_COMPRA.Value := 0;
+  IbDtstTabelaPAIS_ID.AsString          := GetPaisIDDefault;
+  IbDtstTabelaPAIS_NOME.AsString        := GetPaisNomeDefault;
 end;
 
 procedure TfrmGeCliente.DtSrcTabelaStateChange(Sender: TObject);
@@ -270,11 +285,14 @@ procedure TfrmGeCliente.DtSrcTabelaDataChange(Sender: TObject;
   Field: TField);
 begin
   inherited;
+  if ( Field = IbDtstTabela.FieldByName('CNPJ') ) then
+    GetComprasAbertas( IbDtstTabela.FieldByName('CNPJ').AsString );
+
   if ( Field = IbDtstTabela.FieldByName('PESSOA_FISICA') ) then
     if ( IbDtstTabelaPESSOA_FISICA.AsInteger = 1 ) then
       IbDtstTabelaCNPJ.EditMask := '999.999.999-99;0; '
     else
-      IbDtstTabelaCNPJ.EditMask := '99.999.999/9999-99;0; '
+      IbDtstTabelaCNPJ.EditMask := '99.999.999/9999-99;0; ';
 end;
 
 procedure TfrmGeCliente.btbtnSalvarClick(Sender: TObject);
@@ -308,6 +326,22 @@ begin
   end;
 
   inherited;
+end;
+
+procedure TfrmGeCliente.GetComprasAbertas(sCNPJ: String);
+begin
+  with qryTotalComprasAbertas do
+  begin
+    Close;
+    ParamByName('cnpj').AsString := sCNPJ;
+    Open;
+  end;
+end;
+
+procedure TfrmGeCliente.pgcGuiasChange(Sender: TObject);
+begin
+  inherited;
+  GetComprasAbertas( IbDtstTabela.FieldByName('CNPJ').AsString );
 end;
 
 end.

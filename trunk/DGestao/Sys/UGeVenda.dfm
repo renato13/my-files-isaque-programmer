@@ -3905,4 +3905,51 @@ inherited frmGeVenda: TfrmGeVenda
     Left = 1024
     Top = 104
   end
+  object qryTotalComprasAbertas: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'Select'
+      '    g.Valor_limite'
+      '  , g.Valor_compras_abertas'
+      '  , g.Valor_limite_disponivel'
+      'from GET_LIMITE_DISPONIVEL_CLIENTE(:CNPJ) g')
+    Left = 1024
+    Top = 137
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'CNPJ'
+        ParamType = ptInput
+        Value = ''
+      end>
+    object qryTotalComprasAbertasVALOR_LIMITE: TIBBCDField
+      FieldName = 'VALOR_LIMITE'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_LIMITE'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField
+      FieldName = 'VALOR_COMPRAS_ABERTAS'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_COMPRAS_ABERTAS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField
+      FieldName = 'VALOR_LIMITE_DISPONIVEL'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_LIMITE_DISPONIVEL'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object cdsTotalComprasAbertas: TDataSource
+    DataSet = qryTotalComprasAbertas
+    Left = 1056
+    Top = 137
+  end
 end

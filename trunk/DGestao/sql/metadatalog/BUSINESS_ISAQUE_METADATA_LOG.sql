@@ -1824,3 +1824,116 @@ end
 
 SET TERM ; ^
 
+
+
+ALTER TABLE TBCLIENTE
+    ADD VALOR_LIMITE_COMPRA DMN_MONEY;
+
+
+SET TERM ^ ;
+
+create or alter procedure GET_LIMITE_DISPONIVEL_CLIENTE (
+    CPF_CNPJ varchar(18))
+returns (
+    VALOR_LIMITE numeric(15,2),
+    VALOR_COMPRAS_ABERTAS numeric(15,2),
+    VALOR_LIMITE_DISPONIVEL numeric(15,2))
+as
+begin
+  Select
+      coalesce(c.Valor_limite_compra, 0)
+    , sum( coalesce(r.Valorrec, 0) - coalesce(r.Valorrectot, 0) )
+  from TBCLIENTE c
+    left join TBCONTREC r on (r.Cnpj = c.Cnpj and r.Baixado = 0)
+  where c.Cnpj = :Cpf_cnpj
+  Group by 1
+  into
+      Valor_limite
+    , Valor_compras_abertas;
+
+  if ( coalesce(:Valor_compras_abertas, 0) <= 0 ) then
+    Valor_compras_abertas = 0;
+
+  Valor_limite_disponivel = :Valor_limite - :Valor_compras_abertas;
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE GET_LIMITE_DISPONIVEL_CLIENTE TO "PUBLIC";
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_LIMITE_DISPONIVEL_CLIENTE (
+    CPF_CNPJ varchar(18))
+returns (
+    VALOR_LIMITE numeric(15,2),
+    VALOR_COMPRAS_ABERTAS numeric(15,2),
+    VALOR_LIMITE_DISPONIVEL numeric(15,2))
+as
+begin
+  Select
+      coalesce(c.Valor_limite_compra, 0)
+    , sum( coalesce(r.Valorrec, 0) - coalesce(r.Valorrectot, 0) )
+  from TBCLIENTE c
+    left join TBCONTREC r on (r.Cnpj = c.Cnpj and r.Baixado = 0)
+  where c.Cnpj = :Cpf_cnpj
+  Group by 1
+  into
+      Valor_limite
+    , Valor_compras_abertas;
+
+  Valor_limite = coalesce(:Valor_limite, 0);
+
+  if ( coalesce(:Valor_compras_abertas, 0) <= 0 ) then
+    Valor_compras_abertas = 0;
+
+  Valor_limite_disponivel = :Valor_limite - :Valor_compras_abertas;
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_LIMITE_DISPONIVEL_CLIENTE (
+    CPF_CNPJ varchar(18))
+returns (
+    VALOR_LIMITE numeric(15,2),
+    VALOR_COMPRAS_ABERTAS numeric(15,2),
+    VALOR_LIMITE_DISPONIVEL numeric(15,2))
+as
+begin
+  Select
+      coalesce(c.Valor_limite_compra, 0)
+    , sum( coalesce(r.Valorrec, 0) - coalesce(r.Valorrectot, 0) )
+  from TBCLIENTE c
+    left join TBCONTREC r on (r.Cnpj = c.Cnpj and r.Baixado = 0)
+  where c.Cnpj = :Cpf_cnpj
+  Group by 1
+  into
+      Valor_limite
+    , Valor_compras_abertas;
+
+  Valor_limite            = coalesce(:Valor_limite, 0);
+  Valor_limite_disponivel = 0;
+
+  if ( coalesce(:Valor_compras_abertas, 0) <= 0 ) then
+    Valor_compras_abertas = 0;
+
+  if ( :Valor_limite > 0 ) then
+    Valor_limite_disponivel = :Valor_limite - :Valor_compras_abertas;
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+

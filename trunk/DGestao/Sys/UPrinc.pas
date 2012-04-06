@@ -100,6 +100,7 @@ type
     nmRemessaBoleto: TMenuItem;
     nmRetornoBoleto: TMenuItem;
     nmPromocoes: TMenuItem;
+    nmContaCorrente: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);

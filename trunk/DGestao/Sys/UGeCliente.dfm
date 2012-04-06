@@ -2,21 +2,21 @@ inherited frmGeCliente: TfrmGeCliente
   Left = 526
   Top = 268
   Width = 763
-  Height = 465
+  Height = 504
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
-    Top = 423
+    Top = 462
     Width = 747
   end
   inherited Bevel3: TBevel
-    Top = 384
+    Top = 423
     Width = 747
   end
   inherited tlbBotoes: TToolBar
-    Top = 388
+    Top = 427
     Width = 747
     inherited bvlToolExpandir: TBevel
       Width = 81
@@ -30,15 +30,16 @@ inherited frmGeCliente: TfrmGeCliente
   end
   inherited pgcGuias: TPageControl
     Width = 747
-    Height = 384
+    Height = 423
+    OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 289
+        Top = 328
         Width = 739
       end
       inherited dbgDados: TDBGrid
         Width = 739
-        Height = 289
+        Height = 328
         Columns = <
           item
             Expanded = False
@@ -73,7 +74,7 @@ inherited frmGeCliente: TfrmGeCliente
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 293
+        Top = 332
         Width = 739
         inherited grpBxFiltro: TGroupBox
           Left = 464
@@ -716,8 +717,8 @@ inherited frmGeCliente: TfrmGeCliente
         Left = 0
         Top = 237
         Width = 739
-        Height = 118
-        ActivePage = tbsContato
+        Height = 157
+        ActivePage = tbsFinanceiro
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 2
@@ -797,9 +798,95 @@ inherited frmGeCliente: TfrmGeCliente
             OnKeyPress = ProximoCampoKeyPress
           end
         end
-        object tbsCondicoes: TTabSheet
-          Caption = 'Condi'#231#245'es de Pagamento'
+        object tbsFinanceiro: TTabSheet
+          Caption = 'Financeiro'
           ImageIndex = 1
+          object lblValorLimiteCompra: TLabel
+            Left = 8
+            Top = 0
+            Width = 111
+            Height = 13
+            Caption = 'Limte p/ Compras (R$):'
+            FocusControl = dbValorLimiteCompra
+          end
+          object lblTotalCompras: TLabel
+            Left = 8
+            Top = 40
+            Width = 138
+            Height = 13
+            Caption = 'Total Compras Abertas (R$):'
+            FocusControl = dbTotalCompras
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lblLimiteDisponivel: TLabel
+            Left = 8
+            Top = 80
+            Width = 127
+            Height = 13
+            Caption = 'Limite Dispon'#237'vel (R$):'
+            FocusControl = dbLimiteDisponivel
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object dbValorLimiteCompra: TDBEdit
+            Left = 8
+            Top = 16
+            Width = 153
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'VALOR_LIMITE_COMPRA'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+          end
+          object dbTotalCompras: TDBEdit
+            Left = 8
+            Top = 56
+            Width = 153
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'VALOR_COMPRAS_ABERTAS'
+            DataSource = cdsTotalComprasAbertas
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 1
+          end
+          object dbLimiteDisponivel: TDBEdit
+            Left = 8
+            Top = 96
+            Width = 153
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'VALOR_LIMITE_DISPONIVEL'
+            DataSource = cdsTotalComprasAbertas
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 2
+          end
         end
       end
     end
@@ -830,6 +917,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Email'
       '  , cl.Site'
       '  , cl.Pais_id'
+      '  , cl.Valor_limite_compra'
       
         '  , coalesce( cast(coalesce(coalesce(t.Tlg_sigla, t.Tlg_descrica' +
         'o) || '#39' '#39', '#39#39') || l.Log_nome as varchar(250)), cl.Ender ) as Log' +
@@ -993,6 +1081,14 @@ inherited frmGeCliente: TfrmGeCliente
       Origin = 'TBPAIS.PAIS_NOME'
       Size = 150
     end
+    object IbDtstTabelaVALOR_LIMITE_COMPRA: TIBBCDField
+      DisplayLabel = 'Valor Limite p/ Compra'
+      FieldName = 'VALOR_LIMITE_COMPRA'
+      Origin = 'TBCLIENTE.VALOR_LIMITE_COMPRA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
@@ -1022,7 +1118,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  CID_COD,'
       '  EST_COD,'
       '  NUMERO_END,'
-      '  PAIS_ID'
+      '  PAIS_ID,'
+      '  VALOR_LIMITE_COMPRA'
       'from TBCLIENTE '
       'where'
       '  CNPJ = :CNPJ')
@@ -1050,27 +1147,29 @@ inherited frmGeCliente: TfrmGeCliente
       '  CID_COD = :CID_COD,'
       '  EST_COD = :EST_COD,'
       '  NUMERO_END = :NUMERO_END,'
-      '  PAIS_ID = :PAIS_ID'
+      '  PAIS_ID = :PAIS_ID,'
+      '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBCLIENTE'
-      '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, '
-      'COMPLEMENTO, '
+      
+        '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, C' +
+        'OMPLEMENTO, '
       
         '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
-        ', '
-      'BAI_COD, '
-      '   CID_COD, EST_COD, NUMERO_END, PAIS_ID)'
+        ', BAI_COD, '
+      '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
-        'NDER, '
-      ':COMPLEMENTO, '
+        'NDER, :COMPLEMENTO, '
       
         '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :EMAIL, :SITE, :TLG_TIPO,' +
         ' :LOG_COD, '
-      '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID)')
+      
+        '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID, :VALOR_L' +
+        'IMITE_COMPRA)')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
@@ -1079,5 +1178,52 @@ inherited frmGeCliente: TfrmGeCliente
   end
   inherited ImgList: TImageList
     Left = 608
+  end
+  object qryTotalComprasAbertas: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'Select'
+      '    g.Valor_limite'
+      '  , g.Valor_compras_abertas'
+      '  , g.Valor_limite_disponivel'
+      'from GET_LIMITE_DISPONIVEL_CLIENTE(:CNPJ) g')
+    Left = 672
+    Top = 41
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'CNPJ'
+        ParamType = ptInput
+        Value = ''
+      end>
+    object qryTotalComprasAbertasVALOR_LIMITE: TIBBCDField
+      FieldName = 'VALOR_LIMITE'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_LIMITE'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField
+      FieldName = 'VALOR_COMPRAS_ABERTAS'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_COMPRAS_ABERTAS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField
+      FieldName = 'VALOR_LIMITE_DISPONIVEL'
+      Origin = 'GET_LIMITE_DISPONIVEL_CLIENTE.VALOR_LIMITE_DISPONIVEL'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object cdsTotalComprasAbertas: TDataSource
+    DataSet = qryTotalComprasAbertas
+    Left = 704
+    Top = 41
   end
 end
