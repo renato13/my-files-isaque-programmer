@@ -555,8 +555,9 @@ begin
         if ( Trim(FieldByName('Csosn').AsString) <> EmptyStr ) then
           cdsTabelaItensCSOSN.AsString     := FieldByName('Csosn').AsString;
 
-        cdsTabelaItensPUNIT.AsCurrency     := FieldByName('Preco').AsCurrency;
-        cdsTabelaItensVALOR_IPI.AsCurrency := FieldByName('Valor_ipi').AsCurrency;
+        cdsTabelaItensPUNIT.AsCurrency          := FieldByName('Preco').AsCurrency;
+        cdsTabelaItensPUNIT_PROMOCAO.AsCurrency := FieldByName('Preco_Promocao').AsCurrency;
+        cdsTabelaItensVALOR_IPI.AsCurrency      := FieldByName('Valor_ipi').AsCurrency;
         
         cdsTabelaItensESTOQUE.AsInteger    := FieldByName('Qtde').AsInteger;
         cdsTabelaItensRESERVA.AsInteger    := FieldByName('Reserva').AsInteger;
