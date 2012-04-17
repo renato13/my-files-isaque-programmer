@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 372
-  Top = 124
+  Left = 329
+  Top = 139
   Width = 943
   Height = 489
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
