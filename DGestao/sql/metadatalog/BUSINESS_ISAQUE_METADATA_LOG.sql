@@ -1937,3 +1937,488 @@ end
 
 SET TERM ; ^
 
+
+
+CREATE DOMAIN DMN_SMALLINT_N AS
+SMALLINT;;
+CREATE DOMAIN DMN_SMALLINT_NN AS
+SMALLINT
+DEFAULT 0;;
+
+
+CREATE TABLE TBCONTA_CORRENTE (
+    CODIGO DMN_INTEGER_NN NOT NULL,
+    DESCRICAO DMN_VCHAR_50,
+    TIPO DMN_SMALLINT_NN DEFAULT 1,
+    CONTA_BANCO_BOLETO DMN_SMALLINT_N);
+alter table TBCONTA_CORRENTE
+add constraint PK_TBCONTA_CORRENTE
+primary key (CODIGO);
+COMMENT ON COLUMN TBCONTA_CORRENTE.CODIGO IS
+'Codigo.';
+COMMENT ON COLUMN TBCONTA_CORRENTE.DESCRICAO IS
+'Descricao.';
+COMMENT ON COLUMN TBCONTA_CORRENTE.TIPO IS
+'Tipo:
+1 - Caixa
+2 - Banco';
+COMMENT ON COLUMN TBCONTA_CORRENTE.CONTA_BANCO_BOLETO IS
+'Banco Boleto.';
+GRANT ALL ON TBCONTA_CORRENTE TO "PUBLIC";
+
+
+alter table TBCONTA_CORRENTE
+add constraint FK_TBCONTA_CORRENTE_BANCO
+foreign key (CONTA_BANCO_BOLETO)
+references TBBANCO_BOLETO(BCO_COD);
+
+
+CREATE DOMAIN DMN_INTEGER_N AS
+INTEGER;;
+
+
+ALTER TABLE TBFORMPAGTO
+    ADD CONTA_CORRENTE DMN_INTEGER_N;
+
+
+alter table TBFORMPAGTO
+add constraint FK_TBFORMPAGTO_CCORRENTE
+foreign key (CONTA_CORRENTE)
+references TBCONTA_CORRENTE(CODIGO);
+
+
+create view VW_TIPO_CONTA_CORRRENTE ( Codigo, Descricao )
+as
+Select First 1
+    1 as Codigo
+  , 'CAIXA' as Descricao
+from TBORIGEMPROD
+
+union
+
+Select First 1
+    1 as Codigo
+  , 'BANCO' as Descricao
+from TBORIGEMPROD;
+GRANT ALL ON VW_TIPO_CONTA_CORRRENTE TO "PUBLIC";
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendas_atualizar_estoque For Tbvendas
+Active After Update Position 1
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable reserva integer;
+  declare variable valor_produto numeric(15,2);
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 3)) then
+  begin
+
+    -- Baixar produto do Estoque
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(p.Reserva, 0)
+        , coalesce(p.Preco, 0)
+      from TVENDASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          produto
+        , empresa
+        , quantidade
+        , estoque
+        , reserva
+        , valor_produto
+    do
+    begin
+      reserva = :reserva - :Quantidade;
+      estoque = :Estoque - :Quantidade;
+
+      -- Baixar estoque
+      Update TBPRODUTO p Set
+          p.Reserva = :Reserva
+        , p.Qtde    = :Estoque
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gravar posicao de estoque
+      Update TVENDASITENS i Set
+        i.Qtdefinal = :Estoque
+      where i.Ano        = new.Ano
+        and i.Codcontrol = new.Codcontrol
+        and i.Codemp     = new.Codemp
+        and i.Codprod    = :Produto;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'SAIDA - VENDA'
+        , Current_time
+        , :Estoque + :Quantidade
+        , :Quantidade
+        , :Estoque
+        , new.Usuario
+        , 'Venda no valor de R$ ' || :Valor_produto
+      );
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendas_cancelar For Tbvendas
+Active After Update Position 2
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable valor_produto numeric(15,2);
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 5)) then
+  begin
+
+    -- Retornar produto do Estoque
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(p.Preco, 0)
+      from TVENDASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          produto
+        , empresa
+        , quantidade
+        , estoque
+        , valor_produto
+    do
+    begin
+      estoque = :Estoque + :Quantidade;
+
+      -- Retornar estoque
+      Update TBPRODUTO p Set
+        p.Qtde = :Estoque
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'ENTRADA - VENDA CANCELADA'
+        , Current_time
+        , :Estoque - :Quantidade
+        , :Quantidade
+        , :Estoque
+        , new.Usuario
+        , 'Venda no valor de R$ ' || :Valor_produto
+      );
+
+      -- Cancelar Contas A Receber
+      Update TBCONTREC r Set
+        r.status = 'CANCELADA'
+      where r.anovenda = new.ano
+        and r.numvenda = new.codcontrol;
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_vendas_cancelar For Tbvendas
+Active After Update Position 2
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable valor_produto numeric(15,2);
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 5)) then
+  begin
+
+    -- Retornar produto do Estoque
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(p.Preco, 0)
+      from TVENDASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          produto
+        , empresa
+        , quantidade
+        , estoque
+        , valor_produto
+    do
+    begin
+      estoque = :Estoque + :Quantidade;
+
+      -- Retornar estoque
+      Update TBPRODUTO p Set
+        p.Qtde = :Estoque
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'ENTRADA - VENDA CANCELADA'
+        , Current_time
+        , :Estoque - :Quantidade
+        , :Quantidade
+        , :Estoque
+        , new.Cancel_usuario
+        , 'Venda no valor de R$ ' || :Valor_produto
+      );
+
+      -- Cancelar Contas A Receber
+      Update TBCONTREC r Set
+        r.status = 'CANCELADA'
+      where r.anovenda = new.ano
+        and r.numvenda = new.codcontrol;
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_compras_atualizar_estoque For Tbcompras
+Active After Update Position 1
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable custo_produto numeric(15,2);
+  declare variable custo_compra numeric(15,2);
+  declare variable custo_medio numeric(15,2);
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 2)) then
+  begin
+
+    -- Incrimentar Estoque do produto
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(i.Customedio, 0)
+        , coalesce(p.Customedio, 0)
+      from TBCOMPRASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          Produto
+        , Empresa
+        , Quantidade
+        , Estoque
+        , Custo_compra
+        , Custo_produto
+    do
+    begin
+      if ( (:Custo_compra > 0) and (:Custo_produto > 0) and (:Estoque > 0) ) then
+        Custo_medio = (:Custo_compra + :Custo_produto) / 2;
+      else
+        Custo_medio = :Custo_compra;
+
+      -- Incrementar estoque
+      Update TBPRODUTO p Set
+          --p.Customedio = :Custo_medio
+          p.Customedio = :Custo_compra
+        , p.Qtde       = :Estoque + :Quantidade
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gravar posicao de estoque
+      Update TBCOMPRASITENS i Set
+          i.Qtdeantes = :Estoque
+        , i.Qtdefinal = :Estoque + :Quantidade
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+        and i.Codemp     = new.Codemp
+        and i.Codprod    = :Produto;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'ENTRADA - COMPRA'
+        , Current_time
+        , :Estoque
+        , :Quantidade
+        , :Estoque + :Quantidade
+        , new.Usuario
+        , 'Custo Médio no valor de R$ ' || :Custo_medio
+      );
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_compras_cancelar For Tbcompras
+Active After Update Position 2
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable custo_compra numeric(15,2);
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 3)) then
+  begin
+
+    -- Decrementar Estoque do produto
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(i.Customedio, 0)
+      from TBCOMPRASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          Produto
+        , Empresa
+        , Quantidade
+        , Estoque
+        , Custo_compra
+    do
+    begin
+      -- Decrementar estoque
+      Update TBPRODUTO p Set
+        p.Qtde       = :Estoque - :Quantidade
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gerar histórico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'SAIDA - COMPRA CANCELADA'
+        , Current_time
+        , :Estoque
+        , :Quantidade
+        , :Estoque - :Quantidade
+        , new.Cancel_usuario
+        , 'Custo Final no valor de R$ ' || :Custo_compra
+      );
+    end
+     
+  end 
+end
+^
+
+SET TERM ; ^
+

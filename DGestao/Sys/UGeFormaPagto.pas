@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin;
+  ToolWin, IBTable;
 
 type
   TfrmGeFormaPagto = class(TfrmGrPadraoCadastro)
@@ -17,6 +17,11 @@ type
     IbDtstTabelaCOD: TSmallintField;
     IbDtstTabelaDESCRI: TIBStringField;
     IbDtstTabelaACRESCIMO: TFloatField;
+    lblContaCorrente: TLabel;
+    dbContaCorrente: TDBLookupComboBox;
+    tblContaCorrente: TIBTable;
+    dtsContaCorrente: TDataSource;
+    IbDtstTabelaCONTA_CORRENTE: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
   private
@@ -64,6 +69,8 @@ end;
 procedure TfrmGeFormaPagto.FormCreate(Sender: TObject);
 begin
   inherited;
+  tblContaCorrente.Open;
+  
   ControlFirstEdit := dbNome;
 
   DisplayFormatCodigo := '00';

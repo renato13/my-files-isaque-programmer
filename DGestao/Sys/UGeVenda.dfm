@@ -389,6 +389,46 @@ inherited frmGeVenda: TfrmGeVenda
       inherited pnlFiltros: TPanel
         Top = 552
         Width = 1091
+        object Label1: TLabel [0]
+          Left = 2
+          Top = 44
+          Width = 16
+          Height = 13
+          Caption = '* ?'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Visible = False
+        end
+        object lblVendaCancelada: TLabel [1]
+          Left = 2
+          Top = 24
+          Width = 118
+          Height = 13
+          Caption = '* Vendas Canceladas'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblVendaAberta: TLabel [2]
+          Left = 2
+          Top = 4
+          Width = 99
+          Height = 13
+          Caption = '* Vendas Abertas'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 528
           Width = 559

@@ -1,8 +1,8 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 343
-  Top = 217
+  Left = 543
+  Top = 449
   Height = 266
   Width = 575
   object ibdtbsBusiness: TIBDatabase
@@ -175,8 +175,8 @@ object DMBusiness: TDMBusiness
     Transaction = ibtrnsctnBusiness
     BufferChunks = 1000
     CachedUpdates = False
-    Left = 240
-    Top = 64
+    Left = 232
+    Top = 56
   end
   object ibdtstUsers: TIBDataSet
     Database = ibdtbsBusiness
@@ -257,8 +257,8 @@ object DMBusiness: TDMBusiness
     MessageFont.Height = -11
     MessageFont.Name = 'MS Sans Serif'
     MessageFont.Style = []
-    Left = 336
-    Top = 144
+    Left = 312
+    Top = 56
   end
   object dtsrcUsers: TDataSource
     DataSet = ibdtstUsers
@@ -268,5 +268,11 @@ object DMBusiness: TDMBusiness
   object raveReport: TRvProject
     Left = 40
     Top = 120
+  end
+  object IdIPWatch: TIdIPWatch
+    Active = False
+    HistoryFilename = 'iphist.dat'
+    Left = 312
+    Top = 104
   end
 end

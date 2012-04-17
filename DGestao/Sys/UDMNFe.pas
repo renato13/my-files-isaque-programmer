@@ -5,7 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, ACBrNFeDANFEClass, ACBrNFeDANFERave, ACBrNFe, DB,
   IBCustomDataSet, IBQuery, frxClass, frxDBSet, frxExportRTF, frxExportXLS,
-  frxExportPDF, frxExportMail, UGeConfigurarNFeACBr,
+  frxExportPDF, frxExportMail, UFuncoesRede, UGeConfigurarNFeACBr,
 
   ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, ACBrNFeUtil, SHDocVw,
   IBUpdateSQL, IBSQL;
@@ -460,7 +460,7 @@ begin
       {$ENDIF}
 
       rgFormaEmissao.ItemIndex := ReadInteger( 'Geral', 'FormaEmissao', 0) ;
-      rgModoGerarNFe.ItemIndex := 1; // ReadInteger( 'Geral', 'ModoGerarNFe', 1) ;
+      rgModoGerarNFe.ItemIndex := 1; NetWorkActive; // ReadInteger( 'Geral', 'ModoGerarNFe', 1) ;
 
       ckSalvar.Checked := ReadBool  ( 'Geral', 'Salvar'      ,True) ;
       edtPathLogs.Text := ReadString( 'Geral', 'PathSalvar'  ,'') ;
@@ -824,6 +824,9 @@ begin
     AbrirEmitente( sCNPJEmitente );
     AbrirDestinatario( sCNPJDestinatario );
     AbrirVenda( iAnoVenda, iNumVenda );
+
+    if not NetWorkActive(True) then
+      Exit;
 
     iSerieNFe   := qryEmitenteSERIE_NFE.AsInteger;
     iNumeroNFe  := GetNextID('TBEMPRESA', 'NUMERO_NFE',   'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and SERIE_NFE = '    + qryEmitenteSERIE_NFE.AsString);

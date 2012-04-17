@@ -86,7 +86,8 @@ uses
   UGeRemessaBoletos in 'UGeRemessaBoletos.pas' {frmGeRemessaBoleto},
   UGeRetornoBoletos in 'UGeRetornoBoletos.pas' {frmGeRetornoBoleto},
   UGeEntradaConfirmaDuplicatas in 'UGeEntradaConfirmaDuplicatas.pas' {frmGeEntradaConfirmaDuplicatas},
-  UGePromocao in 'UGePromocao.pas' {frmGePromocao};
+  UGePromocao in 'UGePromocao.pas' {frmGePromocao},
+  UGeContaCorrente in 'UGeContaCorrente.pas' {frmGeContaCorrente};
 
 {$R *.res}
 

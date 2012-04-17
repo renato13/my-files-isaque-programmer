@@ -14,6 +14,7 @@ inherited frmAcessoSistema: TfrmAcessoSistema
   OldCreateOrder = True
   Position = poMainFormCenter
   OnClose = FormClose
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 16
   object Bevel1: TBevel

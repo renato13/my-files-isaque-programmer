@@ -111,6 +111,8 @@ type
     lblPrecoPromocao: TLabel;
     dbPrecoPromocao: TDBEdit;
     lblProdutoPromocao: TLabel;
+    lblProdutoSemEstoque: TLabel;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -459,8 +461,13 @@ procedure TfrmGeProduto.dbgDadosDrawColumnCell(Sender: TObject;
 begin
   inherited;
   // Destacar produtos em Promocao
+  if ( IbDtstTabelaQTDE.AsInteger <= 0 ) then
+    dbgDados.Canvas.Font.Color := lblProdutoSemEstoque.Font.Color
+  else
+  // Destacar produtos em Promocao
   if ( IbDtstTabelaPRECO_PROMOCAO.AsCurrency > 0 ) then
     dbgDados.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
+    
   dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
 end;
 

@@ -3,19 +3,19 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   BorderStyle = bsDialog
   BorderWidth = 4
   Caption = 'Confirma'#231#227'o de Duplicadas'
-  ClientHeight = 391
-  ClientWidth = 491
+  ClientHeight = 403
+  ClientWidth = 534
   OldCreateOrder = True
   OnShow = FormShow
   DesignSize = (
-    491
-    391)
+    534
+    403)
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 353
-    Width = 491
+    Top = 365
+    Width = 534
     Height = 38
     Align = alBottom
     Shape = bsTopLine
@@ -23,7 +23,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   object Bevel2: TBevel
     Left = 0
     Top = 73
-    Width = 491
+    Width = 534
     Height = 4
     Align = alTop
     Shape = bsSpacer
@@ -31,7 +31,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   object GrpBxControle: TGroupBox
     Left = 0
     Top = 0
-    Width = 491
+    Width = 534
     Height = 73
     Align = alTop
     Caption = ' Dados da Duplicata Selecionada '
@@ -202,8 +202,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     end
   end
   object btnConfirmar: TBitBtn
-    Left = 303
-    Top = 356
+    Left = 346
+    Top = 368
     Width = 92
     Height = 33
     Anchors = [akRight, akBottom]
@@ -264,8 +264,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     NumGlyphs = 2
   end
   object btFechar: TBitBtn
-    Left = 399
-    Top = 356
+    Left = 442
+    Top = 368
     Width = 92
     Height = 33
     Anchors = [akRight, akBottom]
@@ -329,8 +329,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   object dbgTitulos: TDBGrid
     Left = 0
     Top = 77
-    Width = 491
-    Height = 276
+    Width = 534
+    Height = 288
     TabStop = False
     Align = alClient
     DataSource = dtsDuplicatas
@@ -387,7 +387,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   end
   object dbTotalEntrada: TDBEdit
     Left = 0
-    Top = 358
+    Top = 370
     Width = 113
     Height = 31
     TabStop = False
@@ -408,7 +408,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   end
   object dbTotalParcelas: TDBEdit
     Left = 120
-    Top = 358
+    Top = 370
     Width = 113
     Height = 31
     TabStop = False
@@ -424,6 +424,111 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     ParentFont = False
     ReadOnly = True
     TabOrder = 3
+  end
+  object pnlTotais: TPanel
+    Left = 0
+    Top = 366
+    Width = 345
+    Height = 37
+    Anchors = [akLeft, akBottom]
+    BevelOuter = bvNone
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 6
+    object Label1: TLabel
+      Left = 5
+      Top = 4
+      Width = 105
+      Height = 10
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = 'Total Entrada (R$)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -8
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalEntrada: TLabel
+      Left = 5
+      Top = 16
+      Width = 105
+      Height = 19
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = '1.999.999,99'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 117
+      Top = 4
+      Width = 105
+      Height = 10
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = 'Total Parcelas (R$)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -8
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalParcelas: TLabel
+      Left = 117
+      Top = 16
+      Width = 105
+      Height = 19
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = '1.999.999,99'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 229
+      Top = 4
+      Width = 105
+      Height = 10
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = 'Diferen'#231'a (R$)'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -8
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblTotalDiferenca: TLabel
+      Left = 229
+      Top = 16
+      Width = 105
+      Height = 19
+      Alignment = taRightJustify
+      AutoSize = False
+      Caption = '1.999.999,99'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
   end
   object qryDuplicatas: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -453,6 +558,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
   object dtsDuplicatas: TDataSource
     AutoEdit = False
     DataSet = cdsDuplicatas
+    OnDataChange = dtsDuplicatasDataChange
+    OnUpdateData = dtsDuplicatasUpdateData
     Left = 16
     Top = 216
   end

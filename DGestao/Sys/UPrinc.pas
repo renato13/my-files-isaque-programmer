@@ -101,6 +101,9 @@ type
     nmRetornoBoleto: TMenuItem;
     nmPromocoes: TMenuItem;
     nmContaCorrente: TMenuItem;
+    nmAberturaCaixa: TMenuItem;
+    N12: TMenuItem;
+    nmEncerramentoCaixa: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -143,6 +146,7 @@ type
     procedure nmRemessaBoletoClick(Sender: TObject);
     procedure nmRetornoBoletoClick(Sender: TObject);
     procedure nmPromocoesClick(Sender: TObject);
+    procedure nmContaCorrenteClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -164,7 +168,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao;
+  UGePromocao, UGeContaCorrente;
 
 {$R *.dfm}
 
@@ -449,6 +453,11 @@ end;
 procedure TfrmPrinc.nmPromocoesClick(Sender: TObject);
 begin
   MostrarTabelaPromocoes(Self);
+end;
+
+procedure TfrmPrinc.nmContaCorrenteClick(Sender: TObject);
+begin
+  MostrarTabelaContaCorrente(Self);
 end;
 
 end.

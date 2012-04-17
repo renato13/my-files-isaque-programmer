@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
-  IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg;
+  IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg, IdBaseComponent,
+  IdComponent, IdIPWatch;
 
 type
   TDMBusiness = class(TDataModule)
@@ -35,6 +36,7 @@ type
     dtsrcUsers: TDataSource;
     ibdtstUsersLIMIDESC: TIBBCDField;
     raveReport: TRvProject;
+    IdIPWatch: TIdIPWatch;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -55,6 +57,7 @@ var
 
   procedure Desativar_Promocoes;
 
+  function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
   function GetPaisIDDefault : String;
   function GetEstadoIDDefault : Integer;
@@ -176,6 +179,12 @@ begin
 
     CommitTransaction;
   end;
+end;
+
+function DelphiIsRunning : Boolean;
+begin
+  // Verifica se o programa rodou a partir do IDE do Delphi7:
+  Result := DebugHook <> 0;
 end;
 
 function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;

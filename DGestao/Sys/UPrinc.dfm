@@ -2955,6 +2955,7 @@ object frmPrinc: TfrmPrinc
             0000000000000000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
             FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00}
           Caption = 'Contas Correntes '
+          OnClick = nmContaCorrenteClick
         end
         object nmTipoDespesa: TMenuItem
           Caption = 'Tipos de Despesas'
@@ -3819,6 +3820,15 @@ object frmPrinc: TfrmPrinc
     end
     object menuFinanceiro: TMenuItem
       Caption = '&Financeiro'
+      object nmAberturaCaixa: TMenuItem
+        Caption = 'Abertura de Caixa'
+      end
+      object nmEncerramentoCaixa: TMenuItem
+        Caption = 'Encerramento de Caixa'
+      end
+      object N12: TMenuItem
+        Caption = '-'
+      end
       object nmContasAPagar: TMenuItem
         Bitmap.Data = {
           36100000424D3610000000000000360000002800000020000000200000000100

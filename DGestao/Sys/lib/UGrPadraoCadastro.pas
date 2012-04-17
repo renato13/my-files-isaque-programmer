@@ -145,7 +145,7 @@ procedure TfrmGrPadraoCadastro.dbgDadosDrawColumnCell(Sender: TObject;
 begin
   TDbGrid(Sender).Canvas.font.Color := clBlack;
 
-  if odd(IbDtstTabela.RecNo) then
+  if odd(TDbGrid(Sender).DataSource.DataSet.RecNo) then
     TDBGrid(Sender).Canvas.Brush.Color:= clMenuBar
   else
     TDBGrid(Sender).Canvas.Brush.Color:= clCream;

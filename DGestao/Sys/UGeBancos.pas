@@ -66,6 +66,8 @@ var
   frmGeBancos: TfrmGeBancos;
 
   procedure MostrarTabelaBancos(const AOwner : TComponent);
+  function SelecionarBanco(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
+  function SelecionarBanco(const AOwner : TComponent; var Codigo : Integer; var Nome, Agencia, Conta : String) : Boolean; overload;
 
 implementation
 
@@ -80,6 +82,35 @@ begin
   frm := TfrmGeBancos.Create(AOwner);
   try
     frm.ShowModal;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarBanco(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean;
+var
+  frm : TfrmGeBancos;
+begin
+  frm := TfrmGeBancos.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarBanco(const AOwner : TComponent; var Codigo : Integer; var Nome, Agencia, Conta : String) : Boolean; overload;
+var
+  frm : TfrmGeBancos;
+begin
+  frm := TfrmGeBancos.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+    if ( Result ) then
+    begin
+      Agencia := frm.IbDtstTabelaBCO_AGENCIA.AsString;
+      Conta   := frm.IbDtstTabelaBCO_CC.AsString;
+    end;
   finally
     frm.Destroy;
   end;
