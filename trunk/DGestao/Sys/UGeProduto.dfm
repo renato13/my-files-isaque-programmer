@@ -116,6 +116,33 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Style = [fsBold]
           ParentFont = False
         end
+        object lblProdutoSemEstoque: TLabel [1]
+          Left = 2
+          Top = 24
+          Width = 136
+          Height = 13
+          Caption = '* Produtos sem Estoque'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label1: TLabel [2]
+          Left = 2
+          Top = 44
+          Width = 16
+          Height = 13
+          Caption = '* ?'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Visible = False
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 598
           Width = 260

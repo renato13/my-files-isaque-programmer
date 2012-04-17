@@ -96,7 +96,7 @@ PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
 Packages=vcl;rtl;dbrtl;adortl;vcldb;vclx;bdertl;vcldbx;ibxpress;dsnap;cds;bdecds;qrpt;teeui;teedb;tee;dss;teeqr;dsnapcrba;dsnapcon;VclSmp;vclshlctrls;vclie;xmlrtl;inet;inetdbbde;inetdbxpress;inetdb;nmfast;webdsnap;websnap;dbexpress;dbxcds;indy;dclOffice2k;BcBarMenus60;Instalar;FIBDBMidas6;LabelPack;WinSkinD6R;PackageXPMenu;RxCtl6;RxDB6;RxBDE6
-Conditionals=
+Conditionals=DGE
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=0
 Release=0
-Build=51
+Build=52
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Masterdados Tecnologia da Informação
 FileDescription=DGE
-FileVersion=1.0.0.51
+FileVersion=1.0.0.52
 InternalName=DGE
 LegalCopyright=Dorivaldo Vieira JR.
 LegalTrademarks=
@@ -136,6 +136,9 @@ ProductVersion=1.0.0
 Comments=
 [Excluded Packages]
 C:\Delphi\MyLib\DevExpress.v42\Delphi 7 Library\dxPScxScheduler3LnkD7.bpl=ExpressPrinting System ReportLink for ExpressScheduler 3 by Developer Express Inc.
+[HistoryLists\hlConditionals]
+Count=1
+Item0=DGE
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

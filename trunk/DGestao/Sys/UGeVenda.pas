@@ -253,6 +253,9 @@ type
     qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField;
     qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField;
     cdsTotalComprasAbertas: TDataSource;
+    Label1: TLabel;
+    lblVendaCancelada: TLabel;
+    lblVendaAberta: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -410,6 +413,7 @@ begin
   IbDtstTabelaDESCONTO.Value    := 0;
   IbDtstTabelaTOTALVENDA.Value  := 0;
   IbDtstTabelaNFE_ENVIADA.Value := 0;
+  IbDtstTabelaUSUARIO.Value     := GetUserApp;
 
   IbDtstTabelaSERIE.Clear;
   IbDtstTabelaNFE.Clear;
@@ -561,6 +565,15 @@ begin
         
         cdsTabelaItensESTOQUE.AsInteger    := FieldByName('Qtde').AsInteger;
         cdsTabelaItensRESERVA.AsInteger    := FieldByName('Reserva').AsInteger;
+
+        if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
+        begin
+          cdsTabelaItensDESCONTO_VALOR.AsCurrency := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensPUNIT_PROMOCAO.AsCurrency;
+          cdsTabelaItensDESCONTO.AsCurrency       := cdsTabelaItensDESCONTO_VALOR.AsCurrency / cdsTabelaItensPUNIT.AsCurrency * 100;
+        end;
+
+        dbDesconto.ReadOnly      := (cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0);
+        dbTotalDesconto.ReadOnly := (cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0);
       end
       else
       begin
@@ -757,13 +770,7 @@ begin
       dbDesconto.SetFocus;
     end
     else
-//    if ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) ) then
-//    begin
-//      ShowWarning('Quantidade informada está acima da quantidade disponível no estoque.');
-//      dbQuantidade.SetFocus;
-//    end
-//    else
-    if ( cdsTabelaItensDESCONTO.AsCurrency > GetLimiteDescontoUser ) then
+    if ( (cdsTabelaItensDESCONTO.AsCurrency > GetLimiteDescontoUser) and (cdsTabelaItensPUNIT_PROMOCAO.AsCurrency = 0) ) then
     begin
       ShowWarning('Limite de Desconto = ' + FormatFloat('0.00', GetLimiteDescontoUser) + '%');
       dbDesconto.SetFocus;
@@ -852,10 +859,12 @@ begin
       if ( cdsTabelaItensDESCONTO.IsNull ) then
         cdsTabelaItensDESCONTO.AsCurrency := 0;
 
-      if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
-        cPrecoVND := cdsTabelaItensPUNIT_PROMOCAO.AsCurrency
-      else
-        cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
+//      if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
+//        cPrecoVND := cdsTabelaItensPUNIT_PROMOCAO.AsCurrency
+//      else
+//        cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
+//
+      cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
 
       cdsTabelaItensDESCONTO_VALOR.Value := cPrecoVND * cdsTabelaItensDESCONTO.AsCurrency / 100;
       cdsTabelaItensPFINAL.Value         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.Value;
@@ -956,6 +965,8 @@ var
   cValorPromocao,
   cValorIPI     : Currency;
 begin
+  cValorPromocao := 0;
+  
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
     if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, iEstoque, iReserva) ) then
     begin
@@ -972,6 +983,15 @@ begin
 
       cdsTabelaItensESTOQUE.AsInteger := iEstoque;
       cdsTabelaItensRESERVA.AsInteger := iReserva;
+
+      if ( cValorPromocao > 0 ) then
+      begin
+        cdsTabelaItensDESCONTO_VALOR.AsCurrency := cValorVenda - cValorPromocao;
+        cdsTabelaItensDESCONTO.AsCurrency       := cdsTabelaItensDESCONTO_VALOR.AsCurrency / cdsTabelaItensPUNIT.AsCurrency * 100;
+      end;
+
+      dbDesconto.ReadOnly      := (cValorPromocao > 0);
+      dbTotalDesconto.ReadOnly := (cValorPromocao > 0);
     end;
 end;
 
@@ -1356,6 +1376,9 @@ var
   sValor : String;
   cValor : Currency;
 begin
+  if ( dbTotalDesconto.ReadOnly ) then
+    Exit;
+    
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
   begin
     sValor := InputBox('TOTAL DESCONTO (R$)', 'Favor informar o Valor Total de Desconto:', FormatFloat(',0.00', dbTotalDesconto.Field.AsCurrency));
@@ -1390,11 +1413,25 @@ procedure TfrmGeVenda.dbgDadosDrawColumnCell(Sender: TObject;
   State: TGridDrawState);
 begin
   inherited;
+  if ( Sender = dbgDados ) then
+  begin
+    // Destacar produtos em Promocao
+    if ( IbDtstTabelaSTATUS.AsInteger = STATUS_VND_AND ) then
+      dbgDados.Canvas.Font.Color := lblVendaAberta.Font.Color
+    else
+    // Destacar produtos em Promocao
+    if ( IbDtstTabelaSTATUS.AsInteger = STATUS_VND_CAN ) then
+      dbgDados.Canvas.Font.Color := lblVendaCancelada.Font.Color;
+      
+    dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
+  end
+  else
   // Destacar produtos em Promocao
   if ( Sender = dbgProdutos ) then
   begin
     if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
       dbgProdutos.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
+
     dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
   end;
 end;

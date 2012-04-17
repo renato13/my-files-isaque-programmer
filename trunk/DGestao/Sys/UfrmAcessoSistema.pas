@@ -22,6 +22,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure edSenhaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -117,7 +118,20 @@ procedure TfrmAcessoSistema.edSenhaKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   inherited;
- if key=13 then btbtnEntrarClick(Sender);
+  if key = 13 then
+    btbtnEntrarClick(Sender);
+end;
+
+procedure TfrmAcessoSistema.FormShow(Sender: TObject);
+begin
+  inherited;
+  if ( DelphiIsRunning ) then
+  begin
+    edNome.Text  := 'ISAQUE';
+    edSenha.Text := '123';
+    
+    btbtnEntrar.Click;
+  end;
 end;
 
 end.

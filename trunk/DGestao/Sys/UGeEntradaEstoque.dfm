@@ -229,6 +229,46 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       inherited pnlFiltros: TPanel
         Top = 544
         Width = 1053
+        object lblEntradaAberta: TLabel [0]
+          Left = 2
+          Top = 4
+          Width = 108
+          Height = 13
+          Caption = '* Entradas Abertas'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblEntradaCancelada: TLabel [1]
+          Left = 2
+          Top = 24
+          Width = 127
+          Height = 13
+          Caption = '* Entradas Canceladas'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label1: TLabel [2]
+          Left = 2
+          Top = 44
+          Width = 16
+          Height = 13
+          Caption = '* ?'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Visible = False
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 616
           Width = 433

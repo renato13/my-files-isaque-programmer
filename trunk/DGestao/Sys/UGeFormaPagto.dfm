@@ -58,11 +58,19 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           Caption = 'Descri'#231#227'o:'
         end
         object lblAcrescimo: TLabel [2]
-          Left = 432
+          Left = 344
           Top = 24
           Width = 66
           Height = 13
           Caption = '% Acr'#233'scimo:'
+        end
+        object lblContaCorrente: TLabel [3]
+          Left = 448
+          Top = 24
+          Width = 79
+          Height = 13
+          Caption = 'Conta Corrente:'
+          FocusControl = dbContaCorrente
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -71,7 +79,7 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
         object dbNome: TDBEdit
           Left = 88
           Top = 40
-          Width = 337
+          Width = 249
           Height = 21
           CharCase = ecUpperCase
           DataField = 'DESCRI'
@@ -85,7 +93,7 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           TabOrder = 1
         end
         object dbAcrescimo: TDBEdit
-          Left = 432
+          Left = 344
           Top = 40
           Width = 97
           Height = 21
@@ -100,6 +108,25 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           ParentFont = False
           TabOrder = 2
         end
+        object dbContaCorrente: TDBLookupComboBox
+          Left = 448
+          Top = 40
+          Width = 249
+          Height = 21
+          DataField = 'CONTA_CORRENTE'
+          DataSource = DtSrcTabela
+          DropDownRows = 10
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          KeyField = 'CODIGO'
+          ListField = 'DESCRICAO'
+          ListSource = dtsContaCorrente
+          ParentFont = False
+          TabOrder = 3
+        end
       end
     end
   end
@@ -110,6 +137,7 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       '    p.Cod'
       '  , p.Descri'
       '  , p.Acrescimo'
+      '  , p.Conta_corrente'
       'from TBFORMPAGTO p')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
@@ -131,13 +159,19 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       Origin = 'TBFORMPAGTO.ACRESCIMO'
       DisplayFormat = ',0.00'
     end
+    object IbDtstTabelaCONTA_CORRENTE: TIntegerField
+      DisplayLabel = 'Conta Corrente'
+      FieldName = 'CONTA_CORRENTE'
+      Origin = 'TBFORMPAGTO.CONTA_CORRENTE'
+    end
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
       '  COD,'
       '  DESCRI,'
-      '  ACRESCIMO'
+      '  ACRESCIMO,'
+      '  CONTA_CORRENTE'
       'from TBFORMPAGTO '
       'where'
       '  COD = :COD')
@@ -146,17 +180,63 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       'set'
       '  COD = :COD,'
       '  DESCRI = :DESCRI,'
-      '  ACRESCIMO = :ACRESCIMO'
+      '  ACRESCIMO = :ACRESCIMO,'
+      '  CONTA_CORRENTE = :CONTA_CORRENTE'
       'where'
       '  COD = :OLD_COD')
     InsertSQL.Strings = (
       'insert into TBFORMPAGTO'
-      '  (COD, DESCRI, ACRESCIMO)'
+      '  (COD, DESCRI, ACRESCIMO, CONTA_CORRENTE)'
       'values'
-      '  (:COD, :DESCRI, :ACRESCIMO)')
+      '  (:COD, :DESCRI, :ACRESCIMO, :CONTA_CORRENTE)')
     DeleteSQL.Strings = (
       'delete from TBFORMPAGTO'
       'where'
       '  COD = :OLD_COD')
+  end
+  object tblContaCorrente: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    FieldDefs = <
+      item
+        Name = 'CODIGO'
+        Attributes = [faRequired]
+        DataType = ftInteger
+      end
+      item
+        Name = 'DESCRICAO'
+        DataType = ftString
+        Size = 50
+      end
+      item
+        Name = 'TIPO'
+        DataType = ftSmallint
+      end
+      item
+        Name = 'CONTA_BANCO_BOLETO'
+        DataType = ftSmallint
+      end>
+    IndexDefs = <
+      item
+        Name = 'PK_TBCONTA_CORRENTE'
+        Fields = 'CODIGO'
+        Options = [ixUnique]
+      end
+      item
+        Name = 'FK_TBCONTA_CORRENTE_BANCO'
+        Fields = 'CONTA_BANCO_BOLETO'
+      end>
+    StoreDefs = True
+    TableName = 'TBCONTA_CORRENTE'
+    TableTypes = [ttView]
+    Left = 656
+    Top = 40
+  end
+  object dtsContaCorrente: TDataSource
+    DataSet = tblContaCorrente
+    Left = 688
+    Top = 40
   end
 end

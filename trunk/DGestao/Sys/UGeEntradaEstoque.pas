@@ -237,6 +237,9 @@ type
     cdsTabelaItensCST: TIBStringField;
     cdsTabelaItensCFOP: TIntegerField;
     btbtnCancelarENT: TBitBtn;
+    lblEntradaAberta: TLabel;
+    lblEntradaCancelada: TLabel;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -264,6 +267,8 @@ type
     procedure dbCFOPNFButtonClick(Sender: TObject);
     procedure DtSrcTabelaStateChange(Sender: TObject);
     procedure btbtnCancelarENTClick(Sender: TObject);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -373,6 +378,7 @@ begin
   IbDtstTabelaDESCONTO.Value       := 0;
   IbDtstTabelaTOTALNF.Value        := 0;
   IbDtstTabelaTOTALPROD.Value      := 0;
+  IbDtstTabelaUSUARIO.Value        := GetUserApp;
 end;
 
 procedure TfrmGeEntradaEstoque.dbFornecedorButtonClick(Sender: TObject);
@@ -932,6 +938,25 @@ begin
 
       HabilitarDesabilitar_Btns;
     end;
+end;
+
+procedure TfrmGeEntradaEstoque.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if ( Sender = dbgDados ) then
+  begin
+    // Destacar produtos em Promocao
+    if ( IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_ABR ) then
+      dbgDados.Canvas.Font.Color := lblEntradaAberta.Font.Color
+    else
+    // Destacar produtos em Promocao
+    if ( IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_CAN ) then
+      dbgDados.Canvas.Font.Color := lblEntradaCancelada.Font.Color;
+
+    dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
+  end;
 end;
 
 end.

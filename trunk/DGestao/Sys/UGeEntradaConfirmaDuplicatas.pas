@@ -44,6 +44,13 @@ type
     dbTotalEntrada: TDBEdit;
     dbTotalParcelas: TDBEdit;
     updParcela: TIBDataSet;
+    pnlTotais: TPanel;
+    Label1: TLabel;
+    lblTotalEntrada: TLabel;
+    Label2: TLabel;
+    lblTotalParcelas: TLabel;
+    Label3: TLabel;
+    lblTotalDiferenca: TLabel;
     procedure btFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -53,12 +60,15 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure btnConfirmarClick(Sender: TObject);
     procedure cdsDuplicatasCalcFields(DataSet: TDataSet);
+    procedure dtsDuplicatasDataChange(Sender: TObject; Field: TField);
+    procedure dtsDuplicatasUpdateData(Sender: TObject);
   private
     { Private declarations }
     fAnoCompra ,
     fControleCompra : Integer;
     fTotalEntrada   : Currency;
     procedure UpdateParcelas;
+    procedure DisplayTotais;
   public
     { Public declarations }
     property AnoCompra : Integer read fAnoCompra write fAnoCompra;
@@ -117,6 +127,8 @@ begin
   end;
   
   cdsDuplicatas.Open;
+  if ( not cdsDuplicatas.IsEmpty ) then
+      cdsDuplicatas.Edit;
 end;
 
 procedure TfrmGeEntradaConfirmaDuplicatas.ControlEditEnter(
@@ -170,11 +182,17 @@ end;
 
 procedure TfrmGeEntradaConfirmaDuplicatas.btnConfirmarClick(
   Sender: TObject);
+var
+  cTotalNF ,
+  cTotalDC : Currency;
 begin
   if ( not ShowConfirm('Confirma os valores e vencimentos das parcelas?') ) then
     Exit;
-    
-  if ( dbTotalEntrada.Text <> dbTotalParcelas.Text ) then
+
+  cTotalNF := StrToCurrDef( StringReplace(dbTotalEntrada.Text,  '.', '', [rfReplaceAll]), 0 );
+  cTotalDC := StrToCurrDef( StringReplace(dbTotalParcelas.Text, '.', '', [rfReplaceAll]), 0 );
+
+  if ( cTotalNF <> cTotalDC ) then
   begin
     ShowWarning('O Valor Total das parcelas não coincide com o Valor Total de Entrada.');
     cdsDuplicatas.First;
@@ -212,6 +230,31 @@ begin
     cdsDuplicatas.Next;
   end;
   CommitTransaction;
+end;
+
+procedure TfrmGeEntradaConfirmaDuplicatas.DisplayTotais;
+var
+  cTotalNF ,
+  cTotalDC : Currency;
+begin
+  cTotalNF := StrToCurrDef( StringReplace(dbTotalEntrada.Text,  '.', '', [rfReplaceAll]), 0 );
+  cTotalDC := StrToCurrDef( StringReplace(dbTotalParcelas.Text, '.', '', [rfReplaceAll]), 0 );
+
+  lblTotalEntrada.Caption   := FormatFloat(',0.00', cTotalNF);
+  lblTotalParcelas.Caption  := FormatFloat(',0.00', cTotalDC);
+  lblTotalDiferenca.Caption := FormatFloat(',0.00', cTotalNF - cTotalDC);
+end;
+
+procedure TfrmGeEntradaConfirmaDuplicatas.dtsDuplicatasDataChange(
+  Sender: TObject; Field: TField);
+begin
+  DisplayTotais;
+end;
+
+procedure TfrmGeEntradaConfirmaDuplicatas.dtsDuplicatasUpdateData(
+  Sender: TObject);
+begin
+  DisplayTotais;
 end;
 
 end.
