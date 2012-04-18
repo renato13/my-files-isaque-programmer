@@ -1,6 +1,6 @@
 object frmAjustEstoq: TfrmAjustEstoq
-  Left = 395
-  Top = 160
+  Left = 458
+  Top = 217
   Width = 405
   Height = 338
   BorderIcons = []
@@ -21,7 +21,7 @@ object frmAjustEstoq: TfrmAjustEstoq
     Left = 0
     Top = 0
     Width = 389
-    Height = 267
+    Height = 265
     Align = alClient
     Caption = 'Produto'
     Font.Charset = DEFAULT_CHARSET
@@ -165,6 +165,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       CharCase = ecUpperCase
       DataField = 'CODPROD'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -181,6 +182,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       Height = 21
       DataField = 'QTDENOVA'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -214,6 +216,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       CharCase = ecUpperCase
       DataField = 'MOTIVO'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -230,6 +233,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       CharCase = ecUpperCase
       DataField = 'DOC'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -245,6 +249,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       Height = 21
       DataField = 'DTAJUST'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -278,6 +283,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       Height = 21
       DataField = 'LookFornec'
       DataSource = DMBusiness.dtsrcAjustEstoq
+      Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -324,7 +330,7 @@ object frmAjustEstoq: TfrmAjustEstoq
   end
   object tlbrCadCatProd: TToolBar
     Left = 0
-    Top = 267
+    Top = 265
     Width = 389
     Height = 35
     Align = alBottom
@@ -337,6 +343,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       Width = 75
       Height = 31
       Caption = 'Gravar'
+      Enabled = False
       TabOrder = 0
       OnClick = btbtnGravClick
       Glyph.Data = {
@@ -360,6 +367,7 @@ object frmAjustEstoq: TfrmAjustEstoq
       Width = 75
       Height = 31
       Caption = 'Cancelar'
+      Enabled = False
       TabOrder = 1
       OnClick = btbtnCancelClick
       Glyph.Data = {
