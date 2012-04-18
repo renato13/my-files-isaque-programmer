@@ -1,36 +1,36 @@
 inherited frmGePromocao: TfrmGePromocao
   Left = 706
   Top = 240
-  Width = 806
-  Height = 553
+  Width = 770
+  Height = 520
   Caption = 'Cadastro de Promo'#231#245'es'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
-    Top = 511
-    Width = 790
+    Top = 478
+    Width = 754
   end
   inherited Bevel3: TBevel
-    Top = 472
-    Width = 790
+    Top = 439
+    Width = 754
   end
   inherited tlbBotoes: TToolBar
-    Top = 476
-    Width = 790
+    Top = 443
+    Width = 754
   end
   inherited pgcGuias: TPageControl
-    Width = 790
-    Height = 472
+    Width = 754
+    Height = 439
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 377
-        Width = 782
+        Top = 344
+        Width = 746
       end
       inherited dbgDados: TDBGrid
-        Width = 782
-        Height = 377
+        Width = 746
+        Height = 344
         Columns = <
           item
             Expanded = False
@@ -71,10 +71,10 @@ inherited frmGePromocao: TfrmGePromocao
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 381
-        Width = 782
+        Top = 348
+        Width = 746
         inherited grpBxFiltro: TGroupBox
-          Left = 456
+          Left = 420
           Width = 322
           inherited lbltFiltrar: TLabel
             Width = 58
@@ -93,18 +93,18 @@ inherited frmGePromocao: TfrmGePromocao
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 217
-        Width = 782
+        Width = 746
       end
       object Bevel6: TBevel [1]
         Left = 0
         Top = 97
-        Width = 782
+        Width = 746
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 782
+        Width = 746
         Height = 97
         object lblNome: TLabel [1]
           Left = 88
@@ -114,14 +114,14 @@ inherited frmGePromocao: TfrmGePromocao
           Caption = 'Descri'#231#227'o:'
         end
         object lblDataInicio: TLabel [2]
-          Left = 432
+          Left = 512
           Top = 24
           Width = 55
           Height = 13
           Caption = 'Data In'#237'cio:'
         end
         object lblDataFinal: TLabel [3]
-          Left = 544
+          Left = 624
           Top = 24
           Width = 52
           Height = 13
@@ -133,6 +133,8 @@ inherited frmGePromocao: TfrmGePromocao
           Width = 63
           Height = 13
           Caption = '% Desconto:'
+          Enabled = False
+          Visible = False
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -141,7 +143,7 @@ inherited frmGePromocao: TfrmGePromocao
         object dbNome: TDBEdit
           Left = 88
           Top = 40
-          Width = 337
+          Width = 417
           Height = 21
           CharCase = ecUpperCase
           DataField = 'DESCRICAO'
@@ -155,7 +157,7 @@ inherited frmGePromocao: TfrmGePromocao
           TabOrder = 1
         end
         object dbDataInicio: TDBDateEdit
-          Left = 432
+          Left = 512
           Top = 40
           Width = 105
           Height = 21
@@ -167,7 +169,7 @@ inherited frmGePromocao: TfrmGePromocao
           Weekends = [Sun, Sat]
         end
         object dbDataFinal: TDBDateEdit
-          Left = 544
+          Left = 624
           Top = 40
           Width = 105
           Height = 21
@@ -186,6 +188,7 @@ inherited frmGePromocao: TfrmGePromocao
           CharCase = ecUpperCase
           DataField = 'PERCENTUAL_DESCONTO'
           DataSource = DtSrcTabela
+          Enabled = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -11
@@ -193,6 +196,7 @@ inherited frmGePromocao: TfrmGePromocao
           Font.Style = []
           ParentFont = False
           TabOrder = 4
+          Visible = False
         end
         object dbAtiva: TDBCheckBox
           Left = 16
@@ -210,7 +214,7 @@ inherited frmGePromocao: TfrmGePromocao
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 101
-        Width = 782
+        Width = 746
         Height = 116
         Align = alTop
         Caption = 'Dados do produto em promo'#231#227'o'
@@ -784,8 +788,8 @@ inherited frmGePromocao: TfrmGePromocao
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 221
-        Width = 782
-        Height = 222
+        Width = 746
+        Height = 189
         TabStop = False
         Align = alClient
         DataSource = DtSrcProdutos

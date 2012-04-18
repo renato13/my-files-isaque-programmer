@@ -1092,8 +1092,8 @@ begin
     IbDtstTabela.Edit;
 
     IbDtstTabelaSTATUS.Value              := STATUS_VND_FIN;
-    IbDtstTabelaDTVENDA.Value             := GetDateDB;
-    IbDtstTabelaDTFINALIZACAO_VENDA.Value := GetDateDB;
+    IbDtstTabelaDTVENDA.Value             := GetDateTimeDB;
+    IbDtstTabelaDTFINALIZACAO_VENDA.Value := GetDateTimeDB;
 
     IbDtstTabela.Post;
     IbDtstTabela.ApplyUpdates;
