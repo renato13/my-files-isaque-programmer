@@ -97,9 +97,9 @@ end;
 
 procedure TfrmAjustEstoq.FormShow(Sender: TObject);
 begin
- DMBusiness.ibdtstAjustEstoq.Open;
- DMBusiness.ibdtstAjustEstoq.Insert;
- DBLookupComboBox3.SetFocus;
+// DMBusiness.ibdtstAjustEstoq.Open;
+// DMBusiness.ibdtstAjustEstoq.Insert;
+// DBLookupComboBox3.SetFocus;
 end;
 
 procedure TfrmAjustEstoq.FormClose(Sender: TObject;
