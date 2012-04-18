@@ -230,8 +230,9 @@ end;
 procedure TfrmGePromocao.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-  IbDtstTabelaATIVA.Value       := 0;
-  IbDtstTabelaDATA_INICIO.Value := GetDateDB;
+  IbDtstTabelaATIVA.Value               := 0;
+  IbDtstTabelaDATA_INICIO.Value         := GetDateDB;
+  IbDtstTabelaPERCENTUAL_DESCONTO.Value := 0;
   AbrirTabelaProdutos( IbDtstTabelaCODIGO.AsInteger );
 end;
 
