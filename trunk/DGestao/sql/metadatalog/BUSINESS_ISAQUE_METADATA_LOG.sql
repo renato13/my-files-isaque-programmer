@@ -1,6 +1,5 @@
 
 
-
 /*------ 09/02/2012 10:23:41: Creating domain DMN_MONEY_DESCONTO... --------*/
 
 CREATE DOMAIN DMN_MONEY_DESCONTO AS
