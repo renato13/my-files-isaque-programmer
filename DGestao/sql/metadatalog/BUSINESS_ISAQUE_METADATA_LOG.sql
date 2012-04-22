@@ -2421,3 +2421,463 @@ end
 
 SET TERM ; ^
 
+
+
+CREATE DOMAIN DMN_USUARIO AS
+VARCHAR(12);;
+CREATE DOMAIN DMN_VCHAR_11_N AS
+VARCHAR(12);;
+CREATE DOMAIN DMN_VCHAR_11_NN AS
+VARCHAR(12);;
+
+
+CREATE SEQUENCE GEN_CAIXA_2012;
+CREATE SEQUENCE GEN_CAIXA_2013;
+CREATE SEQUENCE GEN_CAIXA_2014;
+CREATE SEQUENCE GEN_CAIXA_2015;
+CREATE SEQUENCE GEN_CAIXA_2016;
+CREATE SEQUENCE GEN_CAIXA_2017;
+CREATE SEQUENCE GEN_CAIXA_2018;
+CREATE SEQUENCE GEN_CAIXA_2019;
+CREATE SEQUENCE GEN_CAIXA_2020;
+
+
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2012;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2013;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2014;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2015;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2016;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2017;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2018;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2019;
+CREATE SEQUENCE GEN_CX_MOVIMENTO_2020;
+
+
+CREATE TABLE TBCAIXA (
+    ANO DMN_SMALLINT_NN NOT NULL,
+    NUMERO DMN_INTEGER_NN NOT NULL,
+    DATA_ABERTURA DMN_DATE,
+    DATA_FECH DMN_DATE,
+    DATA_CANCEL DMN_DATE,
+    USUARIO DMN_USUARIO,
+    USUARIO_CANCEL DMN_USUARIO,
+    SITUACAO DMN_SMALLINT_NN DEFAULT 0,
+    CONTA_CORRENTE DMN_INTEGER_N,
+    VALOR_TOTAL_CREDITO DMN_MONEY,
+    VALOR_TOTAL_DEBITO DMN_MONEY);
+alter table TBCAIXA
+add constraint PK_TBCAIXA
+primary key (ANO,NUMERO);
+COMMENT ON COLUMN TBCAIXA.SITUACAO IS
+'Situacao:
+0 - Aberta
+1 - Fechada
+2 - Cancelada';
+GRANT ALL ON TBCAIXA TO "PUBLIC";
+
+
+alter table TBCAIXA
+add constraint FK_TBCAIXA_USUARIO
+foreign key (USUARIO)
+references TBUSERS(NOME);
+alter table TBCAIXA
+add constraint FK_TBCAIXA_USUARIO_CANCEL
+foreign key (USUARIO_CANCEL)
+references TBUSERS(NOME);
+alter table TBCAIXA
+add constraint FK_TBCAIXA_CONTA_CORRENTE
+foreign key (CONTA_CORRENTE)
+references TBCONTA_CORRENTE(CODIGO);
+
+
+SET TERM ^ ;
+
+CREATE Trigger Tg_caixa_numero For Tbcaixa
+Active Before Insert Position 0
+AS
+begin
+  IF (New.Numero IS NULL) Then
+    if ( new.Ano = 2012 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2012, 1);
+    else
+    if ( new.Ano = 2013 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2013, 1);
+    else
+    if ( new.Ano = 2014 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2014, 1);
+    else
+    if ( new.Ano = 2015 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2015, 1);
+    else
+    if ( new.Ano = 2016 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2016, 1);
+    else
+    if ( new.Ano = 2017 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2017, 1);
+    else
+    if ( new.Ano = 2018 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2018, 1);
+    else
+    if ( new.Ano = 2019 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2019, 1);
+    else
+    if ( new.Ano = 2020 ) then
+      NEW.Numero = GEN_ID(GEN_CAIXA_2020, 1);
+end
+^
+
+SET TERM ; ^
+
+
+
+CREATE TABLE TBCAIXA_CONSOLIDACAO (
+    ANO DMN_SMALLINT_NN NOT NULL,
+    NUMERO DMN_INTEGER_NN NOT NULL,
+    SEQ DMN_SMALLINT_NN NOT NULL,
+    FORMA_PAGTO DMN_SMALLINT_N,
+    DESCRICAO DMN_VCHAR_50,
+    TOTAL_CREDITO DMN_MONEY DEFAULT 0,
+    TOTAL_DEBITO DMN_MONEY DEFAULT 0);
+alter table TBCAIXA_CONSOLIDACAO
+add constraint PK_TBCAIXA_CONSOLIDACAO
+primary key (ANO,NUMERO,SEQ);
+GRANT ALL ON TBCAIXA_CONSOLIDACAO TO "PUBLIC";
+
+
+alter table TBCAIXA_CONSOLIDACAO
+add constraint FK_TBCAIXA_CONSOLIDACAO
+foreign key (ANO,NUMERO)
+references TBCAIXA(ANO,NUMERO)
+on delete CASCADE
+on update CASCADE;
+alter table TBCAIXA_CONSOLIDACAO
+add constraint FK_TBCAIXA_CONSOLIDACAO_FP
+foreign key (FORMA_PAGTO)
+references TBFORMPAGTO(COD);
+
+
+SET TERM ^ ;
+
+CREATE Trigger Tg_caixa_consolidacao_seq For Tbcaixa_consolidacao
+Active Before Insert Position 0
+AS
+  declare variable sequencial Smallint;
+begin
+  if ( new.Seq is null ) then
+  begin
+    Select
+      max(c.Seq)
+    from TBCAIXA_CONSOLIDACAO c
+    where c.Ano = new.Ano
+      and c.Numero = new.Numero
+    into
+      sequencial;
+
+    new.Seq = coalesce(Sequencial, 0) + 1;
+  end
+end
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE Trigger Tg_caixa_fechar For Tbcaixa
+Active Before Update Position 10
+AS
+  declare variable total_credito Dmn_money;
+  declare variable total_debito Dmn_money;
+begin
+  if ( (old.Situacao = 0) and (new.Situacao = 1) ) then
+  begin
+    Select
+        sum(c.Total_credito)
+      , sum(c.Total_debito)
+    from TBCAIXA_CONSOLIDACAO c
+    where c.Ano = new.Ano
+      and c.Numero = new.Numero
+    into
+        Total_credito
+      , Total_debito;
+
+    new.Valor_total_credito = coalesce(:Total_credito, 0);
+    new.Valor_total_debito  = coalesce(:Total_debito, 0);
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+CREATE DOMAIN DMN_VCHAR_250 AS
+VARCHAR(250);;
+
+
+CREATE TABLE TBCAIXA_MOVIMENTO (
+    ANO DMN_SMALLINT_NN NOT NULL,
+    NUMERO DMN_INTEGER_NN NOT NULL,
+    CAIXA_ANO DMN_SMALLINT_N,
+    CAIXA_NUM DMN_INTEGER_N,
+    CONTA_CORRENTE DMN_INTEGER_N,
+    FORMA_PAGTO DMN_SMALLINT_N,
+    DATAHORA DMN_DATETIME,
+    TIPO DMN_VCHAR_01,
+    HISTORICO DMN_VCHAR_250,
+    VALOR DMN_MONEY,
+    SITUACAO DMN_SMALLINT_N DEFAULT 1,
+    VENDA_ANO DMN_SMALLINT_N,
+    VENDA_NUM DMN_INTEGER_N,
+    COMPRA_ANO DMN_SMALLINT_N,
+    COMPRA_NUM DMN_INTEGER_N,
+    EMPRESA DMN_CNPJ,
+    FORNECEDOR DMN_INTEGER_N,
+    CLIENTE DMN_CNPJ,
+    USUARIO DMN_USUARIO);
+alter table TBCAIXA_MOVIMENTO
+add constraint PK_TBCAIXA_MOVIMENTO
+primary key (ANO,NUMERO);
+COMMENT ON COLUMN TBCAIXA_MOVIMENTO.TIPO IS
+'Tipo:
+C - Credito
+D - Debito';
+COMMENT ON COLUMN TBCAIXA_MOVIMENTO.SITUACAO IS
+'Situcao:
+0 - Cancelado
+1 - Confirmado';
+GRANT ALL ON TBCAIXA_MOVIMENTO TO "PUBLIC";
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_caixa_fechar For Tbcaixa
+Active Before Update Position 10
+AS
+  declare variable forma_pagto Integer;
+  declare variable descricao varchar(50);
+  declare variable total_credito Dmn_money;
+  declare variable total_debito Dmn_money;
+begin
+  if ( (old.Situacao = 0) and (new.Situacao = 1) ) then
+  begin
+    Delete from TBCAIXA_CONSOLIDACAO x
+    where x.Ano = new.Ano
+      and x.Numero = new.Numero;
+
+    for
+
+      Select
+          m.Forma_pagto
+        , f.Descri
+        , sum( coalesce(Case when m.Tipo = 'C' then m.Valor else 0 end, 0) )
+        , sum( coalesce(Case when m.Tipo = 'D' then m.Valor else 0 end, 0) )
+      from TBCAIXA_MOVIMENTO m
+        inner join TBFORMPAGTO f on (f.Cod = m.Forma_pagto)
+      where m.Caixa_ano = new.Ano
+        and m.Caixa_num = new.Numero
+      group by
+          m.Forma_pagto
+        , f.Descri
+      into
+          forma_pagto
+        , descricao
+        , total_credito
+        , total_debito
+
+    do
+    begin
+
+      Insert Into TBCAIXA_CONSOLIDACAO (
+          Ano
+        , Numero
+        , Forma_pagto
+        , Descricao
+        , Total_credito
+        , Total_debito
+      ) Values (
+          new.Ano
+        , new.Numero
+        , :Forma_pagto
+        , :Descricao
+        , coalesce(:Total_credito, 0)
+        , coalesce(:Total_debito, 0)
+      );
+
+    end 
+
+    Select
+        sum(c.Total_credito)
+      , sum(c.Total_debito)
+    from TBCAIXA_CONSOLIDACAO c
+    where c.Ano = new.Ano
+      and c.Numero = new.Numero
+    into
+        Total_credito
+      , Total_debito;
+
+    new.Valor_total_credito = coalesce(:Total_credito, 0);
+    new.Valor_total_debito  = coalesce(:Total_debito, 0);
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+alter table TBCAIXA_MOVIMENTO
+add constraint CHK1_TBCAIXA_MOVIMENTO
+check ((TIPO  = 'C') or (TIPO = 'D')
+);
+
+
+ALTER TABLE TBCAIXA_MOVIMENTO DROP CONSTRAINT CHK1_TBCAIXA_MOVIMENTO;
+alter table TBCAIXA_MOVIMENTO
+add constraint CHK_TBCAIXA_MOVIMENTO_TIPO
+check ((TIPO  = 'C') or (TIPO = 'D'));
+alter table TBCAIXA_MOVIMENTO
+add constraint CHK_TBCAIXA_MOVIMENTO_SIT
+check (situacao between 0 and 1);
+
+
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_CX
+foreign key (CAIXA_ANO,CAIXA_NUM)
+references TBCAIXA(ANO,NUMERO);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_CC
+foreign key (CONTA_CORRENTE)
+references TBCONTA_CORRENTE(CODIGO);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_FP
+foreign key (FORMA_PAGTO)
+references TBFORMPAGTO(COD);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_VD
+foreign key (VENDA_ANO,VENDA_NUM)
+references TBVENDAS(ANO,CODCONTROL);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_CM
+foreign key (COMPRA_ANO,COMPRA_NUM,EMPRESA)
+references TBCOMPRAS(ANO,CODCONTROL,CODEMP);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_EP
+foreign key (EMPRESA)
+references TBEMPRESA(CNPJ);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_FN
+foreign key (FORNECEDOR)
+references TBFORNECEDOR(CODFORN);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_CL
+foreign key (CLIENTE)
+references TBCLIENTE(CNPJ);
+alter table TBCAIXA_MOVIMENTO
+add constraint FK_TBCAIXA_MOVIMENTO_US
+foreign key (USUARIO)
+references TBUSERS(NOME);
+
+
+SET TERM ^ ;
+
+CREATE Trigger Tg_caixa_movimento_numero For Tbcaixa_movimento
+Active Before Insert Position 0
+AS
+begin
+  IF (New.Numero IS NULL) Then
+    if ( new.Ano = 2012 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2012, 1);
+    else
+    if ( new.Ano = 2013 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2013, 1);
+    else
+    if ( new.Ano = 2014 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2014, 1);
+    else
+    if ( new.Ano = 2015 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2015, 1);
+    else
+    if ( new.Ano = 2016 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2016, 1);
+    else
+    if ( new.Ano = 2017 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2017, 1);
+    else
+    if ( new.Ano = 2018 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2018, 1);
+    else
+    if ( new.Ano = 2019 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2019, 1);
+    else
+    if ( new.Ano = 2020 ) then
+      NEW.Numero = GEN_ID(GEN_CX_MOVIMENTO_2020, 1);
+end
+^
+
+SET TERM ; ^
+
+
+
+alter table TBCAIXA
+add constraint CHK_CAIXA_SITUACAO
+check (situacao between 0 and 2);
+
+
+alter table TBCAIXA_MOVIMENTO
+alter column ANO position 1;
+
+alter table TBCAIXA_MOVIMENTO
+alter column NUMERO position 2;
+
+alter table TBCAIXA_MOVIMENTO
+alter column CAIXA_ANO position 3;
+
+alter table TBCAIXA_MOVIMENTO
+alter column CAIXA_NUM position 4;
+
+alter table TBCAIXA_MOVIMENTO
+alter column CONTA_CORRENTE position 5;
+
+alter table TBCAIXA_MOVIMENTO
+alter column FORMA_PAGTO position 6;
+
+alter table TBCAIXA_MOVIMENTO
+alter column DATAHORA position 7;
+
+alter table TBCAIXA_MOVIMENTO
+alter column TIPO position 8;
+
+alter table TBCAIXA_MOVIMENTO
+alter column HISTORICO position 9;
+
+alter table TBCAIXA_MOVIMENTO
+alter column VALOR position 10;
+
+alter table TBCAIXA_MOVIMENTO
+alter column SITUACAO position 11;
+
+alter table TBCAIXA_MOVIMENTO
+alter column VENDA_ANO position 12;
+
+alter table TBCAIXA_MOVIMENTO
+alter column VENDA_NUM position 13;
+
+alter table TBCAIXA_MOVIMENTO
+alter column CLIENTE position 14;
+
+alter table TBCAIXA_MOVIMENTO
+alter column COMPRA_ANO position 15;
+
+alter table TBCAIXA_MOVIMENTO
+alter column COMPRA_NUM position 16;
+
+alter table TBCAIXA_MOVIMENTO
+alter column EMPRESA position 17;
+
+alter table TBCAIXA_MOVIMENTO
+alter column FORNECEDOR position 18;
+
+alter table TBCAIXA_MOVIMENTO
+alter column USUARIO position 19;
