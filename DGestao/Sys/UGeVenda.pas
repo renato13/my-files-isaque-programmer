@@ -12,7 +12,7 @@ uses
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
     lblData: TLabel;
-    edDataInicial: TDateTimePicker;
+    e1Data: TDateTimePicker;
     tblEmpresa: TIBTable;
     dtsEmpresa: TDataSource;
     lblEmpresa: TLabel;
@@ -244,7 +244,7 @@ type
     Bevel13: TBevel;
     dbTotalDesconto: TRxDBComboEdit;
     lblTotalDesconto: TLabel;
-    edDataFinal: TDateTimePicker;
+    e2Data: TDateTimePicker;
     cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField;
     lblProdutoPromocao: TLabel;
@@ -323,7 +323,7 @@ implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos;
+  UGeGerarBoletos, UGeEfetuarPagtoREC;
 
 {$R *.dfm}
 
@@ -335,8 +335,8 @@ begin
   frm := TfrmGeVenda.Create(AOwner);
   try
     whr := 'cast(v.dtvenda as date) between ' +
-            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edDataInicial.Date) ) + ' and ' +
-            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edDataFinal.Date) );
+            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e1Data.Date) ) + ' and ' +
+            QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e2Data.Date) );
 
     with frm, IbDtstTabela do
     begin
@@ -368,8 +368,8 @@ begin
   SQL_Titulos.Clear;
   SQL_Titulos.AddStrings( qryTitulos.SelectSQL );
 
-  edDataInicial.Date := Date;
-  edDataFinal.Date   := Date;
+  e1Data.Date := Date;
+  e2Data.Date   := Date;
   ControlFirstEdit   := dbEmpresa;
 
   tblEmpresa.Open;
@@ -390,8 +390,8 @@ end;
 procedure TfrmGeVenda.btnFiltrarClick(Sender: TObject);
 begin
   WhereAdditional :=  'cast(v.dtvenda as date) between ' +
-                        QuotedStr( FormatDateTime('yyyy-mm-dd', edDataInicial.Date) ) + ' and ' +
-                        QuotedStr( FormatDateTime('yyyy-mm-dd', edDataFinal.Date) );
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) + ' and ' +
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) );
   inherited;
 end;
 
@@ -1046,9 +1046,24 @@ procedure TfrmGeVenda.btbtnFinalizarClick(Sender: TObject);
     Result := Return;
   end;
 
+var
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente : Integer;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
+
+  CxAno    := 0;
+  CxNumero := 0;
+  CxContaCorrente := 0;
+
+  if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
+    if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+    begin
+      ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+      Exit;
+    end;
 
   IbDtstTabela.Edit;
 
@@ -1108,10 +1123,19 @@ begin
     HabilitarDesabilitar_Btns;
 
     // Forma de Pagamento: BOLETA BANCÁRIA
-    
+
     if ( GetEmitirBoleto and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto) ) then
       if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
         btnGerarBoleto.Click;
+
+    // Formas de Pagamento que nao seja a prazo
+    if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
+      if ( not qryTitulos.IsEmpty ) then
+        RegistrarPagamento(qryTitulosANOLANC.AsInteger, qryTitulosNUMLANC.AsInteger, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger,
+          IbDtstTabelaTOTALVENDA.AsCurrency, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
+
+    if ( CxContaCorrente > 0 ) then
+      GerarSaldoContaCorrente(CxContaCorrente, GetDateDB);
   end;
 end;
 

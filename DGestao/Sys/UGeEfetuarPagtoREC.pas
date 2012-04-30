@@ -5,13 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadrao, StdCtrls, Mask, DBCtrls, ExtCtrls, DB,
-  IBCustomDataSet, IBUpdateSQL, IBTable, Buttons;
+  IBCustomDataSet, IBUpdateSQL, IBTable, Buttons, IBStoredProc;
 
 type
   TfrmGeEfetuarPagtoREC = class(TfrmGrPadrao)
-    GrpBxDadosNominais: TGroupBox;
+    GrpBxPagamento: TGroupBox;
     Bevel1: TBevel;
-    GroupBox1: TGroupBox;
+    GrpBxLancamento: TGroupBox;
     lblAnoLanc: TLabel;
     Label3: TLabel;
     lblCliente: TLabel;
@@ -54,6 +54,7 @@ type
     dbHistorico: TDBMemo;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
+    cdsPagamentosUSUARIO: TIBStringField;
     procedure dtsPagamentosStateChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -69,7 +70,8 @@ type
 var
   frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC;
 
-  function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento : Integer; const Cliente : String) : Boolean;
+  function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento, FormaPagto : Integer; const Cliente : String; var DataPagto : TDateTime) : Boolean;
+  function RegistrarPagamento(LancAno, LanNumero : Integer; DataPagto : TDateTime; FormaPagto : Integer; ValorPago : Currency; VendaAno, VendaNumero : Integer) : Boolean;
 
 implementation
 
@@ -77,7 +79,7 @@ uses UDMBusiness;
 
 {$R *.dfm}
 
-function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento : Integer; const Cliente : String) : Boolean;
+function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento, FormaPagto : Integer; const Cliente : String; var DataPagto : TDateTime) : Boolean;
 var
   frm : TfrmGeEfetuarPagtoREC;
 begin
@@ -100,8 +102,77 @@ begin
 
       cdsPagamentos.Open;
       cdsPagamentos.Append;
+      cdsPagamentosFORMA_PAGTO.AsInteger := FormaPagto;
 
       Result := (ShowModal = mrOk);
+
+      if ( Result ) then
+      begin
+        DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
+
+        SetMovimentoCaixa(
+          GetUserApp,
+          cdsPagamentosDATA_PAGTO.AsDateTime + Time,
+          cdsPagamentosFORMA_PAGTO.AsInteger,
+          cdsPagamentosANOLANC.AsInteger,
+          cdsPagamentosNUMLANC.AsInteger,
+          cdsPagamentosSEQ.AsInteger,
+          cdsPagamentosVALOR_BAIXA.AsCurrency,
+          tmcxCredito);
+      end;
+    end;
+
+  finally
+    frm.Free;
+  end;
+end;
+
+function RegistrarPagamento(LancAno, LanNumero : Integer; DataPagto : TDateTime; FormaPagto : Integer; ValorPago : Currency; VendaAno, VendaNumero : Integer) : Boolean;
+var
+  frm : TfrmGeEfetuarPagtoREC;
+begin
+  frm := TfrmGeEfetuarPagtoREC.Create(Application);
+  try
+
+    with frm do
+    begin
+      edAnoLanc.Text := FormatFloat('0000', LancAno);
+      edNumLanc.Text := FormatFloat('###0000000', LanNumero);
+
+      cdsPagamentos.Close;
+
+      with cdsPagamentos, SelectSQL do
+      begin
+        Add('where p.Anolanc = ' + IntToStr(LancAno));
+        Add('  and p.Numlanc = ' + IntToStr(LanNumero));
+      end;
+
+      cdsPagamentos.Open;
+      cdsPagamentos.Append;
+
+      cdsPagamentosDATA_PAGTO.AsDateTime  := DataPagto;
+      cdsPagamentosFORMA_PAGTO.AsInteger  := FormaPagto;
+      cdsPagamentosVALOR_BAIXA.AsCurrency := ValorPago;
+      cdsPagamentosDOCUMENTO_BAIXA.AsString := FormatFloat('0000', VendaAno) + FormatFloat('000000', VendaNumero);
+      cdsPagamentosHISTORICO.AsString       := 'BAIXA AUTOMATICA DE CONFIRMACAO DA VENDA No. ' + FormatFloat('0000', VendaAno) + '/' + FormatFloat('000000', VendaNumero);
+
+      cdsPagamentos.Post;
+      cdsPagamentos.ApplyUpdates;
+
+      CommitTransaction;
+
+      cdsPagamentos.Close;
+
+      SetMovimentoCaixa(
+        GetUserApp,
+        DataPagto + Time,
+        FormaPagto,
+        LancAno,
+        LanNumero,
+        0,
+        ValorPago,
+        tmcxCredito);
+
     end;
 
   finally
@@ -170,7 +241,8 @@ begin
   cdsPagamentosANOLANC.Value    := StrToInt(edAnoLanc.Text);
   cdsPagamentosNUMLANC.Value    := StrToInt(edNumLanc.Text);
   cdsPagamentosSEQ.Value        := GetNextID('TBCONTREC_BAIXA', 'SEQ', 'where anolanc = ' + edAnoLanc.Text + ' and numlanc = ' + edNumLanc.Text);
-  cdsPagamentosDATA_PAGTO.Value := Date;
+  cdsPagamentosDATA_PAGTO.Value := GetDateDB;
+  cdsPagamentosUSUARIO.Value    := GetUserApp;
   cdsPagamentosFORMA_PAGTO.Value      := GetFormaPagtoIDDefault;
   cdsPagamentosFORMA_PAGTO_DESC.Value := GetFormaPagtoNomeDefault;
 end;

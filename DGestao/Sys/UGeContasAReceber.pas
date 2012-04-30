@@ -113,6 +113,7 @@ type
     lblPercDesconto: TLabel;
     dbPercDesconto: TDBEdit;
     IbDtstTabelaNOMECLIENTE: TIBStringField;
+    IbDtstTabelaSITUACAO: TSmallintField;
     procedure FormCreate(Sender: TObject);
     procedure dbClienteButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -231,17 +232,33 @@ begin
   IbDtstTabelaPERCENTJUROS.Value    := 0;
   IbDtstTabelaPERCENTMULTA.Value    := 0;
   IbDtstTabelaPERCENTDESCONTO.Value := 0;
-  IbDtstTabelaBAIXADO.Value := 0;
-  IbDtstTabelaENVIADO.Value := 0;
+  IbDtstTabelaBAIXADO.Value  := 0;
+  IbDtstTabelaENVIADO.Value  := 0;
+  IbDtstTabelaSITUACAO.Value := 1; // Ativa
 end;
 
 procedure TfrmGeContasAReceber.btbtnEfetuarPagtoClick(Sender: TObject);
 var
-  sSenha  : String;
-  iNumero : Integer;
+  sSenha   : String;
+  iNumero  ,
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente : Integer;
+  DataPagto : TDateTime;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
+
+  CxAno    := 0;
+  CxNumero := 0;
+  CxContaCorrente := 0;
+
+  if ( tblFormaPagto.FieldByName('Conta_corrente').AsInteger > 0 ) then
+    if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMA_PAGTO.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+    begin
+      ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+      Exit;
+    end;
 
 //  sSenha := InputBox('Favor informar a senha de autorização', 'Senha de Autorização:', '');
 //
@@ -254,7 +271,7 @@ begin
 //    Exit;
 //  end;
 
-  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaNOMECLIENTE.AsString) then
+  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaFORMA_PAGTO.AsInteger, IbDtstTabelaNOMECLIENTE.AsString, DataPagto) then
   begin
     iNumero := IbDtstTabelaNUMLANC.AsInteger;
 
@@ -264,6 +281,9 @@ begin
     IbDtstTabela.Locate('NUMLANC', iNumero, []);
 
     AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+
+    if ( CxContaCorrente > 0 ) then
+      GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
   end;
 end;
 

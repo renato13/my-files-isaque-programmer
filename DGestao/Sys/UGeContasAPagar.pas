@@ -88,6 +88,9 @@ type
     IbDtstTabelaCODTPDESP: TSmallintField;
     dtsTpDespesa: TDataSource;
     qryTpDespesa: TIBQuery;
+    lblLancamentoAberto: TLabel;
+    lblCaixaCancelado: TLabel;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure dbFornecedorButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -100,6 +103,8 @@ type
     procedure btbtnAlterarClick(Sender: TObject);
     procedure btbtnExcluirClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -111,6 +116,10 @@ type
 
 var
   frmGeContasAPagar: TfrmGeContasAPagar;
+
+const
+  STATUS_APAGAR_PENDENTE = 0;
+  STATUS_APAGAR_PAGO     = 1;
 
   procedure MostrarControleContasAPagar(const AOwner : TComponent);
 
@@ -195,9 +204,12 @@ end;
 procedure TfrmGeContasAPagar.IbDtstTabelaQUITADOGetText(Sender: TField;
   var Text: String; DisplayText: Boolean);
 begin
+  if ( Sender.IsNull ) then
+    Exit;
+    
   Case Sender.AsInteger of
-    0 : Text := 'A Pagar';
-    1 : Text := 'Pago';
+    STATUS_APAGAR_PENDENTE : Text := 'A Pagar';
+    STATUS_APAGAR_PAGO     : Text := 'Pago';
     else
       Text := Sender.AsString;
   end;
@@ -210,18 +222,34 @@ begin
   IbDtstTabelaNOMEEMP.Value := GetEmpresaNomeDefault;
   IbDtstTabelaPARCELA.Value := 0;
   IbDtstTabelaDTEMISS.Value := Date;
-  IbDtstTabelaQUITADO.Value := 0;
+  IbDtstTabelaQUITADO.Value := STATUS_APAGAR_PENDENTE;
   IbDtstTabelaFORMA_PAGTO.Value    := GetFormaPagtoIDDefault;
   IbDtstTabelaCONDICAO_PAGTO.Value := GetCondicaoPagtoIDDefault;
 end;
 
 procedure TfrmGeContasAPagar.btbtnEfetuarPagtoClick(Sender: TObject);
 var
-  sSenha  : String;
-  iNumero : Integer;
+  sSenha   : String;
+  iNumero  ,
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente : Integer;
+  DataPagto : TDateTime;
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
+
+  CxAno    := 0;
+  CxNumero := 0;
+  CxContaCorrente := 0;
+
+  if ( tblCondicaoPagto.Locate('COND_COD', IbDtstTabelaCONDICAO_PAGTO.AsInteger, []) ) then
+    if ( tblCondicaoPagto.FieldByName('COND_PRAZO').AsInteger = 0 ) then
+      if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMA_PAGTO.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+      begin
+        ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+        Exit;
+      end;
 
   sSenha := InputBox('Favor informar a senha de autorização', 'Senha de Autorização:', '');
 
@@ -234,7 +262,7 @@ begin
     Exit;
   end;
 
-  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaNOMEFORN.AsString) then
+  if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaFORMA_PAGTO.AsInteger, IbDtstTabelaNOMEFORN.AsString, DataPagto) then
   begin
     iNumero := IbDtstTabelaNUMLANC.AsInteger;
 
@@ -244,13 +272,16 @@ begin
     IbDtstTabela.Locate('NUMLANC', iNumero, []);
 
     AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+
+    if ( CxContaCorrente > 0 ) then
+      GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
   end;
 end;
 
 procedure TfrmGeContasAPagar.HabilitarDesabilitar_Btns;
 begin
   if ( pgcGuias.ActivePage = tbsCadastro ) then
-    btbtnEfetuarPagto.Enabled := (IbDtstTabelaQUITADO.AsInteger = 0) and (not IbDtstTabela.IsEmpty)
+    btbtnEfetuarPagto.Enabled := (IbDtstTabelaQUITADO.AsInteger = STATUS_APAGAR_PENDENTE) and (not IbDtstTabela.IsEmpty)
   else
     btbtnEfetuarPagto.Enabled := False;
 end;
@@ -288,7 +319,7 @@ end;
 
 procedure TfrmGeContasAPagar.btbtnAlterarClick(Sender: TObject);
 begin
-  if ( IbDtstTabelaQUITADO.AsInteger = 1 ) then
+  if ( IbDtstTabelaQUITADO.AsInteger = STATUS_APAGAR_PAGO ) then
   begin
     ShowWarning('O Lançamento não poderá ser alterado pois este já está quitado!');
     Abort;
@@ -308,7 +339,7 @@ end;
 
 procedure TfrmGeContasAPagar.btbtnExcluirClick(Sender: TObject);
 begin
-  if ( IbDtstTabelaQUITADO.AsInteger = 1 ) then
+  if ( IbDtstTabelaQUITADO.AsInteger = STATUS_APAGAR_PAGO ) then
   begin
     ShowWarning('O Lançamento não poderá ser excluído pois este já está quitado!');
     Abort;
@@ -326,6 +357,30 @@ begin
   inherited;
   qryTpDespesa.Prior;
   qryTpDespesa.Last;
+end;
+
+procedure TfrmGeContasAPagar.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if ( Sender = dbgDados ) then
+  begin
+    // Destacar Caixas Abertos
+    if ( IbDtstTabelaQUITADO.AsInteger = STATUS_APAGAR_PENDENTE ) then
+      dbgDados.Canvas.Font.Color := lblLancamentoAberto.Font.Color;
+
+    dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
+  end
+//  else
+//  // Destacar produtos em Promocao
+//  if ( Sender = dbgProdutos ) then
+//  begin
+//    if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
+//      dbgProdutos.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
+//
+//    dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
+//  end;
 end;
 
 end.

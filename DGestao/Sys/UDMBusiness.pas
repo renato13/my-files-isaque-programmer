@@ -4,10 +4,11 @@ interface
 
 uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
-  IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg, IdBaseComponent,
-  IdComponent, IdIPWatch;
+  DateUtils, IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg, IdBaseComponent,
+  IdComponent, IdIPWatch, IBStoredProc;
 
 type
+  TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
   TDMBusiness = class(TDataModule)
     ibdtbsBusiness: TIBDatabase;
     ibtrnsctnBusiness: TIBTransaction;
@@ -37,6 +38,17 @@ type
     ibdtstUsersLIMIDESC: TIBBCDField;
     raveReport: TRvProject;
     IdIPWatch: TIdIPWatch;
+    qryCaixaAberto: TIBDataSet;
+    qryCaixaAbertoANO: TSmallintField;
+    qryCaixaAbertoNUMERO: TIntegerField;
+    qryCaixaAbertoUSUARIO: TIBStringField;
+    qryCaixaAbertoDATA_ABERTURA: TDateField;
+    qryCaixaAbertoVALOR_TOTAL_CREDITO: TIBBCDField;
+    qryCaixaAbertoVALOR_TOTAL_DEBITO: TIBBCDField;
+    stpCaixaMovimentoREC: TIBStoredProc;
+    stpCaixaMovimentoPAG: TIBStoredProc;
+    stpContaCorrenteSaldo: TIBStoredProc;
+    qryCaixaAbertoCONTA_CORRENTE: TIntegerField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -56,6 +68,7 @@ var
   procedure CommitTransaction;
 
   procedure Desativar_Promocoes;
+  procedure GerarSaldoContaCorrente(const ContaCorrente : Integer; const Data : TDateTime);
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -98,6 +111,9 @@ var
   function GetTimeDB : TDateTime;
   function GetUserApp : String;
   function GetLimiteDescontoUser : Currency;
+  function CaixaAberto(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint; var CxAno, CxNumero, CxContaCorrente : Integer) : Boolean;
+  function SetMovimentoCaixa(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
+    const AnoLancamento, NumLancamento, SeqPagto : Integer; const Valor : Currency; const TipoMov : TTipoMovimentoCaixa) : Boolean;
 
 const
   DB_USER_NAME     = 'SYSDBA';
@@ -178,6 +194,33 @@ begin
     ExecSQL;
 
     CommitTransaction;
+  end;
+end;
+
+procedure GerarSaldoContaCorrente(const ContaCorrente : Integer; const Data : TDateTime);
+begin
+  try
+
+    try
+
+      with DMBusiness, stpContaCorrenteSaldo do
+      begin
+        ParamByName('CONTA_CORRENTE').AsInteger  := ContaCorrente;
+        ParamByName('DATA_MOVIMENTO').AsDateTime := Data;
+
+        ExecProc;
+        CommitTransaction;
+      end;
+
+    except
+      On E : Exception do
+      begin
+        DMBusiness.ibtrnsctnBusiness.Rollback;
+        ShowError('Erro ao tentar atualizar saldo diário de conta corrente.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
   end;
 end;
 
@@ -662,7 +705,7 @@ begin
     Open;
 
     if IsEmpty then
-      ShowWarning('Não existe senha de autorização gravada na base.' + #13#13 + 'Favor solicitação a geração de uma senha de autorização');
+      ShowWarning('Não existe senha de autorização gravada na base.' + #13#13 + 'Favor solicitar a geração de uma senha de autorização');
 
     Result := FieldByName('snh_descricao').AsString;
 
@@ -719,6 +762,85 @@ function GetLimiteDescontoUser : Currency;
 begin
   with DMBusiness, ibdtstUsers do
     Result := ibdtstUsersLIMIDESC.AsCurrency;
+end;
+
+function CaixaAberto(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint; var CxAno, CxNumero, CxContaCorrente : Integer) : Boolean;
+begin
+  with DMBusiness, qryCaixaAberto do
+  begin
+    Close;
+    ParamByName('Usuario').AsString   := Usuario;
+    ParamByName('Data').AsDate        := Data;
+    ParamByName('FormaPagto').AsShort := FormaPagto;
+    Open;
+
+    Result := not IsEmpty;
+
+    if ( Result ) then
+    begin
+      CxAno           := qryCaixaAbertoANO.AsInteger;
+      CxNumero        := qryCaixaAbertoNUMERO.AsInteger; 
+      CxContaCorrente := qryCaixaAbertoCONTA_CORRENTE.AsInteger
+    end;
+  end;
+end;
+
+function SetMovimentoCaixa(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
+  const AnoLancamento, NumLancamento, SeqPagto : Integer; const Valor : Currency; const TipoMov : TTipoMovimentoCaixa) : Boolean;
+var
+  Return : Boolean;
+begin
+  try
+
+    Return := False;
+
+    try
+
+      UpdateSequence('GEN_CX_MOVIMENTO_' + IntToStr(YearOf(Data)), 'TBCAIXA_MOVIMENTO', 'NUMERO', 'where ANO = ' + IntToStr(YearOf(Data)));
+
+      if ( TipoMov = tmcxCredito ) then
+        with DMBusiness, stpCaixaMovimentoREC do
+        begin
+          ParamByName('USUARIO').AsString       := Usuario;
+          ParamByName('DATA_PAGTO').AsDateTime  := Data;
+          ParamByName('FORMA_PAGTO').AsInteger  := FormaPagto;
+          ParamByName('ANOLANC').AsInteger      := AnoLancamento;
+          ParamByName('NUMLANC').AsInteger      := NumLancamento;
+          ParamByName('SEQ').AsInteger          := SeqPagto;
+          ParamByName('VALOR_BAIXA').AsCurrency := Valor;
+
+          ExecProc;
+          CommitTransaction;
+        end
+      else
+      if ( TipoMov = tmcxDebito ) then
+        with DMBusiness, stpCaixaMovimentoPAG do
+        begin
+          ParamByName('USUARIO').AsString       := Usuario;
+          ParamByName('DATA_PAGTO').AsDateTime  := Data;
+          ParamByName('FORMA_PAGTO').AsInteger  := FormaPagto;
+          ParamByName('ANOLANC').AsInteger      := AnoLancamento;
+          ParamByName('NUMLANC').AsInteger      := NumLancamento;
+          ParamByName('SEQ').AsInteger          := SeqPagto;
+          ParamByName('VALOR_BAIXA').AsCurrency := Valor;
+
+          ExecProc;
+          CommitTransaction;
+        end;
+
+      Return := True;
+
+    except
+      On E : Exception do
+      begin
+        DMBusiness.ibtrnsctnBusiness.Rollback;
+        ShowError('Erro ao tentar registrar o pagamento no movimento de caixa.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
+    Result := Return;
+  end;
 end;
 
 procedure TDMBusiness.DataModuleCreate(Sender: TObject);

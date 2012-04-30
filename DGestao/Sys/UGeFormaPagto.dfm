@@ -12,17 +12,24 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           item
             Expanded = False
             FieldName = 'COD'
+            Width = 50
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'DESCRI'
-            Width = 350
+            Width = 300
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'ACRESCIMO'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Lkp_ContaCorrente'
+            Width = 250
             Visible = True
           end>
       end
@@ -163,6 +170,18 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       DisplayLabel = 'Conta Corrente'
       FieldName = 'CONTA_CORRENTE'
       Origin = 'TBFORMPAGTO.CONTA_CORRENTE'
+    end
+    object IbDtstTabelaLkp_ContaCorrente: TStringField
+      DisplayLabel = 'Conta Corrente'
+      FieldKind = fkLookup
+      FieldName = 'Lkp_ContaCorrente'
+      LookupDataSet = tblContaCorrente
+      LookupKeyFields = 'CODIGO'
+      LookupResultField = 'DESCRICAO'
+      KeyFields = 'CONTA_CORRENTE'
+      ProviderFlags = []
+      Size = 50
+      Lookup = True
     end
   end
   inherited IbUpdTabela: TIBUpdateSQL

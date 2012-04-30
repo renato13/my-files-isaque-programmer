@@ -3,7 +3,7 @@ object DMBusiness: TDMBusiness
   OnCreate = DataModuleCreate
   Left = 543
   Top = 449
-  Height = 266
+  Height = 400
   Width = 575
   object ibdtbsBusiness: TIBDatabase
     DatabaseName = 'localhost:BUSINESS'
@@ -274,5 +274,131 @@ object DMBusiness: TDMBusiness
     HistoryFilename = 'iphist.dat'
     Left = 312
     Top = 104
+  end
+  object qryCaixaAberto: TIBDataSet
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    DeleteSQL.Strings = (
+      'delete from TBUSERS'
+      'where'
+      '  NOME = :OLD_NOME')
+    InsertSQL.Strings = (
+      'insert into TBUSERS'
+      '  (NOME, SENHA, NOMECOMPLETO, CODFUNCAO, LIMIDESC)'
+      'values'
+      '  (:NOME, :SENHA, :NOMECOMPLETO, :CODFUNCAO, :LIMIDESC)')
+    RefreshSQL.Strings = (
+      'Select '
+      '  NOME,'
+      '  SENHA,'
+      '  NOMECOMPLETO,'
+      '  CODFUNCAO,'
+      '  LIMIDESC'
+      'from TBUSERS '
+      'where'
+      '  NOME = :NOME')
+    SelectSQL.Strings = (
+      'Select First 1'
+      '    c.Ano'
+      '  , c.Numero'
+      '  , c.Usuario'
+      '  , c.Data_abertura'
+      '  , c.Conta_corrente'
+      
+        '  , sum( Case when upper(cm.Tipo) = '#39'C'#39' then cm.Valor else 0 end' +
+        ' ) as Valor_total_credito'
+      
+        '  , sum( Case when upper(cm.Tipo) = '#39'D'#39' then cm.Valor else 0 end' +
+        ' ) as Valor_total_debito'
+      'from TBCAIXA c'
+      
+        '  Inner join TBCONTA_CORRENTE cc on (cc.Codigo = c.Conta_corrent' +
+        'e)'
+      
+        '  left join TBCAIXA_MOVIMENTO cm on (cm.Caixa_ano = c.Ano and cm' +
+        '.Caixa_num = c.Numero)'
+      'where c.Situacao = 0'
+      '  and c.Usuario = :Usuario'
+      '  and ( (c.Data_abertura = :Data) or (cc.Tipo = 2) )'
+      '  and c.Conta_corrente in ('
+      '    Select'
+      '      f.Conta_corrente'
+      '    from TBFORMPAGTO f'
+      '    where f.Cod = :FormaPagto'
+      '  )'
+      'Group by'
+      '    c.Ano'
+      '  , c.Numero'
+      '  , c.Usuario'
+      '  , c.Data_abertura'
+      '  , c.Conta_corrente')
+    ModifySQL.Strings = (
+      'update TBUSERS'
+      'set'
+      '  NOME = :NOME,'
+      '  SENHA = :SENHA,'
+      '  NOMECOMPLETO = :NOMECOMPLETO,'
+      '  CODFUNCAO = :CODFUNCAO,'
+      '  LIMIDESC = :LIMIDESC'
+      'where'
+      '  NOME = :OLD_NOME')
+    Left = 144
+    Top = 168
+    object qryCaixaAbertoANO: TSmallintField
+      FieldName = 'ANO'
+      Origin = 'TBCAIXA.ANO'
+      Required = True
+    end
+    object qryCaixaAbertoNUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = 'TBCAIXA.NUMERO'
+      Required = True
+    end
+    object qryCaixaAbertoUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = 'TBCAIXA.USUARIO'
+      Size = 12
+    end
+    object qryCaixaAbertoDATA_ABERTURA: TDateField
+      FieldName = 'DATA_ABERTURA'
+      Origin = 'TBCAIXA.DATA_ABERTURA'
+    end
+    object qryCaixaAbertoCONTA_CORRENTE: TIntegerField
+      FieldName = 'CONTA_CORRENTE'
+      Origin = 'TBCAIXA.CONTA_CORRENTE'
+    end
+    object qryCaixaAbertoVALOR_TOTAL_CREDITO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_CREDITO'
+      Precision = 18
+      Size = 2
+    end
+    object qryCaixaAbertoVALOR_TOTAL_DEBITO: TIBBCDField
+      FieldName = 'VALOR_TOTAL_DEBITO'
+      Precision = 18
+      Size = 2
+    end
+  end
+  object stpCaixaMovimentoREC: TIBStoredProc
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    StoredProcName = 'SET_CAIXA_MOVIMENTO_REC'
+    Left = 144
+    Top = 216
+  end
+  object stpCaixaMovimentoPAG: TIBStoredProc
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    StoredProcName = 'SET_CAIXA_MOVIMENTO_PAG'
+    Left = 144
+    Top = 264
+  end
+  object stpContaCorrenteSaldo: TIBStoredProc
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    StoredProcName = 'SET_CONTA_CORRENTE_SALDO'
+    Left = 144
+    Top = 312
   end
 end

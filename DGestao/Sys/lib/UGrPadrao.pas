@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, HPL_Strings, StdCtrls, DBCtrls, IBCustomDataSet, DB, DBClient,
   ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, ToolEdit, RXDBCtrl,
-  ComCtrls, CurrEdit;
+  ComCtrls, CurrEdit, RxLookup;
 
 type
   TfrmGrPadrao = class(TForm)
@@ -53,6 +53,7 @@ begin
       or (Frm.ActiveControl is TComboBox)
       or (Frm.ActiveControl is TMaskEdit)
       or (Frm.ActiveControl is TLabeledEdit)
+      or (Frm.ActiveControl is TRxLookupEdit)
       // DB Controls
       or (Frm.ActiveControl is TDBEdit)
       or (Frm.ActiveControl is TDBCheckBox)
@@ -351,8 +352,16 @@ begin
     begin
       if ( not Assigned(TDateTimePicker(Win.Components[i]).OnEnter) ) then
         TDateTimePicker(Win.Components[i]).OnEnter := ControlEditEnter;
-      if ( not Assigned(TComboBox(Win.Components[i]).OnExit) ) then
+      if ( not Assigned(TDateTimePicker(Win.Components[i]).OnExit) ) then
         TDateTimePicker(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
+    if ( Win.Components[i] is TRxLookupEdit ) then
+    begin
+      if ( not Assigned(TRxLookupEdit(Win.Components[i]).OnEnter) ) then
+        TRxLookupEdit(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TRxLookupEdit(Win.Components[i]).OnExit) ) then
+        TRxLookupEdit(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
     // Controls DB

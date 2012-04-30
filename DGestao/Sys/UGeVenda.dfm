@@ -449,14 +449,14 @@ inherited frmGeVenda: TfrmGeVenda
             Width = 46
             Height = 13
             Caption = 'Per'#237'odo:'
-            FocusControl = edDataInicial
+            FocusControl = e1Data
           end
           inherited edtFiltrar: TEdit
             Left = 328
             Width = 182
             TabOrder = 2
           end
-          object edDataInicial: TDateTimePicker
+          object e1Data: TDateTimePicker
             Left = 64
             Top = 21
             Width = 105
@@ -465,7 +465,7 @@ inherited frmGeVenda: TfrmGeVenda
             Time = 40913.000000000000000000
             TabOrder = 0
           end
-          object edDataFinal: TDateTimePicker
+          object e2Data: TDateTimePicker
             Left = 176
             Top = 21
             Width = 105
