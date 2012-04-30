@@ -84,6 +84,27 @@ type
     qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField;
     lblLimiteDisponivel: TLabel;
     dbLimiteDisponivel: TDBEdit;
+    qryTitulos: TIBQuery;
+    dtsTitulos: TDataSource;
+    qryTitulosANOLANC: TSmallintField;
+    qryTitulosNUMLANC: TIntegerField;
+    qryTitulosLANCAMENTO: TIBStringField;
+    qryTitulosPARCELA: TSmallintField;
+    qryTitulosDTEMISS: TDateField;
+    qryTitulosDTVENC: TDateField;
+    qryTitulosFORMA_PAGTO: TSmallintField;
+    qryTitulosFORMA_PAGTO_DESC: TIBStringField;
+    qryTitulosNOSSONUMERO: TIBStringField;
+    qryTitulosVALORREC: TIBBCDField;
+    qryTitulosVALORMULTA: TIBBCDField;
+    qryTitulosVALORRECTOT: TIBBCDField;
+    qryTitulosVALORSALDO: TIBBCDField;
+    qryTitulosSTATUS: TIBStringField;
+    qryTitulosSITUACAO: TSmallintField;
+    pnlTitulos: TPanel;
+    dbgTitulos: TDBGrid;
+    lblTituloCancelado: TLabel;
+    lblTituloPagando: TLabel;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -95,6 +116,10 @@ type
     procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
     procedure btbtnSalvarClick(Sender: TObject);
     procedure pgcGuiasChange(Sender: TObject);
+    procedure qryTitulosSITUACAOGetText(Sender: TField; var Text: String;
+      DisplayText: Boolean);
+    procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -336,12 +361,48 @@ begin
     ParamByName('cnpj').AsString := sCNPJ;
     Open;
   end;
+
+  with qryTitulos do
+  begin
+    Close;
+    ParamByName('cliente').AsString := sCNPJ;
+    Open;
+  end;
 end;
 
 procedure TfrmGeCliente.pgcGuiasChange(Sender: TObject);
 begin
   inherited;
   GetComprasAbertas( IbDtstTabela.FieldByName('CNPJ').AsString );
+end;
+
+procedure TfrmGeCliente.qryTitulosSITUACAOGetText(Sender: TField;
+  var Text: String; DisplayText: Boolean);
+begin
+  if ( Sender.IsNull ) then
+    Exit;
+    
+  if ( Sender.AsInteger = 0 ) then
+    Text := 'Cancelado';
+end;
+
+procedure TfrmGeCliente.dbgDadosDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+begin
+  inherited;
+  if ( Sender = dbgTitulos ) then
+  begin
+    // Destacar Títulos em Pagamento
+    if ( qryTitulosVALORRECTOT.AsCurrency > 0 ) then
+      dbgTitulos.Canvas.Font.Color := lblTituloPagando.Font.Color
+    else
+    // Destacar Títulos Cancelados
+    if ( qryTitulosSITUACAO.AsInteger = 0 ) then
+      dbgTitulos.Canvas.Font.Color := lblTituloCancelado.Font.Color;
+
+    dbgTitulos.DefaultDrawDataCell(Rect, dbgTitulos.Columns[DataCol].Field, State);
+  end
 end;
 
 end.

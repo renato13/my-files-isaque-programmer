@@ -22,6 +22,7 @@ type
     tblContaCorrente: TIBTable;
     dtsContaCorrente: TDataSource;
     IbDtstTabelaCONTA_CORRENTE: TIntegerField;
+    IbDtstTabelaLkp_ContaCorrente: TStringField;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
   private

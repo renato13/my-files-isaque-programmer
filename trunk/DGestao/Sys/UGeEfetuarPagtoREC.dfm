@@ -27,7 +27,7 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
     Anchors = [akLeft, akRight, akBottom]
     Shape = bsSpacer
   end
-  object GrpBxDadosNominais: TGroupBox
+  object GrpBxPagamento: TGroupBox
     Left = 0
     Top = 85
     Width = 531
@@ -41,7 +41,7 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 0
+    TabOrder = 1
     DesignSize = (
       531
       228)
@@ -260,14 +260,14 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       OnExit = ControlEditExit
     end
   end
-  object GroupBox1: TGroupBox
+  object GrpBxLancamento: TGroupBox
     Left = 0
     Top = 0
     Width = 531
     Height = 81
     Align = alTop
     Caption = 'Dados do lan'#231'amento (Contas A Receber)'
-    TabOrder = 1
+    TabOrder = 0
     object lblAnoLanc: TLabel
       Left = 16
       Top = 24
@@ -505,6 +505,7 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       '  , p.Banco'
       '  , b.Bco_nome'
       '  , p.Documento_baixa'
+      '  , p.Usuario'
       'from TBCONTREC_BAIXA p'
       '  left join TBFORMPAGTO f on (f.Cod = p.Forma_pagto)'
       '  left join TBBANCO_BOLETO b on (b.Bco_cod = p.Banco)')
@@ -585,6 +586,11 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       Origin = 'TBCONTPAG_BAIXA.DOCUMENTO_BAIXA'
       Size = 10
     end
+    object cdsPagamentosUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = 'TBCONTREC_BAIXA.USUARIO'
+      Size = 12
+    end
   end
   object updPagamentos: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -598,7 +604,8 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       '  VALOR_BAIXA,'
       '  NUMERO_CHEQUE,'
       '  BANCO,'
-      '  DOCUMENTO_BAIXA'
+      '  DOCUMENTO_BAIXA,'
+      '  USUARIO'
       'from TBCONTREC_BAIXA '
       'where'
       '  ANOLANC = :ANOLANC and'
@@ -616,7 +623,8 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       '  VALOR_BAIXA = :VALOR_BAIXA,'
       '  NUMERO_CHEQUE = :NUMERO_CHEQUE,'
       '  BANCO = :BANCO,'
-      '  DOCUMENTO_BAIXA = :DOCUMENTO_BAIXA'
+      '  DOCUMENTO_BAIXA = :DOCUMENTO_BAIXA,'
+      '  USUARIO = :USUARIO'
       'where'
       '  ANOLANC = :OLD_ANOLANC and'
       '  NUMLANC = :OLD_NUMLANC and'
@@ -626,12 +634,12 @@ inherited frmGeEfetuarPagtoREC: TfrmGeEfetuarPagtoREC
       
         '  (ANOLANC, NUMLANC, SEQ, HISTORICO, DATA_PAGTO, FORMA_PAGTO, VA' +
         'LOR_BAIXA, '
-      '   NUMERO_CHEQUE, BANCO, DOCUMENTO_BAIXA)'
+      '   NUMERO_CHEQUE, BANCO, DOCUMENTO_BAIXA, USUARIO)'
       'values'
       
         '  (:ANOLANC, :NUMLANC, :SEQ, :HISTORICO, :DATA_PAGTO, :FORMA_PAG' +
         'TO, :VALOR_BAIXA, '
-      '   :NUMERO_CHEQUE, :BANCO, :DOCUMENTO_BAIXA)')
+      '   :NUMERO_CHEQUE, :BANCO, :DOCUMENTO_BAIXA, :USUARIO)')
     DeleteSQL.Strings = (
       'delete from TBCONTREC_BAIXA'
       'where'

@@ -22,7 +22,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       Width = 120
       Height = 31
       Hint = 'Efetuar Pagamento'
-      Caption = '&Efetuar Pagto.'
+      Caption = 'Efetuar &Pagto.'
       Enabled = False
       ParentShowHint = False
       ShowHint = True
@@ -1042,6 +1042,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  , r.Enviado'
       '  , r.Anovenda'
       '  , r.Numvenda'
+      '  , r.Situacao'
       '  , c.Nome as NomeCliente'
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
       'from TBCONTREC r'
@@ -1236,6 +1237,10 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       Origin = 'TBCLIENTE.NOME'
       Size = 60
     end
+    object IbDtstTabelaSITUACAO: TSmallintField
+      FieldName = 'SITUACAO'
+      Origin = 'TBCONTREC.SITUACAO'
+    end
   end
   inherited DtSrcTabela: TDataSource
     Left = 832
@@ -1271,7 +1276,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  BAIXADO,'
       '  ENVIADO,'
       '  ANOVENDA,'
-      '  NUMVENDA'
+      '  NUMVENDA,'
+      '  SITUACAO'
       'from TBCONTREC '
       'where'
       '  ANOLANC = :ANOLANC and'
@@ -1281,6 +1287,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       'set'
       '  ANOLANC = :ANOLANC,'
       '  NUMLANC = :NUMLANC,'
+      '  PARCELA = :PARCELA,'
       '  CNPJ = :CNPJ,'
       '  FORMA_PAGTO = :FORMA_PAGTO,'
       '  TIPPAG = :TIPPAG,'
@@ -1294,7 +1301,6 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  VALORMULTA = :VALORMULTA,'
       '  VALORRECTOT = :VALORRECTOT,'
       '  NUMCONTRATO = :NUMCONTRATO,'
-      '  PARCELA = :PARCELA,'
       '  CODBANCO = :CODBANCO,'
       '  NOSSONUMERO = :NOSSONUMERO,'
       '  REMESSA = :REMESSA,'
@@ -1306,38 +1312,40 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  BAIXADO = :BAIXADO,'
       '  ENVIADO = :ENVIADO,'
       '  ANOVENDA = :ANOVENDA,'
-      '  NUMVENDA = :NUMVENDA'
+      '  NUMVENDA = :NUMVENDA,'
+      '  SITUACAO = :SITUACAO'
       'where'
       '  ANOLANC = :OLD_ANOLANC and'
       '  NUMLANC = :OLD_NUMLANC')
     InsertSQL.Strings = (
       'insert into TBCONTREC'
       
-        '  (ANOLANC, NUMLANC, CNPJ, FORMA_PAGTO, TIPPAG, HISTORIC, NUMREC' +
-        ', DTEMISS, '
+        '  (ANOLANC, NUMLANC, PARCELA, CNPJ, FORMA_PAGTO, TIPPAG, HISTORI' +
+        'C, NUMREC, '
       
-        '   DTVENC, DTREC, DOCBAIX, VALORREC, VALORMULTA, VALORRECTOT, NU' +
-        'MCONTRATO, '
+        '   DTEMISS, DTVENC, DTREC, DOCBAIX, VALORREC, VALORMULTA, VALORR' +
+        'ECTOT, '
       
-        '   PARCELA, CODBANCO, NOSSONUMERO, REMESSA, VALORSALDO, PERCENTJ' +
-        'UROS, PERCENTMULTA, '
+        '   NUMCONTRATO, CODBANCO, NOSSONUMERO, REMESSA, VALORSALDO, PERC' +
+        'ENTJUROS, '
       
-        '   PERCENTDESCONTO, DATAPROCESSOBOLETO, BAIXADO, ENVIADO, ANOVEN' +
-        'DA, NUMVENDA)'
+        '   PERCENTMULTA, PERCENTDESCONTO, DATAPROCESSOBOLETO, BAIXADO, E' +
+        'NVIADO, '
+      '   ANOVENDA, NUMVENDA, SITUACAO)'
       'values'
       
-        '  (:ANOLANC, :NUMLANC, :CNPJ, :FORMA_PAGTO, :TIPPAG, :HISTORIC, ' +
-        ':NUMREC, '
+        '  (:ANOLANC, :NUMLANC, :PARCELA, :CNPJ, :FORMA_PAGTO, :TIPPAG, :' +
+        'HISTORIC, '
       
-        '   :DTEMISS, :DTVENC, :DTREC, :DOCBAIX, :VALORREC, :VALORMULTA, ' +
-        ':VALORRECTOT, '
+        '   :NUMREC, :DTEMISS, :DTVENC, :DTREC, :DOCBAIX, :VALORREC, :VAL' +
+        'ORMULTA, '
       
-        '   :NUMCONTRATO, :PARCELA, :CODBANCO, :NOSSONUMERO, :REMESSA, :V' +
-        'ALORSALDO, '
+        '   :VALORRECTOT, :NUMCONTRATO, :CODBANCO, :NOSSONUMERO, :REMESSA' +
+        ', :VALORSALDO, '
       
         '   :PERCENTJUROS, :PERCENTMULTA, :PERCENTDESCONTO, :DATAPROCESSO' +
         'BOLETO, '
-      '   :BAIXADO, :ENVIADO, :ANOVENDA, :NUMVENDA)')
+      '   :BAIXADO, :ENVIADO, :ANOVENDA, :NUMVENDA, :SITUACAO)')
     DeleteSQL.Strings = (
       'delete from TBCONTREC'
       'where'

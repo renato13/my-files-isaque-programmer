@@ -79,7 +79,6 @@ type
     fAbrirTabelaAuto: Boolean;
     sSQL : TStringList;
     fControlFirst : TWinControl;
-    procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
     procedure CentralizarCodigo;
     procedure SetWhereAdditional(Value : String);
     procedure ClearFieldEmptyStr;
@@ -96,6 +95,7 @@ type
     property SQLTabela : TStringList read sSQL;
     property ControlFirstEdit : TWinControl read fControlFirst write fControlFirst;
     procedure UpdateGenerator(const sWhr : String = '');
+    procedure RedimencionarBevel(const ToolBar : TToolBar; const bvl : TBevel);
   protected
     procedure FiltarDados; overload;
     procedure FecharAbrirTabela(const Tabela : TIBDataSet; const Vazia : Boolean = FALSE); overload;
@@ -351,7 +351,10 @@ begin
                '    or upper(' + CampoDescricao +  ') like ' + QuotedStr('%' + UpperCase(FuncoesString.StrRemoveAllAccents(Trim(edtFiltrar.Text))) + '%') + ')');
 
       if ( fWhereAdditional <> EmptyStr ) then
-        Add( '  and (' + WhereAdditional + ')' );
+        if ( Pos('where', SelectSQL.Text) > 0 ) then
+          Add( '  and (' + WhereAdditional + ')' )
+        else
+          Add( 'where (' + WhereAdditional + ')' );
 
       Add( 'order by ' + CampoOrdenacao );
 

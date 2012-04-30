@@ -1,23 +1,23 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 526
-  Top = 268
-  Width = 763
-  Height = 504
+  Left = 676
+  Top = 244
+  Width = 903
+  Height = 574
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
-    Top = 462
-    Width = 747
+    Top = 532
+    Width = 887
   end
   inherited Bevel3: TBevel
-    Top = 423
-    Width = 747
+    Top = 493
+    Width = 887
   end
   inherited tlbBotoes: TToolBar
-    Top = 427
-    Width = 747
+    Top = 497
+    Width = 887
     inherited bvlToolExpandir: TBevel
       Width = 81
     end
@@ -29,17 +29,17 @@ inherited frmGeCliente: TfrmGeCliente
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 747
-    Height = 423
+    Width = 887
+    Height = 493
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 328
-        Width = 739
+        Top = 398
+        Width = 879
       end
       inherited dbgDados: TDBGrid
-        Width = 739
-        Height = 328
+        Width = 879
+        Height = 398
         Columns = <
           item
             Expanded = False
@@ -74,10 +74,10 @@ inherited frmGeCliente: TfrmGeCliente
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 332
-        Width = 739
+        Top = 402
+        Width = 879
         inherited grpBxFiltro: TGroupBox
-          Left = 464
+          Left = 604
           Width = 271
           inherited lbltFiltrar: TLabel
             Width = 42
@@ -96,18 +96,18 @@ inherited frmGeCliente: TfrmGeCliente
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 113
-        Width = 739
+        Width = 879
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 233
-        Width = 739
+        Width = 879
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 739
+        Width = 879
         Height = 113
         object lblCNPJ: TLabel [1]
           Left = 192
@@ -225,7 +225,7 @@ inherited frmGeCliente: TfrmGeCliente
       object GroupBox1: TGroupBox
         Left = 0
         Top = 117
-        Width = 739
+        Width = 879
         Height = 116
         Align = alTop
         Caption = 'Endere'#231'o'
@@ -716,11 +716,10 @@ inherited frmGeCliente: TfrmGeCliente
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 237
-        Width = 739
-        Height = 157
-        ActivePage = tbsFinanceiro
+        Width = 879
+        Height = 227
+        ActivePage = tbsContato
         Align = alClient
-        Style = tsFlatButtons
         TabOrder = 2
         object tbsContato: TTabSheet
           Caption = 'Contato'
@@ -801,6 +800,9 @@ inherited frmGeCliente: TfrmGeCliente
         object tbsFinanceiro: TTabSheet
           Caption = 'Financeiro'
           ImageIndex = 1
+          DesignSize = (
+            871
+            199)
           object lblValorLimiteCompra: TLabel
             Left = 8
             Top = 0
@@ -832,6 +834,34 @@ inherited frmGeCliente: TfrmGeCliente
             FocusControl = dbLimiteDisponivel
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblTituloCancelado: TLabel
+            Left = 8
+            Top = 182
+            Width = 114
+            Height = 13
+            Anchors = [akLeft, akBottom]
+            Caption = '* T'#237'tulos cancelados'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblTituloPagando: TLabel
+            Left = 8
+            Top = 162
+            Width = 122
+            Height = 13
+            Anchors = [akLeft, akBottom]
+            Caption = '* T'#237'tulos sendo pagos'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlue
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
@@ -886,6 +916,96 @@ inherited frmGeCliente: TfrmGeCliente
             ParentFont = False
             ReadOnly = True
             TabOrder = 2
+          end
+          object pnlTitulos: TPanel
+            Left = 168
+            Top = 0
+            Width = 703
+            Height = 199
+            Align = alRight
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            BevelOuter = bvNone
+            TabOrder = 3
+            object dbgTitulos: TDBGrid
+              Left = 0
+              Top = 0
+              Width = 703
+              Height = 199
+              Align = alClient
+              DataSource = dtsTitulos
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 0
+              TitleFont.Charset = ANSI_CHARSET
+              TitleFont.Color = clBlack
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = [fsBold]
+              OnDrawColumnCell = dbgDadosDrawColumnCell
+              Columns = <
+                item
+                  Expanded = False
+                  FieldName = 'LANCAMENTO'
+                  Title.Caption = 'Lan'#231'amento'
+                  Width = 100
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'DTEMISS'
+                  Title.Caption = 'Emiss'#227'o'
+                  Width = 85
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'DTVENC'
+                  Title.Caption = 'Vencimento'
+                  Width = 85
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'FORMA_PAGTO_DESC'
+                  Title.Caption = 'Forma de Pagamento'
+                  Width = 150
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'SITUACAO'
+                  Title.Caption = 'Situa'#231#227'o'
+                  Width = 75
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'VALORREC'
+                  Title.Caption = 'Valor (R$)'
+                  Width = 80
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'VALORRECTOT'
+                  Title.Caption = 'Pago (R$)'
+                  Width = 80
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'VALORSALDO'
+                  Title.Caption = 'A Pagar (R$)'
+                  Width = 80
+                  Visible = True
+                end>
+            end
           end
         end
       end
@@ -1225,5 +1345,129 @@ inherited frmGeCliente: TfrmGeCliente
     DataSet = qryTotalComprasAbertas
     Left = 704
     Top = 41
+  end
+  object qryTitulos: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'Select'
+      '    r.Anolanc'
+      '  , r.Numlanc'
+      
+        '  , r.Anolanc || '#39'/'#39' || right('#39'0000000'#39' || r.Numlanc, 7) as Lanc' +
+        'amento'
+      '  , r.Parcela'
+      '  , r.Dtemiss'
+      '  , r.Dtvenc'
+      '  , r.Forma_pagto'
+      '  , f.Descri as Forma_pagto_Desc'
+      '  , r.Nossonumero'
+      '  , r.Valorrec'
+      '  , r.Valormulta'
+      '  , r.Valorrectot'
+      '  , r.Valorsaldo'
+      '  , r.Status'
+      '  , r.Situacao'
+      'from TBCONTREC r'
+      '  inner join TBFORMPAGTO f on (f.Cod = r.Forma_pagto)'
+      'where r.Baixado = 0'
+      '  and r.Cnpj = :cliente')
+    Left = 672
+    Top = 73
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'cliente'
+        ParamType = ptInput
+        Value = ''
+      end>
+    object qryTitulosANOLANC: TSmallintField
+      FieldName = 'ANOLANC'
+      Origin = 'TBCONTREC.ANOLANC'
+      Required = True
+    end
+    object qryTitulosNUMLANC: TIntegerField
+      FieldName = 'NUMLANC'
+      Origin = 'TBCONTREC.NUMLANC'
+      Required = True
+    end
+    object qryTitulosLANCAMENTO: TIBStringField
+      FieldName = 'LANCAMENTO'
+      Required = True
+      Size = 25
+    end
+    object qryTitulosPARCELA: TSmallintField
+      FieldName = 'PARCELA'
+      Origin = 'TBCONTREC.PARCELA'
+    end
+    object qryTitulosDTEMISS: TDateField
+      FieldName = 'DTEMISS'
+      Origin = 'TBCONTREC.DTEMISS'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosDTVENC: TDateField
+      FieldName = 'DTVENC'
+      Origin = 'TBCONTREC.DTVENC'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosFORMA_PAGTO: TSmallintField
+      FieldName = 'FORMA_PAGTO'
+      Origin = 'TBCONTREC.FORMA_PAGTO'
+    end
+    object qryTitulosFORMA_PAGTO_DESC: TIBStringField
+      FieldName = 'FORMA_PAGTO_DESC'
+      Origin = 'TBFORMPAGTO.DESCRI'
+      Size = 30
+    end
+    object qryTitulosNOSSONUMERO: TIBStringField
+      FieldName = 'NOSSONUMERO'
+      Origin = 'TBCONTREC.NOSSONUMERO'
+    end
+    object qryTitulosVALORREC: TIBBCDField
+      FieldName = 'VALORREC'
+      Origin = 'TBCONTREC.VALORREC'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosVALORMULTA: TIBBCDField
+      FieldName = 'VALORMULTA'
+      Origin = 'TBCONTREC.VALORMULTA'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosVALORRECTOT: TIBBCDField
+      FieldName = 'VALORRECTOT'
+      Origin = 'TBCONTREC.VALORRECTOT'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosVALORSALDO: TIBBCDField
+      FieldName = 'VALORSALDO'
+      Origin = 'TBCONTREC.VALORSALDO'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object qryTitulosSTATUS: TIBStringField
+      FieldName = 'STATUS'
+      Origin = 'TBCONTREC.STATUS'
+      Size = 12
+    end
+    object qryTitulosSITUACAO: TSmallintField
+      Alignment = taLeftJustify
+      FieldName = 'SITUACAO'
+      Origin = 'TBCONTREC.SITUACAO'
+      OnGetText = qryTitulosSITUACAOGetText
+    end
+  end
+  object dtsTitulos: TDataSource
+    DataSet = qryTitulos
+    Left = 704
+    Top = 73
   end
 end

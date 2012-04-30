@@ -9,9 +9,9 @@ uses
 
 type
   TfrmGeEfetuarPagtoPAG = class(TfrmGrPadrao)
-    GrpBxDadosNominais: TGroupBox;
+    GrpBxPagamento: TGroupBox;
     Bevel1: TBevel;
-    GroupBox1: TGroupBox;
+    GrpBxLancamento: TGroupBox;
     lblAnoLanc: TLabel;
     Label3: TLabel;
     lblFornecedor: TLabel;
@@ -54,6 +54,7 @@ type
     dbHistorico: TDBMemo;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
+    cdsPagamentosUSUARIO: TIBStringField;
     procedure dtsPagamentosStateChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -69,7 +70,7 @@ type
 var
   frmGeEfetuarPagtoPAG: TfrmGeEfetuarPagtoPAG;
 
-  function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento : Integer; const Fornecedor : String) : Boolean;
+  function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento, FormaPagto : Integer; const Fornecedor : String; var DataPagto : TDateTime) : Boolean;
 
 implementation
 
@@ -77,7 +78,7 @@ uses UDMBusiness;
 
 {$R *.dfm}
 
-function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento : Integer; const Fornecedor : String) : Boolean;
+function PagamentoConfirmado(const AOwner : TComponent; const Ano, Lancamento, FormaPagto : Integer; const Fornecedor : String; var DataPagto : TDateTime) : Boolean;
 var
   frm : TfrmGeEfetuarPagtoPAG;
 begin
@@ -100,8 +101,24 @@ begin
 
       cdsPagamentos.Open;
       cdsPagamentos.Append;
+      cdsPagamentosFORMA_PAGTO.AsInteger := FormaPagto;
 
       Result := (ShowModal = mrOk);
+
+      if ( Result ) then
+      begin
+        DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
+
+        SetMovimentoCaixa(
+          GetUserApp,
+          cdsPagamentosDATA_PAGTO.AsDateTime + Time,
+          cdsPagamentosFORMA_PAGTO.AsInteger,
+          cdsPagamentosANOLANC.AsInteger,
+          cdsPagamentosNUMLANC.AsInteger,
+          cdsPagamentosSEQ.AsInteger,
+          cdsPagamentosVALOR_BAIXA.AsCurrency,
+          tmcxDebito);
+      end;
     end;
 
   finally
@@ -171,6 +188,7 @@ begin
   cdsPagamentosNUMLANC.Value    := StrToInt(edNumLanc.Text);
   cdsPagamentosSEQ.Value        := GetNextID('TBCONTPAG_BAIXA', 'SEQ', 'where anolanc = ' + edAnoLanc.Text + ' and numlanc = ' + edNumLanc.Text);
   cdsPagamentosDATA_PAGTO.Value := Date;
+  cdsPagamentosUSUARIO.Value    := GetUserApp;
   cdsPagamentosFORMA_PAGTO.Value      := GetFormaPagtoIDDefault;
   cdsPagamentosFORMA_PAGTO_DESC.Value := GetFormaPagtoNomeDefault;
 end;

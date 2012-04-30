@@ -495,8 +495,22 @@ begin
 end;
 
 procedure TfrmGeRetornoBoleto.btnConfirmarBaixaClick(Sender: TObject);
+var
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente : Integer;
 begin
   try
+
+    CxAno    := 0;
+    CxNumero := 0;
+    CxContaCorrente := 0;
+
+    if ( not CaixaAberto(GetUserApp, GetDateDB, GetCondicaoPagtoIDBoleto, CxAno, CxNumero, CxContaCorrente) ) then
+    begin
+      ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento BOLETO.');
+      Exit;
+    end;
 
     if ( GetCondicaoPagtoIDBoleto = 0 ) then
     begin
@@ -523,6 +537,13 @@ begin
         CdsTitulosValorPago.Value,
         CdsTitulosDataPagamento.Value,
         CdsTitulosNossoNumero.AsString);
+
+
+      try
+        if ( CxContaCorrente > 0 ) then
+          GerarSaldoContaCorrente(CxContaCorrente, CdsTitulosDataPagamento.AsDateTime);
+      except
+      end;
 
       CdsTitulos.Next;
     end;

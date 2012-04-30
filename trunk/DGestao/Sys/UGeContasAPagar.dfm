@@ -170,6 +170,47 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
       inherited pnlFiltros: TPanel
         Top = 428
         Width = 926
+        object lblLancamentoAberto: TLabel [0]
+          Left = 2
+          Top = 4
+          Width = 148
+          Height = 13
+          Caption = '* Lan'#231'amentos em aberto'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblCaixaCancelado: TLabel [1]
+          Left = 2
+          Top = 24
+          Width = 16
+          Height = 13
+          Caption = '* ?'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Visible = False
+        end
+        object Label1: TLabel [2]
+          Left = 2
+          Top = 44
+          Width = 16
+          Height = 13
+          Caption = '* ?'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Visible = False
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 488
           Width = 434

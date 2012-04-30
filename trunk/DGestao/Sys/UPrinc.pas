@@ -104,6 +104,7 @@ type
     nmAberturaCaixa: TMenuItem;
     N12: TMenuItem;
     nmEncerramentoCaixa: TMenuItem;
+    nmGerenciaCaixa: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -147,6 +148,10 @@ type
     procedure nmRetornoBoletoClick(Sender: TObject);
     procedure nmPromocoesClick(Sender: TObject);
     procedure nmContaCorrenteClick(Sender: TObject);
+    procedure nmGerenciaCaixaClick(Sender: TObject);
+    procedure nmAberturaCaixaClick(Sender: TObject);
+    procedure nmEncerramentoCaixaClick(Sender: TObject);
+    procedure nmFluxoDeCaixaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -168,7 +173,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao, UGeContaCorrente;
+  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa;
 
 {$R *.dfm}
 
@@ -458,6 +463,28 @@ end;
 procedure TfrmPrinc.nmContaCorrenteClick(Sender: TObject);
 begin
   MostrarTabelaContaCorrente(Self);
+end;
+
+procedure TfrmPrinc.nmGerenciaCaixaClick(Sender: TObject);
+begin
+  MostrarTabelaCaixa(Self);
+end;
+
+procedure TfrmPrinc.nmAberturaCaixaClick(Sender: TObject);
+begin
+  if ( AbrirCaixa(Self, GetUserApp) ) then
+    ShowInformation('Caixa aberto com sucesso!');
+end;
+
+procedure TfrmPrinc.nmEncerramentoCaixaClick(Sender: TObject);
+begin
+  if ( FecharCaixa(Self, GetUserApp) ) then
+    ShowInformation('Caixa encerrado com sucesso!');
+end;
+
+procedure TfrmPrinc.nmFluxoDeCaixaClick(Sender: TObject);
+begin
+  MostrarTabelaFluxoCaixas(Self);
 end;
 
 end.
