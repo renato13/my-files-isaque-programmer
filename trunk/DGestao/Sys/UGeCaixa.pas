@@ -108,6 +108,7 @@ type
     frrCaixaAnalitico: TfrxReport;
     qryCaixaAnalitico: TIBQuery;
     frdCaixaAnalitico: TfrxDBDataset;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaSITUACAOGetText(Sender: TField; var Text: String;
       DisplayText: Boolean);
