@@ -470,6 +470,9 @@ inherited frmGeCaixa: TfrmGeCaixa
         Align = alTop
         Caption = 'Dados de Encerramento'
         TabOrder = 1
+        DesignSize = (
+          942
+          108)
         object lblDataFech: TLabel
           Left = 16
           Top = 16
@@ -553,6 +556,24 @@ inherited frmGeCaixa: TfrmGeCaixa
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
+        end
+        object Label2: TLabel
+          Left = 509
+          Top = 9
+          Width = 428
+          Height = 13
+          Alignment = taRightJustify
+          Anchors = [akTop, akRight]
+          Caption = 
+            'Obs.: 1 - Apenas caixas que possuem movimenta'#231#227'o podem ser encer' +
+            'rados.'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
         end
         object dbDataFech: TDBDateEdit
           Left = 16
