@@ -263,7 +263,7 @@ const
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
-  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe;
+  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe, UFuncoes;
 
 {$R *.dfm}
 

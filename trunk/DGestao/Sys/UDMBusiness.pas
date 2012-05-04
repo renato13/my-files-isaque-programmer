@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
-  DateUtils, IBQuery, RpDefine, RpRave, frxClass, frxDBSet, EMsgDlg, IdBaseComponent,
-  IdComponent, IdIPWatch, IBStoredProc;
+  ShellApi, Printers, DateUtils, IBQuery, RpDefine, RpRave,
+  frxClass, frxDBSet, EMsgDlg, IdBaseComponent, IdComponent, IdIPWatch, IBStoredProc;
 
 type
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
@@ -86,7 +86,6 @@ var
   function GetEmitirCupom : Boolean;
   function GetModeloEmissaoCupom : Integer;
 
-  function GetExeVersion(const FileName : TFileName) : String;
   function StrIsCNPJ(const Num: string): Boolean;
   function StrIsCPF(const Num: string): Boolean;
   function StrFormatarCnpj(sCnpj: String): String;
@@ -298,39 +297,6 @@ end;
 function GetModeloEmissaoCupom : Integer;
 begin
   Result := FileINI.ReadInteger('Cupom', 'ModeloEmissaoCupom', 0);
-end;
-
-function GetExeVersion(const FileName : TFileName) : String;
-type
-  PFFI = ^vs_FixedFileInfo;
-var
-  F     : PFFI;
-  Handle: Dword;
-  Len : Longint;
-  Data: Pchar;
-  Buffer   : Pointer;
-  Tamanho  : Dword;
-  PFileName: Pchar;
-begin
-   PFileName := StrAlloc(Length(FileName) + 1);
-   StrPcopy(PFileName, FileName);
-   Len := GetFileVersionInfoSize(PFileName, Handle);
-   Result := '';
-   if (Len > 0) then
-   begin
-     Data := StrAlloc(Len + 1);
-     if GetFileVersionInfo(PFileName, Handle, Len, Data) then
-     begin
-       VerQueryValue(Data, '\', Buffer, Tamanho);
-       F := PFFI(Buffer);
-       Result := Format('%d.%d.%d.%d ', [HiWord(F^.dwFileVersionMs),
-                                         LoWord(F^.dwFileVersionMs),
-                                         HiWord(F^.dwFileVersionLs),
-                                         Loword(F^.dwFileVersionLs)]);
-     end;
-     StrDispose(Data)
-   end;
-   StrDispose(PFileName);
 end;
 
 function StrIsCNPJ(const Num: string): Boolean;

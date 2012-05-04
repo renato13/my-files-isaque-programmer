@@ -30,7 +30,7 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses UDMBusiness, UFuncoes;
 
 {$R *.dfm}
 
