@@ -254,6 +254,11 @@ begin
       Close;
       SelectSQL.Add('where ' + whr);
       Open;
+      
+      AbrirTabelaConsolidado(IbDtstTabelaANO.AsInteger, IbDtstTabelaNUMERO.AsInteger);
+      AbrirTabelaMovimento(IbDtstTabelaANO.AsInteger, IbDtstTabelaNUMERO.AsInteger);
+
+      HabilitarDesabilitar_Btns;
     end;
 
     Result := (frm.ShowModal = mrOk);
@@ -506,28 +511,28 @@ begin
 
     dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
   end
-//  else
-//  // Destacar produtos em Promocao
-//  if ( Sender = dbgProdutos ) then
-//  begin
-//    if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
-//      dbgProdutos.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
-//
-//    dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
-//  end;
+  else
+  // Destacar movimentos de Entrada/Saída cancelados
+  if ( Sender = dbgMovimento ) then
+  begin
+    if ( qryMovimentoSITUACAO.AsInteger = 0 ) then
+      dbgMovimento.Canvas.Font.Color := lblCaixaCancelado.Font.Color;
+
+    dbgMovimento.DefaultDrawDataCell(Rect, dbgMovimento.Columns[DataCol].Field, State);
+  end;
 end;
 
 procedure TfrmGeCaixa.HabilitarDesabilitar_Btns;
 begin
   if ( pgcGuias.ActivePage = tbsCadastro ) then
   begin
-    btbtnEncerrar.Enabled      := (IbDtstTabelaSITUACAO.AsInteger < STATUS_CAIXA_FECHADO) and (not cdsCosolidado.IsEmpty);
-    btbtnCancelarCaixa.Enabled := (IbDtstTabelaSITUACAO.AsInteger < STATUS_CAIXA_FECHADO) and (not cdsCosolidado.IsEmpty) and (qryMovimento.IsEmpty);
+    btbtnEncerrar.Enabled      := False;
+    btbtnCancelarCaixa.Enabled := False;
   end
   else
   begin
-    btbtnEncerrar.Enabled      := False;
-    btbtnCancelarCaixa.Enabled := False;
+    btbtnEncerrar.Enabled      := (IbDtstTabelaSITUACAO.AsInteger < STATUS_CAIXA_FECHADO) and (not cdsCosolidado.IsEmpty);
+    btbtnCancelarCaixa.Enabled := (IbDtstTabelaSITUACAO.AsInteger < STATUS_CAIXA_FECHADO) and (not cdsCosolidado.IsEmpty) and (qryMovimento.IsEmpty);
   end;
 end;
 
@@ -605,6 +610,14 @@ begin
     lblOperador.Enabled := False;
     dbOperador.Enabled  := False;
 
+    if ( IbDtstTabela.RecordCount = 0 ) then
+    begin
+      ShowWarning('Não existe caixa a ser encerrado para o usuário ativo no sistema');
+
+      pgcGuias.Enabled   := False;
+      btbtnLista.Enabled := False;
+    end
+    else
     if ( IbDtstTabela.RecordCount = 1 ) then
       pgcGuias.ActivePage := tbsCadastro
     else

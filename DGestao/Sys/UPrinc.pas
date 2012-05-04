@@ -173,7 +173,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa;
+  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes;
 
 {$R *.dfm}
 

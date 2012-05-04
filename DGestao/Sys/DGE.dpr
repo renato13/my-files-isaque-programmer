@@ -89,7 +89,8 @@ uses
   UGePromocao in 'UGePromocao.pas' {frmGePromocao},
   UGeContaCorrente in 'UGeContaCorrente.pas' {frmGeContaCorrente},
   UGeCaixa in 'UGeCaixa.pas' {frmGeCaixa},
-  UGeFluxoCaixa in 'UGeFluxoCaixa.pas' {frmGeFluxoCaixa};
+  UGeFluxoCaixa in 'UGeFluxoCaixa.pas' {frmGeFluxoCaixa},
+  UFuncoes in 'lib\UFuncoes.pas';
 
 {$R *.res}
 

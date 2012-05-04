@@ -2907,8 +2907,8 @@ inherited frmGeCaixa: TfrmGeCaixa
           HAlign = haRight
           Memo.UTF8 = (
             
-              '[FormatFloat('#39',0.00'#39', SUM(<frdCaixaAnalitico."VALOR_CREDITO">,bn' +
-              'dMasterDataMov,2))]')
+              '[FormatFloat('#39',0.00'#39', SUM(IIF(<frdCaixaAnalitico."SITUACAOMOV">=' +
+              '0,0,<frdCaixaAnalitico."VALOR_CREDITO">),bndMasterDataMov,2))]')
           ParentFont = False
           VAlign = vaCenter
           WordWrap = False
@@ -2927,8 +2927,8 @@ inherited frmGeCaixa: TfrmGeCaixa
           HAlign = haRight
           Memo.UTF8 = (
             
-              '[FormatFloat('#39',0.00'#39', SUM(<frdCaixaAnalitico."VALOR_DEBITO">,bnd' +
-              'MasterDataMov,2))]')
+              '[FormatFloat('#39',0.00'#39', SUM(IIF(<frdCaixaAnalitico."SITUACAOMOV">=' +
+              '0,0,<frdCaixaAnalitico."VALOR_DEBITO">),bndMasterDataMov,2))]')
           ParentFont = False
           VAlign = vaCenter
           WordWrap = False
@@ -2948,8 +2948,10 @@ inherited frmGeCaixa: TfrmGeCaixa
           HAlign = haRight
           Memo.UTF8 = (
             
-              '[FormatFloat('#39',0.00'#39', SUM(<frdCaixaAnalitico."VALOR_CREDITO">-<f' +
-              'rdCaixaAnalitico."VALOR_DEBITO">,bndMasterDataMov,2))]')
+              '[FormatFloat('#39',0.00'#39', SUM(IIF(<frdCaixaAnalitico."SITUACAOMOV">=' +
+              '0,0,<frdCaixaAnalitico."VALOR_CREDITO">)-IIF(<frdCaixaAnalitico.' +
+              '"SITUACAOMOV">=0,0,<frdCaixaAnalitico."VALOR_DEBITO">),bndMaster' +
+              'DataMov,2))]')
           ParentFont = False
           VAlign = vaCenter
           WordWrap = False
