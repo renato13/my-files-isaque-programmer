@@ -1,6 +1,6 @@
 inherited frmGeCaixa: TfrmGeCaixa
-  Left = 580
-  Top = 125
+  Left = 224
+  Top = 151
   Width = 966
   Height = 542
   Caption = 'Gerenciar Caixas'
@@ -789,8 +789,8 @@ inherited frmGeCaixa: TfrmGeCaixa
                 Expanded = False
                 FieldName = 'TIPO'
                 Title.Alignment = taCenter
-                Width = 30
-                Visible = True
+                Width = -1
+                Visible = False
               end
               item
                 Expanded = False
@@ -1710,7 +1710,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndMasterData: TfrxMasterData
         Height = 18.897650000000000000
-        Top = 343.937230000000000000
+        Top = 234.330860000000000000
         Width = 718.110700000000000000
         DataSet = frdCaixaSintetico
         DataSetName = 'frdCaixaSintetico'
@@ -1803,7 +1803,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 808.819420000000000000
+        Top = 714.331170000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -1825,7 +1825,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndReportSummary: TfrxReportSummary
         Height = 377.953000000000000000
-        Top = 404.409710000000000000
+        Top = 313.700990000000000000
         Width = 718.110700000000000000
         object Memo14: TfrxMemoView
           Left = 415.748300000000000000
@@ -2170,7 +2170,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndGrpHeaderCaixa: TfrxGroupHeader
         Height = 45.354360000000000000
-        Top = 211.653680000000000000
+        Top = 166.299320000000000000
         Width = 718.110700000000000000
         Condition = 'frdCaixaSintetico."NUMERO"'
         object frdVendaNOME: TfrxMemoView
@@ -2599,7 +2599,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndMasterData: TfrxMasterData
         Height = 18.897650000000000000
-        Top = 211.653680000000000000
+        Top = 234.330860000000000000
         Width = 718.110700000000000000
         DataSet = frdCaixaSintetico
         DataSetName = 'frdCaixaSintetico'
@@ -2692,7 +2692,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 914.646260000000000000
+        Top = 797.480830000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -2714,7 +2714,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndReportSummary: TfrxReportSummary
         Height = 377.953000000000000000
-        Top = 510.236550000000000000
+        Top = 396.850650000000000000
         Width = 718.110700000000000000
         object Memo14: TfrxMemoView
           Left = 415.748300000000000000
@@ -3061,7 +3061,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndGrpHeaderCaixa: TfrxGroupHeader
         Height = 45.354360000000000000
-        Top = 136.063080000000000000
+        Top = 166.299320000000000000
         Width = 718.110700000000000000
         Condition = 'frdCaixaSintetico."NUMERO"'
         object frdVendaNOME: TfrxMemoView
@@ -3295,7 +3295,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       end
       object bndHeaderMov: TfrxHeader
         Height = 18.897650000000000000
-        Top = 260.787570000000000000
+        Top = 275.905690000000000000
         Width = 718.110700000000000000
         ReprintOnNewPage = True
         object Memo33: TfrxMemoView

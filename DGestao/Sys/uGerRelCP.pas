@@ -21,6 +21,7 @@ type
     dttmpcIni: TDateTimePicker;
     dttmpcFim: TDateTimePicker;
     procedure btbtnGrupoClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -179,6 +180,12 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=2)
   end;
 frmRelCP.Destroy;
 
+end;
+
+procedure TfrmGerRelCP.FormCreate(Sender: TObject);
+begin
+ dttmpcIni.Date := IncMonth(Date, -1);
+ dttmpcFim.Date := Date;
 end;
 
 end.

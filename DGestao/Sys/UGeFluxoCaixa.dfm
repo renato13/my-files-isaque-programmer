@@ -1,9 +1,10 @@
 inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
-  Left = 445
-  Top = 174
+  Left = 74
+  Top = 101
   Width = 1148
   Height = 690
-  Caption = 'Controle do Fluxo de Caixa'
+  ActiveControl = dbgDados
+  Caption = 'Tesouraria'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
@@ -19,7 +20,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
     Top = 613
     Width = 1132
     inherited btbtnLista: TBitBtn
-      Caption = '&Fluxo'
+      Caption = '&Extrato'
       Visible = True
       OnClick = btbtnListaClick
     end
@@ -27,6 +28,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   inherited pgcGuias: TPageControl
     Width = 1132
     Height = 609
+    ActivePage = tbsTabela
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -73,7 +75,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           item
             Expanded = False
             FieldName = 'TIPO'
-            Visible = True
+            Visible = False
           end
           item
             Expanded = False
@@ -1987,7 +1989,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40928.407150601900000000
-    ReportOptions.LastChange = 40928.416853240700000000
+    ReportOptions.LastChange = 41039.011192847200000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -2171,7 +2173,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           Frame.Width = 0.100000000000000000
           HAlign = haCenter
           Memo.UTF8 = (
-            'FLUXO DE CAIXA')
+            'EXTRATO DE CONTA CORRENTE')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2179,7 +2181,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndMasterData: TfrxMasterData
         Height = 18.897650000000000000
-        Top = 222.992270000000000000
+        Top = 245.669450000000000000
         Width = 718.110700000000000000
         DataSet = frdFluxoSintetico
         DataSetName = 'frdFluxoSintetico'
@@ -2314,7 +2316,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 914.646260000000000000
+        Top = 778.583180000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -2336,7 +2338,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndReportSummary: TfrxReportSummary
         Height = 287.244280000000000000
-        Top = 495.118430000000000000
+        Top = 468.661720000000000000
         Width = 718.110700000000000000
         object Memo14: TfrxMemoView
           Left = 491.338900000000000000
@@ -2570,7 +2572,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndGrpHeaderCaixa: TfrxGroupHeader
         Height = 56.692950000000000000
-        Top = 132.283550000000000000
+        Top = 166.299320000000000000
         Width = 718.110700000000000000
         Condition = 'frdFluxoSintetico."CONTA_CORRENTE"'
         ReprintOnNewPage = True
@@ -2666,7 +2668,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           Frame.Width = 0.100000000000000000
           HAlign = haRight
           Memo.UTF8 = (
-            'E n t r a d a ')
+            'C r '#195#169' d i t o ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2687,7 +2689,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           Frame.Width = 0.100000000000000000
           HAlign = haRight
           Memo.UTF8 = (
-            'S a '#195#173' d a ')
+            'D '#195#169' b i t o ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2737,7 +2739,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndHeaderMov: TfrxHeader
         Height = 37.795300000000000000
-        Top = 321.260050000000000000
+        Top = 328.819110000000000000
         Width = 718.110700000000000000
         ReprintOnNewPage = True
         object Memo19: TfrxMemoView
@@ -2796,7 +2798,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           Frame.Width = 0.100000000000000000
           HAlign = haRight
           Memo.UTF8 = (
-            'E n t r a d a ')
+            'C r '#195#169' d i t o ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2817,7 +2819,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
           Frame.Width = 0.100000000000000000
           HAlign = haRight
           Memo.UTF8 = (
-            'S a '#195#173' d a ')
+            'D '#195#169' b i t o  ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2867,7 +2869,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndMasterDataMov: TfrxMasterData
         Height = 18.897650000000000000
-        Top = 385.512060000000000000
+        Top = 389.291590000000000000
         Width = 718.110700000000000000
         DataSet = frdFluxoAnalitico
         DataSetName = 'frdFluxoAnalitico'
@@ -2997,7 +2999,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end
       object bndGrpFooterCaixaSaldo: TfrxGroupFooter
         Height = 18.897650000000000000
-        Top = 272.126160000000000000
+        Top = 287.244280000000000000
         Width = 718.110700000000000000
         object Memo34: TfrxMemoView
           Left = 642.520100000000000000

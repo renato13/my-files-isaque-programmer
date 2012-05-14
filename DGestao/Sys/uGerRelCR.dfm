@@ -13,6 +13,7 @@ object frmGerRelCR: TfrmGerRelCR
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -53,7 +54,7 @@ object frmGerRelCR: TfrmGerRelCR
   end
   object Panel1: TPanel
     Left = 0
-    Top = 190
+    Top = 188
     Width = 273
     Height = 41
     Align = alBottom
@@ -121,13 +122,8 @@ object frmGerRelCR: TfrmGerRelCR
       Top = 10
       Width = 101
       Height = 21
-      CalAlignment = dtaLeft
-      Date = 39934.7299823958
-      Time = 39934.7299823958
-      DateFormat = dfShort
-      DateMode = dmComboBox
-      Kind = dtkDate
-      ParseInput = False
+      Date = 39934.729982395800000000
+      Time = 39934.729982395800000000
       TabOrder = 0
     end
     object dttmpcFim: TDateTimePicker
@@ -135,13 +131,8 @@ object frmGerRelCR: TfrmGerRelCR
       Top = 10
       Width = 98
       Height = 21
-      CalAlignment = dtaLeft
-      Date = 39964.7299823958
-      Time = 39964.7299823958
-      DateFormat = dfShort
-      DateMode = dmComboBox
-      Kind = dtkDate
-      ParseInput = False
+      Date = 39964.729982395800000000
+      Time = 39964.729982395800000000
       TabOrder = 1
     end
   end

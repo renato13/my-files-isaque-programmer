@@ -1,6 +1,6 @@
 inherited frmGeContasAPagar: TfrmGeContasAPagar
-  Left = 448
-  Top = 228
+  Left = 248
+  Top = 130
   Width = 950
   Height = 600
   Caption = 'Controle de Contas A Pagar'
