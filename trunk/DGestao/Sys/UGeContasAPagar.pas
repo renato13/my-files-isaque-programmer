@@ -251,7 +251,7 @@ begin
         Exit;
       end;
 
-  sSenha := InputBox('Favor informar a senha de autorização', 'Senha de Autorização:', '');
+{  sSenha := InputBox('Favor informar a senha de autorização', 'Senha de Autorização:', '');
 
   if ( Trim(sSenha) = EmptyStr ) then
     Exit;
@@ -261,7 +261,7 @@ begin
     ShowWarning('Senha de autorização inválida');
     Exit;
   end;
-
+ }
   if PagamentoConfirmado(Self, IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger, IbDtstTabelaFORMA_PAGTO.AsInteger, IbDtstTabelaNOMEFORN.AsString, DataPagto) then
   begin
     iNumero := IbDtstTabelaNUMLANC.AsInteger;

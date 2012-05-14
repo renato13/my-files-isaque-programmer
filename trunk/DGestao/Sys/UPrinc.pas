@@ -22,7 +22,6 @@ type
     nmContasAReceber: TMenuItem;
     nmDeposito: TMenuItem;
     nmFluxoDeCaixa: TMenuItem;
-    nmTesouraria: TMenuItem;
     menuRelatorio: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;

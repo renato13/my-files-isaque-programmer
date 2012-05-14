@@ -1,16 +1,17 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 543
-  Top = 449
+  Left = 465
+  Top = 223
   Height = 400
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    DatabaseName = 'localhost:BUSINESS'
+    Connected = True
+    DatabaseName = 'C:\Masterdados\BUSINESS.FDB'
     Params.Strings = (
+      ''
       'user_name=sysdba'
-      'password=masterkey'
-      'lc_ctype=ISO8859_2')
+      'password=masterkey')
     LoginPrompt = False
     DefaultTransaction = ibtrnsctnBusiness
     IdleTimer = 0
@@ -20,7 +21,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = False
+    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
