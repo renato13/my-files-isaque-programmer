@@ -122,7 +122,6 @@ type
     procedure nmRelatorioContasAReceberClick(Sender: TObject);
     procedure nmRelatorioContasAPagarClick(Sender: TObject);
     procedure nmAboutClick(Sender: TObject);
-    procedure nmRelatorioVendaClick(Sender: TObject);
     procedure mnBancoClick(Sender: TObject);
     procedure nmTiposdeLogradourosClick(Sender: TObject);
     procedure nmEstadosClick(Sender: TObject);
@@ -151,6 +150,7 @@ type
     procedure nmAberturaCaixaClick(Sender: TObject);
     procedure nmEncerramentoCaixaClick(Sender: TObject);
     procedure nmFluxoDeCaixaClick(Sender: TObject);
+    procedure nmRelatorioVendaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -293,12 +293,6 @@ begin
   ShowAbout(Self);
 end;
 
-procedure TfrmPrinc.nmRelatorioVendaClick(Sender: TObject);
-begin
- frmRelVendas.IBQuery1.Open;
- frmRelVendas.qckrp.Preview;
-end;
-
 procedure TfrmPrinc.mnBancoClick(Sender: TObject);
 begin
   MostrarTabelaBancos(Self);
@@ -436,7 +430,7 @@ end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion( Application.ExeName ) + ' ]';
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial  v1.0.1.4' //[ v' + GetExeVersion( Application.ExeName ) + ' ]';
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
@@ -484,6 +478,12 @@ end;
 procedure TfrmPrinc.nmFluxoDeCaixaClick(Sender: TObject);
 begin
   MostrarTabelaFluxoCaixas(Self);
+end;
+
+procedure TfrmPrinc.nmRelatorioVendaClick(Sender: TObject);
+begin
+ Application.CreateForm(TfrmRelVendas, frmRelVendas);
+ frmRelVendas.ShowModal;
 end;
 
 end.
