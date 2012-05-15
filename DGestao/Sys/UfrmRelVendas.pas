@@ -12,7 +12,6 @@ type
     Label3: TLabel;
     Panel1: TPanel;
     BitBtn2: TBitBtn;
-    cmbbxSerie: TComboBox;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -46,19 +45,63 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     grpbxVendedor: TGroupBox;
-    ComboBox1: TComboBox;
+    cmbbxStatus: TComboBox;
     ibqryVendedor: TIBQuery;
-    ibqryVendedorNOME: TIBStringField;
     GroupBox2: TGroupBox;
-    ComboBox2: TComboBox;
+    cmbbxVendedor: TComboBox;
     ibqryVendas: TIBQuery;
     btbtnLista: TBitBtn;
     PopupMenu1: TPopupMenu;
     Analtico1: TMenuItem;
     Sinttico1: TMenuItem;
+    ibqryVendedorNOME: TIBStringField;
+    ibqryVendasCLIENTE: TIBStringField;
+    ibqryVendasCODCONTROL: TIntegerField;
+    ibqryVendasDTFINALIZACAO_VENDA: TDateField;
+    ibqryVendasDESCONTO: TIBBCDField;
+    ibqryVendasSTATUS: TSmallintField;
+    ibqryVendasTOTALVENDA: TIBBCDField;
+    ibqryVendasVENDEDOR: TIBStringField;
+    QRLabel3: TQRLabel;
+    QRDBText3: TQRDBText;
+    ibqryVendasNFE: TLargeintField;
+    ibqryVendasSintetico: TIBQuery;
+    qckrpVendasSintetico: TQuickRep;
+    QRBand1: TQRBand;
+    QRLabel8: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRBand2: TQRBand;
+    QRLabel15: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRBand4: TQRBand;
+    QRLabel20: TQRLabel;
+    QRExpr2: TQRExpr;
+    QRSysData5: TQRSysData;
+    QRBand5: TQRBand;
+    QRSysData6: TQRSysData;
+    ibqryVendasSinteticoVENDEDOR: TIBStringField;
+    ibqryVendasSinteticoCOMISSAO: TIBBCDField;
+    ibqryVendasSinteticoSUM: TIBBCDField;
+    ibqryVendasSinteticoVALORCOMISSAO: TCurrencyField;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRExpr3: TQRExpr;
+    ibqryEmpresa: TIBQuery;
     procedure nmImprimirAnaliticoClick(Sender: TObject);
     procedure Analtico1Click(Sender: TObject);
     procedure btbtnListaClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ibqryVendasSinteticoCalcFields(DataSet: TDataSet);
+    procedure Sinttico1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -81,13 +124,86 @@ end;
 
 procedure TfrmRelVendas.Analtico1Click(Sender: TObject);
 begin
+ ibqryVendas.Close;
+ ibqryVendas.ParamByName('dtini').Value := DateToStr(dttmpcIni.Date);
+ ibqryVendas.ParamByName('dtfim').Value := DateToStr(dttmpcFim.Date);
+ if cmbbxStatus.ItemIndex = 0 then
+  begin
+    ibqryVendas.ParamByName('st1').Value := 3;
+    ibqryVendas.ParamByName('st2').Value := 4;
+    qrlblStatus.Caption := 'STATUS: FINALIZADA / NF-E EMITIDAS';
+  end
+  else
+   begin
+     ibqryVendas.ParamByName('st1').Value := 5;
+    // ibqryVendas.ParamByName('st2').Value := null;
+     qrlblStatus.Caption := 'STATUS: CANCELADAS';
+   end;
+
+ if cmbbxVendedor.Text = 'TODOS' then ibqryVendas.ParamByName('vendedor').AsString := '%'
+  else ibqryVendas.ParamByName('vendedor').AsString := Trim(cmbbxVendedor.Text);
+
+ qrlblPeriodo.Caption:= 'PERÍODO: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
+ qrlblVendedor.Caption := 'VENDEDOR: '+ cmbbxVendedor.Text;
  ibqryVendas.Open;
- qckrpVendas.Preview;
+ if ibqryVendas.IsEmpty then
+    MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+ else qckrpVendas.Preview;
+
 end;
 
 procedure TfrmRelVendas.btbtnListaClick(Sender: TObject);
 begin
   PopupMenu1.Popup(btbtnLista.ClientOrigin.X, btbtnLista.ClientOrigin.Y + btbtnLista.Height);
+end;
+
+procedure TfrmRelVendas.FormCreate(Sender: TObject);
+begin
+ ibqryVendedor.Open;
+ cmbbxVendedor.Items.Add('TODOS');
+  while not ibqryVendedor.Eof do
+  begin
+   cmbbxVendedor.Items.Add(ibqryVendedorNOME.Value);
+   ibqryVendedor.Next;
+  end;
+ ibqryVendedor.Close;
+
+dttmpcIni.Date := IncMonth(Date, -1);
+dttmpcFim.Date := Date;
+cmbbxVendedor.ItemIndex := 0;
+end;
+
+procedure TfrmRelVendas.ibqryVendasSinteticoCalcFields(DataSet: TDataSet);
+begin
+  ibqryVendasSinteticoVALORCOMISSAO.Value := ibqryVendasSinteticoSUM.Value * (ibqryVendasSinteticoCOMISSAO.Value/100);
+end;
+
+procedure TfrmRelVendas.Sinttico1Click(Sender: TObject);
+begin
+ ibqryVendasSintetico.Close;
+ ibqryVendasSintetico.ParamByName('dtini').Value := DateToStr(dttmpcIni.Date);
+ ibqryVendasSintetico.ParamByName('dtfim').Value := DateToStr(dttmpcFim.Date);
+ if cmbbxStatus.ItemIndex = 0 then
+  begin
+    ibqryVendasSintetico.ParamByName('st1').Value := 3;
+    ibqryVendasSintetico.ParamByName('st2').Value := 4;
+    QRLabel13.Caption := 'STATUS: FINALIZADA / NF-E EMITIDAS';
+  end
+  else
+   begin
+     ibqryVendasSintetico.ParamByName('st1').Value := 5;
+    // ibqryVendasSintetico.ParamByName('st2').Value := null;
+     QRLabel13.Caption := 'STATUS: CANCELADAS';
+   end;
+
+ if cmbbxVendedor.Text = 'TODOS' then ibqryVendasSintetico.ParamByName('vendedor').AsString := '%'
+  else ibqryVendasSintetico.ParamByName('vendedor').AsString := Trim(cmbbxVendedor.Text);
+
+ QRLabel9.Caption:= 'PERÍODO: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
+ ibqryVendasSintetico.Open;
+ if ibqryVendasSintetico.IsEmpty then
+    MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+ else qckrpVendasSintetico.Preview;
 end;
 
 end.

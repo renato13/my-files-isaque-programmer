@@ -3,7 +3,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   Top = 208
   Width = 742
   Height = 440
-  ActiveControl = dbCodigo
+  ActiveControl = dbgDados
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Tabela Padr'#227'o de Cadastro'
   Color = clBtnFace
@@ -342,7 +342,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
     Top = 0
     Width = 726
     Height = 359
-    ActivePage = tbsCadastro
+    ActivePage = tbsTabela
     Align = alClient
     Images = ImgList
     TabOrder = 0
