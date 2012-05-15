@@ -1,9 +1,9 @@
 object frmRelVendas: TfrmRelVendas
-  Left = 254
-  Top = 114
+  Left = 348
+  Top = 182
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio de Vendas'
-  ClientHeight = 224
+  ClientHeight = 222
   ClientWidth = 270
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -33,16 +33,16 @@ object frmRelVendas: TfrmRelVendas
     BevelOuter = bvLowered
     TabOrder = 0
     object BitBtn2: TBitBtn
-      Left = 176
+      Left = 144
       Top = 7
-      Width = 75
+      Width = 89
       Height = 27
       Caption = '&Fechar'
       TabOrder = 0
       Kind = bkClose
     end
     object btbtnLista: TBitBtn
-      Left = 24
+      Left = 40
       Top = 7
       Width = 89
       Height = 27
@@ -269,7 +269,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel6: TQRLabel
         Left = 0
         Top = 2
-        Width = 77
+        Width = 102
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -280,12 +280,12 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           0.000000000000000000
           8.819444444444444000
-          339.548611111111100000)
+          449.791666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'DVM - Sistema de Vendas Mercantil'
+        Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1207,7 +1207,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel8: TQRLabel
         Left = 0
         Top = 4
-        Width = 128
+        Width = 170
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1218,12 +1218,12 @@ object frmRelVendas: TfrmRelVendas
           42.333333333333330000
           0.000000000000000000
           10.583333333333330000
-          338.666666666666700000)
+          449.791666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'DVM - Sistema de Vendas Mercantil'
+        Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1994,8 +1994,8 @@ object frmRelVendas: TfrmRelVendas
     end
   end
   object PopupMenu1: TPopupMenu
-    Left = 114
-    Top = 184
+    Left = 58
+    Top = 128
     object Analtico1: TMenuItem
       Caption = 'Anal'#237'tico'
       OnClick = Analtico1Click
