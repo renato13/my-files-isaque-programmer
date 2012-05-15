@@ -64,12 +64,12 @@ if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=0)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
@@ -89,12 +89,12 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=0)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
@@ -114,13 +114,13 @@ else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=1)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTREC is not null)');
      IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
@@ -141,13 +141,13 @@ else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=2)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTREC is null)');
      IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
@@ -167,13 +167,13 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=1)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC,C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC,C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTREC is not null)');
      IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
@@ -194,13 +194,13 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=2)
     begin
      IBQuery1.Close;
      IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DOCNF, R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.PARC, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
+     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
      IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
      IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
      IBQuery1.SQL.Add('and (C.NOME = :cli)');
      IBQuery1.SQL.Add('and (R.DTREC is null)');
      IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME, R.PARC');
+     IBQuery1.SQL.Add('order by C.NOME');
      IBQuery1.ParamByName('cli').Value := cmbbx.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);

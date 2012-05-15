@@ -104,6 +104,7 @@ type
     N12: TMenuItem;
     nmEncerramentoCaixa: TMenuItem;
     nmGerenciaCaixa: TMenuItem;
+    Faturamento1: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);

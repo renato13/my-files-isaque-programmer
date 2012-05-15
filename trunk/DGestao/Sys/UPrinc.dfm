@@ -4851,9 +4851,12 @@ object frmPrinc: TfrmPrinc
         Caption = 'Produtos'
         OnClick = nmRelatorioProdutoClick
       end
-      object nmRelatorioVenda: TMenuItem
-        Caption = 'Vendas'
-        OnClick = nmRelatorioVendaClick
+      object Faturamento1: TMenuItem
+        Caption = 'Faturamento'
+        object nmRelatorioVenda: TMenuItem
+          Caption = 'Vendas'
+          OnClick = nmRelatorioVendaClick
+        end
       end
       object nmRelatorioFinanceiro: TMenuItem
         Caption = 'Financeiro'
