@@ -5,28 +5,87 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, ComCtrls, Buttons,
-  ExtCtrls;
+  ExtCtrls, Menus, QRCtrls, QuickRpt;
 
 type
   TfrmGerRelCR = class(TForm)
-    Label3: TLabel;
-    rdgrpSerie: TRadioGroup;
-    rdgrpStatus: TRadioGroup;
     Panel1: TPanel;
     BitBtn2: TBitBtn;
-    btbtnGrupo: TBitBtn;
-    rdgrpData: TRadioGroup;
-    GroupBox1: TGroupBox;
-    Label1: TLabel;
-    Label2: TLabel;
+    btbtnLista: TBitBtn;
+    qckrpCR: TQuickRep;
+    TitleBand1: TQRBand;
+    QRLabel6: TQRLabel;
+    QRSysData1: TQRSysData;
+    qrlblPeriodo: TQRLabel;
+    QRLabel2: TQRLabel;
+    qrlblCliente: TQRLabel;
+    QRDBText5: TQRDBText;
+    qrlblStatus: TQRLabel;
+    ColumnHeaderBand1: TQRBand;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    qrlblCliMot: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel3: TQRLabel;
+    PageFooterBand1: TQRBand;
+    QRLabel11: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRSysData3: TQRSysData;
+    PageFooterBand2: TQRBand;
+    QRSysData2: TQRSysData;
+    grpbxVendedor: TGroupBox;
+    cmbbxCliente: TComboBox;
+    qckrpVendasSintetico: TQuickRep;
+    QRBand1: TQRBand;
+    QRLabel8: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRBand2: TQRBand;
+    QRLabel15: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRBand4: TQRBand;
+    QRLabel20: TQRLabel;
+    QRExpr2: TQRExpr;
+    QRSysData5: TQRSysData;
+    QRExpr3: TQRExpr;
+    QRBand5: TQRBand;
+    QRSysData6: TQRSysData;
+    ibqryCR: TIBQuery;
+    ibqryEmpresa: TIBQuery;
+    rdgrpPeriodo: TRadioGroup;
     dttmpcIni: TDateTimePicker;
     dttmpcFim: TDateTimePicker;
-    cmbbx: TComboBox;
+    StaticText1: TStaticText;
+    StaticText2: TStaticText;
+    rdgrpStatus: TRadioGroup;
     ibqryCli: TIBQuery;
     ibqryCliNOME: TIBStringField;
-    procedure FormShow(Sender: TObject);
-    procedure btbtnGrupoClick(Sender: TObject);
+    QRLabel12: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRBand6: TQRBand;
+    QRDBText7: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRDBText18: TQRDBText;
+    QRLabel16: TQRLabel;
+    QRDBText19: TQRDBText;
     procedure FormCreate(Sender: TObject);
+    procedure btbtnListaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -42,184 +101,103 @@ uses UDMBusiness, uRelCR;
 
 {$R *.dfm}
 
-procedure TfrmGerRelCR.FormShow(Sender: TObject);
-begin
-ibqryCli.Open;
-while not ibqryCli.Eof do
-  begin
-   cmbbx.Items.Add(ibqryCliNOME.Value);
-   ibqryCli.Next;
-  end;
-ibqryCli.Close;
-end;
-
-procedure TfrmGerRelCR.btbtnGrupoClick(Sender: TObject);
-begin
-Application.CreateForm(TfrmRelCR, frmRelCR);
-// 1/6) Cliente - Por Data de Emissao - Todas as Duplicatas
-if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=0)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     qrlblStatus.Caption := 'TODAS';
-     qckrpCR.Preview;
-    end;
-  end
-
-// 2/6)Cliente - Por Data de Vencimento - Todas as Duplicatas
-else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=0)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     qrlblStatus.Caption := 'TODAS';
-     qckrpCR.Preview;
-    end;
-  end
-
-// 3/6) Cliente - Por Data de Emissao - Duplicatas Quitadas
-else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=1)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTREC is not null)');
-     IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
-     qrlblStatus.Caption := 'QUITADAS';
-     qckrpCR.Preview;
-    end;
-  end
-
-// 4/6) Cliente - Por Data de Emissao - Duplicatas Pendentes
-else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=2)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTREC is null)');
-     IBQuery1.SQL.Add('and (R.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     qrlblStatus.Caption := 'PENDENTES';
-     qckrpCR.Preview;
-    end;
-  end
-
-// 5/6) Cliente - Por Data de Vencimento - Duplicatas Quitadas
-else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=1)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC,C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTREC is not null)');
-     IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
-     qrlblStatus.Caption := 'QUITADAS';
-     qckrpCR.Preview;
-    end;
-  end
-
-// 6/6) Cliente - Por Data de Vencimento - Duplicatas Pendentes
-else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=2)
- then
-  Begin
-   with frmRelCR do
-    begin
-     IBQuery1.Close;
-     IBQuery1.SQL.Clear;
-     IBQuery1.SQL.Add('select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC, R.DTREC, R.VALORREC');
-     IBQuery1.SQL.Add('from TBCONTREC R, TBCLIENTE C');
-     IBQuery1.SQL.Add('where (R.CNPJ = C.CNPJ)');
-     IBQuery1.SQL.Add('and (C.NOME = :cli)');
-     IBQuery1.SQL.Add('and (R.DTREC is null)');
-     IBQuery1.SQL.Add('and (R.DTVENC between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by C.NOME');
-     IBQuery1.ParamByName('cli').Value := cmbbx.Text;
-     IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
-     IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
-     IBQuery1.Open;
-     qrlblCliente.Caption := cmbbx.Text;
-     qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
-     //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
-     qrlblStatus.Caption := 'PENDENTES';
-     qckrpCR.Preview;
-    end;
-  end;
-frmRelCR.Destroy;
-
-end;
 
 procedure TfrmGerRelCR.FormCreate(Sender: TObject);
 begin
  dttmpcIni.Date := IncMonth(Date, -1);
  dttmpcFim.Date := Date;
+
+ ibqryCli.Open;
+ cmbbxCliente.Items.Add('TODOS');
+ while not ibqryCli.Eof do
+  begin
+   cmbbxCliente.Items.Add(ibqryCliNOME.Value);
+   ibqryCli.Next;
+  end;
+ ibqryCli.Close;
+
+ cmbbxCliente.ItemIndex := 1;
+end;
+
+procedure TfrmGerRelCR.btbtnListaClick(Sender: TObject);
+var periodo, status : string;
+begin
+ ibqryCR.Close;
+ ibqryCR.SQL.Clear;
+ ibqryCR.SQL.Add('select CR.numlanc, CR.tippag, CR.dtemiss, CR.dtvenc, CR.dtrec, CR.valorrec, CR.valorrectot, CR.parcela, CR.numvenda, C.nome from TBCONTREC CR inner join tbcliente C on CR.cnpj = C.cnpj ');
+
+ case rdgrpPeriodo.ItemIndex of
+  0 : begin  // PERIODO DATA DE VENCIMENTO
+        periodo := 'DATA DE VENCIMENTO: ';
+        case rdgrpStatus.ItemIndex of
+         0 : begin  // DUPLICATAS - TODAS
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim)');
+               ibqryCR.SQL.Add('order by CR.dtvenc, c.nome');
+               status := 'TODAS' ;
+             end;
+          1 : begin  // DUPLICATAS - BAIXADAS
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is not null) ');
+               ibqryCR.SQL.Add('order by CR.dtvenc, c.nome, CR.dtrec');
+               status := 'BAIXADAS' ;
+             end;
+          2 : begin  // DUPLICATAS - A RECEBER
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is null) ');
+               ibqryCR.SQL.Add('order by CR.dtvenc, c.nome');
+               status := 'A RECEBER' ;
+             end;
+        end;
+      end;
+
+  1 : begin  // PERIODO DATA DE RECEBIMENTO
+        periodo := 'DATA DE RECEBIMENTO: ';
+      //  case rdgrpStatus.ItemIndex of
+        // 0 :
+             begin  // DUPLICATAS - TODAS
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtrec between :dataini and :datafim) and (CR.dtrec is not null)');
+               ibqryCR.SQL.Add('order by CR.dtrec, c.nome');
+               status := 'BAIXADAS' ;
+             end;
+      //  end;
+      end;
+
+  2 : begin  // PERIODO DATA DE EMISSAO
+        periodo := 'DATA DE EMISSÃO: ';
+        case rdgrpStatus.ItemIndex of
+         0 : begin  // DUPLICATAS - TODAS
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim)');
+               ibqryCR.SQL.Add('order by CR.dtemiss, c.nome');
+               status := 'TODAS' ;
+             end;
+          1 : begin  // DUPLICATAS - BAIXADAS
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is not null) ');
+               ibqryCR.SQL.Add('order by CR.dtemiss, c.nome, CR.dtrec');
+               status := 'BAIXADAS' ;
+             end;
+          2 : begin  // DUPLICATAS - A RECEBER
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is null) ');
+               ibqryCR.SQL.Add('order by CR.dtemiss, c.nome, CR.dtvenc');
+               status := 'A RECEBER' ;
+             end;
+        end;
+      end;
+
+ end;
+
+ if cmbbxCliente.Text = 'TODOS' then ibqryCR.ParamByName('cliente').Value := '%'
+  else ibqryCR.ParamByName('cliente').Value := cmbbxCliente.Text;
+ ibqryCR.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
+ ibqryCR.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
+
+
+ qrlblPeriodo.Caption := periodo  + DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
+ qrlblCliente.Caption := 'CLIENTE: ' + cmbbxCliente.Text;
+ qrlblStatus.Caption := 'STATUS: ' + status;
+
+ ibqryCR.Open;
+ if ibqryCR.IsEmpty then
+    MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+ else qckrpCR.Preview;
+
 end;
 
 end.
