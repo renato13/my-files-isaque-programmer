@@ -1,6 +1,6 @@
 inherited frmGeVendedor: TfrmGeVendedor
-  Left = 589
-  Top = 282
+  Left = 313
+  Top = 229
   Width = 722
   Caption = 'Cadastro de Vendedores'
   OldCreateOrder = True
@@ -211,7 +211,8 @@ inherited frmGeVendedor: TfrmGeVendedor
       'Select '
       '  COD,'
       '  NOME,'
-      '  CPF'
+      '  CPF,'
+      '  COMISSAO'
       'from TBVENDEDOR '
       'where'
       '  COD = :COD')
@@ -220,14 +221,15 @@ inherited frmGeVendedor: TfrmGeVendedor
       'set'
       '  COD = :COD,'
       '  NOME = :NOME,'
-      '  CPF = :CPF'
+      '  CPF = :CPF,'
+      '  COMISSAO = :COMISSAO'
       'where'
       '  COD = :OLD_COD')
     InsertSQL.Strings = (
       'insert into TBVENDEDOR'
-      '  (COD, NOME, CPF)'
+      '  (COD, NOME, CPF, COMISSAO)'
       'values'
-      '  (:COD, :NOME, :CPF)')
+      '  (:COD, :NOME, :CPF, :COMISSAO)')
     DeleteSQL.Strings = (
       'delete from TBVENDEDOR'
       'where'

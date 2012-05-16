@@ -105,6 +105,12 @@ type
     dbgTitulos: TDBGrid;
     lblTituloCancelado: TLabel;
     lblTituloPagando: TLabel;
+    Label1: TLabel;
+    IbDtstTabelaDTCAD: TDateField;
+    DBEdit1: TDBEdit;
+    IBQuery1: TIBQuery;
+    IBQuery1CURRENT_TIMESTAMP: TDateTimeField;
+    IBQuery1CURRENT_DATE: TDateField;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -120,6 +126,7 @@ type
       DisplayText: Boolean);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure btbtnIncluirClick(Sender: TObject);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -403,6 +410,14 @@ begin
 
     dbgTitulos.DefaultDrawDataCell(Rect, dbgTitulos.Columns[DataCol].Field, State);
   end
+end;
+
+procedure TfrmGeCliente.btbtnIncluirClick(Sender: TObject);
+begin
+  inherited;
+ IBQuery1.Close;
+ IBQuery1.Open;
+ IbDtstTabelaDTCAD.Value := IBQuery1CURRENT_DATE.Value;
 end;
 
 end.

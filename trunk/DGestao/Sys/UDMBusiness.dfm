@@ -6,11 +6,8 @@ object DMBusiness: TDMBusiness
   Height = 400
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    DatabaseName = 'C:\Masterdados\BUSINESS.FDB'
     Params.Strings = (
-      ''
-      'user_name=sysdba'
-      'password=masterkey')
+      '')
     LoginPrompt = False
     DefaultTransaction = ibtrnsctnBusiness
     IdleTimer = 0

@@ -135,8 +135,6 @@ ProductName=DGE - Sistema de Gestão Empresarial
 ProductVersion=1.0.1
 Comments=
 System Analisty=Isaque Marinho Ribeiro
-[Excluded Packages]
-C:\Delphi\MyLib\DevExpress.v42\Delphi 7 Library\dxPScxScheduler3LnkD7.bpl=ExpressPrinting System ReportLink for ExpressScheduler 3 by Developer Express Inc.
 [HistoryLists\hlConditionals]
 Count=1
 Item0=DGE
