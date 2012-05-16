@@ -740,7 +740,7 @@ begin
     ParamByName('FormaPagto').AsShort := FormaPagto;
     Open;
 
-    Result := not IsEmpty;
+    Result := ( qryCaixaAbertoANO.AsInteger > 0 );
 
     if ( Result ) then
     begin
