@@ -143,6 +143,20 @@ inherited frmGeCliente: TfrmGeCliente
           Caption = 'Inscri'#231#227'o Municipal:'
           FocusControl = dbIM
         end
+        object lblDataCadastro: TLabel [5]
+          Left = 728
+          Top = 24
+          Width = 84
+          Height = 13
+          Caption = 'Data Cadastro:'
+          FocusControl = dbDataCadastro
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODIGO'
@@ -205,7 +219,7 @@ inherited frmGeCliente: TfrmGeCliente
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 5
         end
         object dbIM: TDBEdit
           Left = 176
@@ -221,7 +235,24 @@ inherited frmGeCliente: TfrmGeCliente
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
+        end
+        object dbDataCadastro: TDBEdit
+          Left = 728
+          Top = 40
+          Width = 89
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'DTCAD'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 4
         end
       end
       object GroupBox1: TGroupBox
@@ -750,20 +781,6 @@ inherited frmGeCliente: TfrmGeCliente
             Caption = 'Home page:'
             FocusControl = dbHome
           end
-          object Label1: TLabel
-            Left = 8
-            Top = 96
-            Width = 54
-            Height = 13
-            Caption = 'Cadastro:'
-            FocusControl = dbValorLimiteCompra
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
           object dbFone: TDBEdit
             Left = 8
             Top = 16
@@ -813,23 +830,6 @@ inherited frmGeCliente: TfrmGeCliente
             ParentFont = False
             TabOrder = 2
             OnKeyPress = ProximoCampoKeyPress
-          end
-          object DBEdit1: TDBEdit
-            Left = 8
-            Top = 112
-            Width = 121
-            Height = 21
-            Color = clMoneyGreen
-            DataField = 'DTCAD'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 3
           end
         end
         object tbsFinanceiro: TTabSheet
@@ -1089,7 +1089,6 @@ inherited frmGeCliente: TfrmGeCliente
       '  left join TBPAIS p on (p.Pais_id = cl.Pais_id)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_CLIENTE_ID'
-    Active = True
     Left = 640
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
@@ -1114,6 +1113,7 @@ inherited frmGeCliente: TfrmGeCliente
       DisplayLabel = 'Nome / Raz'#227'o Social'
       FieldName = 'NOME'
       Origin = 'TBCLIENTE.NOME'
+      Required = True
       Size = 60
     end
     object IbDtstTabelaINSCEST: TIBStringField
@@ -1242,14 +1242,18 @@ inherited frmGeCliente: TfrmGeCliente
       DisplayLabel = 'Valor Limite p/ Compra'
       FieldName = 'VALOR_LIMITE_COMPRA'
       Origin = 'TBCLIENTE.VALOR_LIMITE_COMPRA'
+      Required = True
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object IbDtstTabelaDTCAD: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Data Cadastro'
       FieldName = 'DTCAD'
       Origin = 'TBCLIENTE.DTCAD'
       Required = True
+      DisplayFormat = 'dd/mm/yyyy'
     end
   end
   inherited DtSrcTabela: TDataSource
@@ -1515,24 +1519,5 @@ inherited frmGeCliente: TfrmGeCliente
     DataSet = qryTitulos
     Left = 704
     Top = 73
-  end
-  object IBQuery1: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
-    SQL.Strings = (
-      'Select current_timestamp, current_date from rdb$database')
-    Left = 676
-    Top = 121
-    object IBQuery1CURRENT_TIMESTAMP: TDateTimeField
-      FieldName = 'CURRENT_TIMESTAMP'
-      Required = True
-    end
-    object IBQuery1CURRENT_DATE: TDateField
-      FieldName = 'CURRENT_DATE'
-      Required = True
-    end
   end
 end
