@@ -3250,3 +3250,133 @@ end
 
 SET TERM ; ^
 
+
+
+SET TERM ^ ;
+
+create procedure GET_CAIXA_ABERTO_DETALHE (
+    USUARIO_IN varchar(12),
+    DATA date,
+    FORMA_PAGTO smallint)
+returns (
+    ANO smallint,
+    NUMERO integer,
+    USUARIO varchar(12),
+    DATA_ABERTURA date,
+    CONTA_CORRENTE integer,
+    VALOR_TOTAL_CREDITO numeric(15,2),
+    VALOR_TOTAL_DEBITO numeric(15,2))
+as
+begin
+
+  Select
+      gc.Ano_caixa
+    , gc.Num_caixa
+    , gc.Conta_corrente
+  from GET_CAIXA_ABERTO(:Usuario_in, :Data, :Forma_pagto) gc
+  into
+      Ano
+    , Numero
+    , Conta_corrente;
+
+  Select
+      c.Usuario
+    , c.Data_abertura
+    , sum( Case when upper(cm.Tipo) = 'C' then cm.Valor else 0 end ) as Valor_total_credito
+    , sum( Case when upper(cm.Tipo) = 'D' then cm.Valor else 0 end ) as Valor_total_debito
+  from TBCAIXA c
+    inner join TBCAIXA_MOVIMENTO cm on (cm.Caixa_ano = c.Ano and cm.Caixa_num = c.Numero)
+  where c.Ano    = :Ano
+    and c.Numero = :Numero
+  Group by
+      c.Usuario
+    , c.Data_abertura
+  into
+      Usuario
+    , Data_abertura
+    , Valor_total_credito
+    , Valor_total_debito;
+
+  Valor_total_credito = coalesce(:Valor_total_credito, 0);
+  Valor_total_credito = coalesce(:Valor_total_credito, 0);
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE GET_CAIXA_ABERTO_DETALHE TO "PUBLIC";
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_CAIXA_ABERTO_DETALHE (
+    USUARIO_IN varchar(12),
+    DATA date,
+    FORMA_PAGTO smallint)
+returns (
+    ANO smallint,
+    NUMERO integer,
+    USUARIO varchar(12),
+    DATA_ABERTURA date,
+    CONTA_CORRENTE integer,
+    VALOR_TOTAL_CREDITO numeric(15,2),
+    VALOR_TOTAL_DEBITO numeric(15,2))
+as
+begin
+
+  Select
+      gc.Ano_caixa
+    , gc.Num_caixa
+    , gc.Conta_corrente
+  from GET_CAIXA_ABERTO(:Usuario_in, :Data, :Forma_pagto) gc
+  into
+      Ano
+    , Numero
+    , Conta_corrente;
+
+  Select
+      c.Usuario
+    , c.Data_abertura
+    , sum( Case when upper(cm.Tipo) = 'C' then cm.Valor else 0 end ) as Valor_total_credito
+    , sum( Case when upper(cm.Tipo) = 'D' then cm.Valor else 0 end ) as Valor_total_debito
+  from TBCAIXA c
+    inner join TBCAIXA_MOVIMENTO cm on (cm.Caixa_ano = c.Ano and cm.Caixa_num = c.Numero)
+  where c.Ano    = :Ano
+    and c.Numero = :Numero
+  Group by
+      c.Usuario
+    , c.Data_abertura
+  into
+      Usuario
+    , Data_abertura
+    , Valor_total_credito
+    , Valor_total_debito;
+
+  Valor_total_credito = coalesce(:Valor_total_credito, 0);
+  Valor_total_debito  = coalesce(:Valor_total_debito,  0);
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+
+
+
+CREATE DOMAIN DMN_COMISSAO AS
+DECIMAL(2,2)
+DEFAULT 0
+NOT NULL;;
+COMMENT ON DOMAIN DMN_COMISSAO IS 'Percentual de comissao.';
+
+
+ALTER TABLE TBVENDEDOR
+    ADD COMISSAO DMN_COMISSAO;
+COMMENT ON COLUMN TBVENDEDOR.COMISSAO IS
+'Percentual de comissao.';
+
+
+UPDATE TBVENDEDOR
+SET COMISSAO = 0 WHERE COMISSAO IS NULL;

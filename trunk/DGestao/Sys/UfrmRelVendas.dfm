@@ -508,9 +508,9 @@ object frmRelVendas: TfrmRelVendas
         1900.590277777778000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
-        Left = 50
+        Left = 48
         Top = 1
-        Width = 28
+        Width = 32
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -519,9 +519,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           44.097222222222220000
-          220.486111111111100000
+          211.666666666666700000
           4.409722222222222000
-          123.472222222222200000)
+          141.111111111111100000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -572,7 +572,7 @@ object frmRelVendas: TfrmRelVendas
       object qrlblCliMot: TQRLabel
         Left = 99
         Top = 1
-        Width = 25
+        Width = 28
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -583,7 +583,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           436.562500000000000000
           4.409722222222222000
-          110.243055555555600000)
+          123.472222222222200000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -603,7 +603,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel7: TQRLabel
         Left = 0
         Top = 1
-        Width = 29
+        Width = 33
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -614,7 +614,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           0.000000000000000000
           4.409722222222222000
-          127.881944444444400000)
+          145.520833333333300000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -935,7 +935,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel11: TQRLabel
         Left = 0
         Top = 3
-        Width = 23
+        Width = 24
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -946,7 +946,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           0.000000000000000000
           13.229166666666670000
-          101.423611111111100000)
+          105.833333333333300000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -999,7 +999,7 @@ object frmRelVendas: TfrmRelVendas
       object QRSysData3: TQRSysData
         Left = 25
         Top = 3
-        Width = 37
+        Width = 41
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1010,7 +1010,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           110.243055555555600000
           13.229166666666670000
-          163.159722222222200000)
+          180.798611111111100000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -1416,9 +1416,9 @@ object frmRelVendas: TfrmRelVendas
         1740.958333333333000000)
       BandType = rbColumnHeader
       object QRLabel15: TQRLabel
-        Left = 241
+        Left = 228
         Top = 1
-        Width = 85
+        Width = 98
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1427,9 +1427,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          637.645833333333300000
+          603.250000000000000000
           2.645833333333333000
-          224.895833333333300000)
+          259.291666666666700000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1449,7 +1449,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel17: TQRLabel
         Left = 0
         Top = 1
-        Width = 54
+        Width = 60
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1460,7 +1460,7 @@ object frmRelVendas: TfrmRelVendas
           42.333333333333330000
           0.000000000000000000
           2.645833333333333000
-          142.875000000000000000)
+          158.750000000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1478,9 +1478,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 8
       end
       object QRLabel18: TQRLabel
-        Left = 552
+        Left = 538
         Top = 1
-        Width = 106
+        Width = 120
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1489,9 +1489,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1460.500000000000000000
+          1423.458333333333000000
           2.645833333333333000
-          280.458333333333300000)
+          317.500000000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -1509,9 +1509,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 8
       end
       object QRLabel19: TQRLabel
-        Left = 431
+        Left = 422
         Top = 1
-        Width = 66
+        Width = 75
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1520,9 +1520,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1140.354166666667000000
+          1116.541666666667000000
           2.645833333333333000
-          174.625000000000000000)
+          198.437500000000000000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1718,7 +1718,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel20: TQRLabel
         Left = 0
         Top = 5
-        Width = 39
+        Width = 40
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1729,7 +1729,7 @@ object frmRelVendas: TfrmRelVendas
           44.979166666666670000
           0.000000000000000000
           13.229166666666670000
-          103.187500000000000000)
+          105.833333333333300000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1747,9 +1747,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 9
       end
       object QRExpr2: TQRExpr
-        Left = 437
+        Left = 406
         Top = 5
-        Width = 221
+        Width = 252
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1758,9 +1758,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          1156.229166666667000000
+          1074.208333333333000000
           13.229166666666670000
-          584.729166666666700000)
+          666.750000000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -1782,7 +1782,7 @@ object frmRelVendas: TfrmRelVendas
       object QRSysData5: TQRSysData
         Left = 41
         Top = 5
-        Width = 62
+        Width = 69
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1793,7 +1793,7 @@ object frmRelVendas: TfrmRelVendas
           44.979166666666670000
           108.479166666666700000
           13.229166666666670000
-          164.041666666666700000)
+          182.562500000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -2009,7 +2009,6 @@ object frmRelVendas: TfrmRelVendas
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = ibqryVendasSinteticoCalcFields
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -2072,7 +2071,6 @@ object frmRelVendas: TfrmRelVendas
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (

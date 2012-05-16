@@ -1,8 +1,7 @@
 inherited frmGeVendedor: TfrmGeVendedor
-  Left = 309
-  Top = 223
+  Left = 589
+  Top = 282
   Width = 722
-  ActiveControl = dbgDados
   Caption = 'Cadastro de Vendedores'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -27,7 +26,6 @@ inherited frmGeVendedor: TfrmGeVendedor
   end
   inherited pgcGuias: TPageControl
     Width = 706
-    ActivePage = tbsTabela
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Width = 698
@@ -101,7 +99,7 @@ inherited frmGeVendedor: TfrmGeVendedor
           Caption = 'CPF:'
           FocusControl = dbCPF
         end
-        object Label1: TLabel [3]
+        object lblComissao: TLabel [3]
           Left = 520
           Top = 24
           Width = 68
@@ -146,10 +144,10 @@ inherited frmGeVendedor: TfrmGeVendedor
           ParentFont = False
           TabOrder = 2
         end
-        object DBEdit1: TDBEdit
+        object dbComissao: TDBEdit
           Left = 520
           Top = 40
-          Width = 73
+          Width = 81
           Height = 21
           CharCase = ecUpperCase
           DataField = 'COMISSAO'
@@ -176,7 +174,6 @@ inherited frmGeVendedor: TfrmGeVendedor
       'from TBVENDEDOR v')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
-    Active = True
     Left = 488
     object IbDtstTabelaCOD: TIntegerField
       DisplayLabel = 'C'#243'digo'

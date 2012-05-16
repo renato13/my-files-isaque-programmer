@@ -17,8 +17,8 @@ type
     IbDtstTabelaCOD: TIntegerField;
     IbDtstTabelaNOME: TIBStringField;
     IbDtstTabelaCPF: TIBStringField;
-    DBEdit1: TDBEdit;
-    Label1: TLabel;
+    dbComissao: TDBEdit;
+    lblComissao: TLabel;
     IbDtstTabelaCOMISSAO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btbtnSalvarClick(Sender: TObject);

@@ -6,7 +6,6 @@ object DMBusiness: TDMBusiness
   Height = 400
   Width = 575
   object ibdtbsBusiness: TIBDatabase
-    Connected = True
     DatabaseName = 'C:\Masterdados\BUSINESS.FDB'
     Params.Strings = (
       ''
@@ -21,7 +20,7 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = True
+    Active = False
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -301,40 +300,15 @@ object DMBusiness: TDMBusiness
       'where'
       '  NOME = :NOME')
     SelectSQL.Strings = (
-      'Select First 1'
+      'Select'
       '    c.Ano'
       '  , c.Numero'
       '  , c.Usuario'
       '  , c.Data_abertura'
       '  , c.Conta_corrente'
-      
-        '  , sum( Case when upper(cm.Tipo) = '#39'C'#39' then cm.Valor else 0 end' +
-        ' ) as Valor_total_credito'
-      
-        '  , sum( Case when upper(cm.Tipo) = '#39'D'#39' then cm.Valor else 0 end' +
-        ' ) as Valor_total_debito'
-      'from TBCAIXA c'
-      
-        '  Inner join TBCONTA_CORRENTE cc on (cc.Codigo = c.Conta_corrent' +
-        'e)'
-      
-        '  left join TBCAIXA_MOVIMENTO cm on (cm.Caixa_ano = c.Ano and cm' +
-        '.Caixa_num = c.Numero)'
-      'where c.Situacao = 0'
-      '  and c.Usuario = :Usuario'
-      '  and ( (c.Data_abertura = :Data) or (cc.Tipo = 2) )'
-      '  and c.Conta_corrente in ('
-      '    Select'
-      '      f.Conta_corrente'
-      '    from TBFORMPAGTO f'
-      '    where f.Cod = :FormaPagto'
-      '  )'
-      'Group by'
-      '    c.Ano'
-      '  , c.Numero'
-      '  , c.Usuario'
-      '  , c.Data_abertura'
-      '  , c.Conta_corrente')
+      '  , c.Valor_total_credito'
+      '  , c.Valor_total_debito'
+      'from GET_CAIXA_ABERTO_DETALHE(:Usuario, :Data, :FormaPagto) c')
     ModifySQL.Strings = (
       'update TBUSERS'
       'set'
