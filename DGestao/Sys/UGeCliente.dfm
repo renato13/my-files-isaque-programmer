@@ -1,8 +1,9 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 676
-  Top = 244
+  Left = 278
+  Top = 146
   Width = 903
   Height = 574
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -31,6 +32,7 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 887
     Height = 493
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -602,6 +604,7 @@ inherited frmGeCliente: TfrmGeCliente
           Font.Height = -11
           Font.Name = 'MS Sans Serif'
           Font.Style = []
+          MaxLength = 10
           ParentFont = False
           TabOrder = 3
         end
@@ -747,6 +750,20 @@ inherited frmGeCliente: TfrmGeCliente
             Caption = 'Home page:'
             FocusControl = dbHome
           end
+          object Label1: TLabel
+            Left = 8
+            Top = 96
+            Width = 54
+            Height = 13
+            Caption = 'Cadastro:'
+            FocusControl = dbValorLimiteCompra
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
           object dbFone: TDBEdit
             Left = 8
             Top = 16
@@ -760,6 +777,7 @@ inherited frmGeCliente: TfrmGeCliente
             Font.Height = -11
             Font.Name = 'MS Sans Serif'
             Font.Style = []
+            MaxLength = 13
             ParentFont = False
             TabOrder = 0
           end
@@ -795,6 +813,23 @@ inherited frmGeCliente: TfrmGeCliente
             ParentFont = False
             TabOrder = 2
             OnKeyPress = ProximoCampoKeyPress
+          end
+          object DBEdit1: TDBEdit
+            Left = 8
+            Top = 112
+            Width = 121
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'DTCAD'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 3
           end
         end
         object tbsFinanceiro: TTabSheet
@@ -841,7 +876,7 @@ inherited frmGeCliente: TfrmGeCliente
           end
           object lblTituloCancelado: TLabel
             Left = 8
-            Top = 182
+            Top = 175
             Width = 114
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -855,7 +890,7 @@ inherited frmGeCliente: TfrmGeCliente
           end
           object lblTituloPagando: TLabel
             Left = 8
-            Top = 162
+            Top = 151
             Width = 122
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1045,6 +1080,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  , coalesce(c.Cid_nome, cl.Cidade) as Cid_nome'
       '  , coalesce(u.Est_nome, cl.Uf) as Est_nome'
       '  , p.Pais_nome'
+      '  , cl.DtCad '
       'from TBCLIENTE cl'
       '  left join TBTIPO_LOGRADOURO t on (t.Tlg_cod = cl.Tlg_tipo)'
       '  left join TBLOGRADOURO l on (l.Log_cod = cl.Log_cod)'
@@ -1053,6 +1089,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  left join TBPAIS p on (p.Pais_id = cl.Pais_id)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_CLIENTE_ID'
+    Active = True
     Left = 640
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
@@ -1209,6 +1246,11 @@ inherited frmGeCliente: TfrmGeCliente
       Precision = 18
       Size = 2
     end
+    object IbDtstTabelaDTCAD: TDateField
+      FieldName = 'DTCAD'
+      Origin = 'TBCLIENTE.DTCAD'
+      Required = True
+    end
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
@@ -1239,7 +1281,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  EST_COD,'
       '  NUMERO_END,'
       '  PAIS_ID,'
-      '  VALOR_LIMITE_COMPRA'
+      '  VALOR_LIMITE_COMPRA.'
+      '  DTCAD'
       'from TBCLIENTE '
       'where'
       '  CNPJ = :CNPJ')
@@ -1268,7 +1311,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  EST_COD = :EST_COD,'
       '  NUMERO_END = :NUMERO_END,'
       '  PAIS_ID = :PAIS_ID,'
-      '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA'
+      '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA,'
+      '  DTCAD = :DTCAD'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
@@ -1279,7 +1323,9 @@ inherited frmGeCliente: TfrmGeCliente
       
         '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
         ', BAI_COD, '
-      '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA)'
+      
+        '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA, D' +
+        'TCAD)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
@@ -1289,7 +1335,7 @@ inherited frmGeCliente: TfrmGeCliente
         ' :LOG_COD, '
       
         '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID, :VALOR_L' +
-        'IMITE_COMPRA)')
+        'IMITE_COMPRA, :DTCAD)')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
@@ -1469,5 +1515,24 @@ inherited frmGeCliente: TfrmGeCliente
     DataSet = qryTitulos
     Left = 704
     Top = 73
+  end
+  object IBQuery1: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    SQL.Strings = (
+      'Select current_timestamp, current_date from rdb$database')
+    Left = 676
+    Top = 121
+    object IBQuery1CURRENT_TIMESTAMP: TDateTimeField
+      FieldName = 'CURRENT_TIMESTAMP'
+      Required = True
+    end
+    object IBQuery1CURRENT_DATE: TDateField
+      FieldName = 'CURRENT_DATE'
+      Required = True
+    end
   end
 end
