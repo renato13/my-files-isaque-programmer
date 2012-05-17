@@ -1046,7 +1046,10 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  , c.Nome as NomeCliente'
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
       'from TBCONTREC r'
-      '  inner join TBCLIENTE c on (c.Cnpj = r.Cnpj)')
+      '  inner join TBCLIENTE c on (c.Cnpj = r.Cnpj)'
+      
+        '  left join TBVENDAS vn on (vn.Ano = r.Anovenda and vn.Codcontro' +
+        'l = r.Numvenda)')
     GeneratorField.Field = 'NUMLANC'
     GeneratorField.Generator = 'GEN_CONTAREC_NUM_2011'
     Left = 768
