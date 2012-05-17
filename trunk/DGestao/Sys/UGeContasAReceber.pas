@@ -154,7 +154,9 @@ var
 begin
   frm := TfrmGeContasAReceber.Create(AOwner);
   try
-    whr := 'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+    whr :=
+      '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and ' + 
+      'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
 
     with frm, IbDtstTabela do
     begin
@@ -214,7 +216,9 @@ end;
 
 procedure TfrmGeContasAReceber.btnFiltrarClick(Sender: TObject);
 begin
-  WhereAdditional := 'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+  WhereAdditional :=
+    '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and ' + 
+    'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
   inherited;
 end;
 
