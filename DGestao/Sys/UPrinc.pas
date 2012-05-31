@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ComCtrls, BarMenus, SpeedBar, RXCtrls, ExtCtrls, jpeg,
-  EUserAcs, StdCtrls, Buttons;
+  EUserAcs, StdCtrls, Buttons, dxGDIPlusClasses;
 
 type
   TfrmPrinc = class(TForm)
@@ -40,7 +40,7 @@ type
     menuSobre: TMenuItem;
     pnlMain: TPanel;
     nmFornecedor: TMenuItem;
-    Image1: TImage;
+    imgFundo: TImage;
     nmTipoDespesa: TMenuItem;
     RxSpeedButton2: TRxSpeedButton;
     N3: TMenuItem;
@@ -105,6 +105,11 @@ type
     nmEncerramentoCaixa: TMenuItem;
     nmGerenciaCaixa: TMenuItem;
     Faturamento1: TMenuItem;
+    imgEmpresa: TImage;
+    ProductName: TLabel;
+    Copyright: TLabel;
+    Label1: TLabel;
+    Version: TLabel;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -427,11 +432,21 @@ begin
     end
   end;
 
+  Self.WindowState := wsMaximized;
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
+var
+  sFileImage : String;
 begin
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial  v1.0.1.4' //[ v' + GetExeVersion( Application.ExeName ) + ' ]';
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial  [ v' + GetExeVersion + ' ]';
+  Self.Version.Caption := GetVersion;
+
+  // Carregar Imagem de Fundo da Tele Principal
+  
+  sFileImage := ExtractFilePath(Application.ExeName) + 'Logo_Principal.png';
+  if ( FileExists(sFileImage) ) then
+    imgFundo.Picture.LoadFromFile(sFileImage);
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
