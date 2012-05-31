@@ -114,8 +114,8 @@ IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=1
 MinorVer=0
-Release=1
-Build=5
+Release=2
+Build=1
 Debug=0
 PreRelease=0
 Special=0
@@ -126,15 +126,18 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Masterdados Tecnologia da Informação
 FileDescription=DGE
-FileVersion=1.0.1.5
+FileVersion=1.0.2.1
 InternalName=DGE
 LegalCopyright=Dorivaldo Vieira JR.
 LegalTrademarks=
 OriginalFilename=DGE.EXE
 ProductName=DGE - Sistema de Gestão Empresarial
-ProductVersion=1.0.1
+ProductVersion=1.0.2.0
 Comments=
 System Analisty=Isaque Marinho Ribeiro
+ReleaseDate=30/05/2012
+[Excluded Packages]
+C:\Delphi\MyLib\DevExpress.v42\Delphi 7 Library\dxPScxScheduler3LnkD7.bpl=ExpressPrinting System ReportLink for ExpressScheduler 3 by Developer Express Inc.
 [HistoryLists\hlConditionals]
 Count=1
 Item0=DGE

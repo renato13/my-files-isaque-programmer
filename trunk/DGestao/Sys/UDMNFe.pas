@@ -493,7 +493,11 @@ begin
       if ACBrNFe.DANFE <> nil then
       begin
         ACBrNFe.DANFE.TipoDANFE := StrToTpImp(OK, IntToStr(rgTipoDanfe.ItemIndex + 1));
-        ACBrNFe.DANFE.Logo      := edtLogoMarca.Text;
+
+        if ( FilesExists(Trim(edtLogoMarca.Text)) ) then
+          ACBrNFe.DANFE.Logo := Trim(edtLogoMarca.Text)
+        else
+          ACBrNFe.DANFE.Logo := EmptyStr;  
       end;
 
       edtEmitCNPJ.Text       := ReadString( 'Emitente', 'CNPJ'       , '' ) ;
