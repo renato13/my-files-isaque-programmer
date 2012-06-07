@@ -440,7 +440,8 @@ var
   sFileImage : String;
 begin
   Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial  [ v' + GetExeVersion + ' ]';
-  Self.Version.Caption := GetVersion;
+  Self.Version.Caption   := GetVersion;
+  Self.Copyright.Caption := GetCopyright;
 
   // Carregar Imagem de Fundo da Tele Principal
   

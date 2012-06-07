@@ -55,8 +55,9 @@ begin
   else
     sCNPJ := StrFormatarCpf(GetEmpresaIDDefault);
 
-  Version.Caption  := 'Versão ' + GetExeVersion;
-  Comments.Caption := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
+  Version.Caption   := 'Versão ' + GetExeVersion;
+  Copyright.Caption := GetCopyright;
+  Comments.Caption  := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
 end;
 
 end.
