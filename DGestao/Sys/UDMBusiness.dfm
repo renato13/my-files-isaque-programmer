@@ -267,8 +267,8 @@ object DMBusiness: TDMBusiness
     Top = 120
   end
   object IdIPWatch: TIdIPWatch
-    Active = False
-    HistoryFilename = 'iphist.dat'
+    Active = True
+    HistoryFilename = 'NetWorkActiveDGE.dat'
     Left = 312
     Top = 104
   end

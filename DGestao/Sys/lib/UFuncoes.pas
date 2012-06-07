@@ -9,6 +9,7 @@ uses
   function GetExeVersion(const FileName : TFileName) : String; overload;
   function GetExeVersion : String; overload;
   function GetVersion : String;
+  function GetCopyright : String;
 
 implementation
 
@@ -87,6 +88,11 @@ end;
 function GetVersion : String;
 begin
   Result := TInfoVersao.GetInstance().getPropertyValue(ivFILE_VERSION);
+end;
+
+function GetCopyright : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivLEGAL_COPYRIGHT);
 end;
 
 end.

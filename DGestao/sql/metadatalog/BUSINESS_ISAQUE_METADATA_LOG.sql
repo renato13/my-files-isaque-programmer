@@ -238,3 +238,9 @@ COMMENT ON COLUMN TBVENDAS.VENDA_PRAZO IS
 'Venda A Prazo?
 0 - Nao
 1 - Sim';
+
+
+COMMENT ON COLUMN TBPRODUTO.ALIQUOTA_TIPO IS
+'Tipo Aliquota:
+0 - ICMS (Para Produtos)
+1 - ISS  (Para Servicos)';
