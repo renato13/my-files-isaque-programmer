@@ -4,7 +4,7 @@ inherited frmGeProduto: TfrmGeProduto
   Width = 886
   Height = 575
   ActiveControl = dbCodigo
-  Caption = 'Cadastro de Produtos'
+  Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
   PixelsPerInch = 96
@@ -851,7 +851,6 @@ inherited frmGeProduto: TfrmGeProduto
         Height = 148
         ActivePage = tbsValores
         Align = alClient
-        Style = tsFlatButtons
         TabOrder = 3
         object tbsValores: TTabSheet
           Caption = 'Valores'
