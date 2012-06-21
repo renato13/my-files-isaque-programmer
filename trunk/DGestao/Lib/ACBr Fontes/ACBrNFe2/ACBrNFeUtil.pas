@@ -898,7 +898,6 @@ begin
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.am.gov.br/services2/services/NfeConsulta2', 'https://homnfe.sefaz.am.gov.br/services2/services/NfeConsulta2');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.am.gov.br/services2/services/NfeStatusServico2', 'https://homnfe.sefaz.am.gov.br/services2/services/NfeStatusServico2');
     LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.am.gov.br/services2/services/cadconsultacadastro2', 'https://homnfe.sefaz.am.gov.br/services2/services/cadconsultacadastro2');
-    // Incluido por Italo em 03/04/2012
     LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.am.gov.br/services2/services/RecepcaoEvento', 'https://homnfe.sefaz.am.gov.br/services2/services/RecepcaoEvento');
   end;
 end;
@@ -914,9 +913,8 @@ begin
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/nfenw/NfeConsulta2.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/nfenw/NfeConsulta2.asmx');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/nfenw/NfeStatusServico2.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/nfenw/NfeStatusServico2.asmx');
     LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/nfenw/CadConsultaCadastro2.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/nfenw/CadConsultaCadastro2.asmx');
-    // Alterado por Italo em 03/04/2012
-    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/sre/nferecepcaoevento.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/sre/RecepcaoEvento.asmx');
-//    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/sre/nferecepcaoevento.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/sre/nferecepcaoevento.asmx');
+    // Alterado por Italo em 22/05/2012
+    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.ba.gov.br/webservices/sre/RecepcaoEvento.asmx', 'https://hnfe.sefaz.ba.gov.br/webservices/sre/RecepcaoEvento.asmx');
   end;
 end;
 
@@ -961,7 +959,6 @@ begin
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2', 'https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeConsulta2');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2', 'https://homologacao.sefaz.mt.gov.br/nfews/v2/services/NfeStatusServico2');
     LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2', 'https://homologacao.sefaz.mt.gov.br/nfews/v2/services/CadConsultaCadastro2');
-    // Incluido por Italo em 28/11/2011
     LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento', 'https://homologacao.sefaz.mt.gov.br/nfews/v2/services/RecepcaoEvento');
   end;
 end;
@@ -977,8 +974,8 @@ begin
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.ms.gov.br/producao/services2/NfeConsulta2', 'https://homologacao.nfe.ms.gov.br/homologacao/services2/NfeConsulta2');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.ms.gov.br/producao/services2/NfeStatusServico2', 'https://homologacao.nfe.ms.gov.br/homologacao/services2/NfeStatusServico2');
     LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.ms.gov.br/producao/services2/CadConsultaCadastro2', 'https://homologacao.nfe.ms.gov.br/homologacao/services2/CadConsultaCadastro2');
-    // Incluido por Italo em 03/04/2012
-    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.ms.gov.br/producao/services2/NfeRecepcaoEvento', 'https://homologacao.nfe.ms.gov.br/homologacao/services2/RecepcaoEvento');
+    // Alterado por Italo em 22/05/2012
+    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.ms.gov.br/producao/services2/RecepcaoEvento', 'https://homologacao.nfe.ms.gov.br/homologacao/services2/RecepcaoEvento');
   end;
 end;
 
@@ -993,9 +990,7 @@ begin
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.mg.gov.br/nfe2/services/NfeConsulta2', 'https://hnfe.fazenda.mg.gov.br/nfe2/services/NfeConsulta2');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.mg.gov.br/nfe2/services/NfeStatus2', 'https://hnfe.fazenda.mg.gov.br/nfe2/services/NfeStatus2');
     LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.mg.gov.br/nfe2/services/cadconsultacadastro2', 'https://hnfe.fazenda.mg.gov.br/nfe2/services/cadconsultacadastro2');
-    // Alterado por Italo em 03/04/2012
     LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.mg.gov.br/nfe2/services/RecepcaoEvento', 'https://hnfe.fazenda.mg.gov.br/nfe2/services/RecepcaoEvento');
-//    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe.fazenda.mg.gov.br/nfe2/services/NfeRecepcaoEvento', 'https://hnfe.fazenda.mg.gov.br/nfe2/services/NfeRecepcaoEvento');
   end;
 end;
 
@@ -1009,8 +1004,8 @@ begin
     LayNfeInutilizacao  : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe2.fazenda.pr.gov.br/nfe/NFeInutilizacao2', 'https://homologacao.nfe2.fazenda.pr.gov.br/nfe/NFeInutilizacao2');
     LayNfeConsulta      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe2.fazenda.pr.gov.br/nfe/NFeConsulta2', 'https://homologacao.nfe2.fazenda.pr.gov.br/nfe/NFeConsulta2');
     LayNfeStatusServico : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe2.fazenda.pr.gov.br/nfe/NFeStatusServico2', 'https://homologacao.nfe2.fazenda.pr.gov.br/nfe/NFeStatusServico2');
-//    LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, '', '');
-//    LayNfeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, '', '');
+    LayNfeCadastro      : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe2.fazenda.pr.gov.br/nfe/CadConsultaCadastro2', 'https://homologacao.nfe2.fazenda.pr.gov.br/nfe/CadConsultaCadastro2');
+    LayNFeCCe           : Result := NotaUtil.SeSenao(AAmbiente=1, 'https://nfe2.fazenda.pr.gov.br/nfe-evento/NFeRecepcaoEvento', 'https://homologacao.nfe2.fazenda.pr.gov.br/nfe-evento/NFeRecepcaoEvento');
   end;
 end;
 
@@ -1208,6 +1203,62 @@ begin
     xmlFreeDoc(schema_doc);
     Result := True;
 end;
+
+function ValidaAssinaturaLibXML(const Axml: PAnsiChar; out Msg: AnsiString): Boolean;
+var
+  doc : xmlDocPtr;
+  node : xmlNodePtr;
+  dsigCtx : xmlSecDSigCtxPtr;
+  mngr : xmlSecKeysMngrPtr;
+
+  Publico : String;
+  Cert: TMemoryStream;
+  Cert2: TStringStream;
+begin
+{  Publico := copy(Axml,pos('<X509Certificate>',Axml)+17,pos('</X509Certificate>',Axml)-(pos('<X509Certificate>',Axml)+17));
+
+  Cert := TMemoryStream.Create;
+  Cert2 := TStringStream.Create(Publico);
+  Cert.LoadFromStream(Cert2);
+       xmlSecCryptoAppKeyCertLoadMemory
+  if (xmlSecCryptoAppKeysMngrCertLoadMemory(mngr,
+                                        Cert.Memory,
+                                        Cert.Size,
+                                        xmlSecKeyDataFormatUnknown,
+                                        1) < 0) then
+    raise Exception.Create('Error: failed to load certificate');
+  xmlSecOpenSSLAppKeyCertLoadMemory
+
+  doc := xmlParseDoc(Axml);
+  if ((doc = nil) or (xmlDocGetRootElement(doc) = nil)) then
+    raise Exception.Create('Error: unable to parse');
+
+  node := xmlSecFindNode(xmlDocGetRootElement(doc), PAnsiChar(xmlSecNodeSignature), PAnsiChar(xmlSecDSigNs));
+  if (node = nil) then
+    raise Exception.Create('Error: start node not found');
+
+  dsigCtx := xmlSecDSigCtxCreate(nil);
+  if (dsigCtx = nil) then
+    raise Exception.Create('Error :failed to create signature context');
+
+
+
+  dsigCtx^.signKey := xmlSecCryptoAppKeyLoadMemory(Cert.Memory, Cert.Size, xmlSecKeyDataFormatPem, '', nil, nil);
+  if (dsigCtx^.signKey = nil) then
+    raise Exception.Create('Error: failed to load public pem key from "' + Axml + '"');
+
+  { Verify signature }
+ { if (xmlSecDSigCtxVerify(dsigCtx, node) < 0) then
+      raise Exception.Create('Error: signature verify');
+
+  if dsigCtx.status = xmlSecDSigStatusSucceeded then
+    Result := True
+  else
+    Result := False;
+
+  xmlSecDSigCtxDestroy(dsigCtx);
+  xmlFreeDoc(doc);}
+end;
 {$ELSE}
 function ValidaMSXML(XML: AnsiString; out Msg: AnsiString; const APathSchemas: string = ''): Boolean;
 var
@@ -1338,7 +1389,7 @@ class function NotaUtil.ValidaAssinatura(const AXML: AnsiString;
   var AMsg: AnsiString): Boolean;
 begin
 {$IFDEF ACBrNFeOpenSSL}
-  Result := False;
+  Result := ValidaAssinaturaLibXML(PAnsiChar(AXML),AMsg);
 {$ELSE}
   Result := ValidaAssinaturaMSXML(AXML,AMsg);
 {$ENDIF}
