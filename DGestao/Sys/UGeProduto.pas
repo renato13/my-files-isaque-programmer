@@ -416,6 +416,15 @@ end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);
 begin
+  Case fAliquota of
+    taICMS :
+      Caption := 'Cadastro de Produtos';
+    taISS :
+      Caption := 'Cadastro de Serviços';
+    else
+      Caption := 'Cadastro de Produtos/Serviços';
+  end;
+
   if (not fOrdenado) then
   begin
     IbDtstTabela.SelectSQL.Add( 'order by ' + CampoDescricao );

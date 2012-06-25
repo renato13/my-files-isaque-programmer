@@ -37,7 +37,7 @@ var
 
 implementation
 
-uses UDMBusiness, UGrEntradaEstoq, UEntradaEstoq, UPrinc, UfrmAcessoSistema;
+uses UDMBusiness, UPrinc, UfrmAcessoSistema;
 
 {$R *.dfm}
 
@@ -52,10 +52,10 @@ end;
 
 procedure TfrmPesq.BitBtn1Click(Sender: TObject);
 begin
- frmGrEntradaEstoq.ibdtstComprasCODFORN.Value := IBQuery1CODFORN.Value;
- frmEntradaEstoq.Edit1.Text := IBQuery1NOMEFORN.Value;
- IBQuery1.Close;
- close;
+//  frmGrEntradaEstoq.ibdtstComprasCODFORN.Value := IBQuery1CODFORN.Value;
+//  frmEntradaEstoq.Edit1.Text := IBQuery1NOMEFORN.Value;
+//  IBQuery1.Close;
+//  close;
 end;
 
 procedure TfrmPesq.BitBtn2Click(Sender: TObject);
