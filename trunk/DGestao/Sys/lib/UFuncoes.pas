@@ -10,6 +10,9 @@ uses
   function GetExeVersion : String; overload;
   function GetVersion : String;
   function GetCopyright : String;
+  function GetInternalName : String;
+  function GetProductName : String;
+  function GetFileDescription : String;
 
 implementation
 
@@ -93,6 +96,21 @@ end;
 function GetCopyright : String;
 begin
   Result := TInfoVersao.GetInstance().getPropertyValue(ivLEGAL_COPYRIGHT);
+end;
+
+function GetInternalName : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivINTERNAL_NAME);
+end;
+
+function GetProductName : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivPRODUCT_NAME);
+end;
+
+function GetFileDescription : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivFILE_DESCRIPTION);
 end;
 
 end.

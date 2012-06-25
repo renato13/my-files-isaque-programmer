@@ -13,8 +13,8 @@ type
     Copyright: TLabel;
     Comments: TLabel;
     OKButton: TButton;
-    Label1: TLabel;
-    Image1: TImage;
+    FileDescription: TLabel;
+    ImgLogo: TImage;
     Bevel1: TBevel;
     procedure FormCreate(Sender: TObject);
   private
@@ -50,14 +50,20 @@ procedure TfrmSobre.FormCreate(Sender: TObject);
 var
   sCNPJ : String;
 begin
+  ImgLogo.Picture.Icon := Application.Icon;
+
+  Caption := 'Sobre o ' + GetInternalName;
+
   if ( StrIsCNPJ(GetEmpresaIDDefault) ) then
     sCNPJ := StrFormatarCnpj(GetEmpresaIDDefault)
   else
     sCNPJ := StrFormatarCpf(GetEmpresaIDDefault);
 
-  Version.Caption   := 'Versão ' + GetExeVersion;
-  Copyright.Caption := GetCopyright;
-  Comments.Caption  := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
+  ProductName.Caption     := GetInternalName;
+  FileDescription.Caption := GetFileDescription;
+  Version.Caption     := 'Versão ' + GetExeVersion;
+  Copyright.Caption   := GetCopyright;
+  Comments.Caption    := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
 end;
 
 end.
