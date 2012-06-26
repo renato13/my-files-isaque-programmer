@@ -220,7 +220,7 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnProdClick(Sender: TObject);
 begin
-  MostrarTabelaProdutos(Self);
+  MostrarTabelaProdutos(Self, taICMS);
 end;
 
 procedure TfrmPrinc.nmEntradaClick(Sender: TObject);

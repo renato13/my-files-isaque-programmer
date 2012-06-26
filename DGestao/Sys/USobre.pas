@@ -50,7 +50,8 @@ procedure TfrmSobre.FormCreate(Sender: TObject);
 var
   sCNPJ : String;
 begin
-  ImgLogo.Picture.Icon := Application.Icon;
+  if ( ImgLogo.Picture.Height = 0 ) then
+    ImgLogo.Picture.Icon := Application.Icon;
 
   Caption := 'Sobre o ' + GetInternalName;
 

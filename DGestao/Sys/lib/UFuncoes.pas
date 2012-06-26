@@ -13,6 +13,8 @@ uses
   function GetInternalName : String;
   function GetProductName : String;
   function GetFileDescription : String;
+  function GetCompanyName : String;
+  function GetContacts : String;
 
 implementation
 
@@ -111,6 +113,16 @@ end;
 function GetFileDescription : String;
 begin
   Result := TInfoVersao.GetInstance().getPropertyValue(ivFILE_DESCRIPTION);
+end;
+
+function GetCompanyName : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivCOMPANY_NAME);
+end;
+
+function GetContacts : String;
+begin
+  Result := TInfoVersao.GetInstance().getPropertyValue(ivCONTACTS);
 end;
 
 end.

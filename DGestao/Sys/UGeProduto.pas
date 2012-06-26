@@ -136,7 +136,8 @@ type
 var
   frmGeProduto: TfrmGeProduto;
 
-  procedure MostrarTabelaProdutos(const AOwner : TComponent);
+  procedure MostrarTabelaProdutos(const AOwner : TComponent; const TipoAliquota : TAliquota);
+
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI : Currency;
@@ -151,12 +152,13 @@ uses UDMBusiness, UGeSecaoProduto, UGeGrupoProduto, UGeUnidade,
 
 {$R *.dfm}
 
-procedure MostrarTabelaProdutos(const AOwner : TComponent);
+procedure MostrarTabelaProdutos(const AOwner : TComponent; const TipoAliquota : TAliquota);
 var
   frm : TfrmGeProduto;
 begin
   frm := TfrmGeProduto.Create(AOwner);
   try
+    frm.fAliquota := TipoAliquota;
     frm.ShowModal;
   finally
     frm.Destroy;

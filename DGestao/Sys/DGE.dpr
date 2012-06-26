@@ -30,7 +30,6 @@ uses
   UCdFornecedor in 'UCdFornecedor.pas' {frmCdFornecedor},
   UFormPagto in 'UFormPagto.pas' {frmFormPagto},
   UGrupoProd in 'UGrupoProd.pas' {frmGrupoProd},
-  UGrEntradaEstoq in 'UGrEntradaEstoq.pas' {frmGrEntradaEstoq},
   uAjustEstoq in 'uAjustEstoq.pas' {frmAjustEstoq},
   uKardex in 'uKardex.pas' {frmKardex},
   uGrVendas in 'uGrVendas.pas' {frmGrVendas},
