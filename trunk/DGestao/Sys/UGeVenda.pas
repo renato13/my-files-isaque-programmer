@@ -1392,7 +1392,7 @@ end;
 
 procedure TfrmGeVenda.btnConsultarProdutoClick(Sender: TObject);
 begin
-  MostrarTabelaProdutos(Self);
+  MostrarTabelaProdutos(Self, taICMS);
 end;
 
 procedure TfrmGeVenda.dbTotalDescontoButtonClick(Sender: TObject);

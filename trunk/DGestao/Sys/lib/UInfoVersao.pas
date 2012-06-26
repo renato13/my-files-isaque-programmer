@@ -19,7 +19,6 @@ type
     function getPropertyValue(propName: String): String;
   end;
 
-
 var
   InfoVersao  : TInfoVersao;
 
@@ -36,6 +35,7 @@ const
   ivCOMMENTS          = 'Comments';
   ivRELEASE_DATE      = 'ReleaseDate';
   ivSYSTEM_ANALISTY   = 'SystemAnalisty';
+  ivCONTACTS          = 'Contacts';
 
 implementation
 
