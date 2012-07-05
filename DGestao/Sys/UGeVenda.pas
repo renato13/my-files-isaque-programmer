@@ -1058,6 +1058,9 @@ begin
   CxNumero := 0;
   CxContaCorrente := 0;
 
+  cdsTabelaItens.Close;
+  cdsTabelaItens.Open;
+
   if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
     if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
     begin
