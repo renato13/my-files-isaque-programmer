@@ -1,6 +1,6 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 278
-  Top = 146
+  Left = 451
+  Top = 169
   Width = 903
   Height = 574
   ActiveControl = dbCodigo
@@ -752,7 +752,7 @@ inherited frmGeCliente: TfrmGeCliente
         Top = 237
         Width = 879
         Height = 227
-        ActivePage = tbsContato
+        ActivePage = tbsFinanceiro
         Align = alClient
         TabOrder = 2
         object tbsContato: TTabSheet
@@ -986,9 +986,16 @@ inherited frmGeCliente: TfrmGeCliente
               Columns = <
                 item
                   Expanded = False
+                  FieldName = 'VENDA'
+                  Title.Caption = 'Venda'
+                  Width = 90
+                  Visible = True
+                end
+                item
+                  Expanded = False
                   FieldName = 'LANCAMENTO'
                   Title.Caption = 'Lan'#231'amento'
-                  Width = 100
+                  Width = 90
                   Visible = True
                 end
                 item
@@ -1009,7 +1016,7 @@ inherited frmGeCliente: TfrmGeCliente
                   Expanded = False
                   FieldName = 'FORMA_PAGTO_DESC'
                   Title.Caption = 'Forma de Pagamento'
-                  Width = 150
+                  Width = 130
                   Visible = True
                 end
                 item
@@ -1038,6 +1045,13 @@ inherited frmGeCliente: TfrmGeCliente
                   FieldName = 'VALORSALDO'
                   Title.Caption = 'A Pagar (R$)'
                   Width = 80
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'NFE_SERIE'
+                  Title.Caption = 'NF-e'
+                  Width = 90
                   Visible = True
                 end>
             end
@@ -1420,8 +1434,21 @@ inherited frmGeCliente: TfrmGeCliente
       '  , r.Valorsaldo'
       '  , r.Status'
       '  , r.Situacao'
+      '  , r.Anovenda'
+      '  , r.Numvenda'
+      
+        '  , r.Anovenda || '#39'/'#39' || right('#39'0000000'#39' || r.Numvenda, 7) as Ve' +
+        'nda'
+      '  , v.Serie'
+      '  , v.Nfe'
+      
+        '  , '#39'S'#39' || v.Serie || '#39'/'#39' || right('#39'0000000'#39' || v.Nfe, 7) as NFE' +
+        '_Serie'
       'from TBCONTREC r'
       '  inner join TBFORMPAGTO f on (f.Cod = r.Forma_pagto)'
+      
+        '  left join TBVENDAS v on (v.Ano = r.Anovenda and v.Codcontrol =' +
+        ' r.Numvenda)'
       'where r.Baixado = 0'
       '  and r.Cnpj = :cliente')
     Left = 672
@@ -1513,6 +1540,31 @@ inherited frmGeCliente: TfrmGeCliente
       FieldName = 'SITUACAO'
       Origin = 'TBCONTREC.SITUACAO'
       OnGetText = qryTitulosSITUACAOGetText
+    end
+    object qryTitulosANOVENDA: TSmallintField
+      FieldName = 'ANOVENDA'
+      Origin = 'TBCONTREC.ANOVENDA'
+    end
+    object qryTitulosNUMVENDA: TIntegerField
+      FieldName = 'NUMVENDA'
+      Origin = 'TBCONTREC.NUMVENDA'
+    end
+    object qryTitulosVENDA: TIBStringField
+      FieldName = 'VENDA'
+      Size = 25
+    end
+    object qryTitulosSERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = 'TBVENDAS.SERIE'
+      Size = 4
+    end
+    object qryTitulosNFE: TLargeintField
+      FieldName = 'NFE'
+      Origin = 'TBVENDAS.NFE'
+    end
+    object qryTitulosNFE_SERIE: TIBStringField
+      FieldName = 'NFE_SERIE'
+      Size = 34
     end
   end
   object dtsTitulos: TDataSource

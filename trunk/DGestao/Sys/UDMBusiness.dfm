@@ -1,13 +1,16 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 465
-  Top = 223
+  Left = 718
+  Top = 175
   Height = 400
   Width = 575
   object ibdtbsBusiness: TIBDatabase
+    DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
-      '')
+      'user_name=SYSDBA'
+      'Password=masterkey'
+      'lc_ctype=ISO8859_2')
     LoginPrompt = False
     DefaultTransaction = ibtrnsctnBusiness
     IdleTimer = 0
