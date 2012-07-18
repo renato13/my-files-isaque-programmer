@@ -10,11 +10,11 @@ File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCaixa.pas',0,1,219,1,2
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
 Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas
 Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
 Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
 Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
@@ -28,17 +28,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -48,7 +38,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -272,8 +272,8 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Connected
-ExpandedItems=Title
+SelectedItem=Name
+ExpandedItems=
 HiddenCategories=
 
 [ObjectTree]
