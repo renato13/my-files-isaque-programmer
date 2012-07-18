@@ -108,6 +108,12 @@ type
     IbDtstTabelaDTCAD: TDateField;
     lblDataCadastro: TLabel;
     dbDataCadastro: TDBEdit;
+    qryTitulosANOVENDA: TSmallintField;
+    qryTitulosNUMVENDA: TIntegerField;
+    qryTitulosVENDA: TIBStringField;
+    qryTitulosSERIE: TIBStringField;
+    qryTitulosNFE: TLargeintField;
+    qryTitulosNFE_SERIE: TIBStringField;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
