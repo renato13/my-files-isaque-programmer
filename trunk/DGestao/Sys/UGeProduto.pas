@@ -113,6 +113,10 @@ type
     lblProdutoPromocao: TLabel;
     lblProdutoSemEstoque: TLabel;
     Label1: TLabel;
+    lblFabricante: TLabel;
+    dbFabricante: TRxDBComboEdit;
+    IbDtstTabelaCODFABRICANTE: TIntegerField;
+    IbDtstTabelaNOME_FABRICANTE: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -125,6 +129,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbFabricanteButtonClick(Sender: TObject);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -148,7 +153,7 @@ var
 implementation
 
 uses UDMBusiness, UGeSecaoProduto, UGeGrupoProduto, UGeUnidade,
-  UGeTabelaCFOP;
+  UGeTabelaCFOP, UGeFabricante;
 
 {$R *.dfm}
 
@@ -480,6 +485,19 @@ begin
     dbgDados.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
     
   dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
+end;
+
+procedure TfrmGeProduto.dbFabricanteButtonClick(Sender: TObject);
+var
+  iCodigo : Integer;
+  sNome   : String;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarFabricante(Self, iCodigo, sNome) ) then
+    begin
+      IbDtstTabelaCODFABRICANTE.AsInteger  := iCodigo;
+      IbDtstTabelaNOME_FABRICANTE.AsString := sNome;
+    end;
 end;
 
 end.

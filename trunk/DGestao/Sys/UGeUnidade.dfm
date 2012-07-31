@@ -1,11 +1,13 @@
 inherited frmGeUnidade: TfrmGeUnidade
   Left = 549
   Top = 268
+  ActiveControl = dbCodigo
   Caption = 'Tabela de Unidades'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <

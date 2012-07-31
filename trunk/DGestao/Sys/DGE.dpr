@@ -90,7 +90,8 @@ uses
   UGeCaixa in 'UGeCaixa.pas' {frmGeCaixa},
   UGeFluxoCaixa in 'UGeFluxoCaixa.pas' {frmGeFluxoCaixa},
   UFuncoes in 'lib\UFuncoes.pas',
-  UInfoVersao in 'lib\UInfoVersao.pas';
+  UInfoVersao in 'lib\UInfoVersao.pas',
+  UGeFabricante in 'UGeFabricante.pas' {frmGeFabricante};
 
 {$R *.res}
 

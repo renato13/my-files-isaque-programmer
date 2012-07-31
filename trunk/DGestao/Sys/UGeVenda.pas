@@ -310,6 +310,7 @@ type
     procedure GetComprasAbertas(sCNPJ : String);
 
     function ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
+    function PossuiTitulosPagos(AnoVenda : Smallint; NumVenda : Integer) : Boolean;
   public
     { Public declarations }
   end;
@@ -1281,6 +1282,12 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
+  if ( PossuiTitulosPagos(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+  begin
+    ShowWarning('A venda possui título(s) já baixado(s).' + #13 + 'Favor providenciar a exclusão da(s) baixa(s) para que a venda possa ser cancelada!');
+    Exit;
+  end;
+
   if ( CancelarVND(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
     with IbDtstTabela do
     begin
@@ -1471,6 +1478,43 @@ begin
     ParamByName('cnpj').AsString := sCNPJ;
     Open;
   end;
+end;
+
+function TfrmGeVenda.PossuiTitulosPagos(AnoVenda: Smallint; NumVenda: Integer): Boolean;
+var
+  bReturn : Boolean;
+begin
+  bReturn := False;
+
+  try
+
+    try
+      with DMBusiness, qryBusca do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('SELECT coalesce(r.Valorrectot, 0) as Total_Pago from TBCONTREC r');
+        SQL.Add('where r.Anovenda = ' + IntToStr(AnoVenda));
+        SQL.Add('  and r.Numvenda = ' + IntToStr(NumVenda));
+        Open;                          
+
+        bReturn := (FieldByName('Total_Pago').AsCurrency > 0);
+
+        Close;
+      end;
+    except
+      On E : Exception do
+      begin
+        bReturn := False;
+        ShowError('Erro ao tentar consultar títulos baixados do cliente.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
+
+  end;
+  
+  Result := bReturn;
 end;
 
 end.

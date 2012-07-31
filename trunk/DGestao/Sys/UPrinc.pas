@@ -110,6 +110,7 @@ type
     Copyright: TLabel;
     Label1: TLabel;
     Version: TLabel;
+    nmFabricanteProduto: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -157,6 +158,7 @@ type
     procedure nmEncerramentoCaixaClick(Sender: TObject);
     procedure nmFluxoDeCaixaClick(Sender: TObject);
     procedure nmRelatorioVendaClick(Sender: TObject);
+    procedure nmFabricanteProdutoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -178,7 +180,8 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes;
+  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes,
+  UGeFabricante;
 
 {$R *.dfm}
 
@@ -501,6 +504,11 @@ procedure TfrmPrinc.nmRelatorioVendaClick(Sender: TObject);
 begin
  Application.CreateForm(TfrmRelVendas, frmRelVendas);
  frmRelVendas.ShowModal;
+end;
+
+procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);
+begin
+  MostrarTabelaFabricantes(Self);
 end;
 
 end.
