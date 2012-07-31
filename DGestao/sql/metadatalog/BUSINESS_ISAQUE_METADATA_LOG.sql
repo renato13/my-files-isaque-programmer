@@ -413,3 +413,167 @@ end
 
 SET TERM ; ^
 
+
+
+CREATE TABLE TBFABRICANTE (
+    COD DMN_INTEGER_NN NOT NULL,
+    NOME DMN_VCHAR_50);
+alter table TBFABRICANTE
+add constraint PK_TBFABRICANTE
+primary key (COD);
+COMMENT ON COLUMN TBFABRICANTE.COD IS
+'Codigo.';
+COMMENT ON COLUMN TBFABRICANTE.NOME IS
+'Nome.';
+GRANT ALL ON TBFABRICANTE TO "PUBLIC";
+
+
+ALTER TABLE TBPRODUTO
+    ADD CODFABRICANTE INTEGER;
+COMMENT ON COLUMN TBPRODUTO.CODFABRICANTE IS
+'Fabricante.';
+alter table TBPRODUTO
+alter CODIGO position 1;
+alter table TBPRODUTO
+alter COD position 2;
+alter table TBPRODUTO
+alter DESCRI position 3;
+alter table TBPRODUTO
+alter MODELO position 4;
+alter table TBPRODUTO
+alter PRECO position 5;
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 6;
+alter table TBPRODUTO
+alter REFERENCIA position 7;
+alter table TBPRODUTO
+alter SECAO position 8;
+alter table TBPRODUTO
+alter QTDE position 9;
+alter table TBPRODUTO
+alter UNIDADE position 10;
+alter table TBPRODUTO
+alter ESTOQMIN position 11;
+alter table TBPRODUTO
+alter CODGRUPO position 12;
+alter table TBPRODUTO
+alter CODFABRICANTE position 13;
+alter table TBPRODUTO
+alter CUSTOMEDIO position 14;
+alter table TBPRODUTO
+alter CODEMP position 15;
+alter table TBPRODUTO
+alter CODSECAO position 16;
+alter table TBPRODUTO
+alter CODORIGEM position 17;
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 18;
+alter table TBPRODUTO
+alter CST position 19;
+alter table TBPRODUTO
+alter CSOSN position 20;
+alter table TBPRODUTO
+alter NCM_SH position 21;
+alter table TBPRODUTO
+alter CODCFOP position 22;
+alter table TBPRODUTO
+alter CODBARRA_EAN position 23;
+alter table TBPRODUTO
+alter CODUNIDADE position 24;
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 25;
+alter table TBPRODUTO
+alter ALIQUOTA position 26;
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 27;
+alter table TBPRODUTO
+alter VALOR_IPI position 28;
+alter table TBPRODUTO
+alter RESERVA position 29;
+
+
+alter table TBPRODUTO
+add constraint FK_TBPRODUTO_FABRICANTE
+foreign key (CODFABRICANTE)
+references TBFABRICANTE(COD);
+
+
+COMMENT ON COLUMN TBPRODUTO.ALIQUOTA IS
+'Percencial da Aliquota.';
+
+
+CREATE DOMAIN DMN_QUANTIDADE_D3 AS
+NUMERIC(18,3)
+DEFAULT 0
+NOT NULL;;
+COMMENT ON DOMAIN DMN_QUANTIDADE_D3 IS 'Quantidade
+
+(Aceita valores decimais)';
+
+
+ALTER TABLE TBPRODUTO DROP CONSTRAINT FK_TBPRODUTO_FABRICANTE;
+
+
+update RDB$RELATION_FIELDS set
+RDB$FIELD_SOURCE = 'DMN_INTEGER_N'
+where (RDB$FIELD_NAME = 'CODFABRICANTE') and
+(RDB$RELATION_NAME = 'TBPRODUTO')
+;
+
+
+alter table TBPRODUTO
+add constraint FK_TBPRODUTO_FABRICANTE
+foreign key (CODFABRICANTE)
+references TBFABRICANTE(COD);
+
+
+CREATE SEQUENCE GEN_TBFABRICANTE_ID;
+SET TERM ^ ;
+
+CREATE TRIGGER TG_FABRICANTE_COD FOR TBFABRICANTE
+ACTIVE BEFORE INSERT POSITION 0
+AS
+BEGIN
+  IF (NEW.COD IS NULL) THEN
+    NEW.COD = GEN_ID(GEN_TBFABRICANTE_ID,1);
+END
+^
+
+SET TERM ; ^
+
+
+
+CREATE SEQUENCE GEN_FABRICANTE_ID;
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_fabricante_cod For Tbfabricante
+Active Before Insert Position 0
+AS
+BEGIN
+  IF (NEW.COD IS NULL) THEN
+    NEW.COD = GEN_ID(GEN_FABRICANTE_ID, 1);
+END
+^
+
+SET TERM ; ^
+
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER Trigger Tg_fabricante_cod For Tbfabricante
+Active Before Insert Position 0
+AS
+BEGIN
+  IF (NEW.COD IS NULL) THEN
+    NEW.COD = GEN_ID(GEN_FABRICANTE_ID, 1);
+END
+^
+
+SET TERM ; ^
+
+
+
+DROP SEQUENCE GEN_TBFABRICANTE_ID;

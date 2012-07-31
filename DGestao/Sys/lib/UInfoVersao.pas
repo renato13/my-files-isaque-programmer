@@ -9,18 +9,19 @@ type
   TInfoVersao = class(TObject)
   private
     FInfoVersao : TStringList;
+    constructor PrivateCreate;
+    
     procedure SetCompanyName(const Value : String);
 
     function GetCompanyName : String;
   public
+    constructor Create;
+
     property CompanyName: string read GetCompanyName write SetCompanyName;
 
     class function GetInstance : TInfoVersao;
     function getPropertyValue(propName: String): String;
   end;
-
-var
-  InfoVersao  : TInfoVersao;
 
 const
   ivCOMPANY_NAME      = 'CompanyName';
@@ -41,12 +42,15 @@ implementation
 
 uses SysUtils;
 
+var
+  InfoVersao : TInfoVersao;
+
 { TInfoVersao }
 
 class function TInfoVersao.GetInstance : TInfoVersao;
 begin
   if ( InfoVersao = nil ) then
-    InfoVersao := TInfoVersao.Create;
+    InfoVersao := TInfoVersao.PrivateCreate;
 
   Result := InfoVersao;
 end;
@@ -98,6 +102,16 @@ end;
 procedure TInfoVersao.SetCompanyName(const Value: String);
 begin
   FInfoVersao.Values[ivCOMPANY_NAME] := Value;
+end;
+
+constructor TInfoVersao.PrivateCreate;
+begin
+  inherited Create;
+end;
+
+constructor TInfoVersao.Create;
+begin
+  raise Exception.Create('Para obter um TInfoVersao invoque o método GetInstance().');
 end;
 
 end.

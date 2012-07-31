@@ -1,6 +1,7 @@
 inherited frmGeContasAReceber: TfrmGeContasAReceber
   Width = 950
   Height = 600
+  ActiveControl = dbCodigo
   Caption = 'Controle de Contas A Receber'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -92,6 +93,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   inherited pgcGuias: TPageControl
     Width = 934
     Height = 519
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
