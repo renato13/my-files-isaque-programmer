@@ -180,15 +180,18 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
         Top = 428
         Width = 926
         inherited grpBxFiltro: TGroupBox
-          Left = 488
-          Width = 434
+          Left = 328
+          Width = 594
+          DesignSize = (
+            594
+            54)
           inherited lbltFiltrar: TLabel
-            Left = 198
+            Left = 310
             Width = 73
             Caption = 'Lan'#231'amento:'
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 389
+            Left = 549
           end
           object lblData: TLabel [2]
             Left = 14
@@ -196,21 +199,76 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
             Width = 70
             Height = 13
             Caption = 'Vencimento:'
-            FocusControl = edData
+            FocusControl = ed1Data
           end
           inherited edtFiltrar: TEdit
-            Left = 280
-            Width = 105
-            TabOrder = 1
+            Left = 392
+            Width = 153
+            TabOrder = 2
           end
-          object edData: TDateTimePicker
+          object ed1Data: TDateEdit
             Left = 88
             Top = 21
-            Width = 105
+            Width = 104
             Height = 21
-            Date = 40913.000000000000000000
-            Time = 40913.000000000000000000
+            GlyphKind = gkCustom
+            Glyph.Data = {
+              76050000424D760500000000000036000000280000001C0000000C0000000100
+              2000000000004005000000000000000000000000000000000000FF00FF00FF00
+              FF00FF00FF008080800080808000808080008080800080808000808080008080
+              800080808000808080008080800080808000FF00FF00FF00FF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FF00FF00FF00FF000000000000000000800000000000
+              0000800000008000000000000000800000000000000000000000800000008080
+              8000FF00FF008080800080808000808080008080800080808000808080008080
+              80008080800080808000808080008080800080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF008000000080808000FF00FF0080808000FFFFFF00FF00
+              FF00FFFFFF00FFFFFF00FFFFFF00FF00FF00FFFFFF00FFFFFF00FFFFFF00FF00
+              FF0080808000FFFFFF00FF00FF00FF00FF00FFFFFF0000000000000000000000
+              0000FFFFFF00000000000000000000000000C0C0C000FFFFFF00800000008080
+              8000FF00FF0080808000FFFFFF00808080008080800080808000FF00FF008080
+              80008080800080808000FF00FF00FFFFFF0080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00FFFFFF0000000000FFFFFF00FFFFFF00C0C0C000FFFFFF00C0C0
+              C00000000000FFFFFF008000000080808000FF00FF0080808000FFFFFF00FF00
+              FF0080808000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF0080808000FFFF
+              FF0080808000FFFFFF00FF00FF00FF00FF00FFFFFF00FFFFFF0000000000FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000FFFFFF00800000008080
+              8000FF00FF0080808000FFFFFF00FF00FF0080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00FFFFFF0080808000FF00FF0080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00FFFFFF0000000000FFFFFF00FFFFFF0000000000000000000000
+              0000C0C0C000FFFFFF008000000080808000FF00FF0080808000FFFFFF00FF00
+              FF0080808000FFFFFF00FF00FF00808080008080800080808000FF00FF00FF00
+              FF0080808000FFFFFF00FF00FF00FF00FF00FFFFFF000000000000000000FFFF
+              FF00FFFFFF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00800000008080
+              8000FF00FF0080808000FFFFFF008080800080808000FFFFFF00FF00FF008080
+              8000FFFFFF00FFFFFF00FFFFFF00FFFFFF0080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00FFFFFF0000000000FFFFFF00FFFFFF0000000000000000000000
+              000000000000FFFFFF008000000080808000FF00FF0080808000FFFFFF00FF00
+              FF0080808000FF00FF00FF00FF0080808000808080008080800080808000FF00
+              FF0080808000FFFFFF00FF00FF00FF00FF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00800000008080
+              8000FF00FF0080808000FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+              FF00FF00FF00FF00FF00FF00FF00FF00FF0080808000FFFFFF00FF00FF00FF00
+              FF00FFFFFF00C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+              C000C0C0C000FFFFFF008000000080808000FF00FF0080808000FFFFFF00FFFF
+              FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+              FF0080808000FFFFFF00FF00FF00FF00FF000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000FF00FF00FF00
+              FF00FF00FF008080800080808000808080008080800080808000808080008080
+              80008080800080808000808080008080800080808000FF00FF00}
+            NumGlyphs = 2
             TabOrder = 0
+            Text = '01/01/2012'
+          end
+          object ed2Data: TDateEdit
+            Left = 200
+            Top = 21
+            Width = 104
+            Height = 21
+            NumGlyphs = 2
+            TabOrder = 1
+            Text = '01/01/2012'
           end
         end
       end
@@ -724,6 +782,11 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
         Top = 245
         Width = 926
         Height = 119
+        Hint = 
+          'Para a exclus'#227'o de baixas basta pressionar CTRL + DELETE'#13#10#13#10'Obse' +
+          'rva'#231#227'o:'#13#10'======================='#13#10'Apenas usu'#225'rios nas fun'#231#245'es Di' +
+          'retoria, Gerente Financeiro, Gerente ADM'#13#10'e/ou Masterdados podem' +
+          ' excluir registros de pagamentos.'
         TabStop = False
         Align = alClient
         DataSource = dtsPagamentos
@@ -734,7 +797,9 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
         ParentFont = False
+        ParentShowHint = False
         ReadOnly = True
+        ShowHint = True
         TabOrder = 3
         TitleFont.Charset = ANSI_CHARSET
         TitleFont.Color = clBlack
@@ -742,7 +807,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = [fsBold]
         OnDrawColumnCell = dbgDadosDrawColumnCell
-        OnKeyDown = dbgDadosKeyDown
+        OnKeyDown = dbgPagamentosKeyDown
         Columns = <
           item
             Expanded = False

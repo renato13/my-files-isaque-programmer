@@ -54,6 +54,7 @@ begin
       or (Frm.ActiveControl is TMaskEdit)
       or (Frm.ActiveControl is TLabeledEdit)
       or (Frm.ActiveControl is TRxLookupEdit)
+      or (Frm.ActiveControl is TDateEdit)
       // DB Controls
       or (Frm.ActiveControl is TDBEdit)
       or (Frm.ActiveControl is TDBCheckBox)
@@ -65,6 +66,7 @@ begin
       or (Frm.ActiveControl is TDBDateEdit)
       or (Frm.ActiveControl is TRxDBCalcEdit)
       or (Frm.ActiveControl is TRxDBComboEdit)
+      or (Frm.ActiveControl is TDBDateEdit)
     ) then
 
       if ( Assigned(TEdit(Frm.ActiveControl).OnKeyPress) or Assigned(TEdit(Frm.ActiveControl).OnKeyDown) ) then
