@@ -358,6 +358,14 @@ begin
         TDateTimePicker(Win.Components[i]).OnExit  := ControlEditExit;
     end;
 
+    if ( Win.Components[i] is TDateEdit ) then
+    begin
+      if ( not Assigned(TDateEdit(Win.Components[i]).OnEnter) ) then
+        TDateEdit(Win.Components[i]).OnEnter := ControlEditEnter;
+      if ( not Assigned(TDateEdit(Win.Components[i]).OnExit) ) then
+        TDateEdit(Win.Components[i]).OnExit  := ControlEditExit;
+    end;
+
     if ( Win.Components[i] is TRxLookupEdit ) then
     begin
       if ( not Assigned(TRxLookupEdit(Win.Components[i]).OnEnter) ) then

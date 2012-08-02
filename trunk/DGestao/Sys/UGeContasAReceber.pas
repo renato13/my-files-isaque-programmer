@@ -113,8 +113,8 @@ type
     IbDtstTabelaNOMECLIENTE: TIBStringField;
     IbDtstTabelaSITUACAO: TSmallintField;
     lblData: TLabel;
-    ed1Data: TDateEdit;
-    ed2Data: TDateEdit;
+    e1Data: TDateEdit;
+    e2Data: TDateEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbClienteButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -159,8 +159,8 @@ begin
   try
     whr :=
       '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' +
-      'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.ed1Data.Date) ) +
-      ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.ed2Data.Date) ) + ')';
+      'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e1Data.Date) ) +
+      ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e2Data.Date) ) + ')';
 
     with frm, IbDtstTabela do
     begin
@@ -185,8 +185,8 @@ begin
   SQL_Pagamentos := TStringList.Create;
   SQL_Pagamentos.AddStrings( cdsPagamentos.SelectSQL );
 
-  ed1Data.Date     := Date;
-  ed2Data.Date     := Date;
+  e1Data.Date     := Date;
+  e2Data.Date     := Date;
   ControlFirstEdit := dbCliente;
 
   tblEmpresa.Open;
@@ -223,8 +223,8 @@ procedure TfrmGeContasAReceber.btnFiltrarClick(Sender: TObject);
 begin
   WhereAdditional :=
     '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' + 
-    'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', ed1Data.Date) ) +
-    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', ed2Data.Date) ) + ')';
+    'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
+    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
   inherited;
 end;
 
