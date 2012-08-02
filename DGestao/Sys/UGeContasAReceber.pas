@@ -10,8 +10,6 @@ uses
 
 type
   TfrmGeContasAReceber = class(TfrmGrPadraoCadastro)
-    lblData: TLabel;
-    edData: TDateTimePicker;
     btbtnEfetuarPagto: TBitBtn;
     Bevel5: TBevel;
     GrpBxDadosValores: TGroupBox;
@@ -114,6 +112,9 @@ type
     dbPercDesconto: TDBEdit;
     IbDtstTabelaNOMECLIENTE: TIBStringField;
     IbDtstTabelaSITUACAO: TSmallintField;
+    lblData: TLabel;
+    ed1Data: TDateEdit;
+    ed2Data: TDateEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbClienteButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -127,6 +128,8 @@ type
       DisplayText: Boolean);
     procedure ControlEditExit(Sender: TObject);
     procedure dbFormaPagtoClick(Sender: TObject);
+    procedure dbgPagamentosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -155,8 +158,9 @@ begin
   frm := TfrmGeContasAReceber.Create(AOwner);
   try
     whr :=
-      '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and ' + 
-      'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+      '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' +
+      'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.ed1Data.Date) ) +
+      ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.ed2Data.Date) ) + ')';
 
     with frm, IbDtstTabela do
     begin
@@ -181,7 +185,8 @@ begin
   SQL_Pagamentos := TStringList.Create;
   SQL_Pagamentos.AddStrings( cdsPagamentos.SelectSQL );
 
-  edData.Date      := Date;
+  ed1Data.Date     := Date;
+  ed2Data.Date     := Date;
   ControlFirstEdit := dbCliente;
 
   tblEmpresa.Open;
@@ -217,8 +222,9 @@ end;
 procedure TfrmGeContasAReceber.btnFiltrarClick(Sender: TObject);
 begin
   WhereAdditional :=
-    '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and ' + 
-    'cast(r.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+    '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' + 
+    'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', ed1Data.Date) ) +
+    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', ed2Data.Date) ) + ')';
   inherited;
 end;
 
@@ -386,6 +392,83 @@ begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     if ( tblFormaPagto.Locate('cod', dbFormaPagto.Field.AsInteger, []) ) then
       IbDtstTabelaTIPPAG.AsString := tblFormaPagto.FieldByName('descri').AsString;
+end;
+
+procedure TfrmGeContasAReceber.dbgPagamentosKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente,
+  MovAno    ,
+  MovNumero : Integer;
+  DataPagto : TDateTime;
+begin
+  if (Shift = [ssCtrl]) and (Key = 46) Then
+  begin
+    // Diretoria, Gerente Financeiro, Gerente ADM, Masterdados
+
+    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
+      Exit;
+
+    if ( not cdsPagamentos.IsEmpty ) then
+    begin
+      CxAno    := 0;
+      CxNumero := 0;
+      CxContaCorrente := 0;
+
+      if ( tblFormaPagto.Locate('cod', IbDtstTabelaFORMA_PAGTO.AsInteger, []) ) then
+        if ( tblFormaPagto.FieldByName('Conta_corrente').AsInteger > 0 ) then
+          if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMA_PAGTO.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+          begin
+            ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+            Exit;
+          end;
+
+      MovAno    := IbDtstTabelaANOLANC.AsInteger;
+      MovNumero := IbDtstTabelaNUMLANC.AsInteger;
+      DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
+
+      if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
+      begin
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Delete from TBCONTREC_BAIXA');
+          SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+          //SQL.Add('  and SEQ     = ' + cdsPagamentosSEQ.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Update TBCONTPAG Set Quitado = 0, Historic = '''', Dtpag = null, Docbaix = null, Tippag = null, Numchq = null, Banco = null');
+          SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        IbDtstTabela.Close;
+        IbDtstTabela.Open;
+
+        IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
+
+        AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+
+        if ( CxContaCorrente > 0 ) then
+          GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+      end;
+    end;
+  end;
 end;
 
 end.
