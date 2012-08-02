@@ -1,4 +1,6 @@
 inherited frmGeContasAReceber: TfrmGeContasAReceber
+  Left = 445
+  Top = 203
   Width = 950
   Height = 600
   ActiveControl = dbCodigo
@@ -199,14 +201,14 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
             Width = 70
             Height = 13
             Caption = 'Vencimento:'
-            FocusControl = ed1Data
+            FocusControl = e1Data
           end
           inherited edtFiltrar: TEdit
             Left = 392
             Width = 153
             TabOrder = 2
           end
-          object ed1Data: TDateEdit
+          object e1Data: TDateEdit
             Left = 88
             Top = 21
             Width = 104
@@ -261,7 +263,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
             TabOrder = 0
             Text = '01/01/2012'
           end
-          object ed2Data: TDateEdit
+          object e2Data: TDateEdit
             Left = 200
             Top = 21
             Width = 104
