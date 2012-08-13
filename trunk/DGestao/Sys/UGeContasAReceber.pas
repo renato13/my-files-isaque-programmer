@@ -439,7 +439,6 @@ begin
           SQL.Add('Delete from TBCONTREC_BAIXA');
           SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
           SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
-          //SQL.Add('  and SEQ     = ' + cdsPagamentosSEQ.AsString);
           ExecSQL;
 
           CommitTransaction;
@@ -449,7 +448,7 @@ begin
         begin
           Close;
           SQL.Clear;
-          SQL.Add('Update TBCONTPAG Set Quitado = 0, Historic = '''', Dtpag = null, Docbaix = null, Tippag = null, Numchq = null, Banco = null');
+          SQL.Add('Update TBCONTREC Set Baixado = 0, Historic = '''', Dtrec = null, Docbaix = null, Tippag = null, Valorrectot = null');
           SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
           SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
           ExecSQL;
