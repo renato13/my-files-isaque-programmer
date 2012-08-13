@@ -1038,7 +1038,7 @@ procedure TfrmGeVenda.btbtnFinalizarClick(Sender: TObject);
     cdsTabelaItens.First;
     while not cdsTabelaItens.Eof do
     begin
-      Return := ( cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger) );
+      Return := ( (cdsTabelaItensQTDE.AsInteger > (cdsTabelaItensESTOQUE.AsInteger - cdsTabelaItensRESERVA.AsInteger)) or (cdsTabelaItensESTOQUE.AsInteger <= 0) );
       if ( Return ) then
         Break;
       cdsTabelaItens.Next;
@@ -1059,8 +1059,7 @@ begin
   CxNumero := 0;
   CxContaCorrente := 0;
 
-  cdsTabelaItens.Close;
-  cdsTabelaItens.Open;
+  AbrirTabelaItens(IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
 
   if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
     if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
