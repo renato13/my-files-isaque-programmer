@@ -154,7 +154,7 @@ begin
       cdsPagamentosFORMA_PAGTO.AsInteger  := FormaPagto;
       cdsPagamentosVALOR_BAIXA.AsCurrency := ValorPago;
       cdsPagamentosDOCUMENTO_BAIXA.AsString := FormatFloat('0000', VendaAno) + FormatFloat('000000', VendaNumero);
-      cdsPagamentosHISTORICO.AsString       := 'BAIXA AUTOMATICA DE CONFIRMACAO DA VENDA No. ' + FormatFloat('0000', VendaAno) + '/' + FormatFloat('000000', VendaNumero);
+      cdsPagamentosHISTORICO.AsString       := 'BAIXA AUTOMATICA NA CONFIRMACAO DA VENDA No. ' + FormatFloat('0000', VendaAno) + '/' + FormatFloat('000000', VendaNumero);
 
       cdsPagamentos.Post;
       cdsPagamentos.ApplyUpdates;

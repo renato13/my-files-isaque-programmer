@@ -1132,6 +1132,7 @@ begin
         btnGerarBoleto.Click;
 
     // Formas de Pagamento que nao seja a prazo
+    
     if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
       if ( not qryTitulos.IsEmpty ) then
         RegistrarPagamento(qryTitulosANOLANC.AsInteger, qryTitulosNUMLANC.AsInteger, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger,
