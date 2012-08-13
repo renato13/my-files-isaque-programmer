@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ComCtrls, BarMenus, SpeedBar, RXCtrls, ExtCtrls, jpeg,
-  EUserAcs, StdCtrls, Buttons, dxGDIPlusClasses;
+  EUserAcs, StdCtrls, Buttons;
 
 type
   TfrmPrinc = class(TForm)
