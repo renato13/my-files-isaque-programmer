@@ -105,6 +105,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgDadosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -381,6 +383,82 @@ begin
 //
 //    dbgProdutos.DefaultDrawDataCell(Rect, dbgProdutos.Columns[DataCol].Field, State);
 //  end;
+end;
+
+procedure TfrmGeContasAPagar.dbgDadosKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente,
+  MovAno    ,
+  MovNumero : Integer;
+  DataPagto : TDateTime;
+begin
+  if (Shift = [ssCtrl]) and (Key = 46) Then
+  begin
+    // Diretoria, Gerente Financeiro, Gerente ADM, Masterdados
+
+    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
+      Exit;
+
+    if ( not cdsPagamentos.IsEmpty ) then
+    begin
+      CxAno    := 0;
+      CxNumero := 0;
+      CxContaCorrente := 0;
+
+      if ( tblFormaPagto.Locate('cod', IbDtstTabelaFORMA_PAGTO.AsInteger, []) ) then
+        if ( tblFormaPagto.FieldByName('Conta_corrente').AsInteger > 0 ) then
+          if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMA_PAGTO.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+          begin
+            ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+            Exit;
+          end;
+
+      MovAno    := IbDtstTabelaANOLANC.AsInteger;
+      MovNumero := IbDtstTabelaNUMLANC.AsInteger;
+      DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
+
+      if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
+      begin
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Delete from TBCONTPAG_BAIXA');
+          SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Update TBCONTPAG Set Quitado = 0, Historic = '''', Dtpag = null, Docbaix = null, Tippag = null, Numchq = null, Banco = null');
+          SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        IbDtstTabela.Close;
+        IbDtstTabela.Open;
+
+        IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
+
+        AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+
+        if ( CxContaCorrente > 0 ) then
+          GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+      end;
+    end;
+  end;
 end;
 
 end.

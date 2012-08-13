@@ -3,6 +3,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   Top = 165
   Width = 763
   Height = 465
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Fornecedores'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -31,6 +32,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289
@@ -889,7 +891,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       'from TBFORNECEDOR f'
       '  left join TBTIPO_LOGRADOURO t on (t.Tlg_cod = f.Tlg_tipo)'
       '  left join TBLOGRADOURO l on (l.Log_cod = f.Log_cod)'
-      '  left join TBBAIRRO b on (b.Bai_nome = f.Bai_cod)'
+      '  left join TBBAIRRO b on (b.Bai_cod = f.Bai_cod)'
       '  left join TBCIDADE c on (c.Cid_cod = f.Cid_cod)'
       '  left join TBESTADO u on (u.Est_cod = f.Est_cod)'
       '  left join TBPAIS p on (p.Pais_id = f.Pais_id)')
