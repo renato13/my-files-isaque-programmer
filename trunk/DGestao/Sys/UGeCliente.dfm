@@ -1450,6 +1450,7 @@ inherited frmGeCliente: TfrmGeCliente
         '  left join TBVENDAS v on (v.Ano = r.Anovenda and v.Codcontrol =' +
         ' r.Numvenda)'
       'where r.Baixado = 0'
+      '  and r.Parcela > 0'
       '  and r.Cnpj = :cliente')
     Left = 672
     Top = 73
