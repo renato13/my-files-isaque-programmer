@@ -316,7 +316,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           FocusControl = dbCliente
         end
         object lblQuitado: TLabel [2]
-          Left = 775
+          Left = 768
           Top = 24
           Width = 52
           Height = 13
@@ -330,7 +330,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           ParentFont = False
         end
         object lblCNPJ: TLabel [3]
-          Left = 440
+          Left = 368
           Top = 24
           Width = 58
           Height = 13
@@ -344,12 +344,26 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           ParentFont = False
         end
         object lblVenda: TLabel [4]
-          Left = 648
+          Left = 552
           Top = 24
           Width = 58
           Height = 13
           Caption = 'No. Venda:'
           FocusControl = daVenda
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblNFe: TLabel [5]
+          Left = 680
+          Top = 24
+          Width = 28
+          Height = 13
+          Caption = 'NF-e:'
+          FocusControl = dbNFe
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -364,7 +378,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
         object dbCliente: TRxDBComboEdit
           Left = 87
           Top = 40
-          Width = 348
+          Width = 274
           Height = 21
           ButtonHint = 'Pesquisar Cliente (Ctrl+P)'
           CharCase = ecUpperCase
@@ -437,7 +451,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           OnButtonClick = dbClienteButtonClick
         end
         object dbQuitado: TDBEdit
-          Left = 776
+          Left = 768
           Top = 40
           Width = 129
           Height = 21
@@ -452,12 +466,12 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           Font.Style = [fsBold]
           ParentFont = False
           ReadOnly = True
-          TabOrder = 5
+          TabOrder = 6
         end
         object dbCNPJ: TDBEdit
-          Left = 440
+          Left = 368
           Top = 40
-          Width = 201
+          Width = 177
           Height = 21
           Color = clMoneyGreen
           DataField = 'CNPJ'
@@ -472,7 +486,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           TabOrder = 2
         end
         object daVenda: TDBEdit
-          Left = 648
+          Left = 552
           Top = 40
           Width = 41
           Height = 21
@@ -489,7 +503,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           TabOrder = 3
         end
         object dnVenda: TDBEdit
-          Left = 696
+          Left = 600
           Top = 40
           Width = 73
           Height = 21
@@ -504,6 +518,23 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
           ParentFont = False
           ReadOnly = True
           TabOrder = 4
+        end
+        object dbNFe: TDBEdit
+          Left = 680
+          Top = 40
+          Width = 83
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'NFE_VENDA'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 5
         end
       end
       object GrpBxDadosValores: TGroupBox
@@ -1114,6 +1145,11 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
       '  , r.Situacao'
       '  , c.Nome as NomeCliente'
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Pago_'
+      '  , vn.Serie'
+      '  , vn.Nfe'
+      
+        '  , right('#39'0000000'#39' || vn.Nfe, 7) || '#39'/'#39' || trim(vn.Serie) as NF' +
+        'E_VENDA'
       'from TBCONTREC r'
       '  inner join TBCLIENTE c on (c.Cnpj = r.Cnpj)'
       
@@ -1312,6 +1348,20 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
     object IbDtstTabelaSITUACAO: TSmallintField
       FieldName = 'SITUACAO'
       Origin = 'TBCONTREC.SITUACAO'
+    end
+    object IbDtstTabelaSERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = 'TBVENDAS.SERIE'
+      Size = 4
+    end
+    object IbDtstTabelaNFE: TLargeintField
+      FieldName = 'NFE'
+      Origin = 'TBVENDAS.NFE'
+    end
+    object IbDtstTabelaNFE_VENDA: TIBStringField
+      DisplayLabel = 'NF-e'
+      FieldName = 'NFE_VENDA'
+      Size = 33
     end
   end
   inherited DtSrcTabela: TDataSource

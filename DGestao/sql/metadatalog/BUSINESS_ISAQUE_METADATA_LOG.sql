@@ -577,3 +577,12 @@ SET TERM ; ^
 
 
 DROP SEQUENCE GEN_TBFABRICANTE_ID;
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 35, column 42.
+trim.
+
+*/

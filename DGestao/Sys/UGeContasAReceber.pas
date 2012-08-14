@@ -115,6 +115,11 @@ type
     lblData: TLabel;
     e1Data: TDateEdit;
     e2Data: TDateEdit;
+    IbDtstTabelaSERIE: TIBStringField;
+    IbDtstTabelaNFE: TLargeintField;
+    IbDtstTabelaNFE_VENDA: TIBStringField;
+    lblNFe: TLabel;
+    dbNFe: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbClienteButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);

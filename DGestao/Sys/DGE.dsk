@@ -1,37 +1,32 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas',0,1,50,88,56,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas',0,1,490,52,499,1,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFabricante.pas',0,1,7,20,60,1,0
-File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeUnidade.pas',0,1,1,1,1,1,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas',0,1,16,21,60,1,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas',0,1,241,1,325,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas',0,1,122,17,174,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,183,148,217,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaCancelar.pas',0,1,50,88,56,1,0
+File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas',0,1,490,52,499,1,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFabricante.pas',0,1,7,20,60,1,0
+File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeUnidade.pas',0,1,1,1,1,1,0
+File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\USobre.pas',0,1,16,21,60,1,0
 
 [Modules]
-Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas
-Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas
-Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas
-Module9=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
-Module10=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
-Module11=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
-Module12=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
-Module13=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Count=14
+Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
+Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
+Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
+Module9=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module10=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Count=11
 EditWindowCount=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
+FormOnTop=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
@@ -43,27 +38,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -106,8 +91,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=14
-CurrentView=7
+ViewCount=11
+CurrentView=10
 View0=0
 View1=1
 View2=2
@@ -119,9 +104,6 @@ View7=7
 View8=8
 View9=9
 View10=10
-View11=11
-View12=12
-View13=13
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -139,9 +121,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
@@ -207,38 +189,17 @@ TopLine=1081
 LeftCol=1
 
 [View9]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEfetuarPagtoREC.pas
-CursorX=17
-CursorY=174
-TopLine=122
-LeftCol=1
-
-[View10]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas
-CursorX=148
-CursorY=217
-TopLine=183
-LeftCol=1
-
-[View11]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAPagar.pas
 CursorX=76
 CursorY=442
 TopLine=395
 LeftCol=1
 
-[View12]
+[View10]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas
-CursorX=1
-CursorY=442
-TopLine=409
-LeftCol=1
-
-[View13]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas
-CursorX=1
-CursorY=325
-TopLine=241
+CursorX=2
+CursorY=431
+TopLine=414
 LeftCol=1
 
 [Watches]
@@ -257,9 +218,9 @@ State=2
 Left=0
 Top=0
 Width=1920
-Height=144
-MaxLeft=-8
-MaxTop=-8
+Height=122
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -311,7 +272,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=123
 ArrangeBy=Name
-SelectedItem=Name
+SelectedItem=Width
 ExpandedItems=
 HiddenCategories=
 
@@ -336,7 +297,7 @@ Create=1
 Visible=1
 State=0
 Left=0
-Top=135
+Top=114
 Width=30
 Height=897
 MaxLeft=-1
@@ -387,18 +348,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=713
+Height=801
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=713
+ClientHeight=801
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0
