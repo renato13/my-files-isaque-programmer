@@ -1,9 +1,8 @@
 inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
-  Left = 74
-  Top = 101
+  Top = 144
   Width = 1148
   Height = 690
-  ActiveControl = dbgDados
+  ActiveControl = dbCodigo
   Caption = 'Tesouraria'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -28,7 +27,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   inherited pgcGuias: TPageControl
     Width = 1132
     Height = 609
-    ActivePage = tbsTabela
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
