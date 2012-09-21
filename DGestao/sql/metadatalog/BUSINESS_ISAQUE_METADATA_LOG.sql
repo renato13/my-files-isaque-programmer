@@ -586,3 +586,6 @@ Token unknown - line 35, column 42.
 trim.
 
 */
+
+
+ALTER TABLE TB_TESTE DROP CONSTRAINT PK_TB_TESTE;
