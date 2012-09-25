@@ -442,7 +442,7 @@ procedure TfrmPrinc.FormCreate(Sender: TObject);
 var
   sFileImage : String;
 begin
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial v1.0.1.5'; //[ v' + GetExeVersion + ' ]';
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial v1.0.1.6'; //[ v' + GetExeVersion + ' ]';
   Self.Version.Caption   := GetVersion;
   Self.Copyright.Caption := GetCopyright;
 
