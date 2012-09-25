@@ -1,6 +1,6 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 664
-  Top = 219
+  Left = 281
+  Top = 116
   Width = 886
   Height = 575
   ActiveControl = dbCodigo
