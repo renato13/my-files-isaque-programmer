@@ -644,7 +644,7 @@ object DMNFe: TDMNFe
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40928.407150601900000000
-    ReportOptions.LastChange = 40928.416853240700000000
+    ReportOptions.LastChange = 41176.983071388890000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -831,7 +831,7 @@ object DMNFe: TDMNFe
         RowCount = 0
         object frdItensCODPROD: TfrxMemoView
           Left = 22.677180000000000000
-          Width = 60.472480000000000000
+          Width = 52.913420000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -867,8 +867,8 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object frdItensDESCRI: TfrxMemoView
-          Left = 83.149660000000000000
-          Width = 268.346630000000000000
+          Left = 75.590600000000000000
+          Width = 291.023639130000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -885,8 +885,8 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo4: TfrxMemoView
-          Left = 348.937230000000000000
-          Width = 60.472480000000000000
+          Left = 366.614410000000000000
+          Width = 45.354360000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -903,9 +903,28 @@ object DMNFe: TDMNFe
           WordWrap = False
           VAlign = vaCenter
         end
+        object Memo7: TfrxMemoView
+          Left = 642.520100000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          ShowHint = False
+          DataSet = frdItens
+          DataSetName = 'frdItens'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -9
+          Font.Name = 'Lucida Console'
+          Font.Style = []
+          HAlign = haRight
+          Memo.UTF8 = (
+            '[FormatFloat('#39',0.00'#39',<frdItens."TOTAL_LIQUIDO">)] ')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
         object Memo5: TfrxMemoView
-          Left = 408.189240000000000000
-          Width = 41.574830000000000000
+          Left = 411.968770000000000000
+          Width = 37.795300000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdItens
@@ -940,25 +959,6 @@ object DMNFe: TDMNFe
           WordWrap = False
           VAlign = vaCenter
         end
-        object Memo7: TfrxMemoView
-          Left = 642.520100000000000000
-          Width = 75.590600000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frdItens
-          DataSetName = 'frdItens'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -9
-          Font.Name = 'Lucida Console'
-          Font.Style = []
-          HAlign = haRight
-          Memo.UTF8 = (
-            '[FormatFloat('#39',0.00'#39',<frdItens."TOTAL_LIQUIDO">)] ')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
         object Memo15: TfrxMemoView
           Left = 514.016080000000000000
           Width = 64.252010000000000000
@@ -973,12 +973,12 @@ object DMNFe: TDMNFe
           Font.Style = []
           HAlign = haRight
           Memo.UTF8 = (
-            '[FormatFloat('#39',0.00'#39',<frdItens."TOTAL_DESCONTO">)] ')
+            '[FormatFloat('#39',0.00'#39',<frdItens."DESCONTO_VALOR">)] ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
         end
-        object Memo16: TfrxMemoView
+        object Memo18: TfrxMemoView
           Left = 578.268090000000000000
           Width = 64.252010000000000000
           Height = 18.897650000000000000
@@ -992,7 +992,7 @@ object DMNFe: TDMNFe
           Font.Style = []
           HAlign = haRight
           Memo.UTF8 = (
-            '[FormatFloat('#39',0.00'#39',<frdItens."VALOR_IPI">)] ')
+            '[FormatFloat('#39',0.00'#39',<frdItens."PFINAL">)] ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -1145,90 +1145,15 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            'T o t a l ')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
-        object Memo18: TfrxMemoView
-          Left = 578.268090000000000000
-          Top = 64.252010000000000000
-          Width = 64.252010000000000000
-          Height = 15.118120000000000000
-          ShowHint = False
-          Color = 14211288
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          HAlign = haRight
-          Memo.UTF8 = (
-            'I P I ')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
-        object Memo19: TfrxMemoView
-          Left = 514.016080000000000000
-          Top = 64.252010000000000000
-          Width = 64.252010000000000000
-          Height = 15.118120000000000000
-          ShowHint = False
-          Color = 14211288
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          HAlign = haRight
-          Memo.UTF8 = (
-            'D e s c .')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
-        object Memo20: TfrxMemoView
-          Left = 449.764070000000000000
-          Top = 64.252010000000000000
-          Width = 64.252010000000000000
-          Height = 15.118120000000000000
-          ShowHint = False
-          Color = 14211288
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          HAlign = haRight
-          Memo.UTF8 = (
-            'V a l o r ')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
-        object Memo21: TfrxMemoView
-          Left = 408.189240000000000000
-          Top = 64.252010000000000000
-          Width = 41.574830000000000000
-          Height = 15.118120000000000000
-          ShowHint = False
-          Color = 14211288
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -8
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          Memo.UTF8 = (
-            ' U n d .')
+            'T O T A L ')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
         end
         object Memo22: TfrxMemoView
-          Left = 348.937230000000000000
+          Left = 366.614410000000000000
           Top = 64.252010000000000000
-          Width = 60.472443390000000000
+          Width = 45.354323390000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1239,7 +1164,7 @@ object DMNFe: TDMNFe
           Font.Style = [fsBold]
           HAlign = haRight
           Memo.UTF8 = (
-            'Q t d e . ')
+            'Qtde.')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -1271,7 +1196,7 @@ object DMNFe: TDMNFe
         object Memo24: TfrxMemoView
           Left = 22.677180000000000000
           Top = 64.252010000000000000
-          Width = 60.472480000000000000
+          Width = 52.913420000000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1281,15 +1206,15 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' P r o d.')
+            ' C'#195#179'digo')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
         end
         object Memo25: TfrxMemoView
-          Left = 83.149660000000000000
+          Left = 75.590600000000000000
           Top = 64.252010000000000000
-          Width = 268.346454250000000000
+          Width = 291.023639130000000000
           Height = 15.118120000000000000
           ShowHint = False
           Color = 14211288
@@ -1299,7 +1224,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
-            ' D e s c r i '#195#167' '#195#163' o ')
+            ' Descri'#195#167#195#163'o')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -1338,6 +1263,81 @@ object DMNFe: TDMNFe
           Memo.UTF8 = (
             ' Endere'#195#167'o:')
           ParentFont = False
+          VAlign = vaCenter
+        end
+        object Memo21: TfrxMemoView
+          Left = 411.968770000000000000
+          Top = 64.252010000000000000
+          Width = 37.795300000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Color = 14211288
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Lucida Console'
+          Font.Style = [fsBold]
+          Memo.UTF8 = (
+            ' Und.')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
+        object Memo20: TfrxMemoView
+          Left = 449.764070000000000000
+          Top = 64.252010000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Color = 14211288
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Lucida Console'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'V. Bruto ')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
+        object Memo19: TfrxMemoView
+          Left = 514.016080000000000000
+          Top = 64.252010000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Color = 14211288
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Lucida Console'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'V. Desc. ')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
+        object Memo16: TfrxMemoView
+          Left = 578.268090000000000000
+          Top = 64.252010000000000000
+          Width = 64.252010000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          Color = 14211288
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -8
+          Font.Name = 'Lucida Console'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8 = (
+            'V. L'#195#173'quido ')
+          ParentFont = False
+          WordWrap = False
           VAlign = vaCenter
         end
       end
