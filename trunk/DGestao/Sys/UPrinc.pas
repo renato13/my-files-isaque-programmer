@@ -442,13 +442,13 @@ procedure TfrmPrinc.FormCreate(Sender: TObject);
 var
   sFileImage : String;
 begin
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial  [ v' + GetExeVersion + ' ]';
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial v1.0.1.5'; //[ v' + GetExeVersion + ' ]';
   Self.Version.Caption   := GetVersion;
   Self.Copyright.Caption := GetCopyright;
 
   // Carregar Imagem de Fundo da Tele Principal
-  
-  sFileImage := ExtractFilePath(Application.ExeName) + 'Logo_Principal.png';
+
+  sFileImage := ExtractFilePath(Application.ExeName) + 'Logo_Principal.jpg';
   if ( FileExists(sFileImage) ) then
     imgFundo.Picture.LoadFromFile(sFileImage);
 end;
