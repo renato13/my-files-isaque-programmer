@@ -38,6 +38,8 @@
 |*  - Criação e distribuição da Primeira Versao
 *******************************************************************************}
 
+{$I ACBr.inc}
+
 unit ACBrTXTClass;
 
 interface
@@ -129,7 +131,11 @@ begin
      raise Exception.Create( ACBrStr('"NomeArquivo" não especificado') ) ;
 
   if (not FileExists( NomeArquivo )) then
-     FConteudo.SaveToFile( NomeArquivo )
+     {$IFDEF UNICODE}
+      WriteToTXT( NomeArquivo, FConteudo.Text, False, False )
+     {$ELSE}
+      FConteudo.SaveToFile( NomeArquivo ) // SaveToFile nativo deixa arquivo como UTF-8
+     {$ENDIF}
   else
    begin
       FS := TFileStream.Create( NomeArquivo, fmOpenReadWrite or fmShareExclusive );
@@ -272,7 +278,7 @@ begin
      Result := FDelimitador;
      Exit;
   end;
-  Result := FDelimitador + FormatCurr('#0.' + StringOfChar('0', Decimal), Value);
+  Result := FDelimitador + FormatFloat('#0.' + StringOfChar('0', Decimal), Value); //FormatCurr não permite precisão acima de 4 casas decimais
 end;
 
 function TACBrTXTClass.LFill(Value: Integer; Size: Integer; Nulo: Boolean = false; Caracter: Char = '0'): String;

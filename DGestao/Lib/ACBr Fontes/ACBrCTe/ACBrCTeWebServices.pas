@@ -37,7 +37,7 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
+{*******************************************************************************
 |* Historico
 |*
 |* 16/12/2008: Wemerson Souto
@@ -46,7 +46,7 @@
 |*  - Criadas classes e procedimentos para acesso aos webservices
 |* 08/03/2010 : Bruno - Rhythmus Informatica
 |* Corrigida função DoCTeRecepcao
-******************************************************************************}
+*******************************************************************************}
 {$I ACBr.inc}
 
 unit ACBrCTeWebServices;
@@ -417,7 +417,7 @@ begin
 
   HTTP.MimeType  := 'text/xml; charset=utf-8';
   HTTP.UserAgent := '';
-  HTTP.Protocol  := '1.1'; // (1.2 para 1.1) Alterado por Italo em 13/01/2011
+  HTTP.Protocol  := '1.1';
 
   HTTP.AddPortNumberToHost := False;
   HTTP.Headers.Add(Action);
@@ -483,6 +483,8 @@ begin
   CancCTe.tpAmb  := TpcnTipoAmbiente(FConfiguracoes.WebServices.AmbienteCodigo-1);
   CancCTe.nProt  := TCTeCancelamento(Self).Protocolo;
   CancCTe.xJust  := TCTeCancelamento(Self).Justificativa;
+  CancCTe.Versao := CTecancCTe;
+  
   CancCTe.GerarXML;
 
 {$IFDEF ACBrCTeOpenSSL}
@@ -512,7 +514,9 @@ begin
 
 //  FDadosMsg := StringReplace( FDadosMsg, '<'+ENCODING_UTF8_STD+'>', '', [rfReplaceAll] ) ;
 //  FDadosMsg := StringReplace( FDadosMsg, '<'+ENCODING_UTF8+'>', '', [rfReplaceAll] ) ;
-//  FDadosMsg := StringReplace( FDadosMsg, '<?xml version="1.0"?>', '', [rfReplaceAll] ) ;
+{$IFDEF ACBrCTeOpenSSL}
+  FDadosMsg := StringReplace( FDadosMsg, '<?xml version="1.0"?>', '', [rfReplaceAll] );
+{$ENDIF}
 end;
 
 procedure TWebServicesBase.DoCTeConsulta;
@@ -528,6 +532,8 @@ begin
  {$ENDIF}
   ConsSitCTe.TpAmb  := TpcnTipoAmbiente(FConfiguracoes.WebServices.AmbienteCodigo-1);
   ConsSitCTe.chCTe  := TCTeConsulta(Self).CTeChave;
+  ConsSitCTe.Versao := CTeconsSitCTe;
+
   ConsSitCTe.GerarXML;
 
   FDadosMsg := ConsSitCTe.Gerador.ArquivoFormatoXML;
@@ -558,6 +564,8 @@ begin
   InutCTe.nCTIni := TCTeInutilizacao(Self).NumeroInicial;
   InutCTe.nCTFin := TCTeInutilizacao(Self).NumeroFinal;
   InutCTe.xJust  := TCTeInutilizacao(Self).Justificativa;
+  InutCTe.Versao := CTeinutCTe;
+
   InutCTe.GerarXML;
 
 {$IFDEF ACBrCTeOpenSSL}
@@ -591,8 +599,9 @@ var
   ConCadCTe: TConsCad;
 begin
   Cabecalho             := TCabecalho.Create;
-  Cabecalho.Versao      := CTecabMsg;  // Alterado de NFecabMsg por CTecabMsg por Italo em 18/03/2011
-  Cabecalho.VersaoDados := CTeconsCad; // Alterado de NFeconsCad por CTeconsCad por Italo em 18/03/2011
+  Cabecalho.Versao      := CTecabMsg;
+  Cabecalho.VersaoDados := CTeconsCad;
+  
   Cabecalho.GerarXML;
 
   FCabMsg := Cabecalho.Gerador.ArquivoFormatoXML;
@@ -603,11 +612,15 @@ begin
   FCabMsg := StringReplace( FCabMsg, '<?xml version="1.0"?>', '', [rfReplaceAll] ) ;
 
   ConCadCTe        := TConsCad.Create;
-  ConCadCTe.schema := TsPL005c;
+  // Alterado por Italo em 14/03/2012
+  ConCadCTe.schema := TsPL006;
+//  ConCadCTe.schema := TsPL005c;
   ConCadCTe.UF     := TCTeConsultaCadastro(Self).UF;
   ConCadCTe.IE     := TCTeConsultaCadastro(Self).IE;
   ConCadCTe.CNPJ   := TCTeConsultaCadastro(Self).CNPJ;
   ConCadCTe.CPF    := TCTeConsultaCadastro(Self).CPF;
+  ConCadCTe.Versao := CTeconsCad;
+  
   ConCadCTe.GerarXML;
 
   FDadosMsg := ConCadCTe.Gerador.ArquivoFormatoXML;
@@ -656,6 +669,8 @@ begin
  {$ENDIF}
   ConsReciCTe.tpAmb  := TpcnTipoAmbiente(FConfiguracoes.WebServices.AmbienteCodigo-1);
   ConsReciCTe.nRec   := TCTeRetRecepcao(Self).Recibo;
+  ConsReciCTe.Versao := CTeconsReciCTe;
+
   ConsReciCTe.GerarXML;
 
   FDadosMsg := ConsReciCTe.Gerador.ArquivoFormatoXML;
@@ -676,6 +691,7 @@ begin
   Cabecalho             := TCabecalho.Create;
   Cabecalho.Versao      := CTecabMsg;
   Cabecalho.VersaoDados := CTeconsReciCTe;
+
   Cabecalho.GerarXML;
 
   FCabMsg := Cabecalho.Gerador.ArquivoFormatoXML;
@@ -691,6 +707,8 @@ begin
  {$ENDIF}
   ConsReciCTe.tpAmb  := TpcnTipoAmbiente(FConfiguracoes.WebServices.AmbienteCodigo-1);
   ConsReciCTe.nRec   := TCTeRecibo(Self).Recibo;
+  ConsReciCTe.Versao := CTeconsReciCTe;
+  
   ConsReciCTe.GerarXML;
 
   FDadosMsg := ConsReciCTe.Gerador.ArquivoFormatoXML;
@@ -710,6 +728,7 @@ begin
  {$ENDIF}
   ConsStatServ.TpAmb  := TpcnTipoAmbiente(FConfiguracoes.WebServices.AmbienteCodigo-1);
   ConsStatServ.CUF    := FConfiguracoes.WebServices.UFCodigo;
+  ConsStatServ.Versao := CTeconsStatServ;
 
   ConsStatServ.GerarXML;
 
@@ -1063,8 +1082,9 @@ var
      ReqResp: THTTPReqResp;
   {$ENDIF}
 begin
-  {Result :=} inherited Executar;
+  inherited Executar;
 
+  Result := False;
   Acao   := TStringList.Create;
   Stream := TMemoryStream.Create;
 
@@ -1098,10 +1118,8 @@ begin
 
   try
     TACBrCTe( FACBrCTe ).SetStatus( stCTeRecepcao );
-    // Alterado por Italo em 23/02/2011
     if FConfiguracoes.Geral.Salvar then
       FConfiguracoes.Geral.Save(IntToStr(Lote)+'-env-lot.xml', FDadosMsg);
-
     try
       {$IFDEF ACBrCTeOpenSSL}
          HTTP.Document.LoadFromStream(Stream);
@@ -1217,6 +1235,7 @@ begin
                AProcCTe := TProcCTe.Create;
                AProcCTe.PathCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+AInfProt.Items[i].chCTe+'-cte.xml';
                AProcCTe.PathRetConsReciCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+FCTeRetorno.nRec+'-pro-rec.xml';
+               AProcCTe.Versao := CTeenviCTe;
                AProcCTe.GerarXML;
                if CTeUtil.NaoEstaVazio(AProcCTe.Gerador.ArquivoFormatoXML) then
                 begin
@@ -1638,7 +1657,7 @@ begin
      ReqResp.UseUTF8InHeader := True;
      ReqResp.SoapAction := 'http://www.portalfiscal.inf.br/cte/wsdl/CteConsulta/cteConsultaCT';
   {$ENDIF}
-  // Alterado por Italo em 16/11/2011
+
   CTeRetorno := TRetConsSitCTe.Create;
   try
     TACBrCTe( FACBrCTe ).SetStatus( stCTeConsulta );
@@ -1675,12 +1694,10 @@ begin
     FCTeChave   := CTeRetorno.chCTe;
     FMsg        := CTeRetorno.XMotivo;
 
-
     // Comentado por Italo em 16/11/2011
 //    FprotCTe    := CTeRetorno.protCTe;    //Arrumar
 //    FretCancCTe := CTeRetorno.retCancCTe; //Arrumar
 
-    // Incluido por Italo em 16/11/2011
     FprotCTe.Schema             := CTeRetorno.protCTe.Schema;
     FprotCTe.PathCTe            := CTeRetorno.protCTe.PathCTe;
     FprotCTe.PathRetConsReciCTe := CTeRetorno.protCTe.PathRetConsReciCTe;
@@ -1708,15 +1725,13 @@ begin
     FDhRecbto  := CTeUtil.SeSenao(CTeRetorno.retCancCTe.dhRecbto <> 0,CTeRetorno.retCancCTe.dhRecbto,CTeRetorno.protCTe.dhRecbto);
 
     TACBrCTe( FACBrCTe ).SetStatus( stCteIdle );
-    aMsg := //'Versão Leiaute : '+CTeRetorno.Versao+LineBreak+
-            'Identificador : '+CTeRetorno.protCTe.chCTe+LineBreak+
+    aMsg := 'Identificador : '+CTeRetorno.protCTe.chCTe+LineBreak+
             'Ambiente : '+TpAmbToStr(CTeRetorno.TpAmb)+LineBreak+
             'Versão Aplicativo : '+CTeRetorno.verAplic+LineBreak+
             'Status Código : '+IntToStr(CTeRetorno.CStat)+LineBreak+
             'Status Descrição : '+CTeRetorno.xMotivo+LineBreak+
             'UF : '+CodigoParaUF(CTeRetorno.cUF)+LineBreak+
-            'Chave Acesso : '+FCTeChave+LineBreak+ // Incluido por Italo em 28/08/2010
-//            'Chave Acesso : '+CTeRetorno.chCTe+LineBreak+
+            'Chave Acesso : '+FCTeChave+LineBreak+
             'Recebimento : '+DateTimeToStr(FDhRecbto)+LineBreak+
             'Protocolo : '+FProtocolo+LineBreak+
             'Digest Value : '+CTeRetorno.protCTe.digVal+LineBreak;
@@ -1726,7 +1741,7 @@ begin
     if Assigned(TACBrCTe( FACBrCTe ).OnGerarLog) then
        TACBrCTe( FACBrCTe ).OnGerarLog(aMsg);
 
-    Result := (CTeRetorno.CStat in [100,101,110]);
+    Result := (CTeRetorno.CStat in [100, 101, 110]);
     // 100 = Autorizado o Uso
     // 101 = Cancelamento Homologado
     // 110 = Uso Denegado
@@ -1749,7 +1764,7 @@ begin
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].Msg                  := CTeRetorno.xMotivo;
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.tpAmb    := CTeRetorno.tpAmb;
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.verAplic := CTeRetorno.verAplic;
-              TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.chCTe    := FCTeChave; // CTeRetorno.chCTe; Alterado por Italo em 28/08/2010
+              TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.chCTe    := FCTeChave;
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.dhRecbto := FDhRecbto;
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.nProt    := FProtocolo;
               TACBrCTe( FACBrCTe ).Conhecimentos.Items[i].CTe.procCTe.digVal   := CTeRetorno.protCTe.digVal;
@@ -1766,6 +1781,7 @@ begin
              else
                 AProcCTe.PathCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+FCTeChave+'-cte.xml';
              AProcCTe.PathRetConsSitCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+FCTeChave+'-sit.xml';
+             AProcCTe.Versao := CTeenviCTe;
              AProcCTe.GerarXML;
              if CTeUtil.NaoEstaVazio(AProcCTe.Gerador.ArquivoFormatoXML) then
                 AProcCTe.Gerador.SalvarArquivo(AProcCTe.PathCTe);
@@ -1795,6 +1811,7 @@ begin
              AProcCTe := TProcCTe.Create;
              AProcCTe.PathCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+FCTeChave+'-cte.xml';
              AProcCTe.PathRetConsSitCTe := PathWithDelim(FConfiguracoes.Geral.PathSalvar)+FCTeChave+'-sit.xml';
+             AProcCTe.Versao := CTeenviCTe;
              AProcCTe.GerarXML;
              if CTeUtil.NaoEstaVazio(AProcCTe.Gerador.ArquivoFormatoXML) then
                 AProcCTe.Gerador.SalvarArquivo(AProcCTe.PathCTe);
@@ -1809,7 +1826,6 @@ begin
     {$ELSE}
       ReqResp.Free;
     {$ENDIF}
-    // Incluido Por Italo em 16/11/2011
     CTeRetorno.Free;
     Acao.Free;
     Stream.Free;
@@ -2004,7 +2020,6 @@ begin
     {$ENDIF}
     Acao.Free;
     Stream.Free;
-    // Alterado por Italo em 16/03/2011
     CTeRetorno.Free;
     CTeUtil.ConfAmbiente;
     TACBrCTe( FACBrCTe ).SetStatus( stCTeIdle );
@@ -2080,6 +2095,10 @@ begin
      ReqResp.UseUTF8InHeader := True;
      ReqResp.SoapAction := 'http://www.portalfiscal.inf.br/cte/wsdl/CteInutilizacao/cteInutilizacaoCT';
   {$ENDIF}
+
+  // Alterado por Italo em 10/02/2012
+  CTeRetorno := TRetInutCTe.Create;
+
   try
     TACBrCTe( FACBrCTe ).SetStatus( stCTeInutilizacao );
     if FConfiguracoes.Geral.Salvar then
@@ -2107,7 +2126,6 @@ begin
        StrStream.Free;
     {$ENDIF}
 
-    CTeRetorno := TRetInutCTe.Create;
     CTeRetorno.Leitor.Arquivo := FRetWS;
     CTeRetorno.LerXml;
 
@@ -2230,23 +2248,6 @@ begin
   Acao := TStringList.Create;
   Stream := TMemoryStream.Create;
 
-  // Alterado por Italo em  17/10/2011
-  (*
-  Texto := '<?xml version="1.0" encoding="utf-8"?>';
-  Texto := Texto + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-  Texto := Texto +   '<soap:Body>';
-  Texto := Texto +     '<consultaCadastro xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro">';
-  Texto := Texto +       '<nfeCabecMsg>';
-  Texto := Texto +         ParseText(FCabMsg, False);
-  Texto := Texto +       '</nfeCabecMsg>';
-  Texto := Texto +       '<nfeDadosMsg>';
-  Texto := Texto +         ParseText(FDadosMsg, False);
-  Texto := Texto +       '</nfeDadosMsg>';
-  Texto := Texto +     '</consultaCadastro>';
-  Texto := Texto +   '</soap:Body>';
-  Texto := Texto + '</soap:Envelope>';
-  *)
-
   Texto := '<?xml version="1.0" encoding="utf-8"?>';
   Texto := Texto + '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">';
   Texto := Texto +   '<soap12:Header>';
@@ -2272,8 +2273,6 @@ begin
      ConfiguraReqResp( ReqResp );
      ReqResp.URL := Trim(FURL);
      ReqResp.UseUTF8InHeader := True;
-     // Alterado por Italo em  17/10/2011
-//     ReqResp.SoapAction := 'http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro/consultaCadastro';
      ReqResp.SoapAction := 'http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2' ;
   {$ENDIF}
   try
@@ -2284,16 +2283,12 @@ begin
     FRetWS := '';
     {$IFDEF ACBrCTeOpenSSL}
        HTTP.Document.LoadFromStream(Stream);
-       // Alterado por Italo em  17/10/2011
-//       ConfiguraHTTP(HTTP,'SOAPAction: "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro/consultaCadastro"');
        ConfiguraHTTP(HTTP,'SOAPAction: "http://www.portalfiscal.inf.br/nfe/wsdl/CadConsultaCadastro2"');
        HTTP.HTTPMethod('POST', FURL);
 
        StrStream := TStringStream.Create('');
        StrStream.CopyFrom(HTTP.Document, 0);
        FRetornoWS := TiraAcentos(ParseText(StrStream.DataString, True));
-       // Alterado por Italo em  17/10/2011
-//       FRetWS := SeparaDados( FRetornoWS, 'consultaCadastroResult');
        FRetWS := SeparaDados( FRetornoWS,'consultaCadastro2Result');
        StrStream.Free;
     {$ELSE}
@@ -2301,8 +2296,6 @@ begin
        StrStream := TStringStream.Create('');
        StrStream.CopyFrom(Stream, 0);
        FRetornoWS := TiraAcentos(ParseText(StrStream.DataString, True));
-       // Alterado por Italo em  17/10/2011
-//       FRetWS := SeparaDados( FRetornoWS, 'consultaCadastroResult');
        FRetWS := SeparaDados( FRetornoWS,'consultaCadastro2Result');
        StrStream.Free;
     {$ENDIF}
@@ -2338,7 +2331,7 @@ begin
        FCPF  := FRetConsCad.CPF ;
      end;
 
-   Result := (FRetConsCad.cStat in [111,112]);
+   Result := (FRetConsCad.cStat in [111, 112]);
 
     if FConfiguracoes.Geral.Salvar then
       FConfiguracoes.Geral.Save(FormatDateTime('yyyymmddhhnnss',Now)+'-cad.xml', FRetWS);

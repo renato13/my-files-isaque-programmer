@@ -49,10 +49,10 @@ uses
   {$IFDEF FPC}
     LResources, StdCtrls,
   {$ENDIF}
-  ACBrBoleto ;
+  ACBrBoleto, ACBrBarCode ;
 
 const
-  CACBrBoletoFCFortes_Versao = '0.0.12a' ;
+  CACBrBoletoFCFortes_Versao = '0.0.15a' ;
 
 type
 
@@ -70,22 +70,161 @@ type
   TACBrBoletoFCFortesFr = class(TForm)
      BoletoCarne: TRLReport;
      imgBarrasCarne: TRLBarcode;
-    imgCodigoBarra: TRLBarcode;
     ImgLoja: TRLImage;
-    LayoutBoleto: TRLReport;
+    RLDraw1: TRLDraw;
+    RLDraw10: TRLDraw;
+    RLDraw11: TRLDraw;
+    RLDraw12: TRLDraw;
+    RLDraw13: TRLDraw;
+    RLDraw14: TRLDraw;
+    RLDraw15: TRLDraw;
+    RLDraw16: TRLDraw;
+    RLDraw17: TRLDraw;
+    RLDraw18: TRLDraw;
+    RLDraw19: TRLDraw;
+    RLDraw2: TRLDraw;
+    RLDraw20: TRLDraw;
+    RLDraw21: TRLDraw;
+    RLDraw22: TRLDraw;
+    RLDraw23: TRLDraw;
+    RLDraw24: TRLDraw;
+    RLDraw25: TRLDraw;
+    RLDraw26: TRLDraw;
+    RLDraw27: TRLDraw;
+    RLDraw28: TRLDraw;
+    RLDraw29: TRLDraw;
+    RLDraw3: TRLDraw;
+    RLDraw33: TRLDraw;
+    RLDraw34: TRLDraw;
+    RLDraw35: TRLDraw;
+    RLDraw36: TRLDraw;
+    RLDraw37: TRLDraw;
+    RLDraw38: TRLDraw;
+    RLDraw39: TRLDraw;
+    RLDraw4: TRLDraw;
+    RLDraw40: TRLDraw;
+    RLDraw41: TRLDraw;
+    RLDraw42: TRLDraw;
+    RLDraw43: TRLDraw;
+    RLDraw44: TRLDraw;
+    RLDraw45: TRLDraw;
+    RLDraw46: TRLDraw;
+    RLDraw47: TRLDraw;
+    RLDraw48: TRLDraw;
+    RLDraw49: TRLDraw;
+    RLDraw5: TRLDraw;
+    RLDraw50: TRLDraw;
+    RLDraw6: TRLDraw;
+    RLDraw7: TRLDraw;
+    RLDraw72: TRLDraw;
+    RLDraw73: TRLDraw;
+    RLDraw74: TRLDraw;
+    RLDraw75: TRLDraw;
+    RLDraw76: TRLDraw;
+    RLDraw77: TRLDraw;
     RLDraw78: TRLDraw;
+    RLDraw8: TRLDraw;
+    RLDraw81: TRLDraw;
+    RLDraw82: TRLDraw;
+    RLDraw83: TRLDraw;
+    RLDraw9: TRLDraw;
+    RLLabel102: TRLLabel;
+    RLLabel11: TRLLabel;
+    RLLabel14: TRLLabel;
+    RLLabel145: TRLLabel;
+    RLLabel146: TRLLabel;
+    RLLabel147: TRLLabel;
+    RLLabel148: TRLLabel;
+    RLLabel149: TRLLabel;
+    RLLabel150: TRLLabel;
+    RLLabel151: TRLLabel;
+    RLLabel152: TRLLabel;
+    RLLabel153: TRLLabel;
+    RLLabel154: TRLLabel;
+    RLLabel155: TRLLabel;
+    RLLabel156: TRLLabel;
+    RLLabel157: TRLLabel;
+    RLLabel158: TRLLabel;
+    RLLabel159: TRLLabel;
+    RLLabel160: TRLLabel;
+    RLLabel161: TRLLabel;
+    RLLabel162: TRLLabel;
+    RLLabel163: TRLLabel;
+    RLLabel164: TRLLabel;
+    RLLabel165: TRLLabel;
+    RLLabel166: TRLLabel;
+    RLLabel167: TRLLabel;
+    RLLabel168: TRLLabel;
     RLLabel169: TRLLabel;
+    RLLabel170: TRLLabel;
     RLLabel171: TRLLabel;
+    RLLabel175: TRLLabel;
+    RLLabel18: TRLLabel;
+    RLLabel2: TRLLabel;
+    RLLabel20: TRLLabel;
+    RLLabel21: TRLLabel;
+    RLLabel23: TRLLabel;
+    RLLabel25: TRLLabel;
+    RLLabel27: TRLLabel;
+    RLLabel28: TRLLabel;
+    RLLabel29: TRLLabel;
+    RLLabel3: TRLLabel;
+    RLLabel30: TRLLabel;
+    RLLabel31: TRLLabel;
+    RLLabel32: TRLLabel;
+    RLLabel33: TRLLabel;
+    RLLabel35: TRLLabel;
+    RLLabel37: TRLLabel;
+    RLLabel4: TRLLabel;
+    RLLabel50: TRLLabel;
+    RLLabel51: TRLLabel;
+    RLLabel52: TRLLabel;
+    RLLabel54: TRLLabel;
+    RLLabel55: TRLLabel;
+    RLLabel56: TRLLabel;
+    RLLabel57: TRLLabel;
+    RLLabel6: TRLLabel;
+    RLLabel67: TRLLabel;
+    RLLabel68: TRLLabel;
+    RLLabel69: TRLLabel;
+    RLLabel7: TRLLabel;
+    RLLabel70: TRLLabel;
+    RLLabel71: TRLLabel;
+    RLLabel72: TRLLabel;
+    RLLabel73: TRLLabel;
+    RLLabel74: TRLLabel;
+    RLLabel75: TRLLabel;
+    RLLabel76: TRLLabel;
+    RLLabel77: TRLLabel;
+    RLLabel78: TRLLabel;
+    RLLabel79: TRLLabel;
+    RLLabel8: TRLLabel;
+    RLLabel80: TRLLabel;
+    RLLabel81: TRLLabel;
+    RLLabel82: TRLLabel;
+    RLLabel83: TRLLabel;
+    RLLabel84: TRLLabel;
+    RLLabel85: TRLLabel;
+    RLLabel86: TRLLabel;
+    RLLabel87: TRLLabel;
+    RLLabel88: TRLLabel;
+    RLLabel89: TRLLabel;
     RLLabel9: TRLLabel;
+    RLLabel90: TRLLabel;
+    RLLabel91: TRLLabel;
     RLLabel92: TRLLabel;
+    RLLabel93: TRLLabel;
     RLLabel96: TRLLabel;
+    RLLabel98: TRLLabel;
+    txtNomeSacado: TRLLabel;
+    txtOrientacoesBanco: TRLMemo;
+    RLMemo2: TRLMemo;
     txtDesconto5: TRLLabel;
-    txtEndCedente: TRLLabel;
+    txtEndCedente1: TRLLabel;
     txtMoraMulta4: TRLLabel;
     txtNumeroBanco: TRLLabel;
     txtTotPar: TRLLabel;
     mIntrucoes: TRLMemo;
-    RLBand1: TRLBand;
     RLBand3: TRLBand;
     txtParcela: TRLLabel;
     txtCodCedenteCarne2: TRLLabel;
@@ -108,32 +247,12 @@ type
     RLDBText18: TRLDBText;
     txtLocal: TRLLabel;
     txtNomeCedente: TRLLabel;
-    txtNomeSacado: TRLLabel;
     txtNossoNumeroCarne: TRLLabel;
     txtNumeroDocto: TRLLabel;
     txtValorCarne: TRLLabel;
-    RLDraw29: TRLDraw;
     RLDraw30: TRLDraw;
     RLDraw31: TRLDraw;
     RLDraw32: TRLDraw;
-    RLDraw39: TRLDraw;
-    RLDraw38: TRLDraw;
-    RLDraw37: TRLDraw;
-    RLDraw34: TRLDraw;
-    RLDraw28: TRLDraw;
-    RLDraw27: TRLDraw;
-    RLDraw26: TRLDraw;
-    RLDraw25: TRLDraw;
-    RLDraw24: TRLDraw;
-    RLDraw21: TRLDraw;
-    RLDraw23: TRLDraw;
-    RLDraw22: TRLDraw;
-    RLDraw20: TRLDraw;
-    RLDraw19: TRLDraw;
-    RLDraw18: TRLDraw;
-    RLDraw17: TRLDraw;
-    RLDraw16: TRLDraw;
-    imgBanco2: TRLImage;
     RLDraw51: TRLDraw;
     RLDraw52: TRLDraw;
     RLDraw53: TRLDraw;
@@ -201,202 +320,85 @@ type
     RLLabel97: TRLLabel;
     RLLabel99: TRLLabel;
     RLPDFFilter1: TRLPDFFilter;
+    txtVencCarne2: TRLLabel;
+    LayoutBoleto: TRLReport;
     RLBand4: TRLBand;
-    RLDraw14: TRLDraw;
-    RLDraw8: TRLDraw;
-    RLDraw12: TRLDraw;
-    RLDraw6: TRLDraw;
-    RLDraw9: TRLDraw;
-    RLDraw7: TRLDraw;
-    RLDraw4: TRLDraw;
-    RLDraw73: TRLDraw;
-    RLDraw13: TRLDraw;
-    RLDraw10: TRLDraw;
-    RLDraw2: TRLDraw;
-    RLDraw3: TRLDraw;
-    RLDraw5: TRLDraw;
-    RLDraw11: TRLDraw;
-    RLLabel2: TRLLabel;
+    rlBarraOrientbanco: TRLDraw;
     txtNomeCedente4: TRLLabel;
-    RLLabel6: TRLLabel;
     txtCodigoCedente4: TRLLabel;
-    RLLabel8: TRLLabel;
-    RLLabel11: TRLLabel;
     txtNumeroDocumento4: TRLLabel;
-    RLLabel14: TRLLabel;
     txtEspecie4: TRLLabel;
-    RLLabel23: TRLLabel;
     txtNossoNumero4: TRLLabel;
-    RLLabel33: TRLLabel;
     txtValorDocumento4: TRLLabel;
     imgBanco4: TRLImage;
     txtNumeroBanco4: TRLLabel;
-    RLLabel3: TRLLabel;
-    RLLabel51: TRLLabel;
-    RLLabel52: TRLLabel;
     lblLocalPagto4: TRLLabel;
-    RLLabel21: TRLLabel;
     txtDataVencimento4: TRLLabel;
-    RLLabel18: TRLLabel;
-    RLLabel20: TRLLabel;
-    RLLabel25: TRLLabel;
     txtNomeSacado4: TRLLabel;
-    RLLabel27: TRLLabel;
-    RLLabel28: TRLLabel;
-    RLLabel30: TRLLabel;
-    RLLabel29: TRLLabel;
-    RLLabel31: TRLLabel;
-    RLLabel32: TRLLabel;
-    RLLabel35: TRLLabel;
-    RLLabel37: TRLLabel;
-    RLLabel50: TRLLabel;
-    RLLabel54: TRLLabel;
-    RLLabel55: TRLLabel;
-    RLLabel56: TRLLabel;
-    RLLabel57: TRLLabel;
-    RLDraw72: TRLDraw;
-    RLDraw15: TRLDraw;
-    RLLabel4: TRLLabel;
     txtDataProcessamento4: TRLLabel;
-
+    RLBand1: TRLBand;
+    imgBanco2: TRLImage;
     txtNumeroBanco2: TRLLabel;
-    RLLabel67: TRLLabel;
-    RLLabel68: TRLLabel;
     lblLocalPagto: TRLLabel;
-    RLLabel69: TRLLabel;
     txtNomeCedente2: TRLLabel;
-    RLLabel70: TRLLabel;
     txtDataDocumento2: TRLLabel;
-    RLLabel71: TRLLabel;
     txtNumeroDocumento2: TRLLabel;
-    RLLabel72: TRLLabel;
     txtEspecieDoc2: TRLLabel;
-    RLLabel73: TRLLabel;
     txtAceite2: TRLLabel;
-    RLLabel74: TRLLabel;
     txtDataProcessamento2: TRLLabel;
     txtUsoBanco2: TRLLabel;
-    RLLabel75: TRLLabel;
     txtCarteira2: TRLLabel;
-    RLLabel76: TRLLabel;
-    RLLabel77: TRLLabel;
     txtEspecie2: TRLLabel;
-    RLLabel78: TRLLabel;
     txtQuantidade2: TRLLabel;
-    RLLabel79: TRLLabel;
     txtValorMoeda2: TRLLabel;
-    RLLabel80: TRLLabel;
     txtInstrucoes2: TRLMemo;
-    RLLabel81: TRLLabel;
     txtDataVencimento2: TRLLabel;
-    RLLabel82: TRLLabel;
     txtCodigoCedente2: TRLLabel;
-    RLLabel83: TRLLabel;
     txtNossoNumero2: TRLLabel;
-    RLLabel84: TRLLabel;
     txtValorDocumento2: TRLLabel;
-    RLLabel85: TRLLabel;
     txtDesconto2: TRLLabel;
-    RLLabel86: TRLLabel;
     txtMoraMulta2: TRLLabel;
-    RLLabel87: TRLLabel;
     txtValorCobrado2: TRLLabel;
-    RLLabel88: TRLLabel;
     txtNomeSacado2: TRLLabel;
     txtEnderecoSacado2: TRLLabel;
     txtCidadeSacado2: TRLLabel;
-    RLLabel89: TRLLabel;
     txtCpfCnpjSacado2: TRLLabel;
-    RLLabel90: TRLLabel;
     txtCodigoBaixa2: TRLLabel;
-    RLMemo2: TRLMemo;
-    RLLabel91: TRLLabel;
-    RLLabel93: TRLLabel;
-    RLLabel98: TRLLabel;
-    RLLabel102: TRLLabel;
     txtSacadorAvalista2: TRLLabel;
     txtReferencia2: TRLLabel;
-    RLBand2: TRLBand;
-    RLDraw50: TRLDraw;
-    RLDraw49: TRLDraw;
-    RLDraw48: TRLDraw;
-    RLDraw47: TRLDraw;
-    RLDraw46: TRLDraw;
-    RLDraw45: TRLDraw;
-    RLDraw44: TRLDraw;
-    RLDraw43: TRLDraw;
-    RLDraw42: TRLDraw;
-    RLDraw41: TRLDraw;
-    RLDraw40: TRLDraw;
-    RLDraw36: TRLDraw;
-    RLDraw35: TRLDraw;
-    RLDraw33: TRLDraw;
-    imgBanco3: TRLImage;
-    RLDraw81: TRLDraw;
-    txtLinhaDigitavel: TRLLabel;
-    RLDraw82: TRLDraw;
-    txtNumeroBanco3: TRLLabel;
-    RLLabel145: TRLLabel;
-    txtLocalPagamento3: TRLLabel;
-    txtDataVencimento3: TRLLabel;
-    RLLabel146: TRLLabel;
-    RLDraw83: TRLDraw;
-    RLLabel147: TRLLabel;
-    txtNomeCedente3: TRLLabel;
-    RLLabel148: TRLLabel;
-    txtCodigoCedente3: TRLLabel;
-    RLLabel149: TRLLabel;
-    txtDataDocumento3: TRLLabel;
-    RLLabel150: TRLLabel;
-    txtNumeroDocumento3: TRLLabel;
-    RLLabel151: TRLLabel;
-    txtEspecieDoc3: TRLLabel;
-    RLLabel152: TRLLabel;
-    txtAceite3: TRLLabel;
-    RLLabel153: TRLLabel;
-    txtDataProcessamento3: TRLLabel;
-    RLLabel154: TRLLabel;
-    txtNossoNumero3: TRLLabel;
-    RLLabel155: TRLLabel;
-    txtUsoBanco3: TRLLabel;
-    RLLabel156: TRLLabel;
-    txtCarteira3: TRLLabel;
-    RLLabel157: TRLLabel;
-    txtEspecie3: TRLLabel;
-    RLLabel158: TRLLabel;
-    txtQuantidade3: TRLLabel;
-    RLLabel159: TRLLabel;
-    txtValorMoeda3: TRLLabel;
-    RLLabel160: TRLLabel;
-    txtValorDocumento3: TRLLabel;
-    RLLabel161: TRLLabel;
-    txtInstrucoes3: TRLMemo;
-    RLLabel162: TRLLabel;
-    txtDesconto3: TRLLabel;
-    RLLabel163: TRLLabel;
-    txtMoraMulta3: TRLLabel;
-    RLLabel164: TRLLabel;
-    txtValorCobrado3: TRLLabel;
-    RLLabel165: TRLLabel;
-    txtNomeSacado3: TRLLabel;
-    RLLabel166: TRLLabel;
-    txtCpfCnpjSacado3: TRLLabel;
-    txtEnderecoSacado3: TRLLabel;
-    RLLabel167: TRLLabel;
-    txtCidadeSacado3: TRLLabel;
-    txtCodigoBaixa3: TRLLabel;
-    RLLabel168: TRLLabel;
-    RLLabel170: TRLLabel;
-    RLLabel175: TRLLabel;
-    txtSacadorAvalista3: TRLLabel;
-    txtReferencia3: TRLLabel;
+    txtEndCedente: TRLLabel;
     txtSwHouse: TRLAngleLabel;
-    txtVencCarne2: TRLLabel;
-    RLLabel7: TRLLabel;
-    RLDraw74: TRLDraw;
-    RLDraw75: TRLDraw;
-    RLDraw76: TRLDraw;
-    RLDraw77: TRLDraw;
+    RLBand2: TRLBand;
+    imgBanco3: TRLImage;
+    txtNumeroBanco3: TRLLabel;
+    txtLinhaDigitavel: TRLLabel;
+    txtLocalPagamento3: TRLLabel;
+    txtNomeCedente3: TRLLabel;
+    txtDataDocumento3: TRLLabel;
+    txtNumeroDocumento3: TRLLabel;
+    txtEspecieDoc3: TRLLabel;
+    txtAceite3: TRLLabel;
+    txtDataProcessamento3: TRLLabel;
+    txtUsoBanco3: TRLLabel;
+    txtCarteira3: TRLLabel;
+    txtEspecie3: TRLLabel;
+    txtQuantidade3: TRLLabel;
+    txtValorMoeda3: TRLLabel;
+    txtInstrucoes3: TRLMemo;
+    txtDataVencimento3: TRLLabel;
+    txtCodigoCedente3: TRLLabel;
+    txtNossoNumero3: TRLLabel;
+    txtValorDocumento3: TRLLabel;
+    txtDesconto3: TRLLabel;
+    txtMoraMulta3: TRLLabel;
+    txtValorCobrado3: TRLLabel;
+    txtNomeSacado3: TRLLabel;
+    txtEnderecoSacado3: TRLLabel;
+    txtCidadeSacado3: TRLLabel;
+    txtCpfCnpjSacado3: TRLLabel;
+    txtCodigoBaixa3: TRLLabel;
+    txtReferencia3: TRLLabel;
+    imgCodigoBarra: TRLBarcode;
     procedure BoletoCarneBeforePrint ( Sender: TObject; var PrintIt: boolean ) ;
     procedure BoletoCarneDataCount ( Sender: TObject; var DataCount: integer ) ;
     procedure BoletoCarneDataRecord ( Sender: TObject; RecNo: integer;
@@ -475,8 +477,7 @@ begin
      with frACBrBoletoFortes do
      begin
         case LayOut of
-           lPadrao : RLLayout:= LayoutBoleto;
-           lCarne  : RLLayout:= BoletoCarne;
+           lCarne : RLLayout:= BoletoCarne;
         else
            RLLayout:= LayoutBoleto;
         end;
@@ -527,14 +528,30 @@ end;
 { TACBrBoletoFCFortesFr }
 
 procedure TACBrBoletoFCFortesFr.FormCreate(Sender: TObject);
+var
+  I : Integer ;
 begin
    fIndice   := 0 ;
    fBoletoFC := TACBrBoletoFCFortes(Owner) ;  // Link para o Pai
-   MensagemPadrao := TStringList.Create;
-   if (fBoletoFC.ACBrBoleto.ComprovanteEntrega = true)then
-      RLBand4.Visible := true
-   else
-      RLBand4.Visible := false;
+   MensagemPadrao  := TStringList.Create;
+   RLBand4.Visible := (fBoletoFC.LayOut = lPadraoEntrega) ;
+
+   {$IFDEF UNICODE}
+    // Fontes do ACBr estão em CP1252, convertendo textos para UTF-8 //
+    For I := 0 to ComponentCount-1 do
+    begin
+       if Components[I] is TRLMemo then
+        begin
+          with TRLMemo( Components[I] ) do
+             Lines.Text := AnsiToUtf8( Lines.Text )
+        end
+       else if Components[I] is TRLLabel then
+        begin
+          with TRLLabel( Components[I] ) do
+             Caption := AnsiToUtf8( Caption )
+        end
+    end ;
+   {$ENDIF}
 end;
 
 procedure TACBrBoletoFCFortesFr.FormDestroy ( Sender: TObject ) ;
@@ -566,7 +583,6 @@ begin
    Eof := (RecNo > fBoletoFC.ACBrBoleto.ListadeBoletos.Count) ;
    RecordAction := raUseIt ;
 end;
-
 
 function TACBrBoletoFCFortesFr.GetACBrTitulo: TACBrTitulo;
 begin
@@ -638,10 +654,15 @@ begin
       txtNomeSacado2.Caption          := Titulo.Sacado.NomeSacado;
       txtEnderecoSacado2.Caption      := Titulo.Sacado.Logradouro + ' '+
                                          Titulo.Sacado.Numero + Titulo.Sacado.Complemento;
-      txtCidadeSacado2.Caption        := Titulo.Sacado.CEP + ' '+Titulo.Sacado.Cidade +
-                                         ' '+Titulo.Sacado.UF;
+      txtCidadeSacado2.Caption        := Titulo.Sacado.CEP + ' '+Titulo.Sacado.Bairro +
+                                         ' '+Titulo.Sacado.Cidade + ' '+Titulo.Sacado.UF;
       txtCpfCnpjSacado2.Caption       := Titulo.Sacado.CNPJCPF;
-      txtInstrucoes2.Lines.Text       := MensagemPadrao.Text;  //Titulo.Mensagem.Text;
+      txtInstrucoes2.Lines.Text       := MensagemPadrao.Text;
+      txtOrientacoesBanco.Lines.Text  := Banco.OrientacoesBanco.Text;
+
+      rlBarraOrientbanco.Visible:= txtOrientacoesBanco.Lines.Count > 0;
+
+
       with Titulo.ACBrBoleto.Cedente do
       begin
          txtEndCedente.Caption := Logradouro+' '+NumeroRes+' '+Complemento+' '+
@@ -661,10 +682,12 @@ begin
      LinhaDigitavel := Banco.MontarLinhaDigitavel( CodBarras );
 
      imgBanco3.Picture.Assign(imgBanco2.Picture);
+     fBoletoFC.CarregaLogo( imgBanco3.Picture, Banco.Numero );
      txtNumeroBanco3.Caption         := txtNumeroBanco2.Caption;
      txtLocalPagamento3.Caption      := lblLocalPagto.Caption;
      txtDataVencimento3.Caption      := txtDataVencimento2.Caption;
-     txtNomeCedente3.Caption         := Cedente.Nome;
+     txtNomeCedente3.Caption         := txtNomeCedente2.Caption;
+     txtEndCedente1.Caption          := txtEndCedente.Caption  ;
      txtCodigoCedente3.Caption       := txtCodigoCedente2.Caption;
      txtDataDocumento3.Caption       := txtDataDocumento2.Caption;
      txtNumeroDocumento3.Caption     := txtNumeroDocumento2.Caption;
@@ -773,7 +796,7 @@ begin
       lblLocalPagto4.Caption           := Titulo.LocalPagamento;
       txtDataVencimento4.Caption      := FormatDateTime('dd/mm/yyyy', Titulo.Vencimento);
       txtNomeCedente4.Caption         := Cedente.Nome+ ' - '+TipoDoc + Cedente.CNPJCPF;
-      txtCodigoCedente4.Caption       := Cedente.Agencia+'-'+Cedente.AgenciaDigito+'/'+ Cedente.Conta+'-'+Cedente.ContaDigito;
+      txtCodigoCedente4.Caption       := CodCedente;
 
       txtNumeroDocumento4.Caption     := Titulo.NumeroDocumento;
       txtDataProcessamento4.Caption   := FormatDateTime('dd/mm/yyyy',Now);

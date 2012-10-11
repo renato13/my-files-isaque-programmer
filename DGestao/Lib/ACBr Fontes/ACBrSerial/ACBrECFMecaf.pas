@@ -166,7 +166,7 @@ TACBrECFMecaf = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -266,7 +266,7 @@ end;
 procedure TACBrECFMecaf.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+#10+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+#10+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   fpDevice.HandShake := hsRTS_CTS ;
@@ -389,7 +389,11 @@ begin
    begin
      ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+#10+#10+
                 ErroMsg );
-     raise EACBrECFSemResposta.create(ErroMsg) ;
+
+     if (Erro = 33) then
+        DoOnErrorSemPapel
+     else
+        raise EACBrECFSemResposta.create(ErroMsg) ;
    end
   else
      Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -698,7 +702,7 @@ Var Linhas, CodTroco : String ;
 begin
   if ImprimeVinculado then
      if fsVinculado then
-        raise Exception.Create(ACBrStr('Já existe Forma de Pagamento com '+#10+
+        raise EACBrECFERRO.Create(ACBrStr('Já existe Forma de Pagamento com '+#10+
                                'comprovante NAO fiscal vinculado pendente. '+#10+
                                'Impressora: '+fpModeloStr+' aceita apenas um '+#10+
                                'Comprovante não Fiscal Viculado por Cupom.'))
@@ -778,7 +782,8 @@ end;
 Procedure TACBrECFMecaf.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, DescontoStr, Fmt: String ;
     FlagDesc : Integer ;
 begin
@@ -936,7 +941,7 @@ begin
   end ;
 
   if ProxIndice > 15 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Aliquotas'));
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Aliquotas'));
 
   EnviaComando( '46' + IntToStrZero(ProxIndice,2) + ValStr + sTipo ) ;
 
@@ -1033,7 +1038,7 @@ begin
   end ;
 
   if ProxIndice > 15 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Formas de '+
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Formas de '+
                             'Pagamento'));
 
   EnviaComando( '29' + IntToStrZero(ProxIndice,2) + Descricao ) ;
@@ -1103,7 +1108,7 @@ begin
   end ;
 
   if ProxIndice > 31 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novos Comprovantes'+
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novos Comprovantes'+
                             ' não Fiscais'));
 
   EnviaComando( '29' + IntToStrZero(ProxIndice,2) + Descricao ) ;

@@ -38,6 +38,114 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+13/09/2012
+-- ACBrUtil --
+[-] Corrigido Bug de perda de acentos em sistemas com Unicode na
+    function ParseText      (por: DSA)
+
+27/08/2012
+-- ACBrUtil --
+[-] Ajuste em RunCommand para compatibilizar com FPC 2.7.1     (por: DSA)
+
+20/08/2012
+-- ACBrEAD --
+[-] Ajuste no método RemoverEAD, para suportar arquivos assinados com linha de
+    EAD que terminam com LineBreak    (por: DSA)
+
+20/06/2012
+-- ACBrEAD --
+[-] Acertos gerais que estavam impedindo a validação da assinatura, algo a ver
+    com a conversão de strings e ansistrings.
+[*] Acerto nas exception do EAD e mensagem quando quando não conseguir 
+    validar o EAD
+    (por: Regys Silveira)
+
+23/05/2012
+-- ACBrAAC --
+[+] Adicionado a propriedade virtual "ArquivoInvalido". Após executar um comando
+    e o mesmo detectar que o arquivo é inválido, podemos antes de disparar os demais 
+    comandos, checar se o arquivo já foi inválidado, evitando assim achecagem 
+    desnecessária por cada comando disparado. (por: Isaque Pinheiro)
+[+] Implementado recurso para identificar se o arquivo auxiliar foi modificado
+    ou editado por programas de terceiros, disparando mensagem de arquivo 
+    inválido (por: Isaque Pinheiro e DSA)
+
+08/05/2012
+-- ACBrBase --
+[+] Remoção de warning do ACBrBase para métodos deprecated.
+    (por: Regys Silveira)
+
+06/05/2012
+-- ACBrEAD --
+[+] Adicionado método: Function RemoveEAD( MS : TMemoryStream ) : AnsiString;
+    (por: DSA)
+[*] Método: AssinarArquivoComEAD modificado para ser compatível com arquivos que
+    não usam a mesma quebra de Linha do Sistema Operacional.
+    - Adicionada detecção da presença de quebra de linha no final do arquivo
+      antes de adicionar a linha do EAD         (por: DSA)
+[*] Método: RemoveEADArquivo modificado para ser compatível com arquivos que
+    não usam a mesma quebra de Linha do Sistema Operacional.    (por: DSA)
+
+01/05/2012
+-- ACBrEAD --
+[+] Adicionada Function CalcularChavePublica_eECFc( ArquivoXML: String) : AnsiString;
+    que permite converter um arquivo no formado XML do padrão eECFc para uma
+    chave Pública no formado OpenSSL  (por: DSA)
+[*] Evento OnGetChavePublica modificado para aceitar Chaves no formato do
+    arquivo XML usado pelo programa eECFc. Basta ler o Conteudo deste arquivo
+    e informar o mesmo para a variável "Chave" passada por referência no evento.
+    O ACBrEAD usará as Tags <modulo> e <expoente_publico> para computar a chave
+    Publica e proceder com a verificação das assinaturas EAD  (por: DSA)
+
+02/02/2012
+-- ACBrEAD --
+[*] Remoção das warnings por conversão de string.
+    (Régys Silveira)
+
+30/04/2012
+-- ACBrEAD, ACBrUtil --
+[*] Remoção das warnings por conversão de string.
+    (Régys Silveira)
+
+04/04/2012
+-- ACBrUtil --
+[*] Otimização na função AjustaLinhas  (DSA)
+
+22/03/2012
+-- ACBrAAC --
+[-] Ocorria erro quando o arquivo era criado em branco e quando não se 
+    habilitava a gravação de algumas sessões
+    (por: Regys Silveira)
+
+15/03/2012
+-- ACBrAAC --
+[+] Criado novo evento: OnVerificarRecomporNumSerie
+    procedure( const NumSerie: String; const ValorGT : Double; var CRO: Integer;
+               var CNI: Integer)
+    Será disparado quando o ACBrAAC não encontrar o Numero de Série do ECF na
+    lista de ECFs liberados, o que pode ocorrer quando o arquivo estiver
+    corrimpido    (Por: DSA)
+
+[+] Criada nova propriedade: IdentPAF.Paf.RecompoeNumSerie : Boolean
+    Se for True, e não encontar o Num.Serie, tenta executar o evento
+    OnVerificarRecomporNumSerie   (por: DSA)
+
+[*] Evento OnVerificarRecomporValorGT somente será disparado quando:
+    sIdentPAF.Paf.RecompoeGT = True    (por: DSA)
+
+-- TACBrTXTClass --
+[*]  Método TACBrTXTClass.WriteBuffer modificado para nao criar arquivos
+     como UTF8, o que pode causar problemas nos programas de validação.
+     Problema ocorria WinXP, em Sistemas compilados com IDE com suporte a
+     Unicode     (por: DSA)
+
+-- ACBrUtil --
+[*]  Pequena otimização na function: WriteToTXT   (por: DSA)
+
+Data: 01/03/2012
+-- ACBrPAF --
+[-] Tentativa de correção da Ordanação da Lista DAVs Emitidos (DSA)
+
 06/02/2012
 -- ACBrAAC --
 [+] Adicionada verificação de CRC na Gravacao/Abertura do arquivo AAC. Para

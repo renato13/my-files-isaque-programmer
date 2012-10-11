@@ -31,34 +31,6 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
-|* Historico
-|*
-|* 26/06/2006: Daniel Simões de Almeida
-|* - Primeira Versao: Criaçao e Distribuiçao da Primeira Versao
-|* 28/11/2006: Daniel Simões de Almeida
-|* - Corrigo bug em SubTotalizaCupom
-|* 09/01/2007: Daniel Simões de Almeida
-|* - Corrigido espacejamento de PulaLinhas ( considerando 1 linha = 30 dots )
-|* - Corrigido BUG em Método CorrigeEstadoErro, que sempre causava o Reinicio
-|*   do ECF
-|* - Método AbreRelatorioGerencial modificado para cadastrar  Relatorio
-|*   Gerencial ( 0 ) caso ele ainda não exista
-|* 10/01/2007: Daniel Simões de Almeida
-|* - Método VendeItem gerava exceção quando Desconto era informado
-|* - Método "LinhaRelatorioGerencial" nao imprimir linhas vazias e em textos
-|*   maiores que 492 caracteres poderia haver quebra do lay-out de impressao
-|* 01/04/2007:  Daniel Simoes de Almeida
-|*  - Implementados métodos de Cupom Não Fiscal
-|* 24/02/2008:  Fabio Farias
-|*  - Compatibilizada com a TermoPrinter
-|* 05/02/2009:  Daniel Simões de Almeida
-|*  - Corrigido método NaoFiscalCompleto, que era cancelado quando Registrador
-|*    NaoFiscal era de Saidas (-) ou continha Obs no rodapé
-|* 13/09/2010:  Emerson da Silva Crema
-|*  - Implementado Metodo GetDadosUltimaReducaoZ.
-******************************************************************************}
-
 {$I ACBr.inc}
 
 unit ACBrECFFiscNET ;
@@ -196,8 +168,6 @@ TACBrECFFiscNET = class( TACBrECFClass )
     function GetErroAtoCotepe1704(pRet: Integer): string;
 
  protected
-    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
-
     function GetDataHora: TDateTime; override ;
     function GetNumCupom: String; override ;
     function GetNumCCF: String; override ;
@@ -216,6 +186,8 @@ TACBrECFFiscNET = class( TACBrECFClass )
     function GetParamDescontoISSQN: Boolean; override ;
     function GetChequePronto: Boolean; override ;
     function GetArredonda: Boolean; override ;
+
+    function GetTipoUltimoDocumento : TACBrECFTipoDocumento ; override ;
 
     function GetCNPJ: String; override ;
     function GetIE: String; override ;
@@ -260,6 +232,7 @@ TACBrECFFiscNET = class( TACBrECFClass )
 
     Function VerificaFimLeitura(var Retorno: AnsiString;
        var TempoLimite: TDateTime) : Boolean ; override ;
+    function GetNumReducoesZRestantes: String; override;
 
  public
     Constructor create( AOwner : TComponent  )  ;
@@ -276,7 +249,7 @@ TACBrECFFiscNET = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo : Double = 0;
        DescontoAcrescimo : String = 'D'; TipoDescontoAcrescimo : String = '%';
        NumItem : Integer = 0 ) ;  override ;
@@ -296,6 +269,8 @@ TACBrECFFiscNET = class( TACBrECFClass )
        Obs : AnsiString = '') ; override ;
     procedure NaoFiscalCompleto(CodCNF: String; Valor: Double;
       CodFormaPagto: String; Obs: AnsiString; IndiceBMP : Integer = 0); override ;
+
+    Function EstornaCCD( const Todos: Boolean = True) : Integer; override ;
 
     Procedure LeituraX ; override ;
     Procedure LeituraXSerial( Linhas : TStringList) ; override ;
@@ -370,12 +345,12 @@ TACBrECFFiscNET = class( TACBrECFClass )
        Tipo : String = ''; Posicao : String = '') ; override ;
 
     procedure IdentificaPAF( NomeVersao, MD5 : String) ; override ;
-
+    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
  end ;
 
 implementation
 Uses ACBrECF, ACBrConsts,
-     {$IFDEF COMPILER6_UP} DateUtils, StrUtils{$ELSE} ACBrD5, SysUtils, Windows{$ENDIF},
+     {$IFDEF COMPILER6_UP} DateUtils, StrUtils{$ELSE} ACBrD5, Windows{$ENDIF},
      SysUtils, Math, IniFiles ;
 
 { -------------------------  TACBrECFFiscNETComando -------------------------- }
@@ -525,7 +500,7 @@ begin
   try
      fsCont := StrToInt( copy(Buf,1,(P-1)) ) ;
   except
-     raise Exception.Create(ACBrStr('Num.Identificação inválido')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Num.Identificação inválido')) ;
   end ;
   Buf := copy(Buf,P+1,Length(Buf)) ;  // Remove a Ident.
 
@@ -533,7 +508,7 @@ begin
   try
      fsCodRetorno := StrToInt( copy(Buf,1,(P-1)) ) ;
   except
-     raise Exception.Create(ACBrStr('Cod.Retorno inválido')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Cod.Retorno inválido')) ;
   end ;
   Buf := Trim(copy(Buf,P+1,Length(Buf))) ;  // Remove Retorno
 
@@ -651,7 +626,7 @@ end;
 procedure TACBrECFFiscNET.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   inherited Ativar ; { Abre porta serial }
@@ -694,7 +669,7 @@ begin
      // Ajuste de Colunas para modelos Específicos //
      if (fsModeloECF = 'TPF2001') then
         fpColunas := 40
-     else if (pos(fsModeloECF, 'X5|3202DT') > 0) then
+     else if (pos(fsModeloECF, 'X5|3202DT|ELGIN FIT|ELGIN K') > 0) then
         fpColunas := 48;
 
   except
@@ -757,7 +732,13 @@ begin
       begin
         ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+#10+#10+
                    ErroMsg ) ;
-        raise EACBrECFSemResposta.create(ErroMsg) ;
+
+        if (FiscNETResposta.CodRetorno = 7003) or
+           (FiscNETResposta.CodRetorno = 7004) or
+           (FiscNETResposta.CodRetorno = 15011) then
+           DoOnErrorSemPapel
+        else
+           raise EACBrECFSemResposta.create(ErroMsg) ;
       end
      else
         Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -839,6 +820,17 @@ begin
                   FiscNETResposta.Params.Values['ValorInteiro'],0 ), 6) ;
 end;
 
+function TACBrECFFiscNET.GetNumReducoesZRestantes: String;
+begin
+  FiscNETComando.NomeComando := 'LeInteiro' ;
+  FiscNETComando.AddParamString('NomeInteiro','CRZRestantes') ;
+  EnviaComando ;
+
+  Result := IntToStrZero(  StrToIntDef(
+                  FiscNETResposta.Params.Values['ValorInteiro'],0 ), 6) ;
+
+end;
+
 function TACBrECFFiscNET.GetNumCRO: String;
 begin
   FiscNETComando.NomeComando := 'LeInteiro' ;
@@ -913,7 +905,7 @@ begin
      EnviaComando ;
 
      fsNumECF := IntToStrZero(  StrToIntDef(
-                     FiscNETResposta.Params.Values['ValorInteiro'],0 ), 4) ;
+                     FiscNETResposta.Params.Values['ValorInteiro'],0 ), 5) ;
   end ;
 
   Result := fsNumECF ;
@@ -1210,7 +1202,7 @@ begin
   end ;
 
   if Erro <> '' then
-     raise Exception.create(Erro);
+     raise EACBrECFERRO.create(Erro);
 
   fsEmPagamento := false ;
     
@@ -1325,7 +1317,8 @@ end;
 Procedure TACBrECFFiscNET.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 var
   CodAliq: Integer;
 begin
@@ -1338,6 +1331,9 @@ begin
   end ;
 
   try
+    if (CodDepartamento = -1) and fpArredondaItemMFD and (not Arredonda) then
+       CodDepartamento := 1;  // Arredondamento por CodDepartamento
+
     with FiscNETComando do
     begin
        if fsComandoVendeItem = '' then
@@ -1345,6 +1341,9 @@ begin
        else
           NomeComando := fsComandoVendeItem ;
           
+       if CodDepartamento <> -1 then
+         AddParamInteger('CodDepartamento', CodDepartamento);
+         
        AddParamInteger('CodAliquota',CodAliq) ;
        AddParamString('CodProduto',LeftStr(Codigo,48));
        AddParamString('NomeProduto',LeftStr(Descricao,200));
@@ -1844,7 +1843,7 @@ begin
   FPG := AchaFPGIndice( CodFormaPagto ) ;
 
   if FPG = nil then
-     raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+     raise EACBrECFERRO.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                              ' não foi cadastrada.') ) ;
 
   FiscNETComando.NomeComando := 'AbreCreditoDebito' ;
@@ -2212,54 +2211,67 @@ begin
 end;
 
 function TACBrECFFiscNET.GetDataHoraSB: TDateTime;
-Var RetCmd : AnsiString ;
+Var Linha, LinhaVer : AnsiString ;
     OldShortDateFormat : String ;
     Linhas : TStringList;
-    i,x,nLinha, CRZ :Integer;
+    I, CRZ :Integer;
+    AchouBlocoSB : Boolean ;
 begin
   Result := 0.0;
 
+  // verificar se a redução Z está pendente e não fazer se estiver
+  // porque acontecerá erro, conforme consulta ao atendimento da bematech
   if Estado in [estLivre] then
   begin
-    nLinha := -1;
     Linhas := TStringList.Create;
 
     try
-      CRZ := StrToIntDef(NumCRZ, 0) ;
+      CRZ := StrToIntDef(NumCRZ, 1) ;
       LeituraMemoriaFiscalSerial(CRZ, CRZ, Linhas);
 
-      for i := 0 to Linhas.Count-1 do
+      I := 0 ;
+      AchouBlocoSB := False;
+      while (not AchouBlocoSB) and (I < Linhas.Count) do
       begin
-        if pos('SOFTWARE B', Linhas[i]) > 0 then
-        begin
-          for x := i+1 to Linhas.Count-1 do
-          begin
-            if StrToIntDef(StringReplace(Copy(Linhas[x], 1, 8), '.', '', [rfReplaceAll]), 0) = 0 then
-            begin
-               nLinha := x-1;
-               break;
-            end;
-          end;
-          Break;
-        end;
-      end;
+         Linha := Linhas[I] ;
+         AchouBlocoSB := (pos('SOFTWARE B', Linha ) > 0) ;
+         Inc( I ) ;
+      end ;
 
-      if nLinha >= 0 then
+      Linha    := '';
+      LinhaVer := '';
+      while AchouBlocoSB and (I < Linhas.Count) and (Linha = LinhaVer) do
       begin
-        // 01.00.01                    25/06/2009 21:07:40
-        RetCmd := Linhas[nLinha] ;
-        x := pos('/', RetCmd ) ;
+         Linha := Trim(Linhas[I]) ;
+         if (Linha <> '') then
+         begin
+            if ( StrIsNumber( copy(Linha,1,2) ) and ( copy(Linha,3,1) = '.' ) and
+                 StrIsNumber( copy(Linha,4,2) ) and ( copy(Linha,6,1) = '.' ) and
+                 StrIsNumber( copy(Linha,7,2) ) ) then
+               LinhaVer := Linha;
+         end ;
+
+         Inc( I ) ;
+      end ;
+
+      if LinhaVer <> '' then
+      begin
+        // SOFTWARE BµSICO:
+        //03.00.00 09/10/2002   12:18:47
+        //03.03.00 06/03/2006   10:57:23
+
+        I := pos('/', LinhaVer ) ;
 
         OldShortDateFormat := ShortDateFormat ;
         try
           ShortDateFormat := 'dd/mm/yyyy' ;
-          Result := StrToDate( StringReplace( copy(RetCmd, x-2, 10 ),
+          Result := StrToDate( StringReplace( copy(LinhaVer, I-2, 10 ),
                                            '/', DateSeparator, [rfReplaceAll] ) ) ;
 
-          x := pos(':', RetCmd ) ;
-          Result := RecodeHour(  result,StrToInt(copy(RetCmd, x-2,2))) ;
-          Result := RecodeMinute(result,StrToInt(copy(RetCmd, x+1,2))) ;
-          Result := RecodeSecond(result,StrToInt(copy(RetCmd, x+4,2))) ;
+          I := pos(':', LinhaVer ) ;
+          Result := RecodeHour(  result,StrToInt(copy(LinhaVer, I-2,2))) ;
+          Result := RecodeMinute(result,StrToInt(copy(LinhaVer, I+1,2))) ;
+          Result := RecodeSecond(result,StrToInt(copy(LinhaVer, I+4,2))) ;
         finally
           ShortDateFormat := OldShortDateFormat ;
         end ;
@@ -2547,6 +2559,34 @@ begin
   Result := (fsArredonda = 0) or (fsArredonda = 2) ;
 end;
 
+function TACBrECFFiscNET.GetTipoUltimoDocumento : TACBrECFTipoDocumento ;
+var
+   Tipo : Integer ;
+begin
+  FiscNETComando.NomeComando := 'LeInteiro' ;
+  FiscNETComando.AddParamString('NomeInteiro','TipoUltimoDocEmitido') ;
+  EnviaComando ;
+
+  Tipo := StrToIntDef( FiscNETResposta.Params.Values['ValorInteiro'] ,0) ;
+
+  case Tipo of
+    1        : Result := docLX;
+    2        : Result := docRZ;
+    3        : Result := docCF;
+    4,5,6    : Result := docCNF;
+    7,8      : Result := docCFCancelamento;
+    9        : Result := docCNFCancelamento;
+    10       : Result := docCupomAdicional;
+    11       : Result := docLMF;
+    12,13,14 : Result := docCCD;
+    15       : Result := docRG;
+    16       : Result := docEstornoPagto;
+    17       : Result := docEstornoCCD;
+  else
+    Result := docNenhum;
+  end ;
+end ;
+
 procedure TACBrECFFiscNET.NaoFiscalCompleto(CodCNF: String; Valor: Double;
   CodFormaPagto: String; Obs: AnsiString; IndiceBMP : Integer);
 begin
@@ -2577,6 +2617,48 @@ begin
      end ;
   end ;
 end;
+
+function TACBrECFFiscNET.EstornaCCD(const Todos : Boolean) : Integer ;
+var
+   CCD : Integer ;
+   Fim : Boolean ;
+   Erro : String ;
+begin
+  Result := 0;
+
+  if TipoUltimoDocumento <> docCCD then
+     exit ;
+
+  CCD := StrToIntDef(NumCupom,0) ;
+  Fim := not Todos;
+
+  repeat
+     try
+        FiscNETComando.NomeComando := 'EstornaCreditoDebito' ;
+        FiscNETComando.AddParamInteger('COO',CCD) ;
+        EnviaComando ;
+
+
+        FiscNETComando.NomeComando := 'EncerraDocumento' ;
+        FiscNETComando.AddParamString('Operador',Operador) ;
+        EnviaComando ;
+
+        Dec(CCD);
+        Inc( Result );
+     except
+        On E : Exception do
+        begin
+           Erro := E.Message;
+
+           if pos('ErroCMDCOOInvalido', Erro) > 0 then
+              Fim := True
+           else
+              raise ;
+        end ;
+     end ;
+  until Fim;
+
+end ;
 
 procedure TACBrECFFiscNET.CarregaRelatoriosGerenciais;
   Function SubCarregaGerenciais(Indice : Integer) : Boolean ;
@@ -2671,7 +2753,7 @@ end;
 
 procedure TACBrECFFiscNET.IdentificaPAF(NomeVersao, MD5 : String);
 begin
-   fsPAF := Trim( NomeVersao + #10 + MD5 ) ;
+   fsPAF := Trim( MD5 + #10 + NomeVersao ) ;
    FiscNETComando.NomeComando := 'EscreveTexto' ;
    FiscNETComando.AddParamString('NomeTexto' ,'TextoLivre') ;
    FiscNETComando.AddParamString('ValorTexto', fsPAF ) ;
@@ -2725,7 +2807,7 @@ Var
      if not FunctionDetect( sLibName, FuncName, LibPointer) then
      begin
         LibPointer := NIL ;
-        raise Exception.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+LibName ) ) ;
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+LibName ) ) ;
      end ;
    end ;
  end ;
@@ -2790,7 +2872,7 @@ begin
      end ;
 
      if Resp <> 1 then
-        raise Exception.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
         'Elgin_AbrePortaSerial()'));
   end ;
 end;
@@ -2826,18 +2908,18 @@ begin
 
      iRet := xElgin_DownloadMFD(ArqTmp + '.mfd', '1', DiaIni, DiaFim, '');
      if (iRet <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Elgin_DownloadMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Elgin_DownloadMFD.'+sLineBreak+
                                          'Cod.: ' + IntToStr(iRet) )) ;
      if not FileExists( ArqTmp + '.mfd' ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Elgin_DownloadMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Elgin_DownloadMFD.'+sLineBreak+
                                          'Arquivo: "' + ArqTmp + '.mfd" não gerado' )) ;
 
      iRet := xElgin_FormatoDadosMFD(ArqTmp + '.mfd', nomeArquivo, '0', '1', DiaIni, DiaFim, '');
      if (iRet <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Elgin_FormatoDadosMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Elgin_FormatoDadosMFD.'+sLineBreak+
                                          'Cod.: ' + IntToStr(iRet) )) ;
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Elgin_FormatoDadosMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Elgin_FormatoDadosMFD.'+sLineBreak+
                                          'Arquivo: "' + NomeArquivo + '" não gerado' )) ;
      xElgin_FechaPortaSerial();
      DeleteFile( ArqTmp + '.mfd' ) ;
@@ -2879,18 +2961,18 @@ begin
 
      iRet := xElgin_DownloadMFD(ArqTmp + '.mfd', '2', CooIni, CooFim, Prop);
      if (iRet <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Elgin_DownloadMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Elgin_DownloadMFD.'+sLineBreak+
                                          'Cod.: ' + IntToStr(iRet) )) ;
      if not FileExists( ArqTmp + '.mfd' ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Elgin_DownloadMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Elgin_DownloadMFD.'+sLineBreak+
                                          'Arquivo: "' + ArqTmp + '.mfd" não gerado' )) ;
 
      iRet := xElgin_FormatoDadosMFD(ArqTmp + '.mfd', nomeArquivo, '0', '2', CooIni, CooFim, Prop);
      if (iRet <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Elgin_FormatoDadosMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Elgin_FormatoDadosMFD.'+sLineBreak+
                                          'Cod.: ' + IntToStr(iRet) )) ;
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Elgin_FormatoDadosMFD.'+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Elgin_FormatoDadosMFD.'+sLineBreak+
                                          'Arquivo: "' + NomeArquivo + '" não gerado' )) ;
      xElgin_FechaPortaSerial();
      DeleteFile( ArqTmp + '.mfd' ) ;
@@ -2939,12 +3021,12 @@ begin
                                                  NomeArquivo, DiaIni, DiaFim );
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar Gera_AtoCotepe1704_Periodo_MFD.'+sLineBreak+
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Gera_AtoCotepe1704_Periodo_MFD.'+sLineBreak+
                                             'Cod.: '+IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
 
         if not FileExists( NomeArquivo ) then
-           raise Exception.Create( ACBrStr( 'Erro na execução de Gera_AtoCotepe1704_Periodo_MFD.'+sLineBreak+
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Gera_AtoCotepe1704_Periodo_MFD.'+sLineBreak+
                                             'Arquivo: "'+NomeArquivo + '" não gerado' ))
       end
      else if (fsMarcaECF = 'elgin') then
@@ -2959,18 +3041,18 @@ begin
         iRet := xElgin_LeMemoriasBinario( ArqTmp, NumFab, true );
 
         if (iRet <> 1) then
-           raise Exception.Create(ACBrStr('Erro ao executar Elgin_LeMemoriasBinario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro ao executar Elgin_LeMemoriasBinario.'+sLineBreak+
                                           'Cod.: ' + IntToStr(iRet))) ;
 
         if not FilesExists( ArqTmp ) then
-           raise Exception.Create(ACBrStr('Erro na execução de Elgin_LeMemoriasBinario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro na execução de Elgin_LeMemoriasBinario.'+sLineBreak+
                                           'Arquivo binário não gerado!'));
 
         iRet := xElgin_GeraArquivoATO17Binario( ArqTmp, NomeArquivo, DiaIni,
                                                 DiaFim, 'D', Prop, cFinalidade);
 
         if (iRet <> 1) then
-           raise Exception.Create(ACBrStr('Erro ao executar Elgin_GeraArquivoATO17Binario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro ao executar Elgin_GeraArquivoATO17Binario.'+sLineBreak+
                                           'Cod.: ' + IntToStr(iRet))) ;
 
         xElgin_FechaPortaSerial();
@@ -2984,10 +3066,10 @@ begin
         DiaIni := FormatDateTime('yyyymmdd', DataInicial);
         DiaFim := FormatDateTime('yyyymmdd', DataFinal);
 
-        iRet := xDLLReadLeMemorias( PortaSerial, ArqTmp, NumFab, '1');
+        iRet := xDLLReadLeMemorias( PortaSerial, ArqTmp, NumFab, #1);
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar DLLReadLeMemorias.' + sLineBreak +
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar DLLReadLeMemorias.' + sLineBreak +
                                             'Cod.: '+ IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
 
@@ -2995,7 +3077,7 @@ begin
                                       'M', '1', cFinalidade );
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar DLLATO17GeraArquivo.' + sLineBreak +
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar DLLATO17GeraArquivo.' + sLineBreak +
                                             'Cod.: '+ IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
       end ;
@@ -3038,12 +3120,12 @@ begin
         iRet := xGera_PAF( PortaSerial, ModeloECF, NomeArquivo, CooIni, CooFim );
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar Gera_PAF.'+sLineBreak+
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar Gera_PAF.'+sLineBreak+
                                             'Cod.: '+IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
 
         if not FileExists( NomeArquivo ) then
-           raise Exception.Create( ACBrStr( 'Erro na execução de Gera_PAF.'+sLineBreak+
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de Gera_PAF.'+sLineBreak+
                                             ': "'+NomeArquivo + '" não gerado' ))
       end
 
@@ -3056,18 +3138,18 @@ begin
         iRet := xElgin_LeMemoriasBinario( ArqTmp, NumFab, true );
 
         if (iRet <> 1) then
-           raise Exception.Create(ACBrStr('Erro ao executar Elgin_LeMemoriasBinario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro ao executar Elgin_LeMemoriasBinario.'+sLineBreak+
                                                    'Cod.: ' + IntToStr(iRet))) ;
 
         if not FilesExists( ArqTmp ) then
-           raise Exception.Create(ACBrStr('Erro na execução de Elgin_LeMemoriasBinario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro na execução de Elgin_LeMemoriasBinario.'+sLineBreak+
                                           'Arquivo binário não gerado!'));
 
         iRet := xElgin_GeraArquivoATO17Binario( ArqTmp, NomeArquivo, CooIni,
                                                 CooFim, 'C', Prop, cFinalidade);
 
         if (iRet <> 1) then
-           raise Exception.Create(ACBrStr('Erro ao executar Elgin_GeraArquivoATO17Binario.'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('Erro ao executar Elgin_GeraArquivoATO17Binario.'+sLineBreak+
                                           'Cod.: ' + IntToStr(iRet))) ;
 
         xElgin_FechaPortaSerial();
@@ -3081,7 +3163,7 @@ begin
         iRet := xDLLReadLeMemorias( PortaSerial, ArqTmp, NumFab, '1');
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar DLLReadLeMemorias.' + sLineBreak +
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar DLLReadLeMemorias.' + sLineBreak +
                                             'Cod.: '+ IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
 
@@ -3089,7 +3171,7 @@ begin
                                       'C', '1', cFinalidade );
 
         if iRet <> 0 then
-           raise Exception.Create( ACBrStr( 'Erro ao executar DLLATO17GeraArquivo.' + sLineBreak +
+           raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar DLLATO17GeraArquivo.' + sLineBreak +
                                             'Cod.: '+ IntToStr(iRet) + ' - ' +
                                             GetErroAtoCotepe1704(iRet) )) ;
       end ;
@@ -3140,13 +3222,10 @@ begin
 
 
    Result := '[ECF]'+sLineBreak ;
-   try
-      Result := Result + 'DataMovimento = ' +
-                copy( RetCmd, 583, 2 ) + DateSeparator +
-                copy( RetCmd, 585, 2 ) + DateSeparator +
-                copy( RetCmd, 587, 2 ) + sLineBreak ;
-   except
-   end ;
+   if Length(RetCmd) > 587 then
+      Result := Result + 'DataMovimento = ' + copy( RetCmd, 583, 2 ) + DateSeparator +
+                                              copy( RetCmd, 585, 2 ) + DateSeparator +
+                                              copy( RetCmd, 587, 2 ) + sLineBreak;
 
    try
       Result := Result + 'NumSerie = ' + NumSerie + sLineBreak ;
@@ -3159,10 +3238,8 @@ begin
    except
    end ;
 
-   try
+   if Length(RetCmd) > 569 then
       Result := Result + 'NumCOO = ' + copy( RetCmd, 569, 6 ) + sLineBreak ;
-   except
-   end ;
 
    try
       Result := Result + 'NumCRZ = ' + NumCRZ + sLineBreak ;
@@ -3186,7 +3263,7 @@ begin
       sIcms := copy( RetCmd,  49,  64 ) ;
       sAux  := copy( RetCmd, 113, 224 ) ;
 
-      for nAux := 0 to 7 do
+      for nAux := 0 to 15 do
       begin
          nIcms := RoundTo( StrToFloatDef( Copy( sIcms, ( nAux *  4 ) + 1,  4 ), 0 ) / 100, -2 ) ;
          nVal  := RoundTo( StrToFloatDef( Copy( sAux , ( nAux * 14 ) + 1, 14 ), 0 ) / 100, -2 ) ;
@@ -3196,7 +3273,8 @@ begin
          begin
             if ( Aliquotas[ nAux2 ].Aliquota = nIcms ) then
             begin
-               Result := Result + padL( Aliquotas[ nAux2 ].Indice, 2 ) +
+               Result := Result +
+                                  FormatFloat('00', nAux+1 ) +
                                   Aliquotas[ nAux2 ].Tipo +
                                   IntToStrZero( Trunc( Aliquotas[ nAux2 ].Aliquota * 100 ), 4 ) + ' = '+
                                   FloatToStr( nVal ) + sLineBreak ;
@@ -3211,7 +3289,7 @@ begin
    try
       Result := Result + sLineBreak + '[OutrasICMS]' + sLineBreak ;
 
-      nVal := RoundTo( StrToFloatDef( copy( RetCmd, 365, 14 ),0 ) / 100, -2 ) ;
+      nVal := RoundTo( StrToFloatDef( copy( RetCmd, 337, 14 ),0 ) / 100, -2 ) ;
       Result := Result + 'TotalSubstituicaoTributaria = ' + FloatToStr( nVal ) + sLineBreak ;
       VBruta := VBruta + nVal ;
 
@@ -3219,7 +3297,7 @@ begin
       Result := Result + 'TotalNaoTributado = ' + FloatToStr( nVal ) + sLineBreak ;
       VBruta := VBruta + nVal ;
 
-      nVal := RoundTo( StrToFloatDef( copy( RetCmd, 337, 14 ), 0 ) / 100, -2 ) ;
+      nVal := RoundTo( StrToFloatDef( copy( RetCmd, 365, 14 ), 0 ) / 100, -2 ) ;
       Result := Result + 'TotalIsencao = ' + FloatToStr( nVal ) + sLineBreak ;
       VBruta := VBruta + nVal ;
    except
@@ -3261,8 +3339,9 @@ begin
    end ;
 
    try
-      Result := Result + 'TotalAcrescimos = ' + FloatToStr(
-          RoundTo( StrToFloatDef( copy( RetCmd, 589, 14 ), 0 ) / 100, -2 ) )  + sLineBreak ;
+      if Length(RetCmd) > 589 then
+         Result := Result + 'TotalAcrescimos = ' + FloatToStr(
+             RoundTo( StrToFloatDef( copy( RetCmd, 589, 14 ), 0 ) / 100, -2 ) )  + sLineBreak ;
    except
    end ;
 
@@ -3334,12 +3413,12 @@ const
   // <n></n>
   cNegritoON     = ESC + 'E' ;
   cNegritoOFF    = ESC + 'F' ;
-  cNegritoON_B   = ESC + 'E' + #1 ;
-  cNegritoOFF_B  = ESC + 'E' + #0 ;
+  cNegritoON_B   = ESC + '!' + #8 ;
+  cNegritoOFF_B  = ESC + '!' + #0 ;
 
-  cBarras   = #29 ;
-  cBarrasAltura = cBarras + 'h' ;
-  cBarrasLargura= cBarras + 'w' ;
+  cBarras           = #29 ;
+  cBarrasAltura     = cBarras + 'h' ;
+  cBarrasLargura    = cBarras + 'w' ;
   cBarrasMostrarOFF = cBarras + 'H' + #0 ;
   cBarrasMostrarON  = cBarras + 'H' + #2 ; // HRI na Base
   cBarrasFonte      = cBarras + 'f' + #0 ; // Fonte A
@@ -3385,7 +3464,7 @@ var
 begin
 
   // Modelos mais antigos usam comandos "B" //
-  CodB := (pos(fsModeloECF,'3202DT') > 0) ;
+  CodB := (pos(fsModeloECF,'3202DT|X5|ELGIN FIT|ELGIN K') > 0 );
 
   case AnsiIndexText( ATag, ARRAY_TAGS) of
      -1: Result := ATag;

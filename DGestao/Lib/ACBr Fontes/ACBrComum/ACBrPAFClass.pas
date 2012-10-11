@@ -146,6 +146,7 @@ type
 
   TACBrECFInfoPaf = class( TPersistent )
   private
+    FRecompoeNumSerie : Boolean ;
     fsVersao: String;
     fsPrincipalExe: TACBrECFArquivo;
     fsNome: String;
@@ -182,6 +183,7 @@ type
     fsBancoDados: String;
     fsSistemaOperacional: String;
     fsLinguagem: String;
+    FTrocoEmCartao: Boolean;
     procedure SetVersao(const AValue : String) ;
   public
     constructor Create;
@@ -232,9 +234,11 @@ type
     property TransfPreVenda: Boolean read FTransfPreVenda write FTransfPreVenda;
     property TransfDAV: Boolean read FTransfDAV write FTransfDAV;
     property RecompoeGT: Boolean read FRecompoeGT write FRecompoeGT;
+    property RecompoeNumSerie: Boolean read FRecompoeNumSerie write FRecompoeNumSerie;
     property EmitePED: Boolean read FEmitePED write FEmitePED;
     property CupomMania: Boolean read FCupomMania write FCupomMania;
     property MinasLegal: Boolean read FMinasLegal write FMinasLegal;
+    property TrocoEmCartao: Boolean read FTrocoEmCartao write FTrocoEmCartao;
   end;
 
   TACBrECFIdentificacaoPAF = class( TPersistent )
@@ -484,11 +488,18 @@ end;
 { TACBrECFDAV }
 
 function OrdenarDAVs(const ADav1, ADav2: Pointer): Integer;
+var
+  Str1, Str2 : String ;
 begin
-  if TACBrECFDAV(ADav1).DtEmissao < TACBrECFDAV(ADav2).DtEmissao then
+  with TACBrECFDAV(ADav1) do
+     Str1 := DtoS( DtEmissao ) + Trim(Numero) ;
+
+  with TACBrECFDAV(ADav2) do
+     Str2 := DtoS( DtEmissao ) + Trim(Numero) ;
+
+  if Str1 < Str2 then
     Result := -1
-  else
-  if TACBrECFDAV(ADav1).DtEmissao > TACBrECFDAV(ADav2).DtEmissao then
+  else if Str1 > Str2 then
     Result := 1
   else
     Result := 0;

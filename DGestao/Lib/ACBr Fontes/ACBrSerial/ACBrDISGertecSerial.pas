@@ -53,14 +53,15 @@ TACBrDISGertecSerial = class( TACBrDISClass )
     constructor Create(AOwner: TComponent);
 
     procedure LimparDisplay ; override ;
+
     procedure PosicionarCursor(Linha, Coluna: Integer ) ; override ;
     procedure Escrever( Texto : String ) ; override ;
 end ;
 
 implementation
-Uses ACBrDIS,
-     SysUtils,
-     {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5{$ENDIF} ;
+Uses
+  SysUtils,
+  {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5{$ENDIF} ;
 
 { TACBrDISGertecSerial }
 

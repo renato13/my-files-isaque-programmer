@@ -38,6 +38,8 @@
 |*  - Criação e distribuição da Primeira Versao
 |* 29/11/2010: Gutierres Santana da Costa
 |*  - Implementado Registro Tipo C "Controle de Abastecimento e Encerrante"
+|* 29/02/2012: Gutierres Santana da Costa
+|*  - Implementado property ID_ABASTECIMENTO e DATA_ABASTECIMENTO 
 *******************************************************************************}
 
 unit ACBrPAF_C;
@@ -58,10 +60,12 @@ type
   TRegistroC2 = class
   private
     fRegistroValido: boolean;
+    fID_ABASTECIMENTO: string;
     fTANQUE: string;
     fBOMBA: string;
     fBICO: string;
     fCOMBUSTIVEL: string;
+    fDATA_ABASTECIMENTO: TDateTime;
     fHORA_ABASTECIMENTO: TDateTime;
     fENCERRANTE_INICIAL: currency;
     fENCERRANTE_FINAL: currency;
@@ -76,10 +80,12 @@ type
     constructor Create; virtual; /// Create
 
     property RegistroValido: Boolean read fRegistroValido write fRegistroValido default True;
+    property ID_ABASTECIMENTO: string read fID_ABASTECIMENTO write fID_ABASTECIMENTO;
     property TANQUE: string read fTANQUE write fTANQUE;
     property BOMBA: string read fBOMBA write fBOMBA;
     property BICO: string read fBICO write fBICO;
     property COMBUSTIVEL: string read fCOMBUSTIVEL write fCOMBUSTIVEL;
+    property DATA_ABASTECIMENTO: TDateTime read fDATA_ABASTECIMENTO write fDATA_ABASTECIMENTO;
     property HORA_ABASTECIMENTO: TDateTime read fHORA_ABASTECIMENTO write fHORA_ABASTECIMENTO;
     property ENCERRANTE_INICIAL: currency read fENCERRANTE_INICIAL write fENCERRANTE_INICIAL;
     property ENCERRANTE_FINAL: currency read fENCERRANTE_FINAL write fENCERRANTE_FINAL;

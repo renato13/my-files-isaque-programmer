@@ -47,7 +47,7 @@
 |*    "FMargemSuperior", "FMargemInferior", "FMargemEsquerda", "FMargemDireita",
 |*    nas Class procedures "Imprimir" e "SavePDF"
 |*  - Habilitada a funcionalidade da procedure "SavePDF";
-|* 01/12/2012: Italo Jurisato Junior
+|* 15/02/2012: Italo Jurisato Junior
 ******************************************************************************}
 
 {$I ACBr.inc}
@@ -60,9 +60,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, QuickRpt, QRCtrls,
   {$IFDEF QReport_PDF}
-     QRPDFFilt,
-     // Incluido por Italo em 13/01/2011
-     QRPrntr,
+     QRPDFFilt, QRPrntr,
   {$ENDIF}
   ACBrCTeQRCodeBar, pcteCTe, ACBrCTe, ACBrCTeUtil, Printers, pcnConversao;
 
@@ -94,8 +92,8 @@ type
     FMargemInferior     : double;
     FMargemEsquerda     : double;
     FMargemDireita      : double;
-    FImpressora         : String;  // Incluido por Italo em 27/12/2010
-    FPosRecibo          : TPosRecibo;   // Incluido por Italo em 27/04/2011
+    FImpressora         : String;
+    FPosRecibo          : TPosRecibo;
 
     procedure qrlSemValorFiscalPrint(sender: TObject; var Value: string);
     procedure SetBarCodeImage(ACode: string; QRImage: TQRImage);
@@ -198,14 +196,18 @@ begin
 
         if APreview then
          begin
-           QRCTe.PrinterSettings.Copies := FNumCopias; // Incluido por Italo em 15/10/2010
+           QRCTe.PrinterSettings.Copies := FNumCopias;
 
-          // Incluido por Italo em 13/01/2011
          {$IFDEF QReport_PDF}
            QRCTe.PrevShowSearch      := False;
            QRCTe.PrevShowThumbs      := False;
            QRCTe.PreviewInitialState := wsMaximized;
            QRCTe.PrevInitialZoom     := qrZoomToWidth;
+
+           // Incluido por Italo em 14/02/2012
+           // QRCTe.PreviewDefaultSaveType := stPDF;
+           // Incluido por Italo em 16/02/2012
+           QRExportFilterLibrary.AddFilter(TQRPDFDocumentFilter);
          {$ENDIF}
 
            QRCTe.Prepare;
@@ -213,7 +215,7 @@ begin
          end else
          begin
            AfterPreview := True;
-           QRCTe.PrinterSettings.Copies := FNumCopias; // Incluido por Italo em 15/10/2010
+           QRCTe.PrinterSettings.Copies := FNumCopias;
            QRCTe.Prepare;
            QRCTe.Print;
          end;

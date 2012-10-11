@@ -71,7 +71,7 @@
 unit ACBrECFUrano ;
 
 interface
-uses ACBrECFClass, ACBrDevice, ACBrUtil,
+uses ACBrECFClass, ACBrDevice, ACBrUtil, ACBrConsts,
      Classes ;
 
 const R = 'XXXXX' ;
@@ -138,7 +138,7 @@ TACBrECFUrano = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -227,7 +227,7 @@ end;
 procedure TACBrECFUrano.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   fpDevice.HandShake := hsRTS_CTS ;
@@ -258,6 +258,7 @@ Var ErroMsg     : String ;
 begin
   result  := '' ;
   ErroMsg := '' ;
+  Erro    := 0 ;
   fpComandoEnviado   := '' ;
   fpRespostaComando  := '' ;
 
@@ -359,19 +360,17 @@ begin
         else
            ErroMsg := 'Erro retornado pelo ECF: '+IntToStrZero(Erro,2) ;
         end ;
-
-        if Erro = 87 then       { Verifica se possui erro "Pouco Papel" }
-        begin
-           DoOnMsgPoucoPapel ;
-           ErroMsg := '' ;   { Apaga Msg de Erro para nao gerar Exceção }
-        end ;
       end ;
 
      if ErroMsg <> '' then
       begin
         ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+#10+#10+
                    ErroMsg );
-        raise EACBrECFSemResposta.create(ErroMsg) ;
+
+        if Erro = 87 then
+           DoOnErrorSemPapel
+        else
+           raise EACBrECFSemResposta.create(ErroMsg) ;
       end
      else
         Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -546,13 +545,8 @@ begin
 end;
 
 procedure TACBrECFUrano.AbreCupom ;
-var
-  Razao, Linha1, Linha2: String;
 begin
   BytesResp := 0 ;
-  Razao := '';
-  Linha1 := '';
-  Linha2 := '';
 
   try
     EnviaComando('00' + R ) ;
@@ -653,7 +647,8 @@ end;
 Procedure TACBrECFUrano.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, DescontoStr : String ;
     Tipo : Char ;
 begin
@@ -899,7 +894,7 @@ begin
   FPG := AchaFPGIndice( CodFormaPagto ) ;
 
   if FPG = nil then
-     raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+     raise EACBrECFERRO.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                              ' não foi cadastrada.' )) ;
 
   EnviaComando( '44' + '000000' + '01' + R );
@@ -931,7 +926,7 @@ var
   Reducoes: String;
 begin
   // Urano não possui Leitura Simplificada
-  Datas := Padl(Datas,12);
+  Datas := Padl('',12);
   Reducoes := IntToStrZero(ReducaoInicial, 4) + IntToStrZero(ReducaoFinal, 4);
 
   EnviaComando('16' + '1' + Datas + Reducoes + R, 30 * (ReducaoFinal - ReducaoInicial + 1));
@@ -946,7 +941,7 @@ begin
   // Urano não possui Leitura Simplificada
   Datas := FormatDateTime('ddmmyy', DataInicial) +
     FormatDateTime('ddmmyy', DataFinal);
-  Reducoes := Padl(Reducoes,8);
+  Reducoes := Padl('',8);
 
   EnviaComando('16' + '0' + Datas + Reducoes + R, 30 * DaysBetween(DataFinal, DataInicial));
 end;

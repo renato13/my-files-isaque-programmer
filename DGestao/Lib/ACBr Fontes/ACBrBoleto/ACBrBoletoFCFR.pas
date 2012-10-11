@@ -1,13 +1,13 @@
 {******************************************************************************}
-{ Projeto: Componente ACBrNFe                                                  }
-{  Biblioteca multiplataforma de componentes Delphi para emissão de Nota Fiscal}
-{ eletrônica - NFe - http://www.nfe.fazenda.gov.br                          }
+{ Projeto: Componentes ACBr                                                 }
+{  Biblioteca multiplataforma de componentes Delphi para interação com equipa- }
+{ mentos de Automação Comercial utilizados no Brasil                           }
 {                                                                              }
-{ Direitos Autorais Reservados (c) 2008 Wemerson Souto                         }
-{                                       Daniel Simoes de Almeida               }
-{                                       André Ferreira de Moraes               }
+{ Direitos Autorais Reservados (c) 2009 http://acbr.sf.net                     }
+
+
 {                                                                              }
-{ Colaboradores nesse arquivo:                                                 }
+{ Colaboradores nesse arquivo:  Isaque Pinheiro                                               }
 {                                                                              }
 {  Você pode obter a última versão desse arquivo na pagina do Projeto ACBr     }
 { Componentes localizado em http://www.sourceforge.net/projects/acbr           }
@@ -174,15 +174,17 @@ begin
      FieldDefs.Add('OcorrenciaOriginal', ftInteger);
      FieldDefs.Add('Instrucao1', ftString, 300);
      FieldDefs.Add('Instrucao2', ftString, 300);
+     FieldDefs.Add('TextoLivre', ftMemo, 2000);
      // Sacado
      FieldDefs.Add('Sacado_NomeSacado', ftString, 100);
-     FieldDefs.Add('Sacado_CNPJCPF', ftString, 14);
+     FieldDefs.Add('Sacado_CNPJCPF', ftString, 18);
      FieldDefs.Add('Sacado_Logradouro', ftString, 100);
      FieldDefs.Add('Sacado_Numero', ftString, 10);
      FieldDefs.Add('Sacado_Bairro', ftString, 100);
      FieldDefs.Add('Sacado_Cidade', ftString, 100);
      FieldDefs.Add('Sacado_UF', ftString, 2);
      FieldDefs.Add('Sacado_CEP', ftString, 8);
+     FieldDefs.Add('Sacado_Avalista', ftString, 100);
      CreateDataSet;
    end;
 end;
@@ -345,6 +347,7 @@ begin
             FieldByName('OcorrenciaOriginal').AsInteger := Integer(ListadeBoletos[iFor].OcorrenciaOriginal);
             FieldByName('Instrucao1').AsString          := ListadeBoletos[iFor].Instrucao1;
             FieldByName('Instrucao2').AsString          := ListadeBoletos[iFor].Instrucao2;
+            FieldByName('TextoLivre').AsString          := ListadeBoletos[iFor].TextoLivre;
             // Sacado
             FieldByName('Sacado_NomeSacado').AsString   := ListadeBoletos[iFor].Sacado.NomeSacado;
             FieldByName('Sacado_CNPJCPF').AsString      := ListadeBoletos[iFor].Sacado.CNPJCPF;
@@ -354,6 +357,7 @@ begin
             FieldByName('Sacado_Cidade').AsString       := ListadeBoletos[iFor].Sacado.Cidade;
             FieldByName('Sacado_UF').AsString           := ListadeBoletos[iFor].Sacado.UF;
             FieldByName('Sacado_CEP').AsString          := ListadeBoletos[iFor].Sacado.CEP;
+            FieldByName('Sacado_Avalista').AsString     := ListadeBoletos[iFor].Sacado.Avalista;
             Post;
          end;
       end;

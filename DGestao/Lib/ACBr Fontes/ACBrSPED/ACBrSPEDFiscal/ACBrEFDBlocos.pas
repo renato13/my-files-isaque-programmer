@@ -103,7 +103,8 @@ type
                              vlVersao101,  // Código 002 - Versão 101 Ato COTEPE 01/01/2009
                              vlVersao102,  // Código 003 - Versão 102 Ato COTEPE 01/01/2010
                              vlVersao103,  // Código 004 - Versão 103 Ato COTEPE 01/01/2011
-                             vlVersao104   // Código 005 - Versão 104 Ato COTEPE 01/01/2012
+                             vlVersao104,  // Código 005 - Versão 104 Ato COTEPE 01/01/2012
+                             vlVersao105   // Código 006 - Versão 105 Ato COTEPE 01/07/2012
                              );
   /// Código da finalidade do arquivo - TRegistro0000
   TACBrCodFinalidade      = (raOriginal,     // 0 - Remessa do arquivo original
@@ -336,7 +337,8 @@ type
                         mbcOT              // OT = Outras Saídas do Imobilizado
                         );
   /// Código de grupo de tensão
-  TACBrGrupoTensao = (gtA1,          // 01 - A1 - Alta Tensão (230kV ou mais)
+  TACBrGrupoTensao = (gtNenhum,      // '' - Vazio. Para uso quando o documento for cancelado.
+                      gtA1,          // 01 - A1 - Alta Tensão (230kV ou mais)
                       gtA2,          // 02 - A2 - Alta Tensão (88 a 138kV)
                       gtA3,          // 03 - A3 - Alta Tensão (69kV)
                       gtA3a,         // 04 - A3a - Alta Tensão (30kV a 44kV)
@@ -362,7 +364,8 @@ type
                         ccServicoPublico     // 08 -Serviço Público
                         );
   /// Código de tipo de Ligação
-  TACBrTipoLigacao = (tlMonofasico,          // 1 - Monofásico
+  TACBrTipoLigacao = (tlNenhum,              // '' - Para uso quando o documento for cancelado
+                      tlMonofasico,          // 1 - Monofásico
                       tlBifasico,            // 2 - Bifásico
                       tlTrifasico            // 3 - Trifásico
                       );
@@ -382,8 +385,13 @@ type
                         assSemiPublico,            // 5 - Semi-Público
                         assOutros                  // 6 - Outros
                         );
-
-
+  /// Motivo do Inventário
+  TACBrMotivoInventario = (miFinalPeriodo,
+                           miMudancaTributacao,
+                           miBaixaCadastral,
+                           miRegimePagamento,
+                           miDeterminacaoFiscos
+                           );
 
   TOpenBlocos = class
   private

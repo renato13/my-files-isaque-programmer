@@ -49,7 +49,7 @@ uses
   lr_e_pdf, PrintersDlgs, Printers, strutils, LResources, PReport ;
 
 const
-  CACBrBoletoFCLazReport_Versao = '0.1.1a';
+  CACBrBoletoFCLazReport_Versao = '0.1.15a';
 
 type
 
@@ -119,7 +119,7 @@ end;
 procedure TACBrBoletoFCLazReport.Imprimir;
 var
   frACBrBoletoLazReport : TdmACbrBoletoFCLazReport;
-  RelBoleto : string;
+  RelBoleto, Dir : string;
   PageIni, PageFim, PInd : Integer;
   Res : TLResource ;
   MS  : TMemoryStream ;
@@ -131,27 +131,33 @@ begin
      with frACBrBoletoLazReport do
      begin
         case LayOut of
-           lCarne : RelBoleto := 'FCLazReport_Carne';
+           lCarne         : RelBoleto := 'FCLazReport_Carne';
+           lPadraoEntrega : RelBoleto := 'FCLazReport_CompEntrega';
         else
-           if ACBrBoleto.ComprovanteEntrega then
-              RelBoleto := 'FCLazReport_CompEntrega'
-           else
-              RelBoleto := 'FCLazReport_Padrao';
+           RelBoleto := 'FCLazReport_Padrao';
         end;
 
-        Res := LazarusResources.Find(RelBoleto,'LRF');  // Le de ACBrBoletoFCLazReport.lrs
-        if Res = nil then
-           raise Exception.Create('Resource: '+RelBoleto+' não encontrado');
+        // Verificando se o Relatório existe no disco //
+        Dir := ExtractFilePath(Application.ExeName) ;
+        if FileExists( Dir + RelBoleto + '.lrf' ) then
+           frReport1.LoadFromFile( Dir + RelBoleto + '.lrf' )
+        else
+         begin
+           // Lendo Relatório de Resource Interno //
+           Res := LazarusResources.Find(RelBoleto,'LRF');  // Le de ACBrBoletoFCLazReport.lrs
+           if Res = nil then
+              raise Exception.Create('Resource: '+RelBoleto+' não encontrado');
 
-        MS := TMemoryStream.Create ;
-        try
-           MS.Write(Pointer(Res.Value)^,Length(Res.Value)) ;
-           MS.Position := 0;
+           MS := TMemoryStream.Create ;
+           try
+              MS.Write(Pointer(Res.Value)^,Length(Res.Value)) ;
+              MS.Position := 0;
 
-           frReport1.LoadFromXMLStream( MS );
-        finally
-           MS.Free ;
-        end;
+              frReport1.LoadFromXMLStream( MS );
+           finally
+              MS.Free ;
+           end;
+         end ;
 
         PInd := Printer.PrinterIndex;
         frReport1.ChangePrinter( PInd, 0 );
@@ -299,6 +305,8 @@ begin
 
     else if ParName = 'Conta' then                              {Codigo Cedente}
        ParValue := CodCedente
+    else if ParName = 'OrientacoesBanco' then {Orientações do Banco}
+       ParValue:= Banco.OrientacoesBanco.Text
 
     else if ParName = 'DataDocto' then                       {Data do Documento}
        ParValue := FormatDateTime('dd/mm/yyyy', Titulo.DataDocumento)

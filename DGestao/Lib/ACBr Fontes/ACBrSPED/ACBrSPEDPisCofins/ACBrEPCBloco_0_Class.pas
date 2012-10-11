@@ -60,6 +60,7 @@ type
     FRegistro0110Count: Integer;
     FRegistro0111Count: Integer;
     FRegistro0140Count: Integer;
+    FRegistro0145Count: Integer;
     FRegistro0150Count: Integer;
     FRegistro0190Count: Integer;
     FRegistro0200Count: Integer;
@@ -75,6 +76,7 @@ type
     procedure WriteRegistro0110(Reg0001: TRegistro0001);
     procedure WriteRegistro0111(Reg0110: TRegistro0110);
     procedure WriteRegistro0140(Reg0001: TRegistro0001);
+    procedure WriteRegistro0145(Reg0140: TRegistro0140);
     procedure WriteRegistro0150(Reg0140: TRegistro0140);
     procedure WriteRegistro0190(Reg0140: TRegistro0140);
     procedure WriteRegistro0200(Reg0140: TRegistro0140);
@@ -99,6 +101,7 @@ type
     function Registro0110New: TRegistro0110;
     function Registro0111New: TRegistro0111;
     function Registro0140New: TRegistro0140;
+    function Registro0145New: TRegistro0145;
     function Registro0150New: TRegistro0150;
     function Registro0190New: TRegistro0190;
     function Registro0200New: TRegistro0200;
@@ -122,6 +125,7 @@ type
     property Registro0110Count: Integer read FRegistro0110Count write FRegistro0110Count;
     property Registro0111Count: Integer read FRegistro0111Count write FRegistro0111Count;
     property Registro0140Count: Integer read FRegistro0140Count write FRegistro0140Count;
+    property Registro0145Count: Integer read FRegistro0145Count write FRegistro0145Count;
     property Registro0150Count: Integer read FRegistro0150Count write FRegistro0150Count;
     property Registro0190Count: Integer read FRegistro0190Count write FRegistro0190Count;
     property Registro0200Count: Integer read FRegistro0200Count write FRegistro0200Count;
@@ -162,6 +166,7 @@ begin
   FRegistro0110Count := 0;
   FRegistro0111Count := 0;
   FRegistro0140Count := 0;
+  FRegistro0145Count := 0;
   FRegistro0150Count := 0;
   FRegistro0190Count := 0;
   FRegistro0200Count := 0;
@@ -310,6 +315,7 @@ strTIPO_ESCRIT: AnsiString;
 strIND_SIT_ESP: AnsiString;
 strIND_NAT_PJ: AnsiString;
 strIND_ATIV: AnsiString;
+strNUM_REC_ANTERIOR: AnsiString;
 begin
   if Assigned(Registro0000) then
   begin
@@ -318,6 +324,8 @@ begin
        case COD_VER of
          vlVersao100: strCOD_VER := '001'; // Código 001 - Versão 100 ADE Cofis nº 31/2010 de 01/01/2011
          vlVersao101: strCOD_VER := '002'; // Código 002 - Versão 101 ADE Cofis nº 34/2010 de 01/01/2011
+         vlVersao200: strCOD_VER := '002'; // Código 002 - Versão 200 ADE Cofis nº 20/2012
+         vlVersao201: strCOD_VER := '003'; // Código 003 - Versão 201 ADE Cofis nº 20/2012 de 14/03/2012
        end;
        case TIPO_ESCRIT of
          tpEscrOriginal: strTIPO_ESCRIT := '0';
@@ -329,7 +337,7 @@ begin
          indSitFusao: strIND_SIT_ESP := '2';
          indSitIncorporacao: strIND_SIT_ESP := '3';
          indSitEncerramento: strIND_SIT_ESP := '4';
-         indNenhum: strIND_SIT_ESP := ' ';
+         indNenhum: strIND_SIT_ESP := '';
        end;
        case IND_NAT_PJ of
          indNatPJSocEmpresariaGeral   : strIND_NAT_PJ := '00'; //0 - Sociedade empresária geral
@@ -344,6 +352,12 @@ begin
          indAtivoImobiliaria: strIND_ATIV := '4';
          indAtivoOutros: strIND_ATIV := '9';
        end;
+
+       if (TIPO_ESCRIT = tpEscrRetificadora) then
+          strNUM_REC_ANTERIOR := NUM_REC_ANTERIOR
+       else
+          strNUM_REC_ANTERIOR := '';
+
        Check(funChecaCNPJ(CNPJ), '(0-0000) ENTIDADE: O CNPJ "%s" digitado é inválido!', [CNPJ]);
        Check(funChecaUF(UF), '(0-0000) ENTIDADE: A UF "%s" digitada é inválido!', [UF]);
        Check(funChecaMUN(COD_MUN), '(0-0000) ENTIDADE: O código do município "%s" digitado é inválido!', [IntToStr(COD_MUN)]);
@@ -352,7 +366,7 @@ begin
             LFill( strCOD_VER ) +
             LFill( strTIPO_ESCRIT ) +
             LFill( strIND_SIT_ESP ) +
-            LFill( NUM_REC_ANTERIOR, 41 ) +
+            LFill( strNUM_REC_ANTERIOR) +
             LFill( DT_INI ) +
             LFill( DT_FIN ) +
             LFill( NOME ) +
@@ -468,14 +482,47 @@ begin
          codRegimeCompetEscritConsolidada : strIND_REG_CUM := '2';
          codRegimeCompetEscritDetalhada : strIND_REG_CUM := '9';
        end;
+
        ///
-       Add( LFill('0110') +
-            LFill( strCOD_INC_TRIB ) +
-            LFill( strIND_APRO_CRED ) +
-            LFill( strCOD_TIPO_CONT ) ) ; // + lFill( strIND_REG_CUM ) ) ;
+       if FRegistro0000.COD_VER >= vlVersao201 then
+       begin
+         if (COD_INC_TRIB = codEscrOpIncCumulativo) then
+           strIND_APRO_CRED := '';// Conforme Guia prático 1.0.5 Deve ser vazio caso COD_INC_TRIB = 2
+
+         if (COD_INC_TRIB <> codEscrOpIncCumulativo) then // Mário Mesquita -- Conforme guia prático, Deve ser vazio caso COD_INC_TRIB <> 2
+           strIND_REG_CUM := '';
+
+         //Nota: Só a versão 2.01 ou superior do PVA vai estar pronta para validar esse arquivo.
+         Add( LFill('0110') +
+              LFill( strCOD_INC_TRIB  ) +
+              LFill( strIND_APRO_CRED ) +
+              LFill( strCOD_TIPO_CONT ) +
+              LFill( strIND_REG_CUM ) );
+       end
+       else if FRegistro0000.COD_VER >= vlVersao101 then
+       begin
+
+         //Verificar a necessidade desse if abaixo quando sair a versão 2.0 do PVA PisCofins
+         if (COD_INC_TRIB = codEscrOpIncCumulativo) then
+           strIND_APRO_CRED := '';// Conforme Guia prático 1.0.5 Deve ser vazio caso COD_INC_TRIB = 2
+         Add( LFill('0110') +
+              LFill( strCOD_INC_TRIB  ) +
+              LFill( strIND_APRO_CRED ) +
+              LFill( strCOD_TIPO_CONT ) );
+       end
+       else //Modelos de registro anteriores à versao 1.0.3 do guia prático
+         Add( LFill('0110') +
+              LFill( strCOD_INC_TRIB ) +
+              LFill( strIND_APRO_CRED ) +
+              LFill( strCOD_TIPO_CONT ) ) ;
        ///
-       if IND_APRO_CRED = indMetodoDeRateioProporcional then
-         WriteRegistro0111(Reg0001.Registro0110);
+       // O (se no registro 0110 o Campo “COD_INC_TRIB” = 1 ou 3 e o Campo “IND_APRO_CRED” = 2)
+       // N (se no registro 0110 o Campo “COD_INC_TRIB” = 2 ou     o Campo “IND_APRO_CRED” = 1)
+       if (COD_INC_TRIB = codEscrOpIncNaoCumulativo) or (COD_INC_TRIB = codEscrOpIncAmbos) then
+       begin
+          if IND_APRO_CRED = indMetodoDeRateioProporcional then
+             WriteRegistro0111(Reg0001.Registro0110);
+       end;
      end;
      Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
 
@@ -485,8 +532,6 @@ begin
 end;
 
 procedure TBloco_0.WriteRegistro0111(Reg0110: TRegistro0110) ;
-var
-  intFor: integer;
 begin
   if Assigned(Reg0110.Registro0111) then
   begin
@@ -528,6 +573,7 @@ begin
                 LFill( SUFRAMA ) ) ;
         end;
         /// Registros FILHOS
+        WriteRegistro0145( Reg0001.Registro0140.Items[intFor] ) ;
         WriteRegistro0150( Reg0001.Registro0140.Items[intFor] ) ;
         WriteRegistro0190( Reg0001.Registro0140.Items[intFor] ) ;
         WriteRegistro0200( Reg0001.Registro0140.Items[intFor] ) ;
@@ -854,6 +900,35 @@ begin
        Add( LFill('0990') +
             LFill(QTD_LIN_0,0) );
      end;
+  end;
+end;
+
+function TBloco_0.Registro0145New: TRegistro0145;
+var
+U0140Count: Integer;
+begin
+   U0140Count := FRegistro0001.Registro0140.Count -1;
+   //
+   Result := FRegistro0001.Registro0140.Items[U0140Count].Registro0145;
+end;
+
+procedure TBloco_0.WriteRegistro0145(Reg0140: TRegistro0140);
+begin
+  if Assigned(Reg0140.Registro0145) and (Reg0140.Registro0145.COD_INC_TRIB <> '') then
+  begin
+    with Reg0140.Registro0145 do
+    begin
+      Add( LFill('0145')                 +
+           LFill(COD_INC_TRIB)           +
+           LFill(VL_REC_TOT,0,2)         +
+           LFill(VL_REC_ATIV,0,2)        +
+           LFill(VL_REC_DEMAIS_ATIV,0,2) +
+           LFill(INFO_COMPL));
+    end;
+    Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
+
+    /// Variavél para armazenar a quantidade de registro do tipo.
+    FRegistro0145Count := FRegistro0145Count + 1;
   end;
 end;
 

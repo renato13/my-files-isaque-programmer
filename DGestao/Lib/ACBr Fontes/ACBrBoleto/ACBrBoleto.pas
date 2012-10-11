@@ -58,7 +58,7 @@ uses ACBrBase,  {Units da ACBr}
      Graphics, Contnrs, Classes;
 
 const
-  CACBrBoleto_Versao = '0.0.33a' ;
+  CACBrBoleto_Versao = '0.0.45a' ;
 
 type
   TACBrTipoCobranca =
@@ -74,7 +74,9 @@ type
     cobBancoob,
     cobBanrisul,
     cobBanestes,
-    cobHSBC
+    cobHSBC,
+    cobBancoDoNordeste,
+    cobBRB
     );
 
   TACBrTitulo = class;
@@ -99,7 +101,7 @@ type
     toRemessaAlterarVencimento,
     toRemessaProtestar,
     toRemessaSustarProtesto,
-    toRemessaCancelarIntrucaoProtestoBaixa,
+    toRemessaCancelarInstrucaoProtestoBaixa,
     toRemessaCancelarInstrucaoProtesto,
     toRemessaDispensarJuros,
     toRemessaAlterarNomeEnderecoSacado,
@@ -134,7 +136,7 @@ type
     toRetornoLiquidadoSaldoRestante,
     toRetornoLiquidadoSemRegistro,
     toRetornoLiquidadoPorConta,
-    toRetornoLiquidadoAposBaixaouNaoRegistro,
+    toRetornoLiquidadoAposBaixaOuNaoRegistro,
     toRetornoBaixaRejeitada,
     toRetornoBaixaSolicitada,
     toRetornoBaixado,
@@ -152,7 +154,7 @@ type
     toRetornoBaixaCreditoCCAtravesSispagSemTituloCorresp,
     toRetornoTituloEmSer,
     toRetornoTituloNaoExiste,
-    toRetornoTituloPagoemCheque,
+    toRetornoTituloPagoEmCheque,
     toRetornoTituloPagamentoCancelado,
     toRetornoTituloJaBaixado,
     toRetornoTituloSustadoJudicialmente,
@@ -190,7 +192,7 @@ type
     toRetornoNomeSacadoAlterado,
     toRetornoEnderecoSacadoAlterado,
     toRetornoEncaminhadoACartorio,
-    toREtornoEntradaEmCartorio,
+    toRetornoEntradaEmCartorio,
     toRetornoRetiradoDeCartorio,
     toRetornoJurosDispensados,
     toRetornoDespesasProtesto,
@@ -215,7 +217,7 @@ type
     toRetornoTipoCobrancaAlterado,
     toRetornoCancelamentoDadosRateio,
     toRetornoOutrasOcorrencias,
-    toRetornoOcorrenciasdoSacado,
+    toRetornoOcorrenciasDoSacado,
     toRetornoCobrancaContratual,
     toRetornoTarifaExtratoPosicao,
     toRetornoTarifaDeRelacaoDasLiquidacoes,
@@ -276,6 +278,7 @@ type
     fpTamanhoConta: Integer;
     fpAOwner: TACBrBanco;
     fpTamanhoMaximoNossoNum: Integer;
+    fpOrientacoesBanco: TStringList;
     function CalcularFatorVencimento(const DataVencimento: TDateTime): String; virtual;
     function CalcularDigitoCodigoBarras(const CodigoBarras: String): String; virtual;
   public
@@ -291,6 +294,7 @@ type
     property TamanhoAgencia  :Integer read fpTamanhoAgencia;
     property TamanhoConta    :Integer read fpTamanhoConta;
     property TamanhoCarteira :Integer read fpTamanhoCarteira;
+    property OrientacoesBanco: TStringList read fpOrientacoesBanco;
 
     function CalcularDigitoVerificador(const ACBrTitulo : TACBrTitulo): String; virtual;
 
@@ -323,12 +327,14 @@ type
   private
     fACBrBoleto        : TACBrBoleto;
     fNumeroBanco       : Integer;
+    fOrientacoesBanco  : TStringList;
     FTamanhoMaximoNossoNum: Integer;
     fTipoCobranca      : TACBrTipoCobranca;
     fBancoClass        : TACBrBancoClass;
     function GetNome   : String;
     function GetDigito : Integer;
     function GetNumero : Integer;
+    function GetOrientacoesBanco: TStringList;
     function GetTamanhoAgencia: Integer;
     function GetTamanhoCarteira: Integer;
     function GetTamanhoConta: Integer;
@@ -338,13 +344,13 @@ type
     procedure SetTipoCobranca(const AValue: TACBrTipoCobranca);
     procedure SetNumero(const AValue: Integer);
     procedure SetTamMaximoNossoNumero(Const Avalue:Integer);
+    procedure SetOrientacoesBanco(Const Avalue: TStringList);
   public
     constructor Create( AOwner : TComponent); override;
     destructor Destroy ; override ;
 
     property ACBrBoleto : TACBrBoleto     read fACBrBoleto;
     property BancoClass : TACBrBancoClass read fBancoClass ;
-    //property TamanhoMaximoNossoNum :Integer read GetTamanhoMaximoNossoNum;
     property TamanhoAgencia        :Integer read GetTamanhoAgencia;
     property TamanhoConta          :Integer read GetTamanhoConta;
     property TamanhoCarteira       :Integer read GetTamanhoCarteira;
@@ -378,10 +384,13 @@ type
     property Nome      : String         read GetNome    write SetNome   stored false;
     property TamanhoMaximoNossoNum :Integer read GetTamanhoMaximoNossoNum  write SetTamMaximoNossoNumero;
     property TipoCobranca : TACBrTipoCobranca read fTipoCobranca   write SetTipoCobranca;
+    property OrientacoesBanco : TStringList read GetOrientacoesBanco write SetOrientacoesBanco;
   end;
 
   TACBrResponEmissao = (tbCliEmite,tbBancoEmite,tbBancoReemite,tbBancoNaoReemite);
+  TACBrCaracTitulo = (tcSimples,tcVinculada,tcCaucionada,tcDescontada,tcVendor);
   TACBrPessoa = (pFisica,pJuridica,pOutras);
+  TACBrPessoaCedente = pFisica..pJuridica;
 //  TACBrTipoInscricao = (tiPessoaFisica, tiPessoaJuridica, tiOutro);
 
   {Aceite do titulo}
@@ -407,14 +416,15 @@ type
     fModalidade    : String;
     fConvenio      : String;
     fResponEmissao : TACBrResponEmissao;
+    fCaracTitulo:TACBrCaracTitulo;
     fCNPJCPF       : String;
-    fTipoInscricao : TACBrPessoa;
+    fTipoInscricao : TACBrPessoaCedente;
     fUF            : String;
     fAcbrBoleto    : TACBrBoleto;
     procedure SetAgencia(const AValue: String);
     procedure SetCNPJCPF ( const AValue: String ) ;
     procedure SetConta(const AValue: String);
-    procedure SetTipoInscricao ( const AValue: TACBrPessoa ) ;
+    procedure SetTipoInscricao ( const AValue: TACBrPessoaCedente ) ;
   public
     constructor Create( AOwner : TComponent ) ; override ;
     destructor Destroy; override;
@@ -429,8 +439,9 @@ type
     property Modalidade   : String read fModalidade    write fModalidade;
     property Convenio     : String read fConvenio      write fConvenio;
     property ResponEmissao: TACBrResponEmissao read fResponEmissao  write fResponEmissao default tbCliEmite ;
+    property CaracTitulo: TACBrCaracTitulo read fCaracTitulo  write fCaracTitulo default tcSimples;
     property CNPJCPF      : String  read fCNPJCPF  write SetCNPJCPF;
-    property TipoInscricao: TACBrPessoa  read fTipoInscricao write  SetTipoInscricao;
+    property TipoInscricao: TACBrPessoaCedente  read fTipoInscricao write  SetTipoInscricao;
     property Logradouro  : String  read fLogradouro  write fLogradouro;
     property NumeroRes   : String  read fNumeroRes      write fNumeroRes;
     property Complemento : String  read fComplemento write fComplemento;
@@ -526,6 +537,7 @@ type
     fReferencia           : String;
     fVersao               : String;
     fACBrBoleto           : TACBrBoleto;
+    fTextoLivre           : String;
 
     procedure SetCarteira(const AValue: String);
     procedure SetNossoNumero ( const AValue: String ) ;
@@ -582,6 +594,8 @@ type
      property Versao               : String   read fVersao  write fVersao;
      property SeuNumero            : String   read fSeuNumero write fSeuNumero;
      property PercentualMulta      : Double   read fPercentualMulta write fPercentualMulta;
+
+     property TextoLivre : String read fTextoLivre write fTextoLivre;
    end;
 
   { TListadeBoletos }
@@ -596,7 +610,7 @@ type
       read GetObject write SetObject; default;
   end;
 
-TACBrBolLayOut = (lPadrao, lCarne, lFatura) ;
+TACBrBolLayOut = (lPadrao, lCarne, lFatura, lPadraoEntrega) ;
 
 { TACBrBoleto }
 TACBrBoleto = class( TACBrComponent )
@@ -606,7 +620,6 @@ TACBrBoleto = class( TACBrComponent )
     fDirArqRemessa: String;
     fDirArqRetorno: String;
     fLayoutRemessa: TACBrLayoutRemessa;
-    fComprovanteEntrega: boolean;
     fImprimirMensagemPadrao: boolean;
     fListadeBoletos : TListadeBoletos;
     fCedente        : TACBrCedente;
@@ -664,18 +677,17 @@ TACBrBoleto = class( TACBrComponent )
   published
     property About : String read GetAbout write SetAbout stored False ;
 
-    property Cedente        : TACBrCedente       read fCedente                write fCedente ;
     property Banco          : TACBrBanco         read fBanco                  write fBanco;
-    property NomeArqRemessa : String             read fNomeArqRemessa         write SetNomeArqRemessa;
-    property DirArqRemessa  : String             read GetDirArqRemessa        write SetNomeArqRemessa;
-    property NomeArqRetorno : String             read fNomeArqRetorno         write SetNomeArqRetorno;
-    property DirArqRetorno  : String             read GetDirArqRetorno        write SetNomeArqRetorno;
+    property Cedente        : TACBrCedente       read fCedente                write fCedente ;
+    property NomeArqRemessa : String             read fNomeArqRemessa         write fNomeArqRemessa;  //SetNomeArqRemessa;
+    property DirArqRemessa  : String             read fDirArqRemessa {GetDirArqRemessa} write fDirArqRemessa; //SetNomeArqRemessa;
+    property NomeArqRetorno : String             read fNomeArqRetorno         write fNomeArqRetorno; //SetNomeArqRetorno;
+    property DirArqRetorno  : String             read fDirArqRetorno {GetDirArqRetorno} write fDirArqRetorno; //SetNomeArqRetorno;
     property NumeroArquivo  : integer            read fNumeroArquivo          write fNumeroArquivo;
     property DataArquivo    : TDateTime          read fDataArquivo            write fDataArquivo;
     property DataCreditoLanc: TDateTime          read fDataCreditoLanc        write fDataCreditoLanc;
     property LeCedenteRetorno :boolean           read fLeCedenteRetorno       write fLeCedenteRetorno default false;
     property LayoutRemessa  : TACBrLayoutRemessa read fLayoutRemessa          write fLayoutRemessa default c400;
-    property ComprovanteEntrega : Boolean        read fComprovanteEntrega     write fComprovanteEntrega default False;
     property ImprimirMensagemPadrao : Boolean    read fImprimirMensagemPadrao write fImprimirMensagemPadrao default True;
     property ACBrBoletoFC : TACBrBoletoFCClass   read fACBrBoletoFC           write SetACBrBoletoFC;
     procedure ChecarDadosObrigatorios;
@@ -766,7 +778,7 @@ implementation
 
 Uses ACBrUtil, ACBrBancoBradesco, ACBrBancoBrasil, ACBrBanestes, ACBrBancoItau, ACBrBancoSicredi,
      ACBrBancoMercantil, ACBrCaixaEconomica, ACBrBancoBanrisul, ACBrBancoSantander,
-     ACBrBancoob, ACBrCaixaEconomicaSICOB ,ACBrBancoHSBC,Forms,
+     ACBrBancoob, ACBrCaixaEconomicaSICOB ,ACBrBancoHSBC,ACBrBancoNordeste , ACBrBancoBRB,Forms,
      {$IFDEF COMPILER6_UP} StrUtils {$ELSE} ACBrD5 {$ENDIF}, Math;
 
 {$IFNDEF FPC}
@@ -783,14 +795,14 @@ procedure TACBrCedente.SetCNPJCPF ( const AValue: String ) ;
 var
    ACbrValidador: TACBrValidador;
 begin
-   if fCNPJCPF = AValue then
-      exit;
-
-   if TipoInscricao = pOutras then
+   if trim(AValue) = '' then
    begin
-      fCNPJCPF := AValue;
+      fCNPJCPF:= AValue;
       exit;
    end;
+
+   if fCNPJCPF = AValue then
+      exit;
 
    ACbrValidador := TACBrValidador.Create(Self);
    try
@@ -849,7 +861,7 @@ begin
 
 end;
 
-procedure TACBrCedente.SetTipoInscricao ( const AValue: TACBrPessoa ) ;
+procedure TACBrCedente.SetTipoInscricao ( const AValue: TACBrPessoaCedente ) ;
 begin
    if fTipoInscricao = AValue then
       exit;
@@ -870,7 +882,8 @@ begin
   fConvenio      := '';
   fCNPJCPF       := '';
   fResponEmissao := tbCliEmite;
-  fTipoInscricao := pOutras;
+  fCaracTitulo   := tcSimples;
+  fTipoInscricao := pJuridica;
   fAcbrBoleto    := TACBrBoleto(AOwner);
 end;
 
@@ -1097,7 +1110,6 @@ begin
   inherited Create(AOwner);
 
   fACBrBoletoFC           := nil;
-  fComprovanteEntrega     := False;
   fImprimirMensagemPadrao := True;
 
   fListadeBoletos := TListadeBoletos.Create(true);
@@ -1243,6 +1255,8 @@ begin
     ThreadSMTP.smtp.Password := sSmtpPasswd;
 
     ThreadSMTP.smtp.TargetHost := sSmtpHost;
+    if trim(sSmtpPort)<>'' then     // Usa default
+       ThreadSMTP.smtp.TargetPort := sSmtpPort;
 
     ThreadSMTP.smtp.FullSSL := SSL;
     ThreadSMTP.smtp.AutoTLS := TLS;
@@ -1479,6 +1493,11 @@ begin
   Result:=  BancoClass.Numero ;
 end;
 
+function TACBrBanco.GetOrientacoesBanco: TStringList;
+begin
+  Result:= BancoClass.OrientacoesBanco;
+end;
+
 function TACBrBanco.GetTamanhoAgencia: Integer;
 begin
   Result:= BancoClass.TamanhoAgencia;
@@ -1520,6 +1539,11 @@ begin
   BancoClass.fpTamanhoMaximoNossoNum := AValue;
 end;
 
+procedure TACBrBanco.SetOrientacoesBanco(const Avalue: TStringList);
+begin
+  BancoClass.fpOrientacoesBanco.Text := AValue.Text;
+end;
+
 procedure TACBrBanco.SetTipoCobranca(const AValue: TACBrTipoCobranca);
 begin
   if fTipoCobranca = AValue then
@@ -1528,18 +1552,20 @@ begin
   fBancoClass.Free;
 
   case AValue of
-    cobBancoDoBrasil : fBancoClass := TACBrBancoBrasil.create(Self);         {001}
-    cobBanestes      : fBancoClass := TACBrBanestes.create(self);            {021}
-    cobSantander     : fBancoClass := TACBrBancoSantander.create(Self);      {033,353,008}
-    cobBanrisul      : fBancoClass := TACBrBanrisul.create(Self);            {041}
-    cobCaixaEconomica: fBancoClass := TACBrCaixaEconomica.create(Self);      {104}
-    cobCaixaSicob    : fBancoClass := TACBrCaixaEconomicaSICOB.create(Self); {104}
-    cobBradesco      : fBancoClass := TACBrBancoBradesco.create(Self);       {237}
-    cobItau          : fBancoClass := TACBrBancoItau.Create(self);           {341}
-    cobBancoMercantil: fBancoClass := TACBrBancoMercantil.create(Self);      {389}
-    cobSicred        : fBancoClass := TACBrBancoSicredi.Create(self);        {748}
-    cobBancoob       : fBancoClass := TACBrBancoob.create(self);              {756}
-    cobHSBC          : fBancoClass := TACBrBancoHSBC.create(self);            {399}
+    cobBancoDoBrasil  : fBancoClass := TACBrBancoBrasil.create(Self);         {001}
+    cobBancoDoNordeste:fBancoClass  := TACBrBancoNordeste.create(Self);       {004}
+    cobBanestes       : fBancoClass := TACBrBanestes.create(self);            {021}
+    cobSantander      : fBancoClass := TACBrBancoSantander.create(Self);      {033,353,008}
+    cobBanrisul       : fBancoClass := TACBrBanrisul.create(Self);            {041}
+    cobBRB            : fBancoClass := TACBrBancoBRB.create(self);             {070}
+    cobCaixaEconomica : fBancoClass := TACBrCaixaEconomica.create(Self);      {104}
+    cobCaixaSicob     : fBancoClass := TACBrCaixaEconomicaSICOB.create(Self); {104}
+    cobBradesco       : fBancoClass := TACBrBancoBradesco.create(Self);       {237}
+    cobItau           : fBancoClass := TACBrBancoItau.Create(self);           {341}
+    cobBancoMercantil : fBancoClass := TACBrBancoMercantil.create(Self);      {389}
+    cobSicred         : fBancoClass := TACBrBancoSicredi.Create(self);        {748}
+    cobBancoob        : fBancoClass := TACBrBancoob.create(self);              {756}
+    cobHSBC           : fBancoClass := TACBrBancoHSBC.create(self);            {399}
   else
     fBancoClass := TACBrBancoClass.create(Self);
   end;
@@ -1658,11 +1684,13 @@ begin
    fpTamanhoAgencia        := 4;
    fpTamanhoConta          := 10;
    fpModulo := TACBrCalcDigito.Create;
+   fpOrientacoesBanco := TStringList.Create;
 end;
 
 destructor TACBrBancoClass.Destroy;
 begin
    fpModulo.Free;
+   fpOrientacoesBanco.Free;
    Inherited Destroy;
 end;
 
@@ -1762,8 +1790,8 @@ procedure TACBrBancoClass.ErroAbstract(NomeProcedure: String);
 begin
    raise Exception.Create(Format(ACBrStr('Função %s não implementada '+
                                          ' para o banco %s') + sLineBreak +
-                                         ACBrStr('Ajude no desenvolvimento do ACBrECF. ')+ sLineBreak+
-                                         ACBrStr('Acesse nosso Forum em: http://acbr.sf.net/'),[NomeProcedure,Nome])) ;
+                                         'Ajude no desenvolvimento do ACBrECF. '+ sLineBreak+
+                                         'Acesse nosso Forum em: http://acbr.sf.net/',[NomeProcedure,Nome])) ;
 end;
 
 function TACBrBancoClass.CalcularFatorVencimento(const DataVencimento: TDatetime) : String;
@@ -1918,56 +1946,60 @@ var
   NomeArq  : String;
 begin
    SlRetorno:= TStringList.Create;
-   Self.ListadeBoletos.Clear;
+   try
+     Self.ListadeBoletos.Clear;
 
-   if NomeArqRetorno = '' then
-      raise Exception.Create(ACBrStr('NomeArqRetorno deve ser informado.'));
+     if NomeArqRetorno = '' then
+        raise Exception.Create(ACBrStr('NomeArqRetorno deve ser informado.'));
 
-   NomeArq := fDirArqRetorno + PathDelim + NomeArqRetorno;
+     NomeArq := fDirArqRetorno + PathDelim + NomeArqRetorno;
 
-   if not FilesExists( NomeArq ) then
-      raise Exception.Create(ACBrStr('Arquivo não encontrado:'+sLineBreak+NomeArq));
+     if not FilesExists( NomeArq ) then
+        raise Exception.Create(ACBrStr('Arquivo não encontrado:'+sLineBreak+NomeArq));
 
-   SlRetorno.LoadFromFile( NomeArq );
+     SlRetorno.LoadFromFile( NomeArq );
 
-   if SlRetorno.Count < 1 then
-      raise exception.Create(ACBrStr('O Arquivo de Retorno:'+sLineBreak+
-                                     NomeArq + sLineBreak+
-                                     'está vazio.'+sLineBreak+
-                                     ' Não há dados para processar'));
+     if SlRetorno.Count < 1 then
+        raise exception.Create(ACBrStr('O Arquivo de Retorno:'+sLineBreak+
+                                       NomeArq + sLineBreak+
+                                       'está vazio.'+sLineBreak+
+                                       ' Não há dados para processar'));
 
-   case Length(SlRetorno.Strings[0]) of
-      240 :
-        begin
-          if Copy(SlRetorno.Strings[0],143,1) <> '2' then
-             Raise Exception.Create( ACBrStr( NomeArq + sLineBreak +
-                'Não é um arquivo de Retorno de cobrança com layout CNAB240') );
-          LayoutRemessa := c240 ;
-        end;
+     case Length(SlRetorno.Strings[0]) of
+        240 :
+          begin
+            if Copy(SlRetorno.Strings[0],143,1) <> '2' then
+               Raise Exception.Create( ACBrStr( NomeArq + sLineBreak +
+                  'Não é um arquivo de Retorno de cobrança com layout CNAB240') );
+            LayoutRemessa := c240 ;
+          end;
 
-      400 :
-        begin
-           if (Copy(SlRetorno.Strings[0],1,9) <> '02RETORNO')   then
-             Raise Exception.Create( ACBrStr( NomeArq + sLineBreak +
-                'Não é um arquivo de Retorno de cobrança com layout CNAB400'));
-          LayoutRemessa := c400 ;
-        end;
-      else
-          raise Exception.Create( ACBrStr( NomeArq + sLineBreak+
-             'Não é um arquivo de  Retorno de cobrança CNAB240 ou CNAB400'));
+        400 :
+          begin
+             if (Copy(SlRetorno.Strings[0],1,9) <> '02RETORNO')   then
+               Raise Exception.Create( ACBrStr( NomeArq + sLineBreak +
+                  'Não é um arquivo de Retorno de cobrança com layout CNAB400'));
+            LayoutRemessa := c400 ;
+          end;
+        else
+            raise Exception.Create( ACBrStr( NomeArq + sLineBreak+
+               'Não é um arquivo de  Retorno de cobrança CNAB240 ou CNAB400'));
+     end;
+
+     if LayoutRemessa = c240 then
+        Banco.LerRetorno240(SlRetorno)
+     else
+        Banco.LerRetorno400(SlRetorno);
+   finally
+     SlRetorno.Free;
    end;
-
-   if LayoutRemessa = c240 then
-      Banco.LerRetorno240(SlRetorno)
-   else
-      Banco.LerRetorno400(SlRetorno);
 end;
 
 procedure TACBrBoleto.ChecarDadosObrigatorios;
 begin
    if (Cedente.Nome= '') or (cedente.Conta = '') or (Cedente.ContaDigito ='') or
       (Cedente.Agencia = '') or (Cedente.AgenciaDigito = '') then
-     raise Exception.Create(ACBrStr('Informações do Cedente Imcompletas'));
+     raise Exception.Create(ACBrStr('Informações do Cedente incompletas'));
 end;
 
 { TACBrBoletoFCClass }

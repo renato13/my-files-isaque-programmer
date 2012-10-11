@@ -138,7 +138,7 @@ TACBrECFYanco = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -232,7 +232,7 @@ end;
 procedure TACBrECFYanco.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('Esse modelo de impressora requer'+#10+
+     raise EACBrECFERRO.Create(ACBrStr('Esse modelo de impressora requer'+#10+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   fpDevice.HandShake := hsRTS_CTS ;
@@ -418,7 +418,11 @@ begin
    begin
      ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+#10+#10+
                 ErroMsg);
-     raise EACBrECFSemResposta.create(ErroMsg) ;
+
+     if ErroMsg = '10' then
+        DoOnErrorSemPapel
+     else
+        raise EACBrECFSemResposta.create(ErroMsg) ;
    end
   else
      Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -681,7 +685,8 @@ end;
 Procedure TACBrECFYanco.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, DescontoStr : String ;
     Total : Double ;
     TotalStr: String;
@@ -829,19 +834,18 @@ end;
 
 procedure TACBrECFYanco.AbreCupomVinculado(COO, CodFormaPagto,
   CodComprovanteNaoFiscal: String; Valor: Double);
-Var FPG : TACBrECFFormaPagamento ;
-    FPGDesc : String ;
+Var
+  FPG : TACBrECFFormaPagamento ;
 begin
   FPG := AchaFPGIndice( CodFormaPagto ) ;
 
   if FPG = nil then
-     raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+     raise EACBrECFERRO.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                              ' não foi cadastrada.' )) ;
 
-  COO       := Poem_Zeros( trim(COO) ,6) ;
-  FPGDesc   := padL( FPG.Descricao, 16 ) ;
+  COO := Poem_Zeros( trim(COO) ,6) ;
 
-   EnviaComando('132',40);
+  EnviaComando('132',40);
 end;
 
 procedure TACBrECFYanco.LinhaCupomVinculado(Linha: AnsiString);

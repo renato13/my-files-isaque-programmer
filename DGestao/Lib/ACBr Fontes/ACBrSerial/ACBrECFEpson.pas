@@ -31,23 +31,6 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
-|* Historico
-|*
-|* 04/11/2007: Daniel Simões de Almeida e Eduardo Durieux Lopes
-|* - Primeira Versao: Criaçao e Distribuiçao da Primeira Versao
-|* 04/12/2007: Andre Bohn
-|* - Corrigido bug em LerTotaisFormaPagamento
-|* - Implementado os métodos: ImprimeCheque, CancelaImpressaoCheque, 
-|*                            GetChequePronto, LeituraCMC7
-|* 11/04/2008: Daniel Simões de Almeida
-|* - Adicionados métodos: CortaPapel, IdentificaConsumidor, Suprimento
-|* 14/06/2009: Daniel Simões de Almeida
-|* - Adicionada propriedades: CDC, GNF, GRG. Por: José Nilton Pace
-|* 10/02/2010: José Nilton Pace
-|* - Corrigido bug em GetTotalIsencao
-******************************************************************************}
-
 {$I ACBr.inc}
 
 unit ACBrECFEpson ;
@@ -78,19 +61,20 @@ TACBrECFEpsonComando = class
     fsTimeOut : Integer;
 
     function GetFrameEnvio: AnsiString;
+    function GetFrameEnvioDLL : AnsiString ;
     procedure SetComando(const Value: AnsiString);
     procedure SetExtensao(const Value: AnsiString);
-    Function InsertEsc(const Campo: AnsiString): AnsiString ;
  public
     constructor create ;
     destructor destroy ; override ;
 
-    property Comando     : AnsiString  write SetComando  ;
-    property Extensao    : AnsiString  write SetExtensao ;
-    property TimeOut     : Integer     read fsTimeOut write fsTimeOut ;
-    property FrameEnvio  : AnsiString  read GetFrameEnvio ;
-    property Params      : TStringList read fsParams ;
-    property Seq         : Byte read fsSeq  ;
+    property Comando      : AnsiString  write SetComando  ;
+    property Extensao     : AnsiString  write SetExtensao ;
+    property TimeOut      : Integer     read fsTimeOut write fsTimeOut ;
+    property FrameEnvio   : AnsiString  read GetFrameEnvio ;
+    property FrameEnvioDLL: AnsiString  read GetFrameEnvioDLL ;
+    property Params       : TStringList read fsParams ;
+    property Seq          : Byte read fsSeq  ;
 
     Procedure AddParamString(AString: AnsiString) ;
     Procedure AddParamInteger(AInteger: Integer) ;
@@ -98,6 +82,8 @@ TACBrECFEpsonComando = class
     Procedure AddParamBool(ABool: Boolean) ;
     Procedure AddParamDateTime(ADateTime: TDateTime;Tipo : Char = 'D'  ) ;
  end ;
+
+{ TACBrECFEpsonResposta }
 
 TACBrECFEpsonResposta = class
   private
@@ -111,9 +97,9 @@ TACBrECFEpsonResposta = class
     fsParams       : TStringList ;
     fsChkSum       : AnsiString ;
 
-    procedure SetResposta(const Value: AnsiString);
-    Function RemoveEsc(const Campo: AnsiString): AnsiString ;
+    procedure SetResposta(const AValue: AnsiString);
     function GetDescRetorno: String;
+    procedure SetRespostaDLL(AValue : AnsiString) ;
  public
     constructor create( AOwner : TACBrECFEpson ) ;
     destructor destroy ; override ;
@@ -134,6 +120,7 @@ TACBrECFEpsonResposta = class
 
 TACBrECFEpson = class( TACBrECFClass )
  private
+    fsUsarDLL: Boolean;
     fsTentaDetectarVelocidade: Boolean;
     fsNumVersao : String ;
     fsIsFBIII   : Boolean;
@@ -152,6 +139,7 @@ TACBrECFEpson = class( TACBrECFClass )
     fsRet0906 : AnsiString ;
     fsRet0907 : AnsiString ;
     fsBytesIn : Integer ;
+    fsByteACK : Byte ;
     fsEpsonComando: TACBrECFEpsonComando;
     fsEpsonResposta: TACBrECFEpsonResposta;
     fsImprimeCheque: Boolean;
@@ -160,18 +148,25 @@ TACBrECFEpson = class( TACBrECFClass )
     fsPAF1, fsPAF2 : String ;
     fsEmPagamento : Boolean ;
 
-    xEPSON_Serial_Abrir_Porta : function (dwVelocidade:Integer; wPorta:Integer):Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
-    xEPSON_Serial_Fechar_Porta : function : Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
-    xEPSON_Serial_Obter_Estado_Com : function : Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
-    xEPSON_Obter_Dados_MF_MFD : function (pszInicio:AnsiString; pszFinal:AnsiString;
-       dwTipoEntrada:Integer; dwEspelhos:Integer; dwAtoCotepe:Integer;
-       dwSintegra:Integer; pszArquivoSaida:AnsiString) : Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+    xEPSON_Serial_Abrir_Porta : function (dwVelocidade:Integer;
+       wPorta:Integer):Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+    xEPSON_Serial_Fechar_Porta : function : Integer;
+       {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+    xEPSON_Serial_Obter_Estado_Com : function : Integer;
+       {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+    xEPSON_Obter_Dados_MF_MFD : function (pszInicio:AnsiString;
+       pszFinal:AnsiString; dwTipoEntrada:Integer; dwEspelhos:Integer;
+       dwAtoCotepe:Integer; dwSintegra:Integer; pszArquivoSaida:AnsiString) :
+       Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+    xEPSON_Send_From_FileEXX : function (pszLineIn:AnsiString;
+       pszStatus:PAnsiChar; pszLineOut:PAnsiChar ) : Integer;
+       {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
 
     procedure Ativar_Epson ;
-    procedure FechaPortaSerialDLL(const OldAtivo : Boolean) ;
 
     procedure LoadDLLFunctions;
     procedure AbrePortaSerialDLL;
+    procedure FechaPortaSerialDLL(const OldAtivo : Boolean) ;
 
     procedure ZeraCache( ZeraRespostaComando: Boolean = True ) ;
 
@@ -186,8 +181,6 @@ TACBrECFEpson = class( TACBrECFClass )
     property  Ret0907 : AnsiString read GetRet0907 ;
     procedure EnviaPAF;
  protected
-    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
-
     function GetDataHora: TDateTime; override ;
     function GetNumCupom: String; override ;
     function GetNumCCF: String; override ;
@@ -207,13 +200,15 @@ TACBrECFEpson = class( TACBrECFClass )
     function GetNumVersao: String; override ;
     function GetSubTotal: Double; override ;
     function GetTotalPago: Double; override ;
+    function GetNumReducoesZRestantes: String; override ;
 
     function GetEstado: TACBrECFEstado; override ;
     function GetGavetaAberta: Boolean; override ;
     function GetPoucoPapel : Boolean; override ;
     function GetHorarioVerao: Boolean; override ;
-    function GetArredonda : Boolean; override ;
     function GetParamDescontoISSQN: Boolean; override ;
+
+    function GetTipoUltimoDocumento : TACBrECFTipoDocumento ; override ;
 
     function GetCNPJ: String; override ;
     function GetIE: String; override ;
@@ -258,6 +253,7 @@ TACBrECFEpson = class( TACBrECFClass )
     Destructor Destroy  ; override ;
 
     procedure Ativar ; override ;
+    procedure Desativar ; override ;
 
     property VerificaChecksum : Boolean read fsVerificaChecksum
        write fsVerificaChecksum ;
@@ -270,7 +266,7 @@ TACBrECFEpson = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo : Double = 0;
        DescontoAcrescimo : String = 'D'; TipoDescontoAcrescimo : String = '%';
        NumItem : Integer = 0 ) ;  override ;
@@ -362,6 +358,8 @@ TACBrECFEpson = class( TACBrECFClass )
     procedure Suprimento( const Valor: Double; Obs : AnsiString;
        DescricaoCNF: String; DescricaoFPG: String; IndiceBMP: Integer) ; override ;
 
+    Function EstornaCCD( const Todos: Boolean = True) : Integer; override ;
+
     procedure CarregaRelatoriosGerenciais; override;
     procedure LerTotaisRelatoriosGerenciais ; override ;
     procedure ProgramaRelatorioGerencial(var Descricao: string;
@@ -371,9 +369,13 @@ TACBrECFEpson = class( TACBrECFClass )
        TACBrECFComprovanteNaoFiscal; override;
 
     function GetDadosUltimaReducaoZ: AnsiString; override ;
+
+    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
  end ;
 
 function EpsonCheckSum(Dados: AnsiString): AnsiString;
+function RemoveEsc(const Campo : AnsiString) : AnsiString ;
+Function InsertEsc(const Campo: AnsiString): AnsiString ;
 
 implementation
 Uses ACBrECF, ACBrConsts,
@@ -388,6 +390,40 @@ function EpsonCheckSum(Dados: AnsiString): AnsiString;
 begin
   Result := IntToHex( SomaAscII(Dados), 4);
 end;
+
+
+function InsertEsc(const Campo: AnsiString): AnsiString;
+Var
+  I : Integer ;
+begin
+  Result := '' ;
+
+  For I := 1 to Length(Campo) do
+  begin
+    if Campo[I] in [#2, #3, #26 .. #31] then
+       Result := Result + ESC ;
+
+    Result := Result + Campo[I];
+  end ;
+end;
+
+function RemoveEsc(const Campo : AnsiString) : AnsiString ;
+Var
+  I, L : Integer ;
+begin
+  Result := '' ;
+  L := Length(Campo);
+  I := 1 ;
+
+  while I <= L do
+  begin
+    if (Campo[I] = ESC) and (I < L) and  (Campo[I+1] in [#2, #3, #26 .. #31]) then
+       Inc(I);
+
+    Result := Result + Campo[I];
+    Inc(I);
+  end ;
+end ;
 
 { -------------------------  TACBrECFEpsonComando -------------------------- }
 constructor TACBrECFEpsonComando.create;
@@ -438,22 +474,9 @@ begin
   AddParamString( Texto ) ;
 end ;
 
-function TACBrECFEpsonComando.InsertEsc(const Campo: AnsiString): AnsiString;
- Var I : Integer ;
-begin
-  Result := '' ;
-
-  For I := 1 to Length(Campo) do
-  begin
-    if Campo[I] in [#2, #3, #26 .. #31] then
-       Result := Result + ESC ;
-
-    Result := Result + Campo[I];
-  end ;
-end;
-
 procedure TACBrECFEpsonComando.SetComando(const Value: AnsiString);
- Var Tamanho : Integer ;
+Var
+  Tamanho : Integer ;
 begin
   if fsSeq >= 255 then
      fsSeq := 129
@@ -462,7 +485,7 @@ begin
 
   Tamanho := Length(Trim(Value)) ;
   if (Tamanho <> 2) and (Tamanho <> 4) then
-     raise Exception.Create(ACBrStr('Comando Epson deve ter 4 Caracteres em Hexadecimal')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Comando Epson deve ter 4 Caracteres em Hexadecimal')) ;
 
   { Zerando instrucoes adicionais do comando }
   fsParams.Clear ;
@@ -480,7 +503,7 @@ procedure TACBrECFEpsonComando.SetExtensao(const Value: AnsiString);
 begin
   Tamanho := Length(Trim(Value)) ;
   if (Tamanho <> 2) and (Tamanho <> 4) then
-     raise Exception.Create(ACBrStr('Extensao de Comando Epson deve ter 4 Caracteres em Hexadecimal')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Extensao de Comando Epson deve ter 4 Caracteres em Hexadecimal')) ;
 
   if Tamanho = 2 then
      fsExtensao := Value
@@ -489,8 +512,9 @@ begin
 end;
 
 function TACBrECFEpsonComando.GetFrameEnvio: AnsiString;
- Var I : Integer ;
-     ParamsStr : AnsiString ;
+Var
+  I : Integer ;
+  ParamsStr : AnsiString ;
 begin
   { Montando pacote com Parametros }
   ParamsStr := '' ;
@@ -504,13 +528,22 @@ begin
   Result := Result + EpsonCheckSum( Result ) ;
 end;
 
+function TACBrECFEpsonComando.GetFrameEnvioDLL : AnsiString ;
+Var
+  I : Integer ;
+begin
+  Result := AsciiToHex( RemoveEsc(fsComando) )+'|'+AsciiToHex( RemoveEsc(fsExtensao) );
+
+  { Montando pacote com Parametros }
+  For I := 0 to fsParams.Count-1 do
+    Result := Result + '|'+ StringReplace( RemoveEsc(fsParams[I]), '|','/',[rfReplaceAll] ) ;
+end;
+
 
 { ------------------------- TACBrECFEpsonResposta -------------------------- }
 
 constructor TACBrECFEpsonResposta.create( AOwner : TACBrECFEpson );
 begin
-  inherited create ;
-
   fsOwner         := AOwner ;
   fsParams        := TStringList.create ;
   fsSeq           := 0 ;
@@ -528,30 +561,10 @@ begin
   inherited destroy ;
 end;
 
-function TACBrECFEpsonResposta.RemoveEsc(const Campo: AnsiString): AnsiString;
-  Var I : Integer ;
-  Var Pula : Boolean ;
-begin
-  Result := '' ;
-  I      := 1 ;
-  Pula   := True ;
-  while I <= Length(Campo) do
-  begin
-     if (Campo[I] = #27) and Pula then
-        Pula := False
-     else
-      begin
-         Result := Result + Campo[I] ;
-         Pula   := True ;
-      end ;
-
-     Inc( I ) ;
-  end ;
-end;
-
-procedure TACBrECFEpsonResposta.SetResposta(const Value: AnsiString);
-Var Buf : AnsiString ;
-    P   : Integer ;
+procedure TACBrECFEpsonResposta.SetResposta(const AValue: AnsiString);
+Var
+  Buf : AnsiString ;
+  P   : Integer ;
 begin
   fsParams.Clear ;
   fsSeq           := 0 ;
@@ -561,27 +574,33 @@ begin
   fsChkSum        := '' ;
   fsResposta      := '' ;
 
-  if Value = '' then exit ;
+  if AValue = '' then exit ;
 
-  fsResposta := Value ;
+  fsResposta := AValue ;
+
+  if pos('|:|',AValue) = 21 then
+  begin
+     SetRespostaDLL( AValue );
+     exit;
+  end ;
 
   if LeftStr(fsResposta,1) <> STX then
-     raise Exception.Create(ACBrStr('Resposta inválida. Não inicia com STX (02)')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Resposta inválida. Não inicia com STX (02)')) ;
 
   if copy(fsResposta,Length(fsResposta)-4,1) <> ETX then
-     raise Exception.Create(ACBrStr('Resposta inválida. Não finaliza com ETX (03)')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Resposta inválida. Não finaliza com ETX (03)')) ;
 
   if fsOwner.VerificaChecksum then
   begin
      fsChkSum := RightStr(fsResposta,4) ;
      if EpsonCheckSum( copy(fsResposta,1,Length(fsResposta)-4) ) <> fsChkSum then
-        raise Exception.create(ACBrStr('Resposta inválida. CheckSum da Resposta não está correto.')) ;
+        raise EACBrECFERRO.create(ACBrStr('Resposta inválida. CheckSum da Resposta não está correto.')) ;
   end ;
 
   try
      fsSeq := ord(fsResposta[2]) ;
   except
-     raise Exception.Create(ACBrStr('Resposta inválida. Num.Sequencia inválido')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Resposta inválida. Num.Sequencia inválido')) ;
   end ;
 
   { Pega apenas o Frame de Dados }
@@ -602,7 +621,7 @@ begin
   end ;
 
   if fsParams.Count < 4 then
-     raise Exception.Create(ACBrStr('Resposta Incompleta'));
+     raise EACBrECFERRO.Create(ACBrStr('Resposta Incompleta'));
 
   { Removendo Status Printer de fsParams }
   try
@@ -610,7 +629,7 @@ begin
   except
      on E : Exception do
      begin
-        raise Exception.Create(ACBrStr('Resposta Inválida. Erro ao calcular Status da Impressora')+sLineBreak+
+        raise EACBrECFERRO.Create(ACBrStr('Resposta Inválida. Erro ao calcular Status da Impressora')+sLineBreak+
                                E.Message) ;
      end ;
   end ;
@@ -622,7 +641,7 @@ begin
   except
      on E : Exception do
      begin
-        raise Exception.Create(ACBrStr('Resposta Inválida. Erro ao calcular Status Fiscal')+sLineBreak+
+        raise EACBrECFERRO.Create(ACBrStr('Resposta Inválida. Erro ao calcular Status Fiscal')+sLineBreak+
                                E.Message) ;
      end ;
   end ;
@@ -636,7 +655,7 @@ begin
   except
      on E : Exception do
      begin
-        raise Exception.Create(ACBrStr('Resposta Inválida. Erro ao calcular Cod.Retorno')+sLineBreak+
+        raise EACBrECFERRO.Create(ACBrStr('Resposta Inválida. Erro ao calcular Cod.Retorno')+sLineBreak+
                                E.Message) ;
      end ;
   end ;
@@ -646,6 +665,28 @@ begin
      if fsParams[0] = '' then
         fsParams.Delete(0);   // Remove da pilha Reservado 2, pois não é parametro
 end;
+
+procedure TACBrECFEpsonResposta.SetRespostaDLL(AValue : AnsiString) ;
+Var
+  Status, LineOut : AnsiString ;
+  P : Integer ;
+begin
+  Status  := copy( AValue, 1, 20);
+  LineOut := copy( AValue,24, Length(AValue));
+
+  fsStatusPrinter := StrToInt( '$'+copy(Status, 9,3) );
+  fsStatusFiscal  := StrToInt( '$'+copy(Status,13,4) );
+  fsRetorno       := UpperCase( copy(Status, 17,4) );
+
+  { Quebrando Parametros Separados por | e inserindo-os em fsParams }
+  while LineOut <> '' do
+  begin
+     P := pos('|',LineOut+'|') ;
+
+     fsParams.Add( LeftStr(LineOut,P-1) ) ;
+     LineOut := copy(LineOut,P+1,Length(LineOut)) ;  // Pega próximo bloco
+  end ;
+end ;
 
 
 function TACBrECFEpsonResposta.GetDescRetorno: String;
@@ -925,7 +966,6 @@ begin
 end;
 
 
-
 { ----------------------------- TACBrECFEpson ----------------------------- }
 
 constructor TACBrECFEpson.create( AOwner : TComponent ) ;
@@ -976,6 +1016,7 @@ begin
   xEPSON_Serial_Abrir_Porta := NIL ;
   xEPSON_Serial_Fechar_Porta := NIL ;
   xEPSON_Serial_Obter_Estado_Com := NIL ;
+  xEPSON_Send_From_FileEXX := NIL;
 end;
 
 destructor TACBrECFEpson.Destroy;
@@ -1021,11 +1062,24 @@ end ;
 
 procedure TACBrECFEpson.Ativar;
 begin
-  if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
-                            'Porta Serial:  (COM1, COM2, COM3, ...)'));
-
   GravaLog( 'ACBrDevice.Ativar' );
+
+  fsUsarDLL := False;
+
+  if fpDevice.IsDLLPort then
+   begin
+     LoadDLLFunctions ;
+     PaginaDeCodigo := 852;
+     AbrePortaSerialDLL;
+     fsUsarDLL := True;
+   end
+  else
+   begin
+     if not fpDevice.IsSerialPort  then
+        raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+                                'Porta Serial:  (COM1, COM2, COM3, ...)'));
+   end ;
+
   inherited Ativar ; { Abre porta serial }
 
   fsNumVersao := '' ;
@@ -1077,120 +1131,135 @@ begin
 
 end;
 
+procedure TACBrECFEpson.Desativar ;
+begin
+  if fsUsarDLL then
+     try
+        FechaPortaSerialDLL(False);
+     except
+        {Exceção muda pois Porta pode já estar fechada}
+     end ;
+
+  inherited Desativar ;
+end ;
+
 
 Function TACBrECFEpson.EnviaComando_ECF( cmd : AnsiString = '' ) : AnsiString ;
-Var ErroMsg    : String ;
-    OldTimeOut : Integer ;
-    ByteACK    : Byte ;
+Var
+  ErroMsg    : String ;
+  OldTimeOut : Integer ;
+  aStatus  : array [0..20] of AnsiChar;
+  aLineOut : array [0..4096] of AnsiChar;
 begin
   if cmd <> '' then
      PreparaCmd(cmd) ;  // Ajusta e move para Epsoncomando
 
-  cmd := EpsonComando.FrameEnvio ;
-
-  ByteACK := 0 ;
-  Result  := '' ;
-  ErroMsg := '' ;
-  fpComandoEnviado   := '' ;
-  fpRespostaComando  := '' ;
-  fsBytesIn          := 0 ;
   EpsonResposta.Resposta := '' ;  // Zera resposta
-  OldTimeOut := TimeOut ;
-  TimeOut    := max(EpsonComando.TimeOut, TimeOut) ;
+  fpComandoEnviado       := '' ;
+  fpRespostaComando      := '' ;
+  Result                 := '' ;
+  ErroMsg                := '' ;
 
-  try
-     fpDevice.Serial.DeadlockTimeout := 2000 ; { Timeout p/ Envio }
+  if fsUsarDLL then
+   begin
+     cmd := EpsonComando.FrameEnvioDLL ;
 
-     while (chr(ByteACK) <> ACK) do     { Se ACK = 6 Comando foi reconhecido }
-     begin
-        ByteACK := 0 ;
-        fpDevice.Serial.Purge ;                   { Limpa a Porta }
+     aStatus[0]  := #0; // Zera Buffer de Saida
+     aLineOut[0] := #0;
+     xEPSON_Send_From_FileEXX( cmd, aStatus, aLineOut ) ;
 
-        if not TransmiteComando( cmd ) then
-           continue ;
+     fpComandoEnviado  := cmd ;
+     fpRespostaComando := TrimRight( aStatus )+'|:|'+TrimRight( aLineOut );
 
-        fpComandoEnviado := cmd ;
+     EpsonResposta.Resposta := fpRespostaComando ;
+   end
+  else
+   begin
+     cmd := EpsonComando.FrameEnvio ;
 
-        if fpDevice.HandShake = hsDTR_DSR then
-           fpDevice.Serial.DTR := True ;  { Liga o DTR para ler a Resposta }
+     fsBytesIn := 0 ;
+     fsByteACK := 0 ;
 
-        if not fpDevice.Serial.CTS then
-           fpDevice.Serial.RTS := false ;
+     OldTimeOut := TimeOut ;
+     TimeOut    := max(EpsonComando.TimeOut, TimeOut) ;
 
-        try
-           { espera ACK chegar na Porta por 1,5s  }
-           try
-              ByteACK := fpDevice.Serial.RecvByte( 1500 ) ;
-           except
-           end ;
+     try
+        fpDevice.Serial.DeadlockTimeout := 2000 ; { Timeout p/ Envio }
 
-           if ByteACK = 0 then
-              raise EACBrECFSemResposta.create( ACBrStr(
-                    'Impressora '+fpModeloStr+' não responde (ACK = 0)' ))
-           else if chr(ByteACK) = NAK then    { retorno em caracter 21d=15h=NACK }
-              raise EACBrECFSemResposta.create( ACBrStr(
-                    'Impressora '+fpModeloStr+' não reconheceu o Comando'+
-                    sLineBreak+' (NACK)') )
-           else if chr(ByteACK) <> ACK then
-              raise EACBrECFSemResposta.create( ACBrStr(
-                    'Erro. Resposta da Impressora '+fpModeloStr+' inválida'+
-                    sLineBreak+' (ACK = '+IntToStr(ByteACK)+')')) ;
-        except
-           on E : EACBrECFSemResposta do
-            begin
-              fpDevice.Serial.Purge ;
-
-              if not DoOnMsgRetentar( E.Message +sLineBreak+sLineBreak+
-                 'Se o problema persistir, verifique os cabos, ou'+sLineBreak+
-                 'experimente desligar a impressora durante 5 seg,'+sLineBreak+
-                 'liga-la novamente, e repetir a operação...'
-                 , 'LerACK') then
-                 raise ;
-            end ;
-           else
-              raise ;
-        end ;
-
-     end ;
-
-     { Chama Rotina da Classe mãe TACBrClass para ler Resposta. Se houver
-       falha na leitura LeResposta dispara Exceçao.
-       Resposta fica gravada na váriavel "fpRespostaComando" }
-     LeResposta ;
-
-{
-     Try
-        EpsonResposta.Resposta := fpRespostaComando ;
-        if EpsonResposta.Seq <> EpsonComando.Seq then
-           raise Exception.Create(ACBrStr('Sequencia de Resposta diferente da enviada')) ;
-
-        fpDevice.Serial.SendByte(ACK);
-
-        ErroMsg := EpsonResposta.DescRetorno ;
-        if ErroMsg <> '' then
-           ErroMsg := 'Erro: '+ EpsonResposta.Retorno+ ' - '+ErroMsg  ;
-     except
-        on E : Exception do
+        { Segundo suporte da Epson, em alguns casos ECF não envia o ACK,
+          enviando diretamente o STX (que é o inicio do Frame de Resposta) }
+        while not (chr(fsByteACK) in [STX,ACK]) do     { Se ACK = 6 Comando foi reconhecido }
         begin
-           fpDevice.Serial.SendByte(NACK);
-           ErroMsg := E.Message ;
+           fsByteACK := 0 ;
+           fpDevice.Serial.Purge ;                   { Limpa a Porta }
+
+           if not TransmiteComando( cmd ) then
+              continue ;
+
+           fpComandoEnviado := cmd ;
+
+           if fpDevice.HandShake = hsDTR_DSR then
+              fpDevice.Serial.DTR := True ;  { Liga o DTR para ler a Resposta }
+
+           if not fpDevice.Serial.CTS then
+              fpDevice.Serial.RTS := false ;
+
+           try
+              { espera ACK chegar na Porta por 1,5s  }
+              try
+                 fsByteACK := fpDevice.Serial.RecvByte( 1500 ) ;
+              except
+              end ;
+
+              if fsByteACK = 0 then
+                 raise EACBrECFSemResposta.create( ACBrStr(
+                       'Impressora '+fpModeloStr+' não responde (ACK = 0)' ))
+              else if chr(fsByteACK) = NAK then    { retorno em caracter 21d=15h=NACK }
+                 raise EACBrECFSemResposta.create( ACBrStr(
+                       'Impressora '+fpModeloStr+' não reconheceu o Comando'+
+                       sLineBreak+' (NACK)') )
+              else if not (chr(fsByteACK) in [STX,ACK]) then
+                 raise EACBrECFSemResposta.create( ACBrStr(
+                       'Erro. Resposta da Impressora '+fpModeloStr+' inválida'+
+                       sLineBreak+' (ACK = '+IntToStr(fsByteACK)+')')) ;
+           except
+              on E : EACBrECFSemResposta do
+               begin
+                 fpDevice.Serial.Purge ;
+
+                 if not DoOnMsgRetentar( E.Message +sLineBreak+sLineBreak+
+                    'Se o problema persistir, verifique os cabos, ou'+sLineBreak+
+                    'experimente desligar a impressora durante 5 seg,'+sLineBreak+
+                    'liga-la novamente, e repetir a operação...'
+                    , 'LerACK') then
+                    raise ;
+               end ;
+              else
+                 raise ;
+           end ;
         end ;
-     end ;
-}
 
-     ErroMsg := EpsonResposta.DescRetorno ;
-     if ErroMsg <> '' then
-      begin
-        ErroMsg := 'Erro retornado pela Impressora: ' + fpModeloStr + sLineBreak+sLineBreak+
-                   'Erro: '+ EpsonResposta.Retorno+ ' - '+ErroMsg  ;
-        raise EACBrECFSemResposta.create( ACBrStr( ErroMsg ) ) ;
-      end
-     else
+        { Chama Rotina da Classe mãe TACBrClass para ler Resposta. Se houver
+          falha na leitura LeResposta dispara Exceçao.
+          Resposta fica gravada na váriavel "fpRespostaComando" }
+        LeResposta ;
+     finally
+        TimeOut := OldTimeOut ;
         Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
+     end ;
+   end ;
 
-  finally
-     TimeOut := OldTimeOut ;
-  end ;
+  ErroMsg := EpsonResposta.DescRetorno ;
+  if ErroMsg <> '' then
+  begin
+     ErroMsg := 'Erro retornado pela Impressora: ' + fpModeloStr + sLineBreak+sLineBreak+
+                'Erro: '+ EpsonResposta.Retorno+ ' - '+ErroMsg  ;
+
+     if EpsonResposta.Retorno = '0304' then
+        DoOnErrorSemPapel
+     else
+        raise EACBrECFSemResposta.create( ACBrStr(ErroMsg) ) ;
+  end
 end;
 
 Procedure TACBrECFEpson.PreparaCmd(cmd: AnsiString) ;
@@ -1214,7 +1283,7 @@ begin
      end ;
 
      if SL.Count < 1 then
-        raise Exception.create(ACBrStr('Erro ao informar comando.  Use:'+sLineBreak+
+        raise EACBrECFERRO.create(ACBrStr('Erro ao informar comando.  Use:'+sLineBreak+
                                'Comando(4 Hex) #28 Extensao(4 Hex) [ #28 PARAM1 [ #28 PARAM2 ... ]] '+sLineBreak+sLineBreak+
                                'Exemplo, Para emitir Leitura X use: '+sLineBreak+
                                'EnviaComando("0802" + #28 + "0000" ) ') );
@@ -1245,6 +1314,18 @@ var
   end ;
 
 begin
+  if fsUsarDLL then
+  begin
+    Result := True;
+    exit;
+  end ;
+
+  if chr(fsByteACK) = STX then  // Não houve ACK, ECF mandou STX direto, e STX já foi lido
+  begin
+    Retorno   := STX + Retorno ;
+    fsByteACK := 0;
+  end ;
+
   LenRet := Length(Retorno) ;
   Result := BlocoEValido;
 
@@ -1263,12 +1344,16 @@ begin
   // É Envio de Resposta Intermediária ?
   if (LeftStr(Retorno,7) = #2 + #128 + #3 + '0085') then
   begin
-     // DEBUG //
-     // GravaLog( 'Resposta Intermediaria detectada: ' +Retorno, True );
      Retorno     := Copy(Retorno, 8, LenRet );
      LenRet      := Length(Retorno) ;
      fsBytesIn   := LenRet;
      Result      := BlocoEValido ; // Re-avalia o Retorno restante
+     GravaLog( Space(16) + 'RI' + IfThen(Result,'+','-'), True );
+
+     // NOTA: No caso de FIM DE PAPEL, o ECF Epson pode ficar retornando
+     //       resposta intermediária indefinidamente, o que causa um Loop Infinito.
+     //       Segundo suporte da Epson não há solução possível no momento.
+     //       Detectado que o mesmo problema pode ocorrer com a DLL do Fabricante
   end ;
 
   if Result then
@@ -1468,14 +1553,30 @@ begin
   end ;
 end;
 
+function TACBrECFEpson.GetNumReducoesZRestantes: String;
+begin
+  EpsonComando.Comando := '080A' ;
+  EnviaComando ;
+
+  Result := EpsonResposta.Params[7] ;
+end;
+
 function TACBrECFEpson.GetSubTotal: Double;
 begin
   try
     Result := RespostasComando['SubTotal'].AsFloat;
   except
     try
-       EpsonComando.Comando := '0A03' ;
-       EnviaComando ;
+       if Estado = estNaoFiscal then
+        begin
+          EpsonComando.Comando := '0E03' ;
+          EnviaComando ;
+        end
+       else
+        begin
+          EpsonComando.Comando := '0A03' ;
+          EnviaComando ;
+        end ;
 
        RespostasComando.AddField( 'SubTotal', EpsonResposta.Params[0] );
        Result := StrToFloatDef(EpsonResposta.Params[0],0) /100 ;
@@ -1483,7 +1584,7 @@ begin
     except
        on E : Exception do
        begin
-          if (pos('0102',E.Message) <> 0) then
+          if (pos(EpsonResposta.Retorno, '0102|0A13') <> 0)  then
              Result := 0
           else
              raise ;
@@ -1591,17 +1692,38 @@ begin
   Result := (EpsonResposta.Params[0] = 'S') ;
 end;
 
-function TACBrECFEpson.GetArredonda : Boolean ;
-begin
-  Result := fsIsFBIII and ArredondaItemMFD;
-end ;
-
 function TACBrECFEpson.GetParamDescontoISSQN : Boolean ;
 begin
   EpsonComando.Comando := '0513' ;
   EnviaComando ;
 
   Result := (EpsonResposta.Params[0] = 'S') ;
+end ;
+
+function TACBrECFEpson.GetTipoUltimoDocumento : TACBrECFTipoDocumento ;
+var
+   Tipo : Integer ;
+begin
+  EpsonComando.Comando := '0908' ;
+  EnviaComando ;
+
+  Tipo := StrToIntDef(EpsonResposta.Params[0],0) ;
+  case Tipo of
+    1 : Result := docCF;
+    2 : Result := docRZ;
+    3 : Result := docLX;
+    5 : Result := docLMF;
+    22: Result := docCupomAdicional;
+    23: Result := docCFCancelamento;
+    24: Result := docCNF;
+    25: Result := docCNFCancelamento;
+    26: Result := docEstornoPagto;
+    27: Result := docCCD;
+    28: Result := docEstornoCCD;
+    29,14: Result := docRG;
+  else
+    Result := docNenhum;
+  end ;
 end ;
 
 Procedure TACBrECFEpson.LeituraX ;
@@ -1745,7 +1867,6 @@ end;
 procedure TACBrECFEpson.CancelaCupom;
 Var
   Erro : String ;
-  COOCupom, COOCDC : Integer ;
 begin
   ZeraCache;
   fsEmPagamento := false ;
@@ -1765,30 +1886,9 @@ begin
         Erro := E.Message ;
 
         // Verificando se motivo do Erro foi falta do cancelamento do CDC (Erro 0A15)
-        if (pos('0A15',E.Message) > 0) then
+        if (pos('0A15',Erro) > 0) then
          begin
-           // Pega o nro do CDC a cancelar
-           EpsonComando.Comando := '0907';
-           EnviaComando;
-           COOCDC   := StrToInt( Trim(EpsonResposta.Params[0] ) ) ;
-           COOCupom := StrToInt( Trim(EpsonResposta.Params[12]) ) ;
-
-           while COOCDC > COOCupom do
-           begin
-              // Estorna o CDC para poder cancelar o cupom
-              EpsonComando.Comando  := '0E30';
-              EpsonComando.Extensao := '0001';
-              { Passando apenas o numero do COO, os parametros iniciais não são
-                necessáriospara efetuar o cancelameto de CDC }
-              EpsonComando.AddParamString( '' );
-              EpsonComando.AddParamString( '' );
-              EpsonComando.AddParamString( '' );
-              EpsonComando.AddParamInteger( COOCDC );
-              EnviaComando;
-              FechaRelatorio;   { Fecha o estorno do CDC }
-
-              Dec( COOCDC ) ;
-           end ;
+           TACBrECF(fpOwner).EstornaCCD( True ) ;
 
            { Agora sim... Cancelando o Cupom }
            CancelaCupom;
@@ -1802,7 +1902,7 @@ begin
                  FechaRelatorio ;
               except
                  { Se não conseguiu Fechar Relatorio, dispara Msg de exceção original }
-                 raise Exception.Create( Erro );
+                 raise EACBrECFERRO.Create( Erro );
               end ;
             end
            else
@@ -1873,7 +1973,7 @@ begin
      SL := TStringList.create ;
      try
         SL.Text := Obs ;
-        EpsonComando.Comando  := '0A22' ;
+        EpsonComando.Comando := '0A22' ;
         For I := 0 to 7 do
            if I >= SL.Count then
               EpsonComando.AddParamString( '' )
@@ -1920,35 +2020,40 @@ end;
 Procedure TACBrECFEpson.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 begin
+  Codigo    := LeftStr(Codigo,14);
+  Unidade   := Trim(LeftStr( OnlyAlphaNum(Unidade),3)) ;
+  Descricao := LeftStr(Descricao,233);
+
   with EpsonComando do
   begin
     if not fsIsFBIII then
      begin
-       ArredondaItemMFD := False;  // Não suportado na BFII
+       ArredondaItemMFD := False;  // Não suportado na FBII
 
        Comando := '0A02' ;
-       AddParamString( LeftStr(Codigo,14) );
-       AddParamString( LeftStr(Descricao,233) );
+       AddParamString( Codigo );
+       AddParamString( Descricao );
        AddParamDouble( Qtd, fpDecimaisQtd );
-       AddParamString( Trim(LeftStr(Unidade,3)) );
+       AddParamString( Unidade );
        AddParamDouble( ValorUnitario, fpDecimaisPreco );
        AddParamString( AliquotaECF );
      end
     else
      begin
         Comando := '0A12' ;
-        AddParamString( LeftStr(Codigo,14) );
-        AddParamString( LeftStr(Descricao,233) );
+        AddParamString( Codigo );
+        AddParamString( Descricao );
         AddParamDouble( Qtd, fpDecimaisQtd );
-        AddParamString( Trim(LeftStr(Unidade,3)) );
+        AddParamString( Unidade );
         AddParamDouble( ValorUnitario, fpDecimaisPreco );
         AddParamString( AliquotaECF );
         AddParamInteger( fpDecimaisQtd );
         AddParamInteger( fpDecimaisPreco );
         AddParamBool( ArredondaItemMFD );
-        AddParamString( 'S' );
+        AddParamString( 'N' );
      end ;
   end ;
 
@@ -2193,7 +2298,7 @@ begin
   end ;
 
   if ProxIndice > 20 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Formas de '+
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Formas de '+
                             'Pagamento'));
 
   EpsonComando.Comando := '050C' ;
@@ -2319,7 +2424,7 @@ begin
   FPG := AchaFPGIndice( CodFormaPagto ) ;
 
   if FPG = nil then
-     raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+     raise EACBrECFERRO.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                              ' não foi cadastrada.') ) ;
 
   EpsonComando.Comando := '0E30' ;
@@ -3019,6 +3124,43 @@ begin
   inherited Suprimento(Valor, Obs, DescricaoCNF, DescricaoFPG, IndiceBMP);
 end;
 
+function TACBrECFEpson.EstornaCCD(const Todos : Boolean) : Integer ;
+var
+   COOCDC, COOCupom : Integer ;
+begin
+  Result := 0;
+
+  if TipoUltimoDocumento <> docCCD then
+     exit ;
+
+  // Pega o nro do CDC a cancelar
+  EpsonComando.Comando := '0907';
+  EnviaComando;
+  COOCDC   := StrToInt( Trim(EpsonResposta.Params[0] ) ) ;
+  COOCupom := StrToInt( Trim(EpsonResposta.Params[12]) ) ;
+
+  while COOCDC > COOCupom do
+  begin
+     // Estorna o CDC para poder cancelar o cupom
+     EpsonComando.Comando  := '0E30';
+     EpsonComando.Extensao := '0001';
+     { Passando apenas o numero do COO, os parametros iniciais não são
+       necessáriospara efetuar o cancelameto de CDC }
+     EpsonComando.AddParamString( '' );
+     EpsonComando.AddParamString( '' );
+     EpsonComando.AddParamString( '' );
+     EpsonComando.AddParamInteger( COOCDC );
+     EnviaComando;
+     FechaRelatorio;   { Fecha o estorno do CDC }
+
+     Inc( Result ) ;
+     Dec( COOCDC ) ;
+
+     if not Todos then
+        Break;
+  end ;
+end ;
+
 function TACBrECFEpson.GetPAF: String;
 begin
   Result := padL(fsPAF1,42)+'|'+padL(fsPAF2,42) ; 
@@ -3026,8 +3168,8 @@ end;
 
 procedure TACBrECFEpson.IdentificaPAF(NomeVersao, MD5 : String);
 begin
-  fsPAF1 := LeftStr( NomeVersao, 42) ;
-  fsPAF2 := LeftStr( MD5, 42) ;
+  fsPAF1 := LeftStr( MD5, 42) ;
+  fsPAF2 := LeftStr( NomeVersao, 42) ;
 end;
 
 procedure TACBrECFEpson.EnviaPAF ;
@@ -3193,7 +3335,7 @@ procedure TACBrECFEpson.LoadDLLFunctions ;
      if not FunctionDetect( sLibName, FuncName, LibPointer) then
      begin
         LibPointer := NIL ;
-        raise Exception.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+cLIB_Epson ) ) ;
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+cLIB_Epson ) ) ;
      end ;
    end ;
  end ;
@@ -3202,21 +3344,25 @@ begin
    EpsonFunctionDetect('EPSON_Serial_Abrir_Porta', @xEPSON_Serial_Abrir_Porta);
    EpsonFunctionDetect('EPSON_Serial_Fechar_Porta', @xEPSON_Serial_Fechar_Porta);
    EpsonFunctionDetect('EPSON_Serial_Obter_Estado_Com', @xEPSON_Serial_Obter_Estado_Com);
+   EpsonFunctionDetect('EPSON_Send_From_FileEXX', @xEPSON_Send_From_FileEXX);
 end ;
 
 procedure TACBrECFEpson.AbrePortaSerialDLL ;
 Var
   Porta, Resp : Integer ;
 begin
+  if fsUsarDLL and Ativo then exit;
+
   Porta := StrToIntDef( OnlyNumber( fpDevice.Porta ), 0) ;
 
   GravaLog( 'Desativando ACBrECF' );
-  Ativo := False ;
+  if not fsUsarDLL then
+     Ativo := False ;
 
   GravaLog( 'xEPSON_Serial_Abrir_Porta' );
   Resp := xEPSON_Serial_Abrir_Porta( fpDevice.Baud, Porta ) ;
   if Resp <> 0 then
-     raise Exception.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
         'EPSON_Serial_Abrir_Porta('+IntToStr(fpDevice.Baud)+', '+IntToStr(Porta)+')' ));
 end ;
 
@@ -3224,10 +3370,12 @@ procedure TACBrECFEpson.FechaPortaSerialDLL(const OldAtivo : Boolean) ;
 var
   Resp : Integer ;
 begin
+  if fsUsarDLL and OldAtivo then exit;
+
   GravaLog( 'xEPSON_Serial_Fechar_Porta' ) ;
   Resp := xEPSON_Serial_Fechar_Porta ;
   if Resp <> 0 then
-     raise Exception.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao Fechar a Porta com:'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao Fechar a Porta com:'+sLineBreak+
         'EPSON_Serial_Fechar_Porta' ));
 
   GravaLog( 'Ativar ACBr: '+ifthen(OldAtivo,'SIM','NAO') ) ;
@@ -3274,13 +3422,13 @@ begin
 
     GravaLog( 'xEPSON_Obter_Dados_MF_MFD' );
     Resp := xEPSON_Obter_Dados_MF_MFD(  DiaIni, DiaFim,
-                                        0,                // Faixa em Datas
+                                        0,                // 0 = Faixa em Datas
                                         DocumentosToNum(Documentos),
-                                        0,                // Não Gera Ato Cotepe
-                                        0,                // Nao Gera Sintegra
+                                        0,                // 0 = Não Gera Ato Cotepe
+                                        0,                // 0 = Nao Gera Sintegra
                                         ArqTmp );
     if (Resp <> 0) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                                        'Cod.: '+IntToStr(Resp) ))
   finally
     FechaPortaSerialDLL(OldAtivo) ;
@@ -3289,12 +3437,12 @@ begin
   if FileExists( ArqTmp + '_ESP.txt' ) then
    begin
      if not CopyFileTo( ArqTmp + '_ESP.txt', NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
                                 ArqTmp + '_ESP.txt'+sLineBreak+
                                 'para'+sLineBreak+NomeArquivo ))
    end
   else
-     raise Exception.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                             'Arquivo: '+ArqTmp + '_ESP.txt não gerado' ))
 end;
 
@@ -3319,13 +3467,13 @@ begin
 
     GravaLog( 'xEPSON_Obter_Dados_MF_MFD' );
     Resp := xEPSON_Obter_Dados_MF_MFD(  COOIni, CooFim,
-                                        2,                // Faixa em COO
+                                        2,                // 2 = Faixa em COO
                                         DocumentosToNum(Documentos),
-                                        0,                // Não Gera Ato Cotepe
-                                        0,                // Nao Gera Sintegra
+                                        0,                // 0 = Não Gera Ato Cotepe
+                                        0,                // 0 = Nao Gera Sintegra
                                         ArqTmp );
     if (Resp <> 0) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                                        'Cod.: '+IntToStr(Resp) ))
   finally
     FechaPortaSerialDLL(OldAtivo);
@@ -3334,12 +3482,12 @@ begin
   if FileExists( ArqTmp + '_ESP.txt' ) then
    begin
      if not CopyFileTo( ArqTmp + '_ESP.txt', NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
                                 ArqTmp + '_ESP.txt'+sLineBreak+
                                 'para'+sLineBreak+NomeArquivo ))
    end
   else
-     raise Exception.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                             'Arquivo: "'+ArqTmp + '_ESP.txt" não gerado' ))
 end;
 
@@ -3372,13 +3520,13 @@ begin
 
     GravaLog( 'xEPSON_Obter_Dados_MF_MFD' );
     Resp := xEPSON_Obter_Dados_MF_MFD(  DiaIni, DiaFim,
-                                        0,                // Faixa em Datas
-                                        0,                // Sem Espelhos
+                                        0,                // 0 = Faixa em Datas
+                                        0,                // 0 = Sem Espelhos
                                         Tipo,
-                                        0,                // Nao Gera Sintegra
+                                        0,                // 0 = Nao Gera Sintegra
                                         ArqTmp );
     if (Resp <> 0) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                                        'Cod.: '+IntToStr(Resp) ))
   finally
     FechaPortaSerialDLL(OldAtivo);
@@ -3387,12 +3535,12 @@ begin
   if FileExists( ArqTmp + '_CTP.txt' ) then
    begin
      if not CopyFileTo( ArqTmp + '_CTP.txt', NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
                                 ArqTmp + '_CTP.txt'+sLineBreak+
                                 'para'+sLineBreak+NomeArquivo ))
    end
   else
-     raise Exception.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                             'Arquivo: '+ArqTmp + '_CTP.txt não gerado' ))
 end;
 
@@ -3409,7 +3557,7 @@ begin
   // Extraido do Manual da Epson:
   // Leituras somente podem ser realizadas por faixa de CRZ ou Data de Movimento
   if TipoContador = tpcCOO then
-     raise Exception.Create( ACBrStr(cACBrECFPAFFuncaoNaoSuportada) ) ;
+     raise EACBrECFERRO.Create( ACBrStr(cACBrECFPAFFuncaoNaoSuportada) ) ;
 
   LoadDLLFunctions ;
 
@@ -3433,12 +3581,12 @@ begin
     GravaLog( 'xEPSON_Obter_Dados_MF_MFD' );
     Resp := xEPSON_Obter_Dados_MF_MFD(  COOIni, CooFim,
                                         IfThen( TipoContador = tpcCOO, 2, 1),
-                                        0,                // Sem Espelhos
+                                        0,                // 0 = Sem Espelhos
                                         Tipo,
-                                        0,                // Nao Gera Sintegra
+                                        0,                // 0 = Nao Gera Sintegra
                                         ArqTmp );
     if (Resp <> 0) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                                        'Cod.: '+IntToStr(Resp) ))
   finally
     FechaPortaSerialDLL(OldAtivo) ;
@@ -3447,12 +3595,12 @@ begin
   if FileExists( ArqTmp + '_CTP.txt' ) then
    begin
      if not CopyFileTo( ArqTmp + '_CTP.txt', NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao copiar: '+sLineBreak+
                                 ArqTmp + '_CTP.txt'+sLineBreak+
                                 'para'+sLineBreak+NomeArquivo ))
    end
   else
-     raise Exception.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de EPSON_Obter_Dados_MF_MFD.'+sLineBreak+
                             'Arquivo: "'+ArqTmp + '_CTP.txt" não gerado' ))
 end;
 
@@ -3576,14 +3724,12 @@ begin
 end ;
 
 procedure TACBrECFEpson.ProgramaRelatorioGerencial( var Descricao: String; Posicao: String);
-const
-   MaxRG = 30; //Falta saber qual a qtde máxima de RGs na EPSON
 begin
   CarregaRelatoriosGerenciais;
   Descricao := Copy(Trim(Descricao),1,15);
 
   if AchaRGDescricao(Descricao, True)<>nil then
-     raise Exception.Create(ACBrStr('Relatório Gerencial ('+Descricao+') já existe.')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Relatório Gerencial ('+Descricao+') já existe.')) ;
 
   EpsonComando.Comando  := '0570';
   EpsonComando.Extensao := '0000';
@@ -3640,15 +3786,15 @@ const
     Altura, Largura, Mostrar : Integer ;
   begin
     Altura  := max(min(ConfigBarras.Altura,255),0);
-    Largura := ConfigBarras.LarguraLinha;
-    if Largura <> 0 then
-       Largura := max(min(Largura,6),2);
-    Mostrar := 0;
+    if (Altura = 0) and fpDevice.IsDLLPort then
+       Altura := 32;
+    Largura := max(min(ConfigBarras.LarguraLinha,6),2);
+    Mostrar := IfThen(fpDevice.IsDLLPort,2,0);
     if ConfigBarras.MostrarCodigo then
        Mostrar := 2;
 
     Result := cBarras + chr(ACodigo) + chr( Altura ) + chr( Largura ) +
-              chr( Mostrar ) + #0 ;
+              chr( Mostrar ) + #48;
   end;
 var
   TagNum, Cmd : Integer ;
@@ -3696,6 +3842,9 @@ begin
 
      if fsALSublinhado then
         Cmd := Cmd + cSublinhadoOn;
+
+     if fpDevice.IsDLLPort and (Cmd = C_OFF) then
+        Cmd := 32 ;
 
      Result := ESC + chr( Cmd );
   end ;

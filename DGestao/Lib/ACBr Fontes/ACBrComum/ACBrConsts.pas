@@ -44,8 +44,32 @@ unit ACBrConsts;
 
 interface
 
+Uses
 {$IFNDEF COMPILER6_UP}
-Uses ACBrD5, Windows ;
+  ACBrD5,
+{$ENDIF}
+  Windows, SysUtils;
+
+// delphi XE3 em diante não possui mais essas var, então criar e preencher
+{$IFDEF DELPHI17_UP}
+var
+  fmtst: TFormatSettings;
+  CurrencyString: string;
+  CurrencyFormat: Byte;
+  NegCurrFormat: Byte;
+  ThousandSeparator: Char;
+  DecimalSeparator: Char;
+  CurrencyDecimals: Byte;
+  DateSeparator: Char;
+  ShortDateFormat: string;
+  LongDateFormat: string;
+  TimeSeparator: Char;
+  TimeAMString: string;
+  TimePMString: string;
+  ShortTimeFormat: string;
+  LongTimeFormat: string;
+  TwoDigitYearCenturyWindow: Word = 50;
+  ListSeparator: Char;
 {$ENDIF}
 
 const
@@ -84,6 +108,9 @@ const
     '<msi>', '</msi>',
     '<ad>','</ad>','<ce>','</ce>' );
 
+  TAGS_FORMATACAO: set of byte = [2..11] ;
+  TAGS_BLOCO: set of byte = [12..37] ;
+
   cACBrDeviceAtivarPortaException    = 'Porta não definida' ;
   cACBrDeviceAtivarException         = 'Erro abrindo: %s ' + sLineBreak +' %s ' ;
   cACBrDeviceSetBaudException        = 'Valor deve estar na faixa de 50 a 4000000.'+#10+
@@ -113,6 +140,7 @@ const
   cACBrECFOcupadoException             = 'Componente ACBrECF ocupado' + sLineBreak +
                                          'Aguardando resposta do comando anterior' ;
   cACBrECFSemRespostaException         = 'Impressora %s não está respondendo' ;
+  cACBrECFSemPapelException            = 'FIM DE PAPEL' ;
   cACBrECFCmdSemRespostaException      = 'Comandos não estão sendo enviados para Impressora %s ' ;
   cACBrECFEnviaCmdSemRespostaException = 'Erro ao enviar comandos para a Impressora %s ' ;
   cACBrECFDoOnMsgSemRespostaRetentar   = 'A impressora %s não está repondendo.' ;
@@ -178,5 +206,27 @@ const
                                            'Valor do Arquivo: %m' ;
 
 implementation
+
+initialization
+  // delphi XE3 em diante não possui mais essas var, então criar e preencher
+  {$IFDEF DELPHI17_UP}
+    fmtst := TFormatSettings.Create('');
+    CurrencyString := fmtst.CurrencyString;
+    CurrencyFormat := fmtst.CurrencyFormat;
+    NegCurrFormat := fmtst.NegCurrFormat;
+    ThousandSeparator := fmtst.ThousandSeparator;
+    DecimalSeparator := fmtst.DecimalSeparator;
+    CurrencyDecimals := fmtst.CurrencyDecimals;
+    DateSeparator := fmtst.DateSeparator;
+    ShortDateFormat := fmtst.ShortDateFormat;
+    LongDateFormat := fmtst.LongDateFormat;
+    TimeSeparator := fmtst.TimeSeparator;
+    TimeAMString := fmtst.TimeAMString;
+    TimePMString := fmtst.TimePMString;
+    ShortTimeFormat := fmtst.ShortTimeFormat;
+    LongTimeFormat := fmtst.LongTimeFormat;
+    TwoDigitYearCenturyWindow := fmtst.TwoDigitYearCenturyWindow;
+    ListSeparator := fmtst.ListSeparator;
+  {$ENDIF}
 
 end.

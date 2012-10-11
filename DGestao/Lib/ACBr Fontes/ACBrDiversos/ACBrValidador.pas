@@ -179,6 +179,7 @@ type
 function ACBrValidadorValidarCPF( const Documento : AnsiString ) : String ;
 function ACBrValidadorValidarCNPJ( const Documento : AnsiString ) : String ;
 function ACBrValidadorValidarCNPJouCPF( const Documento : AnsiString ) : String ;
+function ACBrValidadorValidarIE(const AIE, AUF: AnsiString): String ;
 function ACBrValidadorValidarSuframa( const Documento : AnsiString ) : String ;
 function ACBrValidadorValidarGTIN( const Documento : AnsiString ) : String ;
 
@@ -199,6 +200,11 @@ end;
 function ACBrValidadorValidarCNPJ(const Documento : AnsiString) : String ;
 begin
   Result := ACBrValidadorValidarDocumento( docCNPJ, Documento );
+end;
+
+function ACBrValidadorValidarIE(const AIE, AUF: AnsiString): String;
+begin
+  Result := ACBrValidadorValidarDocumento(docInscEst, AIE, AUF);
 end;
 
 function ACBrValidadorValidarSuframa( const Documento : AnsiString ) : String ;
@@ -760,19 +766,22 @@ begin
 
   if fsComplemento = 'BA' then
   begin
-     Tamanho := 8 ;
-     xTP := 2   ;   yTP  := 3   ;   yROT := 'E' ;
-     vDigitos := VarArrayOf(
-        ['DVX','DVY',c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,'','','','','',''] ) ;
+    if Length(fsDocto) < 9 then
+       fsDocto := padR(fsDocto,9,'0') ;
 
-     if pos(fsDocto[1],'0123458') > 0 then
-      begin
-        xMD := 10   ;   yMD := 10 ;
-      end
-     else
-      begin
-        xMD := 11   ;   yMD := 11 ;
-      end ;
+    Tamanho := 9 ;
+    xTP := 2   ;   yTP  := 3   ;   yROT := 'E' ;
+    vDigitos := VarArrayOf(
+       ['DVX','DVY',c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,'','','','',''] ) ;
+
+    if pos(fsDocto[2],'0123458') > 0 then
+     begin
+       xMD := 10   ;   yMD := 10 ;
+     end
+    else
+     begin
+       xMD := 11   ;   yMD := 11 ;
+     end ;
   end ;
 
   if fsComplemento = 'CE' then
@@ -787,7 +796,7 @@ begin
      Tamanho := 13 ;
      xTP := 2   ;   yROT := 'E'  ;   yMD  := 11   ;   yTP  := 1 ;
      vDigitos  := VarArrayOf(
-        ['DVY','DVX',c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,'3,4,5','7','0','']);
+        ['DVY','DVX',c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,c0_9,'7','0','']);
   end ;
 
   if fsComplemento = 'ES' then
@@ -1125,7 +1134,7 @@ end;
 Procedure TACBrValidador.ValidarUF(UF: AnsiString) ;
 begin
  if pos( ','+UF+',', ',AC,AL,AP,AM,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR,PE,PI,'+
-                     'RJ,RN,RS,RO,RR,SC,SP,SE,TO,') = 0 then
+                     'RJ,RN,RS,RO,RR,SC,SP,SE,TO,EX,') = 0 then
     fsMsgErro := 'UF inválido: '+UF ;
 end;
 
@@ -1396,7 +1405,7 @@ Begin
   IF UF = 'AL' Then Mascara := '*********';
   IF UF = 'AP' Then Mascara := '*********';
   IF UF = 'AM' Then Mascara := '**.***.***-*';
-  IF UF = 'BA' Then Mascara := '******-**';
+  IF UF = 'BA' Then Mascara := '*******-**';
   IF UF = 'CE' Then Mascara := '********-*';
   IF UF = 'DF' Then Mascara := '***********-**';
   IF UF = 'ES' Then Mascara := '*********';

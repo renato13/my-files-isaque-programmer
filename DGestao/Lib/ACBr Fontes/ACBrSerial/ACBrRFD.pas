@@ -48,7 +48,7 @@
 unit ACBrRFD;
 
 interface
-uses ACBrBase,
+uses ACBrBase, ACBrConsts,
      SysUtils , Classes, Contnrs, ACBrEAD
      {$IFDEF LINUX}
        {$IFNDEF FPC}
@@ -1448,7 +1448,6 @@ begin
   begin
      RZ := '' ;
      try
-        { Por enquanto, Apenas Bematech suporta DadosUltimaReducaoZ }
         RZ := TACBrECF( fsECF ).DadosUltimaReducaoZ ;
      except
      end ;

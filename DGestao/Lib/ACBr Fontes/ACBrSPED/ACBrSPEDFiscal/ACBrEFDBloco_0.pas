@@ -149,6 +149,8 @@ type
     fFAX: String;          /// Número do fax:
     fEMAIL: String;        /// Endereço do correio eletrônico:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property FANTASIA: String read fFANTASIA write fFANTASIA;
     property CEP: String read FCEP write FCEP;
     property ENDERECO: String read FENDERECO write FENDERECO;
@@ -167,6 +169,8 @@ type
     fUF_ST: String;   /// Sigla da unidade da federação:
     fIE_ST: String;   /// Inscrição Estadual:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property UF_ST: String read FUF_ST write FUF_ST;
     property IE_ST: String read FIE_ST write FIE_ST;
   end;
@@ -178,7 +182,7 @@ type
     function GetItem(Index: Integer): TRegistro0015;
     procedure SetItem(Index: Integer; const Value: TRegistro0015);
   public
-    function New: TRegistro0015;
+    function New(AOwner: TRegistro0001): TRegistro0015;
     property Items[Index: Integer]: TRegistro0015 read GetItem write SetItem;
   end;
 
@@ -200,6 +204,8 @@ type
     fEMAIL: String;       /// Endereço do correio eletrônico:
     fCOD_MUN: integer;        /// Código do município, conforme tabela IBGE:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property NOME: String read FNOME write FNOME;
     property CPF: String read FCPF write FCPF;
     property CRC: String read FCRC write FCRC;
@@ -234,7 +240,7 @@ type
 
     FRegistro0175: TRegistro0175List;  /// BLOCO C - Lista de Registro0175 (FILHO)
   public
-    constructor Create; virtual; /// Create
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
     destructor Destroy; override; /// Destroy
 
     property COD_PART: String read FCOD_PART write FCOD_PART;
@@ -260,7 +266,7 @@ type
     function GetItem(Index: Integer): TRegistro0150;
     procedure SetItem(Index: Integer; const Value: TRegistro0150);
   public
-    function New: TRegistro0150;
+    function New(AOwner: TRegistro0001): TRegistro0150;
     function LocalizaRegistro(pCOD_PART: String): boolean;
     property Items[Index: Integer]: TRegistro0150 read GetItem write SetItem;
   end;
@@ -273,6 +279,8 @@ type
     fNR_CAMPO: String;       /// Número do campo alterado (Somente campos 03 a 13):
     fCONT_ANT: String;       /// Conteúdo anterior do campo:
   public
+    constructor Create(AOwner: TRegistro0150); virtual; /// Create
+
     property DT_ALT: TDateTime read FDT_ALT write FDT_ALT;
     property NR_CAMPO: String read FNR_CAMPO write FNR_CAMPO;
     property CONT_ANT: String read FCONT_ANT write FCONT_ANT;
@@ -285,7 +293,7 @@ type
     function GetItem(Index: Integer): TRegistro0175;
     procedure SetItem(Index: Integer; const Value: TRegistro0175);
   public
-    function New: TRegistro0175;
+    function New(AOwner: TRegistro0150): TRegistro0175;
     property Items[Index: Integer]: TRegistro0175 read GetItem write SetItem;
   end;
 
@@ -296,6 +304,8 @@ type
     fUNID: String;        /// Código da unidade de medida:
     fDESCR: String;       /// Descrição da unidade de medida:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property UNID: String read FUNID write FUNID;
     property DESCR: String read FDESCR write FDESCR;
   end;
@@ -307,7 +317,7 @@ type
     function GetItem(Index: Integer): TRegistro0190;
     procedure SetItem(Index: Integer; const Value: TRegistro0190);
   public
-    function New: TRegistro0190;
+    function New(AOwner: TRegistro0001): TRegistro0190;
     function LocalizaRegistro(pUNID: String): boolean;
     property Items[Index: Integer]: TRegistro0190 read GetItem write SetItem;
   end;
@@ -332,7 +342,7 @@ type
     FRegistro0206: TRegistro0206List;  /// BLOCO C - Lista de Registro0206 (FILHO)
     FRegistro0220: TRegistro0220List;  /// BLOCO C - Lista de Registro0220 (FILHO)
   public
-    constructor Create; virtual; /// Create
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
     destructor Destroy; override; /// Destroy
 
     property COD_ITEM: String read FCOD_ITEM write FCOD_ITEM;
@@ -359,7 +369,7 @@ type
     function GetItem(Index: Integer): TRegistro0200;
     procedure SetItem(Index: Integer; const Value: TRegistro0200);
   public
-    function New: TRegistro0200;
+    function New(AOwner: TRegistro0001): TRegistro0200;
     function LocalizaRegistro(pCOD_ITEM: String): boolean;
     property Items[Index: Integer]: TRegistro0200 read GetItem write SetItem;
   end;
@@ -373,6 +383,8 @@ type
     fDT_FIN: TDateTime;         /// Data final de utilização do código:
     fCOD_ANT_ITEM: string;      /// Código anterior do item com relação à última informação apresentada.
   public
+    constructor Create(AOwner: TRegistro0200); virtual; /// Create
+
     property DESCR_ANT_ITEM: String read FDESCR_ANT_ITEM write FDESCR_ANT_ITEM;
     property DT_INI: TDateTime read FDT_INI write FDT_INI;
     property DT_FIN: TDateTime read FDT_FIN write FDT_FIN;
@@ -386,7 +398,7 @@ type
     function GetItem(Index: Integer): TRegistro0205;
     procedure SetItem(Index: Integer; const Value: TRegistro0205);
   public
-    function New: TRegistro0205;
+    function New(AOwner: TRegistro0200): TRegistro0205;
     property Items[Index: Integer]: TRegistro0205 read GetItem write SetItem;
   end;
 
@@ -396,6 +408,8 @@ type
   private
     fCOD_COMB: String;       /// Código do combustível, conforme tabela publicada pela ANP:
   public
+    constructor Create(AOwner: TRegistro0200); virtual; /// Create
+
     property COD_COMB: String read FCOD_COMB write FCOD_COMB;
   end;
 
@@ -406,7 +420,7 @@ type
     function GetItem(Index: Integer): TRegistro0206;
     procedure SetItem(Index: Integer; const Value: TRegistro0206);
   public
-    function New: TRegistro0206;
+    function New(AOwner: TRegistro0200): TRegistro0206;
     property Items[Index: Integer]: TRegistro0206 read GetItem write SetItem;
   end;
 
@@ -415,8 +429,10 @@ type
   TRegistro0220 = class
   private
     fUNID_CONV: String;  /// Unidade comercial a ser convertida na unidade de estoque, referida em 0200:
-    fFAT_CONV: Double;       /// Fator de conversão:
+    fFAT_CONV: Double;   /// Fator de conversão:
   public
+    constructor Create(AOwner: TRegistro0200); virtual; /// Create
+
     property UNID_CONV: String read FUNID_CONV write FUNID_CONV;
     property FAT_CONV: Double read FFAT_CONV write FFAT_CONV;
   end;
@@ -428,7 +444,7 @@ type
     function GetItem(Index: Integer): TRegistro0220;
     procedure SetItem(Index: Integer; const Value: TRegistro0220);
   public
-    function New: TRegistro0220;
+    function New(AOwner: TRegistro0200): TRegistro0220;
     property Items[Index: Integer]: TRegistro0220 read GetItem write SetItem;
   end;
 
@@ -445,7 +461,7 @@ type
 
     FRegistro0305: TRegistro0305; /// BLOCO 0 - Registro0305 (FILHO)
   public
-    constructor Create; virtual; /// Create
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
     destructor Destroy; override; /// Destroy
 
     property COD_IND_BEM: String read FCOD_IND_BEM write FCOD_IND_BEM;
@@ -465,7 +481,7 @@ type
     function GetItem(Index: Integer): TRegistro0300;
     procedure SetItem(Index: Integer; const Value: TRegistro0300);
   public
-    function New: TRegistro0300;
+    function New(AOwner: TRegistro0001): TRegistro0300;
     function LocalizaRegistro(pCOD_IND_BEM: String): boolean;
     property Items[Index: Integer]: TRegistro0300 read GetItem write SetItem;
   end;
@@ -478,6 +494,8 @@ type
     FFUNC: string;      /// Descrição sucinta da função do bem na atividade do estabelecimento
     FVIDA_UTIL: Integer; /// Vida útil estimada do bem, em número de meses
   public
+    constructor Create(AOwner: TRegistro0300); virtual; /// Create
+
     property COD_CCUS: String   read FCOD_CCUS  write FCOD_CCUS;
     property FUNC: String       read FFUNC      write FFUNC;
     property VIDA_UTIL: Integer read FVIDA_UTIL write FVIDA_UTIL;
@@ -490,6 +508,8 @@ type
     fCOD_NAT: String;        /// Código da natureza:
     fDESCR_NAT: String;      /// Descrição da natureza:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property COD_NAT: String read FCOD_NAT write FCOD_NAT;
     property DESCR_NAT: String read FDESCR_NAT write FDESCR_NAT;
   end;
@@ -500,7 +520,7 @@ type
     function GetItem(Index: Integer): TRegistro0400;
     procedure SetItem(Index: Integer; const Value: TRegistro0400);
   public
-    function New: TRegistro0400;
+    function New(AOwner: TRegistro0001): TRegistro0400;
     function LocalizaRegistro(pCOD_NAT: String): boolean;
     property Items[Index: Integer]: TRegistro0400 read GetItem write SetItem;
   end;
@@ -512,6 +532,8 @@ type
     fCOD_INF: String;     /// Código da informação complementar do documento fiscal:
     fTXT: String;         /// Texto livre:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property COD_INF: String read FCOD_INF write FCOD_INF;
     property TXT: String read FTXT write FTXT;
   end;
@@ -523,7 +545,8 @@ type
     function GetItem(Index: Integer): TRegistro0450;
     procedure SetItem(Index: Integer; const Value: TRegistro0450);
   public
-    function New: TRegistro0450;
+    function New(AOwner: TRegistro0001): TRegistro0450;
+    function LocalizaRegistro(pCOD_INF :string): Boolean;
     property Items[Index: Integer]: TRegistro0450 read GetItem write SetItem;
   end;
 
@@ -534,6 +557,8 @@ type
     fCOD_OBS: String;     /// Código da Observação do lançamento fiscal:
     fTXT: String;         /// Descrição da observação vinculada ao lançamento fiscal:
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property COD_OBS: String read FCOD_OBS write FCOD_OBS;
     property TXT: String read FTXT write FTXT;
   end;
@@ -545,7 +570,8 @@ type
     function GetItem(Index: Integer): TRegistro0460;
     procedure SetItem(Index: Integer; const Value: TRegistro0460);
   public
-    function New: TRegistro0460;
+    function New(AOwner: TRegistro0001): TRegistro0460;
+    function LocalizaRegistro(pCOD_OBS: String): boolean;
     property Items[Index: Integer]: TRegistro0460 read GetItem write SetItem;
   end;
 
@@ -559,6 +585,8 @@ type
     fCOD_CTA    : String;       // Código da conta analítica/grupo de conta
     fNOME_CTA   : String;       // Nome da conta analítica/grupo de contas
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property DT_ALT: TDateTime read FDT_ALT write FDT_ALT;
     property COD_NAT_CC: String read FCOD_NAT_CC write FCOD_NAT_CC;
     property IND_CTA: String read FIND_CTA write FIND_CTA;
@@ -573,7 +601,7 @@ type
     function GetItem(Index: Integer): TRegistro0500;
     procedure SetItem(Index: Integer; const Value: TRegistro0500);
   public
-    function New: TRegistro0500;
+    function New(AOwner: TRegistro0001): TRegistro0500;
     property Items[Index: Integer]: TRegistro0500 read GetItem write SetItem;
   end;
 
@@ -584,6 +612,8 @@ type
     fCOD_CCUS   : String;       // Código do centro de custos.
     fCCUS       : String;       // Nome do centro de custos.
   public
+    constructor Create(AOwner: TRegistro0001); virtual; /// Create
+
     property DT_ALT: TDateTime read FDT_ALT write FDT_ALT;
     property COD_CCUS: String read FCOD_CCUS write FCOD_CCUS;
     property CCUS: String read FCCUS write FCCUS;
@@ -595,7 +625,7 @@ type
     function GetItem(Index: Integer): TRegistro0600;
     procedure SetItem(Index: Integer; const Value: TRegistro0600);
   public
-    function New: TRegistro0600;
+    function New(AOwner: TRegistro0001): TRegistro0600;
     property Items[Index: Integer]: TRegistro0600 read GetItem write SetItem;
   end;
 
@@ -616,8 +646,8 @@ constructor TRegistro0001.Create;
 begin
   FRegistro0190 := TRegistro0190List.Create;
   FRegistro0200 := TRegistro0200List.Create;
-  FRegistro0100 := TRegistro0100.Create;
-  FRegistro0005 := TRegistro0005.Create;
+  FRegistro0100 := TRegistro0100.Create(Self);
+  FRegistro0005 := TRegistro0005.Create(Self);
   FRegistro0150 := TRegistro0150List.Create;
   FRegistro0015 := TRegistro0015List.Create;
   FRegistro0300 := TRegistro0300List.Create;
@@ -654,9 +684,9 @@ begin
   Result := TRegistro0015(Inherited Items[Index]);
 end;
 
-function TRegistro0015List.New: TRegistro0015;
+function TRegistro0015List.New(AOwner: TRegistro0001): TRegistro0015;
 begin
-  Result := TRegistro0015.Create;
+  Result := TRegistro0015.Create(AOwner);
   Add(Result);
 end;
 
@@ -687,9 +717,9 @@ begin
    end;
 end;
 
-function TRegistro0150List.New: TRegistro0150;
+function TRegistro0150List.New(AOwner: TRegistro0001): TRegistro0150;
 begin
-  Result := TRegistro0150.Create;
+  Result := TRegistro0150.Create(AOwner);
   Add(Result);
 end;
 
@@ -705,9 +735,9 @@ begin
   Result := TRegistro0175(Inherited Items[Index]);
 end;
 
-function TRegistro0175List.New: TRegistro0175;
+function TRegistro0175List.New(AOwner: TRegistro0150): TRegistro0175;
 begin
-  Result := TRegistro0175.Create;
+  Result := TRegistro0175.Create(AOwner);
   Add(Result);
 end;
 
@@ -738,9 +768,9 @@ begin
    end;
 end;
 
-function TRegistro0190List.New: TRegistro0190;
+function TRegistro0190List.New(AOwner: TRegistro0001): TRegistro0190;
 begin
-  Result := TRegistro0190.Create;
+  Result := TRegistro0190.Create(AOwner);
   Add(Result);
 end;
 
@@ -771,9 +801,9 @@ begin
    end;
 end;
 
-function TRegistro0200List.New: TRegistro0200;
+function TRegistro0200List.New(AOwner: TRegistro0001): TRegistro0200;
 begin
-  Result := TRegistro0200.Create;
+  Result := TRegistro0200.Create(AOwner);
   Add(Result);
 end;
 
@@ -789,9 +819,9 @@ begin
   Result := TRegistro0205(Inherited Items[Index]);
 end;
 
-function TRegistro0205List.New: TRegistro0205;
+function TRegistro0205List.New(AOwner: TRegistro0200): TRegistro0205;
 begin
-  Result := TRegistro0205.Create;
+  Result := TRegistro0205.Create(AOwner);
   Add(Result);
 end;
 
@@ -807,9 +837,9 @@ begin
   Result := TRegistro0206(Inherited Items[Index]);
 end;
 
-function TRegistro0206List.New: TRegistro0206;
+function TRegistro0206List.New(AOwner: TRegistro0200): TRegistro0206;
 begin
-  Result := TRegistro0206.Create;
+  Result := TRegistro0206.Create(AOwner);
   Add(Result);
 end;
 
@@ -825,9 +855,9 @@ begin
   Result := TRegistro0220(Inherited Items[Index]);
 end;
 
-function TRegistro0220List.New: TRegistro0220;
+function TRegistro0220List.New(AOwner: TRegistro0200): TRegistro0220;
 begin
-  Result := TRegistro0220.Create;
+  Result := TRegistro0220.Create(AOwner);
   Add(Result);
 end;
 
@@ -858,9 +888,9 @@ begin
    end;
 end;
 
-function TRegistro0400List.New: TRegistro0400;
+function TRegistro0400List.New(AOwner: TRegistro0001): TRegistro0400;
 begin
-  Result := TRegistro0400.Create;
+  Result := TRegistro0400.Create(AOwner);
   Add(Result);
 end;
 
@@ -876,9 +906,24 @@ begin
   Result := TRegistro0450(Inherited Items[Index]);
 end;
 
-function TRegistro0450List.New: TRegistro0450;
+function TRegistro0450List.LocalizaRegistro(pCOD_INF: string): Boolean;
+  var
+    iI: Integer;
 begin
-  Result := TRegistro0450.Create;
+  Result := False;
+  for iI := 0 to Pred(Self.Count) do
+  begin
+    if Self.Items[iI].COD_INF = pCOD_INF then
+    begin
+      Result := True;
+      Break;
+    end;
+  end;
+end;
+
+function TRegistro0450List.New(AOwner: TRegistro0001): TRegistro0450;
+begin
+  Result := TRegistro0450.Create(AOwner);
   Add(Result);
 end;
 
@@ -894,9 +939,24 @@ begin
   Result := TRegistro0460(inherited Items[Index]);
 end;
 
-function TRegistro0460List.New: TRegistro0460;
+function TRegistro0460List.LocalizaRegistro(pCOD_OBS: String): boolean;
+var
+intFor: integer;
 begin
-  Result := TRegistro0460.Create;
+   Result := false;
+   for intFor := 0 to Self.Count - 1 do
+   begin
+      if Self.Items[intFor].COD_OBS = pCOD_OBS then
+      begin
+         Result := true;
+         Break;
+      end;
+   end;
+end;
+
+function TRegistro0460List.New(AOwner: TRegistro0001): TRegistro0460;
+begin
+  Result := TRegistro0460.Create(AOwner);
   Add(Result);
 end;
 
@@ -907,7 +967,7 @@ end;
 
 { TRegistro0150 }
 
-constructor TRegistro0150.Create;
+constructor TRegistro0150.Create(AOwner: TRegistro0001);
 begin
   FRegistro0175 := TRegistro0175List.Create;
 end;
@@ -920,7 +980,7 @@ end;
 
 { TRegistro0200 }
 
-constructor TRegistro0200.Create;
+constructor TRegistro0200.Create(AOwner: TRegistro0001);
 begin
    FRegistro0205 := TRegistro0205List.Create;
    FRegistro0206 := TRegistro0206List.Create;
@@ -937,9 +997,9 @@ end;
 
 { TRegistro0300 }
 
-constructor TRegistro0300.Create;
+constructor TRegistro0300.Create(AOwner: TRegistro0001);
 begin
-   FRegistro0305 := TRegistro0305.Create;
+   FRegistro0305 := TRegistro0305.Create(Self);
 end;
 
 destructor TRegistro0300.Destroy;
@@ -970,9 +1030,9 @@ begin
    end;
 end;
 
-function TRegistro0300List.New: TRegistro0300;
+function TRegistro0300List.New(AOwner: TRegistro0001): TRegistro0300;
 begin
-  Result := TRegistro0300.Create;
+  Result := TRegistro0300.Create(AOwner);
   Add(Result);
 end;
 
@@ -988,9 +1048,9 @@ begin
   Result := TRegistro0500(inherited Items[Index]);
 end;
 
-function TRegistro0500List.New: TRegistro0500;
+function TRegistro0500List.New(AOwner: TRegistro0001): TRegistro0500;
 begin
-  Result := TRegistro0500.Create;
+  Result := TRegistro0500.Create(AOwner);
   Add(Result);
 end;
 
@@ -1006,15 +1066,99 @@ begin
   Result := TRegistro0600(inherited Items[Index]);
 end;
 
-function TRegistro0600List.New: TRegistro0600;
+function TRegistro0600List.New(AOwner: TRegistro0001): TRegistro0600;
 begin
-  Result := TRegistro0600.Create;
+  Result := TRegistro0600.Create(AOwner);
   Add(Result);
 end;
 
 procedure TRegistro0600List.SetItem(Index: Integer; const Value: TRegistro0600);
 begin
   Put(Index, Value);
+end;
+
+{ TRegistro0005 }
+
+constructor TRegistro0005.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0015 }
+
+constructor TRegistro0015.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0100 }
+
+constructor TRegistro0100.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0175 }
+
+constructor TRegistro0175.Create(AOwner: TRegistro0150);
+begin
+end;
+
+{ TRegistro0190 }
+
+constructor TRegistro0190.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0205 }
+
+constructor TRegistro0205.Create(AOwner: TRegistro0200);
+begin
+end;
+
+{ TRegistro0206 }
+
+constructor TRegistro0206.Create(AOwner: TRegistro0200);
+begin
+end;
+
+{ TRegistro0220 }
+
+constructor TRegistro0220.Create(AOwner: TRegistro0200);
+begin
+end;
+
+{ TRegistro0305 }
+
+constructor TRegistro0305.Create(AOwner: TRegistro0300);
+begin
+end;
+
+{ TRegistro0400 }
+
+constructor TRegistro0400.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0450 }
+
+constructor TRegistro0450.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0460 }
+
+constructor TRegistro0460.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0500 }
+
+constructor TRegistro0500.Create(AOwner: TRegistro0001);
+begin
+end;
+
+{ TRegistro0600 }
+
+constructor TRegistro0600.Create(AOwner: TRegistro0001);
+begin
 end;
 
 end.

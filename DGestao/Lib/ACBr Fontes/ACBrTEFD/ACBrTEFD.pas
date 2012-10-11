@@ -47,8 +47,8 @@ interface
 uses
   Classes, SysUtils, ACBrTEFDClass, ACBrTEFDAuttar,
   ACBrTEFDDial, ACBrTEFDDisc, ACBrTEFDHiper, ACBrTEFDCliSiTef, ACBrTEFDGpu,
-  ACBrTEFDVeSPague, ACBrTEFDBanese
-  {, ACBrTEFDGoodCard, ACBrTEFDFoxWin}
+  ACBrTEFDVeSPague, ACBrTEFDBanese, ACBrTEFDGoodCard, ACBrTEFDFoxWin,
+  ACBrTEFDCliDTEF, ACBrTEFDPetroCard, ACBrTEFDCrediShop, ACBrTEFDTicketCar
   {$IFDEF FPC}
     ,LResources
   {$ENDIF}
@@ -65,17 +65,40 @@ uses
 
 type
 
-   { TACBrTEFDClass }
+   { TACBrTEFDIdentificacao }
+
+   TACBrTEFDIdentificacao = class( TPersistent )
+   private
+      FNomeAplicacao: String;
+      FRazaoSocial: String;
+      FSoftwareHouse: String;
+      FVersaoAplicacao: String;
+      procedure SetNomeAplicacao(AValue: String);
+      procedure SetRazaoSocial(AValue: String);
+      procedure SetSoftwareHouse(AValue: String);
+      procedure SetVersaoAplicacao(AValue: String);
+   published
+     property NomeAplicacao   : String read FNomeAplicacao   write SetNomeAplicacao ;
+     property VersaoAplicacao : String read FVersaoAplicacao write SetVersaoAplicacao ;
+     property SoftwareHouse   : String read FSoftwareHouse   write SetSoftwareHouse ;
+     property RazaoSocial     : String read FRazaoSocial     write SetRazaoSocial ;
+   end ;
+
+
+   { TACBrTEFD }
 
    TACBrTEFD = class( TComponent )
    private
      fAutoAtivarGP : Boolean;
      fAutoFinalizarCupom : Boolean;
      fAutoEfetuarPagamento : Boolean;
+     fCHQEmGerencial: Boolean;
+     fTrocoMaximo: Double;
      fEsperaSleep : Integer;
      fEstadoReq : TACBrTEFDReqEstado;
      fEstadoResp : TACBrTEFDRespEstado;
      fExibirMsgAutenticacao: Boolean;
+     fIdentificacao: TACBrTEFDIdentificacao;
      fMultiplosCartoes : Boolean;
      fNumeroMaximoCartoes: Integer;
      fNumVias : Integer;
@@ -87,6 +110,7 @@ type
      fOnComandaECFAbreVinculado : TACBrTEFDComandaECFAbreVinculado;
      fOnComandaECFImprimeVia : TACBrTEFDComandaECFImprimeVia;
      fOnComandaECFPagamento : TACBrTEFDComandaECFPagamento;
+     fOnComandaECFSubtotaliza: TACBrTEFDComandaECFSubtotaliza;
      fOnDepoisCancelarTransacoes : TACBrTEFDProcessarTransacoesPendentes ;
      fOnDepoisConfirmarTransacoes : TACBrTEFDProcessarTransacoesPendentes;
      fOnExibeMsg : TACBrTEFDExibeMsg;
@@ -98,6 +122,7 @@ type
      fPathBackup   : String;
      fGPAtual      : TACBrTEFDTipo;
      fTecladoBloqueado : Boolean;
+
      fTefClass     : TACBrTEFDClass ;
      fTefDial      : TACBrTEFDDial ;
      fTefGPU       : TACBrTEFDGpu ;
@@ -107,8 +132,13 @@ type
      fTefHiper     : TACBrTEFDHiper ;
      fTefBanese    : TACBrTEFDBanese ;
      fTefAuttar    : TACBrTEFDAuttar ;
-//   fTefGood      : TACBrTEFDGoodCard ;
-//   fTefFW        : TACBrTEFDFoxWin ;
+     fTefGood      : TACBrTEFDGoodCard ;
+     fTefFW        : TACBrTEFDFoxWin ;
+     fTefCliDTEF   : TACBrTEFDCliDTEF ;
+     fTefPetrocard : TACBrTEFDPetroCard ;
+     fTefCrediShop : TACBrTEFDCrediShop ;
+     fTefTicketCar : TACBrTEFDTicketCar ;
+
      fEsperaSTS    : Integer;
      fTEFList      : TACBrTEFDClassList ;
      fpRespostasPendentes : TACBrTEFDRespostasPendentes;
@@ -123,7 +153,6 @@ type
      function GetPathBackup : String;
      function GetReq : TACBrTEFDReq;
      function GetResp : TACBrTEFDResp;
-     procedure SetAutoAtivarGP(const AValue : Boolean);
      procedure SetAutoEfetuarPagamento(const AValue : Boolean);
      procedure SetAutoFinalizarCupom(const AValue : Boolean);
      procedure SetEsperaSleep(const AValue : Integer);
@@ -139,11 +168,14 @@ type
      procedure SetArqLOG(const AValue : String);
 
    public
+     Function InfoECFAsString( Operacao : TACBrTEFDInfoECF ) : String ;
+     Function InfoECFAsDouble( Operacao : TACBrTEFDInfoECF;
+        DefaultValue: Integer = -98787158) : Double ;
      Function EstadoECF : AnsiChar ;
-     function SubTotalECF: Double;
      function DoExibeMsg( Operacao : TACBrTEFDOperacaoMensagem;
         Mensagem : String ) : TModalResult;
      function ComandarECF(Operacao : TACBrTEFDOperacaoECF) : Integer;
+     function ECFSubtotaliza(DescAcres: Double) : Integer;
      function ECFPagamento(Indice : String; Valor : Double) : Integer;
      function ECFAbreVinculado(COO, Indice : String; Valor : Double) : Integer;
      function ECFImprimeVia( TipoRelatorio : TACBrTEFDTipoRelatorio;
@@ -213,6 +245,10 @@ type
    published
 
      property About : String read GetAbout write SetAbout stored False ;
+
+     property Identificacao : TACBrTEFDIdentificacao read fIdentificacao
+        write fIdentificacao ;
+
      property MultiplosCartoes : Boolean read fMultiplosCartoes
        write SetMultiplosCartoes default False ;
      property NumeroMaximoCartoes : Integer read fNumeroMaximoCartoes
@@ -233,6 +269,9 @@ type
         default CACBrTEFD_EsperaSleep ;
      property PathBackup : String read GetPathBackup write SetPathBackup ;
      property ArqLOG : String read fArqLOG write SetArqLOG ;
+     property CHQEmGerencial : Boolean read fCHQEmGerencial
+        write fCHQEmGerencial default False ;
+     property TrocoMaximo : Double read fTrocoMaximo write fTrocoMaximo ;
 
      property TEFDial    : TACBrTEFDDial     read fTefDial ;
      property TEFDisc    : TACBrTEFDDisc     read fTefDisc ;
@@ -242,8 +281,12 @@ type
      property TEFGPU     : TACBrTEFDGpu      read fTefGPU ;
      property TEFBanese  : TACBrTEFDBanese   read fTefBanese ;
      property TEFAuttar  : TACBrTEFDAuttar   read fTefAuttar ;     
-//   property TEFGood    : TACBrTEFDGoodCard read fTefGood ;
-//   property TEFFoxWin  : TACBrTEFDFoxWin   read fTefFW ;
+     property TEFGood    : TACBrTEFDGoodCard read fTefGood ;
+     property TEFFoxWin  : TACBrTEFDFoxWin   read fTefFW ;
+     property TEFCliDTEF : TACBrTEFDCliDTEF  read fTefCliDTEF ;
+     property TEFPetrocard : TACBrTEFDPetroCard  read fTefPetrocard ;
+     property TEFCrediShop : TACBrTEFDCrediShop  read fTefCrediShop ;
+     property TEFTicketCar : TACBrTEFDTicketCar  read fTefTicketCar ;
 
      property OnAguardaResp : TACBrTEFDAguardaRespEvent read fOnAguardaResp
         write fOnAguardaResp ;
@@ -257,6 +300,8 @@ type
         write fOnLimpaTeclado ;
      property OnComandaECF  : TACBrTEFDComandaECF read fOnComandaECF
         write fOnComandaECF ;
+     property OnComandaECFSubtotaliza  : TACBrTEFDComandaECFSubtotaliza
+        read fOnComandaECFSubtotaliza write fOnComandaECFSubtotaliza ;
      property OnComandaECFPagamento  : TACBrTEFDComandaECFPagamento
         read fOnComandaECFPagamento write fOnComandaECFPagamento ;
      property OnComandaECFAbreVinculado : TACBrTEFDComandaECFAbreVinculado
@@ -305,6 +350,32 @@ begin
      raise EACBrTEFDArquivo.Create( ACBrStr( 'Erro ao apagar o arquivo:' + sLineBreak + Arquivo ) );
 end;
 
+{ TACBrTEFDIdentificacao }
+
+procedure TACBrTEFDIdentificacao.SetSoftwareHouse(AValue: String);
+begin
+   if FSoftwareHouse=AValue then Exit;
+   FSoftwareHouse := LeftStr(Trim(AValue),8);
+end;
+
+procedure TACBrTEFDIdentificacao.SetNomeAplicacao(AValue: String);
+begin
+   if FNomeAplicacao=AValue then Exit;
+   FNomeAplicacao := Trim(AValue);
+end;
+
+procedure TACBrTEFDIdentificacao.SetRazaoSocial(AValue: String);
+begin
+   if FRazaoSocial=AValue then Exit;
+   FRazaoSocial := Trim(AValue);
+end;
+
+procedure TACBrTEFDIdentificacao.SetVersaoAplicacao(AValue: String);
+begin
+   if FVersaoAplicacao=AValue then Exit;
+   FVersaoAplicacao := Trim(AValue);
+end;
+
 { TACBrTEFDClass }
 
 constructor TACBrTEFD.Create(AOwner : TComponent);
@@ -324,6 +395,8 @@ begin
   fEsperaSleep          := CACBrTEFD_EsperaSleep ;
   fTecladoBloqueado     := False ;
   fArqLOG               := '' ;
+  fCHQEmGerencial       := False;
+  fTrocoMaximo          := 0;
 
   fOnAguardaResp              := nil ;
   fOnAntesFinalizarRequisicao := nil ;
@@ -331,6 +404,7 @@ begin
   fOnDepoisCancelarTransacoes := nil ;
   fOnAguardaResp              := nil ;
   fOnComandaECF               := nil ;
+  fOnComandaECFSubtotaliza    := nil ;
   fOnComandaECFPagamento      := nil ;
   fOnComandaECFAbreVinculado  := nil ;
   fOnComandaECFImprimeVia     := nil ;
@@ -341,6 +415,7 @@ begin
   fOnBloqueiaMouseTeclado     := nil ;
   fOnLimpaTeclado             := nil ;
   fOnRestauraFocoAplicacao    := nil ;
+  fIdentificacao              := TACBrTEFDIdentificacao.Create;
 
   { Lista de Objetos com todas as Classes de TEF }
   fTEFList := TACBrTEFDClassList.create(True);
@@ -403,8 +478,7 @@ begin
    fTefBanese.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
   {$ENDIF}
 
-(*
-{ Criando Classe GOOD CARD }
+  { Criando Classe GOOD CARD }
   fTefGood := TACBrTEFDGoodCard.Create(self);
   fTEFList.Add(fTefGood);     // Adicionando "fTefGood" na Lista Objetos de Classes de TEF
   {$IFDEF COMPILER6_UP}
@@ -417,13 +491,41 @@ begin
   {$IFDEF COMPILER6_UP}
    fTefFW.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
   {$ENDIF}
-*)
+
+  { Criando Classe CliDTEF }
+  fTefCliDTEF := TACBrTEFDCliDTEF.Create(self);
+  fTEFList.Add(fTefCliDTEF);     // Adicionando "fTefCliDTEF" na Lista Objetos de Classes de TEF
+  {$IFDEF COMPILER6_UP}
+   fTefCliDTEF.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
+  {$ENDIF}
+
+  { Criando Classe Petrocard }
+  fTefPetrocard := TACBrTEFDPetroCard.Create(self);
+  fTEFList.Add(fTefPetrocard);     // Adicionando "fTefPetrocard" na Lista Objetos de Classes de TEF
+  {$IFDEF COMPILER6_UP}
+   fTefPetrocard.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
+  {$ENDIF}
+
+  { Criando Classe CrediShop }
+  fTefCrediShop := TACBrTEFDCrediShop.Create(self);
+  fTEFList.Add(fTefCrediShop);     // Adicionando "fTefCrediShop" na Lista Objetos de Classes de TEF
+  {$IFDEF COMPILER6_UP}
+   fTefCrediShop.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
+  {$ENDIF}
+
+  { Criando Classe TicketCar }
+  fTefTicketCar := TACBrTEFDTicketCar.Create(self);
+  fTEFList.Add(fTefTicketCar);     // Adicionando "fTefTicketCar" na Lista Objetos de Classes de TEF
+  {$IFDEF COMPILER6_UP}
+   fTefTicketCar.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
+  {$ENDIF}
 
   GPAtual := gpTefDial;
 end;
 
 destructor TACBrTEFD.Destroy;
 begin
+  fIdentificacao.Free ;
   fTEFList.Free;  // Destroi Lista de Classes TEF e Objetos internos
   fpRespostasPendentes.Free ;  // Destroi Lista de Respostas pendentes e Objetos internos
 
@@ -519,16 +621,20 @@ begin
   if AValue = fGPAtual then exit ;
 
   case AValue of
-    gpTefDial  : fTefClass := fTefDial ;
-    gpTefDisc  : fTefClass := fTefDisc ;
-    gpHiperTef : fTefClass := fTefHiper ;
-    gpCliSiTef : fTefClass := fTefCliSiTef;
-    gpVeSPague : fTefClass := fTefVeSPague;
-    gpTefGpu   : fTefClass := fTefGPU;
-    gpBanese   : fTefClass := fTefBanese ;
-    gpTefAuttar: fTefClass := fTefAuttar ;
-//  gpGoodCard : fTefClass := fTefGood ;
-//  gpFoxWin   : fTefClass := fTefFW ;
+    gpTefDial   : fTefClass := fTefDial ;
+    gpTefDisc   : fTefClass := fTefDisc ;
+    gpHiperTef  : fTefClass := fTefHiper ;
+    gpCliSiTef  : fTefClass := fTefCliSiTef;
+    gpVeSPague  : fTefClass := fTefVeSPague;
+    gpTefGpu    : fTefClass := fTefGPU;
+    gpBanese    : fTefClass := fTefBanese ;
+    gpTefAuttar : fTefClass := fTefAuttar ;
+    gpGoodCard  : fTefClass := fTefGood ;
+    gpFoxWin    : fTefClass := fTefFW ;
+    gpCliDTEF   : fTefClass := fTefCliDTEF ;
+    gpPetroCard : fTefClass := fTefPetrocard ;
+    gpCrediShop : fTefClass := fTefCrediShop ;
+    gpTicketCar : fTefClass := fTefTicketCar ;
   end;
 
   fGPAtual := AValue;
@@ -538,14 +644,8 @@ function TACBrTEFD.EstadoECF : AnsiChar;
 Var
   Retorno : String ;
 begin
-  Retorno := ' ' ;
-  try
-     OnInfoEcf( ineEstadoECF, Retorno ) ;
-  except
-     On E : Exception do
-        raise EACBrTEFDECF.Create(E.Message);
-  end;
-  Result := upcase( padL(Retorno,1)[1] );
+  Retorno := InfoECFAsString( ineEstadoECF ) ;
+  Result  := upcase( padL(Retorno,1)[1] );
 
   if not (Result in ['L','V','P','C','G','R','N','O']) then
      raise EACBrTEFDECF.Create(
@@ -557,28 +657,6 @@ begin
                  '"G" ou "R" - Relatório Gerencial'+sLineBreak+
                  '"N" - Recebimento Não Fiscal'+sLineBreak+
                  '"O" - Outro' ) );
-end;
-
-function TACBrTEFD.SubTotalECF : Double;
-var
-   SaldoAPagar : Double ;
-   SubTotal    : String ;
-begin
-   try
-      SubTotal := '' ;
-      OnInfoECF( ineSubTotal, SubTotal ) ;
-   except
-      on E : Exception do
-         raise EACBrTEFDECF.Create(E.Message);
-   end;
-
-   SaldoAPagar := StringToFloatDef( SubTotal, -98787158);
-   SaldoAPagar := SimpleRoundTo( SaldoAPagar, -2);     // por Rodrigo Baltazar
-
-   if SaldoAPagar = -98787158 then
-      raise Exception.Create( ACBrStr( 'Erro na conversão do Valor Retornado '+
-                                       'em: OnInfoECF( ineSubTotal, SaldoAPagar )' ) );
-   Result := SaldoAPagar;
 end;
 
 procedure TACBrTEFD.AtivarGP(GP : TACBrTEFDTipo);
@@ -696,8 +774,8 @@ begin
           CNFEnviado := True ;
         end;
 
-        ApagaEVerifica( ArqResp );
-        ApagaEVerifica( RespostasPendentes[I].ArqBackup );
+        ApagaEVerifica( ArqRespPendente );
+        ApagaEVerifica( ArqBackup );
 
         Inc( I ) ;
       end;
@@ -739,12 +817,13 @@ begin
      end;
 
      if EstadoECF <> 'L' then
-        raise EACBrTEFDECF.Create( ACBrStr('ECF não está LIVRE') ) ;
+        raise EACBrTEFDECF.Create( ACBrStr(CACBrTEFD_Erro_ECFNaoLivre) ) ;
   end;
 
-  ImpressaoOk := False ;
-  Gerencial   := False ;
-  RemoverMsg  := False ;
+  ImpressaoOk            := False ;
+  Gerencial              := False ;
+  RemoverMsg             := False ;
+  GerencialAberto        := False ;
   MsgAutenticacaoAExibir := '' ;
 
   GrupoVinc := nil ;
@@ -770,7 +849,7 @@ begin
                     end;
 
                     if EstadoECF <> 'L' then
-                       raise EACBrTEFDECF.Create( ACBrStr('ECF não está LIVRE') ) ;
+                       raise EACBrTEFDECF.Create( ACBrStr(CACBrTEFD_Erro_ECFNaoLivre) ) ;
                  end;
 
                  GerencialAberto := False ;
@@ -833,7 +912,8 @@ begin
                           if (I < NVias) or (J < RespostasPendentes.Count-1) then
                           begin
                              ComandarECF( opePulaLinhas ) ;
-                             DoExibeMsg( opmDestaqueVia, 'Destaque a '+IntToStr(I)+'ª Via') ;
+                             DoExibeMsg( opmDestaqueVia,
+                                         Format( CACBrTEFD_DestaqueVia, [I]) ) ;
                           end;
 
                           Inc( I ) ;
@@ -876,6 +956,9 @@ begin
 
                  For K := 0 to Length( GrupoVinc )-1 do
                  begin
+                    if GrupoVinc[K].OrdemPagamento >= 999 then
+                       Gerencial := True;
+
                     For J := 0 to RespostasPendentes.Count-1 do
                     begin
                        with RespostasPendentes[J] do
@@ -923,23 +1006,40 @@ begin
                           if (NVias > 0) and (Ordem <> OrdemPagamento) then
                           begin
                              Ordem := OrdemPagamento ;
-                             ECFAbreVinculado( DocumentoVinculado,
-                                               GrupoVinc[K].IndiceFPG_ECF,
-                                               GrupoVinc[K].Total ) ;
+                             if Gerencial then
+                              begin
+                                ComandarECF( opeAbreGerencial );
+                                GerencialAberto := True;
+                              end
+                             else
+                                ECFAbreVinculado( DocumentoVinculado,
+                                                  GrupoVinc[K].IndiceFPG_ECF,
+                                                  GrupoVinc[K].Total ) ;
                           end ;
 
                           I := 1 ;
                           while I <= NVias do
                           begin
-                             if I = 1 then
-                                ECFImprimeVia( trVinculado, I, ImagemComprovante1aVia )
+                             if Gerencial then
+                              begin
+                                if I = 1 then
+                                   ECFImprimeVia( trGerencial, I, ImagemComprovante1aVia )
+                                else
+                                   ECFImprimeVia( trGerencial, I, ImagemComprovante2aVia ) ;
+                              end
                              else
-                                ECFImprimeVia( trVinculado, I, ImagemComprovante2aVia ) ;
+                              begin
+                                if I = 1 then
+                                   ECFImprimeVia( trVinculado, I, ImagemComprovante1aVia )
+                                else
+                                   ECFImprimeVia( trVinculado, I, ImagemComprovante2aVia ) ;
+                              end ;
 
                              if (I < NVias) or (J < RespostasPendentes.Count-1) then
                              begin
                                 ComandarECF( opePulaLinhas ) ;
-                                DoExibeMsg( opmDestaqueVia, 'Destaque a '+IntToStr(I)+'ª Via') ;
+                                DoExibeMsg( opmDestaqueVia,
+                                            Format( CACBrTEFD_DestaqueVia, [I]) ) ;
                              end;
 
                              Inc( I ) ;
@@ -974,7 +1074,15 @@ begin
                     end ;
 
                     if Ordem > -1 then
-                       ComandarECF( opeFechaVinculado ) ;
+                    begin
+                       if GerencialAberto then
+                        begin
+                          ComandarECF( opeFechaGerencial );
+                          GerencialAberto := False;
+                        end
+                       else
+                          ComandarECF( opeFechaVinculado ) ;
+                    end;
                  end;
                end;
 
@@ -995,8 +1103,7 @@ begin
 
         if not ImpressaoOk then
         begin
-          if DoExibeMsg( opmYesNo, 'Impressora não responde'+sLineBreak+
-                                   'Tentar novamente ?') <> mrYes then
+          if DoExibeMsg( opmYesNo, CACBrTEFD_Erro_ECFNaoResponde ) <> mrYes then
              break ;
         end;
 
@@ -1067,6 +1174,38 @@ begin
 
      raise EACBrTEFDECF.Create( ACBrStr( Erro ) )
   end;
+end;
+
+function TACBrTEFD.ECFSubtotaliza(DescAcres: Double): Integer;
+Var
+   Erro : String ;
+begin
+  fTefClass.GravaLog( fTefClass.Name +' ECFSubtotaliza: DescAcres: '+
+    FormatFloat('0.00',DescAcres) ) ;
+
+  if not Assigned( OnComandaECFSubtotaliza ) then
+  begin
+     ComandarECF( opeSubTotalizaCupom );
+     exit;
+  end;
+
+  Result := -1 ;  // -1 = Não tratado
+  OnComandaECFSubtotaliza( DescAcres, Result ) ;
+
+  if Result < 1 then
+  begin
+     if Result = 0 then
+        Erro := 'Erro ao executar "OnComandaECFSubtotaliza"'
+     else
+        Erro := '"OnComandaECFSubtotaliza" não tratada' ;
+
+     fTefClass.GravaLog(Erro);
+
+     raise EACBrTEFDECF.Create( ACBrStr( Erro ) )
+  end;
+
+  ComandarECF( opeImprimePagamentos ) ;  // Deve imprimir Dinheiro antes dos pagamentos do TEF
+
 end;
 
 Function TACBrTEFD.ECFPagamento( Indice: String; Valor: Double ) : Integer ;
@@ -1176,7 +1315,7 @@ begin
 
                  try
                     Case Est of
-                      'V' : ComandarECF( opeSubTotalizaCupom );
+                      'V' : ECFSubtotaliza( RespostasPendentes.TotalDesconto );
 
                       'P' :
                         begin
@@ -1192,30 +1331,58 @@ begin
                                  begin
                                    Inc( Ordem ) ;
 
-                                   if SubTotalECF > 0 then
+                                   if InfoECFAsDouble(ineSubTotal) > 0 then
                                       ECFPagamento( GrupoFPG[I].IndiceFPG_ECF, GrupoFPG[I].Total );
 
                                    For J := 0 to RespostasPendentes.Count-1 do
                                       if RespostasPendentes[J].IndiceFPG_ECF = GrupoFPG[I].IndiceFPG_ECF then
-                                         RespostasPendentes[J].OrdemPagamento := Ordem;
+                                      begin
+                                        if (RespostasPendentes[J].Header = 'CHQ') and CHQEmGerencial then
+                                         begin
+                                           RespostasPendentes[J].OrdemPagamento := 999;
+                                           Dec( Ordem ) ;
+                                         end
+                                        else
+                                           RespostasPendentes[J].OrdemPagamento := Ordem;
+                                      end;
                                  end
                                 else
                                    Ordem := GrupoFPG[I].OrdemPagamento ;
                              end;
                           end;
 
-                          if SubTotalECF <= 0 then
-                             ComandarECF( opeFechaCupom )
-                          else
-                             break ;
+                          if (InfoECFAsDouble(ineSubTotal) > 0) then
+                          begin
+                             if (InfoECFAsDouble(ineTotalAPagar,0) > 0) then
+                             begin
+                                ComandarECF( opeImprimePagamentos ) ;
+
+                                if InfoECFAsDouble(ineSubTotal) > 0 then
+                                   Break;
+                              end
+                             else
+                                Break;
+                          end ;
+
+                          ComandarECF( opeFechaCupom )
                         end ;
 
                       'N' :     // Usado apenas no Fechamento de NaoFiscal
                         begin
-                          if SubTotalECF <= 0 then
-                             ComandarECF( opeFechaCupom )
-                          else
-                             break ;
+                          if (InfoECFAsDouble(ineSubTotal) > 0) then
+                          begin
+                             if (InfoECFAsDouble(ineTotalAPagar,0) > 0) then
+                             begin
+                                ComandarECF( opeImprimePagamentos ) ;
+
+                                if InfoECFAsDouble(ineSubTotal) > 0 then
+                                   Break;
+                              end
+                             else
+                                Break;
+                          end ;
+
+                          ComandarECF( opeFechaCupom )
                         end ;
                     else
                       raise Exception.Create(
@@ -1251,8 +1418,7 @@ begin
 
         if not ImpressaoOk then
         begin
-          if DoExibeMsg( opmYesNo, 'Impressora não responde'+sLineBreak+
-                                   'Tentar novamente ?') <> mrYes then
+          if DoExibeMsg( opmYesNo, CACBrTEFD_Erro_ECFNaoResponde ) <> mrYes then
           begin
              try ComandarECF(opeCancelaCupom); except {Exceção Muda} end ;
              break ;
@@ -1272,6 +1438,10 @@ var
    LenArr    : Integer;
    IndiceFPG : String;
    Ordem     : Integer;
+   wTotal: Double;
+   wIndiceFPG_ECF: String;
+   wOrdemPagamento: Integer;
+   Trocou: Boolean;
 begin
   SetLength( Grupo, 0) ;
 
@@ -1300,6 +1470,35 @@ begin
 
      Grupo[J].Total := Grupo[J].Total + RespostasPendentes[I].ValorTotal ;
   end;
+
+  // Ordenando por OrdemPagamento (usando Bubble sort) //
+  LenArr := Length( Grupo ) ;
+  repeat
+     J      := 1 ;
+     Trocou := False ;
+     while J < LenArr do
+     begin
+        if Grupo[J].OrdemPagamento < Grupo[J-1].OrdemPagamento then
+        begin
+          Trocou := True;
+          wOrdemPagamento := Grupo[J].OrdemPagamento ;
+          wIndiceFPG_ECF  := Grupo[J].IndiceFPG_ECF ;
+          wTotal          := Grupo[J].Total ;
+
+          Grupo[J].OrdemPagamento := Grupo[J-1].OrdemPagamento ;
+          Grupo[J].IndiceFPG_ECF  := Grupo[J-1].IndiceFPG_ECF ;
+          Grupo[J].Total          := Grupo[J-1].Total ;
+
+          Grupo[J-1].OrdemPagamento := wOrdemPagamento ;
+          Grupo[J-1].IndiceFPG_ECF  := wIndiceFPG_ECF ;
+          Grupo[J-1].Total          := wTotal ;
+        end;
+
+        Inc( J ) ;
+     end;
+
+     Dec( LenArr ) ;
+  until not Trocou;
 end;
 
 
@@ -1359,18 +1558,6 @@ begin
       raise Exception.Create( ACBrStr('Valor máximo de EsperaSleep deve ser: 500' )) ;
 
    fEsperaSleep := AValue;
-end;
-
-procedure TACBrTEFD.SetAutoAtivarGP(const AValue : Boolean);
-var
-   I : Integer;
-begin
-  { Ajustando o mesmo valor nas Classes de TEF }
-  For I := 0 to fTEFList.Count-1 do
-    if fTEFList[I] is TACBrTEFDClassTXT then
-       TACBrTEFDClassTXT( fTEFList[I] ).AutoAtivarGP := AValue;
-
-  fAutoAtivarGP := AValue;
 end;
 
 procedure TACBrTEFD.SetMultiplosCartoes(const AValue : Boolean);
@@ -1482,6 +1669,42 @@ begin
   end;
 
   fArqLOG := AValue;
+end;
+
+function TACBrTEFD.InfoECFAsString(Operacao: TACBrTEFDInfoECF): String;
+var
+   Retorno: String;
+begin
+   Retorno := '';
+   fTefClass.GravaLog( 'InfoECF: '+
+     GetEnumName(TypeInfo(TACBrTEFDInfoECF), Integer(Operacao) ) ) ;
+
+   try
+      OnInfoEcf( Operacao, Retorno ) ;
+   except
+      On E : Exception do
+      begin
+         fTefClass.GravaLog( fTefClass.Name +'   Erro: '+E.Message ) ;
+         raise EACBrTEFDECF.Create(E.Message);
+      end;
+   end;
+
+   fTefClass.GravaLog( '    Ret: '+Retorno ) ;
+   Result := Retorno;
+end;
+
+function TACBrTEFD.InfoECFAsDouble(Operacao: TACBrTEFDInfoECF;
+   DefaultValue: Integer): Double;
+var
+   Retorno: String;
+begin
+   Retorno := InfoECFAsString( Operacao );
+   Result  := RoundTo( StringToFloatDef( Retorno, DefaultValue), -2 );
+
+   if Result = -98787158 then
+      raise EACBrTEFDErro.Create( ACBrStr(
+         'Erro na conversão do Valor Retornado de: OnInfoECF( '+
+         GetEnumName(TypeInfo(TACBrTEFDInfoECF), Integer(Operacao)) + ')' ) );
 end;
 
 function TACBrTEFD.getArqResp : String;

@@ -58,7 +58,7 @@ const
 type
    { TACBrTEFDGoodCard }
 
-   TACBrTEFDGoodCard = class( TACBrTEFDClass )
+   TACBrTEFDGoodCard = class( TACBrTEFDClassTXT )
    private
    public
      constructor Create( AOwner : TComponent ) ; override ;

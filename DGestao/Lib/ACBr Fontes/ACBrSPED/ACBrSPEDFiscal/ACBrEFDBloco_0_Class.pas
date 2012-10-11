@@ -47,6 +47,7 @@ interface
 uses SysUtils, Classes, DateUtils, ACBrSped, ACBrEFDBloco_0, ACBrEFDBlocos,
      ACBrTXTClass;
 
+
 type
   /// TBLOCO_0 - Abertura, Identificação e Referências
 
@@ -54,6 +55,24 @@ type
 
   TBloco_0 = class(TACBrSPED)
   private
+    FOnBeforeWriteRegistro0200: TWriteRegistroEvent;
+    FOnBeforeWriteRegistro0206: TWriteRegistroEvent;
+    FOnBeforeWriteRegistro0500: TWriteRegistroEvent;
+    FOnBeforeWriteRegistro0600: TWriteRegistroEvent;
+    FOnBeforeWriteRegistro0990: TWriteRegistroEvent;
+
+    FOnWriteRegistro0200: TWriteRegistroEvent;
+    FOnWriteRegistro0206: TWriteRegistroEvent;
+    FOnWriteRegistro0500: TWriteRegistroEvent;
+    FOnWriteRegistro0600: TWriteRegistroEvent;
+    FOnWriteRegistro0990: TWriteRegistroEvent;
+
+    FOnAfterWriteRegistro0200: TWriteRegistroEvent;
+    FOnAfterWriteRegistro0206: TWriteRegistroEvent;
+    FOnAfterWriteRegistro0500: TWriteRegistroEvent;
+    FOnAfterWriteRegistro0600: TWriteRegistroEvent;
+    FOnAfterWriteRegistro0990: TWriteRegistroEvent;
+
     FRegistro0000: TRegistro0000;      /// BLOCO 0 - Registro0000
     FRegistro0001: TRegistro0001;      /// BLOCO 0 - Registro0001
     FRegistro0990: TRegistro0990;      /// BLOCO 0 - Registro0990
@@ -144,11 +163,29 @@ type
     property Registro0460Count: Integer read FRegistro0460Count write FRegistro0460Count;
     property Registro0500Count: Integer read FRegistro0500Count write FRegistro0500Count;
     property Registro0600Count: Integer read FRegistro0600Count write FRegistro0600Count;
+
+    property OnBeforeWriteRegistro0200: TWriteRegistroEvent read FOnBeforeWriteRegistro0200 write FOnBeforeWriteRegistro0200;
+    property OnBeforeWriteRegistro0206: TWriteRegistroEvent read FOnBeforeWriteRegistro0206 write FOnBeforeWriteRegistro0206;
+    property OnBeforeWriteRegistro0500: TWriteRegistroEvent read FOnBeforeWriteRegistro0500 write FOnBeforeWriteRegistro0500;
+    property OnBeforeWriteRegistro0600: TWriteRegistroEvent read FOnBeforeWriteRegistro0600 write FOnBeforeWriteRegistro0600;
+    property OnBeforeWriteRegistro0990: TWriteRegistroEvent read FOnBeforeWriteRegistro0990 write FOnBeforeWriteRegistro0990;
+
+    property OnWriteRegistro0200      : TWriteRegistroEvent read FOnWriteRegistro0200       write FOnWriteRegistro0200;
+    property OnWriteRegistro0206      : TWriteRegistroEvent read FOnWriteRegistro0206       write FOnWriteRegistro0206;
+    property OnWriteRegistro0500      : TWriteRegistroEvent read FOnWriteRegistro0500       write FOnWriteRegistro0500;
+    property OnWriteRegistro0600      : TWriteRegistroEvent read FOnWriteRegistro0600       write FOnWriteRegistro0600;
+    property OnWriteRegistro0990      : TWriteRegistroEvent read FOnWriteRegistro0990       write FOnWriteRegistro0990;
+
+    property OnAfterWriteRegistro0200 : TWriteRegistroEvent read FOnAfterWriteRegistro0200  write FOnAfterWriteRegistro0200;
+    property OnAfterWriteRegistro0206 : TWriteRegistroEvent read FOnAfterWriteRegistro0206  write FOnAfterWriteRegistro0206;
+    property OnAfterWriteRegistro0500 : TWriteRegistroEvent read FOnAfterWriteRegistro0500  write FOnAfterWriteRegistro0500;
+    property OnAfterWriteRegistro0600 : TWriteRegistroEvent read FOnAfterWriteRegistro0600  write FOnAfterWriteRegistro0600;
+    property OnAfterWriteRegistro0990 : TWriteRegistroEvent read FOnAfterWriteRegistro0990  write FOnAfterWriteRegistro0990;
   end;
 
 implementation
 
-uses ACBrSpedUtils;
+uses ACBrSpedUtils, StrUtils;
 
 { TBloco_0 }
 
@@ -224,7 +261,7 @@ end;
 
 function TBloco_0.Registro0015New: TRegistro0015;
 begin
-   Result := FRegistro0001.Registro0015.New;
+   Result := FRegistro0001.Registro0015.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0100New: TRegistro0100;
@@ -234,42 +271,74 @@ end;
 
 function TBloco_0.Registro0150New: TRegistro0150;
 begin
-   Result := FRegistro0001.Registro0150.New;
+   Result := FRegistro0001.Registro0150.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0175New: TRegistro0175;
+var
+U0150: TRegistro0150;
+U0150Count: Integer;
 begin
-   Result := FRegistro0001.Registro0150.Items[FRegistro0001.Registro0150.Count -1].Registro0175.New;
+   U0150Count := FRegistro0001.Registro0150.Count -1;
+   if U0150Count = -1 then
+      raise Exception.Create('O registro 0175 deve ser filho do registro 0150, e não existe nenhum 0150 pai!');
+
+   U0150 := FRegistro0001.Registro0150.Items[U0150Count];
+   Result  := U0150.Registro0175.New(U0150);
 end;
 
 function TBloco_0.Registro0190New: TRegistro0190;
 begin
-   Result := FRegistro0001.Registro0190.New;
+   Result := FRegistro0001.Registro0190.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0200New: TRegistro0200;
 begin
-   Result := FRegistro0001.Registro0200.New;
+   Result := FRegistro0001.Registro0200.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0205New: TRegistro0205;
+var
+U0200: TRegistro0200;
+U0200Count: Integer;
 begin
-   Result := FRegistro0001.Registro0200.Items[FRegistro0001.Registro0200.Count -1].Registro0205.New;
+   U0200Count := FRegistro0001.Registro0200.Count -1;
+   if U0200Count = -1 then
+      raise Exception.Create('O registro 0205 deve ser filho do registro 0200, e não existe nenhum 0200 pai!');
+
+   U0200 := FRegistro0001.Registro0200.Items[U0200Count];
+   Result  := U0200.Registro0205.New(U0200);
 end;
 
 function TBloco_0.Registro0206New: TRegistro0206;
+var
+U0200: TRegistro0200;
+U0200Count: Integer;
 begin
-   Result := FRegistro0001.Registro0200.Items[FRegistro0001.Registro0200.Count -1].Registro0206.New;
+   U0200Count := FRegistro0001.Registro0200.Count -1;
+   if U0200Count = -1 then
+      raise Exception.Create('O registro 0206 deve ser filho do registro 0200, e não existe nenhum 0200 pai!');
+
+   U0200 := FRegistro0001.Registro0200.Items[U0200Count];
+   Result  := U0200.Registro0206.New(U0200);
 end;
 
 function TBloco_0.Registro0220New: TRegistro0220;
+var
+U0200: TRegistro0200;
+U0200Count: Integer;
 begin
-   Result := FRegistro0001.Registro0200.Items[FRegistro0001.Registro0200.Count -1].Registro0220.New;
+   U0200Count := FRegistro0001.Registro0200.Count -1;
+   if U0200Count = -1 then
+      raise Exception.Create('O registro 0220 deve ser filho do registro 0200, e não existe nenhum 0200 pai!');
+
+   U0200 := FRegistro0001.Registro0200.Items[U0200Count];
+   Result  := U0200.Registro0220.New(U0200);
 end;
 
 function TBloco_0.Registro0300New: TRegistro0300;
 begin
-   Result := FRegistro0001.Registro0300.New;
+   Result := FRegistro0001.Registro0300.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0305New: TRegistro0305;
@@ -279,27 +348,27 @@ end;
 
 function TBloco_0.Registro0400New: TRegistro0400;
 begin
-   Result := FRegistro0001.Registro0400.New;
+   Result := FRegistro0001.Registro0400.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0450New: TRegistro0450;
 begin
-   Result := FRegistro0001.Registro0450.New;
+   Result := FRegistro0001.Registro0450.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0460New: TRegistro0460;
 begin
-   Result := FRegistro0001.Registro0460.New;
+   Result := FRegistro0001.Registro0460.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0500New: TRegistro0500;
 begin
-   Result := FRegistro0001.Registro0500.New;
+   Result := FRegistro0001.Registro0500.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0600New: TRegistro0600;
 begin
-   Result := FRegistro0001.Registro0600.New;
+   Result := FRegistro0001.Registro0600.New(FRegistro0001);
 end;
 
 procedure TBloco_0.WriteRegistro0000 ;
@@ -322,7 +391,9 @@ begin
          vlVersao102: strCOD_VER := '003';
          vlVersao103: strCOD_VER := '004';
          vlVersao104: strCOD_VER := '005';
+         vlVersao105: strCOD_VER := '006';
        end;
+
        Check(funChecaCNPJ(CNPJ), '(0-0000) ENTIDADE: O CNPJ "%s" digitado é inválido!', [CNPJ]);
        Check(funChecaCPF(CPF), '(0-0000) ENTIDADE: O CPF "%s" digitado é inválido!', [CPF]);
        Check(funChecaUF(UF), '(0-0000) ENTIDADE: A UF "%s" digitada é inválido!', [UF]);
@@ -386,7 +457,7 @@ begin
   begin
      with Reg0001.Registro0005 do
      begin
-       Check(funChecaCEP(CEP, Registro0000.UF), '(0-0005) COMPLEMENTO DA ENTIDADE: O CEP "%s" digitada é inválido para a unidade de federação "%s"!', [FANTASIA, CEP, Registro0000.UF]);
+       Check(funChecaCEP(CEP, Registro0000.UF), '(0-0005) COMPLEMENTO DA ENTIDADE "%s": O CEP "%s" digitada é inválido para a unidade de federação "%s"!', [FANTASIA, CEP, Registro0000.UF]);
        ///
        Add( LFill('0005') +
             LFill(FANTASIA) +
@@ -465,6 +536,7 @@ end;
 procedure TBloco_0.WriteRegistro0150(Reg0001: TRegistro0001) ;
 var
   intFor: integer;
+  booExterior: Boolean;
 begin
   if Assigned(Reg0001.Registro0150) then
   begin
@@ -472,15 +544,17 @@ begin
      begin
         with Reg0001.Registro0150.Items[intFor] do
         begin
+          booExterior := ((COD_PAIS <> '01058') and (COD_PAIS <> '1058'));
+
 //          Check(funChecaPAISIBGE(COD_PAIS), '(0-0150) %s-%s, o código do país "%s" digitado é inválido!', [COD_PART, NOME, COD_PAIS]);
           if Length(CNPJ) > 0 then
              Check(funChecaCNPJ(CNPJ), '(0-0150) %s-%s, o CNPJ "%s" digitado é inválido!', [COD_PART, NOME, CNPJ]);
           if Length(CPF)  > 0 then
-             Check(funChecaCPF(CPF), '(0-0150) %s-%s, o CPF "%s" digitado é inválido!', [COD_PART, NOME, CPF]);
+             Check(funChecaCPF(CPF),   '(0-0150) %s-%s, o CPF "%s" digitado é inválido!', [COD_PART, NOME, CPF]);
 //          Check(funChecaIE(IE, UF),         '(0-0150) %s-%s, a Inscrição Estadual "%s" digitada é inválida!', [COD_PART, NOME, IE]);
 //          Check(funChecaMUN(COD_MUN),       '(0-0150) %s-%s, o código do município "%s" digitado é inválido!', [COD_PART, NOME, IntToStr(COD_MUN)]);
-          Check(NOME <> '',                 '(0-0150) O nome do participante com CPF/CNPJ %s é obrigatório!', [CNPJ + CPF]);
-          Check(ENDERECO <> EmptyStr, '(0-150) O Endereço do participante "%s - %s - CPF/CNPJ %s" é obrigatório!', [COD_PART, NOME, CNPJ + CPF]);
+          Check(NOME <> '',            '(0-0150) O nome do participante com CPF/CNPJ %s é obrigatório!', [CNPJ + CPF]);
+          Check(ENDERECO <> EmptyStr,  '(0-150) O Endereço do participante "%s - %s - CPF/CNPJ %s" é obrigatório!', [COD_PART, NOME, CNPJ + CPF]);
           ///
           Add( LFill('0150') +
                LFill(COD_PART) +
@@ -489,7 +563,7 @@ begin
                LFill(CNPJ) +
                LFill(CPF) +
                LFill(IE) +
-               LFill(COD_MUN, 7) +
+               IfThen(booExterior, LFill(''), LFill(COD_MUN, 7)) +
                LFill(SUFRAMA) +
                LFill(ENDERECO) +
                LFill(NUM) +
@@ -557,11 +631,21 @@ procedure TBloco_0.WriteRegistro0200(Reg0001: TRegistro0001) ;
 var
   intFor: integer;
   strTIPO_ITEM: AnsiString;
+  strLinha: AnsiString;
 begin
   if Assigned( Reg0001.Registro0200 ) then
   begin
+     //-- Before
+     strLinha := '';
+     if Assigned(FOnBeforeWriteRegistro0200) then
+     begin
+        FOnBeforeWriteRegistro0200(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
+     end;
      for intFor := 0 to Reg0001.Registro0200.Count - 1 do
      begin
+        strLinha := '';
         with Reg0001.Registro0200.Items[intFor] do
         begin
           case TIPO_ITEM of
@@ -584,19 +668,24 @@ begin
             Check(funChecaGENERO(COD_GEN), '(0-0200) O código do gênero "%s" digitado é inválido! ' +
               'Produto %s %s', [COD_GEN, COD_BARRA, DESCR_ITEM]);
           end;
-          ///
-          Add( LFill('0200') +
-               LFill( COD_ITEM ) +
-               LFill( DESCR_ITEM ) +
-               LFill( COD_BARRA ) +
-               LFill( COD_ANT_ITEM ) +
-               LFill( UNID_INV ) +
-               LFill( strTIPO_ITEM ) +
-               LFill( COD_NCM ) +
-               LFill( EX_IPI ) +
-               LFill( COD_GEN, 2 ) +
-               LFill( COD_LST ) +
-               LFill( ALIQ_ICMS,0,2 ) ) ;
+
+          strLinha := LFill('0200') +
+                      LFill( COD_ITEM ) +
+                      LFill( DESCR_ITEM ) +
+                      LFill( COD_BARRA ) +
+                      LFill( COD_ANT_ITEM ) +
+                      LFill( UNID_INV ) +
+                      LFill( strTIPO_ITEM ) +
+                      LFill( COD_NCM ) +
+                      LFill( EX_IPI ) +
+                      LFill( COD_GEN, 2 ) +
+                      LFill( COD_LST ) +
+                      LFill( ALIQ_ICMS,0,2 );
+          //-- Write
+          if Assigned(FOnWriteRegistro0200) then
+             FOnWriteRegistro0200(strLinha);
+
+          Add(strLinha);
         end;
         /// Registros FILHOS
         WriteRegistro0205( Reg0001.Registro0200.Items[intFor] ) ;
@@ -605,7 +694,15 @@ begin
 
         Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
      end;
-     /// Variavél para armazenar a quantidade de registro do tipo.
+     //-- After
+     strLinha := '';
+     if Assigned(FOnAfterWriteRegistro0200) then
+     begin
+        FOnAfterWriteRegistro0200(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
+     end;
+     /// Variável para armazenar a quantidade de registro do tipo.
      FRegistro0200Count := FRegistro0200Count + Reg0001.Registro0200.Count;
   end;
 end;
@@ -636,17 +733,41 @@ end;
 procedure TBloco_0.WriteRegistro0206(Reg0200: TRegistro0200) ;
 var
   intFor: integer;
+  strLinha: AnsiString;
 begin
   if Assigned( Reg0200.Registro0206 ) then
   begin
+     //-- Before
+     strLinha := '';
+     if Assigned(FOnBeforeWriteRegistro0206) then
+     begin
+        FOnBeforeWriteRegistro0206(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
+     end;
+
      for intFor := 0 to Reg0200.Registro0206.Count - 1 do
      begin
+        strLinha := '';
         with Reg0200.Registro0206.Items[intFor] do
         begin
-          Add( LFill('0206') +
-               LFill( COD_COMB ) ) ;
+          strLinha := LFill('0206') +
+                      LFill( COD_COMB );
+          //-- After
+          if Assigned(FOnWriteRegistro0206) then
+             FOnWriteRegistro0206(strLinha);
+
+          Add(strLinha);
         end;
         Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
+     end;
+     //-- After
+     strLinha := '';
+     if Assigned(FOnAfterWriteRegistro0206) then
+     begin
+        FOnAfterWriteRegistro0206(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
      end;
      /// Variavél para armazenar a quantidade de registro do tipo.
      FRegistro0206Count := FRegistro0206Count + Reg0200.Registro0206.Count;
@@ -799,28 +920,53 @@ end;
 procedure TBloco_0.WriteRegistro0500(Reg0001: TRegistro0001) ;
 var
   intFor: integer;
+  strLinha: AnsiString;
 begin
   /// Exigência do Art. 3º do AC 09/08
   if DT_INI >= EncodeDate(2010,07,01) then
   begin
      if Assigned( Reg0001.Registro0500 ) then
      begin
+        //-- Before
+        strLinha := '';
+        if Assigned(FOnBeforeWriteRegistro0500) then
+        begin
+           FOnBeforeWriteRegistro0500(strLinha);
+           if strLinha <> EmptyStr then
+              Add(strLinha);
+        end;
+
         for intFor := 0 to Reg0001.Registro0500.Count - 1 do
         begin
+           strLinha := '';
            with Reg0001.Registro0500.Items[intFor] do
            begin
               Check(Pos(COD_NAT_CC, '01,02,03,04,05,09,10,99') > 0, '(0-0500) O código da natureza da conta/grupo de contas "%s" digitado é inválido!', [COD_NAT_CC]);
               Check(((IND_CTA = 'S') or (IND_CTA = 'A')), '(0-0500) O indicador "%s" do tipo de conta, deve ser informado  S ou A!', [IND_CTA]);
 
-              Add( LFill('0500') +
-                   LFill( DT_ALT ) +
-                   LFill( COD_NAT_CC, 2) +
-                   LFill( IND_CTA, 1) +
-                   LFill( NIVEL ) +
-                   LFill( COD_CTA ) +
-                   LFill( NOME_CTA ) ) ;
+              strLinha := LFill('0500') +
+                          LFill( DT_ALT ) +
+                          LFill( COD_NAT_CC, 2) +
+                          LFill( IND_CTA, 1) +
+                          LFill( NIVEL ) +
+                          LFill( COD_CTA ) +
+                          LFill( NOME_CTA ) ;
+
+              //-- Write
+              if Assigned(FOnWriteRegistro0500) then
+                 FOnWriteRegistro0500(strLinha);
+
+             Add(strLinha);
            end;
            Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
+        end;
+        //-- After
+        strLinha := '';
+        if Assigned(FOnAfterWriteRegistro0500) then
+        begin
+           FOnAfterWriteRegistro0500(strLinha);
+           if strLinha <> EmptyStr then
+              Add(strLinha);
         end;
         /// Variavél para armazenar a quantidade de registro do tipo.
         FRegistro0500Count := FRegistro0500Count + Reg0001.Registro0500.Count;
@@ -831,19 +977,44 @@ end;
 procedure TBloco_0.WriteRegistro0600(Reg0001: TRegistro0001) ;
 var
   intFor: integer;
+  strLinha: AnsiString;
 begin
   if Assigned( Reg0001.Registro0600 ) then
   begin
+     //-- Before
+     strLinha := '';
+     if Assigned(FOnBeforeWriteRegistro0600) then
+     begin
+        FOnBeforeWriteRegistro0600(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
+     end;
+
      for intFor := 0 to Reg0001.Registro0600.Count - 1 do
      begin
+        strLinha := '';
         with Reg0001.Registro0600.Items[intFor] do
         begin
-           Add( LFill('0600') +
-                LFill( DT_ALT ) +
-                LFill( COD_CCUS ) +
-                LFill( CCUS ) ) ;
+          strLinha := LFill( '0600'   ) +
+                      LFill( DT_ALT   ) +
+                      LFill( COD_CCUS ) +
+                      LFill( CCUS     );
+
+          //-- Write
+          if Assigned(FOnWriteRegistro0600) then
+             FOnWriteRegistro0600(strLinha);
+
+          Add(strLinha);
         end;
         Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
+     end;
+     //-- After
+     strLinha := '';
+     if Assigned(FOnAfterWriteRegistro0600) then
+     begin
+        FOnAfterWriteRegistro0600(strLinha);
+        if strLinha <> EmptyStr then
+           Add(strLinha);
      end;
      /// Variavél para armazenar a quantidade de registro do tipo.
      FRegistro0600Count := FRegistro0600Count + Reg0001.Registro0600.Count;
@@ -851,16 +1022,39 @@ begin
 end;
 
 procedure TBloco_0.WriteRegistro0990 ;
+  var strLinha : AnsiString;
 begin
+  //--Before
+  strLinha := '';
+  if Assigned(FOnBeforeWriteRegistro0990) then
+  begin
+    FOnBeforeWriteRegistro0990(strLinha);
+    if strLinha <> EmptyStr then
+       Add(strLinha);
+  end;
+
   if Assigned(Registro0990) then
   begin
      with Registro0990 do
      begin
        QTD_LIN_0 := QTD_LIN_0 + 1;
        ///
-       Add( LFill('0990') +
-            LFill(QTD_LIN_0,0) );
+       strLinha := LFill('0990') +
+                   LFill(QTD_LIN_0,0);
+
+       if Assigned(FOnWriteRegistro0990) then FOnWriteRegistro0990(strLinha);
+
+       Add(strLinha);
      end;
+  end;
+
+  //-- After
+  strLinha := '';
+  if Assigned(FOnAfterWriteRegistro0990) then
+  begin
+    FOnAfterWriteRegistro0990(strLinha);
+    if strLinha <> EmptyStr then
+       Add(strLinha);
   end;
 end;
 

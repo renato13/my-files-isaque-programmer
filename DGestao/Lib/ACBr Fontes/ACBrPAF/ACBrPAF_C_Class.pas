@@ -38,6 +38,9 @@
 |*  - Criação e distribuição da Primeira Versao
 |* 29/11/2010: Gutierres Santana da Costa
 |*  - Implementado Registro Tipo C "Controle de Abastecimento e Encerrante"
+|* 29/02/2012: Gutierres Santana da Costa
+|*  - Implementado na function WriteRegistroC2 ID_ABASTECIMENTO e DATA_ABASTECIMENTO
+|*  - VOLUME passou concatenação para 10,3
 *******************************************************************************}
 
 {$I ACBr.inc}
@@ -166,10 +169,12 @@ begin
           ///
           strRegistroC2 := strRegistroC2 + LFill('C2') +
                                            LFill(FRegistroC1.CNPJ, 14) +
+                                           LFill(ID_ABASTECIMENTO, 15) +
                                            RFill(TANQUE, 3) +
                                            RFill(BOMBA, 3) +
                                            RFill(BICO, 3) +
-                                           RFill(COMBUSTIVEL, 20) +
+                                           RFill(COMBUSTIVEL, 20, ifThen(RegistroValido, ' ', '?')) +
+                                           LFill(DATA_ABASTECIMENTO, 'yyyymmdd') +
                                            LFill(HORA_ABASTECIMENTO, 'hhmmss') +
                                            LFill(ENCERRANTE_INICIAL, 15, 2) +
                                            LFill(ENCERRANTE_FINAL, 15, 2) +
@@ -179,7 +184,7 @@ begin
                                            LFill(HORA, 'hhmmss') +
                                            LFill(COO, 6) +
                                            LFill(NRO_NOTA_FISCAL, 6) +
-                                           LFill(VOLUME, 6, 3) +
+                                           LFill(VOLUME, 10, 3) +
                                            #13#10;
         end;
         ///

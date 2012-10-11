@@ -190,6 +190,7 @@ function TACBrBanrisul.MontarCodigoBarras(const ACBrTitulo: TACBrTitulo): string
 var
   CodigoBarras, FatorVencimento, DigitoCodBarras, CampoLivre, Modalidade: string;
   DigitoNum: Integer;
+  v_calc  : Integer;
 begin
   with ACBrTitulo do
   begin
@@ -221,10 +222,27 @@ begin
      Modulo.Documento:= CampoLivre;
      Modulo.Calcular;
 
-     if (Modulo.ModuloFinal >= 10) or (Modulo.ModuloFinal < 1) then
-        CampoLivre := CampoLivre +'1'
+     
+     if (Modulo.ModuloFinal >= 10) or (Modulo.ModuloFinal = 1) or (Modulo.ModuloFinal <0) then {pg. 35 do manual banrisul modulo 10 acresta + 1 no digito Verificador e refazer o calculo modulo 11 novamente}
+     begin
+       {Calculando Módulo 10}
+       v_calc := StrToInt(copy(CampoLivre,24,1));
+       v_calc := v_calc + 1;
+
+       if (v_calc >=10) then
+         v_calc  := 0;
+
+       CampoLivre := copy(CampoLivre,1,23) + IntToStr(v_calc) ;
+
+       {Calculando Módulo 11}
+       Modulo.CalculoPadrao;
+       Modulo.MultiplicadorFinal:= 7;
+       Modulo.Documento:= CampoLivre;
+       Modulo.Calcular;
+       CampoLivre := CampoLivre + IntToStr(Modulo.DigitoFinal);
+     end
      else
-        CampoLivre := CampoLivre + IntToStr(Modulo.DigitoFinal);
+       CampoLivre := CampoLivre + IntToStr(Modulo.DigitoFinal);
 
      CodigoBarras:= PadR(IntToStr(Numero), 3, '0')+'9'+
                     FatorVencimento+{ Fator de vencimento, não obrigatório }
@@ -249,10 +267,11 @@ end;
 
 function TACBrBanrisul.MontarCampoCodigoCedente(const ACBrTitulo: TACBrTitulo): string;
 begin
-  Result:=copy(ACBrTitulo.ACBrBoleto.Cedente.Agencia, 1, 4)+'-'+
-    copy(ACBrTitulo.ACBrBoleto.Cedente.Agencia, 5, 1)+
-    ACBrTitulo.ACBrBoleto.Cedente.AgenciaDigito+'/'+
-    ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente;
+  Result:=copy(ACBrTitulo.ACBrBoleto.Cedente.Agencia, 2, 4)+'-'+
+         copy(ACBrTitulo.ACBrBoleto.Cedente.Agencia, 5, 1)+ ACBrTitulo.ACBrBoleto.Cedente.AgenciaDigito+'/'+
+         copy(ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente,1,6) + '.' +
+         copy(ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente,7,1) + '.' +
+         copy(ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente,8,2);
 end;
 
 function TACBrBanrisul.GerarRegistroHeader400(NumeroRemessa: Integer): string;
@@ -306,7 +325,7 @@ begin
       toRemessaAlterarVencimento : Ocorrencia:='06'; {Alteração de vencimento}
       //toRemessaAlterarNumeroControle         : Ocorrencia := '08'; {Alteração de seu número}
       toRemessaProtestar                    : Ocorrencia :='09'; {Pedido de protesto}
-      toRemessaCancelarIntrucaoProtestoBaixa: Ocorrencia:='18'; {Sustar protesto e baixar}
+      toRemessaCancelarInstrucaoProtestoBaixa: Ocorrencia:='18'; {Sustar protesto e baixar}
       toRemessaCancelarInstrucaoProtesto    : Ocorrencia:='19'; {Sustar protesto e manter na carteira}
       toRemessaOutrasOcorrencias: Ocorrencia:='31'; {Alteração de Outros Dados}
     else
@@ -355,9 +374,10 @@ begin
                Carteira                                                         +
                aTipoAceite                                                      +
                FormatDateTime('ddmmyy', DataDocumento)                          +// Data de Emissão
-               PadR(Instrucao1, 2)                                              +
+
+               '09'                                                               + // cleonir novo 17/05/2012
                PadR(Instrucao2, 2)                                              +
-               '1'                                                              +
+               '0'                                                                + // cleonir novo  17/05/2012
                FormatCurr('000000000000', ValorMoraJuros*100)                   +
                '000000'                                                         +
                '0000000000000'                                                  +
@@ -379,7 +399,7 @@ begin
                '0000'+
                space(1)+
                '0000000000000'                                                  +
-               PadR(Protesto, 2, '0')                                           +
+               '04'                                                             +  // cleonir novo  17/05/2012
                space(23)                                                        +
                IntToStrZero(ListadeBoletos.IndexOf(ACBrTitulo)+2, 6);
 
@@ -537,7 +557,7 @@ begin
          toRemessaCancelarAbatimento: Ocorrencia := '05'; {Cancelamento de Abatimento concedido}
          toRemessaAlterarVencimento:  Ocorrencia := '06'; {Alteração de vencimento}
          toRemessaProtestar:          Ocorrencia := '09'; {Pedido de protesto}
-         toRemessaCancelarIntrucaoProtestoBaixa: Ocorrencia := '18'; {Sustar protesto e baixar}
+         toRemessaCancelarInstrucaoProtestoBaixa: Ocorrencia := '18'; {Sustar protesto e baixar}
          toRemessaCancelarInstrucaoProtesto:     Ocorrencia := '19'; {Sustar protesto e manter na carteira}
          toRemessaOutrasOcorrencias:  Ocorrencia := '31'; {Alteração de Outros Dados}
       else
@@ -652,10 +672,8 @@ begin
       case StrToIntDef(Copy(ARetorno.Strings[0], 18, 1),0) of
         1:
          Cedente.TipoInscricao := pFisica;
-        2:
-         Cedente.TipoInscricao := pJuridica;
         else
-         Cedente.TipoInscricao := pOutras;
+         Cedente.TipoInscricao := pJuridica;
       end;
 
       Cedente.Convenio      := rConvenio;
