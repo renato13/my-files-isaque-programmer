@@ -113,4 +113,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeEstado', TfrmGeEstado);
+
 end.

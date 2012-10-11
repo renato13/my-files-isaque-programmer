@@ -4437,7 +4437,7 @@ object frmPrinc: TfrmPrinc
       Transparent = True
       IsControl = True
     end
-    object Label1: TLabel
+    object CompanyName: TLabel
       Left = 120
       Top = 350
       Width = 236

@@ -137,4 +137,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeCidade', TfrmGeCidade);
+  
 end.

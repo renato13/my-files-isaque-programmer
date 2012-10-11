@@ -12,7 +12,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function FormFactory: TFormFactory;
-    function CreateForm(const aFormName: string): TForm;
+    function CreateForm(const AOnwer : TComponent; const aFormName: string): TForm;
     procedure RegisterForm(const aFormName: string; aFormClass: TComponentClass);
 end;
 
@@ -33,13 +33,13 @@ begin
   inherited;
 end;
 
-function TFormFactory.CreateForm(const aFormName: string): TForm;
+function TFormFactory.CreateForm(const AOnwer : TComponent; const aFormName: string): TForm;
 var
 i: Integer;
 begin
   i := FList.IndexOf(aFormName);
   Assert(i <> -1, 'Formulário ' + aFormName + ' não existe');
-  Result := TComponentClass(FList.Objects[i]).Create(nil) as TForm;
+  Result := TComponentClass(FList.Objects[i]).Create(AOnwer) as TForm;
 end;
 
 function TFormFactory.FormFactory: TFormFactory;
