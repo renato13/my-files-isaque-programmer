@@ -30,7 +30,7 @@ var
 
 implementation
 
-uses UDMBusiness, UFuncoes;
+uses UDMBusiness, UFuncoes, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -62,7 +62,7 @@ begin
 
   ProductName.Caption     := GetInternalName;
   FileDescription.Caption := GetFileDescription;
-  Version.Caption     := 'Versão 1.0.1.6'; // + GetExeVersion;
+  Version.Caption     := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
   Copyright.Caption   := GetCopyright;
   Comments.Caption    := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
 end;

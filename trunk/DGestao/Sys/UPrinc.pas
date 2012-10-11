@@ -181,7 +181,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes,
-  UGeFabricante;
+  UGeFabricante, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -442,8 +442,8 @@ procedure TfrmPrinc.FormCreate(Sender: TObject);
 var
   sFileImage : String;
 begin
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial v1.0.1.6'; //[ v' + GetExeVersion + ' ]';
-  Self.Version.Caption   := GetVersion;
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER; //[ v' + GetExeVersion + ' ]';
+  Self.Version.Caption   := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
   Self.Copyright.Caption := GetCopyright;
 
   // Carregar Imagem de Fundo da Tele Principal

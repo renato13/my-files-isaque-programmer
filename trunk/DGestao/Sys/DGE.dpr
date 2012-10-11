@@ -91,7 +91,8 @@ uses
   UGeFluxoCaixa in 'UGeFluxoCaixa.pas' {frmGeFluxoCaixa},
   UFuncoes in 'lib\UFuncoes.pas',
   UInfoVersao in 'lib\UInfoVersao.pas',
-  UGeFabricante in 'UGeFabricante.pas' {frmGeFabricante};
+  UGeFabricante in 'UGeFabricante.pas' {frmGeFabricante},
+  UConstantesDGE in 'UConstantesDGE.pas';
 
 {$R *.res}
 
