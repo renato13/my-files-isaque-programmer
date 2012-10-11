@@ -353,4 +353,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeEmpresa', TfrmGeEmpresa);
+
 end.

@@ -108,7 +108,7 @@ type
     imgEmpresa: TImage;
     ProductName: TLabel;
     Copyright: TLabel;
-    Label1: TLabel;
+    CompanyName: TLabel;
     Version: TLabel;
     nmFabricanteProduto: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
@@ -173,8 +173,7 @@ implementation
 uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGridFornec, UGrupoProd, UGrProduto, UGrEntradaEstoq, uAjustEstoq,
   uKardex, uGrVendas, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
-  uGerRelCP, USobre, UfrmRelVendas, UGeBancos, UGeTipoLogradouro,
-  UGeEstado, UGeCidade, UGeDistrito, UGeBairro, UGeLogradouro, UGeEmpresa,
+  uGerRelCP, USobre, UfrmRelVendas, UGeBancos, 
   UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
@@ -192,7 +191,7 @@ end;
 
 procedure TfrmPrinc.RxSpeedButtonEmpresaClick(Sender: TObject);
 begin
-  MostrarTabelaEmpresas(Self);
+  FormFunction.ShowForm(Self, 'frmGeEmpresa');
 end;
 
 procedure TfrmPrinc.RxSpeedBtnClienteClick(Sender: TObject);
@@ -309,32 +308,32 @@ end;
 
 procedure TfrmPrinc.nmTiposdeLogradourosClick(Sender: TObject);
 begin
-  MostrarTabelaTiposLogradouros(Self);
+  FormFunction.ShowForm(Self, 'frmGeTipoLogradouro');
 end;
 
 procedure TfrmPrinc.nmEstadosClick(Sender: TObject);
 begin
-  MostrarTabelaEstados(Self);
+  FormFunction.ShowForm(Self, 'frmGeEstado');
 end;
 
 procedure TfrmPrinc.nmCidadesClick(Sender: TObject);
 begin
-  MostrarTabelaCidades(Self);
+  FormFunction.ShowForm(Self, 'frmGeCidade');
 end;
 
 procedure TfrmPrinc.nmDistritosClick(Sender: TObject);
 begin
-  MostrarTabelaDistritos(Self);
+  FormFunction.ShowForm(Self, 'frmGeDistrito');
 end;
 
 procedure TfrmPrinc.nmBairrosClick(Sender: TObject);
 begin
-  MostrarTabelaBairros(Self);
+  FormFunction.ShowForm(Self, 'frmGeBairro');
 end;
 
 procedure TfrmPrinc.nmLogradourosClick(Sender: TObject);
 begin
-  MostrarTabelaLogradouros(Self);
+  FormFunction.ShowForm(Self, 'frmGeLogradouro');
 end;
 
 procedure TfrmPrinc.nmGruposProdutoClick(Sender: TObject);
@@ -449,8 +448,17 @@ begin
   // Carregar Imagem de Fundo da Tele Principal
 
   sFileImage := ExtractFilePath(Application.ExeName) + 'Logo_Principal.jpg';
+
   if ( FileExists(sFileImage) ) then
-    imgFundo.Picture.LoadFromFile(sFileImage);
+    imgFundo.Picture.LoadFromFile(sFileImage)
+  else
+  begin
+    imgEmpresa.Visible  := False;
+    ProductName.Visible := False;
+    Version.Visible     := False;
+    CompanyName.Visible := False;
+    Copyright.Visible   := False;
+  end;
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);

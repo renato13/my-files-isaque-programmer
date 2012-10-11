@@ -57,4 +57,7 @@ begin
   CampoDescricao := 'tlg_descricao';
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeTipoLogradouro', TfrmGeTipoLogradouro);
+
 end.

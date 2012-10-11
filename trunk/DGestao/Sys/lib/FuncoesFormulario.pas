@@ -11,7 +11,7 @@ type
 
   public
     class function EstaAberto(sForm: String): Boolean;
-    class procedure ShowForm(NomeForm: String);
+    class procedure ShowForm(const AOnwer : TComponent; NomeForm: String);
     class procedure RegisterForm(const aFormName: string; aFormClass: TComponentClass);
     class procedure FecharTodosForm;
 end;
@@ -58,10 +58,10 @@ begin
   _FormFactory.RegisterForm(aFormName, aFormClass);
 end;
 
-class procedure TFormularios.ShowForm(NomeForm: String);
+class procedure TFormularios.ShowForm(const AOnwer : TComponent; NomeForm: String);
 begin
   if TFormularios.EstaAberto(NomeForm) then
-    FForm := _FormFactory.CreateForm(NomeForm);
+    FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
   FForm.Show;
 end;
 

@@ -147,4 +147,7 @@ begin
   inherited;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeLogradouro', TfrmGeLogradouro);
+
 end.

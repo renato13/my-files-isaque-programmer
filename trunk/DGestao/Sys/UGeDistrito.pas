@@ -70,4 +70,7 @@ begin
   UpdateGenerator;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeDistrito', TfrmGeDistrito);
+
 end.

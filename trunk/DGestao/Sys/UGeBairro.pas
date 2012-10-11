@@ -140,4 +140,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeBairro', TfrmGeBairro);
+
 end.

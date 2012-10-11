@@ -5,7 +5,8 @@ interface
 uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
   ShellApi, Printers, DateUtils, IBQuery, RpDefine, RpRave,
-  frxClass, frxDBSet, EMsgDlg, IdBaseComponent, IdComponent, IdIPWatch, IBStoredProc;
+  frxClass, frxDBSet, EMsgDlg, IdBaseComponent, IdComponent, IdIPWatch, IBStoredProc,
+  FuncoesFormulario;
 
 type
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
@@ -60,6 +61,7 @@ var
   DMBusiness: TDMBusiness;
 
   FileINI : TIniFile;
+  FormFunction : TFormularios;
 
   procedure ShowInformation(sMsg : String);
   procedure ShowWarning(sMsg : String);
@@ -845,5 +847,11 @@ begin
       ShowError('Erro ao tentar conectar no Servidor/Base.' + #13#13 + E.Message);
   end;
 end;
+
+initialization
+  FormFunction := TFormularios.Create;
+
+finalization
+  FormFunction.Destroy;
 
 end.

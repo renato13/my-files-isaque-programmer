@@ -92,7 +92,9 @@ uses
   UFuncoes in 'lib\UFuncoes.pas',
   UInfoVersao in 'lib\UInfoVersao.pas',
   UGeFabricante in 'UGeFabricante.pas' {frmGeFabricante},
-  UConstantesDGE in 'UConstantesDGE.pas';
+  UConstantesDGE in 'UConstantesDGE.pas',
+  FormFactoryU in 'lib\FormFactoryU.pas',
+  FuncoesFormulario in 'lib\FuncoesFormulario.pas';
 
 {$R *.res}
 
