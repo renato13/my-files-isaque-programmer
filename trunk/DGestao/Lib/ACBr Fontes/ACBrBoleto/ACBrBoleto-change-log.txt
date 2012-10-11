@@ -47,18 +47,66 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+
+-- ACBrBoletoFC --
+[+] Adicionado novo tipo de Layout: lPadraoEntrega, para substituir a
+    propriedade: ComprovanteEntrega   (DSA)
+
+-- ACBrBoletoFCLazReport --
+[*] Layouts de relatório corrigidos para suportar a versão do Trunk do LazReport
+    (DSA)
+
+04/04/2012
+-- ACBrBoletoFCLazReport --
+[*] Modificado para permitir ler os relatórios (FCLazReport_Carne.lrf,
+    FCLazReport_CompEntrega.lrf, FCLazReport_Padrao.lrf) do disco caso os mesmos
+    estejam na mesma pasta do aplicativo.   (DSA)
+
 Versao 0.0.1 do FastReport 05/08/11
 [-] Lançado a 1a versão para impressão dos boletos em FastReport.
     (por: Isaque Pinheiro)
 
-Versao 0.0.9a do QuickReport 07/07/11
-[-] Corrigido problema ao imprimir apartir da tela do preview.
-    (Rick Nelson)
+Versao 0.0.10a do FastReport 13/08/12
+[+] Adicionado suporte a impressão de boletos em carnê.(Rodrigo Rodrigues)
+[*] Efetuado ajuste para que todas as versões do Delphi consigam ler corretamente
+    a propriedade displayformat dos componentes utilizados para data.(Fábio)
 
-Versao 0.1.1a do LazReport 02/08/11
+
+	
+Versao 0.0.09a do FastReport 02/07/12
+[+] Lançado a 1a versão para impressão dos boletos em FastReport.
+    (por: Isaque Pinheiro)	
+
+
+Versao 0.0.12a do QuickReport 05/08/12
+[*] Efetuado pequenos ajustes para atender a Caixa Econômica Federal(Juliana Tamizou)
+
+Versao 0.0.11a do QuickReport 17/07/12
+[+] Implementado layout Padrão com Comprovante de Entrega.(Ivomar)	
+	
+Versao 0.0.10a do QuickReport 10/07/12
+[-] Corrigido impressão do código de barras.(Rogerio Pett)
+	
+Versao 0.0.9a do QuickReport 07/07/12
+[-] Corrigido impressão do digito verificador do Numero do Banco para bancos com digito maior que 9.(André Luiz)
+
+Versao 0.1.15a do LazReport 05/08/12
+[*] Efetuado pequenos ajustes para atender a Caixa Econômica Federal(Juliana Tamizou)
+
+Versao 0.1.15a do LazReport 02/08/11
 [+] Adicionado campos Outras Deduções e Outros Acréscimos ao boleto, conforme
     solicitação da Caixa Econômica Federal(Juliana Tamizou)
 
+
+Versao 0.0.15a do FortesReport 05/08/12
+[*] Efetuado pequenos ajustes para atender a Caixa Econômica Federal(Juliana Tamizou)
+
+Versao 0.0.14a do FortesReport 17/07/12
+[-] Removido label Sacador/Avalista duplicado.(Juliana Tamizou)	
+
+Versao 0.0.13a do FortesReport 15/06/12
+[-] Corrigido bug ao gerar boletos em PDF.(Juliana Tamizou)
+	
 Versao 0.0.12a do FortesReport 06/02/12
 [+] Corrigido problema com o tipo de Código de Barras impresso, alterado
     propriedade Ratio do componente para 3, corrigindo o problema da não
@@ -74,8 +122,174 @@ Versao 0.0.11a do FortesReport 02/08/11
 Versao 0.0.10a do FortesReport 06/07/11
 [-] Corrigido problema com componentes não encontrados no dfm do Fortes.
     (Juliana Tamizou)
+	
+	
+[*] Acertos na classe do HSBC, testado e funcionando para 
+    cobrança não registrada.
+    (por: Regys Silveira) 
+
+	
+	
+Versao 0.0.45a
+[+] Unit Sicred - Adiciona geração do arquivo remessa e leitura do arquivo retorno CNAB240.
+    (Felipe Sortica).  
+[-] Unit CaixaeconomicaSicob - Corrigida geração da remessa CNAB240.(Roger Mello)
+[-] Unit CaixaeconomicaSicob - Corrigida informação dos dias para Protesto na geração
+   da remessa CNAB240.(Juliana Tamizou)
+[-] Unit Caixaeconomica - Corrigida geração da remessa CNAB240.(Felipe Sortica)
+[-] Unit BancodoBrasil - Corrigida informação do Tipo de Protesto na geração
+   da remessa CNAB240.(Felipe Sortica)
+[-] Unit Banrisul - Correções nas funções de Montagem do Código do Cedente, Código de Barras
+    e geração da remessa CNAB400.(Cleonir)
+[-] Unit Sibred - Correção na leitura do arquivo retorno CNAB400(Felipe Sortica)
+
+Versao 0.0.44a 
+[-] Unit Bancoob - Corrigido geração do arquivo Remessa CNAB400, formatado
+    corretamente o Número da Conta e passado a informar corretamente o tipo de 
+    Documento do Cedente(CNPJ ou CPF).(Juliana Tamizou)
+	
+	
+Versao 0.0.43a 31/08/2012
+[+] Unit Bancoob - Adicionado geração do arquivo remessa CNAB240.(Gustavo)
+[*] Unit HSBC - Ajustado rotina de leitura do arquivo retorno CNAB400 para não importar
+   os campos que não são informados pelo banco para Cobrança sem Registro.(Cloudcon) 
+[-] Unit Banco do Brasil - Corrigido verificação do tipo de registro na leitura do 
+    arquivo retorno CNAB400.(Yorrann Fehlberg)
+	
+Versao 0.0.42a 22/08/2012	
+[-] Unit Banco Brasil - Corrigido formatação da conta na montagem do Código de Barras e alterado
+    impressão do boleto para apenas 8 digitos (12 digitos são necessários apenas na remessa CNAB240).
+    (Juliana Tamizou)	
+
+Versao 0.0.41a 13/08/2012	
+[-] Unit Itaú - Corrigido  calculo do Digito Verificador para a carteira 112.
+    (Daniel Fantastsoft)
+
+[-] Unit CaixaEconomica - Efetuado ajustes na geração da Remessa CNAB240(Gislaine Machado)
+
+[-] Unit HSBC - Ajuste na geração da remessa CNAB400. (Jair Muller)
 
 
+Versao 0.0.40a 08/08/2012
+[+] Adicionado classe para o Banco BRB.(Renato Pavan)
+
+Versao 0.0.39a 05/08/2012		
+[+] Adicionado impressão de boletos do Banco do Nordeste ao ACBrBoleto.(Araujo Junior)
+
+[*] Unit CaixaEconomicaSicob, adicinado verificação se o campo Data Lançamento foi informado
+    no arquivo retorno e só então tratá-lo.(Juliana Tamizou)
+
+[-] Unit Santander, efetuado correção do registro trailler no arquivo remessa CNAB400
+    quando for informado o registo de intruções.(Rodrigo Rodrigues)
+
+[-] Unit CaixaEconomicaSicob, efetuada correção na geração do arquivo remessa CNAB240, 
+    para que o arquivo seja gerado corretamente em modo de produção.(Juliana Tamizou)
+
+[-] Unit HSBC, correção na geração do arquivo remessa CNAB400.(Jair Carlos Muller)
+
+
+[-] Unit CaixaEconomica, correção na leitura do arquivo retorno CNAB240, onde os 
+    campos Nosso Número e Numero do Documento não estavam sendo lidos corretamente.
+    (Juliana Tamizou)
+
+[-] Unit BAnco do Brasil, efetuada correção na leitura do arquivo retorno CNAB240.
+    (Juliano Pompilio)
+	
+
+Versao 0.0.38a 17/07/2012		
+[*] Unit HSBC está fazendo a impressão de Boletos na Cobrança Simples e Registrada.
+    (Jair Carlos Muller)
+[*]	Unit CaixaEconômica, adicionado formatação correta do Nosso Número para Cobrança 
+    Registrada e Nosso Número de 14 Dígitos(Mais o prefixo e o Digito Verificador)
+	Juliana Tamizou)
+[-]	Unit HSBC, efetuado correção da geração do arquivo remessa para Cobrança
+    Registrada.(Jair Carlos Muller)
+
+
+Versao 0.0.37a 10/07/2012	
+[+] Unit Sicred - Adicionado leitura do arquivo retorno CNAB400.(André Luiz)
+	
+Versao 0.0.36a 28/06/2012	
+[-] Unit Sicred - Correção do Calculo do Digito Verificador do Nosso Número.(André Luiz)
+
+[-] Unit HSBC - Correção da montagem do Código do Cedente.(Ronaldo Eiz)	
+	
+
+Versao 0.0.35a 15/08/2012	
+[*] Unit Santander - Adicionado registro das Mensagens ao Sacado para a Remessa
+    CNAB400.(Tuim01)
+	
+[-]	Unit Banco do Brasil - Corrigido falha na detecção do tamanho do Convênio na
+    geração dos registros de transação da Remessa CNAB400.(Tuim01)
+	
+[-]	Unit Banco do Brasil - Corrigido falha ao gerar  o campo Nosso Número para a carteira 17 
+    na Remessa CNAB400 quando a responsabilidade de emissão do boleto é do banco.(Juliana Tamizou)
+	
+[-]	Unit Banco do Brasil - Correção na leitura do arquivo retorno CNAB400.(Rafael Cruz)
+
+[-] Unit Caixa Econômica - Correção na leitura do arquivo retorno CNAB240.(Pedro Manoel)
+
+[-] Unit Caixa Econômica - Correção na geração do arquivo Remessa CNAB240.(Eduardo)
+
+[-] Unit Caixa EconômicaSicob - Correção na leitura do arquivo retorno CNAB240.(Pedro Manoel)
+
+[-] Unit Itaú - Corrigido bug na montagem do código de barras e da linha digital
+    que faziam com que ao efetuar o pagamento retornava a mensagem Código de Barras
+	inválido.(Juliana Tamizou) 
+	
+	
+	
+09/04/2012
+-- ACBrBoleto --
+[*] Removida a propriedade ComprovanteEntrega : Boolean, pois a mesma não tem
+    sentido quando o Layout é Carne ou Fatura  (DSA)
+
+Versao 0.0.34a 12/05/2012
+[+] Unit Banco do Brasil, implementada leitura do arquivo retorno CNAB400.(Lazarin)
+
+[*] Alterado tipo de inscrição do Cedente para evitar problemas na geração da remessa,
+    agora apenas são permitidas as opções pFisica e pJuridica.(Juliana Tamizou)
+	  
+[*]	Unit do Banestes, adicionado geração do arquivo remessa CNAB400.(Francisco)
+
+[*] Unit CaixaEconômica, adicionado tratamento para os retornos com titulos 
+    rejeitados.(Gislaine)
+	
+[*]	Adicionado a propriedade CaracTitulo ao Cedente, para identificar o tipo
+    de cobrança (Vendor, Caucionada,etc). (Leandro)
+	
+[-]	Corrigido bug ao gerar o arquivo remessa em pasta diferente da pasta do projeto ou
+    de algum diretório raiz. (Juliana Tamizou)	
+	
+[-]	Unit Banco do Brasil, efetuado correções na geração do arquivo remessa
+    CNAB240. (Leandro)
+	
+[-] Unit Banco do Brasil, corrigido geração do arquivo remessa e impressão
+    de boletos para a carteira 11 e convênio 7 digitos. (Rafael Cruz)	
+
+[-] Unit CaixaEconômica, corrigido geração do arquivo remessa CNAB240.(Gislaine)
+
+[-] Corrigido problema coma  rotina de envio de email.(Carlos)
+
+[-]	Corrigido unit do Bradesco, a informação do campo DigitoNossoNumero quando 
+    o boleto é impresso pelo banco. (Adauri Jr.)
+
+[-]	Corrigido unit do Itaú, leitura do arquivo retorno CNAB400 estava lendo de   
+    incorreta o CNPJ/CPF.(Endrigo)
+
+[-]	Corrigido unit do Itaú, leitura do arquivo retorno CNAB400 estava ocorrendo   
+    um erro na validação da conta.(Endrigo)	
+	
+[-]	Corrigido unit do Bradesco, leitura do arquivo retorno CNAB400 estava ocorrendo   
+    um erro na validação da conta.(Endrigo)		
+
+[-] Alterado unit do Sicred, corrigido geração da linha digitável.(Carlos)	
+
+[-] Alterado unit do Bancoob, alterado nome do banco impresso no boleto, 
+    conforme instruções do banco. (Dytbel)
+	
+	
+	
 Versao 0.0.33a 06/02/2012
 [+] Adicionado unit para o Banco Banestes(Banco do Espirito Santo), com
     impressão dos boletos.(MarKapollo)

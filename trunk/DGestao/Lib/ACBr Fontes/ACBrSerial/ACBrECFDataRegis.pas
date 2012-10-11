@@ -93,8 +93,8 @@
 unit ACBrECFDataRegis ;
 
 interface
-uses ACBrECFClass, ACBrDevice, ACBrUtil,
-     Classes, Contnrs
+uses ACBrECFClass, ACBrDevice, ACBrUtil, ACBrConsts,
+     Classes
      {$IFNDEF CONSOLE}
        {$IFDEF VisualCLX}, QDialogs, QControls, QForms {$ENDIF}
        {$IFDEF VCL}, Dialogs, Controls, Forms {$ENDIF}
@@ -253,7 +253,7 @@ TACBrECFDataRegis = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -388,7 +388,7 @@ end;
 procedure TACBrECFDataRegis.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('Esse modelo de impressora requer'+#10+
+     raise EACBrECFERRO.Create(ACBrStr('Esse modelo de impressora requer'+#10+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   fpDevice.HandShake := hsDTR_DSR ;
@@ -543,7 +543,11 @@ begin
       begin
         ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+#10+#10+
                    ErroMsg) ;
-        raise EACBrECFSemResposta.create(ErroMsg) ;
+
+        if charAviso = FIMPAPEL then
+           DoOnErrorSemPapel
+        else
+           raise EACBrECFSemResposta.create(ErroMsg) ;
       end
     else
        Sleep(max(IfThen( IsV03,300,100), IntervaloAposComando) ) ;
@@ -701,7 +705,7 @@ begin
   begin
      Retorno := ExtraiRetorno( RetCmd ) ;
      Try
-        Estado := RetCmd[1] ;
+        Estado := Retorno[1] ;
      except
         Estado := 'X' ;
      end ;
@@ -721,7 +725,7 @@ begin
         try
            fsNumVersao := copy(EnviaComando( 'PS' ), 1, 5) ;  {Comando da 02.03}
            if fsNumVersao = '' then
-              raise Exception.Create('Erro') ;
+              raise EACBrECFERRO.Create('Erro') ;
         except
            try
               fsNumVersao := copy(EnviaComando( 'l' ),39, 5) ;{Comando da 02.05}
@@ -1061,7 +1065,7 @@ unidade de medida[2]        Unidade=00 indice da unidade
  Codigo + Descricao + Aliquota + Quant + ValorUnit + Desc + Unidade
 }
   if (NumItem < 1) or (NumItem > fsItensCupom.Count) then
-     raise Exception.create(ACBrStr('Item ('+IntToStrZero(NumItem,3)+') não encontrado')) ;
+     raise EACBrECFERRO.create(ACBrStr('Item ('+IntToStrZero(NumItem,3)+') não encontrado')) ;
 
 { ATENÇÃO. A DataRegis não extorna corretamente Itens vendidos com 3 casas
   decimais. Esse bug é no Software Básico do ECF }
@@ -1128,7 +1132,7 @@ begin
    {Compativel com 02.03 e 02.05}
    {nao tem subtotalizador e desconto ou acrescimento tem que jogar na forma de pagamento}
    if fsTotalPago <> 0 then
-      raise Exception.Create(ACBrStr('SubTotalizaCupom já efetuado'));
+      raise EACBrECFERRO.Create(ACBrStr('SubTotalizaCupom já efetuado'));
 
    EnviaMensagem( MensagemRodape );
 
@@ -1140,7 +1144,8 @@ end;
 Procedure TACBrECFDataRegis.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, DescStr, CodDescr, LinhaItem : String ;
     UMD : TACBrECFUnidadeMedida;
     Ini : TIniFile;
@@ -1212,7 +1217,7 @@ begin
      begin
         UMD := AchaUMDDescricao( 'UN' );
         if UMD = nil then
-           raise Exception.Create(ACBrStr('Unidade de Medida não cadastrada'));
+           raise EACBrECFERRO.Create(ACBrStr('Unidade de Medida não cadastrada'));
      end;
 
      Cmd       := Cmd       + UMD.Indice ;
@@ -1243,7 +1248,7 @@ begin
                           (TruncFix(Qtd * ValorUnitario * 100 ) / 100)
    else
       fsTotalAcumulado := fsTotalAcumulado +
-                          RoundTo(Qtd * ValorUnitario, -2) ;
+                          RoundABNT(Qtd * ValorUnitario, -2) ;
 
    if fsItensCupom.Count = 1 then
       GravaArqINI
@@ -1427,7 +1432,7 @@ begin
    { Dataregis cadastra qualquer descrição mesmo repetida, por isso vamos ver se ja existe antes }
    FPagto:= AchaFPGDescricao(Descricao, True);
    if FPagto <> nil then
-      raise Exception.Create(ACBrStr('Forma de Pagamento já cadastrada'));
+      raise EACBrECFERRO.Create(ACBrStr('Forma de Pagamento já cadastrada'));
 
    Descricao := padL(Trim(Descricao),14) ;         { Ajustando tamanho final }
 
@@ -1453,7 +1458,7 @@ end;
 procedure TACBrECFDataRegis.CancelaImpressaoCheque;
 begin
    { Dataregis não possui comando para cancelar a impressão de cheques}
-   raise Exception.Create(ACBrStr('Impressora '+fpModeloStr+ ' não possui comando para '+
+   raise EACBrECFERRO.Create(ACBrStr('Impressora '+fpModeloStr+ ' não possui comando para '+
                           'cancelar a impressão de cheques. ' + sLineBreak +
                           'Por favor desligue e ligue a impressora ou insira '+
                           'um documento.'));
@@ -1494,7 +1499,7 @@ begin
    FPG := AchaFPGIndice( CodFormaPagto ) ;
 
    if FPG = nil then
-      raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+      raise EACBrECFERRO.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                               ' não foi cadastrada.') ) ;
 
    {Compativel com 02.03 e 02.05}
@@ -1596,9 +1601,7 @@ end;
 
 function TACBrECFDataRegis.AchaICMSAliquota( var AliquotaICMS: String):
    TACBrECFAliquota;
-  Var AliquotaStr : String ;
 begin
-  AliquotaStr := '' ;
   Result      := nil ;
 
   case AliquotaICMS[1] of
@@ -1660,7 +1663,7 @@ begin
    {imprime toda a memória fiscal que ela possui, esse erro foi}
    {corrigido na versão 02.05}
    if IsV03 or IsV04 then
-      raise Exception.Create(ACBrStr('Essa Impressora Fiscal não possui este recurso'))
+      raise EACBrECFERRO.Create(ACBrStr('Essa Impressora Fiscal não possui este recurso'))
    else
     begin
       {Falta testar}
@@ -1691,7 +1694,7 @@ begin
    // DataRegis não possui Leitura Simplificada
    {Compativel com 02.03 e 02.05}
    if IsV03 or IsV04 then
-      raise Exception.Create(ACBrStr('Essa Impressora Fiscal não possui este recurso'))
+      raise EACBrECFERRO.Create(ACBrStr('Essa Impressora Fiscal não possui este recurso'))
    else
     begin
       {Falta testar}
@@ -1705,7 +1708,7 @@ end;
 procedure TACBrECFDataRegis.LeituraMemoriaFiscalSerial(ReducaoInicial,
   ReducaoFinal: Integer; Linhas: TStringList; Simplificada : Boolean);
 begin
-   raise Exception.Create(ACBrStr('Impressora fiscal não possui este recurso'));
+   raise EACBrECFERRO.Create(ACBrStr('Impressora fiscal não possui este recurso'));
 end;
 
 procedure TACBrECFDataRegis.CarregaComprovantesNaoFiscais;
@@ -1780,7 +1783,7 @@ begin
 
    Formato := AchaModeloBanco( Banco ) ;
    if Formato = '' then
-      raise Exception.create(ACBrStr('Modelo de cheque do Banco: '+Banco+
+      raise EACBrECFERRO.create(ACBrStr('Modelo de cheque do Banco: '+Banco+
                              ' não encontrado'));
 
    ValStr     := IntToStrZero( Round(abs(Valor)*100),14) ;
@@ -2122,13 +2125,13 @@ begin
    if IsV03 or IsV04 then
     begin
       if (Codigo < 0) or (Codigo > 999999) then
-         raise Exception.Create(('Valor Inválido para o Operador'));
+         raise EACBrECFERRO.Create(('Valor Inválido para o Operador'));
          StrCod:= padR(IntToStr(Codigo), 6, '0');
     end
    else
     begin
       if (Codigo < 0) or (Codigo > 9999999999) then
-         raise Exception.Create(('Valor Inválido para o Operador'));
+         raise EACBrECFERRO.Create(('Valor Inválido para o Operador'));
          StrCod:= padR(IntToStr(Codigo), 10, '0');
     end;
 
@@ -2342,7 +2345,7 @@ end;
 
 procedure TACBrECFDataRegis.CancelaNaoFiscal;
 begin
-   raise Exception.Create(ACBrStr('Impressora Dataregis não possui esse recurso'));
+   raise EACBrECFERRO.Create(ACBrStr('Impressora Dataregis não possui esse recurso'));
 end;
 
 procedure TACBrECFDataRegis.EfetuaPagamentoNaoFiscal(CodFormaPagto: String;
@@ -2396,7 +2399,7 @@ begin
       Obs := padL(Obs, 76, ' ');
 
    if (StrToInt(CodCNF) < 90) or (StrToInt(CodCNF) > 99) then
-      raise Exception.Create(ACBrStr('CodCnf fora da faixa permitida de 90 a 99'));
+      raise EACBrECFERRO.Create(ACBrStr('CodCnf fora da faixa permitida de 90 a 99'));
 
    QtdStr := '001000';
 
@@ -2414,7 +2417,7 @@ begin
    EnviaMensagem(MensagemRodape);
 
    if fsTotalPago <> 0 then
-      raise Exception.Create(ACBrStr('SubTotalizaCupom já efetuado'));
+      raise EACBrECFERRO.Create(ACBrStr('SubTotalizaCupom já efetuado'));
    fsTotalPago := 0 ;
 end;
 

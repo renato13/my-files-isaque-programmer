@@ -43,7 +43,7 @@
 unit ACBrECFNCR ;
 
 interface
-uses ACBrECFClass, ACBrDevice, ACBrUtil, Synautil,
+uses ACBrECFClass, ACBrDevice, ACBrUtil, Synautil, ACBrConsts,
      Classes ;
 
 const  SOH = #01 ;
@@ -170,7 +170,7 @@ TACBrECFNCR = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -431,7 +431,7 @@ begin
   fsResposta := Value ;
 
   if ( LeftStr(fsResposta,1) <> SOH ) and ( LeftStr(fsResposta,1) <> CAN ) then
-     raise Exception.Create(ACBrStr('Resposta inválida. Não inicia com SOH (01) ou CAN (24) ')) ;
+     raise EACBrECFERRO.Create(ACBrStr('Resposta inválida. Não inicia com SOH (01) ou CAN (24) ')) ;
 
   if ( LeftStr(fsResposta,1) = CAN ) then
   begin
@@ -441,12 +441,12 @@ begin
   begin
     fsChkSum := RightStr(fsResposta,1) ;
     if NCRCheckSum( copy(fsResposta,2,Length(fsResposta)-2) ) <> fsChkSum then
-       raise Exception.create(copy(fsResposta,2,Length(fsResposta)-2) + ' | ' + fsResposta+ACBrStr('Resposta inválida. CheckSum da Resposta não está correto.')) ;
+       raise EACBrECFERRO.create(copy(fsResposta,2,Length(fsResposta)-2) + ' | ' + fsResposta+ACBrStr('Resposta inválida. CheckSum da Resposta não está correto.')) ;
 
     try
        fsSeq := ord(fsResposta[2]) ;
     except
-       raise Exception.Create(ACBrStr('Resposta inválida. Num.Sequencia inválido')) ;
+       raise EACBrECFERRO.Create(ACBrStr('Resposta inválida. Num.Sequencia inválido')) ;
     end ;
 
     fsCmd := ord(fsResposta[3]) ;
@@ -925,7 +925,7 @@ end;
 procedure TACBrECFNCR.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   inherited Ativar ; { Abre porta serial }
@@ -945,7 +945,7 @@ begin
         EnviaComando ;
 
         if NCRResposta.Params[0] <> '0' then  // Diferente de Modo Normal ?
-           raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' esta em'+sLineBreak+
+           raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' esta em'+sLineBreak+
                                   'modo de intervenção técnica.'));
                                   
         NCRComando.Comando := '187' ;  // Obtendo o numero de colunas
@@ -1078,7 +1078,7 @@ begin
 
           NCRResposta.Resposta := fpRespostaComando ;
           if NCRResposta.Seq <> NCRComando.Seq then
-             raise Exception.Create(ACBrStr('Sequencia de Resposta diferente da enviada')) ;
+             raise EACBrECFERRO.Create(ACBrStr('Sequencia de Resposta diferente da enviada')) ;
            
        except
           on E : Exception do
@@ -1303,7 +1303,7 @@ begin
 
         // Pois a ECF fica bloqueada até as 02:00h do dia seguinte da data do movimento
         DataMovLiber := EncodeDate(Ano, Mes, Dia);
-        IncDay(DataMovLiber, 1) ;
+        DataMovLiber := IncDay(DataMovLiber, 1) ;
         DataMovLiber := RecodeHour( DataMovLiber, 2) ;
         DataMovLiber := RecodeMinute( DataMovLiber, 0) ;
         DataMovLiber := RecodeSecond( DataMovLiber, 0) ;
@@ -1485,7 +1485,7 @@ begin
   EnviaComando ;
 
   if NCRResposta.Params[0] = '0' then
-     raise Exception.create(ACBrStr('Não existe documento para ser cancelado.')) ;
+     raise EACBrECFERRO.create(ACBrStr('Não existe documento para ser cancelado.')) ;
 
   SeqVinculado := BuscaSequenciaVinculado;
   if SeqVinculado <> '' then
@@ -1581,14 +1581,15 @@ end;
 Procedure TACBrECFNCR.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
  Var
   ValDesc, ValTotal : Double ;
   IndAliq : Integer ;  
 begin
   with NCRComando do
   begin
-    ValTotal := RoundTo(TruncFix(Qtd*ValorUnitario*100)/100,-2) ;
+    ValTotal := RoundABNT(TruncFix(Qtd*ValorUnitario*100)/100,-2) ;
     Comando := '30' ;
     AddParam( LeftStr(Codigo,14) );
     AddParam( LeftStr(Descricao,233) );
@@ -1784,7 +1785,7 @@ begin
   end ;
 
   if ProxIndice > 20 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Formas de '+
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Formas de '+
                             'Pagamento'));
 
   NCRComando.Comando := '109' ;
@@ -1884,7 +1885,7 @@ begin
   end ;
 
   if ProxIndice > 20 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Formas de '+
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Formas de '+
                             'Pagamento'));
 
   NCRComando.Comando := '104' ;
@@ -1928,7 +1929,7 @@ Var SeqVinculado : String ;
 begin
   SeqVinculado := BuscaSequenciaVinculado( CodFormaPagto ) ;
   if SeqVinculado = '' then
-     raise Exception.create(ACBrStr('Não registrado nenhum pagamento para comprovante vinculado.'));
+     raise EACBrECFERRO.create(ACBrStr('Não registrado nenhum pagamento para comprovante vinculado.'));
 
   NCRComando.Comando := '210' ;
   NCRComando.AddParam( SeqVinculado ) ; // Seqüência do pagamento

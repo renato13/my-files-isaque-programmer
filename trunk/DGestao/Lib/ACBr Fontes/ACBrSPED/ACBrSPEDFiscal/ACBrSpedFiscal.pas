@@ -40,6 +40,8 @@
 |*  - Adicionado o REGISTRO 0500: PLANO DE CONTAS CONTÁBEIS
 *******************************************************************************}
 
+{$I ACBr.inc}
+
 unit ACBrSpedFiscal;
 
 interface
@@ -52,10 +54,12 @@ uses
   DateUtils, ACBrSped, ACBrTXTClass, ACBrEFDBlocos,
   ACBrEFDBloco_0_Class, ACBrEFDBloco_1_Class, ACBrEFDBloco_9_Class,
   ACBrEFDBloco_C_Class, ACBrEFDBloco_D_Class, ACBrEFDBloco_E_Class,
-  ACBrEFDBloco_G_Class, ACBrEFDBloco_H_Class;
+  ACBrEFDBloco_G_Class, ACBrEFDBloco_H_Class,
+  ACBrEFDBloco_0_Events, ACBrEFDBloco_C_Events, ACBrEFDBloco_D_Events,
+  ACBrEFDBloco_E_Events;
 
 const
-  CACBrSpedFiscal_Versao = '1.00b';
+  CACBrSpedFiscal_Versao = '1.01';
 
 type
   /// ACBrSpedFiscal - Sitema Publico de Escrituração Digital Fiscal
@@ -68,6 +72,11 @@ type
     FArquivo: ansistring;
     FInicializado : boolean;
     FOnError: TErrorEvent;
+
+    FEventsBloco_0: TEventsBloco_0;
+    FEventsBloco_C: TEventsBloco_C;
+    FEventsBloco_D: TEventsBloco_D;
+    FEventsBloco_E: TEventsBloco_E;
 
     FDT_INI: TDateTime;           /// Data inicial das informações contidas no arquivo
     FDT_FIN: TDateTime;           /// Data final das informações contidas no arquivo
@@ -179,6 +188,11 @@ type
     property CurMascara: ansistring read GetCurMascara write SetCurMascara;
 
     property OnError: TErrorEvent read GetOnError write SetOnError;
+
+    property EventsBloco_0: TEventsBloco_0 read FEventsBloco_0; // write FOnEventsBloco_0;
+    property EventsBloco_C: TEventsBloco_C read FEventsBloco_C; // write FOnEventsBloco_C;
+    property EventsBloco_D: TEventsBloco_D read FEventsBloco_D; // write FOnEventsBloco_D;
+    property EventsBloco_E: TEventsBloco_E read FEventsBloco_E; // write FOnEventsBloco_E;
   end;
 
 procedure Register;
@@ -229,11 +243,37 @@ begin
   FDelimitador := '|';
   FCurMascara := '#0.00';
   FTrimString := True;
+
+  // Seta os valores defaults para todos os cdaBlocos
+  SetDelimitador(FDelimitador);
+  SetCurMascara(FCurMascara);
+  SetTrimString(FTrimString);
+
+  FEventsBloco_0 := TEventsBloco_0.Create(Self);
+  FEventsBloco_0.Name := 'EventsBloco_0';
+  FEventsBloco_0.SetSubComponent(True);
+
+  FEventsBloco_C := TEventsBloco_C.Create(Self);
+  FEventsBloco_C.Name := 'EventsBloco_C';
+  FEventsBloco_C.SetSubComponent(True);
+
+  FEventsBloco_D := TEventsBloco_D.Create(Self);
+  FEventsBloco_D.Name := 'EventsBloco_D';
+  FEventsBloco_D.SetSubComponent(True);
+
+  FEventsBloco_E := TEventsBloco_E.Create(Self);
+  FEventsBloco_E.Name := 'EventsBloco_E';
+  FEventsBloco_E.SetSubComponent(True);
 end;
 
 destructor TACBrSPEDFiscal.Destroy;
 begin
   FACBrTXT.Free;
+
+  FEventsBloco_0.Free;
+  FEventsBloco_C.Free;
+  FEventsBloco_D.Free;
+  FEventsBloco_E.Free;
 
   FBloco_0.Free;
   FBloco_1.Free;
@@ -853,6 +893,14 @@ begin
    begin
       with Bloco_9.Registro9900 do
       begin
+         if Bloco_1.Registro1010Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1010';
+               QTD_REG_BLC := Bloco_1.Registro1010Count;
+            end;
+         end;
          if Bloco_1.Registro1100Count > 0 then
          begin
             with New do
@@ -1575,6 +1623,23 @@ begin
                QTD_REG_BLC := Bloco_D.RegistroD190Count;
             end;
          end;
+         if Bloco_D.RegistroD195Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := 'D195';
+               QTD_REG_BLC := Bloco_D.RegistroD195Count;
+            end;
+         end;
+         if Bloco_D.RegistroD197Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := 'D197';
+               QTD_REG_BLC := Bloco_D.RegistroD197Count;
+            end;
+         end;
+		 
          if Bloco_D.RegistroD300Count > 0 then
          begin
             with New do
@@ -2033,6 +2098,14 @@ begin
             begin
                REG_BLC := 'H010';
                QTD_REG_BLC := Bloco_H.RegistroH010Count;
+            end;
+         end;
+         if Bloco_H.RegistroH020Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := 'H020';
+               QTD_REG_BLC := Bloco_H.RegistroH020Count;
             end;
          end;
       end;

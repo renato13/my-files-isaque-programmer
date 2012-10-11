@@ -72,8 +72,8 @@ type
   end ;
 
 implementation
-Uses ACBrETQ,
-     {$IFDEF COMPILER6_UP} StrUtils {$ELSE} ACBrD5, Windows{$ENDIF},
+Uses
+     {$IFNDEF COMPILER6_UP} ACBrD5, Windows, {$ENDIF}
      SysUtils ;
 
 { TACBrETQPpla }
@@ -120,10 +120,11 @@ begin
      Raise Exception.Create(ACBrStr('Tamanho maximo para o texto 255 caracteres'));
 
   case Orientacao of
-    orNormal: wOrientacao := 'N'; //normal
     or270   : wOrientacao := 'B'; //270
     or180   : wOrientacao := 'I'; //180
     or90    : wOrientacao := 'R'; //90
+  else
+    wOrientacao := 'N'; //normal
   end;
 
   if Fonte = 0 then

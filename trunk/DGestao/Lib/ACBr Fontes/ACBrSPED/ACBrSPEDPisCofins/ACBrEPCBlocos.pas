@@ -75,7 +75,9 @@ type
   /// Versão do Leiaute do arquivo - TRegistro0000
   TACBrVersaoLeiaute = (
                          vlVersao100,  // Código 001 - Versão 100 ADE Cofis nº 31/2010 de 01/01/2011
-                         vlVersao101   // Código 002 - Versão 101 ADE Cofis nº 34/2010 de 01/01/2011
+                         vlVersao101,  // Código 002 - Versão 101 ADE Cofis nº 34/2010, atualizado pelo ADE Cofis nº 37/2010 de 01/01/2011
+                         vlVersao200,  // Código 002 - Versão 200 ADE Cofis nº 20/2012
+                         vlVersao201   // Código 003 - Versão 201 ADE Cofis nº 20/2012 de 14/03/2012
                         );
   /// Código da finalidade do arquivo - TRegistro0000
   TACBrCodFinalidade = (
@@ -857,6 +859,18 @@ type
                           indRepReceitaAuferida,        //1 – Operação Representativa de Receita Auferida Sujeita ao Pagamento da Contribuição para o PIS/Pasep e da Cofins (CST 01, 02, 03 ou 05).
                           indRepReceitaNaoAuferida      //2 - Operação Representativa de Receita Auferida Não Sujeita ao Pagamento da Contribuição para o PIS/Pasep e da Cofins (CST 04, 06, 07, 08, 09, 49 ou 99).
                         );
+
+   //Indicador da composição da receita recebida no período (RegsitroF525 - IND_REC):
+   TACBrIndicadorDaComposicaoDaReceitaRecebida = (
+                          crCliente,          //01- Clientes
+                          crAdministradora,   //02- Administradora de cartão de débito/crédito
+                          crTituloDeCredito,  //03- Título de crédito - Duplicata, nota promissória, cheque, etc.
+                          crDocumentoFiscal,  //04- Documento fiscal
+                          crItemVendido,      //05- Item vendido (produtos e serviços)
+                          crOutros            //99- Outros (Detalhar no campo 10 – Informação Complementar)
+                        );
+
+
 
   TOpenBlocos = class
   private

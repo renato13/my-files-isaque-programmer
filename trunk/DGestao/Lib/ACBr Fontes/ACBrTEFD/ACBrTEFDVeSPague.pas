@@ -45,7 +45,7 @@ unit ACBrTEFDVeSPague;
 interface
 
 uses
-  Classes, SysUtils, ACBrTEFDClass,
+  Classes, SysUtils, ACBrTEFDClass, ACBrConsts,
   {$IFDEF VisualCLX}
      QControls, QForms, QDialogs,
   {$ELSE}
@@ -118,7 +118,7 @@ type
      Memo: TStringList; var ItemSelecionado : Integer) of object ;
 
   TACBrTEFDVeSPagueObtemCampo = procedure( Titulo : String;
-    Mascara : String; Tipo : AnsiChar; var Resposta : AnsiString;
+    Mascara : String; Tipo : AnsiChar; var Resposta : String;
     var Digitado : Boolean ) of object ;
 
   { TACBrTEFDVeSPague }
@@ -572,6 +572,8 @@ begin
         fpTipoTransacao := ifthen(LowerCase(Valor)='debito', 20, 10 )
      else if Chave = 'transacao_valor' then
         fpValorTotal := StringToFloatDef( Valor, 0 )
+     else if Chave = 'transacao_valor_ajuste' then //---Valor retornado contendo o valor CIELO PREMIA
+        fpDesconto := StringToFloatDef( Valor, 0 )
      else if Chave = 'transacao_valor_saque' then
         fpSaque := StringToFloatDef( Valor, 0 )
      else if Chave = 'transacao_valor_taxa_embarque' then
@@ -729,6 +731,8 @@ end ;
 procedure TACBrTEFDVeSPague.Inicializar;
 var
   Erro, Tentativas : Integer ;
+  Est : AnsiChar;
+  ArqMask: String;
 begin
   if Inicializado then exit ;
 
@@ -762,11 +766,50 @@ begin
                              'Porta: '+fPorta+sLineBreak+
                              'Erro: '+IntToStr(Erro)+'-'+fSocket.LastErrorDesc ) ) ;
 
-  fpInicializado := True ;
   GravaLog( Name +' Inicializado VeSPague' );
 
   ServicoIniciar;
-  CancelarTransacoesPendentesClass  ;
+
+  try
+    Est := TACBrTEFD(Owner).EstadoECF;
+  except
+    Est := 'O' ;
+    { TODO: Criar arquivo de Status da Transação
+
+        Se o ECF estiver desligado, será retornado 'O', o que fará o código
+      abaixo Cancelar Todas as Transações Pendentes, porém, pelo Roteiro do
+      TEF dedicado, é necessário confirmar a Transação se o Cupom foi
+      finalizado com sucesso.
+        Criar um arquivo de Status que seja atualizado no Fim do Cupom e no
+      inicio do CCD, de maneira que seja possível identificar o Status do
+      Documento no ECF indepentende do mesmo estar ou não ligado
+
+        Como alteranativa, é possível implementar código no Evento "OnInfoECF"
+      para buscar o Status do Documento no Banco de dados da sua aplicação, e
+      responder diferente de 'O',   (Veja exemplo nos fontes do TEFDDemo)
+    }
+  end ;
+
+  fpInicializado := True ;
+
+  // Cupom Ficou aberto ?? Se SIM, Cancele tudo... //
+  if (Est in ['V','P','N','O']) then
+   begin
+     { Achando Arquivos de Backup deste GP }
+     ArqMask := TACBrTEFD(Owner).PathBackup + PathDelim + 'ACBr_' + Self.Name + '_*.tef' ;
+     if FilesExists( ArqMask ) then
+     begin
+        TACBrTEFD(Owner).DoExibeMsg( opmOK,
+           'Há pelo menos uma transação PENDENTE.'+sLineBreak+
+           'Favor realizar o DESFAZIMENTO no menu Administrativo -> pedende.'+sLineBreak+
+           'Cancelar o cupom fiscal !' ) ;
+
+        CancelarTransacoesPendentesClass;
+     end;
+   end
+  else
+     // NAO, Cupom Fechado, Pode confirmar e Mandar aviso para re-imprimir //
+     ConfirmarESolicitarImpressaoTransacoesPendentes ;
 end;
 
 procedure TACBrTEFDVeSPague.DesInicializar ;
@@ -814,6 +857,7 @@ var
   I : Integer ;
   Transacao : String ;
 begin
+  Result := True ;
   Transacao := Trim(fTransacaoADM) ;
 
   { No modo BackGround não há um comando que retorne todas as Opçoes
@@ -1006,7 +1050,7 @@ begin
   Retorno := FazerRequisicao( fTransacaoPendente, 'ADM', Valor, '', ListaParams  ) ;
 
   if Retorno = 0 then
-     Retorno := ContinuarRequisicao( True ) ;  { True = Imprimir Comprovantes agora }
+     ContinuarRequisicao( True ) ;  { True = Imprimir Comprovantes agora }
 
   if fTemPendencias then
   begin
@@ -1049,8 +1093,6 @@ begin
    if fpAguardandoResposta then
       raise Exception.Create( ACBrStr( 'Requisição anterior não concluida' ) ) ;
 
-   Result := 0 ;
-
    fCancelandoTransacao := (AnsiUpperCase(Transacao) = 'ADMINISTRACAO CANCELAR');
 
    ServicoIniciar ;
@@ -1065,6 +1107,10 @@ begin
 
    if TransacaoOpcao <> '' then
       ReqVS.AddParamString( 'transacao_opcao', TransacaoOpcao ) ;
+
+   //---Adicionando o parametro CIELO PREMIA--------------
+   ReqVS.AddParamDouble( 'transacao_valor_ajuste',  00) ;
+   //-----------------------------------------------------
 
    if ListaParams <> '' then
       ReqVS.Params.Add(ListaParams);
@@ -1215,7 +1261,8 @@ end;
 
 procedure TACBrTEFDVeSPague.ProcessarColeta ;
 var
-  Mensagem, Mascara, Resposta, Msg : AnsiString ;
+  Mensagem, Mascara, Msg : AnsiString ;
+  Resposta : String ;
   Tipo : AnsiChar ;
   OpcoesMenu, Video_Mensagem : TStringList ;
   ItemSelecionado, OldSeq : Integer ;

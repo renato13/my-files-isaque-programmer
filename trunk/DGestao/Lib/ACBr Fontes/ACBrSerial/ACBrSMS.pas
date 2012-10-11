@@ -42,7 +42,7 @@ interface
 
 uses
   ACBrBase, ACBrConsts, ACBrDevice, ACBrSMSClass,
-  SysUtils , Classes;
+  SysUtils , Classes, Forms;
 
 type
   TACBrSMS = class(TACBrComponent)
@@ -51,14 +51,14 @@ type
     fsDevice: TACBrDevice;
     fsSMS: TACBrSMSClass;
     fsModelo: TACBrSMSModelo;
+    fsOnProgresso: TACBrSMSProgresso;
 
     procedure SetAtivo(const Value: Boolean);
     procedure SetModelo(const Value: TACBrSMSModelo);
     procedure SetRecebeConfirmacao(const Value: Boolean);
-    procedure SetSinCard(const Value: TACBrSMSSinCard);
     function GetRecebeConfirmacao: Boolean;
-    function GetSinCard: TACBrSMSSinCard;
-    function GetUltimaReposta: AnsiString;
+    function GetSimCard: TACBrSMSSimCard;
+    function GetUltimaReposta: String;
     procedure TestaAtivo;
     procedure TestaEmLinha;
     function GetQuebraMensagens: Boolean;
@@ -68,7 +68,9 @@ type
     function GetATResult: Boolean;
     procedure SetATResult(const Value: Boolean);
     function GetBandejasSimCard: Integer;
-    function GetUltimoComando: AnsiString;
+    function GetUltimoComando: String;
+    function GetIntervaloEntreMensagens: Integer;
+    procedure SetIntervaloEntreMensagens(const Value: Integer);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -77,36 +79,39 @@ type
     procedure Desativar;
 
     function EmLinha: Boolean;
-    function IMEI: AnsiString;
+    function IMEI: String;
+    function IMSI: String;
     function NivelSinal: Double;
-    function Operadora: AnsiString;
-    function Fabricante: AnsiString;
-    function ModeloModem: AnsiString;
-    function Firmware: AnsiString;
+    function Operadora: String;
+    function Fabricante: String;
+    function ModeloModem: String;
+    function Firmware: String;
     function EstadoSincronismo: TACBrSMSSincronismo;
 
-    procedure TrocarBandeja(const ASinCard: TACBrSMSSinCard);
-    procedure EnviarSMS(const ATelefone, AMensagem: AnsiString;
+    procedure TrocarBandeja(const ASimCard: TACBrSMSSimCard);
+    procedure EnviarSMS(const ATelefone, AMensagem: String;
       var AIndice: String);
     procedure EnviarSMSLote(const ALote: TACBrSMSMensagens;
       var AIndice: String);
     procedure ListarMensagens(const AFiltro: TACBrSMSFiltro;
-      const APath: AnsiString);
+      const APath: String);
 
-    procedure EnviarComando(Cmd: AnsiString);
+    procedure EnviarComando(ACmd: String; ATimeOut: Integer = 0);
   published
     property Ativo: Boolean read fsAtivo write SetAtivo;
     property Device: TACBrDevice read fsDevice;
     property SMS: TACBrSMSClass read fsSMS;
     property Modelo: TACBrSMSModelo read fsModelo write SetModelo;
-    property SinCard: TACBrSMSSinCard read GetSinCard write SetSinCard;
+    property SimCard: TACBrSMSSimCard read GetSimCard;
     property ATTimeOut: Integer read GetATTimeOut write SetATTimeOut;
     property ATResult: Boolean read GetATResult write SetATResult;
+    property IntervaloEntreMensagens: Integer read GetIntervaloEntreMensagens write SetIntervaloEntreMensagens;
     property RecebeConfirmacao: Boolean read GetRecebeConfirmacao write SetRecebeConfirmacao;
     property BandejasSimCard: Integer read GetBandejasSimCard;
     property QuebraMensagens: Boolean read GetQuebraMensagens write SetQuebraMensagens;
-    property UltimaResposta: AnsiString read GetUltimaReposta;
-    property UltimoComando: AnsiString read GetUltimoComando;
+    property UltimaResposta: String read GetUltimaReposta;
+    property UltimoComando: String read GetUltimoComando;
+    property OnProgresso: TACBrSMSProgresso read fsOnProgresso write fsOnProgresso;
   end;
 
 implementation
@@ -154,11 +159,14 @@ begin
     raise EACBrSMSException.Create('SMS não está em linha.');
 end;
 
-procedure TACBrSMS.TrocarBandeja(const ASinCard: TACBrSMSSinCard);
+procedure TACBrSMS.TrocarBandeja(const ASimCard: TACBrSMSSimCard);
 begin
   TestaAtivo;
-  fsSMS.TrocarBandeja(ASinCard);
-  SetSinCard(ASinCard);
+  if fsSMS.SimCard <> ASimCard then
+  begin
+    fsSMS.TrocarBandeja(ASimCard);
+    fsSMS.SimCard := ASimCard;
+  end;
 end;
 
 function TACBrSMS.EmLinha: Boolean;
@@ -167,13 +175,13 @@ begin
   Result := fsSMS.EmLinha;
 end;
 
-procedure TACBrSMS.EnviarComando(Cmd: AnsiString);
+procedure TACBrSMS.EnviarComando(ACmd: String; ATimeOut: Integer);
 begin
   TestaAtivo;
-  fsSMS.EnviarComando(Cmd);
+  fsSMS.EnviarComando(ACmd, ATimeOut);
 end;
 
-procedure TACBrSMS.EnviarSMS(const ATelefone, AMensagem: AnsiString;
+procedure TACBrSMS.EnviarSMS(const ATelefone, AMensagem: String;
   var AIndice: String);
 var
   F: TStringList;
@@ -200,6 +208,7 @@ begin
       F.Text := QuebraLinhas(AMensagem, 160);
       for I := 0 to F.Count - 1 do
       begin
+        IndiceMsg := '';
         fsSMS.EnviarSMS(ATelefone, F.Strings[I], IndiceMsg);
         AIndice := AIndice + ',' + IndiceMsg;
       end;
@@ -213,16 +222,27 @@ begin
   end;
 end;
 
-procedure TACBrSMS.EnviarSMSLote(const ALote: TACBrSMSMensagens; var AIndice: String);
+procedure TACBrSMS.EnviarSMSLote(const ALote: TACBrSMSMensagens;
+  var AIndice: String);
 var
   I: Integer;
   IndMsgAtual: String;
+  TotalMensagensLote: Integer;
 begin
   AIndice := EmptyStr;
-  for I := 0 to ALote.Count - 1 do
+  TotalMensagensLote := ALote.Count;
+
+  for I := 0 to TotalMensagensLote - 1 do
   begin
+    IndMsgAtual := '' ;
     fsSMS.EnviarSMS(ALote[I].Telefone, ALote[I].Mensagem, IndMsgAtual);
     AIndice := AIndice + ',' + IndMsgAtual;
+
+    Application.ProcessMessages;
+
+    // chamar o evento para a aplicação
+    if Assigned(fsOnProgresso) then
+      fsOnProgresso(I+1, TotalMensagensLote);
   end;
 
   // limpar a virgula inicial
@@ -236,7 +256,7 @@ begin
   Result := fsSMS.EstadoSincronismo;
 end;
 
-function TACBrSMS.Fabricante: AnsiString;
+function TACBrSMS.Fabricante: String;
 begin
   TestaAtivo;
   Result := fsSMS.Fabricante;
@@ -257,6 +277,11 @@ begin
   Result := fsSMS.BandejasSimCard;
 end;
 
+function TACBrSMS.GetIntervaloEntreMensagens: Integer;
+begin
+  Result := fsSMS.IntervaloEntreMensagens;
+end;
+
 function TACBrSMS.GetQuebraMensagens: Boolean;
 begin
   Result := fsSMS.QuebraMensagens;
@@ -267,35 +292,41 @@ begin
   Result := fsSMS.RecebeConfirmacao;
 end;
 
-function TACBrSMS.GetSinCard: TACBrSMSSinCard;
+function TACBrSMS.GetSimCard: TACBrSMSSimCard;
 begin
-  Result := fsSMS.SinCard;
+  Result := fsSMS.SimCard;
 end;
 
-function TACBrSMS.GetUltimaReposta: AnsiString;
+function TACBrSMS.GetUltimaReposta: String;
 begin
   Result := fsSMS.UltimaResposta;
 end;
 
-function TACBrSMS.GetUltimoComando: AnsiString;
+function TACBrSMS.GetUltimoComando: String;
 begin
   Result := fsSMS.UltimoComando;
 end;
 
-function TACBrSMS.IMEI: AnsiString;
+function TACBrSMS.IMEI: String;
 begin
   TestaAtivo;
   Result := fsSMS.IMEI;
 end;
 
+function TACBrSMS.IMSI: String;
+begin
+  TestaAtivo;
+  Result := fsSMS.IMSI;
+end;
+
 procedure TACBrSMS.ListarMensagens(const AFiltro: TACBrSMSFiltro;
-  const APath: AnsiString);
+  const APath: String);
 begin
   TestaAtivo;
   fsSMS.ListarMensagens(AFiltro, APath);
 end;
 
-function TACBrSMS.ModeloModem: AnsiString;
+function TACBrSMS.ModeloModem: String;
 begin
   TestaAtivo;
   Result := fsSMS.ModeloModem;
@@ -307,13 +338,13 @@ begin
   Result := fsSMS.NivelSinal;
 end;
 
-function TACBrSMS.Operadora: AnsiString;
+function TACBrSMS.Operadora: String;
 begin
   TestaAtivo;
   Result := fsSMS.Operadora;
 end;
 
-function TACBrSMS.Firmware: AnsiString;
+function TACBrSMS.Firmware: String;
 begin
   TestaAtivo;
   Result := fsSMS.Firmware;
@@ -348,11 +379,6 @@ begin
   fsSMS.RecebeConfirmacao := Value;
 end;
 
-procedure TACBrSMS.SetSinCard(const Value: TACBrSMSSinCard);
-begin
-  fsSMS.SinCard := Value;
-end;
-
 procedure TACBrSMS.SetAtivo(const Value: Boolean);
 begin
   if Value then
@@ -369,6 +395,11 @@ end;
 procedure TACBrSMS.SetATTimeOut(const Value: Integer);
 begin
   fsSMS.ATTimeOut := Value;
+end;
+
+procedure TACBrSMS.SetIntervaloEntreMensagens(const Value: Integer);
+begin
+  fsSMS.IntervaloEntreMensagens := Value;
 end;
 
 procedure TACBrSMS.Ativar;

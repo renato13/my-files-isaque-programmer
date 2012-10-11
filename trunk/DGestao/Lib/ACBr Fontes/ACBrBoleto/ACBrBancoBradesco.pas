@@ -226,15 +226,15 @@ begin
 
       {Pegando Código da Ocorrencia}
       case OcorrenciaOriginal.Tipo of
-         toRemessaBaixar                        : Ocorrencia := '02'; {Pedido de Baixa}
-         toRemessaConcederAbatimento            : Ocorrencia := '04'; {Concessão de Abatimento}
-         toRemessaCancelarAbatimento            : Ocorrencia := '05'; {Cancelamento de Abatimento concedido}
-         toRemessaAlterarVencimento             : Ocorrencia := '06'; {Alteração de vencimento}
-         toRemessaAlterarNumeroControle         : Ocorrencia := '08'; {Alteração de seu número}
-         toRemessaProtestar                     : Ocorrencia := '09'; {Pedido de protesto}
-         toRemessaCancelarIntrucaoProtestoBaixa : Ocorrencia := '18'; {Sustar protesto e baixar}
-         toRemessaCancelarInstrucaoProtesto     : Ocorrencia := '19'; {Sustar protesto e manter na carteira}
-         toRemessaOutrasOcorrencias             : Ocorrencia := '31'; {Alteração de Outros Dados}
+         toRemessaBaixar                         : Ocorrencia := '02'; {Pedido de Baixa}
+         toRemessaConcederAbatimento             : Ocorrencia := '04'; {Concessão de Abatimento}
+         toRemessaCancelarAbatimento             : Ocorrencia := '05'; {Cancelamento de Abatimento concedido}
+         toRemessaAlterarVencimento              : Ocorrencia := '06'; {Alteração de vencimento}
+         toRemessaAlterarNumeroControle          : Ocorrencia := '08'; {Alteração de seu número}
+         toRemessaProtestar                      : Ocorrencia := '09'; {Pedido de protesto}
+         toRemessaCancelarInstrucaoProtestoBaixa : Ocorrencia := '18'; {Sustar protesto e baixar}
+         toRemessaCancelarInstrucaoProtesto      : Ocorrencia := '19'; {Sustar protesto e manter na carteira}
+         toRemessaOutrasOcorrencias              : Ocorrencia := '31'; {Alteração de Outros Dados}
       else
          Ocorrencia := '01';                                          {Remessa}
       end;
@@ -244,6 +244,7 @@ begin
          tbCliEmite : TipoBoleto := '2';
       else
          TipoBoleto := '1';
+         DigitoNossoNumero := '0';
       end;
 
       {Pegando Especie}
@@ -385,7 +386,7 @@ begin
          raise Exception.Create(ACBrStr('CNPJ\CPF do arquivo inválido'));
 
       if (not LeCedenteRetorno) and ((rAgencia <> OnlyNumber(Cedente.Agencia)) or
-          (rConta <> OnlyNumber(Cedente.Conta))) then
+          (rConta <> RightStr(OnlyNumber(Cedente.Conta),Length(rConta)))) then
          raise Exception.Create(ACBrStr('Agencia\Conta do arquivo inválido'));
 
       Cedente.Nome    := rCedente;
@@ -399,7 +400,7 @@ begin
          11: Cedente.TipoInscricao:= pFisica;
          14: Cedente.TipoInscricao:= pJuridica;
          else
-            Cedente.TipoInscricao := pOutras;
+            Cedente.TipoInscricao := pJuridica;
       end;
 
       ACBrBanco.ACBrBoleto.ListadeBoletos.Clear;

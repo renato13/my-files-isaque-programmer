@@ -31,79 +31,6 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
-|* Historico
-|*
-|* 19/05/2004:  Daniel Simoes de Almeida
-|*   Primeira Versao: Criaçao e Distribuiçao da Primeira Versao
-|* 21/06/2004:  Daniel Simoes de Almeida
-|*   Otimizacao acesso a Variaveis do ECF (NumSerie, NumECF, NumVersao)
-|*   Melhorado o suporte a Impressora Thermica MFD
-|* 20/05/2005:  Daniel Simoes de Almeida
-|*   Corrigido BUG em FechaCupom. Linhas de Observação eram impressas erradas.
-|*   -  Bug reportado por: Erique Costa
-|* 13/06/2005:  Daniel Simoes de Almeida
-|*   Corrigido BUG em AbreCupom na MP25 / MFD. Mesmo que CPF/CNPJ não fosse
-|*   informado era impressa a linha de CPF/CNPJ.
-|*   -  Bug reportado por: Anderson Rogerio Bejatto
-|* 26/10/2005:  Daniel Simoes de Almeida
-|*   Corrigido BUG em CarregaFormasPagamento. Todas as formas carregadas eram
-|*   convertidas para Maiusculas   Bug reportado por: Ederson Selvati 
-|* 29/10/2005:  Daniel Simoes de Almeida
-|*   Adcionado itens SA-Sangria e SU-suprimento em CarregaComprovantesNaoFiscais.
-|*   pois esses indices sempre estarão presentes na Bematech
-|* 01/12/2005:  Daniel Simoes de Almeida
-|*   Melhorado suporte a VendaItem em MFD, usando  novo comando 63
-|*   (não imprimia a Unidade)
-|* 08/12/2005:  Daniel Simoes de Almeida
-|*  - VerificaFimImpressao disparava excessão quando ECF não estava em linha
-|*    Bug reportado por: Adriano Alves Dornelas
-|*  - Diminuido tempo de alguns Sleeps de 100 para 10 a fim de agilizar a
-|*    comunicaçao com o ECF (experimental)
-|* 03/05/2006:  Daniel Simoes de Almeida
-|*  - Adcionada a propriedade Publica IsTH, que retorna Verdadeiro se o ECF for
-|*    Térmico (mais rápido)
-|*  - Se o ECF for Térmico imprime as Linhas do Vinculado e Gerencial em apenas
-|*    um comando, (muito mais rápido) 
-|* 08/06/2006:  Daniel Simoes de Almeida
-|*  - Modificado EnviaComando para tolerar 3 falhas na recepção do ACK...Ou seja
-4|*    o erro só será reportado se o ECF retornar ACK inválido 3 vezes consecutivas
-|* 16/06/2006:  Daniel Simoes de Almeida
-|*  - Abertura de Cupom Vinculado as vezes falha na Bematech MP20/40 se usar
-|*    todos os parâmetros... nesses casos de erro, será tentada a abertura com
-|*    parametros simples antes de acusar a falha
-|*  - Removida a tolerancia de 3 ACKs inválidos inserida em 08/06/2006.
-|*    Mecanismo de espera do ACK ajustado para trabalhar junto com o TimeOut
-|* 29/06/2006:  Daniel Simoes de Almeida
-|*  - Aumentado o TimeOut dos comandos LeituraX e AbreRelatorioGerencial
-|* 01/08/2006:  Anderson Rogerio Bejatto
-|*  - Aumentado o TimeOut do comando FechaCupom
-|* 01/09/2006:  Daniel Simoes de Almeida
-|*  - Adicionada a verificação do Estado  estRequerZ  se o modelo for MFD
-|* 07/11/2006:  Daniel Simoes de Almeida
-|*  - Adicionada a verificação do modelo MP40, que possui apenas 40 colunas
-|* 04/12/2006:  Daniel Simoes de Almeida
-|*  - Corrigido Bug na abertura de Cupom Fiscal com CNPJ na MP20
-|* 01/04/2007:  Daniel Simoes de Almeida
-|*  - Implementados métodos de Cupom Não Fiscal
-|* 04/09/2006:  Daniel Simoes de Almeida
-|*  - Adicionada a verificação do Estado  estRequerZ  para todos os modelos,
-|*    pois a versão 3.30 da MP20-FI2, em alguns casos, não mais emite a 
-|*    Redução Z automáticamente
-|* 11/04/2008:  Daniel Simoes de Almeida
-|*  - Adicionado método CortarPapel
-|*  - EnviaComando_ECF melhorada para diminuir frequencia de msgs de ACK inválido
-|*  - VerificaFimImpressao melhorada para detectar que o ECF está trabalhando
-|*    e com isso aumentar o Tempo de estouro do TimeOut.
-|*    - Com isso, não é necessário setar TimeOuts muito grandes
-|* 09/06/2009:  Daniel Simoes de Almeida
-|*  - Correção em GetDadosUltimaReducaoZ, para somar TotalCancelamentos em
-|*    VendaBruta. Por: Brener B. Leão
-|* 10/06/2009:  Daniel Simoes de Almeida
-|*  - Implementação da programação de relatorio gerencial
-|*    Por: Franklin Haut
-******************************************************************************}
-
 {$I ACBr.inc}
 
 unit ACBrECFBematech ;
@@ -390,7 +317,6 @@ TACBrECFBematech = class( TACBrECFClass )
       usa um Sufixo padrão no fim da resposta da Impressora. }
     fs25MFD     : Boolean ;  // True se for MP25 ou Superior (MFD)
     fsPAF       : String ;
-    fsVendeItemExtendido : Boolean ;
     fsBytesResp : Integer ;
     fsFalhasFimImpressao : Integer ;
     fsNumVersao : String ;
@@ -418,6 +344,10 @@ TACBrECFBematech = class( TACBrECFClass )
        cTipoDownload: AnsiString; cUsuario: AnsiString;
        iTipoGeracao: integer; cChavePublica: AnsiString;
        cChavePrivada: AnsiString; iUnicoArquivo: integer ):Integer;StdCall;
+    xBematech_FI_GeraRegistrosCAT52MFD: function(cNomeArquivoMFD: AnsiString;
+       cData: AnsiString): Integer; stdcall;
+    xBematech_FI_DownloadMFD: function(cNomeArquivoMFD, cTipoDownload,
+      cDadoInicial, cDadoFinal, cUsuario: AnsiString): Integer; stdcall;
 
     {$IFDEF MSWINDOWS}
     procedure LoadDLLFunctions;
@@ -428,13 +358,11 @@ TACBrECFBematech = class( TACBrECFClass )
     procedure CRZToCOO(const ACRZIni, ACRZFim: Integer; var ACOOIni,
       ACOOFim: Integer);
 
-
  protected
     property TotalizadoresParciais : String read GetTotalizadoresParciais ;
 
     Function PreparaCmd( cmd : AnsiString ) : AnsiString ;
     function AnalisarRetornoDll(const ARetorno: Integer): String;
-    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
 
     function GetDataHora: TDateTime; override ;
     function GetNumCupom: String; override ;
@@ -477,6 +405,7 @@ TACBrECFBematech = class( TACBrECFClass )
     function GetNumNCN: String; override ;
     function GetNumCCDC: String; override ;
     function GetVendaBruta: Double; override ;
+    function GetNumReducoesZRestantes: String; override ;
 
     function GetTotalAcrescimos: Double; override ;
     function GetTotalCancelamentos: Double; override ;
@@ -526,7 +455,7 @@ TACBrECFBematech = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo : Double = 0;
        DescontoAcrescimo : String = 'D'; TipoDescontoAcrescimo : String = '%';
        NumItem : Integer = 0 ) ;  override ;
@@ -628,6 +557,12 @@ TACBrECFBematech = class( TACBrECFClass )
        Documentos : TACBrECFTipoDocumentoSet = [docTodos];
        Finalidade: TACBrECFFinalizaArqMFD = finMFD;
        TipoContador: TACBrECFTipoContador = tpcCOO ) ; override ;
+    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
+    function TraduzirTagBloco(const ATag, Conteudo: AnsiString): AnsiString; override;
+
+    procedure PafMF_GerarCAT52(const DataInicial: TDateTime;
+      const DataFinal: TDateTime; const DirArquivos: string); override;
+
  end ;
 
 implementation
@@ -684,7 +619,7 @@ var
   wRetentar : Boolean ;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+     raise EACBrECFErro.Create( ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
   fpDevice.HandShake := hsRTS_CTS ;
@@ -704,7 +639,6 @@ begin
   fsNFCodFPG := '' ;
   fsNFValor  := 0 ;
   fs25MFD    := false ;
-  fsVendeItemExtendido := fpArredondaItemMFD;
 
   try
      { Testando a comunicaçao com a porta }
@@ -864,37 +798,42 @@ begin
      if fs25MFD then
         fsST3 := (nSTH shl 8) + nSTL;
 
-     { Verificando por erros em ST1 e ST2 }
-     ErroMsg := '' ;
-     For B := 0 to 7 do
-     begin
-        if TestBit( ST1, B) then
-           if (not PediuStatus) or ((B <> 1) and (B <> 6)) then
-              ErroMsg := ErroMsg + ACBrStr(ErrosST1[ B ]) + sLineBreak ;
-
-        if TestBit( ST2, B) then
-           ErroMsg := ErroMsg + ACBrStr(ErrosST2[ B ]) + sLineBreak ;
-     end ;
-
-     { Verifica se possui erro "Pouco Papel" = ErrosST1[ 6 ] }
-     if pos(ErrosST1[ 6 ] + sLineBreak, ErroMsg) > 0 then
-     begin
+     { Verifica se possui erro "Pouco Papel" }
+     if TestBit( ST1, 6 ) then
         DoOnMsgPoucoPapel ;
-        { Remove da lista de erros para nao gerar Exceção }
-        ErroMsg := StringReplace(ErroMsg,ErrosST1[ 6 ] + sLineBreak,'',
-                                         [rfReplaceAll,rfIgnoreCase]) ;
-     end ;
 
+     ErroMsg := '' ;
      // Alguns erros estendidos não impedem de continuar a 'conversa' com o ECF
      // por isso só busca o erro estendido se realmente tiver algum erro grave!
-     if (ErroMsg <> '') and (fsST3 > 0) and (fsST3 < 218) then
-       ErroMsg := ErroMsg + ACBrStr(ErrosST3[fsST3]) + sLineBreak;
+     if fs25MFD then
+      begin
+        if (fsST3 > 0) and (fsST3 <= High(ErrosST3)) and
+           (fsST1+fsST2 <> 0) then
+           ErroMsg := ErrosST3[fsST3] + sLineBreak
+      end
+     else
+      begin
+        { Verificando por erros em ST1 e ST2 }
+        For B := 0 to 7 do
+        begin
+           if (B <> 6) and TestBit( ST1, B) then
+              if (not PediuStatus) or (B <> 1) then
+                 ErroMsg := ErroMsg + ErrosST1[ B ] + sLineBreak ;
+
+           if TestBit( ST2, B) then
+              ErroMsg := ErroMsg + ErrosST2[ B ] + sLineBreak ;
+        end ;
+      end ;
 
      if ErroMsg <> '' then
       begin
         ErroMsg := 'Erro retornado pela Impressora: ' + fpModeloStr + sLineBreak+sLineBreak+
                    ErroMsg ;
-        raise EACBrECFSemResposta.create(ErroMsg) ;
+
+        if (fsST1 = 128) or (fsST3 = 11) then
+           DoOnErrorSemPapel
+        else
+           raise EACBrECFSemResposta.create(ACBrStr(ErroMsg)) ;
       end
      else
         Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -982,7 +921,7 @@ begin
            Result := (Length( RetCmd ) >= 2) ;
          end
         else
-           raise Exception.Create(ACBrStr('ACK diferente de 6'));
+           raise EACBrECFErro.Create( ACBrStr('ACK diferente de 6'));
      except
        On E: Exception do
        begin
@@ -1001,7 +940,7 @@ begin
 
 end;
 
-Function TACBrECFBematech.PreparaCmd( cmd : AnsiString ) : AnsiString ;  // Adaptada do manual da Bematech //
+function TACBrECFBematech.PreparaCmd( cmd : AnsiString ) : AnsiString ;  // Adaptada do manual da Bematech //
 Var A, iSoma, LenCmd : Integer ;
     NBL, NBH, CSL, CSH : AnsiChar ;
 begin
@@ -1189,7 +1128,7 @@ begin
   else
      RetCmd := RetornaInfoECF('66') ;
 
-  Result := StrToFloatDef(  RetCmd, 0) / 100 ;
+  Result := StrToFloatDef(RetCmd, 0) / 100 ;
 end;
 
 {  Ordem de Retorno do Estado da Impressora
@@ -1521,7 +1460,8 @@ end;
 Procedure TACBrECFBematech.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, AcrescimoStr, DescontoStr : String ;
     CMD : Byte ;
 begin
@@ -1532,7 +1472,7 @@ begin
   Descricao := trim(Descricao) ;
   Unidade   := padL(Unidade,2) ;
 
-  if fpMFD and fsVendeItemExtendido then
+  if fpMFD and fpArredondaItemMFD then
    begin
      BytesResp   := 0 ;
      Codigo      := padL(Codigo,14) ;
@@ -1560,7 +1500,9 @@ begin
        begin
           if TestBit(ST1,2) then  // Comando inexistente ?
            begin
-             fsVendeItemExtendido := False;
+             fpArredondaItemMFD := False; // Desative o ArredondaItemMFD;
+
+             // Chamada recursiva do método para usar comando tradicional //
              VendeItem( Codigo, Descricao, AliquotaECF, Qtd, ValorUnitario,
                         ValorDescontoAcrescimo, Unidade, TipoDescontoAcrescimo,
                         DescontoAcrescimo );
@@ -1574,6 +1516,7 @@ begin
   else if fs25MFD or
      ((DescontoAcrescimo <> 'D') and (ValorDescontoAcrescimo > 0)) then   // Tem acrescimo ?
    begin
+     fpArredondaItemMFD := False;
      BytesResp   := 0 ;
      Codigo      := Trim(Codigo) ;
      ValorStr    := IntToStrZero( Round( ValorUnitario * 1000), 9) ;
@@ -1584,7 +1527,7 @@ begin
      if TipoDescontoAcrescimo = '%' then
       begin
         if Arredonda then
-           DescontoStr := IntToStrZero( Round( RoundTo(ValorUnitario*Qtd,-2) *
+           DescontoStr := IntToStrZero( Round( RoundABNT(ValorUnitario*Qtd,-2) *
                                         ValorDescontoAcrescimo), 10 )
         else
            DescontoStr := IntToStrZero( TruncFix( RoundTo(ValorUnitario*Qtd,-2) *
@@ -1605,7 +1548,8 @@ begin
    end
   else
    begin
-     Codigo := padL(Codigo,13) ;  
+     fpArredondaItemMFD := False;
+     Codigo := padL(Codigo,13) ;
      if Round( Qtd ) = Qtd then
         QtdStr := IntToStrZero( Round( Qtd ), 4)
      else
@@ -1770,7 +1714,7 @@ begin
     'N' : AliquotaStr  := 'NN' ;
     'F' : AliquotaStr  := 'FF' ;
     'T' : AliquotaICMS := 'T'+padR(copy(AliquotaICMS,2,2),2,'0') ; {Indice}
-    'S' : AliquotaStr  := AliquotaICMS ;  { SN, SF, SI }
+    'S' : AliquotaStr  := PadL( AliquotaICMS, 2, 'N') ;  { SN, SF, SI }
   end;
 
   if AliquotaStr = '' then
@@ -1972,7 +1916,7 @@ begin
   if fpMFD then
    begin
      if AchaRGDescricao(Descricao, True) <> nil then
-        raise Exception.Create(ACBrStr('Relatório Gerencial ('+Descricao+') já existe.')) ;
+        raise EACBrECFErro.Create( ACBrStr('Relatório Gerencial ('+Descricao+') já existe.')) ;
 
      if (ProxIndice < 2) or (ProxIndice > 30) then { Indice passado é válido ? }
      begin
@@ -1984,12 +1928,12 @@ begin
      end ;
 
      if ProxIndice > 30 then
-        raise Exception.create(ACBrStr('Não há espaço para programar novos RGs'));
+        raise EACBrECFErro.create( ACBrStr('Não há espaço para programar novos RGs'));
 
      EnviaComando( #82 + IntToStrZero(ProxIndice,2) + PadL(Descricao,17) ) ;
    end
   else
-     raise Exception.Create(ACBrStr('Impressoras sem MFD não suportam Programação de Relatórios Gerenciais'));
+     raise EACBrECFErro.Create( ACBrStr('Impressoras sem MFD não suportam Programação de Relatórios Gerenciais'));
 
   CarregaRelatoriosGerenciais ;
 end;
@@ -2001,8 +1945,8 @@ Var RetCmd, S: AnsiString ;
     Descr : String ;
 begin
   Cont      := 1 ;
-  BytesResp := 1550 ;
-  RetCmd    := EnviaComando( #35 + #33, 8 ) ;
+  //BytesResp := 1550 ;
+  RetCmd    := RetornaInfoECF( '33' ); //, 8 ) ;
   // ( 2 * 50 ) + (10 * 50) + (19 * 50)
   //     100    +    500    +   950    = 1550
 
@@ -2034,8 +1978,8 @@ begin
      RetCmd := '' ;
      if fs25MFD then
      begin
-        BytesResp := 60 ;
-        RetCmd    := EnviaComando( #35 + #47 ) ;
+        //BytesResp := 60 ;
+        RetCmd    := RetornaInfoECF( '47' ) ;
      end ;
 
     { Adicionando SA-Sangria e SU-Suprimento que sempre estarão presentes na Bematech}
@@ -2082,7 +2026,7 @@ begin
      ProxIndice := ComprovantesNaoFiscais.Count + 1 ;
 
   if ProxIndice > 50 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novos Comprovantes'+
+     raise EACBrECFErro.create( ACBrStr('Não há espaço para programar novos Comprovantes'+
                             ' não Fiscais'));
 
   BytesResp := 0 ;
@@ -2111,7 +2055,7 @@ begin
 
   Modelo := fsModelosCheque.AchaModeloBanco( Banco ) ;
   if Modelo = nil then
-     raise Exception.create(ACBrStr('Modelo de cheque do Banco: '+Banco+
+     raise EACBrECFErro.create( ACBrStr('Modelo de cheque do Banco: '+Banco+
                             ' não encontrado'));
   BytesResp := 0 ;
   with Modelo do
@@ -2145,7 +2089,7 @@ procedure TACBrECFBematech.ImpactoAgulhas( NivelForca : Integer = 2);
 Var Value : Integer ;
 begin
   if fs25MFD or ( StrToIntDef( NumVersao,0 ) < 310) then
-     raise Exception.Create(ACBrStr('Comando para aumentar o impacto das agulhas '+
+     raise EACBrECFErro.Create( ACBrStr('Comando para aumentar o impacto das agulhas '+
                             'não disponível neste modelo de ECF.')) ;
 
   Value := min(max(NivelForca,3),1) ;
@@ -2167,7 +2111,7 @@ begin
      Espera := 10 ;
      RG  := AchaRGIndice( IndiceStr ) ;
      if RG = nil then
-        raise Exception.create( ACBrStr('Relatório Gerencial: '+IndiceStr+
+        raise EACBrECFErro.create( ACBrStr('Relatório Gerencial: '+IndiceStr+
                                 ' não foi cadastrado.' ));
 
      EnviaComando( #83 + IndiceStr, Espera);
@@ -2221,7 +2165,7 @@ begin
   FPG := AchaFPGIndice( CodFormaPagto ) ;
 
   if FPG = nil then
-     raise Exception.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
+     raise EACBrECFErro.create( ACBrStr('Forma de Pagamento: '+CodFormaPagto+
                              ' não foi cadastrada.') ) ;
 
   COO       := Poem_Zeros( trim(COO) ,6) ;
@@ -2439,10 +2383,10 @@ function TACBrECFBematech.GetDataHoraSB: TDateTime;
 Leitura da Memória Fiscal, só para não retornar erro coloquei esta
 informação abaixo, temos que criar uma rotina que leia a LMF serial
 para retornar os valores corretos}
-Var RetCmd, Linha, LinhaVer : AnsiString ;
+Var Linha, LinhaVer : AnsiString ;
     OldShortDateFormat : String ;
     Linhas : TStringList;
-    I, nLinha, CRZ :Integer;
+    I, CRZ :Integer;
     AchouBlocoSB : Boolean ;
 begin
   Result := 0.0;
@@ -2451,7 +2395,6 @@ begin
   // porque acontecerá erro, conforme consulta ao atendimento da bematech
   if Estado in [estLivre] then
   begin
-    nLinha := -1;
     Linhas := TStringList.Create;
 
     try
@@ -2612,12 +2555,15 @@ var
   Cont : Integer ;
   StrRet : AnsiString ;
 begin
-   // Result:= 0 ; // Alguem sabe como a Bematech Retorna essa informação ???
+   // Result:= 0 ; // O Comando para retornar essa informação está defasado de acordo com a documentação. Mas está comentado abaixo pois não funciona no Emulador
   Cont      := 52;
   BytesResp := 1925 ;
   StrRet := EnviaComando( #35+#32, 8 ) ;
   Result := RoundTo( StrToFloatDef( BcdToAsc(
                      copy(StrRet,(Cont*10) - 9 + 833,10) ),0) / 10000, -4) ;
+//begin
+//  O comando abaixo só funciona nas MP-4000. 
+//  Result := StrToFloatDef( RetornaInfoECF( '78' ) ,0) / 100 ;
 end;
 
 function TACBrECFBematech.GetTotalDescontosISSQN: Double;
@@ -2683,6 +2629,7 @@ function TACBrECFBematech.GetVendaBruta: Double;
 Var RetCmd : AnsiString ;
 begin
   try
+     // Lendo Grande Total da última Redução Z //
      BytesResp := 308 ;
      RetCmd    := BcdToAsc(EnviaComando( #62 + #55, 5 )) ;
      Result    := StrToFloatDef(copy(RetCmd,3,18),0) / 100;
@@ -2695,9 +2642,23 @@ begin
   Result :=  RoundTo( GrandeTotal - Result, -2) ;
 end;
 
+function TACBrECFBematech.GetNumReducoesZRestantes: String;
+var
+  RetCmd: AnsiString ;
+begin
+  Result := '';
+
+  if fpMFD then
+    RetCmd := RetornaInfoECF( '59' ) ;
+
+  Result := RetCmd;
+end;
+
 function TACBrECFBematech.GetNumCOOInicial: String;
-Var Erro : Boolean ;
-    RetCmd : AnsiString ;
+Var
+  Erro : Boolean ;
+  RetCmd : AnsiString ;
+  NumUltCOORzAnt: Integer;
 begin
   Erro := False ;
   
@@ -2706,7 +2667,13 @@ begin
      try
         { Comando disponivel epenas a partir da MP2100 }
         RetCmd := RetornaInfoECF( '72' ) ;
-        fsNumCOOInicial := copy( RetCmd ,1,6) ;
+        NumUltCOORzAnt := StrToIntDef( copy( RetCmd ,7,6), 0 ) ;
+
+        if NumUltCOORzAnt > 0 then
+           NumUltCOORzAnt := min( NumUltCOORzAnt + 2, StrToIntDef(GetNumCupom,0) );
+
+        if NumUltCOORzAnt > 0 then
+           fsNumCOOInicial := IntToStrZero( NumUltCOORzAnt, 6 );
      except
         Erro := True ;
      end ;
@@ -2730,7 +2697,7 @@ begin
    begin
      FPG := AchaFPGIndice(CodFormaPagto) ;
      if FPG = nil then
-        raise Exception.create( ACBrStr('Forma de pagamento: '+CodFormaPagto+
+        raise EACBrECFErro.create( ACBrStr('Forma de pagamento: '+CodFormaPagto+
                                 ' não encontrada'));
 
      AguardaImpressao := True ;
@@ -2739,7 +2706,8 @@ begin
    end ;
 end;
 
-procedure TACBrECFBematech.AbreNaoFiscal( CPF_CNPJ, Nome, Endereco: String );
+procedure TACBrECFBematech.AbreNaoFiscal(CPF_CNPJ : String ; Nome : String ;
+   Endereco : String) ;
 begin
   if fs25MFD then
   begin
@@ -2784,7 +2752,7 @@ begin
   else
    begin
      if fsNFCodCNF <> '' then
-        raise Exception.Create(ACBrStr('Essa versão de ECF apenas permite o registro '+
+        raise EACBrECFErro.Create( ACBrStr('Essa versão de ECF apenas permite o registro '+
                                'de 1 Item não Fiscal'));
 
      fsNFCodCNF := CodCNF ;
@@ -2924,8 +2892,8 @@ begin
     end ;
 
     try
-       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
        Result := Result + 'NumECF = ' + NumECF + sLineBreak ;
+       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
     except
     end ;
 
@@ -2963,27 +2931,28 @@ begin
     end ;
 
     try
-       Result := Result + 'NumGRG = ' + copy(RetCmd,29,6) + sLineBreak ;
-    except
-    end ;
-
-    try
        Result := Result + 'NumCFD = ' + copy(RetCmd,35,6) + sLineBreak ;
     except
     end ;
 
     try
-       Result := Result + 'NumNFC = ' + copy(RetCmd,41,4) + sLineBreak ;
+       Result := Result + 'NumCDC = ' + copy(RetCmd,289,4) + sLineBreak ;
+    except
+    end ;
+
+    try
+       Result := Result + 'NumGRG = ' + copy(RetCmd,29,6) + sLineBreak ;
+    except
+    end ;
+
+    try
+       Result := Result + 'NumNFC = ' + copy(RetCmd,41,4) + sLineBreak ;  //NumNFC é nomeado conforme o Manual da Bematech
+       Result := Result + 'NumGNFC = ' + copy(RetCmd,41,4) + sLineBreak ; //NumGNFC foi adicionado para manter padrão com o método MontaDadosReducaoZ usado para Carregar os dados para DadosReducaoZ
     except
     end ;
 
     try
        Result := Result + 'NumCFC = ' + copy(RetCmd,45,4) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCDC = ' + copy(RetCmd,289,4) + sLineBreak ;
     except
     end ;
 
@@ -3132,9 +3101,7 @@ begin
     end ;
 
     try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,1145,14),0) / 100, -2)  ;
-       Result := Result + 'TotalAcrescimosOPNF = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
+       Result := Result + 'TotalNaoFiscal = ' + FloatToStr(TOPNF) + sLineBreak ;
     except
     end ;
 
@@ -3151,9 +3118,10 @@ begin
     except
     end ;
 
-
     try
-       Result := Result + 'TotalNaoFiscal = ' + FloatToStr(TOPNF) + sLineBreak ;
+       V := RoundTo( StrToFloatDef( copy(RetCmd,1145,14),0) / 100, -2)  ;
+       Result := Result + 'TotalAcrescimosOPNF = ' + FloatToStr( V ) + sLineBreak ;
+       VBruta := VBruta + V ;
     except
     end ;
 
@@ -3235,8 +3203,8 @@ begin
     end ;
 
     try
-       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
        Result := Result + 'NumECF = ' + NumECF + sLineBreak ;
+       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
     except
     end ;
 
@@ -3381,7 +3349,7 @@ end;
 
 procedure TACBrECFBematech.IdentificaPAF(NomeVersao, MD5 : String);
 begin
-  fsPAF := padL(NomeVersao,42) + padL(MD5,42) ;
+  fsPAF := padL(MD5,42) + padL(NomeVersao,42) ;
   EnviaComando(#62 + #64 + fsPAF) ;
 end;
 
@@ -3468,15 +3436,15 @@ begin
   ByteReg := StrToIntDef( Registrador, 0 ) ;
 
   Case ByteReg of
-      //Nota: Conforme os manuais da Bematech (ECFs MP2100, MP3000 e MP4000),
-      //      os valores dos registradores 0, 1, 2, 32, 33 e 34 só devem ser
-      //      usados para impressoras MP20 e MP40.
+     //Nota: Conforme os manuais da Bematech (ECFs MP2100, MP3000 e MP4000),
+     //      os valores dos registradores 0, 1, 2, 32, 33 e 34 só devem ser
+     //      usados para impressoras MP20 e MP40.
      0            : begin BytesResp := 15 ; IsBCD := False ; end ;
+     //1,8,9,10,11,12,14,15,18,19,45,46,52,53,57,59,71 : BytesResp := 2 ; //Não são necessários pois o padrão é esse...
      2            : begin BytesResp := 33 ; IsBCD := False ; end ;
      3,68         : BytesResp := 9 ;
      4,5,22,30,66,77,78,79,80,81,82 : BytesResp := 7 ; //Apesar de documentados na MP4000 registradores 80,81,82 não funcionam no emulador nem na MP3000, é preciso testar numa MP4000
      6,7,27,31,41,54,55,56,67,253 : BytesResp := 3 ;
-     //1,8,9,10,11,12,14,15,18,19,45,46,52,53,57,59,71 : BytesResp := 2 ; //Não são necessários pois o padrão é esse...
      13           : begin BytesResp := 186 ; IsBCD := False ; end ;
      16,29,70     : IsBCD := False ;
      17,20,21,28,65,74,75,76,254 : begin BytesResp := 1 ; IsBCD := False ; end ;
@@ -3523,15 +3491,17 @@ procedure TACBrECFBematech.LoadDLLFunctions;
      if not FunctionDetect( sLibName, FuncName, LibPointer) then
      begin
         LibPointer := NIL ;
-        raise Exception.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+LibName ) ) ;
+        raise EACBrECFErro.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+LibName ) ) ;
      end ;
    end ;
  end ;
 begin
-   BematechFunctionDetect('Bematech_FI_AbrePortaSerial',@xBematech_FI_AbrePortaSerial );
-   BematechFunctionDetect('Bematech_FI_FechaPortaSerial',@xBematech_FI_FechaPortaSerial );
-   BematechFunctionDetect('Bematech_FI_ArquivoMFD',@xBematech_FI_ArquivoMFD );
-   BematechFunctionDetect('Bematech_FI_EspelhoMFD',@xBematech_FI_EspelhoMFD );
+   BematechFunctionDetect( 'Bematech_FI_AbrePortaSerial',@xBematech_FI_AbrePortaSerial );
+   BematechFunctionDetect( 'Bematech_FI_FechaPortaSerial',@xBematech_FI_FechaPortaSerial );
+   BematechFunctionDetect( 'Bematech_FI_ArquivoMFD',@xBematech_FI_ArquivoMFD );
+   BematechFunctionDetect( 'Bematech_FI_EspelhoMFD',@xBematech_FI_EspelhoMFD );
+   BematechFunctionDetect( 'Bematech_FI_GeraRegistrosCAT52MFD',@xBematech_FI_GeraRegistrosCAT52MFD );
+   BematechFunctionDetect( 'Bematech_FI_DownloadMFD',@xBematech_FI_DownloadMFD );
 end;
 
 procedure TACBrECFBematech.AbrePortaSerialDLL(const Porta, Path : String ) ;
@@ -3579,7 +3549,7 @@ begin
   end ;
 
   if Resp <> 1 then
-     raise Exception.Create( ACBrStr('Erro em Bematech_FI_AbrePortaSerial'+sLineBreak+
+     raise EACBrECFErro.Create( ACBrStr('Erro em Bematech_FI_AbrePortaSerial'+sLineBreak+
                              AnalisarRetornoDll(Resp) ));
 end ;
 
@@ -3640,7 +3610,7 @@ begin
      RunCommand('./linuxmfd',Cmd,True) ;
 
      if not FileExists( ArqTmp ) then
-        raise Exception.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
+        raise EACBrECFErro.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
                                         'Arquivo: '+ArqTmp+' não foi criado' ) ) ;
 
      SysUtils.DeleteFile( NomeArquivo ) ;
@@ -3648,7 +3618,7 @@ begin
      RunCommand('./bemamfd2',Cmd,True) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      DeleteFile( ArqTmp ) ;
@@ -3668,11 +3638,11 @@ begin
                                       Prop, cChavePublica, cChavePrivada );
 
      if (Resp <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Bematech_FI_EspelhoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro ao executar Bematech_FI_EspelhoMFD.'+sLineBreak+
                                          AnalisarRetornoDll(Resp) )) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      xBematech_FI_FechaPortaSerial();
@@ -3705,7 +3675,7 @@ begin
      RunCommand('./linuxmfd',Cmd,True) ;
 
      if not FileExists( ArqTmp ) then
-        raise Exception.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
+        raise EACBrECFErro.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
                                         'Arquivo: '+ArqTmp+' não foi criado' ) ) ;
 
      SysUtils.DeleteFile( NomeArquivo ) ;
@@ -3713,7 +3683,7 @@ begin
      RunCommand('./bemamfd2',Cmd,True) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      DeleteFile( ArqTmp ) ;
@@ -3731,15 +3701,84 @@ begin
                                       Prop, cChavePublica, cChavePrivada );
 
      if (Resp <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar Bematech_FI_EspelhoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro ao executar Bematech_FI_EspelhoMFD.'+sLineBreak+
                                          AnalisarRetornoDll(Resp) )) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      xBematech_FI_FechaPortaSerial();
      Ativo := OldAtivo ;
+  end;
+ {$ENDIF}
+end;
+
+procedure TACBrECFBematech.PafMF_GerarCAT52(const DataInicial,
+  DataFinal: TDateTime; const DirArquivos: string);
+var
+  Resp: Integer;
+  FilePath, DiaIni, DiaFim, NumUsu: AnsiString;
+  OldAtivo: Boolean;
+  FileMFD: AnsiString;
+  DataArquivo: TDateTime;
+begin
+
+ {$IFDEF LINUX}
+  inherited PafMF_GerarCAT52( DataInicial, DataFinal, DirArquivos);
+ {$ELSE}
+  LoadDLLFunctions;
+
+  NumUsu   := AnsiString(UsuarioAtual);
+
+  DiaIni   := FormatDateTime('dd/mm/yyyy', DataInicial);
+  DiaFim   := FormatDateTime('dd/mm/yyyy', DataFinal);
+
+  FilePath := IncludeTrailingPathDelimiter(DirArquivos);
+  FileMFD  := AnsiString(FilePath + 'download.mfd');
+
+  OldAtivo := Ativo ;
+  try
+    // a bematech não possui a geração do CAT52 por período, mas pode-se
+    // gerar arquivos de um arquivo MFD, então baixamos a MFD para o periodo
+    // e rodamos um loop com a data gerando o arquivo para cada dia dentro
+    // do período
+    AbrePortaSerialDLL( fpDevice.Porta, FilePath ) ;
+
+    // fazer primeiro o download da MFD para o período
+    Resp := xBematech_FI_DownloadMFD( FileMFD, '1', DiaIni, DiaFim, NumUsu );
+    if (Resp <> 1) then
+    begin
+      raise EACBrECFErro.Create(ACBrStr(
+        'Erro ao executar xBematech_FI_DownloadMFD.' + sLineBreak +
+        AnalisarRetornoDll(Resp)
+      ));
+    end;
+
+    // gerar o arquivo para cada dia dentro do período a partir da
+    // MFD baixada da impressora fiscal
+    DataArquivo := DataInicial;
+    repeat
+      DiaIni := FormatDateTime('dd/mm/yyyy', DataArquivo);
+
+      Resp := xBematech_FI_GeraRegistrosCAT52MFD( FileMFD, DiaIni ) ;
+      if (Resp <> 1) then
+      begin
+        raise EACBrECFErro.Create(ACBrStr(
+          'Erro ao executar xBematech_FI_GeraRegistrosCAT52MFD.' + sLineBreak +
+          AnalisarRetornoDll(Resp) + sLineBreak +
+          'Para a data de: "' + DiaIni + '"'
+        ));
+      end;
+
+      // próximo dia
+      DataArquivo := IncDay( DataArquivo, 1 );
+
+    until DataArquivo > DataFinal;
+
+  finally
+    xBematech_FI_FechaPortaSerial();
+    Ativo := OldAtivo ;
   end;
  {$ENDIF}
 end;
@@ -3782,7 +3821,7 @@ begin
      RunCommand('./linuxmfd',Cmd,True) ;
 
      if not FileExists( ArqTmp ) then
-        raise Exception.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
+        raise EACBrECFErro.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
                                         'Arquivo: '+ArqTmp+' não foi criado' ) ) ;
 
      SysUtils.DeleteFile( NomeArquivo ) ;
@@ -3790,7 +3829,7 @@ begin
      RunCommand('./bemamfd2',Cmd,True) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      DeleteFile( ArqTmp ) ;
@@ -3814,13 +3853,13 @@ begin
                                       cChavePublica, cChavePrivada, 1 ) ;
 
      if (Resp <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar xBematech_FI_ArquivoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro ao executar xBematech_FI_ArquivoMFD.'+sLineBreak+
                                          AnalisarRetornoDll(Resp) )) ;
 
      FindFiles( FileMask, Arquivos );
 
      if Arquivos.Count < 1 then
-        raise Exception.Create( ACBrStr( 'Erro na execução de xBematech_FI_ArquivoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de xBematech_FI_ArquivoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
 
      RenameFile( Arquivos[0], NomeArquivo );
@@ -3873,7 +3912,7 @@ begin
      RunCommand('./linuxmfd',Cmd,True) ;
 
      if not FileExists( ArqTmp ) then
-        raise Exception.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
+        raise EACBrECFErro.Create( ACBrStr('Erro na execução do utilitário "linuxmfd" '+
                                         'Arquivo: '+ArqTmp+' não foi criado' ) ) ;
 
      SysUtils.DeleteFile( NomeArquivo ) ;
@@ -3881,7 +3920,7 @@ begin
      RunCommand('./bemamfd2',Cmd,True) ;
 
      if not FileExists( NomeArquivo ) then
-        raise Exception.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução do utilitário "bemamfd2".'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
      DeleteFile( ArqTmp ) ;
@@ -3902,13 +3941,13 @@ begin
      Resp := xBematech_FI_ArquivoMFD( '', COOIni, COOFim, 'C', Prop, Tipo,
                                       cChavePublica, cChavePrivada, 1 ) ;
      if (Resp <> 1) then
-        raise Exception.Create( ACBrStr( 'Erro ao executar xBematech_FI_ArquivoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro ao executar xBematech_FI_ArquivoMFD.'+sLineBreak+
                                          AnalisarRetornoDll(Resp) )) ;
 
      FindFiles( FileMask, Arquivos );
 
      if Arquivos.Count < 1 then
-        raise Exception.Create( ACBrStr( 'Erro na execução de xBematech_FI_ArquivoMFD.'+sLineBreak+
+        raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de xBematech_FI_ArquivoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
 
      RenameFile( Arquivos[0], NomeArquivo );
@@ -3937,7 +3976,7 @@ begin
     //Retorno.SaveToFile('c:\temp\retorno.txt');
 
     if Retorno.Text = '' then
-      raise Exception.Create('Nenhuma leitura serial não foi retornada pela impressora fiscal.');
+      raise EACBrECFErro.Create( 'Nenhuma leitura serial não foi retornada pela impressora fiscal.');
 
     PosCOO  := 0;
     ACOOIni := 0;
@@ -3969,10 +4008,10 @@ begin
     end ;
 
     if ACOOIni = 0 then
-       raise Exception.Create( ACBrStr('Periodo inicial - CRZ: '+CRZi+' não encontrado') );
+       raise EACBrECFErro.Create( ACBrStr('Periodo inicial - CRZ: '+CRZi+' não encontrado') );
 
     if ACOOFim = 0 then
-       raise Exception.Create( ACBrStr('Periodo final - CRZ: '+CRZf+' não encontrado') );
+       raise EACBrECFErro.Create( ACBrStr('Periodo final - CRZ: '+CRZf+' não encontrado') );
 
     GravaLog('CRZ Inicial: '+IntToStr(ACRZIni)+' - COO: '+IntToStr(ACOOIni) +sLineBreak +
              'CRZ Final: '+IntToStr(ACRZFim)+' - COO: '+IntToStr(ACOOFim) );
@@ -3983,13 +4022,12 @@ end;
 
 function TACBrECFBematech.TraduzirTag(const ATag: AnsiString): AnsiString;
 const
-  C_ON  = #1;
-  C_OFF = #0;
-  C_BARRA = #107;
+  C_ON  = #1 ;
+  C_OFF = #0 ;
 
   // <e></e>
-  cExpandidoOn   = ESC + 'W' + C_ON;
-  cExpandidoOff  = ESC + 'W' + C_OFF;
+  cExpandidoOn   = ESC + SO;
+  cExpandidoOff  = #20;
 
   // <n></n>
   cNegritoOn     = ESC + 'E';
@@ -4006,35 +4044,6 @@ const
   //<i></i>
   cItalicoOn  = ESC + '4';
   cITalicoOff = ESC + '5';
-
-  cEAN8     = GS + C_BARRA + #3; // <ean8></ean8>
-  cEAN13    = GS + C_BARRA + #2; // <ean13></ean13>
-  cSTD25    = ''; // <std></std>
-  cINTER25  = ''; // <inter></inter>
-  cCODE11   = ''; // <code11></code11>
-  cCODE39   = GS + C_BARRA + #4; // <code39></code39>
-  cCODE93   = GS + C_BARRA + #72; // <code93></code93>
-  cCODE128  = GS + C_BARRA + #73; // <code128></code128>
-  cUPCA     = GS + C_BARRA + #0; // <upca></upca>
-  cCODABAR  = GS + C_BARRA + #6; // <codabar></codabar>
-  cMSI      = GS + C_BARRA + #22; // <msi></msi>
-  cBarraFim = NUL;
-
-  function ConfigurarBarras(const ACodigo: AnsiString): AnsiString;
-  var
-    Largura: AnsiString;
-    Altura: AnsiString;
-    Mostrar: AnsiString;
-  begin
-    Largura := GS + #119 + IntToStr(ConfigBarras.Altura);
-    Altura  := GS + #104 + IntToStr(ConfigBarras.LarguraLinha);
-
-    if ConfigBarras.MostrarCodigo then
-      Mostrar := GS + #72 + '1'
-    else
-      Mostrar := GS + #72 + '0';
-    Result := Largura + Altura + Mostrar + ACodigo;
-  end;
 begin
 
   case AnsiIndexText( ATag, ARRAY_TAGS) of
@@ -4049,33 +4058,78 @@ begin
      9 : Result := cCondensadoOff;
      10: Result := cItalicoOn;
      11: Result := cITalicoOff;
-     12: Result := ConfigurarBarras(cEAN8);
-     13: Result := cBarraFim;
-     14: Result := ConfigurarBarras(cEAN13);
-     15: Result := cBarraFim;
-     16: Result := ConfigurarBarras(cSTD25);
-     17: Result := cBarraFim;
-     18: Result := ConfigurarBarras(cINTER25);
-     19: Result := cBarraFim;
-     20: Result := ConfigurarBarras(cCODE11);
-     21: Result := cBarraFim;
-     22: Result := ConfigurarBarras(cCODE39);
-     23: Result := cBarraFim;
-     24: Result := ConfigurarBarras(cCODE93);
-     25: Result := cBarraFim;
-     26: Result := ConfigurarBarras(cCODE128);
-     27: Result := cBarraFim;
-     28: Result := ConfigurarBarras(cUPCA);
-     29: Result := cBarraFim;
-     30: Result := ConfigurarBarras(cCODABAR);
-     31: Result := cBarraFim;
-     32: Result := ConfigurarBarras(cMSI);
-     33: Result := cBarraFim;
   else
      Result := '' ;
   end;
 
 end;
+
+function TACBrECFBematech.TraduzirTagBloco(const ATag, Conteudo : AnsiString
+   ) : AnsiString ;
+const
+  C_BARRA = GS + 'k' ;
+
+  cEAN8     = C_BARRA + 'D' ; // <ean8></ean8>
+  cEAN13    = C_BARRA + 'C' ; // <ean13></ean13>
+  cINTER25  = C_BARRA + 'F' ; // <inter></inter>
+  cCODE39   = C_BARRA + 'E' ; // <code39></code39>
+  cCODE93   = C_BARRA + 'H' ; // <code93></code93>
+  cCODE128  = C_BARRA + 'I' ; // <code128></code128>
+  cUPCA     = C_BARRA + 'A' ; // <upca></upca>
+  cCODABAR  = C_BARRA + 'G' ; // <codabar></codabar>
+  cMSI      = C_BARRA + #130; // <msi></msi>
+
+  function MontaCodBarras(const ATipo: AnsiString; ACodigo: AnsiString;
+    TamFixo: Integer = 0): AnsiString;
+  var
+    L, A : Integer ;
+  begin
+    L := IfThen( ConfigBarras.LarguraLinha = 0, 3, max(min(ConfigBarras.LarguraLinha,4),2) );
+    A := IfThen( ConfigBarras.Altura = 0, 162, max(min(ConfigBarras.Altura,255),1) );
+
+    ACodigo := Trim( ACodigo );
+    if TamFixo > 0 then
+       ACodigo := padR( ACodigo, TamFixo, '0') ;
+
+    Result := GS + 'w' + chr( L ) + // Largura
+              GS + 'h' + chr( A ) + // Altura
+              GS + 'H' + ifthen( ConfigBarras.MostrarCodigo, #1, #0 ) +
+              ATipo + chr( Length( ACodigo ) ) + ACodigo;
+  end;
+
+  Function AddStartStop( Conteudo: AnsiString ) : AnsiString ;
+  begin
+    Result := Trim(Conteudo) ;
+    if LeftStr(Result,1) <> '*' then
+       Result := '*'+Result;
+    if RightStr(Result,1) <> '*' then
+       Result := Result+'*' ;
+  end ;
+
+var
+   Is010000 : Boolean ;
+
+begin
+  // MP4000 ver 01.00.00 tem sérios problemas quando tenta imprimir CODE39 ou CODEBAR
+  Is010000 := (StrToIntDef( NumVersao,0 ) <= 10000) ;
+
+  case AnsiIndexText( ATag, ARRAY_TAGS) of
+     12,13: Result := MontaCodBarras(cEAN8, Conteudo, 7);
+     14,15: Result := MontaCodBarras(cEAN13, Conteudo, 12);
+     18,19: Result := MontaCodBarras(cINTER25, Conteudo);
+     22,23: Result := ifthen( Is010000, '',
+                              MontaCodBarras(cCODE39, AddStartStop(Conteudo) ) );
+     24,25: Result := MontaCodBarras(cCODE93, Conteudo);
+     26,27: Result := MontaCodBarras(cCODE128, Conteudo);
+     28,29: Result := MontaCodBarras(cUPCA, Conteudo, 11);
+     30,31: Result := ifthen( Is010000, '',
+                              MontaCodBarras(cCODABAR, AddStartStop(Conteudo) ) );
+     32,33: Result := MontaCodBarras(cMSI, Conteudo);
+  else
+     Result := inherited TraduzirTagBloco(ATag, Conteudo) ;
+  end;
+
+end ;
 
 end.
 

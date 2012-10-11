@@ -31,42 +31,12 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
-|* Historico
-|*
-|* 19/05/2004: Primeira Versao
-|*    Daniel Simoes de Almeida
-|*    Criaçao e Distribuiçao da Primeira Versao
-|* 28/06/2004: Varias modificaçoes. Documentado em ACBrECF.pas ou
-|*    ACBr-change-log.txt
-|* 05/05/2006: Daniel Simoes de Almeida e Fabio Farias
-|*  - Corriga a Perda de foco da aplicação quando usando ExibeMensagem ou
-|*    BloqueiaMouseTeclado  (abertura da janela ShowModal )
-|* 23/05/2006:  Daniel Simoes de Almeida
-|*   - Métodos "ListaRelatorioGerencial" e "ListaCupomVinculado" abstraidos
-|*     pela classe TACBrECFClass... eliminando várias linhas de código nas
-|*     classes filhas
-|* 03/10/2006:  Daniel Simoes de Almeida
-|*   - Corrigido Bug no método FormMsgDoProcedure (usado p/ bloqueio do teclado)
-|*     A pilha de retorno das Exceções não era executada corretamente
-|* 18/12/2006:  J. Luís Schiavo
-|*  - Corrigido Bug em DoOnMsgRetentar, Resposta com sinal invertido
-|* 13/04/2007:  Daniel Simoes de Almeida
-|*  - ArredondaPorQtd não será executado caso o ValorTotal com a Qtd acrescida
-|*    fique superior ao Valor Arredondado pretendido. Isso pode ocorrer se o
-|*    Preço Unitário é grande... nesses casos não há como ajustar... :-(
-|* 05/03/2008:  Daniel Simoes de Almeida / Alexsander Rosa
-|*  - Metodos AchaFPGDescricao e AchaCNFDescricao fazem busca por String usando
-|*    o mesmo tamanho da String informada em Descricao
-******************************************************************************}
-
 {$I ACBr.inc}
 
 Unit ACBrECFClass ;
 
 interface
 uses ACBrDevice,
-     ACBrPAFClass,
      SysUtils ,
      Classes,
      ACBrConsts,
@@ -88,10 +58,12 @@ uses ACBrDevice,
 type
 
 EACBrECFErro            = class(Exception) ;
-EACBrECFCMDInvalido     = class(EACBrECFErro) ;
-EACBrECFSemResposta     = class(EACBrECFErro) ;
-EACBrECFNaoInicializado = class(EACBrECFErro) ;
-EACBrECFOcupado         = class(EACBrECFErro) ;
+  EACBrECFCMDInvalido     = class(EACBrECFErro) ;
+  EACBrECFSemResposta     = class(EACBrECFErro) ;
+  EACBrECFSemPapel        = class(EACBrECFErro) ;
+  EACBrECFTimeOut         = class(EACBrECFErro) ;
+  EACBrECFNaoInicializado = class(EACBrECFErro) ;
+  EACBrECFOcupado         = class(EACBrECFErro) ;
 
 { Definindo novo tipo para armazenar os dados que irão compor o rodapé }
 
@@ -160,8 +132,7 @@ TACBrECFFormaPagamento = class
     fsPermiteVinculado: Boolean;
     fsTotal: Double;
     fsData: TDateTime;
-    fsValorFiscal: Currency;
-    fsValorNaoFiscal: Currency;
+    fsTipoDoc: String;
  public
     constructor create ;
     procedure Assign( AFormaPagamento : TACBrECFFormaPagamento ) ;
@@ -172,8 +143,7 @@ TACBrECFFormaPagamento = class
                                        write fsPermiteVinculado ;
     property Total : Double read fsTotal write fsTotal ;
     property Data: TDateTime read fsData write fsData;
-    property ValorFiscal: Currency read fsValorFiscal write fsValorFiscal;
-    property ValorNaoFiscal: Currency read fsValorNaoFiscal write fsValorNaoFiscal;
+    property TipoDoc: String read fsTipoDoc write fsTipoDoc;
 end;
 
 { Lista de Objetos do tipo TACBrECFFormaPagamento }
@@ -308,6 +278,7 @@ TACBrECFDadosRZ = class
     fsValorVendaBruta: double;
     fsTotalizadoresNaoFiscais: TACBrECFComprovantesNaoFiscais;
     fsICMS: TACBrECFAliquotas;
+    fsTodasAliquotas: TACBrECFAliquotas;
     fsAcrescimoICMS: double;
     fsDescontoICMS: double;
     fsNaoTributadoICMS: double;
@@ -387,6 +358,9 @@ TACBrECFDadosRZ = class
     property AcrescimoICMS: double read fsAcrescimoICMS write fsAcrescimoICMS;
     property AcrescimoISSQN: double read fsAcrescimoISSQN write fsAcrescimoISSQN;
     property AcrescimoOPNF: double read fsAcrescimoOPNF write fsAcrescimoOPNF;
+
+    // Todas as Aliquotas, de ICMS e ISSQN na ordem original de programação no ECF
+    property TodasAliquotas: TACBrECFAliquotas read fsTodasAliquotas;
     // ICMS
     property ICMS: TACBrECFAliquotas read fsICMS;
     property SubstituicaoTributariaICMS: double read fsSubstituicaoTributariaICMS write fsSubstituicaoTributariaICMS;
@@ -472,6 +446,7 @@ TACBrECFClass = class
     fsAguardandoResposta: Boolean;
     fsOnAguardandoRespostaChange: TNotifyEvent;
     fsOnMsgPoucoPapel: TNotifyEvent;
+    fsOnErrorSemPapel : TNotifyEvent ;
     fsOnMsgRetentar : TACBrECFMsgRetentar ;
     fsOperador: String;
     fsBytesRec : Integer ;
@@ -549,6 +524,8 @@ TACBrECFClass = class
     fpEstado: TACBrECFEstado;
     fpArredondaPorQtd: Boolean;
     fpArredondaItemMFD : Boolean ;
+    fpIgnorarErroSemPapel : Boolean ;
+    fpIgnorarTagsFormatacao : Boolean ;
     fpDecimaisPreco: Integer;
     fpDecimaisQtd: Integer;
     fpArqLOG: String;
@@ -586,6 +563,7 @@ TACBrECFClass = class
     function GetNumVersao: String ; virtual ;
     function GetSubTotal: Double; virtual ;
     function GetTotalPago: Double; virtual ;
+    function GetNumReducoesZRestantes: String; virtual;
 
     function GetCNPJ: String; virtual ;
     function GetIE: String; virtual ;
@@ -640,6 +618,8 @@ TACBrECFClass = class
     function GetChequePronto: Boolean; virtual ;
     function GetParamDescontoISSQN: Boolean; virtual;
 
+    function GetTipoUltimoDocumento : TACBrECFTipoDocumento ; virtual ;
+
     Function EnviaComando_ECF( cmd : AnsiString ) : AnsiString ; virtual ;
 
     procedure LeResposta ; virtual ;
@@ -656,11 +636,11 @@ TACBrECFClass = class
     procedure PausarRelatorio( Via : Integer) ;
 
     procedure DoOnMsgPoucoPapel( Mensagem : String = '') ;
+    procedure DoOnErrorSemPapel ;
     Function DoOnMsgRetentar( const Mensagem : String;
        const Situacao : String = '') : Boolean ;
 
     procedure ImprimirLinhaALinha( Texto, Cmd : AnsiString ) ;
-    procedure GravaLog(AString: AnsiString; Traduz :Boolean = False);
 
     function ConfigBarras: TACBrECFConfigBarras;
  public
@@ -671,10 +651,16 @@ TACBrECFClass = class
     procedure Ativar ; virtual ;
     procedure Desativar ; virtual ;
 
+    procedure GravaLog(AString: AnsiString; Traduz :Boolean = False);
+
     property ArredondaPorQtd : Boolean read fpArredondaPorQtd
        write fpArredondaPorQtd ;
     property ArredondaItemMFD : Boolean read fpArredondaItemMFD
        write fpArredondaItemMFD ;
+    property IgnorarErroSemPapel : Boolean read fpIgnorarErroSemPapel
+       write fpIgnorarErroSemPapel;
+    property IgnorarTagsFormatacao : Boolean read fpIgnorarTagsFormatacao
+                write fpIgnorarTagsFormatacao default false ;
 
     property DecimaisPreco : Integer read fpDecimaisPreco
        write fpDecimaisPreco default 3 ;
@@ -705,6 +691,8 @@ TACBrECFClass = class
         read fsOnMsgPoucoPapel write fsOnMsgPoucoPapel ;
     property OnMsgRetentar : TACBrECFMsgRetentar
         read  fsOnMsgRetentar write fsOnMsgRetentar ;
+    property OnErrorSemPapel : TNotifyEvent
+        read fsOnErrorSemPapel write fsOnErrorSemPapel ;
 
     Property TimeOut  : Integer read GetTimeOut write SetTimeOut ;
     Property Retentar : Boolean read fsRetentar write fsRetentar ;
@@ -750,8 +738,9 @@ TACBrECFClass = class
     Property RespostaComando : AnsiString read fpRespostaComando
        write fpRespostaComando ;
     { lista com as resposta de comando tratadas }
-    property RespostasComando: TACBrInformacoes read fpRespostasComando write fpRespostasComando;
-    
+    property RespostasComando: TACBrInformacoes read fpRespostasComando
+       write fpRespostasComando;
+
     { Propriedades relacionadas aos dados do ECF }
     { ECF - Variaveis }
     Property DataHora  : TDateTime read GetDataHora  ;
@@ -761,6 +750,7 @@ TACBrECFClass = class
     Property NumSerie  : String    read GetNumSerie  ;
     Property NumSerieMFD  : String read GetNumSerieMFD  ;
     Property NumVersao : String    read GetNumVersao ;
+    Property NumReducoesZRestantes: String read GetNumReducoesZRestantes ;
 
     { Dados da Reducao Z - Registro 60M }
     Property DataMovimento      : TDateTime  read GetDataMovimento ;
@@ -886,6 +876,8 @@ TACBrECFClass = class
     Property IdentificaConsumidorRodape : Boolean read fpIdentificaConsumidorRodape ;
     Property ModoPreVenda: Boolean read fpModoPreVenda write fpModoPreVenda ;
 
+    Property TipoUltimoDocumento: TACBrECFTipoDocumento read GetTipoUltimoDocumento ;
+
     { Procedimentos de Cupom Fiscal }
     property Consumidor : TACBrECFConsumidor read fpConsumidor ;
     Procedure AbreCupom ; virtual ;
@@ -893,7 +885,7 @@ TACBrECFClass = class
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; virtual ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1) ; virtual ;
     Procedure DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo : Double = 0;
        DescontoAcrescimo : String = 'D'; TipoDescontoAcrescimo : String = '%';
        NumItem : Integer = 0 ) ;  virtual ;
@@ -938,6 +930,8 @@ TACBrECFClass = class
        DescricaoCNF: String; DescricaoFPG: String; IndiceBMP: Integer ) ; virtual ;
     procedure Suprimento( const Valor: Double; Obs : AnsiString;
        DescricaoCNF: String; DescricaoFPG: String; IndiceBMP: Integer ) ; virtual ;
+
+    Function EstornaCCD( const Todos: Boolean = True) : Integer; virtual ;
 
     { Gaveta de dinheiro }
     Procedure AbreGaveta  ; virtual ;
@@ -1009,6 +1003,9 @@ TACBrECFClass = class
        Finalidade: TACBrECFFinalizaArqMFD = finMFD;
        TipoContador: TACBrECFTipoContador = tpcCOO ) ; overload ; virtual ;
 
+    procedure PafMF_GerarCAT52(const DataInicial, DataFinal: TDateTime;
+      const DirArquivos: String); virtual;
+
     Procedure IdentificaOperador(Nome : String); virtual;
     Procedure IdentificaPAF( NomeVersao, MD5 : String) ; virtual ;
     Function RetornaInfoECF( Registrador: String) : AnsiString; Virtual ;
@@ -1034,6 +1031,7 @@ TACBrECFClass = class
       const AAlinhamento: TACBrAlinhamento = alCentro); virtual;
 
     function TraduzirTag(const ATag: AnsiString): AnsiString; virtual;
+    function TraduzirTagBloco(const ATag, Conteudo: AnsiString): AnsiString; virtual;
     function PossuiTagCodBarra(const ATexto: String): Boolean; virtual;
     function CodificarPaginaDeCodigoECF(ATexto: String): AnsiString; virtual;
     function DecodificarPaginaDeCodigoECF(ATexto: AnsiString): String; virtual;
@@ -1074,7 +1072,7 @@ begin
      NewVar := 'T' ;
 
   if not (NewVar in ['T','S']) then
-     raise Exception.create(ACBrStr(cACBrECFAliquotaSetTipoException));
+     raise EACBrECFErro.create( ACBrStr(cACBrECFAliquotaSetTipoException));
   fsTipo := Value;
 end;
 
@@ -1125,11 +1123,8 @@ begin
   fsIndice           := '' ;
   fsDescricao        := '' ;
   fsPermiteVinculado := true ;
-  fsTotal            := 0 ;
-
+  fsTotal            := 0.00 ;
   fsData             := 0.00;
-  fsValorFiscal      := 0.00;
-  fsValorNaoFiscal   := 0.0;
 end;
 
 procedure TACBrECFFormaPagamento.Assign(
@@ -1140,8 +1135,6 @@ begin
   fsPermiteVinculado := AFormaPagamento.PermiteVinculado ;
   fsTotal            := AFormaPagamento.Total ;
   fsData             := AFormaPagamento.Data ;
-  fsValorFiscal      := AFormaPagamento.ValorFiscal ;
-  fsValorNaoFiscal   := AFormaPagamento.ValorNaoFiscal ;
 end;
 
 function TACBrECFFormasPagamento.Add(Obj: TACBrECFFormaPagamento): Integer;
@@ -1199,10 +1192,10 @@ begin
   Endereco  := Trim( Endereco );
 
   if CPF_CNPJ = '' then
-     raise Exception.Create(ACBrStr(cACBrECFConsumidorCPFCNPJException)) ;
+     raise EACBrECFErro.Create( ACBrStr(cACBrECFConsumidorCPFCNPJException)) ;
 
   if (Nome = '') and (Endereco <> '') then
-     raise Exception.Create( ACBrStr(cACBrECFConsumidorNomeException) ) ;
+     raise EACBrECFErro.Create( ACBrStr(cACBrECFConsumidorNomeException) ) ;
 
   fsDocumento := CPF_CNPJ ;
   fsNome      := Nome ;
@@ -1347,7 +1340,7 @@ end;
 constructor TACBrECFClass.create( AOwner : TComponent ) ;
 begin
   if not (AOwner is TACBrECF) then
-     raise Exception.create( ACBrStr(cACBrECFClassCreateException) );
+     raise EACBrECFErro.create( ACBrStr(cACBrECFClassCreateException) );
 
   fpOwner := AOwner ;
 
@@ -1405,7 +1398,9 @@ begin
   fpRespostaComando       := '' ;
   fpUltimaMsgPoucoPapel   := 0 ;
   fpArredondaPorQtd       := False ;
-  fpArredondaItemMFD      := False;
+  fpArredondaItemMFD      := False ;
+  fpIgnorarErroSemPapel   := False ;
+  fpIgnorarTagsFormatacao := False ;
   fpDecimaisPreco         := 3 ;
   fpDecimaisQtd           := 3 ;
   fpAliquotas             := nil ;
@@ -1483,6 +1478,15 @@ procedure TACBrECFClass.Ativar;
 begin
   if fpAtivo then exit ;
 
+  GravaLog( sLineBreak +
+            StringOfChar('-',80)+ sLineBreak +
+            'ATIVAR - '+FormatDateTime('dd/mm/yy hh:nn:ss:zzz',now)+
+            ' - Modelo: '+ModeloStr+
+            ' - Porta: '+fpDevice.Porta+
+            ' - TimeOut: '+IntToStr(TimeOut)+ sLineBreak +
+            '         Device: '+fpDevice.DeviceToString(False) + sLineBreak +
+            StringOfChar('-',80) + sLineBreak );
+
   fpDevice.Ativar ;
 
   fpEstado := estDesconhecido ;
@@ -1491,15 +1495,15 @@ end;
 
 procedure TACBrECFClass.Desativar;
 begin
-  if not fpAtivo then exit ;
-
   AguardandoResposta := False;
   AguardaImpressao   := False;
 
-  fpDevice.Desativar ;
-
   fpEstado := estNaoInicializada ;
-  fpAtivo  := false ;
+
+  if not fpAtivo then exit ;
+
+  fpDevice.Desativar ;
+  fpAtivo := false ;
 end;
 
 
@@ -1539,7 +1543,7 @@ function TACBrECFClass.EnviaComando(cmd: AnsiString = ''): AnsiString;
 begin
   try
     try
-       GravaLog('-- '+FormatDateTime('hh:nn:ss',now)+' '+fpComandoLOG,True );
+       GravaLog('-- '+FormatDateTime('hh:nn:ss:zzz',now)+' '+fpComandoLOG,True );
 
        if (not fpDevice.Ativo) then
           raise EACBrECFNaoInicializado.create( ACBrStr(cACBrECFNaoInicializadoException) );
@@ -1554,9 +1558,10 @@ begin
        try
           Result := EnviaComando_ECF( Cmd ) ;
        finally
-          AguardandoResposta := False ;
-          GravaLog('            TX -> '+fpComandoEnviado, True);
-          GravaLog('   '+FormatDateTime('hh:nn:ss',now)+' RX <- '+fpRespostaComando, True);
+          AguardandoResposta  := False ;
+          IgnorarErroSemPapel := False;
+          GravaLog('                TX -> '+fpComandoEnviado, True);
+          GravaLog('   '+FormatDateTime('hh:nn:ss:zzz',now)+' RX <- '+fpRespostaComando, True);
        end ;
     except
        On E: Exception do
@@ -1624,6 +1629,7 @@ end ;
 
 function TACBrECFClass.EnviaComando_ECF(cmd: AnsiString): AnsiString;
 begin
+  Result := '';
   ErroAbstract( 'EnviaComando_ECF' );
 end;
 
@@ -1652,10 +1658,10 @@ begin
   {$ENDIF}
      DoLeResposta ;
 
-  if fpRespostaComando = 'ACBrErro' then
+  if (pos('ACBrErro:',fpRespostaComando) = 1)  then
   begin
-     fpRespostaComando := '' ;
-     raise EACBrECFSemResposta.create( Format(ACBrStr(cACBrECFSemRespostaException), [ModeloStr]) ) ;
+     fpRespostaComando := copy( fpRespostaComando, 11, Length( fpRespostaComando ) );
+     raise EACBrECFTimeOut.create( Format(ACBrStr(cACBrECFSemRespostaException), [ModeloStr]) ) ;
   end ;
 end;
 
@@ -1725,7 +1731,7 @@ begin
 
            if now > TempoLimite then      { Respondeu Nao a Retentar }
            begin
-              fpRespostaComando := 'ACBrErro' ;
+              fpRespostaComando := 'ACBrErro: '+fpRespostaComando ;
               break ;
            end ;
         end ;
@@ -1797,7 +1803,8 @@ end;
 function TACBrECFClass.VerificaFimLeitura(var Retorno: AnsiString;
    var TempoLimite: TDateTime) : Boolean ;
 begin
-  raise Exception.Create(Format(ACBrStr(cACBrECFVerificaFimLeituraException), [ ModeloStr ])) ;
+  Result := False;
+  raise EACBrECFErro.Create( ACBrStr(Format(cACBrECFVerificaFimLeituraException, [ ModeloStr ]))) ;
 end;
 
 function TACBrECFClass.VerificaFimImpressao(var TempoLimite: TDateTime): Boolean;
@@ -2091,6 +2098,7 @@ end;
 { Essa função PODE ser override por cada Classe Filha criada }
 Function TACBrECFClass.LeituraCMC7 : AnsiString ;
 begin
+  Result := '';
   GeraErro( EACBrECFCMDInvalido.Create( Format(cACBrECFLeituraCMC7Exception,
                                                [ ModeloStr ] ))) ;
 end;
@@ -2270,13 +2278,13 @@ Var
 begin
   CNF := AchaCNFDescricao(DescricaoCNF, True) ;
   if CNF = nil then
-     raise Exception.Create(Format(ACBrStr(cACBrECFAchaCNFException),
-                                   [ DescricaoCNF ] )) ;
+     raise EACBrECFErro.Create( ACBrStr(Format(cACBrECFAchaCNFException,
+                                   [ DescricaoCNF ] ))) ;
 
   FPG := AchaFPGDescricao(DescricaoFPG, True) ;
   if FPG = nil then
-     raise Exception.Create(Format(ACBrStr(cACBrECFAchaFPGException),
-                                   [ DescricaoFPG ])) ;
+     raise EACBrECFErro.Create( ACBrStr(Format(cACBrECFAchaFPGException,
+                                   [ DescricaoFPG ]))) ;
 
   NaoFiscalCompleto( CNF.Indice, Valor, FPG.Indice, Obs);
 end;
@@ -2286,6 +2294,12 @@ procedure TACBrECFClass.Suprimento(const Valor : Double ; Obs : AnsiString ;
 begin
   Sangria( Valor, Obs, DescricaoCNF, DescricaoFPG, IndiceBMP);
 end;
+
+function TACBrECFClass.EstornaCCD(const Todos : Boolean) : Integer ;
+begin
+  Result := 0;
+  ErroAbstract('EstornaCCD');
+end ;
 
 procedure TACBrECFClass.PulaLinhas(NumLinhas: Integer);
 begin
@@ -2308,6 +2322,39 @@ end;
 function TACBrECFClass.GetNumVersao: String ;
 begin
   Result := ''
+end;
+
+function TACBrECFClass.GetNumReducoesZRestantes: String;
+var
+  CRZR: String;
+  I: Integer;
+  LeituraX: TStringList;
+  Linha: String;
+begin
+  // implementada a leitura do contador pela leitura X para suprir
+  // as impressoras que não possuem retorno do contador
+  // nas impressoras que possuem, sobrescrever o método e utilizar o
+  // comando apropriado
+  CRZR := '';
+  LeituraX := TStringList.Create;
+  try
+    LeituraXSerial(LeituraX);
+
+    for I := LeituraX.Count - 1 downto 0 do
+    begin
+      Linha := AnsiUpperCase(LeituraX[I]);
+      if pos('REDUÇÕES RESTANTES:', Linha) > 0 then
+      begin
+        CRZR := Trim(Copy(Linha, 30, 40));
+        CRZR := ACBrUtil.OnlyNumber(CRZR);
+        Break;
+      end;
+    end;
+  finally
+    LeituraX.Free;
+  end;
+
+  Result := Trim( CRZR ) ;
 end;
 
 function TACBrECFClass.GetSubTotal: Double;
@@ -2363,6 +2410,11 @@ function TACBrECFClass.GetParamDescontoISSQN: Boolean;
 begin
   Result := (Trim(IM) <> '') ;
 end;
+
+function TACBrECFClass.GetTipoUltimoDocumento : TACBrECFTipoDocumento ;
+begin
+   Result := docNenhum;
+end ;
 
 function TACBrECFClass.GetDataMovimento: TDateTime;
 begin
@@ -2489,6 +2541,7 @@ end;
 
 function TACBrECFClass.GetDadosUltimaReducaoZ: AnsiString;
 begin
+  Result := '';
   ErroAbstract('DadosUltimaReducaoZ');
 end;
 
@@ -2556,13 +2609,13 @@ begin
 
      Result := Result + sLineBreak + '[Aliquotas]' + sLineBreak ;
 
-     For I := 0 to ICMS.Count-1 do
+     For I := 0 to TodasAliquotas.Count-1 do
      begin
         Result := Result +
                   FormatFloat('00', I+1 ) +
-                  ICMS[I].Tipo +
-                  IntToStrZero(Round(ICMS[I].Aliquota*100),4) + ' = ' +
-                  FloatToStr(ICMS[I].Total) + sLineBreak ;
+                  TodasAliquotas[I].Tipo +
+                  IntToStrZero(Round(TodasAliquotas[I].Aliquota*100),4) + ' = ' +
+                  FloatToStr(TodasAliquotas[I].Total) + sLineBreak ;
      end ;
 
      Result := Result + sLineBreak + '[OutrasICMS]' + sLineBreak ;
@@ -2602,7 +2655,8 @@ end;
 
 Function TACBrECFClass.RetornaInfoECF( Registrador : String ) : AnsiString ;
 begin
-   ErroAbstract('RetornaInfoECF');
+  Result := '';
+  ErroAbstract('RetornaInfoECF');
 end;
 
 procedure TACBrECFClass.PreparaTEF;
@@ -2642,7 +2696,8 @@ end;
 Procedure TACBrECFClass.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String;
+  CodDepartamento: Integer) ;
 begin
   ErroAbstract('VendeItem');
 end;
@@ -2667,8 +2722,8 @@ end;
 
 procedure TACBrECFClass.ErroAbstract(NomeProcedure: String);
 begin
-  raise EACBrECFCMDInvalido.create(Format(ACBrStr(cACBrECFCMDInvalidoException),
-                                          [NomeProcedure, ModeloStr] )) ;
+  raise EACBrECFCMDInvalido.create(ACBrStr(Format(cACBrECFCMDInvalidoException,
+                                          [NomeProcedure, ModeloStr] ))) ;
 end;
 
 function TACBrECFClass.GetModeloStr: String;
@@ -2702,6 +2757,16 @@ begin
      fpUltimaMsgPoucoPapel := now ;
   end ;
 end;
+
+procedure TACBrECFClass.DoOnErrorSemPapel ;
+begin
+   if fpIgnorarErroSemPapel then exit;
+
+   if Assigned( fsOnErrorSemPapel ) then
+      fsOnErrorSemPapel( self )
+   else
+      raise EACBrECFSemPapel.Create( cACBrECFSemPapelException );
+end ;
 
 function TACBrECFClass.DoOnMsgRetentar( const Mensagem : String;
    const Situacao : String = ''): Boolean;
@@ -3471,6 +3536,7 @@ begin
 end;
 
 { ------------------------------ Pausar Relatorios -------------------------}
+
 procedure TACBrECFClass.PausarRelatorio( Via : Integer );
 Var Texto : String ;
     SecRest, SecAnt : Integer ;
@@ -3560,7 +3626,7 @@ end;
     {$ENDIF}
 
     if Assigned(fsFormMsg) then
-       Raise Exception.Create(ACBrStr(cACBrECFFormMsgDoProcedureException)) ;
+       Raise EACBrECFErro.Create( ACBrStr(cACBrECFFormMsgDoProcedureException)) ;
 
     fsFormMsg  := TForm.create( Application ) ;
 
@@ -3611,7 +3677,7 @@ end;
         end ;
 
        if fsFormMsgException <> '' then
-          raise Exception.Create( ACBrStr(fsFormMsgException) ) ;
+          raise EACBrECFErro.Create( ACBrStr(fsFormMsgException) ) ;
     finally
        {$IFDEF VisualCLX}
        Application.OnEvent := OldOnEvent;
@@ -3876,6 +3942,18 @@ begin
      Result := '' ;
 end;
 
+function TACBrECFClass.TraduzirTagBloco(const ATag, Conteudo : AnsiString
+   ) : AnsiString ;
+var
+   LowerTag : String ;
+begin
+  LowerTag := LowerCase( ATag );
+
+  Result := TraduzirTag( LowerTag ) + Conteudo +
+            TraduzirTag( '</'+copy(LowerTag,2,Length(LowerTag)) );
+
+end ;
+
 function TACBrECFClass.CodificarPaginaDeCodigoECF(ATexto: String): AnsiString;
 begin
   if fpPaginaDeCodigo > 0 then
@@ -3893,6 +3971,13 @@ begin
      Result := ACBrStr( ATexto ) ;
 end ;
 
+procedure TACBrECFClass.PafMF_GerarCAT52(const DataInicial,
+  DataFinal: TDateTime; const DirArquivos: String);
+begin
+  Self.ArquivoMFD_DLL(DataInicial, DataFinal, DirArquivos, [docTodos], finNFPTDM);
+end;
+
+
 { TACBrECFDadosRZ }
 
 constructor TACBrECFDadosRZ.Create;
@@ -3900,8 +3985,9 @@ begin
    fsTotalizadoresNaoFiscais := TACBrECFComprovantesNaoFiscais.Create;
    fsRelatorioGerencial      := TACBrECFRelatoriosGerenciais.Create;
    fsMeiosDePagamento        := TACBrECFFormasPagamento.Create;
-   fsICMS                    := TACBrECFAliquotas.Create;
-   fsISSQN                   := TACBrECFAliquotas.Create;
+   fsTodasAliquotas          := TACBrECFAliquotas.Create;
+   fsICMS                    := TACBrECFAliquotas.Create(False);
+   fsISSQN                   := TACBrECFAliquotas.Create(False);
    
    Clear ;
 end;
@@ -3913,6 +3999,7 @@ begin
    fsMeiosDePagamento.Clear ;
    fsICMS.Clear ;
    fsISSQN.Clear ;
+   fsTodasAliquotas.Clear;
 
    fsCOO                         := 0 ;
    fsCFD                         := 0 ;
@@ -3959,6 +4046,7 @@ begin
    fsMeiosDePagamento.Free;
    fsICMS.Free;
    fsISSQN.Free;
+   fsTodasAliquotas.Free;
 
    inherited Destroy ;
 end;
@@ -3987,7 +4075,10 @@ end ;
 
 constructor TACBrECFRodape.Create;
 begin
-  fsMD5 := EmptyStr;
+  fsMD5        := EmptyStr;
+  fsCupomMania := False;
+  fsMinasLegal := False;
+
   Self.Clear;
 end;
 
@@ -3996,8 +4087,6 @@ begin
   fsDav        := EmptyStr;
   fsDavOs      := EmptyStr;
   fsPreVenda   := EmptyStr;
-  fsCupomMania := False;
-  fsMinasLegal := False;
 end;
 
 end.

@@ -56,14 +56,10 @@ type
   end ;
 
 implementation
-Uses ACBrBAL,
-     {$IFDEF COMPILER6_UP} DateUtils, StrUtils {$ELSE} ACBrD5,
-  synaser,
-  synaser,
-  synaser,
-  synaser,
-  synaser, Windows{$ENDIF},
-     SysUtils ;
+Uses
+   ACBrConsts,
+  {$IFDEF COMPILER6_UP} DateUtils, StrUtils {$ELSE} ACBrD5, Windows{$ENDIF},
+  SysUtils ;
 
 { TACBrBALGertecSerial }
 
@@ -75,8 +71,6 @@ end;
 
 function TACBrBALLucasTec.LePeso(MillisecTimeOut : Integer) : Double;
 begin
-
-  Result := 0 ;
   fpUltimoPesoLido := 0 ;
   fpUltimaResposta := '' ;
 
@@ -135,12 +129,12 @@ begin
 
       Resposta := fpUltimaResposta;
 
-      if not ((Pos('kg B ',Resposta)>0)) then begin
-        Peso:=-1;
-        Resposta:='I';
+      if not ((Pos('kg B ',Resposta)>0)) then
+      begin
+        Resposta := 'I';
       end;
 
-      Peso:=0;
+      Peso := 0;
       if Length(Resposta) > 1  then
       begin
          PesoL:=StrToPeso('kg L');

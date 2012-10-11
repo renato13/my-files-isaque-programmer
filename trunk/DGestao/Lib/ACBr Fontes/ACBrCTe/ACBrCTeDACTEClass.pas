@@ -70,6 +70,7 @@ type
     FMostrarPreview : Boolean;
     FMostrarStatus: Boolean;
     FTipoDACTE : TpcnTipoImpressao;
+    FTamanhoPapel: TpcnTamanhoPapel;
     FNumCopias : Integer;
     FExpandirLogoMarca:Boolean;
     FFax  : String;
@@ -93,13 +94,14 @@ type
     property Logo: String read FLogo write FLogo ;
     property Sistema: String read FSistema write FSistema ;
     property Usuario: String read FUsuario write FUsuario ;
-    property PathPDF: String read FPathArquivos write FPathArquivos ;
+    property PathPDF: String read GetPathArquivos write FPathArquivos ;
     property Impressora: String read FImpressora write FImpressora ;
     property ImprimirHoraSaida: Boolean read FImprimirHoraSaida write FImprimirHoraSaida ;
     property ImprimirHoraSaida_Hora: string read FImprimirHoraSaida_Hora write FImprimirHoraSaida_Hora ;
     property MostrarPreview: Boolean read FMostrarPreview write FMostrarPreview ;
     property MostrarStatus: Boolean read FMostrarStatus write FMostrarStatus ;
     property TipoDACTE: TpcnTipoImpressao read FTipoDACTE write FTipoDACTE ;
+    property TamanhoPapel: TpcnTamanhoPapel read FTamanhoPapel write FTamanhoPapel ;
     property NumCopias: Integer read FNumCopias write FNumCopias ;
     property Fax  : String read FFax   write FFax ;
     property Site : String read FSite  write FSite ;

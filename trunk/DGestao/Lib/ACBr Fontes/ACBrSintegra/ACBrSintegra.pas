@@ -71,6 +71,8 @@
 |   - Adição dos registros 88 para combustíveis
 |* 23/01/2012: EMBarbosa
 |   - Adição dos registros 88STES e 88STITNF por Wilson Camargo
+|* 23/02/2012: EMBarbosa
+|   * Correção do contador (88STES e 88STITNF) por Wilson Camargo
 *******************************************************************************}
 
 {$I ACBr.inc}
@@ -1300,12 +1302,12 @@ type
     FCodigoBarras: string;
     FUnidade: string;
     FDescricao: string;
-    FCodigo: Integer;
+    FCodigo: Int64;
     FVersaoEan: TVersaoEan;
 
   public
     property VersaoEan: TVersaoEan read FVersaoEan write FVersaoEan;
-    property Codigo: Integer read FCodigo write FCodigo;
+    property Codigo: Int64 read FCodigo write FCodigo;
     property Descricao: string read FDescricao write FDescricao;
     property Unidade: string read FUnidade write FUnidade;
     property CodigoBarras: string read FCodigoBarras write FCodigoBarras;
@@ -1931,7 +1933,8 @@ var
   wregistro: string;
   i: Integer;
 begin
-Registros53.Sort(Sort53);
+
+//Registros53.Sort(Sort53);//removido temporariamente por questoes de erro de soma no validador. Provavelmente mesmo erro do Registro 50 (Veja GerarRegistros50)
 for i:=0 to Registros53.Count-1 do
 begin
   with Registros53[i] do
@@ -1974,7 +1977,7 @@ begin
     wregistro:=wregistro+Padl(TiraPontos(Registros54[i].CFOP),4);
     wregistro:=wregistro+Padl(Registros54[i].CST,3);
     wregistro:=wregistro+IntToStrZero(Registros54[i].NumeroItem,3);
-    if Registros54[i].NumeroItem<=900 then
+    if Registros54[i].NumeroItem<=990 then
        wregistro:=wregistro+Padl(Registros54[i].Codigo,14) //codigo do produto
     else
        wregistro:=wregistro+space(14);
@@ -2081,7 +2084,7 @@ begin
   wregistro:=wregistro+Padl(Trim(NumSerie),20);
   wregistro:=wregistro+TBStrZero(IntToStr(NumOrdem),3);
   wregistro:=wregistro+ModeloDoc;
-  wregistro:=wregistro+tbstrzero(IntToStr(CooInicial),6);
+  wregistro:=wregistro+TBStrZero(IntToStr(CooInicial),6);
   wregistro:=wregistro+TBStrZero(IntToStr(CooFinal),6);
   wregistro:=wregistro+TBStrZero(IntToStr(CRZ),6);
   wregistro:=wregistro+TBStrZero(IntToStr(CRO),3);
@@ -2330,10 +2333,10 @@ if FInforma88SMS then
   inc(wtotal88);
 
 if FRegistros88STES.Count > 0 then
-  inc(wtotal88);
+  wtotal88 := wtotal88 + FRegistros88STES.Count;
 
 if FRegistros88STITNF.Count > 0 then
-  inc(wtotal88);
+  wtotal88 := wtotal88 + FRegistros88STITNF.Count;
 
 if FInforma88C then begin
   wtotal88:=wtotal88+Registros88C.Count;
@@ -3757,7 +3760,7 @@ end;
 constructor TRegistro88Ean.Create;
 begin
   inherited;
-VersaoEan:=eanIndefinido;
+  VersaoEan := eanIndefinido;
 end;
 
 { TRegistros88C }

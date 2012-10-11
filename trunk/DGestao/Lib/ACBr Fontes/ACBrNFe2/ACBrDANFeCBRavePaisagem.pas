@@ -169,7 +169,7 @@ begin
         FontRotation:=33;
         Print('AMBIENTE DE HOMOLOGAÇÃO - SEM VALOR FISCAL');
       end
-     else if ((procNFe.cStat = 101) or (NFeCancelada)) then
+     else if ((procNFe.cStat in [101,151]) or (NFeCancelada)) then
       begin // cancelada
         SetFont(FontNameUsed,28);
         FontColor:=clRed;
@@ -448,7 +448,7 @@ begin
             if NotaUtil.EstaVazio(aProtocolo) then
                aProtocolo:=Trim(procNFe.nProt)+' '+NotaUtil.SeSenao(procNFe.dhRecbto<>0,DateTimeToStr(procNFe.dhRecbto),'');
             if ((NFeCancelada) or
-                (ACBrNFe.NotasFiscais.Items[FNFIndex].NFe.procNFe.cStat=101)) then
+                (ACBrNFe.NotasFiscais.Items[FNFIndex].NFe.procNFe.cStat in [101,151])) then
                Box([fsLeft,fsTop],PosX,YPos,aWidth,aHeigthPadrao,'PROTOCOLO DE HOMOLOGAÇÃO DO CANCELAMENTO',aProtocolo,taCenter,True)
             else
             if (ACBrNFe.NotasFiscais.Items[FNFIndex].NFe.procNFe.cStat=110) then
@@ -1242,6 +1242,7 @@ begin
 
           PrintTab(Prod.CFOP);
           PrintTab(Prod.UCom);
+
           PrintTab(NotaUtil.FormatFloat(Prod.QCom,NotaUtil.SeSenao(Mask_qCom='',NotaUtil.PreparaCasasDecimais(CasasDecimais_qCom),Mask_qCom)));
           PrintTab(NotaUtil.FormatFloat(Prod.VUnCom,NotaUtil.SeSenao(Mask_vUnCom='',NotaUtil.PreparaCasasDecimais(CasasDecimais_vUnCom),Mask_vUnCom)));
 
@@ -1277,6 +1278,20 @@ begin
           finally
             Memo.Free;
           end;
+
+          // Beretta
+          If Prod.UCom <> Prod.uTrib Then
+             Begin
+             NewLine;
+             PrintTab('');  // 1
+             PrintTab('');  // 2
+             PrintTab('');  // 3
+             PrintTab('');  // 4
+             PrintTab('');  // 5
+             PrintTab(Prod.uTrib);  // 6
+             PrintTab(NotaUtil.FormatFloat(Prod.qTrib,'0.0000'));
+             PrintTab(NotaUtil.FormatFloat(Prod.vUnTrib,'0.0000'));
+             End ;
           inc(FDetIndex);
           NewLine;
          end;

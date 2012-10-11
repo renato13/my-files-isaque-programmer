@@ -47,11 +47,13 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+{$I ACBr.inc}
+
 unit pcnGerador;
 
 interface uses
 
-  SysUtils, Classes, 
+  SysUtils, Classes,
 {$IFNDEF VER130}
   Variants,
 {$ENDIF}
@@ -133,13 +135,18 @@ const
   ERR_MSG_FINAL_MENOR_INICIAL = 'O numero final não pode ser menor que o inicial';
   ERR_MSG_ARQUIVO_NAO_ENCONTRADO = 'Arquivo não encontrado';
   ERR_MSG_SOMENTE_UM = 'Somente um campo deve ser preenchido';
+ // Incluido por Italo em 18/07/2012
+  ERR_MSG_MENOR_MINIMO = 'Número de ocorrências menor que o mínimo permitido - Mínimo ';
 
   CODIGO_BRASIL = 1058;
 
   ENCODING_UTF8 = '?xml version="1.0" encoding="UTF-8"?';
   ENCODING_UTF8_STD = '?xml version="1.0" encoding="UTF-8" standalone="no"?';
   NAME_SPACE = 'xmlns="http://www.portalfiscal.inf.br/nfe"';
-  NAME_SPACE_CTE = 'xmlns="http://www.portalfiscal.inf.br/cte"';  
+  NAME_SPACE_CTE = 'xmlns="http://www.portalfiscal.inf.br/cte"';
+
+ // Incluido por Italo em 01/08/2012
+  NAME_SPACE_MDFE = 'xmlns="http://www.portalfiscal.inf.br/mdfe"';
 
   V1_00 = 'versao="1.00"';
   V1_01 = 'versao="1.01"';
@@ -149,6 +156,7 @@ const
   V1_07 = 'versao="1.07"';
   V1_10 = 'versao="1.10"';
   V2_00 = 'versao="2.00"';
+  V2_01 = 'versao="2.01"';
 
  // Incluido por Italo em 03/08/2011
   VM_Rodo_1_04  = 'versaoModal="1.04"';
@@ -409,6 +417,10 @@ const
   DSC_VFOR = 'Valor dos Fornecimentos';
   DSC_VTOTDED = 'Valor Total da Dedução';
   DSC_VLIQFOR = 'Valor Líquido dos Fornecimentos';
+  // Incluido por Italo em 17/07/2012
+  DSC_INDNFE = 'Indicador de NF-e consultada';
+  DSC_INDEMI = 'Indicador do Emissor da NF-e';
+  DSC_ULTNSU = 'Último NSU recebido pela Empresa';
 
   // CTE //
 
@@ -460,7 +472,7 @@ const
 
 implementation
 
-uses DateUtils;
+uses DateUtils, ACBrConsts;
 
 { TGerador }
 

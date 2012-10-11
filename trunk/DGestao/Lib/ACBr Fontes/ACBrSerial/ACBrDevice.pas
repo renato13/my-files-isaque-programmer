@@ -128,7 +128,7 @@ TACBrECFTipoDocumento = ( docRZ, docLX, docCF, docCFBP, docCupomAdicional,
                           docCFCancelamento, docCCD, docAdicionalCCD,
                           docSegViaCCD, docReimpressaoCCD, docEstornoCCD,
                           docCNF, docCNFCancelamento, docSangria, docSuprimento,
-                          docEstornoPagto, docRG, docLMF, docTodos);
+                          docEstornoPagto, docRG, docLMF, docTodos, docNenhum);
 TACBrECFTipoDocumentoSet = set of TACBrECFTipoDocumento;
 
 TACBrSerialParity = (pNone, pOdd, pEven, pMark, pSpace) ;
@@ -162,6 +162,7 @@ TACBrDevice = class( TComponent )
     procedure ConfiguraSerial ;
     procedure EnviaStringSerial(const AString : AnsiString) ;
     procedure EnviaStringArquivo(const AString : AnsiString) ;
+    function GetParamsString: String;
     {$IFDEF ThreadEnviaLPT}
     procedure EnviaStrThread( AString : AnsiString ) ;
     {$ENDIF}
@@ -180,7 +181,6 @@ TACBrDevice = class( TComponent )
     function GetOnStatus: THookSerialStatus;
     procedure SetAtivo(const Value: Boolean);
     procedure SetHandShake(const Value: TACBrHandShake);
-    function GetParamsString: String;
     procedure SetParamsString(const Value: String);
     function GetMaxBandwidth: Integer;
     procedure SetMaxBandwidth(const Value: Integer);
@@ -209,9 +209,11 @@ TACBrDevice = class( TComponent )
     Procedure SetDefaultValues ;
     Function IsSerialPort : Boolean ;
     Function IsTXTFilePort: Boolean ;
+    Function IsDLLPort: Boolean ;
 
     procedure AcharPortasSeriais( const AStringList : TStrings;
        UltimaPorta : Integer = 64 ) ;
+    function DeviceToString(OnlyException: Boolean): String;
 
   published
      property Baud     : Integer read fsBaud write SetBaud default 9600 ;
@@ -337,7 +339,7 @@ begin
         raise ;
      end ;
    end
-  else
+  else if not IsDLLPort then
    begin
       { Tenta Abrir Arquivo/Porta para ver se xiste e está disponivel}
       if IsTXTFilePort and FileExists(Porta) then
@@ -529,6 +531,9 @@ end;
 function TACBrDevice.EmLinha( lTimeOut : Integer) : Boolean;
 var TempoLimite : TDateTime ;
 begin
+  Result := True;
+  if IsDLLPort then exit;
+
   if not IsSerialPort then
   begin
      try
@@ -543,7 +548,7 @@ begin
      exit ;
   end ;
 
-  result := false ;
+  Result := false ;
   if lTimeout < 1 then
      lTimeOut := 1 ;
 
@@ -589,6 +594,14 @@ begin
   Result := UpperCase(RightStr(fsPorta,4)) = '.TXT' ;
 end;
 
+function TACBrDevice.IsDLLPort : Boolean ;
+Var
+  AStr : String;
+begin
+  AStr   := UpperCase(copy(Porta,1,3));
+  Result := (pos(AStr,'USB|DLL') > 0) ;
+end ;
+
 procedure TACBrDevice.AcharPortasSeriais(const AStringList : TStrings ;
    UltimaPorta : Integer) ;
 var
@@ -618,21 +631,22 @@ begin
    end ;
 end ;
 
-function TACBrDevice.GetParamsString: String;
-Var sStop, sHandShake : String ;
+function TACBrDevice.DeviceToString( OnlyException: Boolean): String;
+Var
+  sStop, sHandShake : String ;
 begin
   Result := '' ;
 
-  if fsBaud <> 9600 then
+  if (not OnlyException) or (fsBaud <> 9600)  then
      Result := Result + ' BAUD='+IntToStr(fsBaud) ;
 
-  if fsData <> 8 then
+  if (not OnlyException) or (fsData <> 8) then
      Result := Result + ' DATA='+IntToStr(fsData) ;
 
-  if fsParity <> 'N' then
+  if (not OnlyException) or (fsParity <> 'N') then
      Result := Result + ' PARITY='+fsParity ;
 
-  if fsStop <> 0 then
+  if (not OnlyException) or (fsStop <> 0) then
   begin
      if fsStop = 2 then
         sStop := '2'
@@ -644,7 +658,7 @@ begin
      Result := Result + ' STOP='+sStop ;
   end ;
 
-  if fsHandShake <> hsNenhum then
+  if (not OnlyException) or (fsHandShake <> hsNenhum) then
   begin
      if fsHandShake = hsXON_XOFF then
         sHandShake := 'XON/XOFF'
@@ -662,7 +676,7 @@ begin
   if fsSoftFlow then
      Result := Result + ' SOFTFLOW' ;
 
-  if MaxBandwidth > 0 then
+  if (not OnlyException) or (MaxBandwidth > 0) then
      Result := Result + ' MAXBANDWIDTH='+IntToStr(MaxBandwidth) ;
      
   Result := Trim(Result) ;
@@ -732,12 +746,15 @@ procedure TACBrDevice.EnviaString( const AString: AnsiString);
 begin
   if IsSerialPort then
      EnviaStringSerial( AString )
-  else
+
+  else if not IsDLLPort then
+   begin
      {$IFNDEF ThreadEnviaLPT}
        EnviaStringArquivo( AString )
      {$ELSE}
        EnviaStrThread( AString )
      {$ENDIF} ;
+   end ;
 end;
 
 procedure TACBrDevice.EnviaStringSerial(const AString : AnsiString) ;
@@ -820,6 +837,11 @@ begin
     end ;
   {$ENDIF}
 end ;
+
+function TACBrDevice.GetParamsString: String;
+begin
+   Result := DeviceToString( True );
+end;
 
 {$IFDEF ThreadEnviaLPT}
 { A ideia dessa Thread é testar se os dados estão sendo gravados com sucesso na

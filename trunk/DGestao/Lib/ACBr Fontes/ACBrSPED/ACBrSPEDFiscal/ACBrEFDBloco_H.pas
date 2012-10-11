@@ -48,19 +48,18 @@ uses
 type
   TRegistroH005List = class;
   TRegistroH010List = class;
+  TRegistroH020List = class;
 
   /// Registro H001 - ABERTURA DO BLOCO H
 
   TRegistroH001 = class(TOpenBlocos)
   private
     FRegistroH005: TRegistroH005List;
-    FRegistroH010: TRegistroH010List;
   public
     constructor Create; virtual; /// Create
     destructor Destroy; override; /// Destroy
 
     property RegistroH005: TRegistroH005List read FRegistroH005 write FRegistroH005;
-    property RegistroH010: TRegistroH010List read FRegistroH010 write FRegistroH010;
   end;
 
   /// Registro H005 - TOTAIS DO INVENTÁRIO
@@ -69,14 +68,21 @@ type
   private
     fDT_INV: TDateTime;    /// Data do inventário:
     fVL_INV: currency;     /// Valor total do estoque:
+    fMOT_INV: TACBrMotivoInventario;      ///01 – No final no período;
+                                         ///02 – Na mudança de forma de tributação da mercadoria (ICMS);
+                                         ///03 – Na solicitação da baixa cadastral, paralisação temporária e outras situações;
+                                         ///04 – Na alteração de regime de pagamento – condição do contribuinte;
+                                         ///05 – Por determinação dos fiscos.
 
-    FRegistroH010: TRegistroH010List;  /// BLOCO C - Lista de RegistroH010 (FILHO)
+    FRegistroH010: TRegistroH010List;  /// BLOCO H - Lista de RegistroH010 (FILHO)
   public
-    constructor Create; virtual; /// Create
+    constructor Create(AOwner: TRegistroH001); virtual; /// Create
     destructor Destroy; override; /// Destroy
 
     property DT_INV: TDateTime read FDT_INV write FDT_INV;
     property VL_INV: currency read FVL_INV write FVL_INV;
+    property MOT_INV: TACBrMotivoInventario read fMOT_INV write fMOT_INV;
+
     /// Registros FILHOS
     property RegistroH010: TRegistroH010List read FRegistroH010 write FRegistroH010;
   end;
@@ -88,7 +94,7 @@ type
     function GetItem(Index: Integer): TRegistroH005; /// GetItem
     procedure SetItem(Index: Integer; const Value: TRegistroH005); /// SetItem
   public
-    function New: TRegistroH005;
+    function New(AOwner: TRegistroH001): TRegistroH005;
     property Items[Index: Integer]: TRegistroH005 read GetItem write SetItem;
   end;
 
@@ -105,7 +111,12 @@ type
     fCOD_PART: String;         /// Código do participante (campo 02 do Registro 0150): proprietário/possuidor que não seja o informante do arquivo
     fTXT_COMPL: String;        /// Descrição complementar
     fCOD_CTA: String;          /// Código da conta analítica contábil debitada/creditada
+
+    FRegistroH020: TRegistroH020List;  /// BLOCO H - Lista de RegistroH020 (FILHO)
   public
+    constructor Create(AOwner: TRegistroH005); virtual; /// Create
+    destructor Destroy; override; /// Destroy
+
     property COD_ITEM: String read FCOD_ITEM write FCOD_ITEM;
     property UNID: String read FUNID write FUNID;
     property QTD: Double read FQTD write FQTD;
@@ -115,6 +126,8 @@ type
     property COD_PART: String read FCOD_PART write FCOD_PART;
     property TXT_COMPL: String read FTXT_COMPL write FTXT_COMPL;
     property COD_CTA: String read FCOD_CTA write FCOD_CTA;
+    /// Registros FILHOS
+    property RegistroH020: TRegistroH020List read FRegistroH020 write FRegistroH020;
   end;
 
   /// Registro H010 - Lista
@@ -124,8 +137,34 @@ type
     function GetItem(Index: Integer): TRegistroH010; /// GetItem
     procedure SetItem(Index: Integer; const Value: TRegistroH010); /// SetItem
   public
-    function New: TRegistroH010;
+    function New(AOwner: TRegistroH005): TRegistroH010;
     property Items[Index: Integer]: TRegistroH010 read GetItem write SetItem;
+  end;
+
+  /// Registro H020 - INFORMAÇÃO COMPLEMENTAR DO INVENTÁRIO
+
+  TRegistroH020 = class
+  private
+    fCST_ICMS: String;          /// Código da Situação Tributária, conforme a Tabela indicada no item 4.3.1
+    fBC_ICMS: currency;         /// Informe a base de cálculo do ICMS
+    fVL_ICMS: currency;         /// Informe o valor do ICMS a ser debitado ou creditado
+  public
+    constructor Create(AOwner: TRegistroH010); virtual; /// Create
+
+    property CST_ICMS: String read FCST_ICMS write FCST_ICMS;
+    property BC_ICMS: currency read FBC_ICMS write FBC_ICMS;
+    property VL_ICMS: currency read FVL_ICMS write FVL_ICMS;
+  end;
+
+  /// Registro H020 - Lista
+
+  TRegistroH020List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistroH020; /// GetItem
+    procedure SetItem(Index: Integer; const Value: TRegistroH020); /// SetItem
+  public
+    function New(AOwner: TRegistroH010): TRegistroH020;
+    property Items[Index: Integer]: TRegistroH020 read GetItem write SetItem;
   end;
 
   /// Registro H990 - ENCERRAMENTO DO BLOCO H
@@ -146,9 +185,9 @@ begin
   Result := TRegistroH010(Inherited Items[Index]);
 end;
 
-function TRegistroH010List.New: TRegistroH010;
+function TRegistroH010List.New(AOwner: TRegistroH005): TRegistroH010;
 begin
-  Result := TRegistroH010.Create;
+  Result := TRegistroH010.Create(AOwner);
   Add(Result);
 end;
 
@@ -164,9 +203,9 @@ begin
   Result := TRegistroH005(Inherited Items[Index]);
 end;
 
-function TRegistroH005List.New: TRegistroH005;
+function TRegistroH005List.New(AOwner: TRegistroH001): TRegistroH005;
 begin
-  Result := TRegistroH005.Create;
+  Result := TRegistroH005.Create(AOwner);
   Add(Result);
 end;
 
@@ -177,7 +216,7 @@ end;
 
 { TRegistroH005 }
 
-constructor TRegistroH005.Create;
+constructor TRegistroH005.Create(AOwner: TRegistroH001);
 begin
   FRegistroH010 := TRegistroH010List.Create;
 end;
@@ -193,7 +232,6 @@ end;
 constructor TRegistroH001.Create;
 begin
    FRegistroH005 := TRegistroH005List.Create;
-   FRegistroH010 := TRegistroH010List.Create;
    //
    IND_MOV := imSemDados;
 end;
@@ -201,8 +239,45 @@ end;
 destructor TRegistroH001.Destroy;
 begin
   FRegistroH005.Free;
-  FRegistroH010.Free;
   inherited;
+end;
+
+{ TRegistroH020List }
+
+function TRegistroH020List.GetItem(Index: Integer): TRegistroH020;
+begin
+  Result := TRegistroH020(Inherited Items[Index]);
+end;
+
+function TRegistroH020List.New(AOwner: TRegistroH010): TRegistroH020;
+begin
+  Result := TRegistroH020.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistroH020List.SetItem(Index: Integer;
+  const Value: TRegistroH020);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistroH010 }
+
+constructor TRegistroH010.Create(AOwner: TRegistroH005);
+begin
+  FRegistroH020 := TRegistroH020List.Create;
+end;
+
+destructor TRegistroH010.Destroy;
+begin
+  FRegistroH020.Free;
+  inherited;
+end;
+
+{ TRegistroH020 }
+
+constructor TRegistroH020.Create(AOwner: TRegistroH010);
+begin
 end;
 
 end.

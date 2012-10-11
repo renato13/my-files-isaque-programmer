@@ -56,9 +56,10 @@ type
   end ;
 
 implementation
-Uses ACBrBAL,
-     {$IFDEF COMPILER6_UP} DateUtils, StrUtils {$ELSE} ACBrD5, Windows{$ENDIF},
-     SysUtils ;
+Uses
+  ACBrConsts,
+  {$IFDEF COMPILER6_UP} DateUtils, StrUtils {$ELSE} ACBrD5, Windows{$ENDIF},
+  SysUtils ;
 
 { TACBrBALGertecSerial }
 

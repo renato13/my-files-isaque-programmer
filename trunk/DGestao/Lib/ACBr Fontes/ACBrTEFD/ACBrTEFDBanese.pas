@@ -36,6 +36,8 @@
 |*
 |* 18/03/2011: Márcio Delfino Carvalho
 |*  - Primeira Versao: Criaçao e Distribuiçao da Primeira Versao
+|* 10/08/2011: Márcio Delfino Carvalho
+|*  - Exibição da msg "IMPRIMINDO", durante a impressão
 ******************************************************************************}
 
 
@@ -46,11 +48,11 @@ unit ACBrTEFDBanese;
 interface
 
 uses
-  Classes, SysUtils, ACBrTEFDClass, contnrs
+  Classes, SysUtils, ACBrTEFDClass
   {$IFDEF VisualCLX}
-     ,QControls
+     ,QForms, QControls
   {$ELSE}
-     ,Controls
+     ,Forms, Controls
   {$ENDIF}  ;
 
 
@@ -85,7 +87,6 @@ type
 
    TACBrTEFDBanese = class( TACBrTEFDClass )
    private
-     fArqLOG : String;
      fArqReq : String;
      fArqTmp : String;
      fArqResp: String;
@@ -114,7 +115,7 @@ type
    public
      property Respostas : TStringList read fRespostas ;
 
-     constructor Create(AOwner : TComponent);
+     constructor Create(AOwner : TComponent); override;
      destructor Destroy ; override;
 
      procedure AtivarGP ; override;
@@ -173,7 +174,8 @@ begin
 
    for I := 0 to Conteudo.Count - 1 do
    begin
-     Linha := Conteudo.Linha[I];
+     Linha  := Conteudo.Linha[I];
+     LinStr := StringToBinaryString( Linha.Informacao.AsString );
 
      case Linha.Identificacao of
        100 :fpModalidadePagto              := LinStr;
@@ -227,6 +229,7 @@ begin
             102 : fpDocumentoVinculado := LinStr;
             103 : fpValorTotal         := fpValorTotal + Linha.Informacao.AsFloat;
             104 : fpRede               := Linha.Informacao.AsString ;
+            130 : fpTextoEspecialOperador := Linha.Informacao.AsString;
           end;
         end;
      end;
@@ -248,8 +251,6 @@ end;
 
 procedure TACBrTEFDRespBanese.GravaInformacao(const Identificacao : Integer;
    const Informacao : AnsiString);
-Var
-  Sequencia : Integer ;
 begin
   fpConteudo.GravaInformacao( Identificacao, 0,
                               BinaryStringToString(Informacao) ); // Converte #10 para "\x0A"
@@ -428,9 +429,8 @@ end;
 Function TACBrTEFDBanese.FazerRequisicao(AHeader : AnsiString = '';
   Valor : Double = 0; IndiceFPG_ECF : String = '') : Boolean ;
 Var
-  Erro, aNSU : AnsiString;
-  SL, ArquivoResposta : TStringList;
-  Voltar, Parar : Boolean;
+  aNSU : AnsiString;
+  ArquivoResposta : TStringList;
   ItemSelecionado : integer;
 begin
   Result   := False ;
@@ -485,8 +485,6 @@ begin
       Result := RealizaTransacao(operFechamento, 0);
     end;
 
-  Erro := '';
-
   if not Result then
     Exit
      //raise EACBrTEFDErro.Create( ACBrStr( Erro ) )
@@ -533,6 +531,7 @@ begin
                 Conteudo.GravaInformacao(899,102, IndiceFPG_ECF ) ;
                 Conteudo.GravaInformacao(899,103, IntToStr(Trunc(SimpleRoundTo( Valor * 100 ,0))) );
                 Conteudo.GravaInformacao(899,104, AHeader );
+                Conteudo.GravaInformacao(899,130, 'IMPRIMINDO...' ) ;
 
                 Resp.TipoGP := fpTipo;
               end;
@@ -618,7 +617,6 @@ begin
               RespostaRequisicao.SaveToFile(ArqRespBkp);
 
             RespostaRequisicao.Free;
-            //CopyFileTo(ArqResp, CACBrTEFDBanese_ArqRespBkp, True);
             DeleteFile(ArqSTS);
             DeleteFile(ArqResp);
 
@@ -729,25 +727,27 @@ begin
 end;
 
 procedure TACBrTEFDBanese.ImprimirComprovantes(SL : TStringList);
-var ImpressaoOk, HouveImpressao, FechaGerencialAberto, GerencialAberto : Boolean;
-    ArqBackUp : AnsiString;
-    Est : AnsiChar;
-    Mensagem : String;
+var
+  ImpressaoOk, FechaGerencialAberto, GerencialAberto : Boolean;
+  Est : AnsiChar;
+  TempoInicio : TDateTime;
 begin
-  if not HouveImpressao then
-  begin
-    HouveImpressao := True ;
-    ArqBackUp      := CopiarResposta;
-  end;
+  CopiarResposta;
 
-  GerencialAberto := False;
-  ImpressaoOk := False ;
+  GerencialAberto      := False;
+  ImpressaoOk          := False ;
+  FechaGerencialAberto := False ;
+  TempoInicio          := now ;
+  
   with TACBrTEFD(Owner) do
   begin
     try
+      BloquearMouseTeclado( True );
+
       while not ImpressaoOk do
       begin
         try
+          try
            if FechaGerencialAberto then
            begin
              Est := EstadoECF;
@@ -766,6 +766,9 @@ begin
                raise EACBrTEFDECF.Create( ACBrStr('ECF não está LIVRE') ) ;
            end;
 
+            TempoInicio     := now ;
+            DoExibeMsg( opmExibirMsgOperador, 'IMPRIMINDO...' ) ;
+
             if SL.Text <> '' then
             begin
               if not GerencialAberto then
@@ -783,6 +786,19 @@ begin
           begin
              ComandarECF( opeFechaGerencial );
              GerencialAberto := False;
+          end;
+          finally
+            { Verifica se Mensagem Ficou pelo menos por 5 segundos }
+            if ImpressaoOk then
+            begin
+              while SecondsBetween(now,TempoInicio) < 5 do
+              begin
+                Sleep(EsperaSleep) ;
+                Application.ProcessMessages;
+              end;
+            end;
+
+            DoExibeMsg( opmRemoverMsgOperador, '' ) ;
           end;
         except
           on EACBrTEFDECF do ImpressaoOk := False ;
@@ -806,25 +822,24 @@ begin
 end;
 
 function TACBrTEFDBanese.RealizaTransacao(operacao : TOperacaoTEFBanese; Valor : Double): Boolean;
-var ArquivoRequisicao : TStringList;
-    TempoInicioEspera : Double;
-    Interromper, OK   : Boolean;
+var
+  ArquivoRequisicao : TStringList;
 begin
-  Result      := False ;
-
   ArquivoRequisicao := TStringList.Create;
-  case operacao of
-    operCRT          : ArquivoRequisicao.Add('SP0001TTTTC' +
-                       padR(RemoveString(',', FormatFloat('0.00', Valor)), 12, '0'));
-    operCancelamento : ArquivoRequisicao.Add('SP0001TTTTL');
-    operFechamento   : ArquivoRequisicao.Add('SP0001TTTTM')
-  end;
-  ArquivoRequisicao.SaveToFile('C:\bcard\req\pergunta.tmp');
-  ArquivoRequisicao.Free;
+  try
+    case operacao of
+      operCRT          : ArquivoRequisicao.Add('SP0001TTTTC' +
+                         padR(RemoveString(',', FormatFloat('0.00', Valor)), 12, '0'));
+      operCancelamento : ArquivoRequisicao.Add('SP0001TTTTL');
+      operFechamento   : ArquivoRequisicao.Add('SP0001TTTTM')
+    end;
+    ArquivoRequisicao.SaveToFile('C:\bcard\req\pergunta.tmp');
+  finally
+    ArquivoRequisicao.Free;
+  end ;
 
-  RenameFile('C:\bcard\req\pergunta.tmp', 'C:\bcard\req\pergunta.txt');
+  RenameFile(fArqTmp, fArqReq);
 
-//  Result := ProcessaRespostaRequisicao(operCRT);
   Result := ProcessaRespostaRequisicao(operacao);
 end;
 

@@ -91,14 +91,15 @@ begin
    with ACBrTitulo do
    begin
       Docto := Carteira + padR(NossoNumero,TamanhoMaximoNossoNum,'0');
-      if not ((Carteira = '126') or (Carteira = '131') or (Carteira = '146') or
-             (Carteira = '150') or (Carteira = '168')) then
-         Docto := ACBrBoleto.Cedente.Agencia + ACBrBoleto.Cedente.Conta + docto
-      else
-         Docto := ACBrTitulo.ACBrBoleto.Cedente.Agencia +
-                  ACBrTitulo.ACBrBoleto.Cedente.Conta +
-                  ACBrTitulo.Carteira +
-                  padR(ACBrTitulo.NossoNumero,TamanhoMaximoNossoNum,'0')
+      if not (Carteira = '112') then
+         if not ((Carteira = '126') or (Carteira = '131') or (Carteira = '146') or
+                (Carteira = '150') or (Carteira = '168')) then
+            Docto := ACBrBoleto.Cedente.Agencia + ACBrBoleto.Cedente.Conta + docto
+         else
+            Docto := ACBrTitulo.ACBrBoleto.Cedente.Agencia +
+                     ACBrTitulo.ACBrBoleto.Cedente.Conta +
+                     ACBrTitulo.Carteira +
+                     padR(ACBrTitulo.NossoNumero,TamanhoMaximoNossoNum,'0')
    end;
 
    Modulo.MultiplicadorInicial := 1;
@@ -173,7 +174,6 @@ begin
       case TipoInscricao of
          pFisica  : ATipoInscricao := '1';
          pJuridica: ATipoInscricao := '2';
-         pOutras  : ATipoInscricao := '3';
       end;
 
           { GERAR REGISTRO-HEADER DO ARQUIVO }
@@ -798,8 +798,8 @@ begin
                                                                Copy(ARetorno[0],118,2),0, 'DD/MM/YY' );//|
 
    case StrToIntDef(Copy(ARetorno[1],2,2),0) of
-      1 : rCNPJCPF:= Copy(ARetorno[1],04,14);
-      2 : rCNPJCPF:= Copy(ARetorno[1],07,11);
+      1 : rCNPJCPF:= Copy(ARetorno[1],07,11);
+      2 : rCNPJCPF:= Copy(ARetorno[1],04,14);
    else
       rCNPJCPF:= Copy(ARetorno[1],4,14);
    end;
@@ -810,7 +810,7 @@ begin
          raise Exception.Create(ACBrStr('CNPJ\CPF do arquivo inválido'));
 
       if (not LeCedenteRetorno) and ((rAgencia <> OnlyNumber(Cedente.Agencia)) or
-          (rConta <> OnlyNumber(Cedente.Conta))) then
+          (rConta <> RightStr(OnlyNumber(Cedente.Conta), Length(rConta)))) then
          raise Exception.Create(ACBrStr('Agencia\Conta do arquivo inválido'));
 
       Cedente.Nome    := rCedente;
@@ -822,9 +822,8 @@ begin
 
       case StrToIntDef(Copy(ARetorno[1],2,2),0) of
          01: Cedente.TipoInscricao:= pFisica;
-         02: Cedente.TipoInscricao:= pJuridica;
          else
-            Cedente.TipoInscricao := pOutras;
+            Cedente.TipoInscricao:= pJuridica;
       end;
 
       ACBrBanco.ACBrBoleto.ListadeBoletos.Clear;

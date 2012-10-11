@@ -43,11 +43,19 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+{$I ACBr.inc}
+
 unit pcnNFe;
 
-interface uses
+interface
 
-  SysUtils, Classes, Dialogs,
+uses
+  SysUtils, Classes,
+{$IFDEF DELPHI16_UP}
+  Vcl.Dialogs,
+{$ELSE}
+  Dialogs,
+{$ENDIF}
 {$IFNDEF VER130}
   Variants,
 {$ENDIF}

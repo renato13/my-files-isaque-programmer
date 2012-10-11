@@ -31,13 +31,6 @@
 {                                                                              }
 {******************************************************************************}
 
-{******************************************************************************
-|* Historico
-|*
-|* 25/08/2009:  Daniel Simoes de Almeida
-|*   Primeira Versao: Criaçao e Distribuiçao da Primeira Versao
-******************************************************************************}
-
 {$I ACBr.inc}
 
 unit ACBrECFSwedaSTX ;
@@ -99,9 +92,16 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
     fsApplicationPath: String ;
 
     xECF_AbreConnectC : Function(Meio: Integer; PathW: AnsiString): Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+
+    xECF_DownloadMF : Function (Arquivo: AnsiString): Integer {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+
     xECF_DownloadMFD : Function (Arquivo: AnsiString; TipoDownload: AnsiString;
       ParametroInicial: AnsiString; ParametroFinal: AnsiString; UsuarioECF: AnsiString ):
       Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+
+    xECF_GeraRegistrosCAT52MFD : Function (Arquivo : AnsiString ; Data: AnsiString):
+      Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
+
     xECF_ReproduzirMemoriaFiscalMFD : Function (tipo: AnsiString; fxai: AnsiString;
       fxaf:  AnsiString; asc: AnsiString; bin: AnsiString): Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
     xECF_FechaPortaSerial : Function: Integer; {$IFDEF LINUX} cdecl {$ELSE} stdcall {$ENDIF} ;
@@ -134,7 +134,6 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
     function GetGavetaAberta: Boolean; override ;
     function GetPoucoPapel : Boolean; override ;
     function GetHorarioVerao: Boolean; override ;
-    function GetArredonda: Boolean; override ;
     function GetChequePronto: Boolean; override ;
     function GetParamDescontoISSQN: Boolean; override ;
 
@@ -143,6 +142,7 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
     function GetIM: String; override ;
     function GetCliche: AnsiString; override ;
     function GetUsuarioAtual: String; override ;
+    function GetDataHoraSB: TDateTime; override ;
     function GetPAF: String; override ;
     function GetDataMovimento: TDateTime; override ;
     function GetGrandeTotal: Double; override ;
@@ -168,7 +168,7 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
        var TempoLimite: TDateTime) : Boolean ; override ;
     function VerificaFimImpressao(var TempoLimite: TDateTime) : Boolean ; override ;
 
-    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
+    function GetNumReducoesZRestantes: String; override;
   public
     Constructor create( AOwner : TComponent  )  ;
     Destructor Destroy  ; override ;
@@ -179,7 +179,7 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo : Double = 0;
        DescontoAcrescimo : String = 'D'; TipoDescontoAcrescimo : String = '%';
        NumItem : Integer = 0 ) ;  override ;
@@ -220,6 +220,8 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
 
     Procedure MudaHorarioVerao  ; overload ; override ;
     Procedure MudaHorarioVerao( EHorarioVerao : Boolean ) ; overload ; override ;
+    Procedure CorrigeEstadoErro( Reducao: Boolean = True ) ; override ;
+
     Procedure LeituraMemoriaFiscal( DataInicial, DataFinal : TDateTime;
        Simplificada : Boolean = False ) ; override ;
     Procedure LeituraMemoriaFiscal( ReducaoInicial, ReducaoFinal : Integer;
@@ -259,6 +261,8 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
     procedure NaoFiscalCompleto(CodCNF: String; Valor: Double;
           CodFormaPagto: String; Obs: AnsiString; IndiceBMP : Integer);override;
 
+    Function LeituraCMC7 : AnsiString ; override ;
+
     Procedure LeituraMFDSerial(DataInicial, DataFinal : TDateTime;
        Linhas : TStringList; Documentos : TACBrECFTipoDocumentoSet = [docTodos] ) ; overload ; override ;
     Procedure LeituraMFDSerial( COOInicial, COOFinal : Integer;
@@ -275,6 +279,12 @@ TACBrECFSwedaSTX = class( TACBrECFClass )
        NomeArquivo : AnsiString; Documentos : TACBrECFTipoDocumentoSet = [docTodos];
        Finalidade: TACBrECFFinalizaArqMFD = finMFD;
        TipoContador: TACBrECFTipoContador = tpcCOO  ) ; override ;
+
+    procedure PafMF_GerarCAT52(const DataInicial: TDateTime;
+      const DataFinal: TDateTime; const DirArquivos: string); override;
+
+    function TraduzirTag(const ATag: AnsiString): AnsiString; override;
+    function TraduzirTagBloco(const ATag, Conteudo : AnsiString) : AnsiString ; override;
  end ;
 
 implementation
@@ -329,16 +339,15 @@ begin
 
   fpDevice.HandShake := hsDTR_DSR ;
   { Variaveis internas dessa classe }
-  fsVerProtocolo := '' ;
-  fsSubModelo := '';
-  fsApplicationPath := '';
-  fsCache34   := TACBrECFSwedaCache.create( True );
-  fsSEQ       := 42 ;
+  fsVerProtocolo     := '' ;
+  fsSubModelo        := '';
+  fsApplicationPath  := '';
+  fsCache34          := TACBrECFSwedaCache.create( True );
+  fsSEQ              := 42 ;
   fsRespostasComando := '' ;
   fsFalhasRX         := 0 ;
-  
-  fpModeloStr := 'SwedaSTX' ;
-  fpRFDID     := 'SW' ;
+  fpModeloStr        := 'SwedaSTX' ;
+  fpRFDID            := 'SW' ;
 end;
 
 destructor TACBrECFSwedaSTX.Destroy;
@@ -349,27 +358,27 @@ begin
 end;
 
 procedure TACBrECFSwedaSTX.Ativar;
-Var RetCmd : AnsiString ;
+Var
+  RetCmd : AnsiString ;
+  LargFonte, AreaImp : Integer ;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
-  fpDevice.HandShake := hsDTR_DSR ;
+  //fpDevice.HandShake := hsDTR_DSR ;
   inherited Ativar ; { Abre porta serial }
 
-  GravaLog( 'Ativar' ) ;
-
-  fsVerProtocolo := '' ;
-  fsSubModelo := '';
+  fsVerProtocolo    := '' ;
+  fsSubModelo       := '' ;
   fsApplicationPath := ExtractFilePath( ParamStr(0) );
-  fpMFD       := True ;
-  fpTermica   := True ;
   fsCache34.Clear ;
   fsRespostasComando := '' ;
   fsFalhasRX         := 0 ;
   
-  fpColunas := 57;
+  fpColunas := 56;
+  fpMFD     := True ;
+  fpTermica := True ;
 
   try
      { Testando a comunicaçao com a porta }
@@ -388,8 +397,15 @@ begin
 
      fpDecimaisQtd := StrToIntDef(copy( TACBrECF(fpOwner).RetornaInfoECF( 'U2' ),  1, 1), 2 ) ;
 
-     if SubModeloECF = 'IF ST2500' then
-        fpColunas := 56;
+     try
+        // Tentando calcular o numero de Colunas //
+        RetCmd := TACBrECF(fpOwner).RetornaInfoECF( 'R2' ) ;
+        LargFonte := StrToInt( copy( RetCmd, IfThen( copy(RetCmd, 36, 1) = 'A', 37, 41 ), 2) );
+        AreaImp   := StrToInt( copy( RetCmd, 45, 4) );
+        fpColunas := Trunc( AreaImp / LargFonte ) ;
+     except
+     end ;
+
   except
      Desativar ;
      raise ;
@@ -486,7 +502,11 @@ begin
       ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+
                  sLineBreak+sLineBreak+
                  'Erro ('+Mensagem+') '+ErroMsg ) ;
-      raise EACBrECFSemResposta.create(ErroMsg) ;
+
+      if Trim(Mensagem) = '125' then
+         DoOnErrorSemPapel
+      else
+         raise EACBrECFSemResposta.create(ErroMsg) ;
     end
    else
       Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -646,12 +666,15 @@ function TACBrECFSwedaSTX.VerificaFimLeitura(var Retorno: AnsiString;
    var TempoLimite: TDateTime) : Boolean ;
 Var
   LenRet, PosETX, PosSTX, Erro : Integer ;
-  Bloco, Tarefa : AnsiString ;
+  Bloco, Tarefa, MsgLog : AnsiString ;
   Sequencia, ACK_PC : Byte ;
   Tipo : AnsiChar ;
 begin
   LenRet := Length(Retorno) ;
   Result := False ;
+
+  // DEBUG
+  //GravaLog( 'Retorno: '+Retorno);
 
   if LenRet < 5 then
      exit ;
@@ -675,28 +698,21 @@ begin
   Sequencia := Ord( Bloco[2] ) ;
   Tarefa    := copy(Bloco,3,2) ;
   Tipo      := Bloco[5] ;
+  Erro      := StrToIntDef( copy(Bloco,6,4), 0 ) ;
+  MsgLog    := '';
 
-  // DEBUG
-  //GravaLog( '         VerificaFimLeitura: Verificando Bloco: '+Bloco, True) ;
+  { ECF está enviando dados... aumente o TimeOut }
+  TempoLimite := IncSecond(now, TimeOut);
 
   { Verificando a Sequencia }
   if Sequencia <> fsSEQ then
   begin
      Result := False ;  // Ignore o Bloco, pois não é a resposta do CMD solicitado
-     GravaLog( '         Sequencia de Resposta ('+IntToStr(Sequencia)+')'+
-               'diferente da enviada ('+IntToStr(fsSEQ)+')' ) ;
+     MsgLog := 'Sequencia diferente da enviada ('+IntToStr(fsSEQ)+')' ;
   end ;
 
   if Result and (Tipo = '!') then  // Bloco de Satus não solicitado, Verificando
-  begin
-    Erro := StrToIntDef( copy(Bloco,6,4), 0 ) ;
-
-    if not (Erro in [ 52, 216, 240 ])  then
-    begin
-      GravaLog( '         VerificaFimLeitura: Bloco (!) Descartado: '+Bloco, True) ;
-      Result := False ;
-    end
-  end ;
+     Result := (Erro in [ 52, 110, 216, 240 ]) ;
 
   { Verificando o CheckSum }
   ACK_PC := Ord(ACK) ;
@@ -706,7 +722,7 @@ begin
   begin
     ACK_PC := Ord(NAK) ;  // Erro no CheckSum, retornar NACK
     if fsFalhasRX > CFALHAS then
-       raise Exception( ACBrStr('Erro no digito Verificador da Resposta.'+sLineBreak+
+       raise EACBrECFERRO( ACBrStr('Erro no digito Verificador da Resposta.'+sLineBreak+
                         'Falha: '+IntToStr(fsFalhasRX)) ) ;
     Inc( fsFalhasRX ) ;  // Incrementa numero de Falhas
     Result := False ;
@@ -722,17 +738,23 @@ begin
      if Tipo = '-' then            // Erro ocorrido,
         AguardaImpressao := False  //   portanto, Desliga AguardaImpressao (caso estivesse ligado)
      else if Result and (Tipo = '!') then
-        GravaLog('         Bloco "!" considerado')
+        MsgLog := 'Bloco "!" considerado'
      else if Tipo <> '+' then      // Tipo não é '-' nem '+', portanto não é o Ultimo Bloco
         Result := False ;          //   portanto Zera para Ler proximo Bloco
   end ;
 
-  // DEBUG
-  {GravaLog( '         VerificaFimLeitura: Seq:'+IntToStr(Sequencia)+' Tarefa:'+
-            Tarefa+' Tipo: '+Tipo+' ACK:'+IntToStr(ACK_PC)+' Result: '+IfThen(Result,'True','False') ) ;}
-
   if not Result then
-     Retorno := copy(Retorno, PosETX+2, Length(Retorno) ) ;
+  begin
+    if (Tipo in ['-','+']) then
+       MsgLog := MsgLog + ' - Bloco removido:' ;
+    Retorno := copy(Retorno, PosETX+2, Length(Retorno) ) ;
+  end ;
+
+  if MsgLog <> '' then
+   GravaLog( '         VerificaFimLeitura, '+MsgLog+' Seq:'+IntToStr(Sequencia)+
+           ' Tipo:'+Tipo+' Tarefa:'+Tarefa+' Erro:'+IntToStr(Erro)+
+           ' ACK:'+IntToStr(ACK_PC)+' - Bloco:'+Bloco  ) ;
+
 end;
 
 function TACBrECFSwedaSTX.VerificaFimImpressao(var TempoLimite: TDateTime): Boolean;
@@ -841,7 +863,7 @@ end ;
 { Remove Blocos de Resposta de Status não solicitados  (envio automático pelo ECF)}
 Function TACBrECFSwedaSTX.AjustaRetorno(Retorno: AnsiString) : AnsiString ;
 Var
-  LenRet, PosETX, PosSTX : Integer ;
+  LenRet, PosETX, PosSTX, Erro : Integer ;
   Bloco, Tipo : AnsiString ;
 begin
   LenRet := Length(Retorno) ;
@@ -867,11 +889,16 @@ begin
 
      if Tipo = '!' then  // Bloco de Status nao solicitado, excluindo
      begin
-        Delete(Result, PosSTX, PosETX-PosSTX + 2 ) ;
-        PosETX := max(PosSTX - 2,0) ;
+        Erro := StrToIntDef( copy(Bloco,6,4), 0 ) ;
+
+        if Erro <> 110 then  // 110 = Leitura de CMC7 completada, mantenha o bloco
+        begin
+           Delete(Result, PosSTX, PosETX-PosSTX + 2 ) ;
+           PosETX := max(PosSTX - 2,0) ;
+        end;
      end ;
 
-     PosSTX := PosEx( STX , Result, PosETX);
+     PosSTX := PosEx( STX , Result, PosETX);  // Acha inicio do proximo Bloco
   end ;
 end ;
 
@@ -948,7 +975,7 @@ begin
     CooFim := IntToStrZero( COOFinal, 6 ) ;
     Resp := xECF_DownloadMFD( NomeArquivo, '2', CooIni, CooFim, '0');
     if (Resp <> 1) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar ECF_DownloadMFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_DownloadMFD.'+sLineBreak+
                                        DescricaoErroDLL(Resp) ))
   finally
     xECF_FechaPortaSerial ;
@@ -956,7 +983,7 @@ begin
   end ;
 
   if not FileExists( NomeArquivo ) then
-     raise Exception.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
                             'Arquivo: "'+NomeArquivo + '" não gerado' ))
 end;
 
@@ -977,7 +1004,7 @@ begin
 
     Resp := xECF_DownloadMFD( NomeArquivo, '1', DiaIni, DiaFim, '0');
     if (Resp <> 1) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar ECF_DownloadMFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_DownloadMFD.'+sLineBreak+
                                        DescricaoErroDLL(Resp) ))
   finally
     xECF_FechaPortaSerial ;
@@ -985,7 +1012,7 @@ begin
   end ;
 
   if not FileExists( NomeArquivo ) then
-     raise Exception.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
                             'Arquivo: "'+NomeArquivo+'" não gerado' ))
 end;
 
@@ -1027,7 +1054,7 @@ begin
 
     Resp := xECF_ReproduzirMemoriaFiscalMFD(Tipo , CooIni, CooFim, NomeArquivo, '');
     if (Resp <> 1) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar xECF_ReproduzirMemoriaFiscalMFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar xECF_ReproduzirMemoriaFiscalMFD.'+sLineBreak+
                                        DescricaoErroDLL(Resp) ))
   finally
     xECF_FechaPortaSerial ;
@@ -1035,8 +1062,60 @@ begin
   end ;
 
   if not FileExists( NomeArquivo ) then
-     raise Exception.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
                             'Arquivo: "'+NomeArquivo + '" não gerado' ))
+end;
+
+procedure TACBrECFSwedaSTX.PafMF_GerarCAT52(const DataInicial: TDateTime;
+   const DataFinal: TDateTime; const DirArquivos: string);
+var
+  Resp: Integer;
+  FilePath, Dia, FileMF : AnsiString;
+  OldAtivo: Boolean;
+  DataArquivo: TDateTime;
+begin
+  LoadDLLFunctions;
+
+  FilePath := IncludeTrailingPathDelimiter(DirArquivos);
+  OldAtivo := Ativo ;
+  try
+    // a sweda não possui a geração do CAT52 por período, mas pode-se
+    // gerar arquivos de um arquivo MF, então baixamos a MF do ECF
+    // e rodamos um loop com a data gerando o arquivo para cada dia dentro
+    // do período
+    AbrePortaSerialDLL;
+    FileMF := 'ACBr.MF';
+
+    // fazer primeiro o download da MF
+    Resp := xECF_DownloadMF(FileMF);
+    if (Resp <> 1) then
+       raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_DownloadMF.'+sLineBreak+
+                                  DescricaoErroDLL(Resp) ));
+
+    // gerar o arquivo para cada dia dentro do período a partir da
+    // MFD baixada da impressora fiscal
+    DataArquivo := DataInicial;
+    repeat
+      Dia := FormatDateTime('dd/mm/yyyy', DataInicial);
+
+      Resp := xECF_GeraRegistrosCAT52MFD( FileMF, Dia ) ;
+      if (Resp <> 1) then
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_DownloadMF.'+sLineBreak+
+                                 DescricaoErroDLL(Resp) + sLineBreak +
+                                 'Para a data de: "' + Dia + '"' ));
+
+      // próximo dia
+      DataArquivo := IncDay( DataArquivo, 1 );
+
+    until DataArquivo > DataFinal;
+
+  finally
+     xECF_FechaPortaSerial ;
+     try
+        Ativo := OldAtivo ;
+     except
+     end;
+  end;
 end;
 
 procedure TACBrECFSwedaSTX.ArquivoMFD_DLL(DataInicial, DataFinal: TDateTime;
@@ -1064,9 +1143,21 @@ begin
     DiaIni := FormatDateTime('dd"/"mm"/"yy', DataInicial) ;
     DiaFim := FormatDateTime('dd"/"mm"/"yy', DataFinal) ;
 
-    Resp := xECF_ReproduzirMemoriaFiscalMFD(Tipo, DiaIni, DiaFim, NomeArquivo, '');
+    if Tipo='3' then
+    begin
+      Resp := xECF_DownloadMF('ACBr.MF');
+      if (Resp <> 1) then
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_DownloadMF.'+sLineBreak+
+                                       DescricaoErroDLL(Resp) ));
+       Resp := xECF_ReproduzirMemoriaFiscalMFD(Tipo, DiaIni, DiaFim, NomeArquivo, 'TMP.MF');
+    end
+    else
+    begin
+       Resp := xECF_ReproduzirMemoriaFiscalMFD(Tipo, DiaIni, DiaFim, NomeArquivo, '');
+    end;
+
     if (Resp <> 1) then
-      raise Exception.Create( ACBrStr( 'Erro ao executar ECF_DownloadMFD.'+sLineBreak+
+      raise EACBrECFERRO.Create( ACBrStr( 'Erro ao executar ECF_ReproduzirMemoriaFiscalMFD.'+sLineBreak+
                                        DescricaoErroDLL(Resp) ))
   finally
     xECF_FechaPortaSerial ;
@@ -1074,7 +1165,7 @@ begin
   end ;
 
   if not FileExists( NomeArquivo ) then
-     raise Exception.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr( 'Erro na execução de ECF_DownloadMFD.'+sLineBreak+
                             'Arquivo: "'+NomeArquivo+'" não gerado' ))
 end;
 
@@ -1259,11 +1350,6 @@ begin
   Result := (UpperCase( copy(RetCmd,20,1) ) = 'V') ;
 end;
 
-function TACBrECFSwedaSTX.GetArredonda: Boolean;
-begin
-  Result := (fsVerProtocolo > 'D') ;
-end;
-
 Procedure TACBrECFSwedaSTX.LeituraX ;
 begin
   AguardaImpressao := True ;
@@ -1280,6 +1366,7 @@ end;
 Procedure TACBrECFSwedaSTX.AbreGaveta ;
 begin
   EnviaComando( '11' ) ;
+  Sleep(200);
 end;
 
 Procedure TACBrECFSwedaSTX.ReducaoZ(DataHora: TDateTime) ;
@@ -1290,8 +1377,21 @@ begin
      Cmd := Cmd + '|' + FormatDateTime('dd"/"mm"/"yyyy',DataHora) +
                   '|' + FormatDateTime('hh":"nn":"ss',DataHora) ;
 
-  AguardaImpressao := True ;
-  EnviaComando(Cmd,30) ;
+  try
+     AguardaImpressao := True ;
+     EnviaComando(Cmd,30) ;
+  except
+     on E : Exception do
+     begin
+        if (pos('0058',E.Message) <> 0) then   // Comando ou operação inválida!
+         begin                                 // Ficou algum Cupom aberto ?
+           CancelaCupom ;
+           ReducaoZ(DataHora);
+         end
+        else
+           raise ;
+    end ;
+  end;
 end;
 
 Procedure TACBrECFSwedaSTX.MudaHorarioVerao ;
@@ -1307,6 +1407,27 @@ begin
       cmd := 'S'
    else cmd := 'N';
    EnviaComando('35|'+cmd);
+end;
+
+procedure TACBrECFSwedaSTX.CorrigeEstadoErro(Reducao: Boolean);
+begin
+   inherited CorrigeEstadoErro(Reducao);
+
+   if Estado = estDesconhecido then
+   begin
+     try
+       LeituraX;
+     except
+       On E: EACBrECFErro do
+       begin
+         if (pos('216', E.Message) > 0) then
+         begin
+            EnviaComando('23|'+FormatDateTime('dd/mm/yyyy|hh:nn:ss',Now));
+            inherited CorrigeEstadoErro(Reducao);
+         end;
+       end;
+     end;
+   end;
 end;
 
 
@@ -1334,6 +1455,41 @@ begin
          raise ;
       end ;
    end ;
+end;
+
+function TACBrECFSwedaSTX.LeituraCMC7: AnsiString;
+var
+   OldTimeOut: Integer;
+   P1, P2: Integer;
+begin
+   Result := '';
+   EnviaComando('24|1|0|1000');
+
+   { Leitura do CMC7 deve retornar mais dados }
+   OldTimeOut := TimeOut;
+   try
+      TimeOut := max(OldTimeOut,10);  // Espere mais 10 segundos...
+      GravaLog( '         Aguardando Resposta CMC7');
+      LeResposta;
+
+      fpRespostaComando := fsRespostasComando ;   // Respostas Acumuladas
+      //DEBUG
+      //GravaLog( '         Retorno Completo: '+fpRespostaComando );
+      { Limpando de "fpRespostaComando" os Status não solicitados }
+      fpRespostaComando := AjustaRetorno( fpRespostaComando  );
+      //DEBUG
+      //GravaLog( '         Retorno Tratado: '+fpRespostaComando );
+
+      P1 := pos('!0110', fpRespostaComando) ;  // Procura por resposta do CMC7
+      if P1 > 0 then
+      begin
+         P1 := P1 + 12;
+         P2 := PosEx(ETX, fpRespostaComando, P1 );
+         Result := copy(fpRespostaComando, P1, P2-P1-1 );
+      end;
+   finally
+     TimeOut := OldTimeOut;
+   end;
 end;
 
 procedure TACBrECFSwedaSTX.AbreCupom  ;
@@ -1420,7 +1576,8 @@ end;
 Procedure TACBrECFSwedaSTX.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 var
    Aliquota : TACBrECFAliquota;
    IAT:String;
@@ -1433,13 +1590,15 @@ begin
   IAT := '';
   if fsVerProtocolo > 'D' then
   begin
-    if ArredondaItemMFD then
+    if fpArredondaItemMFD then
        IAT := 'A'
     else
        IAT := 'T';
 
     IAT := '|'+IAT;
-  end ;
+  end
+  else
+     fpArredondaItemMFD := False;
 
  {Vai vir o indice, tem que transformar em aliquota no formato Tipo + Aliquota}
   if (AliquotaECF[1] <> 'I') and
@@ -1799,7 +1958,7 @@ begin
 
    RG := AchaRGIndice(FormatFloat('00',Indice));
    if RG = nil then
-     raise Exception.create( ACBrStr('Relatório Gerencial: '+IntToStr(Indice)+
+     raise EACBrECFERRO.create( ACBrStr('Relatório Gerencial: '+IntToStr(Indice)+
                                  ' não foi cadastrado.' ));
    sDescricao := PadL(RG.Descricao,15);
    AguardaImpressao := True;
@@ -1820,7 +1979,14 @@ begin
   else
      while Length( Linha ) > 0 do
      begin
-        P := Length( Linha ) ;
+        P := 0 ;
+        if LeftStr(Linha,1) = STX then
+           P := Pos(ETX, Linha);
+        if P = 0 then
+           P := Pos(STX, Linha)-1;
+        if P <= 0 then
+           P := Length( Linha ) ;
+
         if P > MaxChars then    { Acha o fim de Linha mais próximo do limite máximo }
            P := PosLast(#10, LeftStr(Linha,MaxChars) ) ;
 
@@ -1831,14 +1997,18 @@ begin
         Espera := Trunc( CountStr( Buffer, #10 ) / 4) ;
 
         AguardaImpressao := (Espera > 3) ;
-        EnviaComando( '25|' + Buffer, Espera ) ;
+
+        if LeftStr(Buffer,1) = STX then
+           EnviaComando( copy(Buffer, 2, Length(Buffer)-2 ), Espera )
+        else
+           EnviaComando( '25|' + Buffer, Espera ) ;
 
         { ficou apenas um LF sozinho ? }
         if (P = Colunas) and (RightStr( Buffer, 1) <> #10) and
            (copy( Linha, P+1, 1) = #10) then
            P := P + 1 ;
 
-        Linha  := copy( Linha, P+1, Length(Linha) ) ;   // O Restante
+        Linha := copy( Linha, P+1, Length(Linha) ) ;   // O Restante
      end ;
 end;
 
@@ -1853,7 +2023,7 @@ end;
 
 procedure TACBrECFSwedaSTX.LinhaCupomVinculado(Linha: AnsiString);
 begin
-   EnviaComando('25|'+Linha);
+   LinhaRelatorioGerencial( Linha );
 end;
 
 procedure TACBrECFSwedaSTX.FechaRelatorio;
@@ -2000,6 +2170,23 @@ begin
    Result := copy(RemoveNulos(RetCMD),1,2);
 end;
 
+function TACBrECFSwedaSTX.GetDataHoraSB : TDateTime ;
+Var RetCmd : AnsiString ;
+    OldShortDateFormat : String ;
+begin
+  RetCmd := Trim(RetornaInfoECF( 'J1' )) ;
+  OldShortDateFormat := ShortDateFormat ;
+  try
+     ShortDateFormat := 'dd/mm/yyyy' ;
+     Result := StrToDate(copy(RetCmd,10,10)) ;
+  finally
+     ShortDateFormat := OldShortDateFormat ;
+  end ;
+  Result := RecodeHour(  Result,StrToInt(copy(RetCmd,21,2))) ;
+  Result := RecodeMinute(Result,StrToInt(copy(RetCmd,24,2))) ;
+  Result := RecodeSecond(Result,StrToInt(copy(RetCmd,27,2))) ;
+end ;
+
 
 function TACBrECFSwedaSTX.GetDataMovimento: TDateTime;
  Var
@@ -2007,7 +2194,6 @@ function TACBrECFSwedaSTX.GetDataMovimento: TDateTime;
   OldShortDateFormat: AnsiString;
   sData:String;
 begin
-   Result := Date;
    RetCmd := Trim(RetornaInfoECF('A2'));
    OldShortDateFormat := ShortDateFormat ;
    try
@@ -2129,7 +2315,8 @@ begin
    Result := Copy(RetCMD,210,6);
 end ;
 
-procedure TACBrECFSwedaSTX.AbreNaoFiscal( CPF_CNPJ, Nome, Endereco: String );
+procedure TACBrECFSwedaSTX.AbreNaoFiscal(CPF_CNPJ : String ; Nome : String ;
+   Endereco : String) ;
 begin
    EnviaComando('20');
 end;
@@ -2145,25 +2332,23 @@ var
      if not FunctionDetect( sLibName, FuncName, LibPointer) then
      begin
         LibPointer := NIL ;
-        raise Exception.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+cLIB_Sweda ) ) ;
+        raise EACBrECFERRO.Create( ACBrStr( 'Erro ao carregar a função:'+FuncName+' de: '+cLIB_Sweda ) ) ;
      end ;
    end ;
  end ;
 begin
   // Verifica se exite o caminho das DLLs
+  sLibName := '';
   if Length(PathDLL) > 0 then
      sLibName := PathDLL;
 
   // Concatena o caminho se exitir mais o nome da DLL.
   sLibName := sLibName + cLIB_Sweda;
 
-  {$IFDEF MSWINDOWS}
-    if not FileExists( ExtractFilePath( sLibName ) + 'Swmfd.dll') then
-       raise Exception.Create( ACBrStr( 'Não foi encontrada a dll auxiliar Swmfd.dll.' ) ) ;
-  {$ENDIF}
-
   SwedaFunctionDetect('ECF_AbreConnectC', @xECF_AbreConnectC);
   SwedaFunctionDetect('ECF_DownloadMFD', @xECF_DownloadMFD);
+  SwedaFunctionDetect('ECF_GeraRegistrosCAT52MFD', @xECF_GeraRegistrosCAT52MFD);
+  SwedaFunctionDetect('ECF_DownloadMF', @xECF_DownloadMF);
   SwedaFunctionDetect('ECF_ReproduzirMemoriaFiscalMFD', @xECF_ReproduzirMemoriaFiscalMFD);
   SwedaFunctionDetect('ECF_FechaPortaSerial', @xECF_FechaPortaSerial);
 end ;
@@ -2210,7 +2395,7 @@ begin
 
   Resp := xECF_AbreConnectC( 0, fsApplicationPath );
   if Resp <> 1 then
-     raise Exception.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
+     raise EACBrECFERRO.Create( ACBrStr('Erro: '+IntToStr(Resp)+' ao abrir a Porta com:'+sLineBreak+
         'ECF_AbrePortaSerial'));
 end ;
 
@@ -2224,7 +2409,7 @@ begin
    P := StrToInt(CodCNF);
    CNF := AchaCNFIndice(IntToStrZero(P,2));
    if CNF = nil then
-      raise Exception.Create('Indice não encontrado!');
+      raise EACBrECFERRO.Create('Indice não encontrado!');
    sDescricao :=CNF.Descricao;
 //   {Remove o sinal da descrição}
 //   sDescricao[1]:= ' ';
@@ -2281,7 +2466,8 @@ begin
    RetCMD := Copy(RetCMD,17,length(RetCMD));
 
    Result := '[ECF]'+sLineBreak;
-   Result := Result + 'DataMovimento = '+Copy(RetCMD,199,10) +sLineBreak ;
+   Result := Result + 'DataMovimento = '+Copy(RetCMD,199,5)+DateSeparator+
+                                         Copy(RetCMD,207,2)+sLineBreak ;
    Result := Result + 'NumSerie = ' + Copy(RetCMD,51,22) + sLineBreak;
    Result := Result + 'NumLoja = '+ NumLoja +sLineBreak;
    Result := Result + 'NumECF = '+ Copy(RetCMD,73,3) + sLineBreak;
@@ -2375,21 +2561,21 @@ begin
     PosI := Pos('I1   ',RetCMD);
     if PosI > 0 then
     begin
-       PosI := PosI + 5 ; {N1     }
+       PosI := PosI + 5 ; {I1     }
        V  := StrToFloatDef(Trim(Copy(RetCMD,PosI,18)),0)/100;
     end;
 
     PosI := Pos('I2   ',RetCMD);
     if PosI > 0 then
     begin
-       PosI := PosI + 5 ; {N1     }
+       PosI := PosI + 5 ; {I2     }
        V  := V + StrToFloatDef(Trim(Copy(RetCMD,PosI,18)),0)/100;
     end;
 
-    PosI := Pos('N3   ',RetCMD);
+    PosI := Pos('I3   ',RetCMD);
     if PosI > 0 then
     begin
-       PosI := PosI + 5 ; {N1     }
+       PosI := PosI + 5 ; {I3     }
        V  := V + StrToFloatDef(Trim(Copy(RetCMD,PosI,18)),0)/100;
     end;
     Result := Result + 'TotalIsencao = '+FormatFloat('#0.00',V)+ sLineBreak;
@@ -2497,7 +2683,7 @@ end;
 
 procedure TACBrECFSwedaSTX.IdentificaPAF( NomeVersao, MD5 : String);
 begin
-   EnviaComando('39|D|'+padL(NomeVersao,Colunas) + padL(MD5,Colunas));
+   EnviaComando('39|D|' + padL(MD5,Colunas) + padL(NomeVersao,Colunas) );
 end;
 
 function TACBrECFSwedaSTX.GetPAF: String;
@@ -2585,7 +2771,6 @@ const
   //<i></i>
   cItalicoOn  = '';
   cITalicoOff = '';
-
 begin
 
   case AnsiIndexText( ATag, ARRAY_TAGS) of
@@ -2604,6 +2789,76 @@ begin
      Result := '' ;
   end;
 
+end;
+
+function TACBrECFSwedaSTX.TraduzirTagBloco(const ATag, Conteudo : AnsiString
+   ) : AnsiString ;
+const
+  // 10|T|EEEEEEEEEEEEE..EE|A|H|M|P|F|ME|BCCDD
+  // --------
+  // 10 = Comando para impressão das barras
+  // T = Tipo de codigo de Barras
+  // EEEE..EE = Codigo de barra, máximo 40
+  // A = Alinhamento (fixo em 1 - Centro )
+  // H = Altura em Milimitros 3 a 32, (padrão 16)
+  // M = Magnitude, espessura (fixo em 2), usado como Largura
+  // P = Posiçao HRI. imprimir ou não codigo abaixo da barra
+  //     0 - Não imprime ou 2 - Após o Código
+  // F - Fonte para HRI, fixo em 'A' - Normal
+  // ME - Margem esquerda, fixo em 0
+
+  cEAN8     = 'D'; // <ean8></ean8>
+  cEAN13    = 'C'; // <ean13></ean13>
+  cINTER25  = 'F'; // <inter></inter>
+  cCODE39   = 'E'; // <code39></code39>
+  cCODE93   = 'I'; // <code93></code93>
+  cCODE128  = 'J'; // <code128></code128>
+  cUPCA     = 'A'; // <upca></upca>
+  cCODABAR  = 'G'; // <codabar></codabar>
+
+  function MontaCodBarras(const ATipo: AnsiString; ACodigo: AnsiString;
+    TamFixo: Integer = 0): AnsiString;
+  var
+    L, A : Integer ;
+  begin
+    L := IfThen( ConfigBarras.LarguraLinha = 0, 2, max(min(ConfigBarras.LarguraLinha,5),1) );
+    A := IfThen( ConfigBarras.Altura = 0, 16, max(min(ConfigBarras.Altura,32),3) );
+
+    ACodigo := Trim( ACodigo );
+    if TamFixo > 0 then
+       ACodigo := padR( ACodigo, TamFixo, '0') ;
+
+    Result := STX + '10|' + ATipo + '|'+ ACodigo + '|1|' + IntToStr(A) + '|' +
+              IntToStr(L) + '|' + ifthen( ConfigBarras.MostrarCodigo, '2', '0' ) +
+              '|A|0' + ETX ;
+  end;
+
+begin
+  case AnsiIndexText( ATag, ARRAY_TAGS) of
+     12,13: Result := MontaCodBarras(cEAN8, Conteudo, 7);
+     14,15: Result := MontaCodBarras(cEAN13, Conteudo, 12);
+     18,19: Result := MontaCodBarras(cINTER25, Conteudo);
+     22,23: Result := MontaCodBarras(cCODE39, Conteudo ) ;
+     24,25: Result := ifthen(fsVerProtocolo > 'E', MontaCodBarras(cCODE93, Conteudo), '' ) ;
+     26,27: Result := IfThen(fsVerProtocolo > 'E', MontaCodBarras(cCODE128, Conteudo), ''  );
+     28,29: Result := MontaCodBarras(cUPCA, Conteudo, 11);
+     30,31: Result := MontaCodBarras(cCODABAR, Conteudo ) ;
+  else
+     Result := inherited TraduzirTagBloco(ATag, Conteudo) ;
+  end;
+
+end ;
+
+function TACBrECFSwedaSTX.GetNumReducoesZRestantes: String;
+var
+  NumRedAtual: Integer;
+const
+  // o numero 3693 e número de reduções possiveis para as impressoras sweda
+  // conforme informado pelo atendimento sweda
+  NumMaximoReducoes = 3693;
+begin
+  NumRedAtual := StrToIntDef(Self.NumCRZ, 0);
+  Result := Format('%4.4d', [NumMaximoReducoes - NumRedAtual]);
 end;
 
 end.

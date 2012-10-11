@@ -460,8 +460,8 @@ begin
   if Erro <> 0 then
   begin
      Desativar;
-     raise Exception.Create( ACBrStr('Erro: '+IntToStr(Erro)+' - '+ErroDesc+sLineBreak+
-                                     'Não foi possível criar serviço na porta: '+Port)) ;
+     raise Exception.Create( ACBrStr(AnsiString( 'Erro: '+IntToStr(Erro)+' - '+ErroDesc+sLineBreak+
+                                     'Não foi possível criar serviço na porta: '+Port ))) ;
   end ;
 end;
 
@@ -503,7 +503,7 @@ procedure TACBrTCPServer.SetTerminador( const AValue: String) ;
 begin
   VerificaAtivo ;
   fsTerminador  := AValue;
-  fs_Terminador := TraduzComando( fsTerminador ) ;
+  fs_Terminador := TraduzComando( AnsiString( fsTerminador ) ) ;
 end;
 
 procedure TACBrTCPServer.SetTimeOut(const Value: Integer);
@@ -599,8 +599,8 @@ begin
 
   if (Result <> '') then
   begin
-     Result := ACBrStrToAnsi( Result ) ;
-     Result := EncodeURLElement( Result ) ;
+     Result := String( ACBrStrToAnsi( Result ) ) ;
+     Result := String( EncodeURLElement( AnsiString( Result ) ) ) ;
   end ;
 end ;
 
@@ -610,9 +610,7 @@ var
   {$IFNDEF CONSOLE}
    OldCursor : TCursor ;
   {$ENDIF}
-  {$IFDEF UNICODE}
    CT : String ;
-  {$ENDIF}
 begin
   {$IFNDEF CONSOLE}
    OldCursor := Screen.Cursor ;
@@ -623,7 +621,7 @@ begin
     HTTPSend.Clear;
 
     // DEBUG //
-    // WriteToTXT( '/tmp/HTTP.txt', 'URL: '+AURL );
+    //WriteToTXT( 'c:\temp\HTTP.txt', 'URL: '+AURL );
 
     {$IFDEF UNICODE}
      HTTPSend.Headers.Add('Accept-Charset: utf-8;q=*;q=0.7') ;
@@ -635,28 +633,29 @@ begin
     OK := HTTPSend.HTTPMethod('GET', AURL) and (HTTPSend.ResultCode = 200);
     RespHTTP.LoadFromStream( HTTPSend.Document ) ;
 
+    // DEBUG //
+    //WriteToTXT( 'c:\temp\HTTP.txt', 'RespHTTP 1: '+RespHTTP.Text );
+
     if ParseText then
-      RespHTTP.Text := ACBrUtil.ParseText( RespHTTP.Text ) ;
-
-    // Verifica se a Resposta está em ANSI //
-    {$IFDEF UNICODE}
-     CT := LowerCase( GetHeaderValue('Content-Type:') );
-
-     if pos('utf-8', CT) = 0 then     // Resposta em ISO (ansi) ?
-        RespHTTP.Text := ACBrStr( RespHTTP.Text ) ;
-    {$ENDIF}
-
+      RespHTTP.Text := ACBrUtil.ParseText( RespHTTP.Text, True, False ) ;
 
     // DEBUG //
-    // WriteToTXT( '/tmp/HTTP.txt', RespHTTP.Text );
-    // WriteToTXT( '/tmp/HeaderRESP.txt', HTTPSend.Headers.Text );
+    //WriteToTXT( 'c:\temp\HTTP.txt', 'RespHTTP 2: '+RespHTTP.Text );
+
+    // Verifica se a Resposta está em ANSI //
+    CT := LowerCase( GetHeaderValue('Content-Type:') );
+    RespHTTP.Text := DecodeToSys( RespHTTP.Text, (pos('utf-8', CT) > 0) );
+
+    // DEBUG //
+    //WriteToTXT( 'c:\temp\HTTP.txt', 'RespHTTP 3: '+RespHTTP.Text );
+    //WriteToTXT( 'C:\TEMP\HeaderRESP.txt', HTTPSend.Headers.Text );
 
     if not OK then
        raise EACBrHTTPError.Create( 'Erro HTTP: '+IntToStr(HTTPSend.ResultCode)+' '+
                                      HTTPSend.ResultString + sLineBreak +
                                      'URL: '+AURL + sLineBreak + sLineBreak +
                                      'Resposta HTTP:' + sLineBreak +
-                                     AjustaLinhas( RespHTTP.Text, 80, 20) ) ;
+                                     String( AjustaLinhas( AnsiString( RespHTTP.Text ), 80, 20) ) ) ;
   finally
     {$IFNDEF CONSOLE}
      Screen.Cursor := OldCursor;
@@ -670,9 +669,7 @@ var
   {$IFNDEF CONSOLE}
    OldCursor : TCursor ;
   {$ENDIF}
-  {$IFDEF UNICODE}
    CT : String ;
-  {$ENDIF}
 begin
   {$IFNDEF CONSOLE}
    OldCursor := Screen.Cursor ;
@@ -697,16 +694,11 @@ begin
     RespHTTP.LoadFromStream( HTTPSend.Document ) ;
 
     if ParseText then
-      RespHTTP.Text := ACBrUtil.ParseText( RespHTTP.Text ) ;
+      RespHTTP.Text := ACBrUtil.ParseText( RespHTTP.Text, True, False );
 
     // Verifica se a Resposta está em ANSI //
-    {$IFDEF UNICODE}
-     CT := LowerCase( GetHeaderValue('Content-Type:') );
-
-     if pos('utf-8', CT) = 0 then     // Resposta em ISO (ansi) ?
-        RespHTTP.Text := ACBrStr( RespHTTP.Text ) ;
-    {$ENDIF}
-
+    CT := LowerCase( GetHeaderValue('Content-Type:') );
+    RespHTTP.Text := DecodeToSys( RespHTTP.Text, (pos('utf-8', CT) > 0) );
 
     // DEBUG //
     // WriteToTXT( '/tmp/HTTP.txt', RespHTTP.Text );
@@ -717,7 +709,7 @@ begin
                                      HTTPSend.ResultString + sLineBreak +
                                      'URL: '+AURL + sLineBreak + sLineBreak +
                                      'Resposta HTTP:' + sLineBreak +
-                                     AjustaLinhas( RespHTTP.Text, 80, 20) ) ;
+                                     String(AjustaLinhas( AnsiString(RespHTTP.Text), 80, 20) )) ;
   finally
     {$IFNDEF CONSOLE}
      Screen.Cursor := OldCursor;
@@ -909,4 +901,4 @@ begin
   fHTTPSend.ProxyUser := AValue;
 end;
 
-end.
+end.

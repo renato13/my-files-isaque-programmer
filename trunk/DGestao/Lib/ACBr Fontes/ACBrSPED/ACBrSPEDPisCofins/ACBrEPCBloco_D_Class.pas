@@ -494,11 +494,11 @@ end;
 procedure TBloco_D.WriteRegistroD100(RegD010: TRegistroD010) ;
   var
     intFor      : integer;
-//    strIND_OPER : AnsiString;
+//  strIND_OPER : AnsiString;
     strIND_EMIT : AnsiString;
     strCOD_SIT  : AnsiString;
-    strCOD_MOD  : AnsiString;
     strIND_FRT  : AnsiString;
+    booCanceladaDenegadaInutilizada : Boolean;
 begin
   if Assigned(RegD010.RegistroD100) then
   begin
@@ -509,17 +509,18 @@ begin
           Check(Pos(COD_MOD, '07 08 8B 09 10 11 26 27 57') > 0, '(D-100) O Modelo do Documento "%s" é inválido!', [COD_MOD]);
 
 
-//          case IND_OPER of
-//            itoContratado : strIND_OPER := '0';
-//            itoPrestado   : strIND_OPER := '1';
-//          end;
+//        case IND_OPER of
+//          itoContratado : strIND_OPER := '0';
+//          itoPrestado   : strIND_OPER := '1';
+//        end;
 
-//          strIND_OPER := IND_OPER[1];
+//        strIND_OPER := IND_OPER[1];
 
           case IND_EMIT of
             iedfProprio  : strIND_EMIT := '0';
             iedfTerceiro : strIND_EMIT := '1';
           end;
+
           case COD_SIT of
             sdfRegular         : strCOD_SIT := '00';
             sdfExtRegular      : strCOD_SIT := '01';
@@ -530,12 +531,34 @@ begin
             sdfInutilizado     : strCOD_SIT := '08';
           end;
 
-          case IND_FRT of
-            tfPorContaTerceiros        : strIND_FRT := '0';
-            tfPorContaEmitente         : strIND_FRT := '1';
-            tfPorContaDestinatario     : strIND_FRT := '2';
-            tfSemCobrancaFrete         : strIND_FRT := '9';
-            tfNenhum : strIND_FRT      := '';
+          if Bloco_0.DT_INI < StrToDate('01/07/2012') then
+          begin
+            case IND_FRT of
+	          tfPorContaTerceiros        : strIND_FRT := '0';
+	          tfPorContaEmitente         : strIND_FRT := '1';
+	          tfPorContaDestinatario     : strIND_FRT := '2';
+	          tfSemCobrancaFrete         : strIND_FRT := '9';
+	          tfNenhum : strIND_FRT      := '';
+            end;
+          end
+          else
+          begin
+            case IND_FRT of
+	          tfPorContaEmitente         : strIND_FRT := '0';
+	          tfPorContaDestinatario     : strIND_FRT := '1';
+	          tfPorContaTerceiros        : strIND_FRT := '2';
+	          tfSemCobrancaFrete         : strIND_FRT := '9';
+	          tfNenhum : strIND_FRT      := '';
+            end;
+          end;
+
+          // Tratamento COD_SIT canceladas (02, 03), denegadas (04), inutilizadas (05) 17/05/2012 //DigiSat
+          booCanceladaDenegadaInutilizada := False;
+          case COD_SIT of
+            sdfCancelado       : booCanceladaDenegadaInutilizada := True;
+            sdfExtCancelado    : booCanceladaDenegadaInutilizada := True;
+            sdfDenegado        : booCanceladaDenegadaInutilizada := True;
+            sdfInutilizado     : booCanceladaDenegadaInutilizada := True;
           end;
 
           Add( LFill('D100')           +
@@ -552,13 +575,13 @@ begin
                LFill( DT_A_P )         +
                LFill( TP_CT_e )        +
                LFill( CHV_CTE_REF )    +
-               LFill( VL_DOC,0,2 )     +
-               LFill( VL_DESC,0,2 )    +
+               LFill( VL_DOC,0,2,booCanceladaDenegadaInutilizada )    +
+               LFill( VL_DESC,0,2,booCanceladaDenegadaInutilizada )   +
                LFill( strIND_FRT )     +
-               LFill( VL_SERV,0,2 )    +
-               LFill( VL_BC_ICMS,0,2 ) +
-               LFill( VL_ICMS,0,2 )    +
-               LFill( VL_NT,0,2 )      +
+               LFill( VL_SERV,0,2,booCanceladaDenegadaInutilizada )   +
+               LFill( VL_BC_ICMS,0,2,booCanceladaDenegadaInutilizada )+
+               LFill( VL_ICMS,0,2,booCanceladaDenegadaInutilizada )   +
+               LFill( VL_NT,0,2,booCanceladaDenegadaInutilizada )     +
                LFill( COD_INF )        +
                LFill( COD_CTA ) ) ;
         end;
@@ -661,7 +684,7 @@ begin
              LFill( strCST_PIS )     +
              LFill( strNAT_BC_CRED ) +
              LFill( VL_BC_PIS,0,2 )  +
-             LFill( ALIQ_PIS,0,2 )   +
+             DFill( ALIQ_PIS, 4 )   +
              LFill( VL_PIS,0,2 )     +
              LFill(COD_CTA) ) ;
         //
@@ -759,7 +782,7 @@ begin
              LFill( strCST_COFINS )    +
              LFill( strNAT_BC_CRED )   +
              LFill( VL_BC_COFINS,0,2 ) +
-             LFill( ALIQ_COFINS,0,2 )  +
+             DFill( ALIQ_COFINS, 4 )  +
              LFill( VL_COFINS,0,2 )    +
              LFill(COD_CTA) ) ;
         //
@@ -804,7 +827,6 @@ end;
 procedure TBloco_D.WriteRegistroD200(RegD010: TRegistroD010) ;
   var
     intFor     : integer;
-    strCOD_MOD : AnsiString;
     strCOD_SIT : AnsiString;
 begin
   if Assigned(RegD010.RegistroD200) then
@@ -820,7 +842,7 @@ begin
             sdfExtRegular      : strCOD_SIT := '01';
             sdfComplementar    : strCOD_SIT := '06';
             sdfExtComplementar : strCOD_SIT := '07';
-            sdfInutilizado     : strCOD_SIT := '08';
+            sdfEspecial        : strCOD_SIT := '08';
           end;
 
           Add( LFill('D200')        +
@@ -900,7 +922,7 @@ begin
              LFill( strCST_PIS )    +
              LFill( VL_ITEM,0,2 )   +
              LFill( VL_BC_PIS,0,2 ) +
-             LFill( ALIQ_PIS,0,2 )  +
+             DFill( ALIQ_PIS, 4 )  +
              LFill( VL_PIS,0,2 )    +
              LFill(COD_CTA) ) ;
         //
@@ -963,7 +985,7 @@ begin
              LFill( strCST_COFINS )    +
              LFill( VL_ITEM,0,2 )      +
              LFill( VL_BC_COFINS,0,2 ) +
-             LFill( ALIQ_COFINS,0,2 )  +
+             DFill( ALIQ_COFINS, 4 )  +
              LFill( VL_COFINS,0,2 )    +
              LFill(COD_CTA) ) ;
         //
@@ -1008,7 +1030,6 @@ end;
 procedure TBloco_D.WriteRegistroD300(RegD010: TRegistroD010) ;
   var
     intFor        : integer;
-    strCOD_MOD    : AnsiString;
     strCST_PIS    :  AnsiString;
     strCST_COFINS :  AnsiString;
 begin
@@ -1104,11 +1125,11 @@ begin
                LFill( VL_DESC,0,2 )      +
                LFill( strCST_PIS )       +
                LFill( VL_BC_PIS,0,2 )    +
-               LFill( ALIQ_PIS,0,2 )     +
+               DFill( ALIQ_PIS, 4 )     +
                LFill( VL_PIS,0,2 )       +
                LFill( strCST_COFINS )    +
                LFill( VL_BC_COFINS,0,2 ) +
-               LFill( ALIQ_COFINS,0,2 )  +
+               DFill( ALIQ_COFINS, 4 )  +
                LFill( VL_COFINS,0,2 )    +
                LFill(COD_CTA) ) ;
         end;
@@ -1156,7 +1177,6 @@ end;
 procedure TBloco_D.WriteRegistroD350(RegD010: TRegistroD010) ;
   var
     intFor        : integer;
-    strCOD_MOD    : AnsiString;
     strCST_PIS    :  AnsiString;
     strCST_COFINS :  AnsiString;
 begin
@@ -1244,22 +1264,22 @@ begin
                LFill( ECF_MOD )               +
                LFill( ECF_FAB )               +
                LFill( DT_DOC )                +
-               LFill( CRO )                   +
-               LFill( CRZ )                   +
-               LFill( NUM_COO_FIN )           +
-               LFill( GT_FIN )                +
-               LFill( VL_BRT,0,2 )            +
+               LFill( CRO, 3 )                +
+               LFill( CRZ, 6 )                +
+               LFill( NUM_COO_FIN, 6 )        +
+               DFill( GT_FIN )                +
+               DFill( VL_BRT )                +
                LFill( strCST_PIS )            +
-               LFill( VL_BC_PIS,0,2 )         +
-               LFill( ALIQ_PIS,0,4 )          +
-               LFill( QUANT_BC_PIS,0,3 )      +
-               LFill( ALIQ_PIS_QUANT,0,4 )    +
+               LFill( VL_BC_PIS, 0, 2 )       +
+               DFill( ALIQ_PIS, 4, True )           +
+               DFill( QUANT_BC_PIS, 3, True )       +
+               DFill( ALIQ_PIS_QUANT, 4, True )     +
                LFill( VL_PIS,0,2 )            +
                LFill( strCST_COFINS )         +
                LFill( VL_BC_COFINS,0,2 )      +
-               LFill( ALIQ_COFINS,0,4 )       +
-               LFill( QUANT_BC_COFINS,0,3 )   +
-               LFill( ALIQ_COFINS_QUANT,0,4 ) +
+               DFill( ALIQ_COFINS, 4, True )        +
+               DFill( QUANT_BC_COFINS, 3, True )    +
+               DFill( ALIQ_COFINS_QUANT, 4, True )  +
                LFill( VL_COFINS,0,2 )         +
                LFill(COD_CTA) ) ;
         end;
@@ -1309,7 +1329,6 @@ procedure TBloco_D.WriteRegistroD500(RegD010: TRegistroD010) ;
     intFor      : integer;
     strIND_OPER : AnsiString;
     strIND_EMIT : AnsiString;
-    strCOD_MOD  : AnsiString;
     strCOD_SIT  : AnsiString;
 begin
   if Assigned(RegD010.RegistroD500) then
@@ -1449,7 +1468,7 @@ begin
              LFill( VL_ITEM,0,2 )    +
              LFill( strNAT_BC_CRED ) +
              LFill( VL_BC_PIS,0,2 )  +
-             LFill( ALIQ_PIS,0,2 )   +
+             DFill( ALIQ_PIS, 4 )   +
              LFill( VL_PIS,0,2 )     +
              LFill(COD_CTA) ) ;
         //
@@ -1535,7 +1554,7 @@ begin
              LFill( VL_ITEM,0,2 )      +
              LFill( strNAT_BC_CRED )   +
              LFill( VL_BC_COFINS,0,2 ) +
-             LFill( ALIQ_COFINS,0,2 )  +
+             DFill( ALIQ_COFINS, 4 )  +
              LFill( VL_COFINS,0,2 )    +
              LFill(COD_CTA) ) ;
         //
@@ -1580,7 +1599,6 @@ end;
 procedure TBloco_D.WriteRegistroD600(RegD010: TRegistroD010) ;
   var
     intFor     : integer;
-    strCOD_MOD : AnsiString;
     strIND_REC : AnsiString;
 begin
   if Assigned(RegD010.RegistroD600) then
@@ -1691,7 +1709,7 @@ begin
              LFill( VL_DESC,0,2 )   +
              LFill( strCST_PIS )    +
              LFill( VL_BC_PIS,0,2 ) +
-             LFill( ALIQ_PIS,0,2 )  +
+             DFill( ALIQ_PIS, 4 )  +
              LFill( VL_PIS,0,2 )    +
              LFill(COD_CTA) ) ;
         //
@@ -1756,7 +1774,7 @@ begin
              LFill( VL_DESC,0,2 )      +
              LFill( strCST_COFINS )    +
              LFill( VL_BC_COFINS,0,2 ) +
-             LFill( ALIQ_COFINS,0,2 )  +
+             DFill( ALIQ_COFINS, 4 )  +
              LFill( VL_COFINS,0,2 )    +
              LFill(COD_CTA) ) ;
         //

@@ -377,7 +377,22 @@
     {$I ACBr_kylix.inc} // FPC incompatible stuff
   {$ELSE ~KYLIX}
 
-    {$IFDEF VER230} // XE2 ???
+    {$IFDEF VER240} // XE3
+      {$DEFINE BDS}
+      {$DEFINE BDS7}
+      {$DEFINE COMPILER17}
+      {$IFDEF BCB}
+        {$DEFINE BCB17}
+      {$ELSE}
+        {$DEFINE DELPHI17}
+        {$DEFINE DELPHI2012} // synonym to DELPHI17
+        {$DEFINE DELPHICOMPILER17}
+      {$ENDIF BCB}
+      {$DEFINE RTL240_UP}
+      {$UNDEF UNKNOWN_COMPILER_VERSION}
+    {$ENDIF VER240}  
+  
+    {$IFDEF VER230} // XE2
       {$DEFINE BDS}
       {$DEFINE BDS7}
       {$DEFINE COMPILER16}
@@ -392,7 +407,7 @@
       {$UNDEF UNKNOWN_COMPILER_VERSION}
     {$ENDIF VER230}
 
-    {$IFDEF VER220} // Fulcrum
+    {$IFDEF VER220} // XE
       {$DEFINE BDS}
       {$DEFINE BDS7}
       {$DEFINE COMPILER15}
@@ -422,7 +437,7 @@
       {$UNDEF UNKNOWN_COMPILER_VERSION}
     {$ENDIF VER210}
 
-    {$IFDEF VER200}
+    {$IFDEF VER200} // RAD Studio 2009
       {H+}
       {$DEFINE COMPILER12}
       {$DEFINE DELPHI12}
@@ -430,7 +445,7 @@
       {$DEFINE RTL200_UP}
     {$ENDIF}
 
-    {$IFDEF VER190}
+    {$IFDEF VER190} // RAD Studio 2007
       {$DEFINE COMPILER11}
       {$DEFINE DELPHI11}
       {$DEFINE DELPHICOMPILER11}
@@ -444,14 +459,14 @@
       {$DEFINE RTL185_UP}
     {$ENDIF}
 
-    {$IFDEF VER180}
+    {$IFDEF VER180} // RAD Studio 2006
       {$DEFINE COMPILER10}
       {$DEFINE DELPHI10}
       {$DEFINE DELPHICOMPILER10}
       {$DEFINE RTL180_UP}
     {$ENDIF}
 
-    {$IFDEF VER170}
+    {$IFDEF VER170} // RAD Studio 2005
       {$DEFINE COMPILER9}
       {$DEFINE DELPHI9}
       {$DEFINE DELPHICOMPILER9}
@@ -465,7 +480,7 @@
       {$DEFINE RTL160_UP}
     {$ENDIF}
 
-    {$IFDEF VER150}
+    {$IFDEF VER150} // D7
       {$DEFINE COMPILER7}
       {$IFDEF BCB}
         {$DEFINE BCB7}
@@ -562,6 +577,26 @@
 // DELPHIX_UP à partir dos mapeamentos DELPHIX
 //------------------------------------------------------------------------------
 
+{$IFDEF DELPHI17}
+  {$DEFINE DELPHI17_UP}
+  {$DEFINE DELPHI16_UP}
+  {$DEFINE DELPHI15_UP}
+  {$DEFINE DELPHI14_UP}
+  {$DEFINE DELPHI13_UP}
+  {$DEFINE DELPHI12_UP}
+  {$DEFINE DELPHI11_UP}
+  {$DEFINE DELPHI10_UP}
+  {$DEFINE DELPHI9_UP}
+  {$DEFINE DELPHI8_UP}
+  {$DEFINE DELPHI7_UP}
+  {$DEFINE DELPHI6_UP}
+  {$DEFINE DELPHI5_UP}
+  {$DEFINE DELPHI4_UP}
+  {$DEFINE DELPHI3_UP}
+  {$DEFINE DELPHI2_UP}
+  {$DEFINE DELPHI1_UP}
+{$ENDIF}
+
 {$IFDEF DELPHI16}
   {$DEFINE DELPHI16_UP}
   {$DEFINE DELPHI15_UP}
@@ -617,7 +652,7 @@
 {$ENDIF}
 
 {$IFDEF DELPHI12}
-  {$DEFINE DELPHI12_UP}
+//  {$DEFINE DELPHI12_UP} // Essa linha dispara um erro na compilação no D2009 - "ACBrBase.pas(247) Error: E2003 Undeclared identifier: 'Start'"
   {$DEFINE DELPHI11_UP}
   {$DEFINE DELPHI10_UP}
   {$DEFINE DELPHI9_UP}
@@ -660,7 +695,7 @@
 
 {$IFDEF DELPHI9}
   {$DEFINE DELPHI9_UP}
-  {$DEFINE DELPHI8_UP}
+//  {$DEFINE DELPHI8_UP} // Essa linha dispara um erro na compilação no D2005 - "ACBrRFD.pas(1861) Error: E2034 Too many actual parameters"
   {$DEFINE DELPHI7_UP}
   {$DEFINE DELPHI6_UP}
   {$DEFINE DELPHI5_UP}
@@ -795,6 +830,26 @@
 //------------------------------------------------------------------------------
 // DELPHICOMPILERX_UP à partir dos mapeamentos DELPHICOMPILERX
 //------------------------------------------------------------------------------
+
+{$IFDEF DELPHICOMPILER17}
+  {$DEFINE DELPHICOMPILER17_UP}
+  {$DEFINE DELPHICOMPILER16_UP}
+  {$DEFINE DELPHICOMPILER15_UP}
+  {$DEFINE DELPHICOMPILER14_UP}
+  {$DEFINE DELPHICOMPILER13_UP}
+  {$DEFINE DELPHICOMPILER12_UP}
+  {$DEFINE DELPHICOMPILER11_UP}
+  {$DEFINE DELPHICOMPILER10_UP}
+  {$DEFINE DELPHICOMPILER9_UP}
+  {$DEFINE DELPHICOMPILER8_UP}
+  {$DEFINE DELPHICOMPILER7_UP}
+  {$DEFINE DELPHICOMPILER6_UP}
+  {$DEFINE DELPHICOMPILER5_UP}
+  {$DEFINE DELPHICOMPILER4_UP}
+  {$DEFINE DELPHICOMPILER3_UP}
+  {$DEFINE DELPHICOMPILER2_UP}
+  {$DEFINE DELPHICOMPILER1_UP}
+{$ENDIF}
 
 {$IFDEF DELPHICOMPILER16}
   {$DEFINE DELPHICOMPILER16_UP}
@@ -967,6 +1022,27 @@
 //------------------------------------------------------------------------------
 // COMPILERX_UP à partir do mapeamento de nomes COMPILERX
 //------------------------------------------------------------------------------
+
+{$IFDEF COMPILER17}
+  {$DEFINE COMPILER17_UP}
+  {$DEFINE COMPILER16_UP}
+  {$DEFINE COMPILER15_UP}
+  {$DEFINE COMPILER14_UP}
+  {$DEFINE COMPILER13_UP}
+  {$DEFINE COMPILER12_UP}
+  {$DEFINE COMPILER11_UP}
+  {$DEFINE COMPILER10_UP}
+  {$DEFINE COMPILER9_UP}
+  {$DEFINE COMPILER8_UP}
+  {$DEFINE COMPILER7_UP}
+  {$DEFINE COMPILER6_UP}
+  {$DEFINE COMPILER5_UP}
+  {$DEFINE COMPILER4_UP}
+  {$DEFINE COMPILER35_UP}
+  {$DEFINE COMPILER3_UP}
+  {$DEFINE COMPILER2_UP}
+  {$DEFINE COMPILER1_UP}
+{$ENDIF}
 
 {$IFDEF COMPILER16}
   {$DEFINE COMPILER16_UP}
@@ -1549,5 +1625,5 @@
 // Define o Pacote de Liberação / Descomente o pacote a ser utilizado 
 // Atenção não comente ou descomente as duas definições
 
-{$DEFINE PL_103}
-//{$DEFINE PL_104}
+//{$DEFINE PL_103}
+{$DEFINE PL_104}

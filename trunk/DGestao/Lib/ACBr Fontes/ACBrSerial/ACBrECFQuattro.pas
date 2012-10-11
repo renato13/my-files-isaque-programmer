@@ -135,7 +135,7 @@ TACBrECFQuattro = class( TACBrECFClass )
     Procedure VendeItem( Codigo, Descricao : String; AliquotaECF : String;
        Qtd : Double ; ValorUnitario : Double; ValorDescontoAcrescimo : Double = 0;
        Unidade : String = ''; TipoDescontoAcrescimo : String = '%';
-       DescontoAcrescimo : String = 'D' ) ; override ;
+       DescontoAcrescimo : String = 'D'; CodDepartamento: Integer = -1 ) ; override ;
     Procedure SubtotalizaCupom( DescontoAcrescimo : Double = 0;
        MensagemRodape : AnsiString  = '' ) ; override ;
     Procedure EfetuaPagamento( CodFormaPagto : String; Valor : Double;
@@ -204,7 +204,7 @@ TACBrECFQuattro = class( TACBrECFClass )
 
 implementation
 Uses {$IFDEF COMPILER6_UP} DateUtils, StrUtils {$ELSE} ACBrD5, Windows {$ENDIF},
-     SysUtils, Math ;
+     SysUtils, Math, ACBrConsts ;
 
 { ----------------------------- TACBrECFQuattro ------------------------------ }
 
@@ -240,7 +240,7 @@ end;
 procedure TACBrECFQuattro.Ativar;
 begin
   if not fpDevice.IsSerialPort  then
-     raise Exception.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+#10+
+     raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+#10+
                             'Porta Serial:  (COM1, COM2, COM3, ...)'));
 
 //  fpDevice.HandShake := hsDTR_DSR ;
@@ -275,6 +275,7 @@ Var ErroMsg : String ;
 begin
   result    := '' ;
   ErroMsg   := '' ;
+  Erro      := 0 ;
   Verificar := false ;
   LeituraMF := (cmd = '++') ;
   fpComandoEnviado   := '' ;
@@ -337,7 +338,7 @@ begin
         if fsOldSeq <> copy(Result,9,4) then
            DoOnMsgPoucoPapel( 'Papel acabando' )
         else
-           ErroMsg := 'Impressora Sem Papel' ;
+           ErroMsg := cACBrECFSemPapelException ;
      end ;
    end
   else if copy(Result, 1, 2) = '.-' then
@@ -452,7 +453,11 @@ begin
      ErroMsg := ACBrStr('Erro retornado pela Impressora: '+fpModeloStr+
                 sLineBreak + sLineBreak+
                 ErroMsg );
-     raise EACBrECFSemResposta.create( ErroMsg ) ;
+
+     if (Erro = 68) or (ErroMsg = cACBrECFSemPapelException) then
+        DoOnErrorSemPapel
+     else
+        raise EACBrECFSemResposta.create( ErroMsg ) ;
    end
   else
      Sleep( IntervaloAposComando ) ;  { Pequena pausa entre comandos }
@@ -637,8 +642,9 @@ begin
 end;
 
 function TACBrECFQuattro.GetEstado: TACBrECFEstado;
-Var RetCmd, Status, Transacao : AnsiString ;
-    FlagZ, FlagX : AnsiChar ;
+Var
+  RetCmd : AnsiString ;
+  FlagZ, FlagX : AnsiChar ;
 begin
   if (not fpAtivo) then
      fpEstado := estNaoInicializada
@@ -651,8 +657,8 @@ begin
         try FlagZ := RetCmd[18]  except FlagZ := ' ' end ;
 
         { Status pode ser: C - concluida, P - Pendente, E - Erro no Comando }
-        Status    := UpperCase(copy(RetCmd,7,1)) ;
-        Transacao := UpperCase(Trim(copy(RetCmd,8,8))) ;
+        //Status  := UpperCase(copy(RetCmd,7,1)) ;
+        //Transacao := UpperCase(Trim(copy(RetCmd,8,8))) ;
 
         fpEstado := estDesconhecido ;
 
@@ -842,7 +848,7 @@ Var CPF_CNPJ : String ;
 begin
   fpUltimaMsgPoucoPapel := 0 ;  { Zera tempo pra msg de pouco papel }
 //  if Estado = estRequerX then
-//     raise Exception.create(ACBrStr('Leitura X inicial ainda não foi emitida'));
+//     raise EACBrECFERRO.create(ACBrStr('Leitura X inicial ainda não foi emitida'));
 
   CPF_CNPJ := '' ;
   if (Consumidor.Documento <> '') then
@@ -939,7 +945,8 @@ end;
 Procedure TACBrECFQuattro.VendeItem( Codigo, Descricao : String;
   AliquotaECF : String; Qtd : Double ; ValorUnitario : Double;
   ValorDescontoAcrescimo : Double; Unidade : String;
-  TipoDescontoAcrescimo : String; DescontoAcrescimo : String) ;
+  TipoDescontoAcrescimo : String; DescontoAcrescimo : String ;
+  CodDepartamento: Integer) ;
 Var QtdStr, ValorStr, Descr2 : String ;
     ValDesc, ValTotal : Double ;
 begin
@@ -970,7 +977,7 @@ begin
   ValorStr    := IntToStrZero( Round( ValorUnitario*1000 ) ,9) ;
 
   if Arredonda then
-     ValTotal := RoundTo( Qtd*ValorUnitario, -2 )
+     ValTotal := RoundABNT( Qtd*ValorUnitario, -2 )
   else
      ValTotal := RoundTo(TruncFix(Qtd*ValorUnitario*100)/100,-2) ;
      
@@ -1098,7 +1105,7 @@ begin
   end ;
 
   if ProxIndice > 15 then
-     raise Exception.create(ACBrStr('Não há espaço para programar novas Aliquotas'));
+     raise EACBrECFERRO.create(ACBrStr('Não há espaço para programar novas Aliquotas'));
 
   EnviaComando( '33' + Tipo + IntToStrZero(ProxIndice,2) + ValStr ) ;
 
@@ -1222,6 +1229,7 @@ Var RetCmd, Str, Descricao : AnsiString ;
     Cont : Integer ;
     CNF : TACBrECFComprovanteNaoFiscal ;
 begin
+  Str    := '';
   RetCmd := EnviaComando('29' + '7') ;
   if copy(RetCmd,1,3) <> '.+T' then exit ;
   Str := Str + copy(RetCmd, 8, 120) ;
@@ -1296,7 +1304,7 @@ begin
      Tipo := '+' ;
 
   if (pos(Tipo,'&+-') = 0) or (Length(Tipo) > 1) then
-     raise Exception.Create(ACBrStr('Os Tipos válidos para Quattro são:'+sLineBreak+
+     raise EACBrECFERRO.Create(ACBrStr('Os Tipos válidos para Quattro são:'+sLineBreak+
                             '&  Criaçao de um novo Grupo (Titulo)'+sLineBreak+
                             '+  Entrada de Recursos'+sLineBreak+
                             '-  Saida de Recursos') ) ;
@@ -1445,7 +1453,7 @@ end;
 procedure TACBrECFQuattro.CancelaImpressaoCheque;
 begin
    { Quattro não possui comando para cancelar a impressão de cheques}
-   raise Exception.Create(ACBrStr('Impressora '+fpModeloStr+ ' não possui comando para '+
+   raise EACBrECFERRO.Create(ACBrStr('Impressora '+fpModeloStr+ ' não possui comando para '+
                           'cancelar a impressão de cheques. ' + sLineBreak +
                           'Por favor desligue e ligue a impressora ou insira '+
                           'um documento.'));

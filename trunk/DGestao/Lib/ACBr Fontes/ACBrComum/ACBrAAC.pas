@@ -59,7 +59,8 @@ type
   TACBrAACAntesArquivo = procedure( var Continua: Boolean) of object ;
   TACBrAACOnVerificarRecomporValorGT = procedure(const NumSerie: String;
      var ValorGT : Double) of object ;
-
+  TACBrAACOnVerificarRecomporNumSerie = procedure(const NumSerie: String;
+     const ValorGT : Double; var CRO: Integer; var CNI: Integer) of object ;
   { TACBrAAC }
 
   TACBrAAC = class( TACBrComponent )
@@ -80,19 +81,20 @@ type
      fsOnDepoisAbrirArquivo : TNotifyEvent ;
      fsOnDepoisGravarArquivo : TNotifyEvent ;
      fsOnGetChave : TACBrAACGetChave ;
+     fsOnVerificarRecomporNumSerie : TACBrAACOnVerificarRecomporNumSerie ;
      fsOnVerificarRecomporValorGT : TACBrAACOnVerificarRecomporValorGT ;
      fsParams : TStringList ;
      fsIdentPAF: TACBrECFIdentificacaoPAF;
-    fsGravarConfigApp: Boolean;
+     fsGravarConfigApp: Boolean;
      function GetChave : AnsiString ;
      procedure SetNomeArquivoAux(const AValue : String) ;
      procedure SetParams(const AValue : TStringList) ;
+     function GetArquivoInvalido: Boolean;
   protected
 
      function Criptografar( const Dados: AnsiString ) : AnsiString ;
      function DesCriptografar( const Dados: AnsiString ) : AnsiString ;
      Procedure GravaLog( const AString: AnsiString );
-     procedure VerificaReCarregarArquivo;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -110,9 +112,10 @@ type
     procedure AtualizarMD5(const AMD5: String);
     procedure AtualizarValorGT(const NumeroSerie: String;
       const ValorGT: Double);
+    procedure VerificaReCarregarArquivo;
 
     property DtHrArquivo : TDateTime read fsDtHrArquivo ;
-
+    property ArquivoInvalido: Boolean read GetArquivoInvalido;
   published
     property NomeArquivoAux : String  read fsNomeArquivoAux
        write SetNomeArquivoAux ;
@@ -147,6 +150,8 @@ type
       read fsOnDepoisGravarArquivo write fsOnDepoisGravarArquivo ;
     property VerificarRecomporValorGT : TACBrAACOnVerificarRecomporValorGT
       read fsOnVerificarRecomporValorGT write fsOnVerificarRecomporValorGT;
+    property VerificarRecomporNumSerie : TACBrAACOnVerificarRecomporNumSerie
+      read fsOnVerificarRecomporNumSerie write fsOnVerificarRecomporNumSerie;
   end;
 
 implementation
@@ -169,6 +174,8 @@ begin
   fsOnDepoisAbrirArquivo  := nil ;
   fsOnAntesGravarArquivo  := nil ;
   fsOnDepoisGravarArquivo := nil ;
+  fsOnVerificarRecomporNumSerie := nil;
+  fsOnVerificarRecomporValorGT  := nil;
 
   fsNomeArquivoAux    := '' ;
   fsCriarBAK          := True;
@@ -260,31 +267,28 @@ begin
      //GravaLog('Arquivo Descriptografado: '+sLineBreak+ R );
 
      SL.Text := R;
-     // Verificando o arquivo:
-     I := SL.Count-1 ;
-     Linha := SL[ I ] ;   // Pega Ultima Linha
-     if copy(Linha,1,4) = 'CRC:' then   // Ultima Linha é CRC ?
+     if Trim(SL.Text) <> '' then
      begin
-        CRC := StrToIntDef( copy( Linha, 5, Length(Linha) ), -999) ;
-        SL.Delete( I );
+       // Verificando o arquivo:
+       I := SL.Count-1 ;
+       Linha := SL[ I ] ;   // Pega Ultima Linha
+       if copy(Linha,1,4) = 'CRC:' then   // Ultima Linha é CRC ?
+       begin
+          CRC := StrToIntDef( copy( Linha, 5, Length(Linha) ), -999) ;
+          SL.Delete( I );
 
-        if StringCrc16( SL.Text ) <> CRC then
-           raise EACBrAAC_CRC.Create(
-              ACBrStr('Arquivo: '+NomeArquivoAux+' inválido') );
-     end ;
-
+          if StringCrc16( SL.Text ) <> CRC then
+             fsDtHrArquivo := 0;
+       end
+     end;
      // Atribuindo para o .INI //
      Ini.SetStrings( SL );
 
-     // Seçao 'PAF' deve existir //
-     if not Ini.SectionExists('PAF') then
-     begin
-       raise EACBrAAC_ArquivoInvalido.Create(
-          ACBrStr('Arquivo: '+NomeArquivoAux+' inválido') );
-     end ;
-
      if GravarDadosSH then
      begin
+        if not Ini.SectionExists('SH') then
+           fsDtHrArquivo := 0;
+
         fsIdentPAF.Empresa.Cep         := Ini.ReadString('SH','Cep','');
         fsIdentPAF.Empresa.Cidade      := Ini.ReadString('SH','Cidade','');
         fsIdentPAF.Empresa.CNPJ        := Ini.ReadString('SH','CNPJ','');
@@ -298,8 +302,11 @@ begin
         fsIdentPAF.Empresa.Uf          := Ini.ReadString('SH','Uf','');
      end ;
 
-     if GravarDadosPAF then
+     if (not ArquivoInvalido) and GravarDadosPAF then
      begin
+        if not Ini.SectionExists('PAF') then
+           fsDtHrArquivo := 0;
+
         fsIdentPAF.NumeroLaudo             := Ini.ReadString('PAF','NumeroLaudo','');        // Número do Laudo
         fsIdentPAF.VersaoER                := Ini.ReadString('PAF','VersaoER','');           // Versão do Roteiro Executado na Homologação
         fsIdentPAF.Paf.Nome                := Ini.ReadString('PAF','Nome','');               // Nome do Sistema PAF
@@ -315,8 +322,11 @@ begin
         fsIdentPAF.Paf.IntegracaoPAFECF    := TACBrPAFTipoIntegracao(Ini.ReadInteger('PAF', 'IntegracaoPAFECF', 0));
      end ;
 
-     if GravarConfigApp then
+     if (not ArquivoInvalido) and GravarConfigApp then
      begin
+        if not Ini.SectionExists('PAF') then
+           fsDtHrArquivo := 0;
+
         fsIdentPAF.Paf.RealizaPreVenda              := Ini.ReadBool('PAF', 'RealizaPreVenda', False);
         fsIdentPAF.Paf.RealizaDAVECF                := Ini.ReadBool('PAF', 'RealizaDAVECF', False);
         fsIdentPAF.Paf.RealizaDAVNaoFiscal          := Ini.ReadBool('PAF', 'RealizaDAVNaoFiscal', False);
@@ -341,10 +351,15 @@ begin
         fsIdentPAF.Paf.TransfPreVenda               := Ini.ReadBool('PAF', 'TransfPreVenda', False);
         fsIdentPAF.Paf.TransfDAV                    := Ini.ReadBool('PAF', 'TransfDAV', False);
         fsIdentPAF.Paf.RecompoeGT                   := Ini.ReadBool('PAF', 'RecompoeGT', False);
+        fsIdentPAF.Paf.RecompoeNumSerie             := Ini.ReadBool('PAF', 'RecompoeNumSerie', False);
         fsIdentPAF.Paf.EmitePED                     := Ini.ReadBool('PAF', 'EmitePED', False);
         fsIdentPAF.Paf.CupomMania                   := Ini.ReadBool('PAF', 'CupomMania', False);
         fsIdentPAF.Paf.MinasLegal                   := Ini.ReadBool('PAF', 'MinasLegal', False);
      end;
+
+     if ArquivoInvalido then
+       raise EACBrAAC_ArquivoInvalido.Create(
+          ACBrStr('Arquivo: '+NomeArquivoAux+' inválido') );
 
      fsIdentPAF.ArquivoListaAutenticados.MD5 := Ini.ReadString('PAF','MD5','');     // MD5 do arquivo que contem a lista de arquivos autenticados
 
@@ -398,7 +413,7 @@ var
   ArqBak : String ;
   R      : AnsiString ;
   Continua : Boolean ;
-  CRC : Word ;
+  CRC : Word;
 begin
   GravaLog( 'GravarArqRegistro' );
 
@@ -492,6 +507,7 @@ begin
         Ini.WriteBool('PAF', 'TransfPreVenda', fsIdentPAF.Paf.TransfPreVenda);
         Ini.WriteBool('PAF', 'TransfDAV', fsIdentPAF.Paf.TransfDAV);
         Ini.WriteBool('PAF', 'RecompoeGT', fsIdentPAF.Paf.RecompoeGT);
+        Ini.WriteBool('PAF', 'RecompoeNumSerie', fsIdentPAF.Paf.RecompoeNumSerie);
         Ini.WriteBool('PAF', 'EmitePED', fsIdentPAF.Paf.EmitePED);
         Ini.WriteBool('PAF', 'CupomMania', fsIdentPAF.Paf.CupomMania);
         Ini.WriteBool('PAF', 'MinasLegal', fsIdentPAF.Paf.MinasLegal);
@@ -514,6 +530,19 @@ begin
         Ini.WriteString( 'Params', Ident, Params[I] );
      end ;
 
+     // Codigo re-inserido para manter compatibilidade de Arquivo AAC com
+     // Executaveis compilados com a versão antiga. Caso contrário Executaveis
+     // antigos cairiam no Erro: "Arquivo XXX inválido" ao tentar abrir o arquivo
+     if GravarDadosPAF and GravarDadosSH then
+     begin
+       // Calculando o CRC //
+       CRC := StringCrc16( IdentPAF.Empresa.RazaoSocial + IdentPAF.Empresa.CNPJ +
+                           IdentPAF.Empresa.IE + IdentPAF.Empresa.IM +
+                           IdentPAF.Paf.Nome + IdentPAF.Paf.Versao +
+                           fsIdentPAF.Paf.PrincipalExe.MD5 );
+       Ini.WriteInteger('CHK','CRC16',CRC);
+     end ;
+
      Ini.GetStrings( SL );
      SL.Add( 'CRC:' + IntToStr( StringCrc16( SL.Text ) ) );
 
@@ -526,14 +555,14 @@ begin
      if fsCriarBAK then
      begin
         ArqBak := ChangeFileExt( fsNomeCompleto, '.bak');
-        DeleteFile( ArqBak );
+        SysUtils.DeleteFile( ArqBak );
         RenameFile( fsNomeCompleto, ArqBak );
      end ;
 
      WriteToTXT( fsNomeCompleto, R, False, False );
 
      if fsEfetuarFlush then
-        FlushToDisk( fsNomeCompleto );
+        FlushFileToDisk( fsNomeCompleto );
 
      fsDtHrArquivo := FileDateToDateTime( FileAge( fsNomeCompleto ) );
 
@@ -548,11 +577,22 @@ end ;
 procedure TACBrAAC.VerificaReCarregarArquivo ;
 var
    NewDtHrArquivo : TDateTime;
+   Recarregar : Boolean ;
 begin
-  // Data/Hora do arquivo é diferente ?
-  NewDtHrArquivo := FileDateToDateTime( FileAge( fsNomeCompleto ) ) ;
+  Recarregar := ArquivoInvalido;
 
-  if fsDtHrArquivo <> NewDtHrArquivo then
+  if not Recarregar then
+  begin
+     // Data/Hora do arquivo é diferente ?
+     try
+       NewDtHrArquivo := FileDateToDateTime( FileAge( fsNomeCompleto ) ) ;
+       Recarregar := (fsDtHrArquivo <> NewDtHrArquivo)
+     except
+       Recarregar := true;
+     end;
+  end ;
+
+  if Recarregar then
      AbrirArquivo ;
 end ;
 
@@ -582,20 +622,47 @@ function TACBrAAC.VerificarGTECF(const NumeroSerie : String ;
 var
    AECF : TACBrAACECF ;
    ValorGTNovo : Double ;
+   CRONovo, CNINovo : Integer ;
+   NewECF : TACBrAACECF ;
 begin
   Result := 0;
   VerificaReCarregarArquivo;
 
   AECF := AchaECF( NumeroSerie );
   if not Assigned( AECF ) then
-     Result := -1
+   begin
+     Result := -1;
+
+     if fsIdentPAF.Paf.RecompoeNumSerie and
+        Assigned( fsOnVerificarRecomporNumSerie ) then
+     begin
+        CRONovo := 0;
+        CNINovo := 0;
+
+        fsOnVerificarRecomporNumSerie( NumeroSerie, ValorGT, CRONovo, CNINovo ) ;
+        if (CRONovo > 0) then
+        begin
+           NewECF := TACBrAACECF.Create;
+           NewECF.NumeroSerie    := NumeroSerie;
+           NewECF.CRO            := CRONovo;
+           NewECF.DtHrAtualizado := Now;
+           NewECF.ValorGT        := ValorGT;
+           NewECF.CNI            := CNINovo;
+           fsIdentPAF.ECFsAutorizados.Add( NewECF );
+           SalvarArquivo;
+
+           Result := 0;
+        end ;
+     end ;
+   end
   else
     if RoundTo( AECF.ValorGT, -2) <> RoundTo( ValorGT, -2 ) then
     begin
        ValorGT := AECF.ValorGT;
        Result  := -2;
 
-       if Assigned( fsOnVerificarRecomporValorGT ) then
+       if fsIdentPAF.Paf.RecompoeGT and
+          Assigned( fsOnVerificarRecomporValorGT ) then
        begin
           ValorGTNovo := AECF.ValorGT;
           fsOnVerificarRecomporValorGT( NumeroSerie, ValorGTNovo );
@@ -615,8 +682,7 @@ var
 begin
   GravaLog( 'AtualizarMD5 - De: '+fsIdentPAF.ArquivoListaAutenticados.MD5+' Para: '+AMD5 );
 
-  if fsDtHrArquivo = 0 then
-     AbrirArquivo;
+  VerificaReCarregarArquivo;
 
   if AMD5 = fsIdentPAF.ArquivoListaAutenticados.MD5 then exit ;
 
@@ -646,10 +712,7 @@ var
 begin
   LogTXT := 'AtualizarGTECF - NumSerie: '+NumeroSerie ;
 
-  if fsDtHrArquivo = 0 then
-     AbrirArquivo;
-
-  AECF := AchaECF( NumeroSerie );
+  AECF := AchaECF( NumeroSerie );    // AchaECF chama VerificaReCarregarArquivo;
   if not Assigned( AECF ) then
   begin
      LogTXT := LogTXT +' - nao encontrado';
@@ -694,6 +757,11 @@ begin
   except
   end ;
 end ;
+
+function TACBrAAC.GetArquivoInvalido: Boolean;
+begin
+   Result := (fsDtHrArquivo <= 0);
+end;
 
 function TACBrAAC.GetChave : AnsiString ;
 Var

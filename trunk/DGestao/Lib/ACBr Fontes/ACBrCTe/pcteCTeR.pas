@@ -47,8 +47,9 @@
 
 unit pcteCTeR;
 
-interface uses
+interface
 
+uses
   SysUtils, Classes,
 {$IFNDEF VER130}
   Variants,
@@ -181,6 +182,7 @@ begin
       (*B33*)CTe.Ide.Toma4.IE      := Leitor.rCampo(tcStr, 'IE');
       (*B34*)CTe.Ide.Toma4.xNome   := Leitor.rCampo(tcStr, 'xNome');
       (*B35*)CTe.Ide.Toma4.xFant   := Leitor.rCampo(tcStr, 'xFant');
+      (*#44*)CTe.Ide.Toma4.fone    := Leitor.rCampo(tcStr, 'fone');
   {$IFDEF PL_104}
       (*#56*)CTe.Ide.Toma4.email   := Leitor.rCampo(tcStr, 'email');
   {$ENDIF}
@@ -230,17 +232,20 @@ begin
     begin
       if Leitor.rExtrai(3, 'semData') <> '' then
       begin
+        CTe.Compl.Entrega.TipoData      := tdSemData; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.semData.tpPer := StrToTpDataPeriodo(ok, Leitor.rCampo(tcStr, 'tpPer'));
       end;
 
       if Leitor.rExtrai(3, 'comData') <> '' then
       begin
+        CTe.Compl.Entrega.TipoData      := tdNaData; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.comData.tpPer := StrToTpDataPeriodo(ok, Leitor.rCampo(tcStr, 'tpPer'));
         CTe.Compl.Entrega.comData.dProg := Leitor.rCampo(tcDat, 'dProg');
       end;
 
       if Leitor.rExtrai(3, 'noPeriodo') <> '' then
       begin
+        CTe.Compl.Entrega.TipoData        := tdNoPeriodo; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.noPeriodo.tpPer := StrToTpDataPeriodo(ok, Leitor.rCampo(tcStr, 'tpPer'));
         CTe.Compl.Entrega.noPeriodo.dIni  := Leitor.rCampo(tcDat, 'dIni');
         CTe.Compl.Entrega.noPeriodo.dFim  := Leitor.rCampo(tcDat, 'dFim');
@@ -248,17 +253,20 @@ begin
 
       if Leitor.rExtrai(3, 'semHora') <> '' then
       begin
+        CTe.Compl.Entrega.TipoHora      := thSemHorario; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.semHora.tpHor := StrToTpHorarioIntervalo(ok, Leitor.rCampo(tcStr, 'tpHor'));
       end;
 
       if Leitor.rExtrai(3, 'comHora') <> '' then
       begin
+        CTe.Compl.Entrega.TipoHora      := thNoHorario; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.comHora.tpHor := StrToTpHorarioIntervalo(ok, Leitor.rCampo(tcStr, 'tpHor'));
         CTe.Compl.Entrega.comHora.hProg := StrToTime(Leitor.rCampo(tcStr, 'hProg'));
       end;
 
       if Leitor.rExtrai(3, 'noInter') <> '' then
       begin
+        CTe.Compl.Entrega.TipoHora      := thNoIntervalo; // 02/05/2012 13:51:33 - Roberto Godinho
         CTe.Compl.Entrega.noInter.tpHor := StrToTpHorarioIntervalo(ok, Leitor.rCampo(tcStr, 'tpHor'));
         CTe.Compl.Entrega.noInter.hIni  := StrToTime(Leitor.rCampo(tcStr, 'hIni'));
         CTe.Compl.Entrega.noInter.hFim  := StrToTime(Leitor.rCampo(tcStr, 'hFim'));
@@ -274,8 +282,6 @@ begin
       I := RetornarPosEx('ObsCont xCampo=', Leitor.Arquivo, I + 1);
       J := RetornarPosEx('"', Leitor.Arquivo, I + 16);
       CTe.Compl.ObsCont.Add;
-//      CTe.Compl.ObsCont[i01].xCampo := copy(Leitor.Arquivo, I + 16, J - (I + 16) - 1);
-      // Alterado por Italo em 29/08/2011 conforme erro apontado por Doni Delphi
       CTe.Compl.ObsCont[i01].xCampo := copy(Leitor.Arquivo, I + 16, J - (I + 16));
       CTe.Compl.ObsCont[i01].xTexto := Leitor.rCampo(tcstr,'xTexto');
       inc(i01);
@@ -290,8 +296,6 @@ begin
       I := RetornarPosEx('ObsFisco xCampo=', Leitor.Arquivo, I + 1);
       J := RetornarPosEx('"', Leitor.Arquivo, I + 17);
       CTe.Compl.ObsFisco.Add;
-//      CTe.Compl.ObsFisco[i01].xCampo := copy(Leitor.Arquivo, I + 17, J - (I + 17) - 1);
-      // Alterado por Italo em 29/08/2011 conforme erro apontado por Doni Delphi
       CTe.Compl.ObsFisco[i01].xCampo := copy(Leitor.Arquivo, I + 17, J - (I + 17));
       CTe.Compl.ObsFisco[i01].xTexto := Leitor.rCampo(tcstr,'xTexto');
       inc(i01);
@@ -468,6 +472,7 @@ begin
     CTe.Dest.IE      := Leitor.rCampo(tcStr, 'IE');
     CTe.Dest.xNome   := Leitor.rCampo(tcStr, 'xNome');
     CTe.Dest.fone    := Leitor.rCampo(tcStr, 'fone');
+    CTe.Dest.ISUF    := Leitor.rCampo(tcStr, 'ISUF');
   {$IFDEF PL_104}
     CTe.Dest.email   := Leitor.rCampo(tcStr, 'email');
   {$ENDIF}
@@ -521,6 +526,18 @@ begin
   begin
     if Leitor.rExtrai(2, 'ICMS') <> '' then
     begin
+
+    // Incluido por Italo em 31/03/2012
+    // Ronaldo RCLSoft detectou que estava faltando
+    // Alterado por Italo em 17/09/2012
+    {$IFDEF PL_104}
+//    if Leitor.rExtrai(2, 'infAdFisco') <> '' then
+//    begin
+      // Informações adicionais de interesse do Fisco
+      CTe.Imp.infAdFisco := Leitor.rCampo(tcStr,'infAdFisco');
+//    end;
+    {$ENDIF}
+
     {$IFDEF PL_103}
       if Leitor.rExtrai(3, 'CST00') <> '' then
       begin
@@ -706,6 +723,7 @@ begin
     {$ENDIF}
 
     end;
+
   end;
 
   (* Grupo da TAG <infCTeNorm> ************************************************)
@@ -950,9 +968,12 @@ begin
       end;
 
   {$IFDEF PL_104}
-      CTe.Aereo.natCarga.xDime     := Leitor.rCampo(tcStr,'xDime');
-      CTe.Aereo.natCarga.cinfManu  := Leitor.rCampo(tcInt,'cInfManu');
-      CTe.Aereo.natCarga.cIMP      := Leitor.rCampo(tcStr,'cIMP');
+      if Leitor.rExtrai(3, 'natCarga') <> '' then
+       begin
+         CTe.Aereo.natCarga.xDime     := Leitor.rCampo(tcStr,'xDime');
+         CTe.Aereo.natCarga.cinfManu  := Leitor.rCampo(tcInt,'cInfManu');
+         CTe.Aereo.natCarga.cIMP      := Leitor.rCampo(tcStr,'cIMP');
+       end;  
   {$ENDIF}
     end; // fim das informações do modal Aéreo
 
@@ -1277,7 +1298,7 @@ begin
           if Leitor.rCampo(tcStr,'CST')='00'
           then begin
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib    := cst00;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST00.CST   := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST00.CST   := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST00.vBC   := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST00.pICMS := Leitor.rCampo(tcDe2,'pICMS');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST00.vICMS := Leitor.rCampo(tcDe2,'vICMS');
@@ -1290,7 +1311,7 @@ begin
           if Leitor.rCampo(tcStr,'CST')='00'
           then begin
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst00;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS00.CST   := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS00.CST   := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS00.vBC   := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS00.pICMS := Leitor.rCampo(tcDe2,'pICMS');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS00.vICMS := Leitor.rCampo(tcDe2,'vICMS');
@@ -1304,7 +1325,7 @@ begin
           if Leitor.rCampo(tcStr,'CST')='20'
           then begin
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst20;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST20.CST    := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST20.CST    := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST20.pRedBC := Leitor.rCampo(tcDe2,'pRedBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST20.vBC    := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST20.pICMS  := Leitor.rCampo(tcDe2,'pICMS');
@@ -1317,8 +1338,8 @@ begin
         begin
           if Leitor.rCampo(tcStr,'CST')='20'
           then begin
-            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst20;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS20.CST    := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib      := cst20;
+            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS20.CST    := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS20.pRedBC := Leitor.rCampo(tcDe2,'pRedBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS20.vBC    := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS20.pICMS  := Leitor.rCampo(tcDe2,'pICMS');
@@ -1334,8 +1355,8 @@ begin
              (Leitor.rCampo(tcStr,'CST')='41') or
              (Leitor.rCampo(tcStr,'CST')='51')
           then begin
-            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib  := Leitor.rCampo(tcStr,'CST');
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST45.CST := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib  := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST45.CST := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
           end;
         end;
 {$ENDIF}
@@ -1346,8 +1367,8 @@ begin
              (Leitor.rCampo(tcStr,'CST')='41') or
              (Leitor.rCampo(tcStr,'CST')='51')
           then begin
-            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib  := Leitor.rCampo(tcStr,'CST');
-            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS45.CST := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib   := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
+            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS45.CST := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
           end;
         end;
 {$ENDIF}
@@ -1358,7 +1379,7 @@ begin
           if Leitor.rCampo(tcStr,'CST')='60'
           then begin
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib          := cst60;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS60.CST        := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS60.CST        := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS60.vBCSTRet   := Leitor.rCampo(tcDe2,'vBCSTRet');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS60.vICMSSTRet := Leitor.rCampo(tcDe2,'vICMSSTRet');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS60.pICMSSTRet := Leitor.rCampo(tcDe2,'pICMSSTRet');
@@ -1374,7 +1395,7 @@ begin
           then begin
             // Responsabilidade do recolhimento do ICMS atribuído ao tomador ou 3o por ST
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib    := cst80;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST80.CST   := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST80.CST   := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST80.vBC   := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST80.pICMS := Leitor.rCampo(tcDe2,'pICMS');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST80.vICMS := Leitor.rCampo(tcDe2,'vICMS');
@@ -1388,7 +1409,7 @@ begin
           then begin
             // ICMS devido à Outra UF
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst81;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST81.CST    := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST81.CST    := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST81.pRedBC := Leitor.rCampo(tcDe2,'pRedBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST81.vBC    := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST81.pICMS  := Leitor.rCampo(tcDe2,'pICMS');
@@ -1403,7 +1424,7 @@ begin
           if Leitor.rCampo(tcStr,'CST')='90'
           then begin
             CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst90;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.CST90.CST    := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.CST90.CST    := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST90.pRedBC := Leitor.rCampo(tcDe2,'pRedBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST90.vBC    := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.CST90.pICMS  := Leitor.rCampo(tcDe2,'pICMS');
@@ -1419,8 +1440,8 @@ begin
         begin
           if Leitor.rCampo(tcStr,'CST')='90'
           then begin
-            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib     := cst90;
-            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS90.CST    := Leitor.rCampo(tcStr,'CST');
+            CTe.InfCTeComp[i01].impComp.ICMSComp.SituTrib      := cst90;
+            CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS90.CST    := StrToCSTICMS(ok, Leitor.rCampo(tcStr,'CST'));
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS90.pRedBC := Leitor.rCampo(tcDe2,'pRedBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS90.vBC    := Leitor.rCampo(tcDe2,'vBC');
             CTe.InfCTeComp[i01].impComp.ICMSComp.ICMS90.pICMS  := Leitor.rCampo(tcDe2,'pICMS');
