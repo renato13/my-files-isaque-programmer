@@ -755,15 +755,6 @@ begin
   if ( not cdsTabelaItens.IsEmpty ) then
     if ( ShowConfirm('Deseja excluir o ítem selecionado?') ) then
     begin
-//      IbDtstTabelaDESCONTO.AsCurrency   := IbDtstTabelaDESCONTO.AsCurrency - cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
-//      IbDtstTabelaTOTALVENDA.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency - cdsTabelaItensTOTAL_LIQUIDO.AsCurrency;
-//
-//      if ( IbDtstTabelaDESCONTO.AsCurrency < 0 ) then
-//        IbDtstTabelaDESCONTO.AsCurrency := 0;
-//
-//      if ( IbDtstTabelaTOTALVENDA.AsCurrency < 0 ) then
-//        IbDtstTabelaTOTALVENDA.AsCurrency := 0;
-//
       cdsTabelaItens.Delete;
 
       GetToTais(cDescontos, cTotalLiquido);
@@ -839,20 +830,6 @@ begin
     end
     else
     begin
-
-//      case cdsTabelaItens.State of
-//        dsInsert:
-//          begin
-//            IbDtstTabelaDESCONTO.AsCurrency   := IbDtstTabelaDESCONTO.AsCurrency   + cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
-//            IbDtstTabelaTOTALVENDA.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency + cdsTabelaItensTOTAL_LIQUIDO.AsCurrency;
-//          end;
-//
-//        dsEdit:
-//          begin
-//            IbDtstTabelaDESCONTO.AsCurrency   := IbDtstTabelaDESCONTO.AsCurrency   - cdsTabelaItensTOTAL_DESCONTO.OldValue + cdsTabelaItensTOTAL_DESCONTO.NewValue;
-//            IbDtstTabelaTOTALVENDA.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency - cdsTabelaItensTOTAL_LIQUIDO.OldValue  + cdsTabelaItensTOTAL_LIQUIDO.NewValue;
-//          end;
-//      end;
 
       cdsTabelaItens.Post;
 
