@@ -1,8 +1,8 @@
 object DMNFe: TDMNFe
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 598
-  Top = 180
+  Left = 458
+  Top = 133
   Height = 429
   Width = 419
   object ACBrNFe: TACBrNFe
@@ -719,17 +719,17 @@ object DMNFe: TDMNFe
           Left = 145.740260000000000000
           Top = 21.897650000000000000
           Width = 226.771800000000000000
-          Height = 18.897650000000000000
+          Height = 15.118120000000000000
           ShowHint = False
           DataSet = frdCliente
           DataSetName = 'frdCliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -11
+          Font.Height = -12
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
-            'CNPJ.: [frdEmpresa."CNPJ"]')
+            'CNPJ: [frdEmpresa."CNPJ"]')
           ParentFont = False
           VAlign = vaCenter
         end
@@ -807,9 +807,9 @@ object DMNFe: TDMNFe
           DataSetName = 'frdCliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -12
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             
               '[frdEmpresa."TLG_SIGLA"] [frdEmpresa."LOG_NOME"], [frdEmpresa."N' +
@@ -828,17 +828,17 @@ object DMNFe: TDMNFe
         end
         object frdFone: TfrxMemoView
           Left = 145.740260000000000000
-          Top = 41.795300000000000000
+          Top = 37.795300000000000000
           Width = 226.771800000000000000
-          Height = 11.338590000000000000
+          Height = 15.118120000000000000
           ShowHint = False
           DataSet = frdCliente
           DataSetName = 'frdCliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -8
+          Font.Height = -12
           Font.Name = 'Lucida Console'
-          Font.Style = []
+          Font.Style = [fsBold]
           Memo.UTF8 = (
             'FONE: [frdEmpresa."Fone"]')
           ParentFont = False
