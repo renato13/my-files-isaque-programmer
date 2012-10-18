@@ -1343,11 +1343,15 @@ begin
           //Lacres.Add.nLacre := '';
         end;
 
-      Cobr.Fat.nFat  := FormatFloat('0000', qryCalculoImportoANO.AsInteger) + '/' + FormatFloat('0000000', qryCalculoImportoCODCONTROL.AsInteger);
-      Cobr.Fat.vOrig := qryCalculoImportoTOTALVENDABRUTA.AsCurrency;
-      Cobr.Fat.vDesc := qryCalculoImportoDESCONTO.AsCurrency ;
-      Cobr.Fat.vLiq  := qryCalculoImportoTOTALVENDA.AsCurrency ;
+//      // Dados da Fatura
+//
+//      Cobr.Fat.nFat  := FormatFloat('0000', qryCalculoImportoANO.AsInteger) + '/' + FormatFloat('0000000', qryCalculoImportoCODCONTROL.AsInteger);
+//      Cobr.Fat.vOrig := qryCalculoImportoTOTALVENDABRUTA.AsCurrency;
+//      Cobr.Fat.vDesc := qryCalculoImportoDESCONTO.AsCurrency ;
+//      Cobr.Fat.vLiq  := qryCalculoImportoTOTALVENDA.AsCurrency ;
 
+      // Dados da(s) Duplicata(s)
+      
       if ( qryCalculoImportoVENDA_PRAZO.AsInteger = 1 ) then
       begin
         qryDuplicatas.First;
