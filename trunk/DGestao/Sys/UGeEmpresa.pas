@@ -117,6 +117,7 @@ type
     procedure ppmCarregarImagemClick(Sender: TObject);
     procedure ppmLimparImagemClick(Sender: TObject);
     procedure btbtnAlterarClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -351,6 +352,13 @@ begin
     if ( IbDtstTabelaLOTE_NUM_NFE.IsNull ) then
       IbDtstTabelaLOTE_NUM_NFE.Value := 0;
   end;
+end;
+
+procedure TfrmGeEmpresa.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  Action := caFree;
 end;
 
 initialization

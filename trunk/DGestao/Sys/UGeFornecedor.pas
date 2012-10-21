@@ -90,6 +90,7 @@ type
     procedure DtSrcTabelaStateChange(Sender: TObject);
     procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
     procedure btbtnSalvarClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -321,5 +322,15 @@ begin
 
   inherited;
 end;
+
+procedure TfrmGeFornecedor.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  Action := caFree;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmGeFornecedor', TfrmGeFornecedor);
 
 end.

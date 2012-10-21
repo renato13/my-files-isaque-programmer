@@ -6,6 +6,7 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   ActiveControl = dbCodigo
   Caption = 'Cadastro de Fornecedores'
   OldCreateOrder = True
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel

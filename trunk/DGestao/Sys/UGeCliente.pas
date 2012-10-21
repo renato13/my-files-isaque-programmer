@@ -114,6 +114,17 @@ type
     qryTitulosSERIE: TIBStringField;
     qryTitulosNFE: TLargeintField;
     qryTitulosNFE_SERIE: TIBStringField;
+    IbDtstTabelaBLOQUEADO: TSmallintField;
+    IbDtstTabelaBLOQUEADO_DATA: TDateField;
+    IbDtstTabelaBLOQUEADO_MOTIVO: TMemoField;
+    IbDtstTabelaBLOQUEADO_USUARIO: TIBStringField;
+    GrpBxBloqueio: TGroupBox;
+    Bevel6: TBevel;
+    Bevel7: TBevel;
+    Bevel9: TBevel;
+    dbmMotivoBloqueio: TDBMemo;
+    dbcBloqueio: TDBCheckBox;
+    IbDtstTabelaDESBLOQUEADO_DATA: TDateField;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -129,6 +140,7 @@ type
       DisplayText: Boolean);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -142,6 +154,7 @@ var
   procedure MostrarTabelaClientes(const AOwner : TComponent);
   function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
+  function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String; var Bloqueado : Boolean; var MotivoBloqueio : String) : Boolean; overload;
 
 implementation
 
@@ -182,7 +195,29 @@ begin
   try
     Result := frm.SelecionarRegistro(Codigo, Nome);
     if ( Result ) then
-      CNPJ := frm.IbDtstTabelaCNPJ.AsString;
+      CNPJ      := frm.IbDtstTabelaCNPJ.AsString;
+  finally
+    frm.Destroy;
+  end;
+end;
+
+function SelecionarCliente(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String; var Bloqueado : Boolean; var MotivoBloqueio : String) : Boolean;
+var
+  frm : TfrmGeCliente;
+begin
+  frm := TfrmGeCliente.Create(AOwner);
+  try
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+    if ( Result ) then
+    begin
+      CNPJ      := frm.IbDtstTabelaCNPJ.AsString;
+      Bloqueado := (frm.IbDtstTabelaBLOQUEADO.AsInteger = 1);
+
+      if Bloqueado then
+        MotivoBloqueio := frm.IbDtstTabelaBLOQUEADO_MOTIVO.AsString
+      else
+        MotivoBloqueio := EmptyStr;
+    end;
   finally
     frm.Destroy;
   end;
@@ -191,6 +226,8 @@ end;
 procedure TfrmGeCliente.FormCreate(Sender: TObject);
 begin
   inherited;
+  BloquearClientes;
+  
   ControlFirstEdit := dbPessoaFisica;
 
   NomeTabela     := 'TBCLIENTE';
@@ -297,7 +334,12 @@ begin
   IbDtstTabelaVALOR_LIMITE_COMPRA.Value := 0;
   IbDtstTabelaPAIS_ID.AsString          := GetPaisIDDefault;
   IbDtstTabelaPAIS_NOME.AsString        := GetPaisNomeDefault;
-  IbDtstTabelaDTCAD.AsDateTime          := GetDateDB; 
+  IbDtstTabelaDTCAD.AsDateTime          := GetDateDB;
+  IbDtstTabelaBLOQUEADO.AsInteger       := Ord(False);
+
+  IbDtstTabelaBLOQUEADO_DATA.Clear;
+  IbDtstTabelaBLOQUEADO_MOTIVO.Clear;
+  IbDtstTabelaBLOQUEADO_USUARIO.Clear;
 end;
 
 procedure TfrmGeCliente.DtSrcTabelaStateChange(Sender: TObject);
@@ -401,6 +443,15 @@ procedure TfrmGeCliente.dbgDadosDrawColumnCell(Sender: TObject;
   State: TGridDrawState);
 begin
   inherited;
+  if ( Sender = dbgDados ) then
+  begin
+    // Cliente bloqueado
+    if ( IbDtstTabelaBLOQUEADO.AsInteger = 1 ) then
+      dbgDados.Canvas.Font.Color := GrpBxBloqueio.Font.Color;
+
+    dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
+  end
+  else
   if ( Sender = dbgTitulos ) then
   begin
     // Destacar Títulos em Pagamento
@@ -414,5 +465,15 @@ begin
     dbgTitulos.DefaultDrawDataCell(Rect, dbgTitulos.Columns[DataCol].Field, State);
   end
 end;
+
+procedure TfrmGeCliente.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  Action := caFree;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmGeCliente', TfrmGeCliente);
 
 end.

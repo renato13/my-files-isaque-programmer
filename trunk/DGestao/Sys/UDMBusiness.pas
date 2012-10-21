@@ -71,6 +71,8 @@ var
 
   procedure Desativar_Promocoes;
   procedure GerarSaldoContaCorrente(const ContaCorrente : Integer; const Data : TDateTime);
+  procedure BloquearClientes;
+  procedure DesbloquearCliente(CNPJ : String; const Motivo : String = '');
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -147,6 +149,9 @@ const
   STATUS_CMP_ABR = 1;
   STATUS_CMP_FIN = 2;
   STATUS_CMP_CAN = 3;
+
+  // Mensagens padrões do sistema
+  CLIENTE_BLOQUEADO_PORDEBITO = 'Cliente bloqueado, automaticamente, pelo sistema por se encontrar com títulos vencidos. Favor buscar mais informações junto ao FINANCEIRO.';
 
 implementation
 
@@ -235,6 +240,47 @@ begin
     end;
 
   finally
+  end;
+end;
+
+procedure BloquearClientes;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Update TBCLIENTE Set Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = user,');
+    SQL.Add('  Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
+    SQL.Add('where Bloqueado = 0');
+    SQL.Add('  and ((Desbloqueado_data is null) or (Desbloqueado_data <> Current_date))');
+    SQL.Add('  and Cnpj in (');
+    SQL.Add('    Select Distinct');
+    SQL.Add('      r.Cnpj');
+    SQL.Add('    from TBCONTREC r');
+    SQL.Add('    where r.Parcela > 0');
+    SQL.Add('      and r.Situacao = 1');
+    SQL.Add('      and r.Dtvenc < Current_date');
+    SQL.Add('      and r.Baixado = 0');
+    SQL.Add('      and r.Cnpj <> ' + QuotedStr('99999999999999')); // CONSUMIDOR FINAL
+    SQL.Add('  )');
+    ExecSQL;
+
+    CommitTransaction;
+  end;
+end;
+
+procedure DesbloquearCliente(CNPJ : String; const Motivo : String = '');
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Update TBCLIENTE Set Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
+    SQL.Add('  Bloqueado_motivo = ' + QuotedStr(Trim(Motivo)));
+    SQL.Add('where Cnpj = ' + QuotedStr(CNPJ));
+    ExecSQL;
+
+    CommitTransaction;
   end;
 end;
 

@@ -174,7 +174,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGridFornec, UGrupoProd, UGrProduto, UGrEntradaEstoq, uAjustEstoq,
   uKardex, uGrVendas, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, 
-  UGeCliente, UGeFornecedor, UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
+  UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
@@ -196,7 +196,7 @@ end;
 
 procedure TfrmPrinc.RxSpeedBtnClienteClick(Sender: TObject);
 begin
-  MostrarTabelaClientes(Self);
+  FormFunction.ShowForm(Self, 'frmGeCliente');
 end;
 
 procedure TfrmPrinc.RxSpeedBtnCRecClick(Sender: TObject);
@@ -211,7 +211,7 @@ end;
 
 procedure TfrmPrinc.nmFornecedorClick(Sender: TObject);
 begin
-  MostrarTabelaFornecedores(Self);
+  FormFunction.ShowForm(Self, 'frmGeFornecedor');
 end;
 
 procedure TfrmPrinc.RxSpeedButton2Click(Sender: TObject);
