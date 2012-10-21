@@ -256,6 +256,8 @@ type
     Label1: TLabel;
     lblVendaCancelada: TLabel;
     lblVendaAberta: TLabel;
+    IbDtstTabelaBLOQUEADO: TSmallintField;
+    IbDtstTabelaBLOQUEADO_MOTIVO: TMemoField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -427,10 +429,25 @@ var
   iCodigo : Integer;
   sCNPJ ,
   sNome : String;
+  bBloqueado : Boolean;
+  sBloqueado : String;
 begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarCliente(Self, iCodigo, sCNPJ, sNome) ) then
+    if ( SelecionarCliente(Self, iCodigo, sCNPJ, sNome, bBloqueado, sBloqueado) ) then
     begin
+      if bBloqueado then
+      begin
+        ShowWarning('Cliente selecionado se encontra bloqueado!' + #13#13 + 'Motivo:' + #13 + sBloqueado);
+
+        IbDtstTabelaBLOQUEADO.AsInteger       := 1;
+        IbDtstTabelaBLOQUEADO_MOTIVO.AsString := sBloqueado;
+      end
+      else
+      begin
+        IbDtstTabelaBLOQUEADO.AsInteger       := 0;
+        IbDtstTabelaBLOQUEADO_MOTIVO.AsString := EmptyStr;
+      end;
+
       IbDtstTabelaCODCLI.AsString := sCNPJ;
       IbDtstTabelaNOME.AsString   := sNome;
     end;
@@ -903,11 +920,6 @@ begin
       if ( cdsTabelaItensDESCONTO.IsNull ) then
         cdsTabelaItensDESCONTO.AsCurrency := 0;
 
-//      if ( cdsTabelaItensPUNIT_PROMOCAO.AsCurrency > 0 ) then
-//        cPrecoVND := cdsTabelaItensPUNIT_PROMOCAO.AsCurrency
-//      else
-//        cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
-//
       cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
 
       cdsTabelaItensDESCONTO_VALOR.Value := cPrecoVND * cdsTabelaItensDESCONTO.AsCurrency / 100;
@@ -917,22 +929,6 @@ begin
       cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
 
-//  if ( (Sender = dbQuantidade) or (Sender = dbDescontoValor) ) then
-//    if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-//    begin
-//      if ( cdsTabelaItensPUNIT.IsNull ) then
-//        cdsTabelaItensPUNIT.AsCurrency := 0;
-//
-//      if ( cdsTabelaItensDESCONTO_VALOR.IsNull ) then
-//        cdsTabelaItensDESCONTO_VALOR.AsCurrency := 0;
-//
-//      cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
-//      cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
-//      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
-//      cdsTabelaItensTOTAL_DESCONTO.Value := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-//      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
-//    end;
-//
   if ( Sender = dbValorLiq ) then
     if ( btnProdutoSalvar.Visible and btnProdutoSalvar.Enabled ) then
       btnProdutoSalvar.SetFocus;
@@ -1059,7 +1055,6 @@ begin
   cdsTabelaItensDTVENDA.Value    := IbDtstTabelaDTVENDA.Value;
   cdsTabelaItensCODEMP.Value     := IbDtstTabelaCODEMP.Value;
   cdsTabelaItensCODCLI.Value     := IbDtstTabelaCODCLI.Value;
-//  cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
   cdsTabelaItensCFOP_COD.Value       := GetCfopIDDefault;
   cdsTabelaItensCFOP_DESCRICAO.Value := GetCfopNomeDefault;
   cdsTabelaItensCST.Value            := '000';
@@ -1103,6 +1098,18 @@ begin
   CxContaCorrente := 0;
 
   AbrirTabelaItens(IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
+
+
+  // Verificar se cliente está bloqueado, caso a venda seja a prazo
+
+  if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 1 ) then
+    if ( IbDtstTabelaBLOQUEADO.AsInteger = 1 ) then
+    begin
+      ShowWarning('Cliente bloqueado!' + #13#13 + 'Motivo:' + #13 + IbDtstTabelaBLOQUEADO_MOTIVO.AsString);
+      Exit;
+    end;
+
+  // Verificar se existe caixa aberto para o usuário do sistema
 
   if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
     if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then

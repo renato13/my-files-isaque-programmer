@@ -135,6 +135,7 @@ type
     procedure dbFormaPagtoClick(Sender: TObject);
     procedure dbgPagamentosKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure IbDtstTabelaBeforePost(DataSet: TDataSet);
   private
     { Private declarations }
     SQL_Pagamentos : TStringList;
@@ -299,6 +300,8 @@ begin
 
     if ( CxContaCorrente > 0 ) then
       GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+
+    DesbloquearCliente(IbDtstTabelaCNPJ.AsString, EmptyStr);
   end;
 end;
 
@@ -473,6 +476,13 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmGeContasAReceber.IbDtstTabelaBeforePost(DataSet: TDataSet);
+begin
+  if ( IbDtstTabela.State = dsEdit ) then
+    if ( VarToStr(IbDtstTabelaDTVENC.OldValue) <> VarToStr(IbDtstTabelaDTVENC.NewValue) ) then
+      DesbloquearCliente(IbDtstTabelaCNPJ.AsString, EmptyStr)
 end;
 
 end.

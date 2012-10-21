@@ -1111,6 +1111,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
     end
   end
   inherited IbDtstTabela: TIBDataSet
+    BeforePost = IbDtstTabelaBeforePost
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'

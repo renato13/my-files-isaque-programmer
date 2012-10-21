@@ -3,8 +3,10 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   Top = 278
   Width = 763
   Height = 465
+  ActiveControl = dbCodigo
   Caption = 'Cadastro da Empresa(s)'
   OldCreateOrder = True
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
@@ -31,6 +33,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   inherited pgcGuias: TPageControl
     Width = 747
     Height = 384
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 289

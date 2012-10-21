@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 196
-  Top = 40
+  Left = 585
+  Top = 117
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -2678,6 +2678,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  , v.Prazo_11'
       '  , v.Prazo_12'
       '  , c.Nome'
+      '  , c.Bloqueado'
+      '  , c.Bloqueado_motivo'
       'from TBVENDAS v'
       '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
       '')
@@ -2920,6 +2922,16 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'NOME'
       Origin = 'TBCLIENTE.NOME'
       Size = 60
+    end
+    object IbDtstTabelaBLOQUEADO: TSmallintField
+      FieldName = 'BLOQUEADO'
+      Origin = 'TBCLIENTE.BLOQUEADO'
+    end
+    object IbDtstTabelaBLOQUEADO_MOTIVO: TMemoField
+      FieldName = 'BLOQUEADO_MOTIVO'
+      Origin = 'TBCLIENTE.BLOQUEADO_MOTIVO'
+      BlobType = ftMemo
+      Size = 8
     end
   end
   inherited DtSrcTabela: TDataSource

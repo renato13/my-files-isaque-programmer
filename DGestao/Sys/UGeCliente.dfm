@@ -1,11 +1,12 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 451
-  Top = 169
+  Left = 384
+  Top = 148
   Width = 903
   Height = 574
   ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
@@ -78,9 +79,20 @@ inherited frmGeCliente: TfrmGeCliente
       inherited pnlFiltros: TPanel
         Top = 402
         Width = 879
+        object Bevel6: TBevel [0]
+          Left = 600
+          Top = 4
+          Width = 4
+          Height = 54
+          Align = alRight
+          Shape = bsSpacer
+        end
         inherited grpBxFiltro: TGroupBox
           Left = 604
           Width = 271
+          DesignSize = (
+            271
+            54)
           inherited lbltFiltrar: TLabel
             Width = 42
             Caption = 'Cliente:'
@@ -91,6 +103,53 @@ inherited frmGeCliente: TfrmGeCliente
           inherited edtFiltrar: TEdit
             Left = 56
             Width = 166
+          end
+        end
+        object GrpBxBloqueio: TGroupBox
+          Left = 4
+          Top = 4
+          Width = 596
+          Height = 54
+          Align = alClient
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clRed
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+          object Bevel7: TBevel
+            Left = 590
+            Top = 15
+            Width = 4
+            Height = 37
+            Align = alRight
+            Shape = bsSpacer
+          end
+          object Bevel9: TBevel
+            Left = 2
+            Top = 15
+            Width = 4
+            Height = 37
+            Align = alLeft
+            Shape = bsSpacer
+          end
+          object dbmMotivoBloqueio: TDBMemo
+            Left = 6
+            Top = 15
+            Width = 584
+            Height = 37
+            TabStop = False
+            Align = alClient
+            BorderStyle = bsNone
+            Color = clBtnFace
+            Ctl3D = False
+            DataField = 'BLOQUEADO_MOTIVO'
+            DataSource = DtSrcTabela
+            ParentCtl3D = False
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 0
           end
         end
       end
@@ -890,7 +949,7 @@ inherited frmGeCliente: TfrmGeCliente
           end
           object lblTituloPagando: TLabel
             Left = 8
-            Top = 151
+            Top = 159
             Width = 122
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1056,6 +1115,26 @@ inherited frmGeCliente: TfrmGeCliente
                 end>
             end
           end
+          object dbcBloqueio: TDBCheckBox
+            Left = 8
+            Top = 122
+            Width = 153
+            Height = 17
+            TabStop = False
+            Caption = 'Cliente Bloqueado'
+            DataField = 'BLOQUEADO'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 4
+            ValueChecked = '1'
+            ValueUnchecked = '0'
+          end
         end
       end
     end
@@ -1087,6 +1166,12 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Site'
       '  , cl.Pais_id'
       '  , cl.Valor_limite_compra'
+      '  , cl.DtCad '
+      '  , cl.Bloqueado'
+      '  , cl.Bloqueado_data'
+      '  , cl.Bloqueado_motivo'
+      '  , cl.Bloqueado_usuario'
+      '  , cl.DesBloqueado_data'
       
         '  , coalesce( cast(coalesce(coalesce(t.Tlg_sigla, t.Tlg_descrica' +
         'o) || '#39' '#39', '#39#39') || l.Log_nome as varchar(250)), cl.Ender ) as Log' +
@@ -1094,7 +1179,6 @@ inherited frmGeCliente: TfrmGeCliente
       '  , coalesce(c.Cid_nome, cl.Cidade) as Cid_nome'
       '  , coalesce(u.Est_nome, cl.Uf) as Est_nome'
       '  , p.Pais_nome'
-      '  , cl.DtCad '
       'from TBCLIENTE cl'
       '  left join TBTIPO_LOGRADOURO t on (t.Tlg_cod = cl.Tlg_tipo)'
       '  left join TBLOGRADOURO l on (l.Log_cod = cl.Log_cod)'
@@ -1269,6 +1353,30 @@ inherited frmGeCliente: TfrmGeCliente
       Required = True
       DisplayFormat = 'dd/mm/yyyy'
     end
+    object IbDtstTabelaBLOQUEADO: TSmallintField
+      FieldName = 'BLOQUEADO'
+      Origin = 'TBCLIENTE.BLOQUEADO'
+      Required = True
+    end
+    object IbDtstTabelaBLOQUEADO_DATA: TDateField
+      FieldName = 'BLOQUEADO_DATA'
+      Origin = 'TBCLIENTE.BLOQUEADO_DATA'
+    end
+    object IbDtstTabelaBLOQUEADO_MOTIVO: TMemoField
+      FieldName = 'BLOQUEADO_MOTIVO'
+      Origin = 'TBCLIENTE.BLOQUEADO_MOTIVO'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object IbDtstTabelaBLOQUEADO_USUARIO: TIBStringField
+      FieldName = 'BLOQUEADO_USUARIO'
+      Origin = 'TBCLIENTE.BLOQUEADO_USUARIO'
+      Size = 50
+    end
+    object IbDtstTabelaDESBLOQUEADO_DATA: TDateField
+      FieldName = 'DESBLOQUEADO_DATA'
+      Origin = 'TBCLIENTE.DESBLOQUEADO_DATA'
+    end
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
@@ -1299,8 +1407,12 @@ inherited frmGeCliente: TfrmGeCliente
       '  EST_COD,'
       '  NUMERO_END,'
       '  PAIS_ID,'
-      '  VALOR_LIMITE_COMPRA.'
-      '  DTCAD'
+      '  VALOR_LIMITE_COMPRA,'
+      '  DTCAD,'
+      '  BLOQUEADO,'
+      '  BLOQUEADO_DATA,'
+      '  BLOQUEADO_MOTIVO,'
+      '  BLOQUEADO_USUARIO'
       'from TBCLIENTE '
       'where'
       '  CNPJ = :CNPJ')
@@ -1315,45 +1427,59 @@ inherited frmGeCliente: TfrmGeCliente
       '  INSCMUN = :INSCMUN,'
       '  ENDER = :ENDER,'
       '  COMPLEMENTO = :COMPLEMENTO,'
+      '  NUMERO_END = :NUMERO_END,'
       '  BAIRRO = :BAIRRO,'
       '  CEP = :CEP,'
       '  CIDADE = :CIDADE,'
       '  UF = :UF,'
       '  FONE = :FONE,'
-      '  EMAIL = :EMAIL,'
-      '  SITE = :SITE,'
       '  TLG_TIPO = :TLG_TIPO,'
       '  LOG_COD = :LOG_COD,'
       '  BAI_COD = :BAI_COD,'
       '  CID_COD = :CID_COD,'
       '  EST_COD = :EST_COD,'
-      '  NUMERO_END = :NUMERO_END,'
+      '  EMAIL = :EMAIL,'
+      '  SITE = :SITE,'
       '  PAIS_ID = :PAIS_ID,'
       '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA,'
-      '  DTCAD = :DTCAD'
+      '  DTCAD = :DTCAD,'
+      '  BLOQUEADO = :BLOQUEADO,'
+      '  BLOQUEADO_DATA = :BLOQUEADO_DATA,'
+      '  BLOQUEADO_MOTIVO = :BLOQUEADO_MOTIVO,'
+      '  BLOQUEADO_USUARIO = :BLOQUEADO_USUARIO,'
+      '  LOGRADOURO = :LOGRADOURO,'
+      '  CID_NOME = :CID_NOME,'
+      '  EST_NOME = :EST_NOME,'
+      '  PAIS_NOME = :PAIS_NOME'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBCLIENTE'
+      '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, '
+      'COMPLEMENTO, '
       
-        '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, C' +
-        'OMPLEMENTO, '
+        '   NUMERO_END, BAIRRO, CEP, CIDADE, UF, FONE, TLG_TIPO, LOG_COD,' +
+        ' '
+      'BAI_COD, '
       
-        '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
-        ', BAI_COD, '
-      
-        '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA, D' +
-        'TCAD)'
+        '   CID_COD, EST_COD, EMAIL, SITE, PAIS_ID, VALOR_LIMITE_COMPRA, ' +
+        'DTCAD, '
+      '   BLOQUEADO, BLOQUEADO_DATA, BLOQUEADO_MOTIVO, '
+      'BLOQUEADO_USUARIO, LOGRADOURO, '
+      '   CID_NOME, EST_NOME, PAIS_NOME)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
-        'NDER, :COMPLEMENTO, '
+        'NDER, '
+      ':COMPLEMENTO, '
       
-        '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :EMAIL, :SITE, :TLG_TIPO,' +
-        ' :LOG_COD, '
-      
-        '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID, :VALOR_L' +
-        'IMITE_COMPRA, :DTCAD)')
+        '   :NUMERO_END, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :TLG_TIPO, :' +
+        'LOG_COD, '
+      '   :BAI_COD, :CID_COD, :EST_COD, :EMAIL, :SITE, :PAIS_ID, '
+      ':VALOR_LIMITE_COMPRA, '
+      '   :DTCAD, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MOTIVO, '
+      ':BLOQUEADO_USUARIO, '
+      '   :LOGRADOURO, :CID_NOME, :EST_NOME, :PAIS_NOME)')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
