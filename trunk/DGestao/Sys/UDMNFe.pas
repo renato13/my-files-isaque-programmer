@@ -8,7 +8,7 @@ uses
   frxExportPDF, frxExportMail, UFuncoesRede, UGeConfigurarNFeACBr,
 
   ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, ACBrNFeUtil, SHDocVw,
-  IBUpdateSQL, IBSQL;
+  IBUpdateSQL, IBSQL, frxDesgn;
 
 type
   TDMNFe = class(TDataModule)
@@ -216,6 +216,7 @@ type
   private
     { Private declarations }
     frmACBr : TfrmGeConfigurarNFeACBr;
+    fr3Designer: TfrxDesigner;
     procedure UpdateNumeroNFe(const sCNPJEmitente : String; const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
 
@@ -358,9 +359,11 @@ begin
   ConfigACBr.sbtnGetCert.OnClick := SelecionarCertificado;
   ConfigACBr.btnServico.OnClick  := TestarServico;
 
-  rvDANFE.Sistema := GetCompanyName + ' - Contato(s): ' + GetContacts; 
+  rvDANFE.Sistema := GetCompanyName + ' - Contato(s): ' + GetContacts;
 
   LerConfiguracao;
+
+  fr3Designer := TfrxDesigner.Create(Self);
 end;
 
 procedure TDMNFe.GravarConfiguracao;
