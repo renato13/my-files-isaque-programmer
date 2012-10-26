@@ -644,7 +644,7 @@ object DMNFe: TDMNFe
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40928.407150601900000000
-    ReportOptions.LastChange = 41177.660600069440000000
+    ReportOptions.LastChange = 41208.858393020830000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -694,48 +694,9 @@ object DMNFe: TDMNFe
       TopMargin = 10.000000000000000000
       BottomMargin = 10.000000000000000000
       object bndReportTitle: TfrxReportTitle
-        Height = 75.590600000000000000
+        Height = 90.401670000000000000
         Top = 18.897650000000000000
         Width = 718.110700000000000000
-        object frdEmpresaRZSOC: TfrxMemoView
-          Left = 145.740260000000000000
-          Top = 3.000000000000000000
-          Width = 411.968770000000000000
-          Height = 18.897650000000000000
-          ShowHint = False
-          DataSet = frdCliente
-          DataSetName = 'frdCliente'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          Memo.UTF8 = (
-            '[frdEmpresa."RZSOC"]')
-          ParentFont = False
-          VAlign = vaCenter
-        end
-        object frdEmpresaNMFANT: TfrxMemoView
-          Left = 145.740260000000000000
-          Top = 21.897650000000000000
-          Width = 411.968770000000000000
-          Height = 15.118120000000000000
-          ShowHint = False
-          DataSet = frdCliente
-          DataSetName = 'frdCliente'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -12
-          Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
-          Memo.UTF8 = (
-            
-              'CNPJ.: [FormatMaskText('#39'##.###.###/####-##;0;'#39',<frdEmpresa."CNPJ' +
-              '">)]')
-          ParentFont = False
-          WordWrap = False
-          VAlign = vaCenter
-        end
         object frdVendaCODCONTROL: TfrxMemoView
           Left = 559.370440000000000000
           Top = 18.897650000000000000
@@ -800,11 +761,20 @@ object DMNFe: TDMNFe
           ParentFont = False
           VAlign = vaCenter
         end
-        object Memo11: TfrxMemoView
-          Left = 145.740260000000000000
-          Top = 54.590600000000000000
-          Width = 570.709030000000000000
-          Height = 15.118120000000000000
+        object Picture1: TfrxPictureView
+          Left = 3.779530000000000000
+          Width = 139.842610000000000000
+          Height = 79.370130000000000000
+          ShowHint = False
+          DataField = 'LOGO'
+          DataSet = frdEmpresa
+          DataSetName = 'frdEmpresa'
+          HightQuality = False
+        end
+        object frdEmpresaRZSOC: TfrxMemoView
+          Left = 143.622140000000000000
+          Width = 411.968770000000000000
+          Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdCliente
           DataSetName = 'frdCliente'
@@ -813,6 +783,64 @@ object DMNFe: TDMNFe
           Font.Height = -12
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
+          Memo.UTF8 = (
+            '[frdEmpresa."RZSOC"]')
+          ParentFont = False
+          VAlign = vaCenter
+        end
+        object frdEmpresaNMFANT: TfrxMemoView
+          Left = 143.622140000000000000
+          Top = 18.897650000000000000
+          Width = 411.968770000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataSet = frdCliente
+          DataSetName = 'frdCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Lucida Console'
+          Font.Style = []
+          Memo.UTF8 = (
+            
+              'CNPJ.: [FormatMaskText('#39'##.###.###/####-##;0;'#39',<frdEmpresa."CNPJ' +
+              '">)]')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
+        object frdFone: TfrxMemoView
+          Left = 143.622140000000000000
+          Top = 34.015770000000000000
+          Width = 411.968770000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataSet = frdCliente
+          DataSetName = 'frdCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Lucida Console'
+          Font.Style = []
+          Memo.UTF8 = (
+            'FONE: [FormatMaskText('#39'(##)####.####;0;'#39',<frdEmpresa."FONE">)]')
+          ParentFont = False
+          WordWrap = False
+          VAlign = vaCenter
+        end
+        object Memo11: TfrxMemoView
+          Left = 143.622140000000000000
+          Top = 49.133890000000000000
+          Width = 411.968770000000000000
+          Height = 15.118120000000000000
+          ShowHint = False
+          DataSet = frdCliente
+          DataSetName = 'frdCliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Lucida Console'
+          Font.Style = []
           Memo.UTF8 = (
             
               '[frdEmpresa."TLG_SIGLA"] [frdEmpresa."LOG_NOME"], [frdEmpresa."N' +
@@ -824,15 +852,14 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Line1: TfrxLineView
-          Left = 3.779530000000000000
-          Top = 71.504020000000000000
+          Top = 83.149660000000000000
           Width = 718.110700000000000000
           ShowHint = False
           Frame.Typ = [ftTop]
         end
-        object frdFone: TfrxMemoView
-          Left = 145.740260000000000000
-          Top = 37.795300000000000000
+        object Memo44: TfrxMemoView
+          Left = 143.622140000000000000
+          Top = 64.252010000000000000
           Width = 411.968770000000000000
           Height = 15.118120000000000000
           ShowHint = False
@@ -840,23 +867,16 @@ object DMNFe: TDMNFe
           DataSetName = 'frdCliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -12
+          Font.Height = -11
           Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
+          Font.Style = []
           Memo.UTF8 = (
-            'FONE: [FormatMaskText('#39'(##)####.####;0;'#39',<frdEmpresa."FONE">)]')
+            
+              'Hope Page: [frdEmpresa."HOME_PAGE"] - E-mail: [frdEmpresa."EMAIL' +
+              '"]')
           ParentFont = False
+          WordWrap = False
           VAlign = vaCenter
-        end
-        object Picture1: TfrxPictureView
-          Left = 3.779530000000000000
-          Width = 139.842610000000000000
-          Height = 68.031540000000000000
-          ShowHint = False
-          DataField = 'LOGO'
-          DataSet = frdEmpresa
-          DataSetName = 'frdEmpresa'
-          HightQuality = False
         end
       end
       object bndMasterData: TfrxMasterData
