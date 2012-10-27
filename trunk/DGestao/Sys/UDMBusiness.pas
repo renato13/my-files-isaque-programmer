@@ -113,6 +113,7 @@ var
   function GetDateDB : TDateTime;
   function GetTimeDB : TDateTime;
   function GetUserApp : String;
+  function GetUserFunctionID : Integer;
   function GetLimiteDescontoUser : Currency;
   function CaixaAberto(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint; var CxAno, CxNumero, CxContaCorrente : Integer) : Boolean;
   function SetMovimentoCaixa(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
@@ -250,7 +251,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Update TBCLIENTE Set Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = user,');
-    SQL.Add('  Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
+    SQL.Add('  Desbloqueado_data = null, Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
     SQL.Add('where Bloqueado = 0');
     SQL.Add('  and ((Desbloqueado_data is null) or (Desbloqueado_data <> Current_date))');
     SQL.Add('  and Cnpj in (');
@@ -276,7 +277,12 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Update TBCLIENTE Set Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
-    SQL.Add('  Bloqueado_motivo = ' + QuotedStr(Trim(Motivo)));
+
+    if Trim(Motivo) = EmptyStr then
+      SQL.Add('  Bloqueado_motivo = Null')
+    else
+      SQL.Add('  Bloqueado_motivo = ' + QuotedStr(Trim(Motivo)));
+
     SQL.Add('where Cnpj = ' + QuotedStr(CNPJ));
     ExecSQL;
 
@@ -783,6 +789,12 @@ function GetUserApp : String;
 begin
   with DMBusiness, ibdtstUsers do
     Result := UpperCase( Trim(ibdtstUsersNOME.AsString) );
+end;
+
+function GetUserFunctionID : Integer;
+begin
+  with DMBusiness, ibdtstUsers do
+    Result := ibdtstUsersCODFUNCAO.AsInteger;
 end;
 
 function GetLimiteDescontoUser : Currency;

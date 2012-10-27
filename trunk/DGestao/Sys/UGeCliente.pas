@@ -125,6 +125,8 @@ type
     dbmMotivoBloqueio: TDBMemo;
     dbcBloqueio: TDBCheckBox;
     IbDtstTabelaDESBLOQUEADO_DATA: TDateField;
+    Bevel10: TBevel;
+    BtBtnDesbloquear: TBitBtn;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -141,6 +143,7 @@ type
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BtBtnDesbloquearClick(Sender: TObject);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -348,7 +351,7 @@ begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
   begin
     pgcMaisDados.ActivePageIndex := 0;
-    
+
     if ( IbDtstTabelaPESSOA_FISICA.AsInteger = 1 ) then
       IbDtstTabelaCNPJ.EditMask := '999.999.999-99;0; '
     else
@@ -356,12 +359,16 @@ begin
   end
   else
     IbDtstTabelaCNPJ.EditMask := '';
+
+  BtBtnDesbloquear.Enabled := (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
 end;
 
 procedure TfrmGeCliente.DtSrcTabelaDataChange(Sender: TObject;
   Field: TField);
 begin
   inherited;
+  BtBtnDesbloquear.Enabled := (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
+
   if ( Field = IbDtstTabela.FieldByName('CNPJ') ) then
     GetComprasAbertas( IbDtstTabela.FieldByName('CNPJ').AsString );
 
@@ -471,6 +478,31 @@ procedure TfrmGeCliente.FormClose(Sender: TObject;
 begin
   inherited;
   Action := caFree;
+end;
+
+procedure TfrmGeCliente.BtBtnDesbloquearClick(Sender: TObject);
+var
+  sCNPJ ,
+  sMotivo : String;
+begin
+  if not (GetUserFunctionID in [FUNCTION_USER_ID_DIRETORIA, FUNCTION_USER_ID_GERENTE_ADM, FUNCTION_USER_ID_GERENTE_VND,
+    FUNCTION_USER_ID_GERENTE_FIN, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2]) then
+  begin
+    ShowWarning('Usuário sem permisssão para execução desta rotina!');
+    Exit;
+  end;
+
+  if ( IbDtstTabelaBLOQUEADO.AsInteger = 1 ) then
+    if InputQuery('Desbloquear cliente:', 'Informe o motivo do desbloqueio:', sMotivo) then
+      if Trim(sMotivo) <> EmptyStr then
+      begin
+        sCNPJ := IbDtstTabelaCNPJ.AsString;
+        DesbloquearCliente(sCNPJ, GetUserApp + ' -> ' + AnsiUpperCase(sMotivo));
+
+        IbDtstTabela.Close;
+        IbDtstTabela.Open;
+        IbDtstTabela.Locate('CNPJ', sCNPJ, []);
+      end;
 end;
 
 initialization
