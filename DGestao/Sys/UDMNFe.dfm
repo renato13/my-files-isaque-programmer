@@ -644,7 +644,7 @@ object DMNFe: TDMNFe
     PrintOptions.Printer = 'Padr'#227'o'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 40928.407150601900000000
-    ReportOptions.LastChange = 41208.884424664350000000
+    ReportOptions.LastChange = 41209.028739675920000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       ''
@@ -780,7 +780,7 @@ object DMNFe: TDMNFe
           DataSetName = 'frdCliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -12
+          Font.Height = -13
           Font.Name = 'Lucida Console'
           Font.Style = [fsBold]
           Memo.UTF8 = (
@@ -871,7 +871,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Lucida Console'
           Font.Style = []
           Memo.UTF8 = (
-            'Hope Page: [frdEmpresa."HOME_PAGE"] E-mail: [frdEmpresa."EMAIL"]')
+            'Site / E-mail: [frdEmpresa."HOME_PAGE"] / [frdEmpresa."EMAIL"]')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
