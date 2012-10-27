@@ -1,41 +1,35 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas',0,1,326,20,330,1,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas',0,1,357,1,362,1,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,469,1,473,1,0
-File_3=SourceModule,'C:\Delphi\MyLib\FastReport\FastReport 4\LibD7\frxClass.pas',0,1,11711,121,11720,0,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,256,16,304,1,0
-File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGePromocao.pas',0,1,116,3,144,0,0
-File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UPesq.pas',0,1,40,31,85,1,0
-File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoLogradouro.pas',0,1,32,49,61,0,0
-File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeLogradouro.pas',0,1,122,99,124,0,0
-File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBairro.pas',0,1,115,77,129,0,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas',0,1,1326,1,1369,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeCliente.pas',0,1,477,28,488,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeFornecedor.pas',0,1,326,20,330,1,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeEmpresa.pas',0,1,357,1,362,1,0
+File_4=SourceModule,'C:\Delphi\MyLib\FastReport\FastReport 4\LibD7\frxClass.pas',0,1,11711,121,11720,0,0
+File_5=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeContasAReceber.pas',0,1,256,16,304,1,0
+File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGePromocao.pas',0,1,116,3,144,0,0
+File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UPesq.pas',0,1,40,31,85,1,0
+File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeTipoLogradouro.pas',0,1,32,49,61,0,0
+File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeLogradouro.pas',0,1,122,99,124,0,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UConstantesDGE.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UConstantesDGE.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module6=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
+Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
 Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
-Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
-Module9=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
-Module10=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Count=11
+Module8=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module9=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
+Count=10
 EditWindowCount=1
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -45,17 +39,22 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas]
 ModuleType=SourceModule
-FormState=1
+FormState=0
 FormOnTop=0
 
-[C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -65,12 +64,7 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas]
+[C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -84,16 +78,16 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
-FormState=0
-FormOnTop=0
-
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
+FormState=0
+FormOnTop=0
+
 [EditWindow0]
-ViewCount=11
+ViewCount=10
 CurrentView=3
 View0=0
 View1=1
@@ -105,7 +99,6 @@ View6=6
 View7=7
 View8=8
 View9=9
-View10=10
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -150,16 +143,16 @@ LeftCol=1
 
 [View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=33
-CursorY=257
-TopLine=247
+CursorX=38
+CursorY=130
+TopLine=102
 LeftCol=1
 
 [View4]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=91
-CursorY=1311
-TopLine=1299
+CursorX=95
+CursorY=370
+TopLine=354
 LeftCol=1
 
 [View5]
@@ -178,8 +171,8 @@ LeftCol=1
 
 [View7]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
-CursorX=92
-CursorY=159
+CursorX=1
+CursorY=169
 TopLine=123
 LeftCol=1
 
@@ -192,16 +185,9 @@ LeftCol=1
 
 [View9]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-CursorX=3
-CursorY=177
-TopLine=203
-LeftCol=1
-
-[View10]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=10
-CursorY=1115
-TopLine=1113
+CursorX=48
+CursorY=401
+TopLine=375
 LeftCol=1
 
 [Watches]
@@ -220,9 +206,9 @@ State=2
 Left=0
 Top=0
 Width=1920
-Height=144
-MaxLeft=-8
-MaxTop=-8
+Height=122
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -272,10 +258,10 @@ ClientHeight=849
 TBDockHeight=522
 LRDockWidth=190
 Dockable=1
-SplitPos=123
+SplitPos=160
 ArrangeBy=Name
-SelectedItem=Connected
-ExpandedItems=
+SelectedItem=Name
+ExpandedItems=Restrictions
 HiddenCategories=
 
 [ObjectTree]

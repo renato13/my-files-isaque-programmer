@@ -1358,31 +1358,14 @@ procedure TfrmGeVenda.FormActivate(Sender: TObject);
 begin
   inherited;
   HabilitarDesabilitar_Btns;
-  
-  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
-// 1: EvUAfrmPrinc.UserID := 1 ;  //Diretoria
-    2: begin
-    // EvUAfrmPrinc.UserID := 4;   // Gerente de Vendas
-         btbtnFinalizar.Visible   := False;
-         btbtnGerarNFe.Visible    := False;
-         btbtnCancelarVND.Visible := False;
-       end;
-// 3: EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
-    4: begin
-    //   EvUAfrmPrinc.UserID := 4;   // Vendedor
-         btbtnFinalizar.Visible   := false;
-         btbtnGerarNFe.Visible    := False;
-         btbtnCancelarVND.Visible := False;
-       end;
-//   5: EvUAfrmPrinc.UserID := 5;   // Gerente ADM
-//   6: EvUAfrmPrinc.UserID := 6;   // Caixa
-//   7: EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
-//   8: EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
-//   9: EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
-//   10: EvUAfrmPrinc.UserID := 10;   // Estoquista
- //  11: EvUAfrmPrinc.UserID := 11;   // TI
-//   12: EvUAfrmPrinc.UserID := 12;   // Masterdados-Supervisor
-// else ShowMessage('Falta cruzar nova função com UserID!');
+
+  case GetUserFunctionID of
+    FUNCTION_USER_ID_GERENTE_ADM, FUNCTION_USER_ID_GERENTE_FIN:
+      begin
+        btbtnFinalizar.Visible   := False;
+        btbtnGerarNFe.Visible    := False;
+        btbtnCancelarVND.Visible := False;
+      end;
   end
 end;
 
