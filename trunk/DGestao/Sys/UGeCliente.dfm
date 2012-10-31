@@ -1,6 +1,6 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 384
-  Top = 148
+  Left = 246
+  Top = 141
   Width = 903
   Height = 574
   ActiveControl = dbCodigo
@@ -23,8 +23,15 @@ inherited frmGeCliente: TfrmGeCliente
     inherited bvlToolExpandir: TBevel
       Width = 81
     end
-    object BtBtnDesbloquear: TBitBtn [12]
+    inherited btbtnSelecionar: TBitBtn
       Left = 622
+      TabOrder = 8
+    end
+    inherited bvlTool4: TBevel
+      Left = 742
+    end
+    object BtBtnDesbloquear: TBitBtn
+      Left = 746
       Top = 2
       Width = 120
       Height = 31
@@ -88,19 +95,12 @@ inherited frmGeCliente: TfrmGeCliente
         C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0}
       NumGlyphs = 2
     end
-    object Bevel10: TBevel [13]
-      Left = 742
+    object Bevel10: TBevel
+      Left = 866
       Top = 2
       Width = 4
       Height = 31
       Shape = bsSpacer
-    end
-    inherited btbtnSelecionar: TBitBtn
-      Left = 746
-      TabOrder = 8
-    end
-    inherited bvlTool4: TBevel
-      Left = 866
     end
   end
   inherited pgcGuias: TPageControl
