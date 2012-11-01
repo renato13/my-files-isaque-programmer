@@ -625,3 +625,55 @@ ALTER TABLE TBCLIENTE
     ADD DESBLOQUEADO_DATA DMN_DATE;
 COMMENT ON COLUMN TBCLIENTE.DESBLOQUEADO_DATA IS
 'Data de desbloqueio.';
+
+
+ALTER TABLE TBFORMPAGTO
+    ADD DEBITAR_LIMITE_CLIENTE DMN_LOGICO DEFAULT 1;
+COMMENT ON COLUMN TBFORMPAGTO.DEBITAR_LIMITE_CLIENTE IS
+'Forma de Pagamento DECREMENTA Limite de Credito do Cliente:
+0 - Nao
+1 - Sim';
+
+/*------ SYSDBA 30/10/2012 18:07:05 --------*/
+
+Update TBFORMPAGTO x Set x.Debitar_limite_cliente = 1;
+COMMIT WORK;
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_LIMITE_DISPONIVEL_CLIENTE (
+    CPF_CNPJ varchar(18))
+returns (
+    VALOR_LIMITE numeric(15,2),
+    VALOR_COMPRAS_ABERTAS numeric(15,2),
+    VALOR_LIMITE_DISPONIVEL numeric(15,2))
+as
+begin
+  Select
+      coalesce(c.Valor_limite_compra, 0)
+    , sum( coalesce(r.Valorrec, 0) - coalesce(r.Valorrectot, 0) )
+  from TBCLIENTE c
+    left join TBCONTREC r on ( (r.Cnpj = c.Cnpj and r.Baixado = 0 and r.Parcela > 0) and ((r.Status is null) or (r.Situacao = 1)) )
+    left join TBFORMPAGTO f on (f.Cod = r.Forma_pagto and f.Debitar_limite_cliente = 1)
+  where c.Cnpj = :Cpf_cnpj
+  Group by 1
+  into
+      Valor_limite
+    , Valor_compras_abertas;
+
+  Valor_limite            = coalesce(:Valor_limite, 0);
+  Valor_limite_disponivel = 0;
+
+  if ( coalesce(:Valor_compras_abertas, 0) <= 0 ) then
+    Valor_compras_abertas = 0;
+
+  if ( :Valor_limite > 0 ) then
+    Valor_limite_disponivel = :Valor_limite - :Valor_compras_abertas;
+
+  suspend;
+end
+^
+
+SET TERM ; ^
+
