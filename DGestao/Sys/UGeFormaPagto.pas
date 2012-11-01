@@ -23,6 +23,8 @@ type
     dtsContaCorrente: TDataSource;
     IbDtstTabelaCONTA_CORRENTE: TIntegerField;
     IbDtstTabelaLkp_ContaCorrente: TStringField;
+    dbcDecrementarLimite: TDBCheckBox;
+    IbDtstTabelaDEBITAR_LIMITE_CLIENTE: TSmallintField;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
   private
@@ -78,6 +80,9 @@ begin
   NomeTabela     := 'TBFORMPAGTO';
   CampoCodigo    := 'COD';
   CampoDescricao := 'DESCRI';
+
+  dbcDecrementarLimite.Enabled := (GetUserFunctionID in [FUNCTION_USER_ID_DIRETORIA, FUNCTION_USER_ID_GERENTE_ADM, FUNCTION_USER_ID_GERENTE_VND,
+    FUNCTION_USER_ID_GERENTE_FIN, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2]);
 end;
 
 procedure TfrmGeFormaPagto.IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -85,6 +90,7 @@ begin
   inherited;
   IbDtstTabelaCOD.Value       := GetNextID(NomeTabela, CampoCodigo);
   IbDtstTabelaACRESCIMO.Value := 0;
+  IbDtstTabelaDEBITAR_LIMITE_CLIENTE.Value := 1;
 end;
 
 end.

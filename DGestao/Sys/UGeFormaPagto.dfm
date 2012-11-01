@@ -1,11 +1,13 @@
 inherited frmGeFormaPagto: TfrmGeFormaPagto
   Left = 553
   Top = 269
+  ActiveControl = dbCodigo
   Caption = 'Tabela de Formas de Pagamento'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <
@@ -53,10 +55,10 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
     end
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
-        Top = 81
+        Top = 105
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Height = 81
+        Height = 105
         object lblNome: TLabel [1]
           Left = 88
           Top = 24
@@ -134,6 +136,18 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
           ParentFont = False
           TabOrder = 3
         end
+        object dbcDecrementarLimite: TDBCheckBox
+          Left = 16
+          Top = 72
+          Width = 425
+          Height = 17
+          Caption = 'Forma de Pagamento DECREMENTA Limite de Cr'#233'dito do Cliente'
+          DataField = 'DEBITAR_LIMITE_CLIENTE'
+          DataSource = DtSrcTabela
+          TabOrder = 4
+          ValueChecked = '1'
+          ValueUnchecked = '0'
+        end
       end
     end
   end
@@ -145,6 +159,7 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       '  , p.Descri'
       '  , p.Acrescimo'
       '  , p.Conta_corrente'
+      '  , p.Debitar_limite_cliente'
       'from TBFORMPAGTO p')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_GRUPOPRODUTO_COD'
@@ -171,6 +186,11 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       FieldName = 'CONTA_CORRENTE'
       Origin = 'TBFORMPAGTO.CONTA_CORRENTE'
     end
+    object IbDtstTabelaDEBITAR_LIMITE_CLIENTE: TSmallintField
+      FieldName = 'DEBITAR_LIMITE_CLIENTE'
+      Origin = 'TBFORMPAGTO.DEBITAR_LIMITE_CLIENTE'
+      Required = True
+    end
     object IbDtstTabelaLkp_ContaCorrente: TStringField
       DisplayLabel = 'Conta Corrente'
       FieldKind = fkLookup
@@ -190,7 +210,8 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       '  COD,'
       '  DESCRI,'
       '  ACRESCIMO,'
-      '  CONTA_CORRENTE'
+      '  CONTA_CORRENTE,'
+      '  DEBITAR_LIMITE_CLIENTE'
       'from TBFORMPAGTO '
       'where'
       '  COD = :COD')
@@ -200,14 +221,19 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
       '  COD = :COD,'
       '  DESCRI = :DESCRI,'
       '  ACRESCIMO = :ACRESCIMO,'
-      '  CONTA_CORRENTE = :CONTA_CORRENTE'
+      '  CONTA_CORRENTE = :CONTA_CORRENTE,'
+      '  DEBITAR_LIMITE_CLIENTE = :DEBITAR_LIMITE_CLIENTE'
       'where'
       '  COD = :OLD_COD')
     InsertSQL.Strings = (
       'insert into TBFORMPAGTO'
-      '  (COD, DESCRI, ACRESCIMO, CONTA_CORRENTE)'
+      
+        '  (COD, DESCRI, ACRESCIMO, CONTA_CORRENTE, DEBITAR_LIMITE_CLIENT' +
+        'E)'
       'values'
-      '  (:COD, :DESCRI, :ACRESCIMO, :CONTA_CORRENTE)')
+      
+        '  (:COD, :DESCRI, :ACRESCIMO, :CONTA_CORRENTE, :DEBITAR_LIMITE_C' +
+        'LIENTE)')
     DeleteSQL.Strings = (
       'delete from TBFORMPAGTO'
       'where'
