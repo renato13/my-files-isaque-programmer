@@ -62,7 +62,11 @@ begin
 
   ProductName.Caption     := GetInternalName;
   FileDescription.Caption := GetFileDescription;
+  {$IFDEF DGE}
   Version.Caption     := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
+  {$ELSE}
+  Version.Caption     := 'Versão ' + GetExeVersion;
+  {$ENDIF}
   Copyright.Caption   := GetCopyright;
   Comments.Caption    := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
 end;
