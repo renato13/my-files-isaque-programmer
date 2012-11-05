@@ -1,7 +1,6 @@
 inherited frmGeFabricante: TfrmGeFabricante
   Width = 767
   Height = 495
-  ActiveControl = dbCodigo
   Caption = 'Tabela de Fabricantes'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -21,7 +20,6 @@ inherited frmGeFabricante: TfrmGeFabricante
   inherited pgcGuias: TPageControl
     Width = 751
     Height = 414
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 319
@@ -115,11 +113,10 @@ inherited frmGeFabricante: TfrmGeFabricante
       'Select'
       '    f.Cod'
       '  , f.Nome'
-      'from TBFABRICANTE f'
-      'order by'
-      '    f.Nome')
+      'from TBFABRICANTE f')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_FABRICANTE_ID'
+    Active = True
     object IbDtstTabelaCOD: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'COD'

@@ -1,6 +1,6 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 544
-  Top = 224
+  Left = 403
+  Top = 134
   Width = 860
   Height = 536
   ActiveControl = dbCodigo
