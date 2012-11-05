@@ -1593,7 +1593,7 @@ begin
       MovNumero := qryTitulosNUMLANC.AsInteger;
       DataPagto := qryTitulosDTREC.AsDateTime;
 
-      if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
+      if ShowConfirm('Confirma a remoção do(s) registro(s) de baixa(s) do título selecionado?') then
       begin
 
         with DMBusiness, qryBusca do
@@ -1625,7 +1625,7 @@ begin
         if ( CxContaCorrente > 0 ) then
           GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
 
-        ShowInformation('Registro de baixa de título removido com sucesso.');  
+        ShowInformation('Registro(s) de baixa(s) de título removido(s) com sucesso.');  
       end;
     end;
   end;
