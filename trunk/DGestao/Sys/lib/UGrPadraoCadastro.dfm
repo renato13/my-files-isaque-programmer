@@ -514,6 +514,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
+    OnUpdateError = IbDtstTabelaUpdateError
     BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
