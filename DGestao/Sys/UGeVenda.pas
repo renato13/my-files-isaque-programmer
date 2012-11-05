@@ -1337,51 +1337,7 @@ begin
   if ( PossuiTitulosPagos(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
   begin
     ShowWarning('A venda possui título(s) já baixado(s).' + #13 + 'Favor providenciar a exclusão da(s) baixa(s) para que a venda possa ser cancelada!');
-//
-//    MovAno    := IbDtstTabelaANOLANC.AsInteger;
-//    MovNumero := IbDtstTabelaNUMLANC.AsInteger;
-//    DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
-//
-//    if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
-//    begin
-//
-//      with DMBusiness, qryBusca do
-//      begin
-//        Close;
-//        SQL.Clear;
-//        SQL.Add('Delete from TBCONTREC_BAIXA');
-//        SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
-//        SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
-//        ExecSQL;
-//
-//        CommitTransaction;
-//      end;
-//
-//      with DMBusiness, qryBusca do
-//      begin
-//        Close;
-//        SQL.Clear;
-//        SQL.Add('Update TBCONTREC Set Baixado = 0, Historic = '''', Dtrec = null, Docbaix = null, Tippag = null, Valorrectot = null');
-//        SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
-//        SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
-//        ExecSQL;
-//
-//        CommitTransaction;
-//      end;
-//
-//      IbDtstTabela.Close;
-//      IbDtstTabela.Open;
-//
-//      IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
-//
-//      AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
-//
-//      if ( CxContaCorrente > 0 ) then
-//        GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
-//
-//    end
-//    else
-      Exit;
+    Exit;
   end;
 
   if ( CancelarVND(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
@@ -1406,7 +1362,7 @@ begin
   HabilitarDesabilitar_Btns;
 
   case GetUserFunctionID of
-    FUNCTION_USER_ID_GERENTE_ADM, FUNCTION_USER_ID_GERENTE_FIN:
+    FUNCTION_USER_ID_GERENTE_ADM, FUNCTION_USER_ID_GERENTE_VND, FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR:
       begin
         btbtnFinalizar.Visible   := False;
         btbtnGerarNFe.Visible    := False;
