@@ -1624,6 +1624,8 @@ begin
 
         if ( CxContaCorrente > 0 ) then
           GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+
+        ShowInformation('Registro de baixa de título removido com sucesso.');  
       end;
     end;
   end;
