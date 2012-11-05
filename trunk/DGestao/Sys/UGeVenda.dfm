@@ -1814,7 +1814,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 464
         Width = 1091
         Height = 150
-        ActivePage = tbsRecebimento
+        ActivePage = tbsITitulos
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -2426,6 +2426,11 @@ inherited frmGeVenda: TfrmGeVenda
             Top = 0
             Width = 1005
             Height = 122
+            Hint = 
+              'Para a exclus'#227'o de baixas basta pressionar CTRL + DELETE'#13#10#13#10'Obse' +
+              'rva'#231#227'o:'#13#10'======================='#13#10'Apenas usu'#225'rios nas fun'#231#245'es Di' +
+              'retoria, Gerente Financeiro, Gerente ADM'#13#10'e/ou Masterdados podem' +
+              ' excluir registros de pagamentos.'
             TabStop = False
             Align = alClient
             DataSource = dtsTitulos
@@ -2436,7 +2441,9 @@ inherited frmGeVenda: TfrmGeVenda
             Font.Style = []
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
             ParentFont = False
+            ParentShowHint = False
             ReadOnly = True
+            ShowHint = True
             TabOrder = 1
             TitleFont.Charset = ANSI_CHARSET
             TitleFont.Color = clBlack
@@ -2444,6 +2451,7 @@ inherited frmGeVenda: TfrmGeVenda
             TitleFont.Name = 'Tahoma'
             TitleFont.Style = [fsBold]
             OnDrawColumnCell = dbgDadosDrawColumnCell
+            OnKeyDown = dbgTitulosKeyDown
             Columns = <
               item
                 Expanded = False

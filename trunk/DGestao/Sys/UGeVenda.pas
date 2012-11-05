@@ -297,6 +297,8 @@ type
     procedure btnGerarBoletoClick(Sender: TObject);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgTitulosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -1335,7 +1337,51 @@ begin
   if ( PossuiTitulosPagos(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
   begin
     ShowWarning('A venda possui título(s) já baixado(s).' + #13 + 'Favor providenciar a exclusão da(s) baixa(s) para que a venda possa ser cancelada!');
-    Exit;
+//
+//    MovAno    := IbDtstTabelaANOLANC.AsInteger;
+//    MovNumero := IbDtstTabelaNUMLANC.AsInteger;
+//    DataPagto := cdsPagamentosDATA_PAGTO.AsDateTime;
+//
+//    if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
+//    begin
+//
+//      with DMBusiness, qryBusca do
+//      begin
+//        Close;
+//        SQL.Clear;
+//        SQL.Add('Delete from TBCONTREC_BAIXA');
+//        SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+//        SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+//        ExecSQL;
+//
+//        CommitTransaction;
+//      end;
+//
+//      with DMBusiness, qryBusca do
+//      begin
+//        Close;
+//        SQL.Clear;
+//        SQL.Add('Update TBCONTREC Set Baixado = 0, Historic = '''', Dtrec = null, Docbaix = null, Tippag = null, Valorrectot = null');
+//        SQL.Add('where ANOLANC = ' + cdsPagamentosANOLANC.AsString);
+//        SQL.Add('  and NUMLANC = ' + cdsPagamentosNUMLANC.AsString);
+//        ExecSQL;
+//
+//        CommitTransaction;
+//      end;
+//
+//      IbDtstTabela.Close;
+//      IbDtstTabela.Open;
+//
+//      IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
+//
+//      AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
+//
+//      if ( CxContaCorrente > 0 ) then
+//        GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+//
+//    end
+//    else
+      Exit;
   end;
 
   if ( CancelarVND(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
@@ -1548,6 +1594,83 @@ begin
   end;
   
   Result := bReturn;
+end;
+
+procedure TfrmGeVenda.dbgTitulosKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  CxAno    ,
+  CxNumero ,
+  CxContaCorrente,
+  MovAno    ,
+  MovNumero : Integer;
+  DataPagto : TDateTime;
+begin
+  if (Shift = [ssCtrl]) and (Key = 46) Then
+  begin
+    if ( UpperCase(Trim(qryTitulosBAIXADO_.AsString)) <> 'X' ) then
+      Exit;
+      
+    // Diretoria, Gerente Financeiro, Gerente ADM, Masterdados
+
+    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [
+        FUNCTION_USER_ID_DIRETORIA
+      , FUNCTION_USER_ID_GERENTE_ADM
+      , FUNCTION_USER_ID_GERENTE_FIN
+      , FUNCTION_USER_ID_SYSTEM_ADM])) then Exit;
+
+    if ( not qryTitulos.IsEmpty ) then
+    begin
+      CxAno    := 0;
+      CxNumero := 0;
+      CxContaCorrente := 0;
+
+      if ( tblFormaPagto.Locate('cod', IbDtstTabelaFORMAPAGTO_COD.AsInteger, []) ) then
+        if ( tblFormaPagto.FieldByName('Conta_corrente').AsInteger > 0 ) then
+          if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+          begin
+            ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+            Exit;
+          end;
+
+      MovAno    := qryTitulosANOLANC.AsInteger;
+      MovNumero := qryTitulosNUMLANC.AsInteger;
+      DataPagto := qryTitulosDTREC.AsDateTime;
+
+      if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
+      begin
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Delete from TBCONTREC_BAIXA');
+          SQL.Add('where ANOLANC = ' + qryTitulosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + qryTitulosNUMLANC.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Update TBCONTREC Set Baixado = 0, Historic = '''', Dtrec = null, Docbaix = null, Tippag = null, Valorrectot = null');
+          SQL.Add('where ANOLANC = ' + qryTitulosANOLANC.AsString);
+          SQL.Add('  and NUMLANC = ' + qryTitulosNUMLANC.AsString);
+          ExecSQL;
+
+          CommitTransaction;
+        end;
+
+        AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+        if ( CxContaCorrente > 0 ) then
+          GerarSaldoContaCorrente(CxContaCorrente, DataPagto);
+      end;
+    end;
+  end;
 end;
 
 end.

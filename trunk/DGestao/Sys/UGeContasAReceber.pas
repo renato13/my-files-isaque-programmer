@@ -416,8 +416,11 @@ begin
   begin
     // Diretoria, Gerente Financeiro, Gerente ADM, Masterdados
 
-    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
-      Exit;
+    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [
+        FUNCTION_USER_ID_DIRETORIA
+      , FUNCTION_USER_ID_GERENTE_ADM
+      , FUNCTION_USER_ID_GERENTE_FIN
+      , FUNCTION_USER_ID_SYSTEM_ADM])) then Exit;
 
     if ( not cdsPagamentos.IsEmpty ) then
     begin
