@@ -67,6 +67,8 @@ type
     procedure btbtnSelecionarClick(Sender: TObject);
     procedure dbgDadosKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure IbDtstTabelaUpdateError(DataSet: TDataSet; E: EDatabaseError;
+      UpdateKind: TUpdateKind; var UpdateAction: TIBUpdateAction);
   private
     { Private declarations }
     fDisplayFormat  ,
@@ -554,6 +556,22 @@ begin
       if ( Trim(IbDtstTabela.Fields[I].AsString) = EmptyStr ) then
         IbDtstTabela.Fields[I].Clear;
         
+end;
+
+procedure TfrmGrPadraoCadastro.IbDtstTabelaUpdateError(DataSet: TDataSet;
+  E: EDatabaseError; UpdateKind: TUpdateKind;
+  var UpdateAction: TIBUpdateAction);
+begin
+  Case UpdateKind of
+    ukModify:
+      ShowError('Erro ao tentar gravar atualização do registro.' + #13#13 + E.Message);
+
+    ukInsert:
+      ShowError('Erro ao tentar gravar novo registro.' + #13#13 + E.Message);
+      
+    ukDelete:
+      ShowError('Erro ao tentar gravar excluir registro.' + #13#13 + E.Message);
+  end;
 end;
 
 end.
