@@ -1,8 +1,8 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 246
-  Top = 141
-  Width = 903
-  Height = 574
+  Left = 544
+  Top = 224
+  Width = 860
+  Height = 536
   ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
@@ -10,28 +10,28 @@ inherited frmGeCliente: TfrmGeCliente
   PixelsPerInch = 96
   TextHeight = 13
   inherited Bevel1: TBevel
-    Top = 532
-    Width = 887
+    Top = 494
+    Width = 844
   end
   inherited Bevel3: TBevel
-    Top = 493
-    Width = 887
+    Top = 455
+    Width = 844
   end
   inherited tlbBotoes: TToolBar
-    Top = 497
-    Width = 887
+    Top = 459
+    Width = 844
     inherited bvlToolExpandir: TBevel
-      Width = 81
+      Width = 28
     end
     inherited btbtnSelecionar: TBitBtn
-      Left = 622
+      Left = 569
       TabOrder = 8
     end
     inherited bvlTool4: TBevel
-      Left = 742
+      Left = 689
     end
     object BtBtnDesbloquear: TBitBtn
-      Left = 746
+      Left = 693
       Top = 2
       Width = 120
       Height = 31
@@ -96,7 +96,7 @@ inherited frmGeCliente: TfrmGeCliente
       NumGlyphs = 2
     end
     object Bevel10: TBevel
-      Left = 866
+      Left = 813
       Top = 2
       Width = 4
       Height = 31
@@ -104,18 +104,18 @@ inherited frmGeCliente: TfrmGeCliente
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 887
-    Height = 493
+    Width = 844
+    Height = 455
     ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 398
-        Width = 879
+        Top = 360
+        Width = 836
       end
       inherited dbgDados: TDBGrid
-        Width = 879
-        Height = 398
+        Width = 836
+        Height = 360
         Columns = <
           item
             Expanded = False
@@ -125,35 +125,35 @@ inherited frmGeCliente: TfrmGeCliente
           item
             Expanded = False
             FieldName = 'NOME'
-            Width = 250
+            Width = 300
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'CNPJ'
-            Width = 140
+            Width = 150
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'INSCEST'
             Title.Caption = 'RG / Ins. Estadual'
-            Width = 120
+            Width = 130
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'INSCMUN'
             Title.Caption = 'Inscri'#231#227'o Municipal'
-            Width = 120
+            Width = 130
             Visible = True
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 402
-        Width = 879
+        Top = 364
+        Width = 836
         object Bevel6: TBevel [0]
-          Left = 600
+          Left = 557
           Top = 4
           Width = 4
           Height = 54
@@ -161,7 +161,7 @@ inherited frmGeCliente: TfrmGeCliente
           Shape = bsSpacer
         end
         inherited grpBxFiltro: TGroupBox
-          Left = 604
+          Left = 561
           Width = 271
           DesignSize = (
             271
@@ -181,7 +181,7 @@ inherited frmGeCliente: TfrmGeCliente
         object GrpBxBloqueio: TGroupBox
           Left = 4
           Top = 4
-          Width = 596
+          Width = 553
           Height = 54
           Align = alClient
           Font.Charset = ANSI_CHARSET
@@ -192,7 +192,7 @@ inherited frmGeCliente: TfrmGeCliente
           ParentFont = False
           TabOrder = 1
           object Bevel7: TBevel
-            Left = 590
+            Left = 547
             Top = 15
             Width = 4
             Height = 37
@@ -210,7 +210,7 @@ inherited frmGeCliente: TfrmGeCliente
           object dbmMotivoBloqueio: TDBMemo
             Left = 6
             Top = 15
-            Width = 584
+            Width = 541
             Height = 37
             TabStop = False
             Align = alClient
@@ -230,18 +230,18 @@ inherited frmGeCliente: TfrmGeCliente
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 113
-        Width = 879
+        Width = 836
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 233
-        Width = 879
+        Width = 836
         Height = 4
         Align = alTop
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 879
+        Width = 836
         Height = 113
         object lblCNPJ: TLabel [1]
           Left = 192
@@ -374,6 +374,7 @@ inherited frmGeCliente: TfrmGeCliente
           Top = 40
           Width = 89
           Height = 21
+          TabStop = False
           Color = clMoneyGreen
           DataField = 'DTCAD'
           DataSource = DtSrcTabela
@@ -390,13 +391,13 @@ inherited frmGeCliente: TfrmGeCliente
       object GroupBox1: TGroupBox
         Left = 0
         Top = 117
-        Width = 879
+        Width = 836
         Height = 116
         Align = alTop
         Caption = 'Endere'#231'o'
         TabOrder = 1
         object lblCidade: TLabel
-          Left = 160
+          Left = 176
           Top = 24
           Width = 37
           Height = 13
@@ -410,7 +411,7 @@ inherited frmGeCliente: TfrmGeCliente
           Caption = 'Estado:'
         end
         object lblBairro: TLabel
-          Left = 416
+          Left = 456
           Top = 24
           Width = 32
           Height = 13
@@ -424,7 +425,7 @@ inherited frmGeCliente: TfrmGeCliente
           Caption = 'Logradouro:'
         end
         object lblCEP: TLabel
-          Left = 616
+          Left = 696
           Top = 24
           Width = 23
           Height = 13
@@ -432,7 +433,7 @@ inherited frmGeCliente: TfrmGeCliente
           FocusControl = dbCEP
         end
         object lblNumero: TLabel
-          Left = 416
+          Left = 456
           Top = 64
           Width = 41
           Height = 13
@@ -440,7 +441,7 @@ inherited frmGeCliente: TfrmGeCliente
           FocusControl = dbNumero
         end
         object lblComplemento: TLabel
-          Left = 488
+          Left = 528
           Top = 64
           Width = 69
           Height = 13
@@ -448,16 +449,16 @@ inherited frmGeCliente: TfrmGeCliente
           FocusControl = dbComplemento
         end
         object lblPais: TLabel
-          Left = 616
+          Left = 696
           Top = 64
           Width = 23
           Height = 13
           Caption = 'Pa'#237's:'
         end
         object dbCidade: TRxDBComboEdit
-          Left = 160
+          Left = 176
           Top = 40
-          Width = 249
+          Width = 273
           Height = 21
           ButtonHint = 'Pesquisar Cidade (Ctrl+P)'
           CharCase = ecUpperCase
@@ -532,7 +533,7 @@ inherited frmGeCliente: TfrmGeCliente
         object dbEstado: TRxDBComboEdit
           Left = 16
           Top = 40
-          Width = 137
+          Width = 153
           Height = 21
           ButtonHint = 'Pesquisar Estado (Ctrl+P)'
           CharCase = ecUpperCase
@@ -605,9 +606,9 @@ inherited frmGeCliente: TfrmGeCliente
           OnButtonClick = dbEstadoButtonClick
         end
         object dbBairro: TRxDBComboEdit
-          Left = 416
+          Left = 456
           Top = 40
-          Width = 193
+          Width = 233
           Height = 21
           ButtonHint = 'Pesquisar Bairro (Ctrl+P)'
           CharCase = ecUpperCase
@@ -682,7 +683,7 @@ inherited frmGeCliente: TfrmGeCliente
         object dbLogradouro: TRxDBComboEdit
           Left = 16
           Top = 80
-          Width = 393
+          Width = 433
           Height = 21
           ButtonHint = 'Pesquisar Logradouro (Ctrl+P)'
           CharCase = ecUpperCase
@@ -755,9 +756,9 @@ inherited frmGeCliente: TfrmGeCliente
           OnButtonClick = dbLogradouroButtonClick
         end
         object dbCEP: TDBEdit
-          Left = 616
+          Left = 696
           Top = 40
-          Width = 105
+          Width = 121
           Height = 21
           CharCase = ecUpperCase
           DataField = 'CEP'
@@ -772,7 +773,7 @@ inherited frmGeCliente: TfrmGeCliente
           TabOrder = 3
         end
         object dbNumero: TDBEdit
-          Left = 416
+          Left = 456
           Top = 80
           Width = 65
           Height = 21
@@ -788,9 +789,9 @@ inherited frmGeCliente: TfrmGeCliente
           TabOrder = 5
         end
         object dbComplemento: TDBEdit
-          Left = 488
+          Left = 528
           Top = 80
-          Width = 121
+          Width = 161
           Height = 21
           CharCase = ecUpperCase
           DataField = 'COMPLEMENTO'
@@ -804,9 +805,9 @@ inherited frmGeCliente: TfrmGeCliente
           TabOrder = 6
         end
         object dbPais: TRxDBComboEdit
-          Left = 616
+          Left = 696
           Top = 80
-          Width = 105
+          Width = 121
           Height = 21
           ButtonHint = 'Pesquisar Pa'#237's (Ctrl+P)'
           CharCase = ecUpperCase
@@ -882,8 +883,8 @@ inherited frmGeCliente: TfrmGeCliente
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 237
-        Width = 879
-        Height = 227
+        Width = 836
+        Height = 189
         ActivePage = tbsContato
         Align = alClient
         TabOrder = 2
@@ -969,8 +970,8 @@ inherited frmGeCliente: TfrmGeCliente
           Caption = 'Financeiro'
           ImageIndex = 1
           DesignSize = (
-            871
-            199)
+            828
+            161)
           object lblValorLimiteCompra: TLabel
             Left = 8
             Top = 0
@@ -1009,7 +1010,7 @@ inherited frmGeCliente: TfrmGeCliente
           end
           object lblTituloCancelado: TLabel
             Left = 8
-            Top = 175
+            Top = 137
             Width = 114
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1023,7 +1024,7 @@ inherited frmGeCliente: TfrmGeCliente
           end
           object lblTituloPagando: TLabel
             Left = 8
-            Top = 159
+            Top = 121
             Width = 122
             Height = 13
             Anchors = [akLeft, akBottom]
@@ -1088,8 +1089,8 @@ inherited frmGeCliente: TfrmGeCliente
           object pnlTitulos: TPanel
             Left = 168
             Top = 0
-            Width = 703
-            Height = 199
+            Width = 660
+            Height = 161
             Align = alRight
             Anchors = [akLeft, akTop, akRight, akBottom]
             BevelOuter = bvNone
@@ -1097,8 +1098,8 @@ inherited frmGeCliente: TfrmGeCliente
             object dbgTitulos: TDBGrid
               Left = 0
               Top = 0
-              Width = 703
-              Height = 199
+              Width = 660
+              Height = 161
               Align = alClient
               DataSource = dtsTitulos
               Font.Charset = ANSI_CHARSET
@@ -1486,7 +1487,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  BLOQUEADO,'
       '  BLOQUEADO_DATA,'
       '  BLOQUEADO_MOTIVO,'
-      '  BLOQUEADO_USUARIO'
+      '  BLOQUEADO_USUARIO,'
+      '  DESBLOQUEADO_DATA'
       'from TBCLIENTE '
       'where'
       '  CNPJ = :CNPJ')
@@ -1501,19 +1503,19 @@ inherited frmGeCliente: TfrmGeCliente
       '  INSCMUN = :INSCMUN,'
       '  ENDER = :ENDER,'
       '  COMPLEMENTO = :COMPLEMENTO,'
-      '  NUMERO_END = :NUMERO_END,'
       '  BAIRRO = :BAIRRO,'
       '  CEP = :CEP,'
       '  CIDADE = :CIDADE,'
       '  UF = :UF,'
       '  FONE = :FONE,'
+      '  EMAIL = :EMAIL,'
+      '  SITE = :SITE,'
       '  TLG_TIPO = :TLG_TIPO,'
       '  LOG_COD = :LOG_COD,'
       '  BAI_COD = :BAI_COD,'
       '  CID_COD = :CID_COD,'
       '  EST_COD = :EST_COD,'
-      '  EMAIL = :EMAIL,'
-      '  SITE = :SITE,'
+      '  NUMERO_END = :NUMERO_END,'
       '  PAIS_ID = :PAIS_ID,'
       '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA,'
       '  DTCAD = :DTCAD,'
@@ -1521,39 +1523,37 @@ inherited frmGeCliente: TfrmGeCliente
       '  BLOQUEADO_DATA = :BLOQUEADO_DATA,'
       '  BLOQUEADO_MOTIVO = :BLOQUEADO_MOTIVO,'
       '  BLOQUEADO_USUARIO = :BLOQUEADO_USUARIO,'
-      '  LOGRADOURO = :LOGRADOURO,'
-      '  CID_NOME = :CID_NOME,'
-      '  EST_NOME = :EST_NOME,'
-      '  PAIS_NOME = :PAIS_NOME'
+      '  DESBLOQUEADO_DATA = :DESBLOQUEADO_DATA'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBCLIENTE'
-      '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, '
-      'COMPLEMENTO, '
       
-        '   NUMERO_END, BAIRRO, CEP, CIDADE, UF, FONE, TLG_TIPO, LOG_COD,' +
-        ' '
-      'BAI_COD, '
+        '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, C' +
+        'OMPLEMENTO, '
       
-        '   CID_COD, EST_COD, EMAIL, SITE, PAIS_ID, VALOR_LIMITE_COMPRA, ' +
-        'DTCAD, '
-      '   BLOQUEADO, BLOQUEADO_DATA, BLOQUEADO_MOTIVO, '
-      'BLOQUEADO_USUARIO, LOGRADOURO, '
-      '   CID_NOME, EST_NOME, PAIS_NOME)'
+        '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
+        ', BAI_COD, '
+      
+        '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA, D' +
+        'TCAD, BLOQUEADO, '
+      
+        '   BLOQUEADO_DATA, BLOQUEADO_MOTIVO, BLOQUEADO_USUARIO, DESBLOQU' +
+        'EADO_DATA)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
-        'NDER, '
-      ':COMPLEMENTO, '
+        'NDER, :COMPLEMENTO, '
       
-        '   :NUMERO_END, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :TLG_TIPO, :' +
-        'LOG_COD, '
-      '   :BAI_COD, :CID_COD, :EST_COD, :EMAIL, :SITE, :PAIS_ID, '
-      ':VALOR_LIMITE_COMPRA, '
-      '   :DTCAD, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MOTIVO, '
-      ':BLOQUEADO_USUARIO, '
-      '   :LOGRADOURO, :CID_NOME, :EST_NOME, :PAIS_NOME)')
+        '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :EMAIL, :SITE, :TLG_TIPO,' +
+        ' :LOG_COD, '
+      
+        '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID, :VALOR_L' +
+        'IMITE_COMPRA, '
+      
+        '   :DTCAD, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MOTIVO, :BLOQ' +
+        'UEADO_USUARIO, '
+      '   :DESBLOQUEADO_DATA)')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'

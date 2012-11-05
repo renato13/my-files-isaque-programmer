@@ -441,8 +441,13 @@ procedure TfrmPrinc.FormCreate(Sender: TObject);
 var
   sFileImage : String;
 begin
+  {$IFDEF DGE}
   Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER; //[ v' + GetExeVersion + ' ]';
   Self.Version.Caption   := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
+  {$ELSE}
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion + ' ]';
+  Self.Version.Caption   := 'Versão ' + GetExeVersion;
+  {$ENDIF}
   Self.Copyright.Caption := GetCopyright;
 
   // Carregar Imagem de Fundo da Tele Principal
