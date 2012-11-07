@@ -960,3 +960,36 @@ alter VALOR_IPI position 30;
 alter table TBPRODUTO
 alter RESERVA position 31;
 
+
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure SET_SEGMENTO (
+    SEG_ID smallint,
+    SEG_DESCRICAO varchar(60))
+as
+begin
+  if ( (:Seg_id is null) or (:Seg_descricao is null)  ) then
+    Exit;
+
+  if ( exists(
+    Select
+      s.Seg_id
+    from TBSEGMENTO s
+    where s.Seg_id = :Seg_id
+  ) ) then
+    Update TBSEGMENTO u Set
+      u.Seg_descricao = :Seg_descricao
+    where u.Seg_id = :Seg_id;
+  else
+    Insert Into TBSEGMENTO (
+        Seg_id
+      , Seg_descricao
+    ) values (
+        :Seg_id
+      , :Seg_descricao
+    );
+end^
+
+SET TERM ; ^
+
