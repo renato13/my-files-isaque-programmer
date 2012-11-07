@@ -104,6 +104,11 @@ type
     lblCNAE: TLabel;
     dbCNAE: TDBEdit;
     IbDtstTabelaCNAE: TIBStringField;
+    tblSegmento: TIBTable;
+    dtsSegmento: TDataSource;
+    IbDtstTabelaSEGMENTO: TSmallintField;
+    lblSegmento: TLabel;
+    dbSegmento: TDBLookupComboBox;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -132,7 +137,7 @@ var
 implementation
 
 uses UDMBusiness, UGeBairro, UGeCidade, UGeDistrito, UGeEstado,
-  UGeLogradouro, DateUtils, ChkDgVer;
+  UGeLogradouro, DateUtils, ChkDgVer, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -152,6 +157,7 @@ procedure TfrmGeEmpresa.FormCreate(Sender: TObject);
 begin
   inherited;
   tblTipoRegimeNFe.Open;
+  tblSegmento.Open;
 
   ControlFirstEdit := dbPessoaFisica;
 
@@ -162,6 +168,10 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
+//
+//  RegistrarSegmentos(SEGMENTO_PADRAO_ID,         SEGMENTO_PADRAO_DS);
+//  RegistrarSegmentos(SEGMENTO_VAREJO_ATACADO_ID, SEGMENTO_VAREJO_ATACADO_DS);
+//  RegistrarSegmentos(SEGMENTO_MERCADO_CARRO_ID,  SEGMENTO_MERCADO_CARRO_DS);
 end;
 
 procedure TfrmGeEmpresa.ProximoCampoKeyPress(Sender: TObject;
@@ -263,6 +273,7 @@ begin
   IbDtstTabelaNUMERO_NFE.Value   := 0;
   IbDtstTabelaLOTE_ANO_NFE.Value := YearOf(Date);
   IbDtstTabelaLOTE_NUM_NFE.Value := 0;
+  IbDtstTabelaSEGMENTO.Value     := SEGMENTO_PADRAO_ID;
 end;
 
 procedure TfrmGeEmpresa.DtSrcTabelaStateChange(Sender: TObject);
