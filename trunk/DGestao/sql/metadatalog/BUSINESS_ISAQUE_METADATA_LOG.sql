@@ -677,3 +677,286 @@ end
 
 SET TERM ; ^
 
+
+
+CREATE TABLE TBSEGMENTO (
+    SEG_ID DMN_SMALLINT_NN NOT NULL,
+    SEG_DESCRICAO DMN_NOME);
+
+ALTER TABLE TBSEGMENTO
+ADD CONSTRAINT PK_TBSEGMENTO
+PRIMARY KEY (SEG_ID);
+
+COMMENT ON COLUMN TBSEGMENTO.SEG_ID IS
+'Código.';
+
+COMMENT ON COLUMN TBSEGMENTO.SEG_DESCRICAO IS
+'Descrição.';
+
+
+
+COMMENT ON TABLE TBSEGMENTO IS 'Tabela de Segmentos.
+    
+    Autor   :   Isaque Marinho Ribeiro
+    Data    :   07/11/2012
+
+Tabela responsável por armazenar os códigos e descrições dos segmentos que a empresa poderá assumir.';
+
+GRANT ALL ON TBSEGMENTO TO "PUBLIC";
+
+
+SET TERM ^ ;
+
+create or alter procedure SET_SEGMENTO (
+    SEG_ID smallint,
+    SEG_DESCRICAO varchar(60))
+as
+begin
+  if ( (:Seg_id is null) or (:Seg_descricao is null)  ) then
+    Exit;
+
+  if ( not exists(
+    Select
+      s.Seg_id
+    from TBSEGMENTO s
+    where s.Seg_id = :Seg_id
+  ) ) then
+    Update TBSEGMENTO u Set
+      u.Seg_descricao = :Seg_descricao
+    where u.Seg_id = :Seg_id;
+  else
+    Insert Into TBSEGMENTO (
+        Seg_id
+      , Seg_descricao
+    ) values (
+        :Seg_id
+      , :Seg_descricao
+    );
+end^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE SET_SEGMENTO TO "PUBLIC";
+
+
+ALTER TABLE TBEMPRESA
+    ADD SEGMENTO DMN_SMALLINT_N;
+
+COMMENT ON COLUMN TBEMPRESA.SEGMENTO IS
+'Segmento.';
+
+alter table TBEMPRESA
+alter CODIGO position 1;
+
+alter table TBEMPRESA
+alter PESSOA_FISICA position 2;
+
+alter table TBEMPRESA
+alter CNPJ position 3;
+
+alter table TBEMPRESA
+alter RZSOC position 4;
+
+alter table TBEMPRESA
+alter NMFANT position 5;
+
+alter table TBEMPRESA
+alter IE position 6;
+
+alter table TBEMPRESA
+alter IM position 7;
+
+alter table TBEMPRESA
+alter CNAE position 8;
+
+alter table TBEMPRESA
+alter SEGMENTO position 9;
+
+alter table TBEMPRESA
+alter ENDER position 10;
+
+alter table TBEMPRESA
+alter COMPLEMENTO position 11;
+
+alter table TBEMPRESA
+alter BAIRRO position 12;
+
+alter table TBEMPRESA
+alter CEP position 13;
+
+alter table TBEMPRESA
+alter CIDADE position 14;
+
+alter table TBEMPRESA
+alter UF position 15;
+
+alter table TBEMPRESA
+alter FONE position 16;
+
+alter table TBEMPRESA
+alter LOGO position 17;
+
+alter table TBEMPRESA
+alter TLG_TIPO position 18;
+
+alter table TBEMPRESA
+alter LOG_COD position 19;
+
+alter table TBEMPRESA
+alter BAI_COD position 20;
+
+alter table TBEMPRESA
+alter CID_COD position 21;
+
+alter table TBEMPRESA
+alter EST_COD position 22;
+
+alter table TBEMPRESA
+alter NUMERO_END position 23;
+
+alter table TBEMPRESA
+alter EMAIL position 24;
+
+alter table TBEMPRESA
+alter HOME_PAGE position 25;
+
+alter table TBEMPRESA
+alter CHAVE_ACESSO_NFE position 26;
+
+alter table TBEMPRESA
+alter PAIS_ID position 27;
+
+alter table TBEMPRESA
+alter TIPO_REGIME_NFE position 28;
+
+alter table TBEMPRESA
+alter SERIE_NFE position 29;
+
+alter table TBEMPRESA
+alter NUMERO_NFE position 30;
+
+alter table TBEMPRESA
+alter LOTE_ANO_NFE position 31;
+
+alter table TBEMPRESA
+alter LOTE_NUM_NFE position 32;
+
+
+
+ALTER TABLE TBEMPRESA
+ADD CONSTRAINT FK_TBEMPRESA_SEGMENTO
+FOREIGN KEY (SEGMENTO)
+REFERENCES TBSEGMENTO(SEG_ID)
+ON UPDATE CASCADE;
+
+
+
+CREATE DOMAIN DMN_VCHAR_100 AS
+VARCHAR(100);
+
+ALTER TABLE TBPRODUTO
+    ADD APRESENTACAO DMN_VCHAR_50,
+    ADD DESCRI_APRESENTACAO DMN_VCHAR_100;
+
+COMMENT ON COLUMN TBPRODUTO.DESCRI IS
+'Descrição.';
+
+COMMENT ON COLUMN TBPRODUTO.APRESENTACAO IS
+'Apresentação.';
+
+COMMENT ON COLUMN TBPRODUTO.DESCRI_APRESENTACAO IS
+'Campo Calculado = Descrição + Apresentação.';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter CODEMP position 17;
+
+alter table TBPRODUTO
+alter CODSECAO position 18;
+
+alter table TBPRODUTO
+alter CODORIGEM position 19;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 20;
+
+alter table TBPRODUTO
+alter CST position 21;
+
+alter table TBPRODUTO
+alter CSOSN position 22;
+
+alter table TBPRODUTO
+alter NCM_SH position 23;
+
+alter table TBPRODUTO
+alter CODCFOP position 24;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 25;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 26;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 27;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 28;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 29;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 30;
+
+alter table TBPRODUTO
+alter RESERVA position 31;
+

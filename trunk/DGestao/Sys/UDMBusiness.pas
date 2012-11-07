@@ -73,6 +73,7 @@ var
   procedure GerarSaldoContaCorrente(const ContaCorrente : Integer; const Data : TDateTime);
   procedure BloquearClientes;
   procedure DesbloquearCliente(CNPJ : String; const Motivo : String = '');
+  procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -284,6 +285,19 @@ begin
       SQL.Add('  Bloqueado_motivo = ' + QuotedStr(Trim(Motivo)));
 
     SQL.Add('where Cnpj = ' + QuotedStr(CNPJ));
+    ExecSQL;
+
+    CommitTransaction;
+  end;
+end;
+
+procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Execute Procedure SET_SEGMENTO(' + IntToStr(Codigo) + ', ' + QuotedStr(Trim(Descricao)) + ')');
     ExecSQL;
 
     CommitTransaction;

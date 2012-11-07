@@ -157,6 +157,14 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           Caption = 'CNAE Fiscal:'
           FocusControl = dbCNAE
         end
+        object lblSegmento: TLabel [7]
+          Left = 192
+          Top = 64
+          Width = 52
+          Height = 13
+          Caption = 'Segmento:'
+          FocusControl = dbSegmento
+        end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
           DataField = 'CODIGO'
@@ -208,7 +216,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         object dbFantasia: TDBEdit
           Left = 16
           Top = 80
-          Width = 329
+          Width = 169
           Height = 21
           CharCase = ecUpperCase
           DataField = 'NMFANT'
@@ -235,7 +243,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
         end
         object dbIM: TDBEdit
           Left = 488
@@ -251,7 +259,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 7
         end
         object dbCNAE: TDBEdit
           Left = 624
@@ -267,7 +275,26 @@ inherited frmGeEmpresa: TfrmGeEmpresa
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 8
+        end
+        object dbSegmento: TDBLookupComboBox
+          Left = 192
+          Top = 80
+          Width = 153
+          Height = 21
+          DataField = 'SEGMENTO'
+          DataSource = DtSrcTabela
+          DropDownRows = 10
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          KeyField = 'SEG_ID'
+          ListField = 'SEG_DESCRICAO'
+          ListSource = dtsSegmento
+          ParentFont = False
+          TabOrder = 5
         end
       end
       object GroupBox1: TGroupBox
@@ -1053,6 +1080,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  , e.Ie'
       '  , e.Im'
       '  , e.Cnae'
+      '  , e.Segmento'
       '  , e.Ender'
       '  , e.Complemento'
       '  , e.Numero_end'
@@ -1121,6 +1149,12 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       FieldName = 'NMFANT'
       Origin = 'TBEMPRESA.NMFANT'
       Size = 25
+    end
+    object IbDtstTabelaSEGMENTO: TSmallintField
+      DisplayLabel = 'Segmento'
+      FieldName = 'SEGMENTO'
+      Origin = 'TBEMPRESA.SEGMENTO'
+      Required = True
     end
     object IbDtstTabelaIE: TIBStringField
       DisplayLabel = 'Inscri'#231#227'o Estadual'
@@ -1302,6 +1336,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  IE,'
       '  IM,'
       '  CNAE,'
+      '  SEGMENTO,'
       '  ENDER,'
       '  COMPLEMENTO,'
       '  BAIRRO,'
@@ -1327,7 +1362,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  LOTE_NUM_NFE'
       'from TBEMPRESA '
       'where'
-      '  CODIGO = :CODIGO')
+      '  CNPJ = :CNPJ')
     ModifySQL.Strings = (
       'update TBEMPRESA'
       'set'
@@ -1339,6 +1374,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  IE = :IE,'
       '  IM = :IM,'
       '  CNAE = :CNAE,'
+      '  SEGMENTO = :SEGMENTO,'
       '  ENDER = :ENDER,'
       '  COMPLEMENTO = :COMPLEMENTO,'
       '  BAIRRO = :BAIRRO,'
@@ -1363,26 +1399,28 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  LOTE_ANO_NFE = :LOTE_ANO_NFE,'
       '  LOTE_NUM_NFE = :LOTE_NUM_NFE'
       'where'
-      '  CODIGO = :OLD_CODIGO')
+      '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBEMPRESA'
       
-        '  (CODIGO, PESSOA_FISICA, CNPJ, RZSOC, NMFANT, IE, IM, CNAE, END' +
-        'ER, COMPLEMENTO, '
+        '  (CODIGO, PESSOA_FISICA, CNPJ, RZSOC, NMFANT, IE, IM, CNAE, SEG' +
+        'MENTO, '
       
-        '   BAIRRO, CEP, CIDADE, UF, FONE, LOGO, TLG_TIPO, LOG_COD, BAI_C' +
-        'OD, CID_COD, '
+        '   ENDER, COMPLEMENTO, BAIRRO, CEP, CIDADE, UF, FONE, LOGO, TLG_' +
+        'TIPO, LOG_COD, '
       
-        '   EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAVE_ACESSO_NFE, PAIS' +
-        '_ID, TIPO_REGIME_NFE, '
-      '   SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE, LOTE_NUM_NFE)'
+        '   BAI_COD, CID_COD, EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAV' +
+        'E_ACESSO_NFE, '
+      
+        '   PAIS_ID, TIPO_REGIME_NFE, SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE' +
+        ', LOTE_NUM_NFE)'
       'values'
       
         '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :RZSOC, :NMFANT, :IE, :IM, :C' +
-        'NAE, :ENDER, '
+        'NAE, :SEGMENTO, '
       
-        '   :COMPLEMENTO, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :LOGO, :TLG' +
-        '_TIPO, '
+        '   :ENDER, :COMPLEMENTO, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :LO' +
+        'GO, :TLG_TIPO, '
       
         '   :LOG_COD, :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :EMAIL, ' +
         ':HOME_PAGE, '
@@ -1393,7 +1431,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
     DeleteSQL.Strings = (
       'delete from TBEMPRESA'
       'where'
-      '  CODIGO = :OLD_CODIGO')
+      '  CNPJ = :OLD_CNPJ')
     Left = 672
   end
   inherited ImgList: TImageList
@@ -1432,5 +1470,19 @@ inherited frmGeEmpresa: TfrmGeEmpresa
     DataSet = tblTipoRegimeNFe
     Left = 576
     Top = 8
+  end
+  object tblSegmento: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'TBSEGMENTO'
+    Left = 544
+    Top = 40
+  end
+  object dtsSegmento: TDataSource
+    DataSet = tblSegmento
+    Left = 576
+    Top = 40
   end
 end
