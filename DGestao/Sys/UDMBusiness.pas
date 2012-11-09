@@ -6,7 +6,7 @@ uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
   ShellApi, Printers, DateUtils, IBQuery, RpDefine, RpRave,
   frxClass, frxDBSet, EMsgDlg, IdBaseComponent, IdComponent, IdIPWatch, IBStoredProc,
-  FuncoesFormulario;
+  FuncoesFormulario, UConstantesDGE;
 
 type
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
@@ -90,6 +90,7 @@ var
   function GetCondicaoPagtoIDBoleto : Integer;
   function GetEmitirCupom : Boolean;
   function GetModeloEmissaoCupom : Integer;
+  function GetSegmentoID(const CNPJ : String) : Integer;
 
   function StrIsCNPJ(const Num: string): Boolean;
   function StrIsCPF(const Num: string): Boolean;
@@ -97,6 +98,7 @@ var
   function StrFormatarCpf(sCpf: String): String;
   function StrFormatarCEP(sCEP: String): String;
   function StrFormatarFONE(sFone: String): String;
+  function StrDescricaoProduto : String;
 
   function GetGeneratorID(const GeneratorName : String) : Integer;
   function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
@@ -380,6 +382,21 @@ begin
   Result := FileINI.ReadInteger('Cupom', 'ModeloEmissaoCupom', 0);
 end;
 
+function GetSegmentoID(const CNPJ : String) : Integer;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select coalesce(SEGMENTO, 0) as SegmentoID from TBEMPRESA where CNPJ = ' + QuotedStr(Trim(CNPJ)));
+    Open;
+
+    Result := FieldByName('SegmentoID').AsInteger;
+
+    Close;
+  end;
+end;
+
 function StrIsCNPJ(const Num: string): Boolean;
 var
   Dig: array [1..14] of Byte;
@@ -575,6 +592,25 @@ begin
     S := Copy(S, 1, 8) + '-' + Copy(S, 9, Length(S));
 
   Result := S;
+end;
+
+function StrDescricaoProduto : String;
+var
+  S : String;
+begin
+  try
+    S := 'Produtos';
+
+    Case GetSegmentoID(GetEmpresaIDDefault)  of
+      SEGMENTO_MERCADO_CARRO_ID:
+        S := 'Veículos';
+      else
+        S := 'Produtos';
+    end;
+    
+  finally
+    Result := S;
+  end;
 end;
 
 function GetGeneratorID(const GeneratorName : String) : Integer;

@@ -208,6 +208,7 @@ type
     qryCalculoImportoDESCONTO: TIBBCDField;
     qryDadosProdutoDESCONTO: TIBBCDField;
     qryDadosProdutoPUNIT_PROMOCAO: TIBBCDField;
+    qryDadosProdutoPRODUTO_NOVO: TSmallintField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -264,7 +265,8 @@ const
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
-  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe, UFuncoes;
+  ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe, UFuncoes,
+  UConstantesDGE;
 
 {$R *.dfm}
 
@@ -982,6 +984,7 @@ begin
         Entrega.UF      := '';}
 
   //Adicionando Produtos
+  
       qryDadosProduto.First;
       while not qryDadosProduto.Eof do
       begin
@@ -1053,33 +1056,44 @@ begin
                end;
             end;
   }
+
   //Campos para venda de veículos novos
-  {         with Prod.veicProd do
-            begin
-              tpOP    := toVendaConcessionaria;
-              chassi  := '';
-              cCor    := '';
-              xCor    := '';
-              pot     := '';
-              Cilin   := '';
-              pesoL   := '';
-              pesoB   := '';
-              nSerie  := '';
-              tpComb  := '';
-              nMotor  := '';
-              CMT     := '';
-              dist    := '';
-              RENAVAM := '';
-              anoMod  := 0;
-              anoFab  := 0;
-              tpPint  := '';
-              tpVeic  := 0;
-              espVeic := 0;
-              VIN     := '';
-              condVeic := cvAcabado;
-              cMod    := '';
-            end;
-  }
+
+          if ( (GetSegmentoID(qryEmitenteCNPJ.AsString) = SEGMENTO_MERCADO_CARRO_ID) and (qryDadosProdutoPRODUTO_NOVO.AsInteger = 1) ) then
+          begin
+
+            with Prod.veicProd do
+              begin
+                tpOP     := toVendaConcessionaria; // J02 - Tipo da operação
+                                                   //    (1) = toVendaConcessionaria
+                                                   //    (2) = toFaturamentoDireto
+                                                   //    (3) = toVendaDireta
+                                                   //    (0) = toOutros
+                chassi   := ''; // J03 - Chassi do veículo
+                cCor     := ''; // J04 - Cor
+                xCor     := ''; // J05 - Descrição da Cor
+                pot      := ''; // J06 - Potência Motor
+                Cilin    := '';
+                pesoL    := ''; // J08 - Peso Líquido
+                pesoB    := ''; // J09 - Peso Bruto
+                nSerie   := ''; // J10 - Serial (série)
+                tpComb   := ''; // J11 - Tipo de combustível
+                nMotor   := ''; // J12 - Número de Motor
+                CMT      := '';
+                dist     := '';        // J14 - Distância entre eixos
+                RENAVAM  := '';        // J15 - RENAVAM            (Não informar a TAG na exportação)
+                anoMod   := 0;         // J16 - Ano Modelo de Fabricação
+                anoFab   := 0;         // J17 - Ano de Fabricação
+                tpPint   := '';        // J18 - Tipo de Pintura
+                tpVeic   := 0;         // J19 - Tipo de Veículo    (Utilizar Tabela RENAVAM)
+                espVeic  := 0;         // J20 - Espécie de Veículo (Utilizar Tabela RENAVAM)
+                VIN      := '';        // J21 - Condição do VIN
+                condVeic := cvAcabado; // J22 - Condição do Veículo (1 - Acabado; 2 - Inacabado; 3 - Semi-acabado)
+                cMod     := '';        // J23 - Código Marca Modelo (Utilizar Tabela RENAVAM)
+              end;
+
+          end;
+
   //Campos específicos para venda de medicamentos
   {         with Prod.med.Add do
             begin
@@ -1375,7 +1389,7 @@ begin
                             'Venda: ' + qryCalculoImportoANO.AsString + '/' + FormatFloat('###0000000', qryCalculoImportoCODCONTROL.AsInteger)  +
                             ' - Forma/Cond. Pgto.: ' + qryCalculoImportoFORMAPAG.AsString + '/' + qryCalculoImportoCOND_DESCRICAO_FULL.AsString + ' * * * ' + #13 +
                             'Vendedor: ' + qryCalculoImportoVENDEDOR_NOME.AsString + ' * * * ' + #13 +
-                            'Obserações : ' + qryCalculoImportoOBS.AsString;
+                            'Observações : ' + qryCalculoImportoOBS.AsString;
 
       InfAdic.infAdFisco := 'Info. Fisco: ' + GetInformacaoFisco;
 

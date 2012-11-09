@@ -117,6 +117,13 @@ type
     dbFabricante: TRxDBComboEdit;
     IbDtstTabelaCODFABRICANTE: TIntegerField;
     IbDtstTabelaNOME_FABRICANTE: TIBStringField;
+    IbDtstTabelaAPRESENTACAO: TIBStringField;
+    IbDtstTabelaDESCRI_APRESENTACAO: TIBStringField;
+    IbDtstTabelaPRODUTO_NOVO: TSmallintField;
+    tbsEspecificacaoVeiculo: TTabSheet;
+    lblApresentacao: TLabel;
+    dbApresentacao: TDBEdit;
+    DBCheckBox1: TDBCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -153,7 +160,7 @@ var
 implementation
 
 uses UDMBusiness, UGeSecaoProduto, UGeGrupoProduto, UGeUnidade,
-  UGeTabelaCFOP, UGeFabricante;
+  UGeTabelaCFOP, UGeFabricante, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -351,6 +358,8 @@ end;
 procedure TfrmGeProduto.IbDtstTabelaBeforePost(DataSet: TDataSet);
 begin
   inherited;
+  IbDtstTabelaDESCRI_APRESENTACAO.AsString := Trim(IbDtstTabelaDESCRI.AsString + ' ' + IbDtstTabelaAPRESENTACAO.AsString);
+
   if ( IbDtstTabelaQTDE.AsInteger < 0 ) then
     IbDtstTabelaQTDE.Value := 0;
 
@@ -418,18 +427,24 @@ begin
   IbDtstTabelaALIQUOTA.Value       := 0;
   IbDtstTabelaALIQUOTA_CSOSN.Value := 0;
   IbDtstTabelaVALOR_IPI.Value      := 0;
-  IbDtstTabelaRESERVA.Value        := 0; 
+  IbDtstTabelaRESERVA.Value        := 0;
+  IbDtstTabelaPRODUTO_NOVO.Value   := 0;
 end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);
+var
+  S : String;
 begin
+  // Configurar Legendas de acordo com o segmento
+  S := StrDescricaoProduto;
+
   Case fAliquota of
     taICMS :
-      Caption := 'Cadastro de Produtos';
+      Caption := 'Cadastro de ' + S;
     taISS :
       Caption := 'Cadastro de Serviços';
     else
-      Caption := 'Cadastro de Produtos/Serviços';
+      Caption := 'Cadastro de ' + S + '/Serviços';
   end;
 
   if (not fOrdenado) then
@@ -439,6 +454,8 @@ begin
   end;
 
   inherited;
+
+  tbsEspecificacaoVeiculo.TabVisible := (GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID);
 end;
 
 procedure TfrmGeProduto.DtSrcTabelaStateChange(Sender: TObject);

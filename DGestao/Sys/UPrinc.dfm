@@ -641,7 +641,7 @@ object frmPrinc: TfrmPrinc
       Transparent = True
       OnClick = RxSpeedBtnCPagClick
     end
-    object RxSpeedBtnProd: TRxSpeedButton
+    object btProduto: TRxSpeedButton
       Left = 153
       Top = 3
       Width = 75
@@ -755,7 +755,7 @@ object frmPrinc: TfrmPrinc
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedBtnProdClick
+      OnClick = btProdutoClick
     end
     object RxSpeedBtnCliente: TRxSpeedButton
       Left = 78
@@ -5469,7 +5469,7 @@ object frmPrinc: TfrmPrinc
           FF004C39CE00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Produto'
-        OnClick = RxSpeedBtnProdClick
+        OnClick = btProdutoClick
       end
       object nmPromocoes: TMenuItem
         Bitmap.Data = {

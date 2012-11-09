@@ -1,6 +1,6 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 281
-  Top = 116
+  Left = 549
+  Top = 154
   Width = 886
   Height = 575
   ActiveControl = dbCodigo
@@ -195,15 +195,15 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbDescricao
         end
         object lblReferencia: TLabel [2]
-          Left = 696
-          Top = 24
+          Left = 16
+          Top = 64
           Width = 56
           Height = 13
           Caption = 'Refer'#234'ncia:'
           FocusControl = dbReferencia
         end
         object lblModelo: TLabel [3]
-          Left = 512
+          Left = 696
           Top = 24
           Width = 38
           Height = 13
@@ -211,7 +211,7 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbModelo
         end
         object lblSecao: TLabel [4]
-          Left = 208
+          Left = 320
           Top = 64
           Width = 33
           Height = 13
@@ -219,7 +219,7 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbSecao
         end
         object lblGrupo: TLabel [5]
-          Left = 16
+          Left = 128
           Top = 64
           Width = 33
           Height = 13
@@ -243,12 +243,20 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbCodigoEAN
         end
         object lblFabricante: TLabel [8]
-          Left = 400
+          Left = 512
           Top = 64
           Width = 55
           Height = 13
           Caption = 'Fabricante:'
           FocusControl = dbFabricante
+        end
+        object lblApresentacao: TLabel [9]
+          Left = 512
+          Top = 24
+          Width = 71
+          Height = 13
+          Caption = 'Apresenta'#231#227'o:'
+          FocusControl = dbApresentacao
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -271,9 +279,9 @@ inherited frmGeProduto: TfrmGeProduto
           TabOrder = 2
         end
         object dbReferencia: TDBEdit
-          Left = 696
-          Top = 40
-          Width = 145
+          Left = 16
+          Top = 80
+          Width = 105
           Height = 21
           CharCase = ecUpperCase
           DataField = 'REFERENCIA'
@@ -284,12 +292,12 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 5
         end
         object dbModelo: TDBEdit
-          Left = 512
+          Left = 696
           Top = 40
-          Width = 177
+          Width = 145
           Height = 21
           CharCase = ecUpperCase
           DataField = 'MODELO'
@@ -300,10 +308,10 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 4
         end
         object dbSecao: TRxDBComboEdit
-          Left = 208
+          Left = 320
           Top = 80
           Width = 185
           Height = 21
@@ -374,11 +382,11 @@ inherited frmGeProduto: TfrmGeProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 6
+          TabOrder = 7
           OnButtonClick = dbSecaoButtonClick
         end
         object dbGrupo: TRxDBComboEdit
-          Left = 16
+          Left = 128
           Top = 80
           Width = 185
           Height = 21
@@ -449,7 +457,7 @@ inherited frmGeProduto: TfrmGeProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 5
+          TabOrder = 6
           OnButtonClick = dbGrupoButtonClick
         end
         object dbUnidade: TRxDBComboEdit
@@ -524,7 +532,7 @@ inherited frmGeProduto: TfrmGeProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 8
+          TabOrder = 9
           OnButtonClick = dbUnidadeButtonClick
         end
         object dbCodigoEAN: TDBEdit
@@ -544,9 +552,9 @@ inherited frmGeProduto: TfrmGeProduto
           TabOrder = 1
         end
         object dbFabricante: TRxDBComboEdit
-          Left = 400
+          Left = 512
           Top = 80
-          Width = 289
+          Width = 177
           Height = 21
           ButtonHint = 'Pesquisar Fabricante (Ctrl+P)'
           CharCase = ecUpperCase
@@ -615,8 +623,23 @@ inherited frmGeProduto: TfrmGeProduto
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 7
+          TabOrder = 8
           OnButtonClick = dbFabricanteButtonClick
+        end
+        object dbApresentacao: TDBEdit
+          Left = 512
+          Top = 40
+          Width = 177
+          Height = 21
+          DataField = 'APRESENTACAO'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
         end
       end
       object GrpBxDadosTributo: TGroupBox
@@ -1029,6 +1052,22 @@ inherited frmGeProduto: TfrmGeProduto
             ReadOnly = True
             TabOrder = 2
           end
+          object DBCheckBox1: TDBCheckBox
+            Left = 16
+            Top = 56
+            Width = 113
+            Height = 17
+            Caption = 'Produto Novo'
+            DataField = 'PRODUTO_NOVO'
+            DataSource = DtSrcTabela
+            TabOrder = 3
+            ValueChecked = 'True'
+            ValueUnchecked = 'False'
+          end
+        end
+        object tbsEspecificacaoVeiculo: TTabSheet
+          Caption = 'Especifica'#231#245'es'
+          ImageIndex = 2
         end
         object tbsHistorico: TTabSheet
           Caption = 'Hist'#243'ricos'
@@ -1155,6 +1194,8 @@ inherited frmGeProduto: TfrmGeProduto
       '    p.Codigo'
       '  , p.Cod'
       '  , p.Descri'
+      '  , p.Apresentacao'
+      '  , p.Descri_apresentacao'
       '  , p.Modelo'
       '  , p.Preco'
       '  , p.Preco_Promocao'
@@ -1181,6 +1222,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Aliquota_CSOSN'
       '  , p.Valor_ipi'
       '  , p.Reserva'
+      '  , p.Produto_novo'
       '  , case when coalesce(p.Reserva, 0) > 0'
       '      then coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0)'
       '      else coalesce(p.Qtde, 0)'
@@ -1200,8 +1242,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  left join TBFABRICANTE f on (f.Cod = p.Codfabricante)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_PRODUTO_ID'
-    Left = 760
-    Top = 16
+    Left = 768
+    Top = 352
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -1219,6 +1261,18 @@ inherited frmGeProduto: TfrmGeProduto
       Origin = 'TBPRODUTO.DESCRI'
       Required = True
       Size = 50
+    end
+    object IbDtstTabelaAPRESENTACAO: TIBStringField
+      DisplayLabel = 'Apresenta'#231#227'o'
+      FieldName = 'APRESENTACAO'
+      Origin = 'TBPRODUTO.APRESENTACAO'
+      Size = 50
+    end
+    object IbDtstTabelaDESCRI_APRESENTACAO: TIBStringField
+      DisplayLabel = 'Descri'#231#227'o + Apresenta'#231#227'o'
+      FieldName = 'DESCRI_APRESENTACAO'
+      Origin = 'TBPRODUTO.DESCRI_APRESENTACAO'
+      Size = 100
     end
     object IbDtstTabelaMODELO: TIBStringField
       DisplayLabel = 'Modelo'
@@ -1385,6 +1439,13 @@ inherited frmGeProduto: TfrmGeProduto
       FieldName = 'RESERVA'
       Origin = 'TBPRODUTO.RESERVA'
     end
+    object IbDtstTabelaPRODUTO_NOVO: TSmallintField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Produto Novo'
+      FieldName = 'PRODUTO_NOVO'
+      Origin = 'TBPRODUTO.PRODUTO_NOVO'
+      Required = True
+    end
     object IbDtstTabelaDISPONIVEL: TLargeintField
       DisplayLabel = 'Dispon'#237'vel'
       FieldName = 'DISPONIVEL'
@@ -1432,8 +1493,8 @@ inherited frmGeProduto: TfrmGeProduto
     end
   end
   inherited DtSrcTabela: TDataSource
-    Left = 824
-    Top = 16
+    Left = 832
+    Top = 352
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -1441,8 +1502,11 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODIGO,'
       '  COD,'
       '  DESCRI,'
+      '  APRESENTACAO,'
+      '  DESCRI_APRESENTACAO,'
       '  MODELO,'
       '  PRECO,'
+      '  PRECO_PROMOCAO,'
       '  REFERENCIA,'
       '  SECAO,'
       '  QTDE,'
@@ -1465,7 +1529,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  ALIQUOTA,'
       '  ALIQUOTA_CSOSN,'
       '  VALOR_IPI,'
-      '  RESERVA'
+      '  RESERVA,'
+      '  PRODUTO_NOVO'
       'from TBPRODUTO '
       'where'
       '  CODIGO = :CODIGO')
@@ -1475,8 +1540,11 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODIGO = :CODIGO,'
       '  COD = :COD,'
       '  DESCRI = :DESCRI,'
+      '  APRESENTACAO = :APRESENTACAO,'
+      '  DESCRI_APRESENTACAO = :DESCRI_APRESENTACAO,'
       '  MODELO = :MODELO,'
       '  PRECO = :PRECO,'
+      '  PRECO_PROMOCAO = :PRECO_PROMOCAO,'
       '  REFERENCIA = :REFERENCIA,'
       '  SECAO = :SECAO,'
       '  QTDE = :QTDE,'
@@ -1498,42 +1566,52 @@ inherited frmGeProduto: TfrmGeProduto
       '  ALIQUOTA_TIPO = :ALIQUOTA_TIPO,'
       '  ALIQUOTA = :ALIQUOTA,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
-      '  VALOR_IPI = :VALOR_IPI'
+      '  VALOR_IPI = :VALOR_IPI,'
+      '  RESERVA = :RESERVA,'
+      '  PRODUTO_NOVO = :PRODUTO_NOVO'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
       'insert into TBPRODUTO'
       
-        '  (CODIGO, COD, DESCRI, MODELO, PRECO, REFERENCIA, SECAO, QTDE, ' +
-        'UNIDADE, '
+        '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, MODEL' +
+        'O, PRECO, '
       
-        '   ESTOQMIN, CODGRUPO, CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSEC' +
-        'AO, CODORIGEM, CODTRIBUTACAO,'
+        '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, C' +
+        'ODGRUPO, '
+      
+        '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, CODTR' +
+        'IBUTACAO, '
       
         '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUO' +
         'TA_TIPO, '
-      '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI)'
+      '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO)'
       'values'
       
-        '  (:CODIGO, :COD, :DESCRI, :MODELO, :PRECO, :REFERENCIA, :SECAO,' +
-        ' :QTDE, '
+        '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, ' +
+        ':MODELO, '
       
-        '   :UNIDADE, :ESTOQMIN, :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, ' +
-        ':CODEMP, :CODSECAO, :CODORIGEM, '
+        '   :PRECO, :PRECO_PROMOCAO, :REFERENCIA, :SECAO, :QTDE, :UNIDADE' +
+        ', :ESTOQMIN, '
+      
+        '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, :' +
+        'CODORIGEM, '
       
         '   :CODTRIBUTACAO, :CST, :CSOSN, :NCM_SH, :CODCFOP, :CODBARRA_EA' +
         'N, :CODUNIDADE, '
-      '   :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI)')
+      
+        '   :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI, :RESE' +
+        'RVA, :PRODUTO_NOVO)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'
       '  CODIGO = :OLD_CODIGO')
-    Left = 792
-    Top = 16
+    Left = 800
+    Top = 352
   end
   inherited ImgList: TImageList
-    Left = 728
-    Top = 16
+    Left = 736
+    Top = 352
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1541,13 +1619,13 @@ inherited frmGeProduto: TfrmGeProduto
     BufferChunks = 1000
     CachedUpdates = False
     TableName = 'TBEMPRESA'
-    Left = 728
-    Top = 48
+    Left = 736
+    Top = 384
   end
   object dtsEmpresa: TDataSource
     DataSet = tblEmpresa
-    Left = 760
-    Top = 48
+    Left = 768
+    Top = 384
   end
   object tblOrigem: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1579,13 +1657,13 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_ORIGEM_PRODUTO'
     TableTypes = [ttView]
-    Left = 728
-    Top = 80
+    Left = 736
+    Top = 416
   end
   object dtsOrigem: TDataSource
     DataSet = tblOrigem
-    Left = 760
-    Top = 80
+    Left = 768
+    Top = 416
   end
   object tblTributacaoNM: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1623,13 +1701,13 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_TIPO_TRIBUTACAO'
     TableTypes = [ttView]
-    Left = 792
-    Top = 48
+    Left = 800
+    Top = 384
   end
   object dtsTributacaoNM: TDataSource
     DataSet = tblTributacaoNM
-    Left = 824
-    Top = 48
+    Left = 832
+    Top = 384
   end
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1651,13 +1729,13 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_TIPO_ALIQUOTA'
     TableTypes = [ttView]
-    Left = 728
-    Top = 112
+    Left = 736
+    Top = 448
   end
   object dtsAliquota: TDataSource
     DataSet = tblAliquota
-    Left = 760
-    Top = 112
+    Left = 768
+    Top = 448
   end
   object EvUA: TEvUserAccess
     Consents.Strings = (
@@ -1668,8 +1746,8 @@ inherited frmGeProduto: TfrmGeProduto
       'btbtnSalvar=D1,2,3,5,11,12'
       'dbCusto=H1,2,3,5,11,12'
       'lblCusto=H1,2,3,5,11,12')
-    Left = 700
-    Top = 17
+    Left = 708
+    Top = 353
   end
   object tblTributacaoSN: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -1703,12 +1781,12 @@ inherited frmGeProduto: TfrmGeProduto
     StoreDefs = True
     TableName = 'VW_TIPO_TRIBUTACAO'
     TableTypes = [ttView]
-    Left = 792
-    Top = 80
+    Left = 800
+    Top = 416
   end
   object dtsTributacaoSN: TDataSource
     DataSet = tblTributacaoSN
-    Left = 824
-    Top = 80
+    Left = 832
+    Top = 416
   end
 end

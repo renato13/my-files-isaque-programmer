@@ -390,6 +390,10 @@ begin
   CampoOrdenacao := 'v.dtvenda, c.Nome';
 
   UpdateGenerator( 'where Ano = ' + FormatFloat('0000', YearOf(Date)) );
+
+  // Configurar Legendas de acordo com o segmento
+  btnConsultarProduto.Caption := StrDescricaoProduto;
+  btnConsultarProduto.Hint    := 'Consultar ' + StrDescricaoProduto;
 end;
 
 procedure TfrmGeVenda.btnFiltrarClick(Sender: TObject);
