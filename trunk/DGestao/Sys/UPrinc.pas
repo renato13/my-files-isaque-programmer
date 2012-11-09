@@ -34,7 +34,7 @@ type
     RxSpeedButton4: TRxSpeedButton;
     RxSpeedButton5: TRxSpeedButton;
     RxSpeedBtnCPag: TRxSpeedButton;
-    RxSpeedBtnProd: TRxSpeedButton;
+    btProduto: TRxSpeedButton;
     RxSpeedBtnCliente: TRxSpeedButton;
     SpeedbarSection1: TSpeedbarSection;
     menuSobre: TMenuItem;
@@ -118,7 +118,7 @@ type
     procedure RxSpeedBtnCPagClick(Sender: TObject);
     procedure nmFornecedorClick(Sender: TObject);
     procedure RxSpeedButton2Click(Sender: TObject);
-    procedure RxSpeedBtnProdClick(Sender: TObject);
+    procedure btProdutoClick(Sender: TObject);
     procedure nmEntradaClick(Sender: TObject);
     procedure nmAjusteManualClick(Sender: TObject);
     procedure nmKardexClick(Sender: TObject);
@@ -220,7 +220,7 @@ begin
     Application.Terminate;
 end;
 
-procedure TfrmPrinc.RxSpeedBtnProdClick(Sender: TObject);
+procedure TfrmPrinc.btProdutoClick(Sender: TObject);
 begin
   MostrarTabelaProdutos(Self, taICMS);
 end;
@@ -411,7 +411,7 @@ begin
     4 : begin
          EvUAfrmPrinc.UserID := 4;   // Vendedor
          RxSpeedButtonEmpresa.Visible := false;
-         RxSpeedBtnProd.Enabled := false;
+         btProduto.Enabled := false;
          RxSpeedButton4.Enabled := false;
          RxSpeedButton1.Enabled := false;
          RxSpeedButton5.Enabled := false;
@@ -464,6 +464,10 @@ begin
     CompanyName.Visible := False;
     Copyright.Visible   := False;
   end;
+
+  // Configurar Legendas de acordo com o segmento
+  nmProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
+  btProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);

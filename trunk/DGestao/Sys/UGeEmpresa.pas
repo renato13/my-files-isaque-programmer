@@ -155,7 +155,12 @@ end;
 
 procedure TfrmGeEmpresa.FormCreate(Sender: TObject);
 begin
+  RegistrarSegmentos(SEGMENTO_PADRAO_ID,         SEGMENTO_PADRAO_DS);
+  RegistrarSegmentos(SEGMENTO_VAREJO_ATACADO_ID, SEGMENTO_VAREJO_ATACADO_DS);
+  RegistrarSegmentos(SEGMENTO_MERCADO_CARRO_ID,  SEGMENTO_MERCADO_CARRO_DS);
+
   inherited;
+
   tblTipoRegimeNFe.Open;
   tblSegmento.Open;
 
@@ -168,10 +173,6 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
-//
-//  RegistrarSegmentos(SEGMENTO_PADRAO_ID,         SEGMENTO_PADRAO_DS);
-//  RegistrarSegmentos(SEGMENTO_VAREJO_ATACADO_ID, SEGMENTO_VAREJO_ATACADO_DS);
-//  RegistrarSegmentos(SEGMENTO_MERCADO_CARRO_ID,  SEGMENTO_MERCADO_CARRO_DS);
 end;
 
 procedure TfrmGeEmpresa.ProximoCampoKeyPress(Sender: TObject;

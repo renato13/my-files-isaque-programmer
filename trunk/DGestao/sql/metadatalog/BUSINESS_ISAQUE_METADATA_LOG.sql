@@ -993,3 +993,245 @@ end^
 
 SET TERM ; ^
 
+
+
+COMMENT ON COLUMN TBSEGMENTO.SEG_DESCRICAO IS
+'Descricao.';
+
+
+
+COMMENT ON COLUMN TBSEGMENTO.SEG_ID IS
+'Codigo.';
+
+
+
+COMMENT ON TABLE TBSEGMENTO IS 'Tabela de Segmentos.
+    
+    Autor   :   Isaque Marinho Ribeiro
+    Data    :   07/11/2012
+
+Tabela responsavel por armazenar os codigos e descricoes dos segmentos que a empresa podera assumir.';
+
+
+
+COMMENT ON COLUMN TBPRODUTO.DESCRI IS
+'Descricao.';
+
+
+
+COMMENT ON COLUMN TBPRODUTO.APRESENTACAO IS
+'Apresentacao.';
+
+
+
+COMMENT ON COLUMN TBPRODUTO.DESCRI_APRESENTACAO IS
+'Campo Calculado = Descricao + Apresentacao.';
+
+
+
+CREATE INDEX IBE$$RC_TEMP_INDEX
+ON RDB$RELATION_CONSTRAINTS (RDB$INDEX_NAME);
+
+
+
+DROP INDEX IBE$$RC_TEMP_INDEX;
+
+
+
+alter table TBEMPRESA
+alter column CODIGO position 1;
+
+alter table TBEMPRESA
+alter column PESSOA_FISICA position 2;
+
+alter table TBEMPRESA
+alter column CNPJ position 3;
+
+alter table TBEMPRESA
+alter column RZSOC position 4;
+
+alter table TBEMPRESA
+alter column NMFANT position 5;
+
+alter table TBEMPRESA
+alter column IE position 6;
+
+alter table TBEMPRESA
+alter column IM position 7;
+
+alter table TBEMPRESA
+alter column SEGMENTO position 8;
+
+alter table TBEMPRESA
+alter column CNAE position 9;
+
+alter table TBEMPRESA
+alter column ENDER position 10;
+
+alter table TBEMPRESA
+alter column COMPLEMENTO position 11;
+
+alter table TBEMPRESA
+alter column BAIRRO position 12;
+
+alter table TBEMPRESA
+alter column CEP position 13;
+
+alter table TBEMPRESA
+alter column CIDADE position 14;
+
+alter table TBEMPRESA
+alter column UF position 15;
+
+alter table TBEMPRESA
+alter column FONE position 16;
+
+alter table TBEMPRESA
+alter column LOGO position 17;
+
+alter table TBEMPRESA
+alter column TLG_TIPO position 18;
+
+alter table TBEMPRESA
+alter column LOG_COD position 19;
+
+alter table TBEMPRESA
+alter column BAI_COD position 20;
+
+alter table TBEMPRESA
+alter column CID_COD position 21;
+
+alter table TBEMPRESA
+alter column EST_COD position 22;
+
+alter table TBEMPRESA
+alter column NUMERO_END position 23;
+
+alter table TBEMPRESA
+alter column EMAIL position 24;
+
+alter table TBEMPRESA
+alter column HOME_PAGE position 25;
+
+alter table TBEMPRESA
+alter column CHAVE_ACESSO_NFE position 26;
+
+alter table TBEMPRESA
+alter column PAIS_ID position 27;
+
+alter table TBEMPRESA
+alter column TIPO_REGIME_NFE position 28;
+
+alter table TBEMPRESA
+alter column SERIE_NFE position 29;
+
+alter table TBEMPRESA
+alter column NUMERO_NFE position 30;
+
+alter table TBEMPRESA
+alter column LOTE_ANO_NFE position 31;
+
+alter table TBEMPRESA
+alter column LOTE_NUM_NFE position 32;
+
+alter table TBPRODUTO
+alter column CODIGO position 1;
+
+alter table TBPRODUTO
+alter column COD position 2;
+
+alter table TBPRODUTO
+alter column DESCRI position 3;
+
+alter table TBPRODUTO
+alter column APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter column DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter column MODELO position 6;
+
+alter table TBPRODUTO
+alter column PRECO position 7;
+
+alter table TBPRODUTO
+alter column PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter column REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter column SECAO position 10;
+
+alter table TBPRODUTO
+alter column QTDE position 11;
+
+alter table TBPRODUTO
+alter column UNIDADE position 12;
+
+alter table TBPRODUTO
+alter column ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter column CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter column CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter column CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter column CODEMP position 17;
+
+alter table TBPRODUTO
+alter column CODSECAO position 18;
+
+alter table TBPRODUTO
+alter column CODORIGEM position 19;
+
+alter table TBPRODUTO
+alter column CODTRIBUTACAO position 20;
+
+alter table TBPRODUTO
+alter column CST position 21;
+
+alter table TBPRODUTO
+alter column CSOSN position 22;
+
+alter table TBPRODUTO
+alter column NCM_SH position 23;
+
+alter table TBPRODUTO
+alter column CODCFOP position 24;
+
+alter table TBPRODUTO
+alter column CODBARRA_EAN position 25;
+
+alter table TBPRODUTO
+alter column CODUNIDADE position 26;
+
+alter table TBPRODUTO
+alter column ALIQUOTA_TIPO position 27;
+
+alter table TBPRODUTO
+alter column ALIQUOTA position 28;
+
+alter table TBPRODUTO
+alter column ALIQUOTA_CSOSN position 29;
+
+alter table TBPRODUTO
+alter column VALOR_IPI position 30;
+
+alter table TBPRODUTO
+alter column RESERVA position 31;
+
+ALTER TABLE TBPRODUTO
+    ADD PRODUTO_NOVO DMN_LOGICO DEFAULT 0;
+
+COMMENT ON COLUMN TBPRODUTO.PRODUTO_NOVO IS
+'Produto novo:
+0 - Nao
+1 - Sim';
+

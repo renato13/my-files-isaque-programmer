@@ -359,6 +359,7 @@ object DMNFe: TDMNFe
       '  , i.Qtde * i.Desconto_valor as Total_desconto'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
+      '  , p.Produto_novo'
       '  , coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0) as Disponivel'
       'from TVENDASITENS i'
       '  inner join TBPRODUTO p on (p.Cod = i.Codprod)'
@@ -551,6 +552,11 @@ object DMNFe: TDMNFe
     object qryDadosProdutoRESERVA: TIntegerField
       FieldName = 'RESERVA'
       Origin = 'TBPRODUTO.RESERVA'
+    end
+    object qryDadosProdutoPRODUTO_NOVO: TSmallintField
+      FieldName = 'PRODUTO_NOVO'
+      Origin = 'TBPRODUTO.PRODUTO_NOVO'
+      Required = True
     end
     object qryDadosProdutoDISPONIVEL: TLargeintField
       FieldName = 'DISPONIVEL'
