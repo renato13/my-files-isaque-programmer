@@ -11,7 +11,6 @@ object DMNFe: TDMNFe
     Configuracoes.WebServices.AguardarConsultaRet = 0
     Configuracoes.WebServices.IntervaloTentativas = 0
     Configuracoes.WebServices.AjustaAguardaConsultaRet = False
-    DANFE = rvDANFE
     Left = 24
     Top = 24
   end
