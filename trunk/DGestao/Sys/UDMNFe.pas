@@ -1081,7 +1081,7 @@ begin
                 nMotor   := ''; // J12 - Número de Motor
                 CMT      := '';
                 dist     := '';        // J14 - Distância entre eixos
-                RENAVAM  := '';        // J15 - RENAVAM            (Não informar a TAG na exportação)
+//                RENAVAM  := '';        // J15 - RENAVAM            (Não informar a TAG na exportação)
                 anoMod   := 0;         // J16 - Ano Modelo de Fabricação
                 anoFab   := 0;         // J17 - Ano de Fabricação
                 tpPint   := '';        // J18 - Tipo de Pintura
@@ -1093,6 +1093,35 @@ begin
               end;
 
           end;
+
+{
+    property tpOP: TpcnTipoOperacao read FtpOP write FtpOP;
+    property chassi: string read Fchassi write Fchassi;
+    property cCor: string read FcCor write FcCor;
+    property xCor: string read FxCor write FxCor;
+    property pot: string read Fpot write Fpot;
+    property Cilin: string read FCilin write FCilin;
+    property pesoL: string read FpesoL write FpesoL;
+    property pesoB: string read FpesoB write FpesoB;
+    property nSerie: string read FnSerie write FnSerie;
+    property tpComb: string read FtpComb write FtpComb;
+    property nMotor: string read FnMotor write FnMotor;
+    property CMT: string read FCMT write FCMT;
+    property dist: string read Fdist write Fdist;
+    //property RENAVAM: string read FRENAVAM write FRENAVAM;
+    property anoMod: integer read FanoMod write FanoMod;
+    property anoFab: integer read FanoFab write FanoFab;
+    property tpPint: string read FtpPint write FtpPint;
+    property tpVeic: integer read FtpVeic write FtpVeic;
+    property espVeic: integer read FespVeic write FespVeic;
+    property VIN: string read FVIN write FVIN;
+    property condVeic: TpcnCondicaoVeiculo read FcondVeic write FcondVeic;
+    property cMod: string read FcMod write FcMod;
+
+    property cCorDENATRAN: string read FcCorDENATRAN write FcCorDENATRAN;
+    property lota: integer read Flota write Flota;
+    property tpRest: integer read FtpRest write FtpRest;
+}
 
   //Campos específicos para venda de medicamentos
   {         with Prod.med.Add do
