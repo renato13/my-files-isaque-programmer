@@ -11,6 +11,7 @@ object DMNFe: TDMNFe
     Configuracoes.WebServices.AguardarConsultaRet = 0
     Configuracoes.WebServices.IntervaloTentativas = 0
     Configuracoes.WebServices.AjustaAguardaConsultaRet = False
+    DANFE = rvDANFE
     Left = 24
     Top = 24
   end
@@ -330,6 +331,11 @@ object DMNFe: TDMNFe
       '  , i.Codprod'
       '  , p.Codbarra_ean'
       '  , p.Descri'
+      '  , p.Apresentacao'
+      
+        '  , coalesce(p.Descri_apresentacao, p.Descri) as Descri_apresent' +
+        'acao'
+      '  , p.Modelo'
       '  , p.Referencia'
       '  , p.Ncm_sh'
       '  , p.Codorigem'
@@ -359,10 +365,31 @@ object DMNFe: TDMNFe
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
       '  , p.Produto_novo'
+      '  , p.Cor_veiculo'
+      '  , cr.Descricao as Cor_veiculo_descricao'
+      '  , p.Combustivel_veiculo'
+      '  , cb.Descricao as Combustivel_veiculo_descricao'
+      '  , p.Ano_fabricacao_veiculo'
+      '  , p.Ano_modelo_veiculo'
+      
+        '  , p.Ano_fabricacao_veiculo || '#39'/'#39' || p.Ano_modelo_veiculo as a' +
+        'no_fab_modelo_veiculo'
+      '  , p.Tipo_veiculo'
+      '  , tv.Descricao as Tipo_veiculo_descricao'
+      '  , p.Renavam_veiculo'
+      '  , p.Chassi_veiculo'
+      '  , p.Kilometragem_veiculo'
       '  , coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0) as Disponivel'
       'from TVENDASITENS i'
       '  inner join TBPRODUTO p on (p.Cod = i.Codprod)'
       '  inner join TBUNIDADEPROD u on (u.Unp_cod = i.Unid_cod)'
+      '  left join RENAVAM_COR cr on (cr.Codigo = p.Cor_veiculo)'
+      
+        '  left join RENAVAM_COBUSTIVEL cb on (cb.Codigo = p.Combustivel_' +
+        'veiculo)'
+      
+        '  left join RENAVAM_TIPOVEICULO tv on (tv.Codigo = p.Tipo_veicul' +
+        'o)'
       'where i.Ano = :anovenda'
       '  and i.Codcontrol = :numvenda')
     Left = 144
@@ -410,6 +437,20 @@ object DMNFe: TDMNFe
       FieldName = 'DESCRI'
       Origin = 'TBPRODUTO.DESCRI'
       Size = 50
+    end
+    object qryDadosProdutoAPRESENTACAO: TIBStringField
+      FieldName = 'APRESENTACAO'
+      Origin = 'TBPRODUTO.APRESENTACAO'
+      Size = 50
+    end
+    object qryDadosProdutoDESCRI_APRESENTACAO: TIBStringField
+      FieldName = 'DESCRI_APRESENTACAO'
+      Size = 100
+    end
+    object qryDadosProdutoMODELO: TIBStringField
+      FieldName = 'MODELO'
+      Origin = 'TBPRODUTO.MODELO'
+      Size = 40
     end
     object qryDadosProdutoREFERENCIA: TIBStringField
       FieldName = 'REFERENCIA'
@@ -559,6 +600,62 @@ object DMNFe: TDMNFe
     end
     object qryDadosProdutoDISPONIVEL: TLargeintField
       FieldName = 'DISPONIVEL'
+    end
+    object qryDadosProdutoCOR_VEICULO: TIBStringField
+      FieldName = 'COR_VEICULO'
+      Origin = 'TBPRODUTO.COR_VEICULO'
+      Size = 3
+    end
+    object qryDadosProdutoCOR_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'COR_VEICULO_DESCRICAO'
+      Origin = 'RENAVAM_COR.DESCRICAO'
+      Size = 50
+    end
+    object qryDadosProdutoCOMBUSTIVEL_VEICULO: TIBStringField
+      FieldName = 'COMBUSTIVEL_VEICULO'
+      Origin = 'TBPRODUTO.COMBUSTIVEL_VEICULO'
+      Size = 3
+    end
+    object qryDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'COMBUSTIVEL_VEICULO_DESCRICAO'
+      Origin = 'RENAVAM_COBUSTIVEL.DESCRICAO'
+      Size = 100
+    end
+    object qryDadosProdutoANO_FABRICACAO_VEICULO: TSmallintField
+      FieldName = 'ANO_FABRICACAO_VEICULO'
+      Origin = 'TBPRODUTO.ANO_FABRICACAO_VEICULO'
+    end
+    object qryDadosProdutoANO_MODELO_VEICULO: TSmallintField
+      FieldName = 'ANO_MODELO_VEICULO'
+      Origin = 'TBPRODUTO.ANO_MODELO_VEICULO'
+    end
+    object qryDadosProdutoANO_FAB_MODELO_VEICULO: TIBStringField
+      FieldName = 'ANO_FAB_MODELO_VEICULO'
+      Size = 13
+    end
+    object qryDadosProdutoTIPO_VEICULO: TIBStringField
+      FieldName = 'TIPO_VEICULO'
+      Origin = 'TBPRODUTO.TIPO_VEICULO'
+      Size = 3
+    end
+    object qryDadosProdutoTIPO_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'TIPO_VEICULO_DESCRICAO'
+      Origin = 'RENAVAM_TIPOVEICULO.DESCRICAO'
+      Size = 100
+    end
+    object qryDadosProdutoRENAVAM_VEICULO: TIBStringField
+      FieldName = 'RENAVAM_VEICULO'
+      Origin = 'TBPRODUTO.RENAVAM_VEICULO'
+      Size = 50
+    end
+    object qryDadosProdutoCHASSI_VEICULO: TIBStringField
+      FieldName = 'CHASSI_VEICULO'
+      Origin = 'TBPRODUTO.CHASSI_VEICULO'
+      Size = 50
+    end
+    object qryDadosProdutoKILOMETRAGEM_VEICULO: TIntegerField
+      FieldName = 'KILOMETRAGEM_VEICULO'
+      Origin = 'TBPRODUTO.KILOMETRAGEM_VEICULO'
     end
   end
   object frdEmpresa: TfrxDBDataset
@@ -1821,6 +1918,9 @@ object DMNFe: TDMNFe
       'CODPROD=CODPROD'
       'CODBARRA_EAN=CODBARRA_EAN'
       'DESCRI=DESCRI'
+      'APRESENTACAO=APRESENTACAO'
+      'DESCRI_APRESENTACAO=DESCRI_APRESENTACAO'
+      'MODELO=MODELO'
       'REFERENCIA=REFERENCIA'
       'NCM_SH=NCM_SH'
       'CODORIGEM=CODORIGEM'
@@ -1849,7 +1949,20 @@ object DMNFe: TDMNFe
       'TOTAL_DESCONTO=TOTAL_DESCONTO'
       'ESTOQUE=ESTOQUE'
       'RESERVA=RESERVA'
-      'DISPONIVEL=DISPONIVEL')
+      'PRODUTO_NOVO=PRODUTO_NOVO'
+      'DISPONIVEL=DISPONIVEL'
+      'COR_VEICULO=COR_VEICULO'
+      'COR_VEICULO_DESCRICAO=COR_VEICULO_DESCRICAO'
+      'COMBUSTIVEL_VEICULO=COMBUSTIVEL_VEICULO'
+      'COMBUSTIVEL_VEICULO_DESCRICAO=COMBUSTIVEL_VEICULO_DESCRICAO'
+      'ANO_FABRICACAO_VEICULO=ANO_FABRICACAO_VEICULO'
+      'ANO_MODELO_VEICULO=ANO_MODELO_VEICULO'
+      'ANO_FAB_MODELO_VEICULO=ANO_FAB_MODELO_VEICULO'
+      'TIPO_VEICULO=TIPO_VEICULO'
+      'TIPO_VEICULO_DESCRICAO=TIPO_VEICULO_DESCRICAO'
+      'RENAVAM_VEICULO=RENAVAM_VEICULO'
+      'CHASSI_VEICULO=CHASSI_VEICULO'
+      'KILOMETRAGEM_VEICULO=KILOMETRAGEM_VEICULO')
     DataSet = qryDadosProduto
     Left = 180
     Top = 169
