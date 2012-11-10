@@ -209,6 +209,21 @@ type
     qryDadosProdutoDESCONTO: TIBBCDField;
     qryDadosProdutoPUNIT_PROMOCAO: TIBBCDField;
     qryDadosProdutoPRODUTO_NOVO: TSmallintField;
+    qryDadosProdutoCOR_VEICULO: TIBStringField;
+    qryDadosProdutoCOR_VEICULO_DESCRICAO: TIBStringField;
+    qryDadosProdutoCOMBUSTIVEL_VEICULO: TIBStringField;
+    qryDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO: TIBStringField;
+    qryDadosProdutoANO_FABRICACAO_VEICULO: TSmallintField;
+    qryDadosProdutoANO_MODELO_VEICULO: TSmallintField;
+    qryDadosProdutoTIPO_VEICULO: TIBStringField;
+    qryDadosProdutoTIPO_VEICULO_DESCRICAO: TIBStringField;
+    qryDadosProdutoRENAVAM_VEICULO: TIBStringField;
+    qryDadosProdutoCHASSI_VEICULO: TIBStringField;
+    qryDadosProdutoKILOMETRAGEM_VEICULO: TIntegerField;
+    qryDadosProdutoANO_FAB_MODELO_VEICULO: TIBStringField;
+    qryDadosProdutoAPRESENTACAO: TIBStringField;
+    qryDadosProdutoDESCRI_APRESENTACAO: TIBStringField;
+    qryDadosProdutoMODELO: TIBStringField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -986,6 +1001,7 @@ begin
   //Adicionando Produtos
   
       qryDadosProduto.First;
+      
       while not qryDadosProduto.Eof do
       begin
 
@@ -993,7 +1009,12 @@ begin
         begin
           Prod.nItem    := qryDadosProdutoSEQ.AsInteger;              // Número sequencial, para cada item deve ser incrementado
           Prod.cProd    := qryDadosProdutoCODPROD.AsString;
-          Prod.xProd    := qryDadosProdutoDESCRI.AsString;
+
+          if ( GetSegmentoID(qryEmitenteCNPJ.AsString) <> SEGMENTO_MERCADO_CARRO_ID ) then
+            Prod.xProd  := qryDadosProdutoDESCRI.AsString
+          else
+            Prod.xProd  := qryDadosProdutoDESCRI.AsString + ' ' + qryDadosProdutoANO_FAB_MODELO_VEICULO.AsString;
+
           Prod.NCM      := qryDadosProdutoNCM_SH.AsString;            // Tabela NCM disponível em  http://www.receita.fazenda.gov.br/Aliquotas/DownloadArqTIPI.htm
           Prod.EXTIPI   := '';
           Prod.CFOP     := qryDadosProdutoCFOP_COD.AsString;
@@ -1032,10 +1053,17 @@ begin
           Prod.vDesc     := qryDadosProdutoTOTAL_DESCONTO.AsCurrency; // I17 - Valor do Desconto
 
           // Informação Adicional do Produto
-          if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
-            infAdProd    := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString
+          
+          if ( GetSegmentoID(qryEmitenteCNPJ.AsString) <> SEGMENTO_MERCADO_CARRO_ID ) then
+            if ( Trim(qryDadosProdutoREFERENCIA.AsString) <> EmptyStr ) then
+              infAdProd    := 'Ref.: ' + qryDadosProdutoREFERENCIA.AsString
+            else
+              infAdProd    := EmptyStr
           else
-            infAdProd    := EmptyStr;
+            infAdProd      := 'Cor: '         + qryDadosProdutoCOR_VEICULO_DESCRICAO.AsString + #13 +
+                              'Placa: '       + qryDadosProdutoREFERENCIA.AsString      + #13 +
+                              'Renavam: '     + qryDadosProdutoRENAVAM_VEICULO.AsString + #13 +
+                              'Combustivel: ' + qryDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO.AsString;
 
   //Declaração de Importação. Pode ser adicionada várias através do comando Prod.DI.Add
   {         with Prod.DI.Add do
@@ -1069,23 +1097,23 @@ begin
                                                    //    (2) = toFaturamentoDireto
                                                    //    (3) = toVendaDireta
                                                    //    (0) = toOutros
-                chassi   := ''; // J03 - Chassi do veículo
-                cCor     := ''; // J04 - Cor
-                xCor     := ''; // J05 - Descrição da Cor
+                chassi   := qryDadosProdutoCHASSI_VEICULO.AsString;        // J03 - Chassi do veículo
+                cCor     := qryDadosProdutoCOR_VEICULO.AsString;           // J04 - Cor
+                xCor     := qryDadosProdutoCOR_VEICULO_DESCRICAO.AsString; // J05 - Descrição da Cor
                 pot      := ''; // J06 - Potência Motor
                 Cilin    := '';
                 pesoL    := ''; // J08 - Peso Líquido
                 pesoB    := ''; // J09 - Peso Bruto
                 nSerie   := ''; // J10 - Serial (série)
-                tpComb   := ''; // J11 - Tipo de combustível
+                tpComb   := qryDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO.AsString; // J11 - Tipo de combustível
                 nMotor   := ''; // J12 - Número de Motor
                 CMT      := '';
                 dist     := '';        // J14 - Distância entre eixos
 //                RENAVAM  := '';        // J15 - RENAVAM            (Não informar a TAG na exportação)
-                anoMod   := 0;         // J16 - Ano Modelo de Fabricação
-                anoFab   := 0;         // J17 - Ano de Fabricação
+                anoMod   := qryDadosProdutoANO_MODELO_VEICULO.AsInteger;         // J16 - Ano Modelo de Fabricação
+                anoFab   := qryDadosProdutoANO_FABRICACAO_VEICULO.AsInteger;     // J17 - Ano de Fabricação
                 tpPint   := '';        // J18 - Tipo de Pintura
-                tpVeic   := 0;         // J19 - Tipo de Veículo    (Utilizar Tabela RENAVAM)
+                tpVeic   := StrToIntDef(qryDadosProdutoTIPO_VEICULO.AsString, 0); // J19 - Tipo de Veículo    (Utilizar Tabela RENAVAM)
                 espVeic  := 0;         // J20 - Espécie de Veículo (Utilizar Tabela RENAVAM)
                 VIN      := '';        // J21 - Condição do VIN
                 condVeic := cvAcabado; // J22 - Condição do Veículo (1 - Acabado; 2 - Inacabado; 3 - Semi-acabado)

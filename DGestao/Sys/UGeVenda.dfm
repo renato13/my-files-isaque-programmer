@@ -1814,7 +1814,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 464
         Width = 1091
         Height = 150
-        ActivePage = tbsITitulos
+        ActivePage = tbsRecebimento
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet

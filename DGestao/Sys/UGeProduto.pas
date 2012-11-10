@@ -123,7 +123,40 @@ type
     tbsEspecificacaoVeiculo: TTabSheet;
     lblApresentacao: TLabel;
     dbApresentacao: TDBEdit;
-    DBCheckBox1: TDBCheckBox;
+    dbProdutoNovo: TDBCheckBox;
+    IbDtstTabelaCOR_VEICULO: TIBStringField;
+    IbDtstTabelaCOMBUSTIVEL_VEICULO: TIBStringField;
+    IbDtstTabelaTIPO_VEICULO: TIBStringField;
+    IbDtstTabelaRENAVAM_VEICULO: TIBStringField;
+    IbDtstTabelaCHASSI_VEICULO: TIBStringField;
+    IbDtstTabelaANO_MODELO_VEICULO: TSmallintField;
+    IbDtstTabelaANO_FABRICACAO_VEICULO: TSmallintField;
+    IbDtstTabelaKILOMETRAGEM_VEICULO: TIntegerField;
+    IbDtstTabelaDESCRICAO_COR: TIBStringField;
+    IbDtstTabelaDESCRICAO_COMBUSTIVEL: TIBStringField;
+    IbDtstTabelaMODELO_FABRICACAO: TIBStringField;
+    tblCor: TIBTable;
+    dtsCor: TDataSource;
+    tblCombustivel: TIBTable;
+    dtsCombustivel: TDataSource;
+    tblTipoVeiculo: TIBTable;
+    dtsTipoVeiculo: TDataSource;
+    lblTipoVeiculo: TLabel;
+    dbTipoVeiculo: TDBLookupComboBox;
+    lblCorVeiculo: TLabel;
+    dbCorVeiculo: TDBLookupComboBox;
+    lblTipoCombustivel: TLabel;
+    dbTipoCombustivel: TDBLookupComboBox;
+    lblRenavam: TLabel;
+    dbRenavam: TDBEdit;
+    lblChassi: TLabel;
+    dbChassi: TDBEdit;
+    lblAnoModelo: TLabel;
+    dbAnoModelo: TDBEdit;
+    lblAnoFabricacao: TLabel;
+    dbAnoFabricacao: TDBEdit;
+    lblKilometragem: TLabel;
+    dbKilometragem: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -137,6 +170,8 @@ type
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure dbFabricanteButtonClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -317,6 +352,13 @@ begin
   tblTributacaoSN.Open;
   tblAliquota.Open;
 
+  if ( GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID ) then
+  begin
+    tblCor.Open;
+    tblCombustivel.Open;
+    tblTipoVeiculo.Open;
+  end;
+
   DisplayFormatCodigo := '###0000000';
 
   NomeTabela     := 'TBPRODUTO';
@@ -366,6 +408,9 @@ begin
   if ( (IbDtstTabelaRESERVA.AsInteger < 0) or (IbDtstTabelaRESERVA.AsInteger > IbDtstTabelaQTDE.AsInteger) ) then
     IbDtstTabelaRESERVA.Value := 0;
 
+  if ( IbDtstTabelaPRODUTO_NOVO.IsNull ) then
+    IbDtstTabelaPRODUTO_NOVO.Value := 0;
+    
   IbDtstTabelaDISPONIVEL.Value := IbDtstTabelaQTDE.Value - IbDtstTabelaRESERVA.Value;
 
   IbDtstTabelaCST.Value := IbDtstTabelaCODORIGEM.AsString + IbDtstTabelaCODTRIBUTACAO.AsString;
@@ -373,6 +418,10 @@ begin
   if ( IbDtstTabela.State = dsInsert ) then
     if ( Trim(IbDtstTabelaCOD.AsString) = EmptyStr ) then
       IbDtstTabelaCOD.Value := FormatFloat(DisplayFormatCodigo, IbDtstTabelaCODIGO.AsInteger);
+
+  IbDtstTabelaDESCRICAO_COR.AsString         := dbCorVeiculo.Text;
+  IbDtstTabelaDESCRICAO_COMBUSTIVEL.AsString := dbTipoCombustivel.Text;
+  IbDtstTabelaMODELO_FABRICACAO.AsString     := dbAnoFabricacao.Text + '/' + dbAnoModelo.Text;
 end;
 
 procedure TfrmGeProduto.dbUnidadeButtonClick(Sender: TObject);
@@ -429,15 +478,21 @@ begin
   IbDtstTabelaVALOR_IPI.Value      := 0;
   IbDtstTabelaRESERVA.Value        := 0;
   IbDtstTabelaPRODUTO_NOVO.Value   := 0;
+
+  IbDtstTabelaCOR_VEICULO.Clear;
+  IbDtstTabelaCOMBUSTIVEL_VEICULO.Clear;
+  IbDtstTabelaTIPO_VEICULO.Clear;
+  IbDtstTabelaRENAVAM_VEICULO.Clear;
+  IbDtstTabelaCHASSI_VEICULO.Clear;
+  IbDtstTabelaANO_MODELO_VEICULO.Clear;
+  IbDtstTabelaANO_FABRICACAO_VEICULO.Clear;
 end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);
 var
   S : String;
 begin
-  // Configurar Legendas de acordo com o segmento
   S := StrDescricaoProduto;
-
   Case fAliquota of
     taICMS :
       Caption := 'Cadastro de ' + S;
@@ -455,7 +510,35 @@ begin
 
   inherited;
 
+  // Configurar Legendas de acordo com o segmento
   tbsEspecificacaoVeiculo.TabVisible := (GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID);
+
+  if ( tbsEspecificacaoVeiculo.TabVisible ) then
+  begin
+    lblReferencia.Caption               := 'Placa:';
+    IbDtstTabelaREFERENCIA.DisplayLabel := 'Placa';
+  end;
+
+  IbDtstTabelaCOR_VEICULO.Required         := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaCOMBUSTIVEL_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaTIPO_VEICULO.Required    := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaRENAVAM_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaCHASSI_VEICULO.Required  := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaKILOMETRAGEM_VEICULO.Required   := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaANO_MODELO_VEICULO.Required     := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaANO_FABRICACAO_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
+
+  with dbgDados do
+  begin
+    Columns[2].Visible  := not tbsEspecificacaoVeiculo.TabVisible;
+    Columns[4].Visible  := tbsEspecificacaoVeiculo.TabVisible;
+    Columns[5].Visible  := tbsEspecificacaoVeiculo.TabVisible;
+    Columns[6].Visible  := tbsEspecificacaoVeiculo.TabVisible;
+    Columns[7].Visible  := tbsEspecificacaoVeiculo.TabVisible;
+    Columns[8].Visible  := tbsEspecificacaoVeiculo.TabVisible;
+    Columns[9].Visible  := not tbsEspecificacaoVeiculo.TabVisible;
+    Columns[12].Visible := not tbsEspecificacaoVeiculo.TabVisible;
+  end;
 end;
 
 procedure TfrmGeProduto.DtSrcTabelaStateChange(Sender: TObject);
@@ -515,6 +598,21 @@ begin
       IbDtstTabelaCODFABRICANTE.AsInteger  := iCodigo;
       IbDtstTabelaNOME_FABRICANTE.AsString := sNome;
     end;
+end;
+
+procedure TfrmGeProduto.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    if ( (ActiveControl = dbProdutoNovo) and tbsEspecificacaoVeiculo.TabVisible ) then
+    begin
+      pgcMaisDados.ActivePage := tbsEspecificacaoVeiculo;
+      dbTipoVeiculo.SetFocus;
+      Exit;
+    end;
+
+  inherited;
+
 end;
 
 end.
