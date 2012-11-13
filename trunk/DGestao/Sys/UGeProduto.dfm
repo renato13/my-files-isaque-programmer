@@ -180,6 +180,9 @@ inherited frmGeProduto: TfrmGeProduto
         inherited grpBxFiltro: TGroupBox
           Left = 689
           Width = 260
+          DesignSize = (
+            260
+            54)
           inherited lbltFiltrar: TLabel
             Width = 48
             Caption = 'Produto:'
@@ -987,7 +990,7 @@ inherited frmGeProduto: TfrmGeProduto
         Top = 317
         Width = 953
         Height = 221
-        ActivePage = tbsEspecificacaoVeiculo
+        ActivePage = tbsHistoricoVeiculo
         Align = alClient
         TabOrder = 3
         object tbsValores: TTabSheet
@@ -1119,7 +1122,7 @@ inherited frmGeProduto: TfrmGeProduto
           object lblTipoCombustivel: TLabel
             Left = 480
             Top = 8
-            Width = 93
+            Width = 85
             Height = 13
             Caption = 'Tipo Combust'#237'vel:'
             FocusControl = dbTipoCombustivel
@@ -1302,9 +1305,62 @@ inherited frmGeProduto: TfrmGeProduto
             TabOrder = 7
           end
         end
-        object tbsHistorico: TTabSheet
+        object tbsHistoricoVeiculo: TTabSheet
           Caption = 'Hist'#243'ricos'
           ImageIndex = 1
+          DesignSize = (
+            945
+            193)
+          object lblSituacaoVeiculo: TLabel
+            Left = 16
+            Top = 8
+            Width = 81
+            Height = 13
+            Caption = 'Situa'#231#227'o ve'#237'culo:'
+            FocusControl = dbSituacaoVeiculo
+          end
+          object lblHistoricoSituacaoVeiculo: TLabel
+            Left = 16
+            Top = 48
+            Width = 103
+            Height = 13
+            Caption = 'Hist'#243'rico da situa'#231#227'o:'
+            FocusControl = dbHistoricoSituacaoVeiculo
+          end
+          object dbSituacaoVeiculo: TDBEdit
+            Left = 16
+            Top = 24
+            Width = 913
+            Height = 21
+            DataField = 'SITUACAO_ATUAL_VEICULO'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+          end
+          object dbHistoricoSituacaoVeiculo: TDBMemo
+            Left = 16
+            Top = 64
+            Width = 913
+            Height = 113
+            TabStop = False
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            DataField = 'SITUACAO_HISTORICO_VEICULO'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -13
+            Font.Name = 'Lucida Console'
+            Font.Style = []
+            ParentFont = False
+            ReadOnly = True
+            ScrollBars = ssBoth
+            TabOrder = 1
+          end
         end
       end
       object GrpBxDadosEstoque: TGroupBox
@@ -1464,6 +1520,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Ano_modelo_veiculo'
       '  , p.Ano_fabricacao_veiculo'
       '  , p.Kilometragem_veiculo'
+      '  , p.Situacao_atual_veiculo'
+      '  , p.Situacao_historico_veiculo'
       '  , case when coalesce(p.Reserva, 0) > 0'
       '      then coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0)'
       '      else coalesce(p.Qtde, 0)'
@@ -1740,6 +1798,18 @@ inherited frmGeProduto: TfrmGeProduto
       FieldName = 'KILOMETRAGEM_VEICULO'
       Origin = 'TBPRODUTO.KILOMETRAGEM_VEICULO'
     end
+    object IbDtstTabelaSITUACAO_ATUAL_VEICULO: TIBStringField
+      DisplayLabel = 'Situa'#231#227'o Ve'#237'culo'
+      FieldName = 'SITUACAO_ATUAL_VEICULO'
+      Origin = 'TBPRODUTO.SITUACAO_ATUAL_VEICULO'
+      Size = 100
+    end
+    object IbDtstTabelaSITUACAO_HISTORICO_VEICULO: TMemoField
+      FieldName = 'SITUACAO_HISTORICO_VEICULO'
+      Origin = 'TBPRODUTO.SITUACAO_HISTORICO_VEICULO'
+      BlobType = ftMemo
+      Size = 8
+    end
     object IbDtstTabelaDISPONIVEL: TLargeintField
       DisplayLabel = 'Dispon'#237'vel'
       FieldName = 'DISPONIVEL'
@@ -1848,7 +1918,9 @@ inherited frmGeProduto: TfrmGeProduto
       '  ANO_FABRICACAO_VEICULO,'
       '  RENAVAM_VEICULO,'
       '  CHASSI_VEICULO,'
-      '  KILOMETRAGEM_VEICULO'
+      '  KILOMETRAGEM_VEICULO,'
+      '  SITUACAO_ATUAL_VEICULO,'
+      '  SITUACAO_HISTORICO_VEICULO'
       'from TBPRODUTO '
       'where'
       '  CODIGO = :CODIGO')
@@ -1894,52 +1966,50 @@ inherited frmGeProduto: TfrmGeProduto
       '  ANO_FABRICACAO_VEICULO = :ANO_FABRICACAO_VEICULO,'
       '  RENAVAM_VEICULO = :RENAVAM_VEICULO,'
       '  CHASSI_VEICULO = :CHASSI_VEICULO,'
-      '  KILOMETRAGEM_VEICULO = :KILOMETRAGEM_VEICULO'
+      '  KILOMETRAGEM_VEICULO = :KILOMETRAGEM_VEICULO,'
+      '  SITUACAO_ATUAL_VEICULO = :SITUACAO_ATUAL_VEICULO,'
+      '  SITUACAO_HISTORICO_VEICULO = :SITUACAO_HISTORICO_VEICULO'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
       'insert into TBPRODUTO'
-      
-        '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, MODEL' +
-        'O, PRECO, '
-      
-        '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, C' +
-        'ODGRUPO, '
-      
-        '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, CODTR' +
-        'IBUTACAO, '
-      
-        '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUO' +
-        'TA_TIPO, '
-      
-        '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO, C' +
-        'OR_VEICULO, '
-      
-        '   COMBUSTIVEL_VEICULO, TIPO_VEICULO, ANO_MODELO_VEICULO, ANO_FA' +
-        'BRICACAO_VEICULO, '
-      '   RENAVAM_VEICULO, CHASSI_VEICULO, KILOMETRAGEM_VEICULO)'
+      '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, '
+      'MODELO, PRECO, '
+      '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, '
+      'CODGRUPO, '
+      '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, '
+      'CODTRIBUTACAO, '
+      '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, '
+      'ALIQUOTA_TIPO, '
+      '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO, '
+      'COR_VEICULO, '
+      '   COMBUSTIVEL_VEICULO, TIPO_VEICULO, ANO_MODELO_VEICULO, '
+      'ANO_FABRICACAO_VEICULO, '
+      '   RENAVAM_VEICULO, CHASSI_VEICULO, KILOMETRAGEM_VEICULO, '
+      'SITUACAO_ATUAL_VEICULO, '
+      '   SITUACAO_HISTORICO_VEICULO)'
       'values'
-      
-        '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, ' +
-        ':MODELO, '
+      '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, '
+      ':MODELO, '
       
         '   :PRECO, :PRECO_PROMOCAO, :REFERENCIA, :SECAO, :QTDE, :UNIDADE' +
-        ', :ESTOQMIN, '
-      
-        '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, :' +
-        'CODORIGEM, '
+        ', '
+      ':ESTOQMIN, '
+      '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, '
+      ':CODORIGEM, '
       
         '   :CODTRIBUTACAO, :CST, :CSOSN, :NCM_SH, :CODCFOP, :CODBARRA_EA' +
-        'N, :CODUNIDADE, '
+        'N, '
+      ':CODUNIDADE, '
       
         '   :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI, :RESE' +
-        'RVA, :PRODUTO_NOVO, '
-      
-        '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, :ANO_MODEL' +
-        'O_VEICULO, '
-      
-        '   :ANO_FABRICACAO_VEICULO, :RENAVAM_VEICULO, :CHASSI_VEICULO, :' +
-        'KILOMETRAGEM_VEICULO)')
+        'RVA, '
+      ':PRODUTO_NOVO, '
+      '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, '
+      ':ANO_MODELO_VEICULO, '
+      '   :ANO_FABRICACAO_VEICULO, :RENAVAM_VEICULO, :CHASSI_VEICULO, '
+      ':KILOMETRAGEM_VEICULO, '
+      '   :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORICO_VEICULO)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'

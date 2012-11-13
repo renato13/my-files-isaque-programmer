@@ -1066,6 +1066,7 @@ begin
                               'Combustivel: ' + qryDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO.AsString;
 
   //Declaração de Importação. Pode ser adicionada várias através do comando Prod.DI.Add
+  
   {         with Prod.DI.Add do
             begin
               nDi         := '';
