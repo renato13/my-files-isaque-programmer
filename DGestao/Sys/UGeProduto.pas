@@ -67,7 +67,7 @@ type
     dtsTributacaoNM: TDataSource;
     pgcMaisDados: TPageControl;
     tbsValores: TTabSheet;
-    tbsHistorico: TTabSheet;
+    tbsHistoricoVeiculo: TTabSheet;
     IbDtstTabelaUNP_SIGLA: TIBStringField;
     Bevel6: TBevel;
     GrpBxDadosEstoque: TGroupBox;
@@ -157,6 +157,12 @@ type
     dbAnoFabricacao: TDBEdit;
     lblKilometragem: TLabel;
     dbKilometragem: TDBEdit;
+    IbDtstTabelaSITUACAO_ATUAL_VEICULO: TIBStringField;
+    IbDtstTabelaSITUACAO_HISTORICO_VEICULO: TMemoField;
+    lblSituacaoVeiculo: TLabel;
+    dbSituacaoVeiculo: TDBEdit;
+    lblHistoricoSituacaoVeiculo: TLabel;
+    dbHistoricoSituacaoVeiculo: TDBMemo;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -419,6 +425,14 @@ begin
     if ( Trim(IbDtstTabelaCOD.AsString) = EmptyStr ) then
       IbDtstTabelaCOD.Value := FormatFloat(DisplayFormatCodigo, IbDtstTabelaCODIGO.AsInteger);
 
+  if Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.OldValue)) <> Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.NewValue)) then
+    if (Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.OldValue)) <> EmptyStr) and (Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.NewValue)) <> EmptyStr) then
+      IbDtstTabelaSITUACAO_HISTORICO_VEICULO.AsString :=
+        FormatDateTime('dd/mm/yyyy hh:mm', GetDateTimeDB)           + ' - '  +
+        Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.OldValue)) + ' -> ' +
+        Trim(VarToStr(IbDtstTabelaSITUACAO_ATUAL_VEICULO.NewValue)) + ' (' + GetUserApp + ')' + #13 +
+        Trim(IbDtstTabelaSITUACAO_HISTORICO_VEICULO.AsString);
+
   IbDtstTabelaDESCRICAO_COR.AsString         := dbCorVeiculo.Text;
   IbDtstTabelaDESCRICAO_COMBUSTIVEL.AsString := dbTipoCombustivel.Text;
   IbDtstTabelaMODELO_FABRICACAO.AsString     := dbAnoFabricacao.Text + '/' + dbAnoModelo.Text;
@@ -512,6 +526,7 @@ begin
 
   // Configurar Legendas de acordo com o segmento
   tbsEspecificacaoVeiculo.TabVisible := (GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID);
+  tbsHistoricoVeiculo.TabVisible     := (GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID);
 
   if ( tbsEspecificacaoVeiculo.TabVisible ) then
   begin
@@ -608,6 +623,13 @@ begin
     begin
       pgcMaisDados.ActivePage := tbsEspecificacaoVeiculo;
       dbTipoVeiculo.SetFocus;
+      Exit;
+    end
+    else
+    if ( (ActiveControl = dbKilometragem) and tbsHistoricoVeiculo.TabVisible ) then
+    begin
+      pgcMaisDados.ActivePage := tbsHistoricoVeiculo;
+      dbSituacaoVeiculo.SetFocus;
       Exit;
     end;
 
