@@ -1750,16 +1750,17 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
     FieldDefs = <
       item
         Name = 'TIPO'
-        Attributes = [faReadonly]
+        Attributes = [faReadonly, faFixed]
         DataType = ftString
         Size = 1
       end
       item
         Name = 'TIPO_DESC'
-        Attributes = [faReadonly]
+        Attributes = [faReadonly, faFixed]
         DataType = ftString
         Size = 7
       end>
+    ReadOnly = True
     StoreDefs = True
     TableName = 'VW_TIPO_MOVIMENTO_CAIXA'
     TableTypes = [ttView]
