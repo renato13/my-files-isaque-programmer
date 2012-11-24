@@ -1494,3 +1494,27 @@ COMMENT ON COLUMN TBPRODUTO.SITUACAO_ATUAL_VEICULO IS
 COMMENT ON COLUMN TBPRODUTO.SITUACAO_HISTORICO_VEICULO IS
 'Historico das situacoes do produto (Veiculo).';
 
+
+
+DROP VIEW VW_TIPO_MOVIMENTO_CAIXA;
+
+
+/*------ SYSDBA 22/11/2012 13:26:27 --------*/
+
+CREATE VIEW VW_TIPO_MOVIMENTO_CAIXA(
+    TIPO,
+    TIPO_DESC)
+AS
+Select First 1
+    'C' as TIPO
+  , 'Crédito' as TIPO_DESC
+from TBEMPRESA
+
+union
+
+Select First 1
+    'D' as TIPO
+  , 'Débito' as TIPO_DESC
+from TBEMPRESA
+;
+COMMIT WORK;
