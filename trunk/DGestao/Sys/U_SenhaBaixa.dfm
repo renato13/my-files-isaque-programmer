@@ -1,6 +1,6 @@
 object f_senhaBaixa: Tf_senhaBaixa
-  Left = 383
-  Top = 291
+  Left = 447
+  Top = 287
   Width = 272
   Height = 119
   BorderIcons = [biSystemMenu]
