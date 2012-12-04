@@ -111,6 +111,7 @@ type
     CompanyName: TLabel;
     Version: TLabel;
     nmFabricanteProduto: TMenuItem;
+    AlteraodeSenha1: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -159,6 +160,7 @@ type
     procedure nmFluxoDeCaixaClick(Sender: TObject);
     procedure nmRelatorioVendaClick(Sender: TObject);
     procedure nmFabricanteProdutoClick(Sender: TObject);
+    procedure AlteraodeSenha1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -180,7 +182,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes,
-  UGeFabricante, UConstantesDGE;
+  UGeFabricante, UConstantesDGE, UfrmAltSenha;
 
 {$R *.dfm}
 
@@ -526,6 +528,11 @@ end;
 procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);
 begin
   MostrarTabelaFabricantes(Self);
+end;
+
+procedure TfrmPrinc.AlteraodeSenha1Click(Sender: TObject);
+begin
+  frmAltSenha.ShowModal;
 end;
 
 end.

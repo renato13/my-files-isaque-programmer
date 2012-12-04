@@ -94,7 +94,8 @@ uses
   UGeFabricante in 'UGeFabricante.pas' {frmGeFabricante},
   UConstantesDGE in 'UConstantesDGE.pas',
   FormFactoryU in 'lib\FormFactoryU.pas',
-  FuncoesFormulario in 'lib\FuncoesFormulario.pas';
+  FuncoesFormulario in 'lib\FuncoesFormulario.pas',
+  UfrmAltSenha in 'UfrmAltSenha.pas' {frmAltSenha};
 
 {$R *.res}
 
@@ -107,5 +108,6 @@ begin
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.CreateForm(TfrmPesq, frmPesq);
+  Application.CreateForm(TfrmAltSenha, frmAltSenha);
   Application.Run;
 end.

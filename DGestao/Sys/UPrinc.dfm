@@ -5638,6 +5638,10 @@ object frmPrinc: TfrmPrinc
           3E3E3E3E3E3E3E3E00003E3E3E3E3E3E3E3E3E3E3E3E3E3E0000}
         Caption = 'Usu'#225'rio'
       end
+      object AlteraodeSenha1: TMenuItem
+        Caption = 'Altera'#231#227'o de Senha'
+        OnClick = AlteraodeSenha1Click
+      end
     end
     object menuEstoque: TMenuItem
       Caption = '&Estoque'
