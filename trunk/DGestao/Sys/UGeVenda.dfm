@@ -978,7 +978,7 @@ inherited frmGeVenda: TfrmGeVenda
           FocusControl = dbProduto
         end
         object lblQuantidade: TLabel
-          Left = 208
+          Left = 312
           Top = 64
           Width = 60
           Height = 13
@@ -992,7 +992,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorUnit: TLabel
-          Left = 288
+          Left = 392
           Top = 64
           Width = 92
           Height = 13
@@ -1006,7 +1006,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblDesconto: TLabel
-          Left = 408
+          Left = 512
           Top = 64
           Width = 45
           Height = 13
@@ -1020,7 +1020,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorLiq: TLabel
-          Left = 592
+          Left = 696
           Top = 64
           Width = 88
           Height = 13
@@ -1070,7 +1070,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblCST: TLabel
-          Left = 168
+          Left = 272
           Top = 64
           Width = 23
           Height = 13
@@ -1084,7 +1084,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorIPI: TLabel
-          Left = 720
+          Left = 824
           Top = 64
           Width = 69
           Height = 13
@@ -1107,7 +1107,7 @@ inherited frmGeVenda: TfrmGeVenda
           Shape = bsSpacer
         end
         object lblTotalDesconto: TLabel
-          Left = 480
+          Left = 584
           Top = 64
           Width = 82
           Height = 13
@@ -1127,6 +1127,21 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+        end
+        object lblPercRedBC: TLabel
+          Left = 168
+          Top = 64
+          Width = 76
+          Height = 13
+          Caption = '% Redu'#231#227'o BC:'
+          FocusControl = dbPercRedBC
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          Visible = False
         end
         object dbProduto: TRxDBComboEdit
           Left = 88
@@ -1222,7 +1237,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 2
         end
         object dbQuantidade: TDBEdit
-          Left = 208
+          Left = 312
           Top = 80
           Width = 73
           Height = 21
@@ -1235,11 +1250,11 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 8
+          TabOrder = 9
           OnExit = ControlEditExit
         end
         object dbValorUnit: TDBEdit
-          Left = 288
+          Left = 392
           Top = 80
           Width = 113
           Height = 21
@@ -1253,11 +1268,11 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 9
+          TabOrder = 10
           OnExit = ControlEditExit
         end
         object dbDesconto: TDBEdit
-          Left = 408
+          Left = 512
           Top = 80
           Width = 65
           Height = 21
@@ -1270,11 +1285,11 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 10
+          TabOrder = 11
           OnExit = ControlEditExit
         end
         object dbValorLiq: TDBEdit
-          Left = 592
+          Left = 696
           Top = 80
           Width = 121
           Height = 21
@@ -1288,7 +1303,7 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 13
+          TabOrder = 14
           OnExit = ControlEditExit
         end
         object dbUnidade: TDBEdit
@@ -1403,7 +1418,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 6
         end
         object dbCST: TDBEdit
-          Left = 168
+          Left = 272
           Top = 80
           Width = 33
           Height = 21
@@ -1418,10 +1433,10 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 7
+          TabOrder = 8
         end
         object dbValorIPI: TDBEdit
-          Left = 720
+          Left = 824
           Top = 80
           Width = 97
           Height = 21
@@ -1435,7 +1450,7 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = []
           ParentFont = False
           ReadOnly = True
-          TabOrder = 12
+          TabOrder = 13
           Visible = False
         end
         object dbCFOPDescricao: TDBEdit
@@ -1733,7 +1748,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
         end
         object dbTotalDesconto: TRxDBComboEdit
-          Left = 480
+          Left = 584
           Top = 80
           Width = 105
           Height = 21
@@ -1804,9 +1819,27 @@ inherited frmGeVenda: TfrmGeVenda
           ParentShowHint = False
           ReadOnly = True
           ShowHint = True
-          TabOrder = 11
+          TabOrder = 12
           OnButtonClick = dbTotalDescontoButtonClick
           OnExit = ControlEditExit
+        end
+        object dbPercRedBC: TDBEdit
+          Left = 168
+          Top = 80
+          Width = 97
+          Height = 21
+          Color = clMoneyGreen
+          DataField = 'PERCENTUAL_REDUCAO_BC'
+          DataSource = DtSrcTabelaItens
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 7
+          Visible = False
         end
       end
       object pgcMaisDados: TPageControl
@@ -3195,6 +3228,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Aliquota'
       '  , i.Aliquota_csosn'
       '  , i.Valor_ipi'
+      '  , i.Percentual_reducao_BC'
       '  , p.Descri'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
@@ -3332,6 +3366,13 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
+    object cdsTabelaItensPERCENTUAL_REDUCAO_BC: TIBBCDField
+      FieldName = 'PERCENTUAL_REDUCAO_BC'
+      Origin = 'TVENDASITENS.PERCENTUAL_REDUCAO_BC'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsTabelaItensDESCRI: TIBStringField
       DisplayLabel = 'Nome do produto'
       FieldName = 'DESCRI'
@@ -3410,7 +3451,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  CFOP_COD,'
       '  ALIQUOTA,'
       '  ALIQUOTA_CSOSN,'
-      '  VALOR_IPI'
+      '  VALOR_IPI,'
+      '  PERCENTUAL_REDUCAO_BC'
       'from TVENDASITENS '
       'where'
       '  ANO = :ANO and'
@@ -3438,7 +3480,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  CFOP_COD = :CFOP_COD,'
       '  ALIQUOTA = :ALIQUOTA,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
-      '  VALOR_IPI = :VALOR_IPI'
+      '  VALOR_IPI = :VALOR_IPI,'
+      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC'
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL and'
@@ -3452,7 +3495,9 @@ inherited frmGeVenda: TfrmGeVenda
       
         '   PUNIT_PROMOCAO, DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, ' +
         'UNID_COD, '
-      '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI)'
+      
+        '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, PERCENTUAL_RED' +
+        'UCAO_BC)'
       'values'
       
         '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
@@ -3460,7 +3505,9 @@ inherited frmGeVenda: TfrmGeVenda
       
         '   :PUNIT, :PUNIT_PROMOCAO, :DESCONTO, :DESCONTO_VALOR, :PFINAL,' +
         ' :QTDEFINAL, '
-      '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI)')
+      
+        '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI,' +
+        ' :PERCENTUAL_REDUCAO_BC)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'

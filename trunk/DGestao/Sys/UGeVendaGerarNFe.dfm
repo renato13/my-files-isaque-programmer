@@ -889,28 +889,59 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Nfe_valor_cofins'
       '  , v.Nfe_valor_outros'
       '  , v.Nfe_valor_total_nota'
-      '  , sum( coalesce(i.Valor_ipi, 0) ) as valor_total_IPI'
-      '  , sum( coalesce(i.Qtde, 0) * i.Punit ) as valor_total_bruto'
       
-        '  , sum( coalesce(i.Qtde, 0) * coalesce(i.Desconto_valor, 0) ) a' +
-        's valor_total_desconto'
-      '  , sum( coalesce(i.Qtde, 0) * i.Pfinal ) as valor_total_liquido'
+        '  , sum( coalesce(i.Valor_ipi, 0) )                             ' +
+        'as valor_total_IPI'
+      
+        '  , sum( coalesce(i.Qtde, 0) * i.Punit )                        ' +
+        'as valor_total_bruto'
+      
+        '  , sum( coalesce(i.Qtde, 0) * coalesce(i.Desconto_valor, 0) )  ' +
+        'as valor_total_desconto'
+      
+        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal )                       ' +
+        'as valor_total_liquido'
+      ''
       
         '  , sum( case when coalesce(p.Aliquota, 0) = 0 then 0 else coale' +
         'sce(i.Qtde, 0) * p.Customedio end ) as valor_base_icms_normal_en' +
         'trada'
       
         '  , sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
-        'a, 0) / 100 ) as valor_total_icms_normal_entrada'
+        'a, 0) / 100 )                       as valor_total_icms_normal_e' +
+        'ntrada'
+      ''
+      
+        '--  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coa' +
+        'lesce(i.Qtde, 0) * i.Pfinal end ) as valor_base_icms_normal_said' +
+        'a'
+      
+        '--  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota,' +
+        ' 0) / 100 )                       as valor_total_icms_normal_sai' +
+        'da'
+      '--'
       
         '  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coale' +
-        'sce(i.Qtde, 0) * i.Pfinal end ) as valor_base_icms_normal_saida'
+        'sce(i.Qtde, 0) * (case when coalesce(i.Percentual_reducao_bc, 0)' +
+        ' = 0 then i.Pfinal else (i.Pfinal * i.Percentual_reducao_bc / 10' +
+        '0) end) end ) as valor_base_icms_normal_saida'
       
-        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota, 0' +
-        ') / 100 ) as valor_total_icms_normal_saida'
+        '  , sum( coalesce(i.Qtde, 0) * (case when coalesce(i.Percentual_' +
+        'reducao_bc, 0) = 0 then i.Pfinal else (i.Pfinal * i.Percentual_r' +
+        'educao_bc / 100) end) * coalesce(i.Aliquota, 0) / 100 )         ' +
+        '              as valor_total_icms_normal_saida'
+      ''
       
-        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota, 0' +
-        ') / 100 ) -'
+        '--  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota,' +
+        ' 0) / 100 ) -'
+      
+        '--    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliqu' +
+        'ota, 0) / 100 ) as valor_total_icms_normal_devido'
+      '--'
+      
+        '  , sum( coalesce(i.Qtde, 0) * (case when coalesce(i.Percentual_' +
+        'reducao_bc, 0) = 0 then i.Pfinal else (i.Pfinal * i.Percentual_r' +
+        'educao_bc / 100) end) * coalesce(i.Aliquota, 0) / 100 ) -'
       
         '    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
         'a, 0) / 100 ) as valor_total_icms_normal_devido'
@@ -1161,17 +1192,13 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     object cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_SAIDA'
       Precision = 18
-      Size = 2
+      Size = 4
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
-      Precision = 18
-      Size = 4
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
-      Precision = 18
-      Size = 4
     end
   end
   object updVenda: TIBUpdateSQL

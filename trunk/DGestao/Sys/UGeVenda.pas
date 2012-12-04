@@ -258,6 +258,9 @@ type
     lblVendaAberta: TLabel;
     IbDtstTabelaBLOQUEADO: TSmallintField;
     IbDtstTabelaBLOQUEADO_MOTIVO: TMemoField;
+    cdsTabelaItensPERCENTUAL_REDUCAO_BC: TIBBCDField;
+    lblPercRedBC: TLabel;
+    dbPercRedBC: TDBEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -1007,14 +1010,15 @@ var
   sUnidade   ,
   sCST       : String;
   cAliquota  ,
+  cPercRedBC ,
   cValorVenda,
   cValorPromocao,
   cValorIPI     : Currency;
 begin
   cValorPromocao := 0;
-  
+
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, iEstoque, iReserva) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, cPercRedBC, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;
@@ -1026,6 +1030,8 @@ begin
       cdsTabelaItensPUNIT_PROMOCAO.AsCurrency := cValorPromocao;
       cdsTabelaItensPFINAL.AsCurrency    := cValorVenda;
       cdsTabelaItensVALOR_IPI.AsCurrency := cValorIPI;
+
+      cdsTabelaItensPERCENTUAL_REDUCAO_BC.AsCurrency := cPercRedBC;
 
       cdsTabelaItensESTOQUE.AsInteger := iEstoque;
       cdsTabelaItensRESERVA.AsInteger := iReserva;
@@ -1069,6 +1075,7 @@ begin
   cdsTabelaItensQTDE.Value           := 1;
   cdsTabelaItensDESCONTO.Value       := 0;
   cdsTabelaItensDESCONTO_VALOR.Value := 0;
+  cdsTabelaItensPERCENTUAL_REDUCAO_BC.Value := 0.0;
 end;
 
 procedure TfrmGeVenda.btbtnFinalizarClick(Sender: TObject);

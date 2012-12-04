@@ -48,15 +48,6 @@ type
     dbGrupo: TRxDBComboEdit;
     lblUnidade: TLabel;
     dbUnidade: TRxDBComboEdit;
-    GrpBxDadosTributo: TGroupBox;
-    lblOrigem: TLabel;
-    dbOrigem: TDBLookupComboBox;
-    lblTipoTributacaoNM: TLabel;
-    dbTipoTributacaoNM: TDBLookupComboBox;
-    lblCFOP: TLabel;
-    dbCFOP: TRxDBComboEdit;
-    lblAliquota: TLabel;
-    dbAliquota: TDBEdit;
     IbDtstTabelaALIQUOTA: TIBBCDField;
     IbDtstTabelaCFOP_DESCRICAO: TIBStringField;
     IbDtstTabelaCFOP_ESPECIFICACAO: TMemoField;
@@ -69,7 +60,6 @@ type
     tbsValores: TTabSheet;
     tbsHistoricoVeiculo: TTabSheet;
     IbDtstTabelaUNP_SIGLA: TIBStringField;
-    Bevel6: TBevel;
     GrpBxDadosEstoque: TGroupBox;
     lblEstoqueQtde: TLabel;
     dbEstoqueQtde: TDBEdit;
@@ -83,10 +73,6 @@ type
     dbPreco: TDBEdit;
     lblCodigoEAN: TLabel;
     dbCodigoEAN: TDBEdit;
-    lblIPI: TLabel;
-    dbIPI: TDBEdit;
-    dbAliquotaTipo: TDBLookupComboBox;
-    lblAliquotaTipo: TLabel;
     tblAliquota: TIBTable;
     dtsAliquota: TDataSource;
     IbDtstTabelaALIQUOTA_TIPO: TSmallintField;
@@ -95,18 +81,12 @@ type
     dbReserva: TDBEdit;
     IbDtstTabelaRESERVA: TIntegerField;
     IbDtstTabelaDISPONIVEL: TLargeintField;
-    lblNCM_SH: TLabel;
-    dbNCM_SH: TDBEdit;
     IbDtstTabelaNCM_SH: TIBStringField;
     EvUA: TEvUserAccess;
     tblTributacaoSN: TIBTable;
     dtsTributacaoSN: TDataSource;
     IbDtstTabelaCSOSN: TIBStringField;
     IbDtstTabelaALIQUOTA_CSOSN: TIBBCDField;
-    lblTipoTributacaoSN: TLabel;
-    dbTipoTributacaoSN: TDBLookupComboBox;
-    lblAliquotaSN: TLabel;
-    dbAliquotaSN: TDBEdit;
     IbDtstTabelaPRECO_PROMOCAO: TIBBCDField;
     lblPrecoPromocao: TLabel;
     dbPrecoPromocao: TDBEdit;
@@ -163,6 +143,36 @@ type
     dbSituacaoVeiculo: TDBEdit;
     lblHistoricoSituacaoVeiculo: TLabel;
     dbHistoricoSituacaoVeiculo: TDBMemo;
+    tbsTributacao: TTabSheet;
+    IbDtstTabelaPERCENTUAL_REDUCAO_BC: TIBBCDField;
+    GrpBxDadosTributoICMS: TGroupBox;
+    lblOrigem: TLabel;
+    lblTipoTributacaoNM: TLabel;
+    lblCFOP: TLabel;
+    lblAliquota: TLabel;
+    lblIPI: TLabel;
+    lblAliquotaTipo: TLabel;
+    lblNCM_SH: TLabel;
+    lblTipoTributacaoSN: TLabel;
+    lblAliquotaSN: TLabel;
+    Label2: TLabel;
+    dbOrigem: TDBLookupComboBox;
+    dbTipoTributacaoNM: TDBLookupComboBox;
+    dbCFOP: TRxDBComboEdit;
+    dbAliquota: TDBEdit;
+    dbIPI: TDBEdit;
+    dbAliquotaTipo: TDBLookupComboBox;
+    dbNCM_SH: TDBEdit;
+    dbTipoTributacaoSN: TDBLookupComboBox;
+    dbAliquotaSN: TDBEdit;
+    dbPercentualReducaoBC: TDBEdit;
+    Bevel6: TBevel;
+    GrpBxDadosTributoPIS: TGroupBox;
+    Bevel7: TBevel;
+    Label3: TLabel;
+    DBLookupComboBox1: TDBLookupComboBox;
+    Label4: TLabel;
+    DBLookupComboBox2: TDBLookupComboBox;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -193,7 +203,7 @@ var
 
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
-  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI : Currency;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
     var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, Unidade : String; var ValorVenda, ValorPromocao : Currency; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
@@ -253,7 +263,7 @@ begin
   end;
 end;
 
-function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI : Currency;
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
   var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 var
   frm : TfrmGeProduto;
@@ -281,6 +291,8 @@ begin
       ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
       ValorPromocao := frm.IbDtstTabelaPRECO_PROMOCAO.AsCurrency;
       ValorIPI   := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
+
+      PercentualRedBC := frm.IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency;
 
       Estoque := frm.IbDtstTabelaQTDE.AsInteger;
       Reserva := frm.IbDtstTabelaRESERVA.AsInteger;
@@ -417,6 +429,9 @@ begin
   if ( IbDtstTabelaPRODUTO_NOVO.IsNull ) then
     IbDtstTabelaPRODUTO_NOVO.Value := 0;
     
+  if ( (IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency < 0) or (IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency > 100) ) then
+    IbDtstTabelaPERCENTUAL_REDUCAO_BC.Value := 0;
+
   IbDtstTabelaDISPONIVEL.Value := IbDtstTabelaQTDE.Value - IbDtstTabelaRESERVA.Value;
 
   IbDtstTabelaCST.Value := IbDtstTabelaCODORIGEM.AsString + IbDtstTabelaCODTRIBUTACAO.AsString;
@@ -492,6 +507,8 @@ begin
   IbDtstTabelaVALOR_IPI.Value      := 0;
   IbDtstTabelaRESERVA.Value        := 0;
   IbDtstTabelaPRODUTO_NOVO.Value   := 0;
+  
+  IbDtstTabelaPERCENTUAL_REDUCAO_BC.Value := 0;
 
   IbDtstTabelaCOR_VEICULO.Clear;
   IbDtstTabelaCOMBUSTIVEL_VEICULO.Clear;
@@ -619,7 +636,14 @@ procedure TfrmGeProduto.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_RETURN then
-    if ( (ActiveControl = dbProdutoNovo) and tbsEspecificacaoVeiculo.TabVisible ) then
+    if ( (ActiveControl = dbProdutoNovo) and tbsTributacao.TabVisible ) then
+    begin
+      pgcMaisDados.ActivePage := tbsTributacao;
+      dbOrigem.SetFocus;
+      Exit;
+    end
+    else
+    if ( (ActiveControl = dbIPI) and tbsEspecificacaoVeiculo.TabVisible ) then
     begin
       pgcMaisDados.ActivePage := tbsEspecificacaoVeiculo;
       dbTipoVeiculo.SetFocus;

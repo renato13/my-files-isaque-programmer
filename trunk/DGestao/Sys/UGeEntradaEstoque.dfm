@@ -3,7 +3,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   Top = 214
   Width = 1077
   Height = 716
-  ActiveControl = dbEmpresa
+  ActiveControl = nil
   Caption = 'Controle de Entradas no Estoque'
   OldCreateOrder = True
   PixelsPerInch = 96

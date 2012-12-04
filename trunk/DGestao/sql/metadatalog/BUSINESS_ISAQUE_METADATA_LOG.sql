@@ -1518,3 +1518,163 @@ Select First 1
 from TBEMPRESA
 ;
 COMMIT WORK;
+
+
+COMMENT ON COLUMN TBTRIBUTACAO_TIPO.CRT IS
+'Codigo do Regime Tributario.
+0 - Normal
+1 - Simples Nacional';
+
+
+
+ALTER TABLE TBPRODUTO
+    ADD PERCENTUAL_REDUCAO_BC DECIMAL(15,2);
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_REDUCAO_BC IS
+'Percentual de reducao da Base de Calculo da Aliquota ICMS.';
+
+
+
+ALTER TABLE TBPRODUTO ADD IBE$$TEMP_COLUMN
+ NUMERIC(1,1) DEFAULT 0
+;
+
+UPDATE RDB$RELATION_FIELDS F1
+SET
+F1.RDB$DEFAULT_VALUE  = (SELECT F2.RDB$DEFAULT_VALUE
+                         FROM RDB$RELATION_FIELDS F2
+                         WHERE (F2.RDB$RELATION_NAME = 'TBPRODUTO') AND
+                               (F2.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN')),
+F1.RDB$DEFAULT_SOURCE = (SELECT F3.RDB$DEFAULT_SOURCE FROM RDB$RELATION_FIELDS F3
+                         WHERE (F3.RDB$RELATION_NAME = 'TBPRODUTO') AND
+                               (F3.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN'))
+WHERE (F1.RDB$RELATION_NAME = 'TBPRODUTO') AND
+      (F1.RDB$FIELD_NAME = 'PERCENTUAL_REDUCAO_BC');
+
+ALTER TABLE TBPRODUTO DROP IBE$$TEMP_COLUMN;
+
+
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_REDUCAO_BC IS
+'Percentual de reducao da Base de Calculo da Aliquota ICMS.
+
+Exemplo:
+Caso um produto tenha uma reducao de 94% sobre o seu preco de venda, seu percentual sera de 6% (100% - 94%).';
+
+
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_REDUCAO_BC IS
+'Percentual de reducao da Base de Calculo da Aliquota ICMS.';
+
+
+
+ALTER TABLE TVENDASITENS
+    ADD PERCENTUAL_REDUCAO_BC DECIMAL(15,2) DEFAULT 0;
+
+COMMENT ON COLUMN TVENDASITENS.PERCENTUAL_REDUCAO_BC IS
+'Percentual de Reducao BC.';
+
+
+
+CREATE TABLE TBCST_PIS (
+    CODIGO DMN_VCHAR_03 NOT NULL,
+    DESCRICAO DMN_VCHAR_250,
+    INDICE_ACBR DMN_SMALLINT_NN);
+
+ALTER TABLE TBCST_PIS
+ADD CONSTRAINT PK_TBCST_PIS
+PRIMARY KEY (CODIGO);
+
+COMMENT ON COLUMN TBCST_PIS.CODIGO IS
+'Codigo.';
+
+COMMENT ON COLUMN TBCST_PIS.DESCRICAO IS
+'Descricao.';
+
+COMMENT ON COLUMN TBCST_PIS.INDICE_ACBR IS
+'Indice ACBr para geracao da NF-e.';
+
+GRANT ALL ON TBCST_PIS TO "PUBLIC";
+
+
+CREATE TABLE TBCST_COFINS (
+    CODIGO       DMN_VCHAR_03 NOT NULL /* DMN_VCHAR_03 = VARCHAR(3) */,
+    DESCRICAO    DMN_VCHAR_250 /* DMN_VCHAR_250 = VARCHAR(250) */,
+    INDICE_ACBR  DMN_SMALLINT_NN /* DMN_SMALLINT_NN = SMALLINT DEFAULT 0 */
+);
+
+ALTER TABLE TBCST_COFINS ADD CONSTRAINT PK_TBCST_COFINS PRIMARY KEY (CODIGO);
+
+COMMENT ON COLUMN TBCST_COFINS.CODIGO IS 
+'Codigo.';
+
+COMMENT ON COLUMN TBCST_COFINS.DESCRICAO IS 
+'Descricao.';
+
+COMMENT ON COLUMN TBCST_COFINS.INDICE_ACBR IS 
+'Indice ACBr para geracao da NF-e.';
+
+GRANT ALL ON TBCST_COFINS TO PUBLIC;
+
+SET TERM ^ ;
+
+create or alter procedure SET_CST_PIS (
+    CODIGO varchar(3),
+    DESCRICAO varchar(250),
+    INDICE_ACBR smallint)
+as
+begin
+  if ( Trim(coalesce(:Codigo, '')) <> '' ) then
+  begin
+    Codigo      = Trim(:Codigo);
+    Descricao   = Trim(:Descricao);
+    Indice_acbr = coalesce(:Indice_acbr, 99);
+
+    if (not Exists(
+      Select
+        p.Codigo
+      from TBCST_PIS p
+      where p.Codigo = :Codigo
+    )) then
+    begin
+
+      /* Inserir CST, caso nao exista */
+
+      Insert Into TBCST_PIS (
+          Codigo
+        , Descricao
+        , Indice_acbr
+      ) values (
+          :Codigo
+        , :Descricao
+        , :Indice_acbr
+      );
+
+    end
+    else
+    begin
+
+      /* Atualizar CST, caso exista */
+
+      Update TBCST_PIS Set
+          Descricao   = :Descricao
+        , Indice_acbr = :Indice_acbr
+      where Codigo = :Codigo;
+
+    end 
+
+  end 
+end^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE SET_CST_PIS TO "PUBLIC";
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 33, column 61.
+=.
+
+*/
