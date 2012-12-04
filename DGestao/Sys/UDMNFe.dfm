@@ -359,6 +359,12 @@ object DMNFe: TDMNFe
       '  , i.Aliquota'
       '  , i.Aliquota_csosn'
       '  , i.Valor_ipi'
+      
+        '  , coalesce(i.Percentual_reducao_bc, 0) as Percentual_reducao_b' +
+        'c'
+      
+        '  , coalesce(i.Pfinal, 0) * coalesce(i.Percentual_reducao_bc, 0)' +
+        ' / 100 as valor_reducao_bc'
       '  , i.Qtde * i.Punit as Total_bruto'
       '  , i.Qtde * i.Pfinal as Total_liquido'
       '  , i.Qtde * i.Desconto_valor as Total_desconto'
@@ -569,6 +575,16 @@ object DMNFe: TDMNFe
       Origin = 'TVENDASITENS.VALOR_IPI'
       Precision = 18
       Size = 2
+    end
+    object qryDadosProdutoPERCENTUAL_REDUCAO_BC: TIBBCDField
+      FieldName = 'PERCENTUAL_REDUCAO_BC'
+      Precision = 18
+      Size = 2
+    end
+    object qryDadosProdutoVALOR_REDUCAO_BC: TIBBCDField
+      FieldName = 'VALOR_REDUCAO_BC'
+      Precision = 18
+      Size = 4
     end
     object qryDadosProdutoTOTAL_BRUTO: TIBBCDField
       FieldName = 'TOTAL_BRUTO'

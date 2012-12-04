@@ -67,8 +67,6 @@ type
     cdsVendaSERIE: TIBStringField;
     cdsVendaNFE: TLargeintField;
     cdsVendaSTATUS: TSmallintField;
-    cdsVendaNFE_VALOR_BASE_ICMS: TIBBCDField;
-    cdsVendaNFE_VALOR_ICMS: TIBBCDField;
     cdsVendaNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField;
     cdsVendaNFE_VALOR_ICMS_SUBST: TIBBCDField;
     cdsVendaNFE_VALOR_TOTAL_PRODUTO: TIBBCDField;
@@ -87,13 +85,15 @@ type
     cdsVendaVALOR_TOTAL_IPI: TIBBCDField;
     cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField;
     cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField;
+    lblInforme: TLabel;
+    cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
+    cdsVendaNFE_VALOR_BASE_ICMS: TIBBCDField;
+    cdsVendaNFE_VALOR_ICMS: TIBBCDField;
     cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField;
-    cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TIBBCDField;
-    cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TIBBCDField;
-    lblInforme: TLabel;
-    cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
+    cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField;
+    cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);

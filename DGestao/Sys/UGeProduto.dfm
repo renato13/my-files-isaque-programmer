@@ -1,6 +1,6 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 549
-  Top = 154
+  Left = 592
+  Top = 145
   Width = 977
   Height = 648
   ActiveControl = dbCodigo
@@ -204,15 +204,7 @@ inherited frmGeProduto: TfrmGeProduto
       end
       object Bevel5: TBevel [1]
         Left = 0
-        Top = 313
-        Width = 953
-        Height = 4
-        Align = alTop
-        Shape = bsSpacer
-      end
-      object Bevel6: TBevel [2]
-        Left = 0
-        Top = 233
+        Top = 193
         Width = 953
         Height = 4
         Align = alTop
@@ -677,322 +669,14 @@ inherited frmGeProduto: TfrmGeProduto
           TabOrder = 3
         end
       end
-      object GrpBxDadosTributo: TGroupBox
-        Left = 0
-        Top = 117
-        Width = 953
-        Height = 116
-        Align = alTop
-        Caption = 'Dados fiscais'
-        TabOrder = 1
-        object lblOrigem: TLabel
-          Left = 16
-          Top = 24
-          Width = 38
-          Height = 13
-          Caption = 'Origem:'
-          FocusControl = dbOrigem
-        end
-        object lblTipoTributacaoNM: TLabel
-          Left = 224
-          Top = 24
-          Width = 121
-          Height = 13
-          Caption = 'Tipo de Tributa'#231#227'o ICMS:'
-          FocusControl = dbTipoTributacaoNM
-        end
-        object lblCFOP: TLabel
-          Left = 16
-          Top = 64
-          Width = 169
-          Height = 13
-          Caption = 'CFOP (C'#243'digo Fiscal de Opera'#231#227'o):'
-          FocusControl = dbCFOP
-        end
-        object lblAliquota: TLabel
-          Left = 672
-          Top = 64
-          Width = 57
-          Height = 13
-          Caption = '% Al'#237'quota:'
-          FocusControl = dbAliquota
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
-        object lblIPI: TLabel
-          Left = 848
-          Top = 64
-          Width = 69
-          Height = 13
-          Caption = 'Valor IPI (R$):'
-          FocusControl = dbIPI
-        end
-        object lblAliquotaTipo: TLabel
-          Left = 576
-          Top = 64
-          Width = 43
-          Height = 13
-          Caption = 'Al'#237'quota:'
-          FocusControl = dbAliquotaTipo
-        end
-        object lblNCM_SH: TLabel
-          Left = 480
-          Top = 64
-          Width = 43
-          Height = 13
-          Caption = 'NCM/SH:'
-          FocusControl = dbNCM_SH
-        end
-        object lblTipoTributacaoSN: TLabel
-          Left = 560
-          Top = 24
-          Width = 233
-          Height = 13
-          Caption = 'Tipo de Tributa'#231#227'o ICMS (Simples Nacional - SN):'
-          FocusControl = dbTipoTributacaoSN
-        end
-        object lblAliquotaSN: TLabel
-          Left = 760
-          Top = 64
-          Width = 73
-          Height = 13
-          Caption = '% Al'#237'quota SN:'
-          FocusControl = dbAliquotaSN
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
-        object dbOrigem: TDBLookupComboBox
-          Left = 16
-          Top = 40
-          Width = 201
-          Height = 21
-          DataField = 'CODORIGEM'
-          DataSource = DtSrcTabela
-          DropDownRows = 10
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          KeyField = 'ORP_COD'
-          ListField = 'ORP_DESCRICAO_FULL'
-          ListSource = dtsOrigem
-          ParentFont = False
-          TabOrder = 0
-        end
-        object dbTipoTributacaoNM: TDBLookupComboBox
-          Left = 224
-          Top = 40
-          Width = 329
-          Height = 21
-          DataField = 'CODTRIBUTACAO'
-          DataSource = DtSrcTabela
-          DropDownRows = 10
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          KeyField = 'TPT_COD'
-          ListField = 'TPT_DESCRICAO_FULL'
-          ListSource = dtsTributacaoNM
-          ParentFont = False
-          TabOrder = 1
-        end
-        object dbCFOP: TRxDBComboEdit
-          Left = 16
-          Top = 80
-          Width = 457
-          Height = 21
-          ButtonHint = 'Pesquisar CFOP (Ctrl+P)'
-          CharCase = ecUpperCase
-          ClickKey = 16464
-          Color = clMoneyGreen
-          DataField = 'CFOP_DESCRICAO'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          Glyph.Data = {
-            36060000424D3606000000000000360000002800000020000000100000000100
-            18000000000000060000000000000000000000000000000000001DE6B51DE6B5
-            1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B5B1AD
-            AC203040ACA5A21DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
-            C3C3C3C3C3C3C3C3C3C3C3C3C3C37F7F7F7F7F7FACA5A2C3C3C31DE6B5B0A090
-            6048306048306048306048306048306048306048306048306048305048403050
-            604078C0304860B1ACA6C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
-            7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3B1ACA61DE6B5B0A090
-            FFFFFFB0A090B0A090B0A090B0A090B0A090B0A090B0A0909088803050703080
-            D04098E050B0F0506870C3C3C37F7F7FFFFFFFC3C3C3C3C3C3C3C3C3C3C3C3C3
-            C3C3C3C3C3C3C3C39088807F7F7FC3C3C3C3C3C3C3C3C37F7F7F1DE6B5B0A090
-            FFFFFFFFFFFFFFF8FFF0F0F0D0D8D090989070686060686050586040709040A0
-            E060C8FF7090A0C5BEB5C3C3C37F7F7FFFFFFFFFFFFFFFF8FFF0F0F0D0D8D07F
-            7F7F7F7F7F7F7F7F505860C3C3C3C3C3C3C3C3C37090A0C5BEB51DE6B5B0A090
-            FFFFFFFFFFFFFFFFFFE0E0E0909090B0A8A0D0C0B0D0B0A08078705058506090
-            B07098B0AEAEAA1DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFE0E0E07F7F7F7F
-            7F7FD0C0B0D0B0A0807870505850C3C3C37098B0AEAEAAC3C3C31DE6B5B0A090
-            FFFFFFFFFFFFFFFFFFB0B0B0C0B8B0FFF0E0FFE8E0F0D8C0F0D0B08078709D8F
-            8CAEAFAA1DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
-            F0E0FFE8E0F0D8C0F0D0B08078709D8F8CAEAFAAC3C3C3C3C3C31DE6B5C0A890
-            FFFFFFFFFFFFFFFFFFA09890F0E8E0FFF8F0FFF0F0FFE8E0F0D8D0D0B0A06367
-            5E1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
-            F8F0FFF0F0FFE8E0F0D8D0D0B0A063675EC3C3C3C3C3C3C3C3C31DE6B5C0A8A0
-            FFFFFFFFFFFFFFFFFFA0A090F0E8E0FFFFFFFFF8F0FFF0F0FFE8E0E0C0B0716E
-            6C1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
-            FFFFFFF8F0FFF0F0FFE8E0E0C0B0716E6CC3C3C3C3C3C3C3C3C31DE6B5C0B0A0
-            FFFFFFFFFFFFFFFFFFC0C8C0C0C0C0FFFFFFFFFFFFFFF8F0FFF0E0B0A090A69C
-            951DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
-            FFFFFFFFFFFFF8F0FFF0E0B0A090A69C95C3C3C3C3C3C3C3C3C31DE6B5D0B0A0
-            FFFFFFFFFFFFFFFFFFF0F8FFC0B8B0C0C0C0F0E8E0F0E8E0B0B0A07070601DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFF0F8FF7F7F7F7F
-            7F7FF0E8E0F0E8E0B0B0A0707060C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8A0
-            FFFFFFFFFFFFFFFFFFFFFFFFF0F8FFC0C8C0A0A0909090809090906050401DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFF0F8FF7F
-            7F7FA0A0907F7F7F909090605040C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8B0
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A0906048306048306048301DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFF7F7F7F604830604830604830C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0C0B0
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C06048301DE6B51DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFF7F7F7FC3C3C3604830C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0604830E0C6B71DE6B51DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFF7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
-            E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0E0C7B91DE6B51DE6B51DE6
-            B51DE6B51DE6B51DE6B5C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
-            7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B51DE6B5
-            1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6
-            B51DE6B51DE6B51DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
-            C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3}
-          NumGlyphs = 2
-          ParentFont = False
-          ParentShowHint = False
-          ReadOnly = True
-          ShowHint = True
-          TabOrder = 3
-          OnButtonClick = dbCFOPButtonClick
-        end
-        object dbAliquota: TDBEdit
-          Left = 672
-          Top = 80
-          Width = 81
-          Height = 21
-          CharCase = ecUpperCase
-          DataField = 'ALIQUOTA'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 6
-        end
-        object dbIPI: TDBEdit
-          Left = 848
-          Top = 80
-          Width = 89
-          Height = 21
-          CharCase = ecUpperCase
-          DataField = 'VALOR_IPI'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 8
-        end
-        object dbAliquotaTipo: TDBLookupComboBox
-          Left = 576
-          Top = 80
-          Width = 89
-          Height = 21
-          DataField = 'ALIQUOTA_TIPO'
-          DataSource = DtSrcTabela
-          DropDownRows = 10
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          KeyField = 'CODIGO'
-          ListField = 'DESCRICAO'
-          ListSource = dtsAliquota
-          ParentFont = False
-          TabOrder = 5
-        end
-        object dbNCM_SH: TDBEdit
-          Left = 480
-          Top = 80
-          Width = 89
-          Height = 21
-          CharCase = ecUpperCase
-          DataField = 'NCM_SH'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 4
-        end
-        object dbTipoTributacaoSN: TDBLookupComboBox
-          Left = 560
-          Top = 40
-          Width = 377
-          Height = 21
-          DataField = 'CSOSN'
-          DataSource = DtSrcTabela
-          DropDownRows = 10
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          KeyField = 'TPT_COD'
-          ListField = 'TPT_DESCRICAO_FULL'
-          ListSource = dtsTributacaoSN
-          ParentFont = False
-          TabOrder = 2
-        end
-        object dbAliquotaSN: TDBEdit
-          Left = 760
-          Top = 80
-          Width = 81
-          Height = 21
-          CharCase = ecUpperCase
-          DataField = 'ALIQUOTA_CSOSN'
-          DataSource = DtSrcTabela
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 7
-        end
-      end
       object pgcMaisDados: TPageControl
         Left = 0
-        Top = 317
+        Top = 197
         Width = 953
-        Height = 221
-        ActivePage = tbsHistoricoVeiculo
+        Height = 341
+        ActivePage = tbsTributacao
         Align = alClient
-        TabOrder = 3
+        TabOrder = 2
         object tbsValores: TTabSheet
           Caption = 'Valores'
           Font.Charset = ANSI_CHARSET
@@ -1098,6 +782,425 @@ inherited frmGeProduto: TfrmGeProduto
             TabOrder = 3
             ValueChecked = 'True'
             ValueUnchecked = 'False'
+          end
+        end
+        object tbsTributacao: TTabSheet
+          Caption = 'Tributa'#231#245'es'
+          ImageIndex = 3
+          object Bevel6: TBevel
+            Left = 0
+            Top = 257
+            Width = 945
+            Height = 4
+            Align = alTop
+            Shape = bsSpacer
+          end
+          object Bevel7: TBevel
+            Left = 0
+            Top = 116
+            Width = 945
+            Height = 4
+            Align = alTop
+            Shape = bsSpacer
+          end
+          object GrpBxDadosTributoICMS: TGroupBox
+            Left = 0
+            Top = 0
+            Width = 945
+            Height = 116
+            Align = alTop
+            Caption = 'Dados fiscais p/ ICMS'
+            TabOrder = 0
+            object lblOrigem: TLabel
+              Left = 16
+              Top = 24
+              Width = 38
+              Height = 13
+              Caption = 'Origem:'
+              FocusControl = dbOrigem
+            end
+            object lblTipoTributacaoNM: TLabel
+              Left = 224
+              Top = 24
+              Width = 121
+              Height = 13
+              Caption = 'Tipo de Tributa'#231#227'o ICMS:'
+              FocusControl = dbTipoTributacaoNM
+            end
+            object lblCFOP: TLabel
+              Left = 16
+              Top = 64
+              Width = 169
+              Height = 13
+              Caption = 'CFOP (C'#243'digo Fiscal de Opera'#231#227'o):'
+              FocusControl = dbCFOP
+            end
+            object lblAliquota: TLabel
+              Left = 584
+              Top = 64
+              Width = 57
+              Height = 13
+              Caption = '% Al'#237'quota:'
+              FocusControl = dbAliquota
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object lblIPI: TLabel
+              Left = 848
+              Top = 64
+              Width = 69
+              Height = 13
+              Caption = 'Valor IPI (R$):'
+              FocusControl = dbIPI
+            end
+            object lblAliquotaTipo: TLabel
+              Left = 488
+              Top = 64
+              Width = 43
+              Height = 13
+              Caption = 'Al'#237'quota:'
+              FocusControl = dbAliquotaTipo
+            end
+            object lblNCM_SH: TLabel
+              Left = 392
+              Top = 64
+              Width = 43
+              Height = 13
+              Caption = 'NCM/SH:'
+              FocusControl = dbNCM_SH
+            end
+            object lblTipoTributacaoSN: TLabel
+              Left = 560
+              Top = 24
+              Width = 233
+              Height = 13
+              Caption = 'Tipo de Tributa'#231#227'o ICMS (Simples Nacional - SN):'
+              FocusControl = dbTipoTributacaoSN
+            end
+            object lblAliquotaSN: TLabel
+              Left = 672
+              Top = 64
+              Width = 73
+              Height = 13
+              Caption = '% Al'#237'quota SN:'
+              FocusControl = dbAliquotaSN
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label2: TLabel
+              Left = 760
+              Top = 64
+              Width = 76
+              Height = 13
+              Caption = '% Redu'#231#227'o BC:'
+              FocusControl = dbPercentualReducaoBC
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object dbOrigem: TDBLookupComboBox
+              Left = 16
+              Top = 40
+              Width = 201
+              Height = 21
+              DataField = 'CODORIGEM'
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'ORP_COD'
+              ListField = 'ORP_DESCRICAO_FULL'
+              ListSource = dtsOrigem
+              ParentFont = False
+              TabOrder = 0
+            end
+            object dbTipoTributacaoNM: TDBLookupComboBox
+              Left = 224
+              Top = 40
+              Width = 329
+              Height = 21
+              DataField = 'CODTRIBUTACAO'
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'TPT_COD'
+              ListField = 'TPT_DESCRICAO_FULL'
+              ListSource = dtsTributacaoNM
+              ParentFont = False
+              TabOrder = 1
+            end
+            object dbCFOP: TRxDBComboEdit
+              Left = 16
+              Top = 80
+              Width = 369
+              Height = 21
+              ButtonHint = 'Pesquisar CFOP (Ctrl+P)'
+              CharCase = ecUpperCase
+              ClickKey = 16464
+              Color = clMoneyGreen
+              DataField = 'CFOP_DESCRICAO'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              Glyph.Data = {
+                36060000424D3606000000000000360000002800000020000000100000000100
+                18000000000000060000000000000000000000000000000000001DE6B51DE6B5
+                1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B5B1AD
+                AC203040ACA5A21DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
+                C3C3C3C3C3C3C3C3C3C3C3C3C3C37F7F7F7F7F7FACA5A2C3C3C31DE6B5B0A090
+                6048306048306048306048306048306048306048306048306048305048403050
+                604078C0304860B1ACA6C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
+                7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3B1ACA61DE6B5B0A090
+                FFFFFFB0A090B0A090B0A090B0A090B0A090B0A090B0A0909088803050703080
+                D04098E050B0F0506870C3C3C37F7F7FFFFFFFC3C3C3C3C3C3C3C3C3C3C3C3C3
+                C3C3C3C3C3C3C3C39088807F7F7FC3C3C3C3C3C3C3C3C37F7F7F1DE6B5B0A090
+                FFFFFFFFFFFFFFF8FFF0F0F0D0D8D090989070686060686050586040709040A0
+                E060C8FF7090A0C5BEB5C3C3C37F7F7FFFFFFFFFFFFFFFF8FFF0F0F0D0D8D07F
+                7F7F7F7F7F7F7F7F505860C3C3C3C3C3C3C3C3C37090A0C5BEB51DE6B5B0A090
+                FFFFFFFFFFFFFFFFFFE0E0E0909090B0A8A0D0C0B0D0B0A08078705058506090
+                B07098B0AEAEAA1DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFE0E0E07F7F7F7F
+                7F7FD0C0B0D0B0A0807870505850C3C3C37098B0AEAEAAC3C3C31DE6B5B0A090
+                FFFFFFFFFFFFFFFFFFB0B0B0C0B8B0FFF0E0FFE8E0F0D8C0F0D0B08078709D8F
+                8CAEAFAA1DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+                F0E0FFE8E0F0D8C0F0D0B08078709D8F8CAEAFAAC3C3C3C3C3C31DE6B5C0A890
+                FFFFFFFFFFFFFFFFFFA09890F0E8E0FFF8F0FFF0F0FFE8E0F0D8D0D0B0A06367
+                5E1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+                F8F0FFF0F0FFE8E0F0D8D0D0B0A063675EC3C3C3C3C3C3C3C3C31DE6B5C0A8A0
+                FFFFFFFFFFFFFFFFFFA0A090F0E8E0FFFFFFFFF8F0FFF0F0FFE8E0E0C0B0716E
+                6C1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+                FFFFFFF8F0FFF0F0FFE8E0E0C0B0716E6CC3C3C3C3C3C3C3C3C31DE6B5C0B0A0
+                FFFFFFFFFFFFFFFFFFC0C8C0C0C0C0FFFFFFFFFFFFFFF8F0FFF0E0B0A090A69C
+                951DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+                FFFFFFFFFFFFF8F0FFF0E0B0A090A69C95C3C3C3C3C3C3C3C3C31DE6B5D0B0A0
+                FFFFFFFFFFFFFFFFFFF0F8FFC0B8B0C0C0C0F0E8E0F0E8E0B0B0A07070601DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFF0F8FF7F7F7F7F
+                7F7FF0E8E0F0E8E0B0B0A0707060C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8A0
+                FFFFFFFFFFFFFFFFFFFFFFFFF0F8FFC0C8C0A0A0909090809090906050401DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFF0F8FF7F
+                7F7FA0A0907F7F7F909090605040C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8B0
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A0906048306048306048301DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFF7F7F7F604830604830604830C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0C0B0
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C06048301DE6B51DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFF7F7F7FC3C3C3604830C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0604830E0C6B71DE6B51DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFF7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
+                E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0E0C7B91DE6B51DE6B51DE6
+                B51DE6B51DE6B51DE6B5C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
+                7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B51DE6B5
+                1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6
+                B51DE6B51DE6B51DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
+                C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3}
+              NumGlyphs = 2
+              ParentFont = False
+              ParentShowHint = False
+              ReadOnly = True
+              ShowHint = True
+              TabOrder = 3
+              OnButtonClick = dbCFOPButtonClick
+            end
+            object dbAliquota: TDBEdit
+              Left = 584
+              Top = 80
+              Width = 81
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'ALIQUOTA'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 6
+            end
+            object dbIPI: TDBEdit
+              Left = 848
+              Top = 80
+              Width = 85
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'VALOR_IPI'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 9
+            end
+            object dbAliquotaTipo: TDBLookupComboBox
+              Left = 488
+              Top = 80
+              Width = 89
+              Height = 21
+              DataField = 'ALIQUOTA_TIPO'
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'CODIGO'
+              ListField = 'DESCRICAO'
+              ListSource = dtsAliquota
+              ParentFont = False
+              TabOrder = 5
+            end
+            object dbNCM_SH: TDBEdit
+              Left = 392
+              Top = 80
+              Width = 89
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'NCM_SH'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 4
+            end
+            object dbTipoTributacaoSN: TDBLookupComboBox
+              Left = 560
+              Top = 40
+              Width = 373
+              Height = 21
+              DataField = 'CSOSN'
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'TPT_COD'
+              ListField = 'TPT_DESCRICAO_FULL'
+              ListSource = dtsTributacaoSN
+              ParentFont = False
+              TabOrder = 2
+            end
+            object dbAliquotaSN: TDBEdit
+              Left = 672
+              Top = 80
+              Width = 81
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'ALIQUOTA_CSOSN'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 7
+            end
+            object dbPercentualReducaoBC: TDBEdit
+              Left = 760
+              Top = 80
+              Width = 81
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'PERCENTUAL_REDUCAO_BC'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 8
+            end
+          end
+          object GrpBxDadosTributoPIS: TGroupBox
+            Left = 0
+            Top = 120
+            Width = 945
+            Height = 137
+            Align = alTop
+            Caption = 'Dados fiscais p/ PIS e COFINS'
+            TabOrder = 1
+            object Label3: TLabel
+              Left = 16
+              Top = 24
+              Width = 193
+              Height = 13
+              Caption = 'CST - C'#243'digo de Situa'#231#227'o Tribut'#225'ria PIS:'
+              FocusControl = DBLookupComboBox1
+            end
+            object Label4: TLabel
+              Left = 16
+              Top = 64
+              Width = 215
+              Height = 13
+              Caption = 'CST - C'#243'digo de Situa'#231#227'o Tribut'#225'ria COFINS:'
+              FocusControl = DBLookupComboBox2
+            end
+            object DBLookupComboBox1: TDBLookupComboBox
+              Left = 16
+              Top = 40
+              Width = 561
+              Height = 21
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'ORP_COD'
+              ListField = 'ORP_DESCRICAO_FULL'
+              ListSource = dtsOrigem
+              ParentFont = False
+              TabOrder = 0
+            end
+            object DBLookupComboBox2: TDBLookupComboBox
+              Left = 16
+              Top = 80
+              Width = 561
+              Height = 21
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'ORP_COD'
+              ListField = 'ORP_DESCRICAO_FULL'
+              ListSource = dtsOrigem
+              ParentFont = False
+              TabOrder = 1
+            end
           end
         end
         object tbsEspecificacaoVeiculo: TTabSheet
@@ -1310,7 +1413,7 @@ inherited frmGeProduto: TfrmGeProduto
           ImageIndex = 1
           DesignSize = (
             945
-            193)
+            313)
           object lblSituacaoVeiculo: TLabel
             Left = 16
             Top = 8
@@ -1346,7 +1449,7 @@ inherited frmGeProduto: TfrmGeProduto
             Left = 16
             Top = 64
             Width = 913
-            Height = 113
+            Height = 233
             TabStop = False
             Anchors = [akLeft, akTop, akRight, akBottom]
             DataField = 'SITUACAO_HISTORICO_VEICULO'
@@ -1365,12 +1468,12 @@ inherited frmGeProduto: TfrmGeProduto
       end
       object GrpBxDadosEstoque: TGroupBox
         Left = 0
-        Top = 237
+        Top = 117
         Width = 953
         Height = 76
         Align = alTop
         Caption = 'Dados estoque'
-        TabOrder = 2
+        TabOrder = 1
         object lblEstoqueQtde: TLabel
           Left = 632
           Top = 24
@@ -1522,6 +1625,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Kilometragem_veiculo'
       '  , p.Situacao_atual_veiculo'
       '  , p.Situacao_historico_veiculo'
+      '  , p.Percentual_reducao_BC'
       '  , case when coalesce(p.Reserva, 0) > 0'
       '      then coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0)'
       '      else coalesce(p.Qtde, 0)'
@@ -1810,6 +1914,14 @@ inherited frmGeProduto: TfrmGeProduto
       BlobType = ftMemo
       Size = 8
     end
+    object IbDtstTabelaPERCENTUAL_REDUCAO_BC: TIBBCDField
+      DisplayLabel = '% Redu'#231#227'o da Base de C'#225'lculo (BC)'
+      FieldName = 'PERCENTUAL_REDUCAO_BC'
+      Origin = 'TBPRODUTO.PERCENTUAL_REDUCAO_BC'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object IbDtstTabelaDISPONIVEL: TLargeintField
       DisplayLabel = 'Dispon'#237'vel'
       FieldName = 'DISPONIVEL'
@@ -1920,7 +2032,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  CHASSI_VEICULO,'
       '  KILOMETRAGEM_VEICULO,'
       '  SITUACAO_ATUAL_VEICULO,'
-      '  SITUACAO_HISTORICO_VEICULO'
+      '  SITUACAO_HISTORICO_VEICULO,'
+      '  PERCENTUAL_REDUCAO_BC'
       'from TBPRODUTO '
       'where'
       '  CODIGO = :CODIGO')
@@ -1968,48 +2081,59 @@ inherited frmGeProduto: TfrmGeProduto
       '  CHASSI_VEICULO = :CHASSI_VEICULO,'
       '  KILOMETRAGEM_VEICULO = :KILOMETRAGEM_VEICULO,'
       '  SITUACAO_ATUAL_VEICULO = :SITUACAO_ATUAL_VEICULO,'
-      '  SITUACAO_HISTORICO_VEICULO = :SITUACAO_HISTORICO_VEICULO'
+      '  SITUACAO_HISTORICO_VEICULO = :SITUACAO_HISTORICO_VEICULO,'
+      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
       'insert into TBPRODUTO'
-      '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, '
-      'MODELO, PRECO, '
-      '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, '
-      'CODGRUPO, '
-      '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, '
-      'CODTRIBUTACAO, '
-      '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, '
-      'ALIQUOTA_TIPO, '
-      '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO, '
-      'COR_VEICULO, '
-      '   COMBUSTIVEL_VEICULO, TIPO_VEICULO, ANO_MODELO_VEICULO, '
-      'ANO_FABRICACAO_VEICULO, '
-      '   RENAVAM_VEICULO, CHASSI_VEICULO, KILOMETRAGEM_VEICULO, '
-      'SITUACAO_ATUAL_VEICULO, '
-      '   SITUACAO_HISTORICO_VEICULO)'
+      
+        '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, MODEL' +
+        'O, PRECO, '
+      
+        '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, C' +
+        'ODGRUPO, '
+      
+        '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, CODTR' +
+        'IBUTACAO, '
+      
+        '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUO' +
+        'TA_TIPO, '
+      
+        '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO, C' +
+        'OR_VEICULO, '
+      
+        '   COMBUSTIVEL_VEICULO, TIPO_VEICULO, ANO_MODELO_VEICULO, ANO_FA' +
+        'BRICACAO_VEICULO, '
+      
+        '   RENAVAM_VEICULO, CHASSI_VEICULO, KILOMETRAGEM_VEICULO, SITUAC' +
+        'AO_ATUAL_VEICULO, '
+      '   SITUACAO_HISTORICO_VEICULO, PERCENTUAL_REDUCAO_BC)'
       'values'
-      '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, '
-      ':MODELO, '
+      
+        '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, ' +
+        ':MODELO, '
       
         '   :PRECO, :PRECO_PROMOCAO, :REFERENCIA, :SECAO, :QTDE, :UNIDADE' +
-        ', '
-      ':ESTOQMIN, '
-      '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, '
-      ':CODORIGEM, '
+        ', :ESTOQMIN, '
+      
+        '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, :' +
+        'CODORIGEM, '
       
         '   :CODTRIBUTACAO, :CST, :CSOSN, :NCM_SH, :CODCFOP, :CODBARRA_EA' +
-        'N, '
-      ':CODUNIDADE, '
+        'N, :CODUNIDADE, '
       
         '   :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI, :RESE' +
-        'RVA, '
-      ':PRODUTO_NOVO, '
-      '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, '
-      ':ANO_MODELO_VEICULO, '
-      '   :ANO_FABRICACAO_VEICULO, :RENAVAM_VEICULO, :CHASSI_VEICULO, '
-      ':KILOMETRAGEM_VEICULO, '
-      '   :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORICO_VEICULO)')
+        'RVA, :PRODUTO_NOVO, '
+      
+        '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, :ANO_MODEL' +
+        'O_VEICULO, '
+      
+        '   :ANO_FABRICACAO_VEICULO, :RENAVAM_VEICULO, :CHASSI_VEICULO, :' +
+        'KILOMETRAGEM_VEICULO, '
+      
+        '   :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORICO_VEICULO, :PERCEN' +
+        'TUAL_REDUCAO_BC)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'

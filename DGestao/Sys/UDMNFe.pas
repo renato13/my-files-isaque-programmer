@@ -224,6 +224,8 @@ type
     qryDadosProdutoAPRESENTACAO: TIBStringField;
     qryDadosProdutoDESCRI_APRESENTACAO: TIBStringField;
     qryDadosProdutoMODELO: TIBStringField;
+    qryDadosProdutoPERCENTUAL_REDUCAO_BC: TIBBCDField;
+    qryDadosProdutoVALOR_REDUCAO_BC: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -233,6 +235,8 @@ type
     { Private declarations }
     frmACBr : TfrmGeConfigurarNFeACBr;
     fr3Designer: TfrxDesigner;
+    procedure GerarTabela_CST_PIS;
+
     procedure UpdateNumeroNFe(const sCNPJEmitente : String; const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
 
@@ -381,6 +385,8 @@ begin
   LerConfiguracao;
 
   fr3Designer := TfrxDesigner.Create(Self);
+
+  GerarTabela_CST_PIS;
 end;
 
 procedure TDMNFe.GravarConfiguracao;
@@ -1203,7 +1209,8 @@ begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
 
-                // csosnVazio,csosn101, csosn102, csosn103, csosn201, csosn202, csosn203, csosn300, csosn400, csosn500, csosn900
+                // csosnVazio, csosn101, csosn102, csosn103, csosn201, csosn202, csosn203, csosn300, csosn400, csosn500, csosn900
+                
                 Case qryDadosProdutoCSOSN.AsInteger of
                   101 : CSOSN := csosn101;
                   102 : CSOSN := csosn102;
@@ -1241,10 +1248,15 @@ begin
                 end;
 
                 ICMS.modBC   := dbiValorOperacao;
-                ICMS.vBC     := qryDadosProdutoPFINAL.AsCurrency;
-                ICMS.pRedBC  := 0;
+                ICMS.pRedBC  := qryDadosProdutoPERCENTUAL_REDUCAO_BC.AsCurrency;
+                
+                if ( ICMS.pRedBC > 0 ) then
+                  ICMS.vBC   := qryDadosProdutoVALOR_REDUCAO_BC.AsCurrency
+                else
+                  ICMS.vBC   := qryDadosProdutoPFINAL.AsCurrency;
+
                 ICMS.pICMS   := qryDadosProdutoALIQUOTA.AsCurrency;
-                ICMS.vICMS   := qryDadosProdutoPFINAL.AsCurrency * ICMS.pICMS / 100;
+                ICMS.vICMS   := ICMS.vBC * ICMS.pICMS / 100;
 
               end;
 
@@ -1262,6 +1274,7 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
+
                 CST      := pis99;
                 PIS.vBC  := 0;
                 PIS.pPIS := 0;
@@ -1270,6 +1283,20 @@ begin
                 PIS.qBCProd   := 0;
                 PIS.vAliqProd := 0;
                 PIS.vPIS      := 0;
+
+              end
+              else
+              begin
+
+                CST      := pis99;
+                PIS.vBC  := 0;
+                PIS.pPIS := 0;
+                PIS.vPIS := 0;
+
+                PIS.qBCProd   := 0;
+                PIS.vAliqProd := 0;
+                PIS.vPIS      := 0;
+                
               end;
             end;
 
@@ -1277,6 +1304,7 @@ begin
             begin
               if ( Emit.CRT = crtSimplesNacional ) then
               begin
+
                 CST            := cof99;
                 COFINS.vBC     := 0;
                 COFINS.pCOFINS := 0;
@@ -1284,6 +1312,19 @@ begin
 
                 COFINS.qBCProd   := 0;
                 COFINS.vAliqProd := 0;
+
+              end
+              else
+              begin
+
+                CST            := cof99;
+                COFINS.vBC     := 0;
+                COFINS.pCOFINS := 0;
+                COFINS.vCOFINS := 0;
+
+                COFINS.qBCProd   := 0;
+                COFINS.vAliqProd := 0;
+                
               end;
             end;
 
@@ -1531,6 +1572,101 @@ begin
       Value := StrFormatarCnpj(qryDestinatarioCNPJ.AsString)
     else
       Value := StrFormatarCpf(qryDestinatarioCNPJ.AsString);
+end;
+
+procedure TDMNFe.GerarTabela_CST_PIS;
+var
+  I : Integer;
+  sCST_PIS_ID : Array[0..32] of String;
+const
+  CST_PIS_DESC : Array[0..32] of String = (
+      'Operação Tributável com Alíquota Básica'
+    , 'Operação Tributável com Alíquota Diferenciada'
+    , 'Operação Tributável com Alíquota por Unidade de Medida de Produto'
+    , 'Operação Tributável Monofásica - Revenda a Alíquota Zero'
+    , 'Operação Tributável por Substituição Tributária'
+    , 'Operação Tributável a Alíquota Zero'
+    , 'Operação Isenta da Contribuição'
+    , 'Operação sem Incidênc ia da Contribuição'
+    , 'Operação com Suspensão da Contribuição'
+    , 'Outras Operações de Saída'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Não Tributada no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno, e de Exportação'
+    , 'Crédito Presumido - Outras Operações'
+    , 'Operação de Aquisição sem Direito a Crédito'
+    , 'Operação de Aquisição com Isenção'
+    , 'Operação de Aquisição com Suspensão'
+    , 'Operação de Aquisição a Alíquota Zero'
+    , 'Operação de Aquisição sem Incidência da Contribuição'
+    , 'Operação de Aquisição por Substituição Tributária'
+    , 'Outras Operações de Entrada'
+    , 'Outras Operações'
+  );
+begin
+  try
+    sCST_PIS_ID[0]  := '01'; // Operação Tributável com Alíquota Básica
+    sCST_PIS_ID[1]  := '02'; // Operação Tributável com Alíquota Diferenciada
+    sCST_PIS_ID[2]  := '03'; // Operação Tributável com Alíquota por Unidade de Medida de Produto
+    sCST_PIS_ID[3]  := '04'; // Operação Tributável Monofásica - Revenda a Alíquota Zero
+    sCST_PIS_ID[4]  := '05'; // Operação Tributável por Substituição Tributária
+    sCST_PIS_ID[5]  := '06'; // Operação Tributável a Alíquota Zero
+    sCST_PIS_ID[6]  := '07'; // Operação Isenta da Contribuição
+    sCST_PIS_ID[7]  := '08'; // Operação sem Incidênc ia da Contribuição
+    sCST_PIS_ID[8]  := '09'; // Operação com Suspensão da Contribuição
+    sCST_PIS_ID[9]  := '49'; // Outras Operações de Saída
+    sCST_PIS_ID[10] := '50'; // Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno
+    sCST_PIS_ID[11] := '51'; // Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Não Tributada no Mercado Interno
+    sCST_PIS_ID[12] := '52'; // Operação com Direito a Crédito - Vinculada Exclusivamente a Receita de Exportação
+    sCST_PIS_ID[13] := '53'; // Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno
+    sCST_PIS_ID[14] := '54'; // Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação
+    sCST_PIS_ID[15] := '55'; // Operação com Direito a Crédito - Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação
+    sCST_PIS_ID[16] := '56'; // Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno' e de Exportação
+    sCST_PIS_ID[17] := '60'; // Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno
+    sCST_PIS_ID[18] := '61'; // Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno
+    sCST_PIS_ID[19] := '62'; // Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação
+    sCST_PIS_ID[20] := '63'; // Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno
+    sCST_PIS_ID[21] := '64'; // Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação
+    sCST_PIS_ID[22] := '65'; // Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação
+    sCST_PIS_ID[23] := '66'; // Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno' e de Exportação
+    sCST_PIS_ID[24] := '67'; // Crédito Presumido - Outras Operações
+    sCST_PIS_ID[25] := '70'; // Operação de Aquisição sem Direito a Crédito
+    sCST_PIS_ID[26] := '71'; // Operação de Aquisição com Isenção
+    sCST_PIS_ID[27] := '72'; // Operação de Aquisição com Suspensão
+    sCST_PIS_ID[28] := '73'; // Operação de Aquisição a Alíquota Zero
+    sCST_PIS_ID[29] := '74'; // Operação de Aquisição sem Incidência da Contribuição
+    sCST_PIS_ID[30] := '75'; // Operação de Aquisição por Substituição Tributária
+    sCST_PIS_ID[31] := '98'; // Outras Operações de Entrada
+    sCST_PIS_ID[32] := '99'; // Outras Operações
+
+    for I := Low(sCST_PIS_ID) to High(sCST_PIS_ID) do
+      with IBSQL do
+      begin
+        SQL.Clear;
+        SQL.Add( 'Execute Procedure SET_CST_PIS ('     );
+        SQL.Add( '    ' + QuotedStr(sCST_PIS_ID[I])    );
+        SQL.Add( '  , ' + QuotedStr(CST_PIS_DESC[I])   );
+        SQL.Add( '  , ' + IntToStr(Ord(TpcnCstIpi(I))) );
+        SQL.Add( ')' );
+
+        ExecQuery;
+        CommitTransaction;
+      end;
+  except
+    On E : Exception do
+      raise Exception.Create('Erro no procedimento GerarTabela_CST_PIS - ' + E.Message);
+  end;
 end;
 
 end.
