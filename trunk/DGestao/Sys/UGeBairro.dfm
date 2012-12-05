@@ -46,7 +46,7 @@ inherited frmGeBairro: TfrmGeBairro
           Caption = 'Cidade:'
         end
         object lblDistrito: TLabel [2]
-          Left = 296
+          Left = 368
           Top = 64
           Width = 38
           Height = 13
@@ -66,7 +66,7 @@ inherited frmGeBairro: TfrmGeBairro
         object dbCidade: TRxDBComboEdit
           Left = 16
           Top = 80
-          Width = 273
+          Width = 345
           Height = 21
           ButtonHint = 'Pesquisar Cidade (Ctrl+P)'
           CharCase = ecUpperCase
@@ -139,9 +139,9 @@ inherited frmGeBairro: TfrmGeBairro
           OnButtonClick = dbCidadeButtonClick
         end
         object dbDistrito: TRxDBComboEdit
-          Left = 296
+          Left = 368
           Top = 80
-          Width = 257
+          Width = 329
           Height = 21
           ButtonHint = 'Pesquisar Distrito (Ctrl+P)'
           CharCase = ecUpperCase
@@ -216,7 +216,7 @@ inherited frmGeBairro: TfrmGeBairro
         object dbNome: TDBEdit
           Left = 88
           Top = 40
-          Width = 465
+          Width = 609
           Height = 21
           CharCase = ecUpperCase
           DataField = 'BAI_NOME'

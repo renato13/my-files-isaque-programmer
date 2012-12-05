@@ -111,7 +111,7 @@ type
     CompanyName: TLabel;
     Version: TLabel;
     nmFabricanteProduto: TMenuItem;
-    AlteraodeSenha1: TMenuItem;
+    nmUsuarioAlterarSenha: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
     procedure RxSpeedButtonEmpresaClick(Sender: TObject);
     procedure RxSpeedBtnClienteClick(Sender: TObject);
@@ -160,7 +160,7 @@ type
     procedure nmFluxoDeCaixaClick(Sender: TObject);
     procedure nmRelatorioVendaClick(Sender: TObject);
     procedure nmFabricanteProdutoClick(Sender: TObject);
-    procedure AlteraodeSenha1Click(Sender: TObject);
+    procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -172,9 +172,7 @@ var
 
 implementation
 
-uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
-  UGridFornec, UGrupoProd, UGrProduto, UGrEntradaEstoq, uAjustEstoq,
-  uKardex, uGrVendas, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
+uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   uGerRelCP, USobre, UfrmRelVendas, UGeBancos, 
   UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
@@ -182,7 +180,7 @@ uses UGrCliente, UGrEmpresa, UGrContPagar, UGrContReceber,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes,
-  UGeFabricante, UConstantesDGE, UfrmAltSenha;
+  UGeFabricante, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -397,43 +395,62 @@ begin
   else
     sCNPJ := ' CNPJ.: ' + StrFormatarCpf(GetEmpresaIDDefault);
 
-  stbMain.Panels.Items[2].Text := 'Licenciado a empresa ' + GetEmpresaNomeDefault;
+  stbMain.Panels.Items[2].Text  := 'Licenciado a empresa ' + GetEmpresaNomeDefault;
+  nmUsuarioAlterarSenha.Caption := Format('Alteração de Senha (%s)', [GetUserApp]);
 
-  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
-    1 : EvUAfrmPrinc.UserID := 1 ;  //Diretoria
+  Case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
+    FUNCTION_USER_ID_DIRETORIA :
+      EvUAfrmPrinc.UserID := 1;
 
-    2 : begin
-         EvUAfrmPrinc.UserID := 2;   // Gerente de Vendas
-         RxSpeedButton5.Enabled := false;
-         RxSpeedBtnCRec.Enabled := false;
-         RxSpeedBtnCPag.Enabled := false;
-       end;
-    3 : EvUAfrmPrinc.UserID := 3;   // Gerente Financeiro
+    FUNCTION_USER_ID_GERENTE_VND :
+      begin
+        EvUAfrmPrinc.UserID := 2;   
+        RxSpeedButton5.Enabled := false;
+        RxSpeedBtnCRec.Enabled := false;
+        RxSpeedBtnCPag.Enabled := false;
+      end;
 
-    4 : begin
-         EvUAfrmPrinc.UserID := 4;   // Vendedor
-         RxSpeedButtonEmpresa.Visible := false;
-         btProduto.Enabled := false;
-         RxSpeedButton4.Enabled := false;
-         RxSpeedButton1.Enabled := false;
-         RxSpeedButton5.Enabled := false;
-         RxSpeedBtnCRec.Enabled := false;
-         RxSpeedBtnCPag.Enabled := false;
-       end;
+    FUNCTION_USER_ID_GERENTE_FIN :
+      EvUAfrmPrinc.UserID := 3;
 
-    5 : EvUAfrmPrinc.UserID := 5;   // Gerente ADM
-    6 : EvUAfrmPrinc.UserID := 6;   // Caixa
-    7 : EvUAfrmPrinc.UserID := 7;   // Aux.Financeiro 1
-    8 : EvUAfrmPrinc.UserID := 8;   // Aux.Financeiro 2
-    9 : EvUAfrmPrinc.UserID := 9;   // Supervisor Caixa
-    10: EvUAfrmPrinc.UserID := 10;  // Estoquista
-    11: EvUAfrmPrinc.UserID := 11;  // TI
-    12: EvUAfrmPrinc.UserID := 12;  // Masterdados-Supervisor
+    FUNCTION_USER_ID_VENDEDOR :
+      begin
+        EvUAfrmPrinc.UserID := 4;   
+        RxSpeedButtonEmpresa.Visible := false;
+        btProduto.Enabled      := false;
+        RxSpeedButton4.Enabled := false;
+        RxSpeedButton1.Enabled := false;
+        RxSpeedButton5.Enabled := false;
+        RxSpeedBtnCRec.Enabled := false;
+        RxSpeedBtnCPag.Enabled := false;
+      end;
+
+    FUNCTION_USER_ID_GERENTE_ADM :
+      EvUAfrmPrinc.UserID := 5;
+
+    FUNCTION_USER_ID_CAIXA :
+      EvUAfrmPrinc.UserID := 6;
+
+    FUNCTION_USER_ID_AUX_FINANC1 :
+      EvUAfrmPrinc.UserID := 7;
+
+    FUNCTION_USER_ID_AUX_FINANC2 :
+      EvUAfrmPrinc.UserID := 8;
+
+    FUNCTION_USER_ID_SUPERV_CX :
+      EvUAfrmPrinc.UserID := 9;
+
+    FUNCTION_USER_ID_ESTOQUISTA :
+      EvUAfrmPrinc.UserID := 10;
+
+    FUNCTION_USER_ID_SUPORTE_TI :
+      EvUAfrmPrinc.UserID := 11;
+
+    FUNCTION_USER_ID_SYSTEM_ADM :
+      EvUAfrmPrinc.UserID := 12;  
   else
-    begin
-     ShowWarning('Falta cruzar nova função com UserID!');
-     Application.Terminate;
-    end
+    ShowWarning('Falta cruzar nova função com UserID!');
+    Application.Terminate;
   end;
 
   Self.WindowState := wsMaximized;
@@ -530,9 +547,9 @@ begin
   MostrarTabelaFabricantes(Self);
 end;
 
-procedure TfrmPrinc.AlteraodeSenha1Click(Sender: TObject);
+procedure TfrmPrinc.nmUsuarioAlterarSenhaClick(Sender: TObject);
 begin
-  frmAltSenha.ShowModal;
+  // frmAltSenha.ShowModal;
 end;
 
 end.
