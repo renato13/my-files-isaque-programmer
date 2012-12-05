@@ -14,6 +14,7 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
@@ -54,7 +55,7 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Width = 81
       Height = 16
       Alignment = taRightJustify
-      Caption = 'Senha Nova:'
+      Caption = 'Senha &Nova:'
       FocusControl = dbSenhaNova
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -69,8 +70,8 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Width = 104
       Height = 16
       Alignment = taRightJustify
-      Caption = 'Confirmar Nova:'
-      FocusControl = edSenhaConfirmar
+      Caption = '&Confirmar Nova:'
+      FocusControl = dbSenhaConfirmar
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -84,7 +85,7 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Width = 84
       Height = 16
       Alignment = taRightJustify
-      Caption = 'Senha Atual:'
+      Caption = 'Senha &Atual:'
       FocusControl = dbSenhaAtual
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -116,7 +117,7 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Width = 167
       Height = 24
       CharCase = ecUpperCase
-      DataField = 'SENHA'
+      DataField = 'SENHA_ATUAL'
       DataSource = dtsUsers
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -125,16 +126,16 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Font.Style = [fsBold]
       ParentFont = False
       PasswordChar = '*'
-      ReadOnly = True
       TabOrder = 1
-      OnExit = dbSenhaAtualExit
     end
-    object edSenhaConfirmar: TEdit
+    object dbSenhaNova: TDBEdit
       Left = 122
-      Top = 111
+      Top = 79
       Width = 167
       Height = 24
       CharCase = ecUpperCase
+      DataField = 'SENHA_NOVA'
+      DataSource = dtsUsers
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -144,13 +145,13 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       PasswordChar = '*'
       TabOrder = 2
     end
-    object dbSenhaNova: TDBEdit
+    object dbSenhaConfirmar: TDBEdit
       Left = 122
-      Top = 79
+      Top = 111
       Width = 167
       Height = 24
       CharCase = ecUpperCase
-      DataField = 'SENHA'
+      DataField = 'SENHA_CONFIRMAR'
       DataSource = dtsUsers
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -159,7 +160,6 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Font.Style = [fsBold]
       ParentFont = False
       PasswordChar = '*'
-      ReadOnly = True
       TabOrder = 3
     end
   end
@@ -262,7 +262,17 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       'where'
       '  NOME = :NOME')
     SelectSQL.Strings = (
-      'select * from TBUSERS')
+      'Select'
+      '    u.Nome'
+      '  , u.Senha'
+      '  , u.Nomecompleto'
+      '  , u.Codfuncao'
+      '  , u.Limidesc'
+      '  , cast(null as varchar(16)) as Senha_Atual'
+      '  , cast(null as varchar(16)) as Senha_Nova'
+      '  , cast(null as varchar(16)) as Senha_Confirmar'
+      'from TBUSERS u'
+      'where u.Nome = :Nome')
     ModifySQL.Strings = (
       'update TBUSERS'
       'set'
@@ -273,6 +283,7 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       '  LIMIDESC = :LIMIDESC'
       'where'
       '  NOME = :OLD_NOME')
+    UpdateObject = updUsers
     Left = 16
     Top = 152
     object tblUsersNOME: TIBStringField
@@ -304,10 +315,64 @@ object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
       Precision = 9
       Size = 2
     end
+    object tblUsersSENHA_ATUAL: TIBStringField
+      DisplayLabel = 'Senha Atual'
+      FieldName = 'SENHA_ATUAL'
+      ProviderFlags = []
+      Required = True
+      Size = 16
+    end
+    object tblUsersSENHA_NOVA: TIBStringField
+      DisplayLabel = 'Nova Senha'
+      FieldName = 'SENHA_NOVA'
+      ProviderFlags = []
+      Required = True
+      Size = 16
+    end
+    object tblUsersSENHA_CONFIRMAR: TIBStringField
+      DisplayLabel = 'Confirmar Senha'
+      FieldName = 'SENHA_CONFIRMAR'
+      ProviderFlags = []
+      Required = True
+      Size = 16
+    end
   end
   object dtsUsers: TDataSource
     DataSet = tblUsers
-    Left = 48
+    Left = 80
     Top = 152
+  end
+  object updUsers: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  NOME,'
+      '  SENHA,'
+      '  NOMECOMPLETO,'
+      '  CODFUNCAO,'
+      '  LIMIDESC'
+      'from TBUSERS '
+      'where'
+      '  NOME = :NOME')
+    ModifySQL.Strings = (
+      'update TBUSERS'
+      'set'
+      '  NOME = :NOME,'
+      '  SENHA = :SENHA,'
+      '  NOMECOMPLETO = :NOMECOMPLETO,'
+      '  CODFUNCAO = :CODFUNCAO,'
+      '  LIMIDESC = :LIMIDESC'
+      'where'
+      '  NOME = :OLD_NOME')
+    InsertSQL.Strings = (
+      'insert into TBUSERS'
+      '  (NOME, SENHA, NOMECOMPLETO, CODFUNCAO, LIMIDESC)'
+      'values'
+      '  (:NOME, :SENHA, :NOMECOMPLETO, :CODFUNCAO, :LIMIDESC)')
+    DeleteSQL.Strings = (
+      'delete from TBUSERS'
+      'where'
+      '  NOME = :OLD_NOME')
+    Left = 48
+    Top = 154
   end
 end

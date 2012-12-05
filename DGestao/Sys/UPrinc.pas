@@ -549,7 +549,8 @@ end;
 
 procedure TfrmPrinc.nmUsuarioAlterarSenhaClick(Sender: TObject);
 begin
-  // frmAltSenha.ShowModal;
+  if ( FormFunction.ShowModalForm(Self, 'frmGrUsuarioAlterarSenha') ) then
+    Self.Update;
 end;
 
 end.

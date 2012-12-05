@@ -2,15 +2,17 @@ unit FuncoesFormulario;
 
 interface
 
-uses Classes, Forms;{, ConexaoDB, Basico, BasicoTela,  Windows, Messages, SysUtils, Variants,
-Graphics, Controls, Dialogs, StdCtrls;
+uses Classes, Forms, Controls;{, ConexaoDB, Basico, BasicoTela,  Windows, Messages, SysUtils, Variants,
+Graphics, Dialogs, StdCtrls;
 }
+
 type
   TFormularios = class
   private
 
   public
     class function EstaAberto(sForm: String): Boolean;
+    class function ShowModalForm(const AOnwer : TComponent; NomeForm: String): Boolean;
     class procedure ShowForm(const AOnwer : TComponent; NomeForm: String);
     class procedure RegisterForm(const aFormName: string; aFormClass: TComponentClass);
     class procedure FecharTodosForm;
@@ -63,6 +65,14 @@ begin
   if TFormularios.EstaAberto(NomeForm) then
     FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
   FForm.Show;
+end;
+
+class function TFormularios.ShowModalForm(const AOnwer: TComponent;
+  NomeForm: String): Boolean;
+begin
+  if TFormularios.EstaAberto(NomeForm) then
+    FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
+  Result := (FForm.ShowModal = mrOk);
 end;
 
 end.
