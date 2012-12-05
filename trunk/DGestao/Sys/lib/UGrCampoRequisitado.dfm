@@ -264,7 +264,6 @@ inherited frmCampoRequisitado: TfrmCampoRequisitado
         FieldName = 'Image'
         Title.Alignment = taCenter
         Title.Caption = 'I'
-        Width = -1
         Visible = False
       end
       item

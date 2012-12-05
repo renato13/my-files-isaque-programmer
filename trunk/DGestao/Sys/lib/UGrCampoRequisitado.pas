@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadrao, ExtCtrls, StdCtrls, Buttons, DB, DBClient, Grids,
-  DBGrids;
+  DBGrids, IBCustomDataSet;
 
 type
   TfrmCampoRequisitado = class(TfrmGrPadrao)
@@ -37,7 +37,8 @@ type
 var
   frmCampoRequisitado: TfrmCampoRequisitado;
 
-  function CamposRequiridos(const AOwer : TComponent; const Tabela : TClientDataSet; const TabelaNome : String) : Boolean;
+  function CamposRequiridos(const AOwer : TComponent; const Tabela : TClientDataSet; const TabelaNome : String) : Boolean; overload;
+  function CamposRequiridos(const AOwer : TComponent; const Tabela : TIBDataSet; const TabelaNome : String) : Boolean; overload;
 
 implementation
 
@@ -54,7 +55,41 @@ begin
     with frm, cdsRequisitado do
     begin
       frm.pnlDescricao.Caption := Trim(TabelaNome);
-      
+
+      CreateDataSet;
+      for I := 0 to Tabela.Fields.Count - 1 do
+        if ( Tabela.Fields[I].Required ) then
+          if ( Tabela.Fields[I].IsNull ) then
+          begin
+            Append;
+            cdsRequisitadoID.Value    := RecordCount + 1;
+            cdsRequisitadoImage.Value := 1;
+            cdsRequisitadoDescription.Value := ' * ' + Trim(Tabela.Fields[I].DisplayName);
+            Post;
+          end;
+       Result := (RecordCount > 0);
+
+       if ( Result ) then
+         ShowModal;
+    end;
+
+  finally
+    frm.Free;
+  end;
+end;
+
+function CamposRequiridos(const AOwer : TComponent; const Tabela : TIBDataSet; const TabelaNome : String) : Boolean;
+var
+  I : Integer;
+  frm : TfrmCampoRequisitado;
+begin
+  frm := TfrmCampoRequisitado.Create(Aower);
+  try
+
+    with frm, cdsRequisitado do
+    begin
+      frm.pnlDescricao.Caption := Trim(TabelaNome);
+
       CreateDataSet;
       for I := 0 to Tabela.Fields.Count - 1 do
         if ( Tabela.Fields[I].Required ) then
