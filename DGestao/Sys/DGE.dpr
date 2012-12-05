@@ -6,23 +6,16 @@ uses
   SysUtils,
   HPL_Strings in 'lib\HPL_Strings.pas',
   UPrinc in 'UPrinc.pas' {frmPrinc},
-  U_SenhaBaixa in 'U_SenhaBaixa.pas' {f_senhaBaixa},
   UBxCP in 'UBxCP.pas' {frmBxCP},
   UBxCR in 'UBxCR.pas' {frmBxCR},
   UCdBanco in 'UCdBanco.pas' {frmCadBanco},
   UCdCliente in 'UCdCliente.pas' {frmCdCliente},
-  UCdContPagar in 'UCdContPagar.pas' {frmCdContPagar},
   UCdContReceber in 'UCdContReceber.pas' {frmCdContReceb},
   UCdDeposito in 'UCdDeposito.pas' {frmCdDeposito},
   UCdEmpresa in 'UCdEmpresa.pas' {frmCadEmpresa},
   UCdVendedor in 'UCdVendedor.pas' {frmCdVendedor},
   UDMBusiness in 'UDMBusiness.pas' {DMBusiness: TDataModule},
-  UGrBanco in 'UGrBanco.pas' {frmGridBanco},
-  UGrCliente in 'UGrCliente.pas' {frmGrCliente},
-  UGrContPagar in 'UGrContPagar.pas' {frmGrContPagar},
-  UGrContReceber in 'UGrContReceber.pas' {frmGrContReceb},
   UGrDepositos in 'UGrDepositos.pas' {frmGrDepositos},
-  UGrEmpresa in 'UGrEmpresa.pas' {frmGridEmpresa},
   UGrProduto in 'UGrProduto.pas' {frmGrProdutos},
   USobre in 'USobre.pas' {frmSobre},
   UPesq in 'UPesq.pas' {frmPesq},
@@ -32,7 +25,6 @@ uses
   UGrupoProd in 'UGrupoProd.pas' {frmGrupoProd},
   uAjustEstoq in 'uAjustEstoq.pas' {frmAjustEstoq},
   uKardex in 'uKardex.pas' {frmKardex},
-  uGrVendas in 'uGrVendas.pas' {frmGrVendas},
   uVenda in 'uVenda.pas' {frmVenda},
   uRelCli in 'uRelCli.pas' {frmRelCli},
   uRelFornec in 'uRelFornec.pas' {frmRelFornec},
@@ -95,7 +87,7 @@ uses
   UConstantesDGE in 'UConstantesDGE.pas',
   FormFactoryU in 'lib\FormFactoryU.pas',
   FuncoesFormulario in 'lib\FuncoesFormulario.pas',
-  UfrmAltSenha in 'UfrmAltSenha.pas' {frmAltSenha};
+  UGrUsuarioAlterarSenha in 'lib\UGrUsuarioAlterarSenha.pas' {frmGrUsuarioAlterarSenha};
 
 {$R *.res}
 
@@ -108,6 +100,5 @@ begin
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.CreateForm(TfrmPesq, frmPesq);
-  Application.CreateForm(TfrmAltSenha, frmAltSenha);
   Application.Run;
 end.

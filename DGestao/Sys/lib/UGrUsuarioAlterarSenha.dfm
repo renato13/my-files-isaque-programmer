@@ -1,144 +1,161 @@
-object frmAltSenha: TfrmAltSenha
-  Left = 429
-  Top = 270
+object frmGrUsuarioAlterarSenha: TfrmGrUsuarioAlterarSenha
+  Left = 1012
+  Top = 305
+  ActiveControl = dbNome
   BorderStyle = bsDialog
   Caption = 'Altera'#231#227'o de Senha'
-  ClientHeight = 197
-  ClientWidth = 261
+  ClientHeight = 187
+  ClientWidth = 367
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 261
-    Height = 151
+    Width = 367
+    Height = 146
     Align = alClient
-    BevelInner = bvLowered
+    BevelOuter = bvNone
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 0
     object lblNome: TLabel
-      Left = 60
-      Top = 17
-      Width = 59
+      Left = 66
+      Top = 18
+      Width = 53
       Height = 16
+      Alignment = taRightJustify
       Caption = 'Usu'#225'rio:'
-      Font.Charset = DEFAULT_CHARSET
+      FocusControl = dbNome
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblsenha: TLabel
-      Left = 29
-      Top = 81
-      Width = 90
+    object lblSenhaNova: TLabel
+      Left = 38
+      Top = 83
+      Width = 81
       Height = 16
+      Alignment = taRightJustify
       Caption = 'Senha Nova:'
-      Font.Charset = DEFAULT_CHARSET
+      FocusControl = dbSenhaNova
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblconfSen: TLabel
-      Left = 7
-      Top = 113
-      Width = 112
+    object lblSenhaConfirmar: TLabel
+      Left = 15
+      Top = 115
+      Width = 104
       Height = 16
+      Alignment = taRightJustify
       Caption = 'Confirmar Nova:'
-      Font.Charset = DEFAULT_CHARSET
+      FocusControl = edSenhaConfirmar
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object Label1: TLabel
-      Left = 31
-      Top = 49
-      Width = 88
+    object lblSenhaAtual: TLabel
+      Left = 35
+      Top = 50
+      Width = 84
       Height = 16
+      Alignment = taRightJustify
       Caption = 'Senha Atual:'
-      Font.Charset = DEFAULT_CHARSET
+      FocusControl = dbSenhaAtual
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object DBENome: TDBEdit
+    object dbNome: TDBEdit
       Left = 122
       Top = 14
-      Width = 122
+      Width = 231
       Height = 24
       CharCase = ecUpperCase
       DataField = 'NOME'
-      DataSource = dtsrcUsers
-      Font.Charset = DEFAULT_CHARSET
+      DataSource = dtsUsers
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
     end
-    object DBEsenha: TDBEdit
+    object dbSenhaAtual: TDBEdit
       Left = 122
       Top = 46
-      Width = 50
+      Width = 167
       Height = 24
       CharCase = ecUpperCase
       DataField = 'SENHA'
-      DataSource = dtsrcUsers
-      Font.Charset = DEFAULT_CHARSET
+      DataSource = dtsUsers
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       PasswordChar = '*'
       ReadOnly = True
       TabOrder = 1
-      OnExit = DBEsenhaExit
+      OnExit = dbSenhaAtualExit
     end
-    object EdConfirmSenha: TEdit
+    object edSenhaConfirmar: TEdit
       Left = 122
       Top = 111
-      Width = 51
+      Width = 167
       Height = 24
       CharCase = ecUpperCase
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       PasswordChar = '*'
       TabOrder = 2
     end
-    object DBEsenhanova: TDBEdit
+    object dbSenhaNova: TDBEdit
       Left = 122
       Top = 79
-      Width = 50
+      Width = 167
       Height = 24
       CharCase = ecUpperCase
       DataField = 'SENHA'
-      DataSource = dtsrcUsers
-      Font.Charset = DEFAULT_CHARSET
+      DataSource = dtsUsers
+      Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
-      Font.Name = 'MS Sans Serif'
+      Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
       PasswordChar = '*'
@@ -146,48 +163,36 @@ object frmAltSenha: TfrmAltSenha
       TabOrder = 3
     end
   end
-  object Panel2: TPanel
+  object pnlBotoes: TPanel
     Left = 0
-    Top = 151
-    Width = 261
-    Height = 46
+    Top = 146
+    Width = 367
+    Height = 41
     Align = alBottom
-    BevelInner = bvLowered
+    BevelOuter = bvNone
     TabOrder = 1
-    object btbtnFechar: TBitBtn
-      Left = 194
-      Top = 8
-      Width = 47
+    DesignSize = (
+      367
+      41)
+    object BvlBotoes: TBevel
+      Left = 0
+      Top = 0
+      Width = 367
+      Height = 9
+      Align = alTop
+      Shape = bsTopLine
+    end
+    object btbtnSalvar: TBitBtn
+      Left = 210
+      Top = 5
+      Width = 75
       Height = 31
-      Hint = 'Fechar'
+      Hint = 'Gravar Nova Senha'
+      Anchors = [akTop, akRight]
+      Caption = 'Confirmar'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      OnClick = btbtnFecharClick
-      Glyph.Data = {
-        76010000424D7601000000000000760000002800000020000000100000000100
-        04000000000000010000120B0000120B00001000000000000000000000000000
-        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
-        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033BBBBBBBBBB
-        BB33337777777777777F33BB00BBBBBBBB33337F77333333F37F33BB0BBBBBB0
-        BB33337F73F33337FF7F33BBB0BBBB000B33337F37FF3377737F33BBB00BB00B
-        BB33337F377F3773337F33BBBB0B00BBBB33337F337F7733337F33BBBB000BBB
-        BB33337F33777F33337F33EEEE000EEEEE33337F3F777FFF337F33EE0E80000E
-        EE33337F73F77773337F33EEE0800EEEEE33337F37377F33337F33EEEE000EEE
-        EE33337F33777F33337F33EEEEE00EEEEE33337F33377FF3337F33EEEEEE00EE
-        EE33337F333377F3337F33EEEEEE00EEEE33337F33337733337F33EEEEEEEEEE
-        EE33337FFFFFFFFFFF7F33EEEEEEEEEEEE333377777777777773}
-      NumGlyphs = 2
-    end
-    object btbtnSalvar: TBitBtn
-      Left = 124
-      Top = 8
-      Width = 47
-      Height = 31
-      Hint = 'Gravar Nova Senha'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 1
       OnClick = btbtnSalvarClick
       Glyph.Data = {
         76010000424D7601000000000000760000002800000020000000100000000100
@@ -204,8 +209,35 @@ object frmAltSenha: TfrmAltSenha
         05555777775555557F5555000555555505555577755555557555}
       NumGlyphs = 2
     end
+    object btbtnFechar: TBitBtn
+      Left = 288
+      Top = 5
+      Width = 75
+      Height = 31
+      Hint = 'Fechar'
+      Anchors = [akTop, akRight]
+      Caption = 'Fechar'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      OnClick = btbtnFecharClick
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0033BBBBBBBBBB
+        BB33337777777777777F33BB00BBBBBBBB33337F77333333F37F33BB0BBBBBB0
+        BB33337F73F33337FF7F33BBB0BBBB000B33337F37FF3377737F33BBB00BB00B
+        BB33337F377F3773337F33BBBB0B00BBBB33337F337F7733337F33BBBB000BBB
+        BB33337F33777F33337F33EEEE000EEEEE33337F3F777FFF337F33EE0E80000E
+        EE33337F73F77773337F33EEE0800EEEEE33337F37377F33337F33EEEE000EEE
+        EE33337F33777F33337F33EEEEE00EEEEE33337F33377FF3337F33EEEEEE00EE
+        EE33337F333377F3337F33EEEEEE00EEEE33337F33337733337F33EEEEEEEEEE
+        EE33337FFFFFFFFFFF7F33EEEEEEEEEEEE333377777777777773}
+      NumGlyphs = 2
+    end
   end
-  object ibdtstUsers: TIBDataSet
+  object tblUsers: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     BufferChunks = 1000
@@ -241,41 +273,41 @@ object frmAltSenha: TfrmAltSenha
       '  LIMIDESC = :LIMIDESC'
       'where'
       '  NOME = :OLD_NOME')
-    Left = 184
-    Top = 40
-    object ibdtstUsersNOME: TIBStringField
+    Left = 16
+    Top = 152
+    object tblUsersNOME: TIBStringField
       FieldName = 'NOME'
       Origin = 'TBUSERS.NOME'
       Required = True
       Size = 12
     end
-    object ibdtstUsersSENHA: TIBStringField
+    object tblUsersSENHA: TIBStringField
       FieldName = 'SENHA'
       Origin = 'TBUSERS.SENHA'
       Required = True
       Size = 16
     end
-    object ibdtstUsersNOMECOMPLETO: TIBStringField
+    object tblUsersNOMECOMPLETO: TIBStringField
       FieldName = 'NOMECOMPLETO'
       Origin = 'TBUSERS.NOMECOMPLETO'
       Required = True
       Size = 60
     end
-    object ibdtstUsersCODFUNCAO: TSmallintField
+    object tblUsersCODFUNCAO: TSmallintField
       FieldName = 'CODFUNCAO'
       Origin = 'TBUSERS.CODFUNCAO'
       Required = True
     end
-    object ibdtstUsersLIMIDESC: TIBBCDField
+    object tblUsersLIMIDESC: TIBBCDField
       FieldName = 'LIMIDESC'
       Origin = 'TBUSERS.LIMIDESC'
       Precision = 9
       Size = 2
     end
   end
-  object dtsrcUsers: TDataSource
-    DataSet = ibdtstUsers
-    Left = 184
-    Top = 88
+  object dtsUsers: TDataSource
+    DataSet = tblUsers
+    Left = 48
+    Top = 152
   end
 end
