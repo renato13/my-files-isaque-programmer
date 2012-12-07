@@ -1,30 +1,29 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas',0,1,138,1,170,0,0
-File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\FuncoesFormulario.pas',0,1,1,30,5,0,0
-File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrCampoRequisitado.pas',0,1,29,78,81,1,0
-File_3=SourceModule,'c:\program files (x86)\borland\delphi7\source\vcl\Controls.pas',0,1,112,1,140,0,0
-File_4=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas',0,1,1,1,1,1,0
+File_0=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas',0,1,66,29,94,1,0
+File_1=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrUsuarioAlterarSenha.pas',0,1,75,1,56,1,0
+File_2=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\FuncoesFormulario.pas',0,1,1,30,5,0,0
+File_3=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrCampoRequisitado.pas',0,1,29,78,81,1,0
+File_4=SourceModule,'c:\program files (x86)\borland\delphi7\source\vcl\Controls.pas',0,1,112,1,140,0,0
 File_5=SourceModule,'c:\program files (x86)\borland\delphi7\source\rtl\Sys\sysutils.pas',0,1,3485,36,3508,0,0
 File_6=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGrContPagar.pas',0,1,1,1,1,0,0
 File_7=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastroSimples.pas',0,1,1,118,13,1,0
-File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas',0,1,297,1,300,1,0
-File_9=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBairro.pas',0,1,122,1,146,1,0
+File_8=SourceModule,'E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeBairro.pas',0,1,122,1,146,1,0
 
 [Modules]
 Module0=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrUsuarioAlterarSenha.pas
-Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UConstantesDGE.pas
-Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
-Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
-Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
-Module9=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-Module10=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-Module11=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
-Module12=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
-Module13=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnConversao.pas
+Module1=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+Module2=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+Module3=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
+Module4=E:\Projetos\Dorivaldo\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module5=E:\Projetos\Dorivaldo\DGESTAO\Sys\UConstantesDGE.pas
+Module6=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
+Module7=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
+Module8=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
+Module9=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
+Module10=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
+Module11=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
+Module12=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnConversao.pas
+Module13=E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr
 Count=14
 EditWindowCount=1
 
@@ -33,7 +32,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrUsuarioAlterarSenha.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -48,14 +57,14 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas]
-ModuleType=SourceModule
-FormState=0
 FormOnTop=0
 
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas]
@@ -63,27 +72,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -98,15 +92,20 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\DGE.dpr]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
 [E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
+[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+[E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrPadrao.pas]
 FormState=0
 FormOnTop=0
 
@@ -171,79 +170,79 @@ LeftCol=1
 
 [View3]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMBusiness.pas
-CursorX=135
-CursorY=181
-TopLine=169
+CursorX=145
+CursorY=187
+TopLine=926
 LeftCol=1
 
 [View4]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
-CursorX=21
-CursorY=1205
-TopLine=1483
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UFuncoesRede.pas
+CursorX=1
+CursorY=170
+TopLine=138
 LeftCol=1
 
 [View5]
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UDMNFe.pas
+CursorX=26
+CursorY=391
+TopLine=358
+LeftCol=1
+
+[View6]
 Module=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnConversao.pas
 CursorX=13
 CursorY=160
 TopLine=124
 LeftCol=1
 
-[View6]
+[View7]
 Module=C:\Delphi\MyLib\ACBr\Fontes\PCN2\pcnModeloNFe.pas
 CursorX=41
 CursorY=322
 TopLine=315
 LeftCol=1
 
-[View7]
+[View8]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UFuncoes.pas
 CursorX=1
 CursorY=95
 TopLine=54
 LeftCol=1
 
-[View8]
+[View9]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UInfoVersao.pas
 CursorX=106
 CursorY=22
 TopLine=17
 LeftCol=1
 
-[View9]
+[View10]
 Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UPrinc.pas
 CursorX=17
 CursorY=553
 TopLine=508
 LeftCol=1
 
-[View10]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
-CursorX=15
-CursorY=257
-TopLine=584
-LeftCol=1
-
 [View11]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
-CursorX=12
-CursorY=412
-TopLine=397
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeProduto.pas
+CursorX=171
+CursorY=676
+TopLine=652
 LeftCol=1
 
 [View12]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
-CursorX=101
-CursorY=125
-TopLine=109
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVenda.pas
+CursorX=93
+CursorY=584
+TopLine=551
 LeftCol=1
 
 [View13]
-Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\lib\UGrUsuarioAlterarSenha.pas
-CursorX=1
-CursorY=56
-TopLine=81
+Module=E:\Projetos\Dorivaldo\DGESTAO\Sys\UGeVendaGerarNFe.pas
+CursorX=44
+CursorY=155
+TopLine=109
 LeftCol=1
 
 [Watches]
@@ -290,8 +289,8 @@ Dockable=1
 Create=1
 Visible=1
 State=0
-Left=301
-Top=135
+Left=357
+Top=129
 Width=156
 Height=84
 MaxLeft=-1
@@ -317,7 +316,7 @@ Dockable=1
 SplitPos=123
 ArrangeBy=Name
 SelectedItem=Connected
-ExpandedItems=ProviderFlags
+ExpandedItems=
 HiddenCategories=
 
 [ObjectTree]
