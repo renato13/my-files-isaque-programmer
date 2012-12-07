@@ -146,13 +146,13 @@ begin
         cdsVendaNFE_VALOR_ICMS.Value      := cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA.AsCurrency;
         cdsVendaNFE_VALOR_BASE_ICMS_SUBST.Value := 0;
         cdsVendaNFE_VALOR_ICMS_SUBST.Value      := 0;
-        cdsVendaNFE_VALOR_PIS.Value             := 0;
         cdsVendaNFE_VALOR_TOTAL_PRODUTO.Value   := cdsVendaVALOR_TOTAL_BRUTO.AsCurrency;
         cdsVendaNFE_VALOR_FRETE.Value      := 0;
         cdsVendaNFE_VALOR_SEGURO.Value     := 0;
         cdsVendaNFE_VALOR_DESCONTO.Value   := cdsVendaVALOR_TOTAL_DESCONTO.AsCurrency;
         cdsVendaNFE_VALOR_OUTROS.Value     := 0;
         cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.AsCurrency;
+        cdsVendaNFE_VALOR_PIS.Value        := 0;
         cdsVendaNFE_VALOR_COFINS.Value     := 0;
         cdsVendaNFE_VALOR_TOTAL_II.Value   := 0;
 

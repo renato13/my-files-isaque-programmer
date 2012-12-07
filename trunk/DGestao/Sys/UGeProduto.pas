@@ -173,6 +173,7 @@ type
     DBLookupComboBox1: TDBLookupComboBox;
     Label4: TLabel;
     DBLookupComboBox2: TDBLookupComboBox;
+    chkProdutoComEstoque: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -188,6 +189,8 @@ type
     procedure dbFabricanteButtonClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure chkProdutoComEstoqueClick(Sender: TObject);
+    procedure btnFiltrarClick(Sender: TObject);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -656,6 +659,23 @@ begin
       dbSituacaoVeiculo.SetFocus;
       Exit;
     end;
+
+  inherited;
+
+end;
+
+procedure TfrmGeProduto.chkProdutoComEstoqueClick(Sender: TObject);
+begin
+  if ( (pgcGuias.ActivePage = tbsTabela) and (edtFiltrar.Visible and edtFiltrar.Enabled) ) then
+    edtFiltrar.SetFocus;
+end;
+
+procedure TfrmGeProduto.btnFiltrarClick(Sender: TObject);
+begin
+  if chkProdutoComEstoque.Checked then
+    WhereAdditional := 'p.Qtde > 0'
+  else
+    WhereAdditional := EmptyStr;  
 
   inherited;
 

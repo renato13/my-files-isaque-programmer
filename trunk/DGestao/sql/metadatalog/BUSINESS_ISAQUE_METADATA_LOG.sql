@@ -1678,3 +1678,58 @@ Token unknown - line 33, column 61.
 =.
 
 */
+
+
+SET TERM ^ ;
+
+create or alter procedure SET_CST_COFINS (
+    CODIGO varchar(3),
+    DESCRICAO varchar(250),
+    INDICE_ACBR smallint)
+as
+begin
+  if ( Trim(coalesce(:Codigo, '')) <> '' ) then
+  begin
+    Codigo      = Trim(:Codigo);
+    Descricao   = Trim(:Descricao);
+    Indice_acbr = coalesce(:Indice_acbr, 99);
+
+    if (not Exists(
+      Select
+        p.Codigo
+      from TBCST_COFINS p
+      where p.Codigo = :Codigo
+    )) then
+    begin
+
+      /* Inserir CST, caso nao exista */
+
+      Insert Into TBCST_COFINS (
+          Codigo
+        , Descricao
+        , Indice_acbr
+      ) values (
+          :Codigo
+        , :Descricao
+        , :Indice_acbr
+      );
+
+    end
+    else
+    begin
+
+      /* Atualizar CST, caso exista */
+
+      Update TBCST_COFINS Set
+          Descricao   = :Descricao
+        , Indice_acbr = :Indice_acbr
+      where Codigo = :Codigo;
+
+    end 
+
+  end 
+end^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE SET_CST_COFINS TO "PUBLIC";

@@ -577,8 +577,9 @@ begin
         if ( FieldByName('Codcfop').AsInteger > 0 ) then
           cdsTabelaItensCFOP_COD.AsInteger := FieldByName('Codcfop').AsInteger;
 
-        cdsTabelaItensALIQUOTA.AsCurrency       := FieldByName('Aliquota').AsCurrency;
-        cdsTabelaItensALIQUOTA_CSOSN.AsCurrency := FieldByName('Aliquota_csosn').AsCurrency;
+        cdsTabelaItensALIQUOTA.AsCurrency              := FieldByName('Aliquota').AsCurrency;
+        cdsTabelaItensALIQUOTA_CSOSN.AsCurrency        := FieldByName('Aliquota_csosn').AsCurrency;
+        cdsTabelaItensPERCENTUAL_REDUCAO_BC.AsCurrency := FieldByName('Percentual_reducao_BC').AsCurrency;
 
         if ( Trim(FieldByName('Cst').AsString) <> EmptyStr ) then
           cdsTabelaItensCST.AsString       := FieldByName('Cst').AsString;

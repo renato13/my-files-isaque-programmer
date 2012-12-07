@@ -236,6 +236,7 @@ type
     frmACBr : TfrmGeConfigurarNFeACBr;
     fr3Designer: TfrxDesigner;
     procedure GerarTabela_CST_PIS;
+    procedure GerarTabela_CST_COFINS;
 
     procedure UpdateNumeroNFe(const sCNPJEmitente : String; const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
@@ -387,6 +388,7 @@ begin
   fr3Designer := TfrxDesigner.Create(Self);
 
   GerarTabela_CST_PIS;
+  GerarTabela_CST_COFINS;
 end;
 
 procedure TDMNFe.GravarConfiguracao;
@@ -1667,6 +1669,11 @@ begin
     On E : Exception do
       raise Exception.Create('Erro no procedimento GerarTabela_CST_PIS - ' + E.Message);
   end;
+end;
+
+procedure TDMNFe.GerarTabela_CST_COFINS;
+begin
+  ;
 end;
 
 end.

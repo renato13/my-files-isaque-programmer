@@ -178,21 +178,33 @@ inherited frmGeProduto: TfrmGeProduto
           Visible = False
         end
         inherited grpBxFiltro: TGroupBox
-          Left = 689
-          Width = 260
+          Left = 584
+          Width = 365
+          Caption = 'Pesquisar    '
           DesignSize = (
-            260
+            365
             54)
           inherited lbltFiltrar: TLabel
             Width = 48
             Caption = 'Produto:'
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 215
+            Left = 320
           end
           inherited edtFiltrar: TEdit
-            Left = 64
-            Width = 147
+            Left = 68
+            Width = 247
+            TabOrder = 1
+          end
+          object chkProdutoComEstoque: TCheckBox
+            Left = 68
+            Top = -1
+            Width = 194
+            Height = 17
+            TabStop = False
+            Caption = 'A&penas produtos com estoque'
+            TabOrder = 0
+            OnClick = chkProdutoComEstoqueClick
           end
         end
       end
@@ -789,7 +801,7 @@ inherited frmGeProduto: TfrmGeProduto
           ImageIndex = 3
           object Bevel6: TBevel
             Left = 0
-            Top = 257
+            Top = 233
             Width = 945
             Height = 4
             Align = alTop
@@ -1145,7 +1157,7 @@ inherited frmGeProduto: TfrmGeProduto
             Left = 0
             Top = 120
             Width = 945
-            Height = 137
+            Height = 113
             Align = alTop
             Caption = 'Dados fiscais p/ PIS e COFINS'
             TabOrder = 1

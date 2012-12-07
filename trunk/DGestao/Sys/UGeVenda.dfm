@@ -3559,6 +3559,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , p.Aliquota_tipo'
       '  , p.Aliquota'
       '  , p.Aliquota_csosn'
+      '  , p.Percentual_reducao_BC'
       '  , p.Valor_ipi'
       '  , p.Reserva'
       '  , case when coalesce(p.Reserva, 0) > 0'
