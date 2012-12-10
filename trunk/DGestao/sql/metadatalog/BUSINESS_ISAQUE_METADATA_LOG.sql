@@ -1733,3 +1733,452 @@ end^
 SET TERM ; ^
 
 GRANT EXECUTE ON PROCEDURE SET_CST_COFINS TO "PUBLIC";
+
+
+ALTER TABLE TBPRODUTO
+    ADD CST_PIS DMN_VCHAR_03 DEFAULT '99',
+    ADD CST_COFINS DMN_VCHAR_03 DEFAULT '99';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter CODEMP position 17;
+
+alter table TBPRODUTO
+alter CODSECAO position 18;
+
+alter table TBPRODUTO
+alter CODORIGEM position 19;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 20;
+
+alter table TBPRODUTO
+alter CST position 21;
+
+alter table TBPRODUTO
+alter CSOSN position 22;
+
+alter table TBPRODUTO
+alter CST_PIS position 23;
+
+alter table TBPRODUTO
+alter CST_COFINS position 24;
+
+alter table TBPRODUTO
+alter NCM_SH position 25;
+
+alter table TBPRODUTO
+alter CODCFOP position 26;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 27;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 28;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 29;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 30;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 31;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 32;
+
+alter table TBPRODUTO
+alter RESERVA position 33;
+
+alter table TBPRODUTO
+alter PRODUTO_NOVO position 34;
+
+alter table TBPRODUTO
+alter COR_VEICULO position 35;
+
+alter table TBPRODUTO
+alter COMBUSTIVEL_VEICULO position 36;
+
+alter table TBPRODUTO
+alter TIPO_VEICULO position 37;
+
+alter table TBPRODUTO
+alter ANO_MODELO_VEICULO position 38;
+
+alter table TBPRODUTO
+alter ANO_FABRICACAO_VEICULO position 39;
+
+alter table TBPRODUTO
+alter RENAVAM_VEICULO position 40;
+
+alter table TBPRODUTO
+alter CHASSI_VEICULO position 41;
+
+alter table TBPRODUTO
+alter KILOMETRAGEM_VEICULO position 42;
+
+alter table TBPRODUTO
+alter SITUACAO_ATUAL_VEICULO position 43;
+
+alter table TBPRODUTO
+alter SITUACAO_HISTORICO_VEICULO position 44;
+
+alter table TBPRODUTO
+alter PERCENTUAL_REDUCAO_BC position 45;
+
+
+
+ALTER TABLE TBPRODUTO
+    ADD ALIQUOTA_PIS DECIMAL(15,2) DEFAULT 0,
+    ADD ALIQUOTA_COFINS DECIMAL(15,2) DEFAULT 0;
+
+COMMENT ON COLUMN TBPRODUTO.CST_PIS IS
+'Codigo de Situacao Tributaria PIS.';
+
+COMMENT ON COLUMN TBPRODUTO.CST_COFINS IS
+'Codigo de Situacao Tributaria COFINS.';
+
+COMMENT ON COLUMN TBPRODUTO.ALIQUOTA_PIS IS
+'Aliquota PIS.';
+
+COMMENT ON COLUMN TBPRODUTO.ALIQUOTA_COFINS IS
+'Aliquota COFINS.';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter CODEMP position 17;
+
+alter table TBPRODUTO
+alter CODSECAO position 18;
+
+alter table TBPRODUTO
+alter CODORIGEM position 19;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 20;
+
+alter table TBPRODUTO
+alter CST position 21;
+
+alter table TBPRODUTO
+alter CSOSN position 22;
+
+alter table TBPRODUTO
+alter CST_PIS position 23;
+
+alter table TBPRODUTO
+alter CST_COFINS position 24;
+
+alter table TBPRODUTO
+alter NCM_SH position 25;
+
+alter table TBPRODUTO
+alter CODCFOP position 26;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 27;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 28;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 29;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 30;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 31;
+
+alter table TBPRODUTO
+alter ALIQUOTA_PIS position 32;
+
+alter table TBPRODUTO
+alter ALIQUOTA_COFINS position 33;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 34;
+
+alter table TBPRODUTO
+alter RESERVA position 35;
+
+alter table TBPRODUTO
+alter PRODUTO_NOVO position 36;
+
+alter table TBPRODUTO
+alter COR_VEICULO position 37;
+
+alter table TBPRODUTO
+alter COMBUSTIVEL_VEICULO position 38;
+
+alter table TBPRODUTO
+alter TIPO_VEICULO position 39;
+
+alter table TBPRODUTO
+alter ANO_MODELO_VEICULO position 40;
+
+alter table TBPRODUTO
+alter ANO_FABRICACAO_VEICULO position 41;
+
+alter table TBPRODUTO
+alter RENAVAM_VEICULO position 42;
+
+alter table TBPRODUTO
+alter CHASSI_VEICULO position 43;
+
+alter table TBPRODUTO
+alter KILOMETRAGEM_VEICULO position 44;
+
+alter table TBPRODUTO
+alter SITUACAO_ATUAL_VEICULO position 45;
+
+alter table TBPRODUTO
+alter SITUACAO_HISTORICO_VEICULO position 46;
+
+alter table TBPRODUTO
+alter PERCENTUAL_REDUCAO_BC position 47;
+
+
+/*------ SYSDBA 10/12/2012 17:27:29 --------*/
+
+Update TBPRODUTO x Set
+    x.Cst_pis    = '99'
+  , x.Cst_cofins = '99'
+  , x.Aliquota_pis   = 0.0
+  , x.Aliquota_cofins = 0.0
+where x.Cst_pis is null;
+COMMIT WORK;
+
+
+create view new_view (
+    Codigo
+  , Descricao_FULL
+  , Descricao
+  , Indice_acbr)
+as
+Select
+    p.Codigo
+  , p.Codigo || ' - ' || p.Descricao as Descricao_FULL
+  , p.Descricao
+  , p.Indice_acbr
+from TBCST_PIS p
+order by
+    2
+;
+
+GRANT ALL ON NEW_VIEW TO "PUBLIC";
+
+
+create view vw_aliquota_pis (
+    Codigo
+  , Descricao_FULL
+  , Descricao
+  , Indice_acbr)
+as
+Select
+    p.Codigo
+  , p.Codigo || ' - ' || p.Descricao as Descricao_FULL
+  , p.Descricao
+  , p.Indice_acbr
+from TBCST_PIS p
+order by
+    2
+;
+
+GRANT ALL ON VW_ALIQUOTA_PIS TO "PUBLIC";
+
+
+DROP VIEW NEW_VIEW;
+
+
+
+CREATE VIEW VW_ALIQUOTA_COFINS (
+    CODIGO,
+    DESCRICAO_FULL,
+    DESCRICAO,
+    INDICE_ACBR)
+AS
+Select
+    p.Codigo
+  , p.Codigo || ' - ' || p.Descricao as Descricao_FULL
+  , p.Descricao
+  , p.Indice_acbr
+from TBCST_COFINS p
+order by
+    2
+;
+
+GRANT ALL ON VW_ALIQUOTA_COFINS TO "PUBLIC";
+
+
+ALTER TABLE TVENDASITENS
+    ADD ALIQUOTA_PIS DECIMAL(15,2) DEFAULT 0,
+    ADD ALIQUOTA_COFINS DECIMAL(15,2) DEFAULT 0;
+
+COMMENT ON COLUMN TVENDASITENS.ALIQUOTA_PIS IS
+'Percentual Aliquota PIS.';
+
+COMMENT ON COLUMN TVENDASITENS.ALIQUOTA_COFINS IS
+'Percentual Aliquota COFINS.';
+
+alter table TVENDASITENS
+alter ANO position 1;
+
+alter table TVENDASITENS
+alter CODCONTROL position 2;
+
+alter table TVENDASITENS
+alter SEQ position 3;
+
+alter table TVENDASITENS
+alter CODPROD position 4;
+
+alter table TVENDASITENS
+alter CODEMP position 5;
+
+alter table TVENDASITENS
+alter CODCLI position 6;
+
+alter table TVENDASITENS
+alter DTVENDA position 7;
+
+alter table TVENDASITENS
+alter QTDE position 8;
+
+alter table TVENDASITENS
+alter PUNIT position 9;
+
+alter table TVENDASITENS
+alter PUNIT_PROMOCAO position 10;
+
+alter table TVENDASITENS
+alter DESCONTO position 11;
+
+alter table TVENDASITENS
+alter DESCONTO_VALOR position 12;
+
+alter table TVENDASITENS
+alter PFINAL position 13;
+
+alter table TVENDASITENS
+alter QTDEFINAL position 14;
+
+alter table TVENDASITENS
+alter UNID_COD position 15;
+
+alter table TVENDASITENS
+alter CFOP_COD position 16;
+
+alter table TVENDASITENS
+alter ALIQUOTA position 17;
+
+alter table TVENDASITENS
+alter ALIQUOTA_CSOSN position 18;
+
+alter table TVENDASITENS
+alter ALIQUOTA_PIS position 19;
+
+alter table TVENDASITENS
+alter ALIQUOTA_COFINS position 20;
+
+alter table TVENDASITENS
+alter VALOR_IPI position 21;
+
+alter table TVENDASITENS
+alter PERCENTUAL_REDUCAO_BC position 22;
+

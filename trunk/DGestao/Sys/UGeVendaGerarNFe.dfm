@@ -945,6 +945,13 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       
         '    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
         'a, 0) / 100 ) as valor_total_icms_normal_devido'
+      ''
+      
+        '  , sum( (coalesce(i.Qtde, 0) * i.Pfinal) * coalesce(i.Aliquota_' +
+        'pis, 0) / 100 )    as valor_total_PIS'
+      
+        '  , sum( (coalesce(i.Qtde, 0) * i.Pfinal) * coalesce(i.Aliquota_' +
+        'cofins, 0) / 100 ) as valor_total_COFINS'
       'from TBVENDAS v'
       
         '  inner join TVENDASITENS i on (i.Ano = v.Ano and i.Codcontrol =' +
@@ -1199,6 +1206,16 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
+    end
+    object cdsVendaVALOR_TOTAL_PIS: TIBBCDField
+      FieldName = 'VALOR_TOTAL_PIS'
+      Precision = 18
+      Size = 4
+    end
+    object cdsVendaVALOR_TOTAL_COFINS: TIBBCDField
+      FieldName = 'VALOR_TOTAL_COFINS'
+      Precision = 18
+      Size = 4
     end
   end
   object updVenda: TIBUpdateSQL

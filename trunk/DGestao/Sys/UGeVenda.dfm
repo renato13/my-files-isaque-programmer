@@ -3227,6 +3227,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Cfop_cod'
       '  , i.Aliquota'
       '  , i.Aliquota_csosn'
+      '  , i.Aliquota_pis'
+      '  , i.Aliquota_cofins'
       '  , i.Valor_ipi'
       '  , i.Percentual_reducao_BC'
       '  , p.Descri'
@@ -3359,6 +3361,20 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
+    object cdsTabelaItensALIQUOTA_PIS: TIBBCDField
+      FieldName = 'ALIQUOTA_PIS'
+      Origin = 'TVENDASITENS.ALIQUOTA_PIS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsTabelaItensALIQUOTA_COFINS: TIBBCDField
+      FieldName = 'ALIQUOTA_COFINS'
+      Origin = 'TVENDASITENS.ALIQUOTA_COFINS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsTabelaItensVALOR_IPI: TIBBCDField
       FieldName = 'VALOR_IPI'
       Origin = 'TVENDASITENS.VALOR_IPI'
@@ -3451,6 +3467,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  CFOP_COD,'
       '  ALIQUOTA,'
       '  ALIQUOTA_CSOSN,'
+      '  ALIQUOTA_PIS,'
+      '  ALIQUOTA_COFINS,'
       '  VALOR_IPI,'
       '  PERCENTUAL_REDUCAO_BC'
       'from TVENDASITENS '
@@ -3480,6 +3498,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  CFOP_COD = :CFOP_COD,'
       '  ALIQUOTA = :ALIQUOTA,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
+      '  ALIQUOTA_PIS = :ALIQUOTA_PIS,'
+      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
       '  VALOR_IPI = :VALOR_IPI,'
       '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC'
       'where'
@@ -3496,8 +3516,9 @@ inherited frmGeVenda: TfrmGeVenda
         '   PUNIT_PROMOCAO, DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, ' +
         'UNID_COD, '
       
-        '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, PERCENTUAL_RED' +
-        'UCAO_BC)'
+        '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ALIQUOTA_CO' +
+        'FINS, VALOR_IPI, '
+      '   PERCENTUAL_REDUCAO_BC)'
       'values'
       
         '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
@@ -3506,8 +3527,9 @@ inherited frmGeVenda: TfrmGeVenda
         '   :PUNIT, :PUNIT_PROMOCAO, :DESCONTO, :DESCONTO_VALOR, :PFINAL,' +
         ' :QTDEFINAL, '
       
-        '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI,' +
-        ' :PERCENTUAL_REDUCAO_BC)')
+        '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :ALIQUOTA_P' +
+        'IS, :ALIQUOTA_COFINS, '
+      '   :VALOR_IPI, :PERCENTUAL_REDUCAO_BC)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'
@@ -3559,6 +3581,8 @@ inherited frmGeVenda: TfrmGeVenda
       '  , p.Aliquota_tipo'
       '  , p.Aliquota'
       '  , p.Aliquota_csosn'
+      '  , p.Aliquota_pis'
+      '  , p.Aliquota_cofins'
       '  , p.Percentual_reducao_BC'
       '  , p.Valor_ipi'
       '  , p.Reserva'

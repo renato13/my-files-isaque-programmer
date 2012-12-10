@@ -342,6 +342,10 @@ object DMNFe: TDMNFe
       '  , p.Codtributacao'
       '  , p.Cst'
       '  , p.Csosn'
+      '  , p.Cst_pis'
+      '  , p.Cst_cofins'
+      '  , coalesce(ps.Indice_acbr, 32) as Cst_pis_indice_ACBr'
+      '  , coalesce(cs.Indice_acbr, 32) as Cst_cofins_indice_ACBr'
       '  , i.Codemp'
       '  , i.Codcli'
       '  , i.Dtvenda'
@@ -358,13 +362,15 @@ object DMNFe: TDMNFe
       '  , i.Cfop_cod'
       '  , i.Aliquota'
       '  , i.Aliquota_csosn'
+      '  , coalesce(i.Aliquota_pis, 0.0) as Aliquota_pis'
+      '  , coalesce(i.Aliquota_cofins, 0.0) as Aliquota_cofins'
       '  , i.Valor_ipi'
       
-        '  , coalesce(i.Percentual_reducao_bc, 0) as Percentual_reducao_b' +
-        'c'
+        '  , coalesce(i.Percentual_reducao_bc, 0.0) as Percentual_reducao' +
+        '_bc'
       
-        '  , coalesce(i.Pfinal, 0) * coalesce(i.Percentual_reducao_bc, 0)' +
-        ' / 100 as valor_reducao_bc'
+        '  , coalesce(i.Pfinal, 0) * coalesce(i.Percentual_reducao_bc, 0.' +
+        '0) / 100 as valor_reducao_bc'
       '  , i.Qtde * i.Punit as Total_bruto'
       '  , i.Qtde * i.Pfinal as Total_liquido'
       '  , i.Qtde * i.Desconto_valor as Total_desconto'
@@ -396,8 +402,11 @@ object DMNFe: TDMNFe
       
         '  left join RENAVAM_TIPOVEICULO tv on (tv.Codigo = p.Tipo_veicul' +
         'o)'
+      '  left join TBCST_PIS ps on (ps.Codigo = p.Cst_pis)'
+      '  left join TBCST_COFINS cs on (cs.Codigo = p.Cst_cofins)'
       'where i.Ano = :anovenda'
-      '  and i.Codcontrol = :numvenda')
+      '  and i.Codcontrol = :numvenda'
+      '')
     Left = 144
     Top = 168
     ParamData = <
@@ -488,6 +497,22 @@ object DMNFe: TDMNFe
       Origin = 'TBPRODUTO.CSOSN'
       Size = 3
     end
+    object qryDadosProdutoCST_PIS: TIBStringField
+      FieldName = 'CST_PIS'
+      Origin = 'TBPRODUTO.CST_PIS'
+      Size = 3
+    end
+    object qryDadosProdutoCST_COFINS: TIBStringField
+      FieldName = 'CST_COFINS'
+      Origin = 'TBPRODUTO.CST_COFINS'
+      Size = 3
+    end
+    object qryDadosProdutoCST_PIS_INDICE_ACBR: TIntegerField
+      FieldName = 'CST_PIS_INDICE_ACBR'
+    end
+    object qryDadosProdutoCST_COFINS_INDICE_ACBR: TIntegerField
+      FieldName = 'CST_COFINS_INDICE_ACBR'
+    end
     object qryDadosProdutoCODEMP: TIBStringField
       FieldName = 'CODEMP'
       Origin = 'TVENDASITENS.CODEMP'
@@ -567,6 +592,16 @@ object DMNFe: TDMNFe
     object qryDadosProdutoALIQUOTA_CSOSN: TIBBCDField
       FieldName = 'ALIQUOTA_CSOSN'
       Origin = 'TVENDASITENS.ALIQUOTA_CSOSN'
+      Precision = 18
+      Size = 2
+    end
+    object qryDadosProdutoALIQUOTA_PIS: TIBBCDField
+      FieldName = 'ALIQUOTA_PIS'
+      Precision = 18
+      Size = 2
+    end
+    object qryDadosProdutoALIQUOTA_COFINS: TIBBCDField
+      FieldName = 'ALIQUOTA_COFINS'
       Precision = 18
       Size = 2
     end

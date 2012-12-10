@@ -203,6 +203,8 @@ inherited frmGeProduto: TfrmGeProduto
             Height = 17
             TabStop = False
             Caption = 'A&penas produtos com estoque'
+            Checked = True
+            State = cbChecked
             TabOrder = 0
             OnClick = chkProdutoComEstoqueClick
           end
@@ -1161,27 +1163,44 @@ inherited frmGeProduto: TfrmGeProduto
             Align = alTop
             Caption = 'Dados fiscais p/ PIS e COFINS'
             TabOrder = 1
-            object Label3: TLabel
+            object lblCSTPIS: TLabel
               Left = 16
               Top = 24
               Width = 193
               Height = 13
               Caption = 'CST - C'#243'digo de Situa'#231#227'o Tribut'#225'ria PIS:'
-              FocusControl = DBLookupComboBox1
+              FocusControl = dbCSTPIS
             end
-            object Label4: TLabel
+            object lblCSTCOFINS: TLabel
               Left = 16
               Top = 64
               Width = 215
               Height = 13
               Caption = 'CST - C'#243'digo de Situa'#231#227'o Tribut'#225'ria COFINS:'
-              FocusControl = DBLookupComboBox2
+              FocusControl = dbCSTCOFINS
             end
-            object DBLookupComboBox1: TDBLookupComboBox
+            object lblAliquotaCOFINS: TLabel
+              Left = 848
+              Top = 64
+              Width = 56
+              Height = 13
+              Caption = '% COFINS:'
+              FocusControl = dbAliquotaCOFINS
+            end
+            object lblAliquotaPIS: TLabel
+              Left = 848
+              Top = 24
+              Width = 34
+              Height = 13
+              Caption = '% PIS:'
+              FocusControl = dbAliquotaPIS
+            end
+            object dbCSTPIS: TDBLookupComboBox
               Left = 16
               Top = 40
-              Width = 561
+              Width = 825
               Height = 21
+              DataField = 'ALIQUOTA_PIS'
               DataSource = DtSrcTabela
               DropDownRows = 10
               Font.Charset = DEFAULT_CHARSET
@@ -1189,17 +1208,18 @@ inherited frmGeProduto: TfrmGeProduto
               Font.Height = -11
               Font.Name = 'MS Sans Serif'
               Font.Style = []
-              KeyField = 'ORP_COD'
-              ListField = 'ORP_DESCRICAO_FULL'
-              ListSource = dtsOrigem
+              KeyField = 'CODIGO'
+              ListField = 'DESCRICAO_FULL'
+              ListSource = dtsAliquotaPIS
               ParentFont = False
               TabOrder = 0
             end
-            object DBLookupComboBox2: TDBLookupComboBox
+            object dbCSTCOFINS: TDBLookupComboBox
               Left = 16
               Top = 80
-              Width = 561
+              Width = 825
               Height = 21
+              DataField = 'ALIQUOTA_COFINS'
               DataSource = DtSrcTabela
               DropDownRows = 10
               Font.Charset = DEFAULT_CHARSET
@@ -1207,9 +1227,41 @@ inherited frmGeProduto: TfrmGeProduto
               Font.Height = -11
               Font.Name = 'MS Sans Serif'
               Font.Style = []
-              KeyField = 'ORP_COD'
-              ListField = 'ORP_DESCRICAO_FULL'
-              ListSource = dtsOrigem
+              KeyField = 'CODIGO'
+              ListField = 'DESCRICAO_FULL'
+              ListSource = dtsAliquotaCOFINS
+              ParentFont = False
+              TabOrder = 2
+            end
+            object dbAliquotaCOFINS: TDBEdit
+              Left = 848
+              Top = 80
+              Width = 85
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'ALIQUOTA_COFINS'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              ParentFont = False
+              TabOrder = 3
+            end
+            object dbAliquotaPIS: TDBEdit
+              Left = 848
+              Top = 40
+              Width = 85
+              Height = 21
+              CharCase = ecUpperCase
+              DataField = 'ALIQUOTA_PIS'
+              DataSource = DtSrcTabela
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
               ParentFont = False
               TabOrder = 1
             end
@@ -1617,6 +1669,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Codtributacao'
       '  , p.Cst'
       '  , p.Csosn'
+      '  , p.Cst_pis'
+      '  , p.Cst_cofins'
       '  , p.NCM_SH'
       '  , p.Codcfop'
       '  , p.Codbarra_ean'
@@ -1624,6 +1678,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Aliquota_tipo'
       '  , p.Aliquota'
       '  , p.Aliquota_CSOSN'
+      '  , p.Aliquota_pis'
+      '  , p.Aliquota_cofins'
       '  , p.Valor_ipi'
       '  , p.Reserva'
       '  , p.Produto_novo'
@@ -1802,6 +1858,18 @@ inherited frmGeProduto: TfrmGeProduto
       Required = True
       Size = 3
     end
+    object IbDtstTabelaCST_PIS: TIBStringField
+      DisplayLabel = 'CST PIS'
+      FieldName = 'CST_PIS'
+      Origin = 'TBPRODUTO.CST_PIS'
+      Size = 3
+    end
+    object IbDtstTabelaCST_COFINS: TIBStringField
+      DisplayLabel = 'CST COFINS'
+      FieldName = 'CST_COFINS'
+      Origin = 'TBPRODUTO.CST_COFINS'
+      Size = 3
+    end
     object IbDtstTabelaNCM_SH: TIBStringField
       DisplayLabel = 'NCM/SH'
       FieldName = 'NCM_SH'
@@ -1845,6 +1913,22 @@ inherited frmGeProduto: TfrmGeProduto
       FieldName = 'ALIQUOTA_CSOSN'
       Origin = 'TBPRODUTO.ALIQUOTA_CSOSN'
       Required = True
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object IbDtstTabelaALIQUOTA_PIS: TIBBCDField
+      DisplayLabel = '% Al'#237'quota PIS'
+      FieldName = 'ALIQUOTA_PIS'
+      Origin = 'TBPRODUTO.ALIQUOTA_PIS'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object IbDtstTabelaALIQUOTA_COFINS: TIBBCDField
+      DisplayLabel = '% Al'#237'quota COFINS'
+      FieldName = 'ALIQUOTA_COFINS'
+      Origin = 'TBPRODUTO.ALIQUOTA_COFINS'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
@@ -2025,6 +2109,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODTRIBUTACAO,'
       '  CST,'
       '  CSOSN,'
+      '  CST_PIS,'
+      '  CST_COFINS,'
       '  NCM_SH,'
       '  CODCFOP,'
       '  CODBARRA_EAN,'
@@ -2032,6 +2118,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  ALIQUOTA_TIPO,'
       '  ALIQUOTA,'
       '  ALIQUOTA_CSOSN,'
+      '  ALIQUOTA_PIS,'
+      '  ALIQUOTA_COFINS,'
       '  VALOR_IPI,'
       '  RESERVA,'
       '  PRODUTO_NOVO,'
@@ -2074,6 +2162,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODTRIBUTACAO = :CODTRIBUTACAO,'
       '  CST = :CST,'
       '  CSOSN = :CSOSN,'
+      '  CST_PIS = :CST_PIS,'
+      '  CST_COFINS = :CST_COFINS,'
       '  NCM_SH = :NCM_SH,'
       '  CODCFOP = :CODCFOP,'
       '  CODBARRA_EAN = :CODBARRA_EAN,'
@@ -2081,6 +2171,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  ALIQUOTA_TIPO = :ALIQUOTA_TIPO,'
       '  ALIQUOTA = :ALIQUOTA,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
+      '  ALIQUOTA_PIS = :ALIQUOTA_PIS,'
+      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
       '  VALOR_IPI = :VALOR_IPI,'
       '  RESERVA = :RESERVA,'
       '  PRODUTO_NOVO = :PRODUTO_NOVO,'
@@ -2109,18 +2201,21 @@ inherited frmGeProduto: TfrmGeProduto
         '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, CODTR' +
         'IBUTACAO, '
       
-        '   CST, CSOSN, NCM_SH, CODCFOP, CODBARRA_EAN, CODUNIDADE, ALIQUO' +
-        'TA_TIPO, '
+        '   CST, CSOSN, CST_PIS, CST_COFINS, NCM_SH, CODCFOP, CODBARRA_EA' +
+        'N, CODUNIDADE, '
       
-        '   ALIQUOTA, ALIQUOTA_CSOSN, VALOR_IPI, RESERVA, PRODUTO_NOVO, C' +
-        'OR_VEICULO, '
+        '   ALIQUOTA_TIPO, ALIQUOTA, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ALIQUO' +
+        'TA_COFINS, '
       
-        '   COMBUSTIVEL_VEICULO, TIPO_VEICULO, ANO_MODELO_VEICULO, ANO_FA' +
-        'BRICACAO_VEICULO, '
+        '   VALOR_IPI, RESERVA, PRODUTO_NOVO, COR_VEICULO, COMBUSTIVEL_VE' +
+        'ICULO, '
       
-        '   RENAVAM_VEICULO, CHASSI_VEICULO, KILOMETRAGEM_VEICULO, SITUAC' +
-        'AO_ATUAL_VEICULO, '
-      '   SITUACAO_HISTORICO_VEICULO, PERCENTUAL_REDUCAO_BC)'
+        '   TIPO_VEICULO, ANO_MODELO_VEICULO, ANO_FABRICACAO_VEICULO, REN' +
+        'AVAM_VEICULO, '
+      
+        '   CHASSI_VEICULO, KILOMETRAGEM_VEICULO, SITUACAO_ATUAL_VEICULO,' +
+        ' SITUACAO_HISTORICO_VEICULO, '
+      '   PERCENTUAL_REDUCAO_BC)'
       'values'
       
         '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, ' +
@@ -2132,11 +2227,14 @@ inherited frmGeProduto: TfrmGeProduto
         '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, :' +
         'CODORIGEM, '
       
-        '   :CODTRIBUTACAO, :CST, :CSOSN, :NCM_SH, :CODCFOP, :CODBARRA_EA' +
-        'N, :CODUNIDADE, '
+        '   :CODTRIBUTACAO, :CST, :CSOSN, :CST_PIS, :CST_COFINS, :NCM_SH,' +
+        ' :CODCFOP, '
       
-        '   :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQUOTA_CSOSN, :VALOR_IPI, :RESE' +
-        'RVA, :PRODUTO_NOVO, '
+        '   :CODBARRA_EAN, :CODUNIDADE, :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQU' +
+        'OTA_CSOSN, '
+      
+        '   :ALIQUOTA_PIS, :ALIQUOTA_COFINS, :VALOR_IPI, :RESERVA, :PRODU' +
+        'TO_NOVO, '
       
         '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, :ANO_MODEL' +
         'O_VEICULO, '
@@ -2399,6 +2497,52 @@ inherited frmGeProduto: TfrmGeProduto
   object dtsTipoVeiculo: TDataSource
     DataSet = tblTipoVeiculo
     Left = 520
+    Top = 32
+  end
+  object dtsAliquotaPIS: TDataSource
+    DataSet = qryAliquotaPIS
+    Left = 584
+  end
+  object dtsAliquotaCOFINS: TDataSource
+    DataSet = qryAliquotaCOFINS
+    Left = 584
+    Top = 32
+  end
+  object qryAliquotaPIS: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'select'
+      '    Codigo'
+      '  , Descricao_FULL'
+      '  , Descricao'
+      '  , Indice_acbr'
+      'from VW_ALIQUOTA_PIS')
+    ModifySQL.Strings = (
+      '')
+    Left = 552
+  end
+  object qryAliquotaCOFINS: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'select'
+      '    Codigo'
+      '  , Descricao_FULL'
+      '  , Descricao'
+      '  , Indice_acbr'
+      'from VW_ALIQUOTA_PIS')
+    ModifySQL.Strings = (
+      '')
+    Left = 552
     Top = 32
   end
 end

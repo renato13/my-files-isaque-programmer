@@ -94,6 +94,8 @@ type
     cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField;
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
+    cdsVendaVALOR_TOTAL_PIS: TIBBCDField;
+    cdsVendaVALOR_TOTAL_COFINS: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -152,8 +154,8 @@ begin
         cdsVendaNFE_VALOR_DESCONTO.Value   := cdsVendaVALOR_TOTAL_DESCONTO.AsCurrency;
         cdsVendaNFE_VALOR_OUTROS.Value     := 0;
         cdsVendaNFE_VALOR_TOTAL_IPI.Value  := cdsVendaVALOR_TOTAL_IPI.AsCurrency;
-        cdsVendaNFE_VALOR_PIS.Value        := 0;
-        cdsVendaNFE_VALOR_COFINS.Value     := 0;
+        cdsVendaNFE_VALOR_PIS.Value        := cdsVendaVALOR_TOTAL_PIS.AsCurrency;
+        cdsVendaNFE_VALOR_COFINS.Value     := cdsVendaVALOR_TOTAL_COFINS.AsCurrency;
         cdsVendaNFE_VALOR_TOTAL_II.Value   := 0;
 
         RecalcularTotalNota;

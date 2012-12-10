@@ -362,15 +362,21 @@ begin
 
       Open;
 
-      if ( not IsEmpty ) then
-        dbgDados.SetFocus
-      else
-      begin
-        ShowWarning('Não existe registros na tabela para este tipo de pesquisa');
+      try
+      
+        if ( not IsEmpty ) then
+          dbgDados.SetFocus
+        else
+        begin
+          ShowWarning('Não existe registros na tabela para este tipo de pesquisa');
 
-        edtFiltrar.SetFocus;
-        edtFiltrar.SelectAll;
+          edtFiltrar.SetFocus;
+          edtFiltrar.SelectAll;
+        end;
+
+      except
       end;
+
     end;
   except
     On E : Exception do
