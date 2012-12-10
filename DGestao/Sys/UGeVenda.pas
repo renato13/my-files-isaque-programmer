@@ -261,6 +261,8 @@ type
     cdsTabelaItensPERCENTUAL_REDUCAO_BC: TIBBCDField;
     lblPercRedBC: TLabel;
     dbPercRedBC: TDBEdit;
+    cdsTabelaItensALIQUOTA_PIS: TIBBCDField;
+    cdsTabelaItensALIQUOTA_COFINS: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -579,6 +581,8 @@ begin
 
         cdsTabelaItensALIQUOTA.AsCurrency              := FieldByName('Aliquota').AsCurrency;
         cdsTabelaItensALIQUOTA_CSOSN.AsCurrency        := FieldByName('Aliquota_csosn').AsCurrency;
+        cdsTabelaItensALIQUOTA_PIS.AsCurrency          := FieldByName('Aliquota_pis').AsCurrency;
+        cdsTabelaItensALIQUOTA_COFINS.AsCurrency       := FieldByName('Aliquota_cofins').AsCurrency;
         cdsTabelaItensPERCENTUAL_REDUCAO_BC.AsCurrency := FieldByName('Percentual_reducao_BC').AsCurrency;
 
         if ( Trim(FieldByName('Cst').AsString) <> EmptyStr ) then
@@ -1011,6 +1015,8 @@ var
   sUnidade   ,
   sCST       : String;
   cAliquota  ,
+  cAliquotaPIS   ,
+  cAliquotaCOFINS,
   cPercRedBC ,
   cValorVenda,
   cValorPromocao,
@@ -1019,14 +1025,17 @@ begin
   cValorPromocao := 0;
 
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
-    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cValorVenda, cValorPromocao, cValorIPI, cPercRedBC, iEstoque, iReserva) ) then
+    if ( SelecionarProduto(Self, iCodigo, sCodigoAlfa, sDescricao, sUnidade, sCST, iUnidade, iCFOP, cAliquota, cAliquotaPIS, cAliquotaCOFINS,
+      cValorVenda, cValorPromocao, cValorIPI, cPercRedBC, iEstoque, iReserva) ) then
     begin
       cdsTabelaItensCODPROD.AsString     := sCodigoAlfa;
       cdsTabelaItensDESCRI.AsString      := sDescricao;
       cdsTabelaItensUNP_SIGLA.AsString   := sUnidade;
       cdsTabelaItensCST.AsString         := sCST;
       cdsTabelaItensCFOP_COD.AsInteger   := iCFOP;
-      cdsTabelaItensALIQUOTA.AsCurrency  := cAliquota;
+      cdsTabelaItensALIQUOTA.AsCurrency        := cAliquota;
+      cdsTabelaItensALIQUOTA_PIS.AsCurrency    := cAliquotaPIS;
+      cdsTabelaItensALIQUOTA_COFINS.AsCurrency := cAliquotaCOFINS;
       cdsTabelaItensPUNIT.AsCurrency     := cValorVenda;
       cdsTabelaItensPUNIT_PROMOCAO.AsCurrency := cValorPromocao;
       cdsTabelaItensPFINAL.AsCurrency    := cValorVenda;
@@ -1068,14 +1077,16 @@ begin
   cdsTabelaItensDTVENDA.Value    := IbDtstTabelaDTVENDA.Value;
   cdsTabelaItensCODEMP.Value     := IbDtstTabelaCODEMP.Value;
   cdsTabelaItensCODCLI.Value     := IbDtstTabelaCODCLI.Value;
-  cdsTabelaItensCFOP_COD.Value       := GetCfopIDDefault;
-  cdsTabelaItensCFOP_DESCRICAO.Value := GetCfopNomeDefault;
-  cdsTabelaItensCST.Value            := '000';
-  cdsTabelaItensPUNIT_PROMOCAO.Value := 0.0;
-  cdsTabelaItensALIQUOTA.Value       := 0;
-  cdsTabelaItensQTDE.Value           := 1;
-  cdsTabelaItensDESCONTO.Value       := 0;
-  cdsTabelaItensDESCONTO_VALOR.Value := 0;
+  cdsTabelaItensCFOP_COD.Value        := GetCfopIDDefault;
+  cdsTabelaItensCFOP_DESCRICAO.Value  := GetCfopNomeDefault;
+  cdsTabelaItensCST.Value             := '000';
+  cdsTabelaItensPUNIT_PROMOCAO.Value  := 0.0;
+  cdsTabelaItensALIQUOTA.Value        := 0;
+  cdsTabelaItensALIQUOTA_PIS.Value    := 0.0;
+  cdsTabelaItensALIQUOTA_COFINS.Value := 0.0;
+  cdsTabelaItensQTDE.Value            := 1;
+  cdsTabelaItensDESCONTO.Value        := 0;
+  cdsTabelaItensDESCONTO_VALOR.Value  := 0;
   cdsTabelaItensPERCENTUAL_REDUCAO_BC.Value := 0.0;
 end;
 

@@ -169,11 +169,23 @@ type
     Bevel6: TBevel;
     GrpBxDadosTributoPIS: TGroupBox;
     Bevel7: TBevel;
-    Label3: TLabel;
-    DBLookupComboBox1: TDBLookupComboBox;
-    Label4: TLabel;
-    DBLookupComboBox2: TDBLookupComboBox;
+    lblCSTPIS: TLabel;
+    dbCSTPIS: TDBLookupComboBox;
+    lblCSTCOFINS: TLabel;
+    dbCSTCOFINS: TDBLookupComboBox;
     chkProdutoComEstoque: TCheckBox;
+    IbDtstTabelaCST_PIS: TIBStringField;
+    IbDtstTabelaCST_COFINS: TIBStringField;
+    IbDtstTabelaALIQUOTA_PIS: TIBBCDField;
+    IbDtstTabelaALIQUOTA_COFINS: TIBBCDField;
+    lblAliquotaCOFINS: TLabel;
+    dbAliquotaCOFINS: TDBEdit;
+    lblAliquotaPIS: TLabel;
+    dbAliquotaPIS: TDBEdit;
+    dtsAliquotaPIS: TDataSource;
+    dtsAliquotaCOFINS: TDataSource;
+    qryAliquotaPIS: TIBDataSet;
+    qryAliquotaCOFINS: TIBDataSet;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -206,7 +218,7 @@ var
 
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
-  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
+  function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, AliquotaPIS, AliquotaCOFINS, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
     var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, CodigoEAN, Nome : String; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
   function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, Unidade : String; var ValorVenda, ValorPromocao : Currency; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
@@ -225,6 +237,12 @@ begin
   frm := TfrmGeProduto.Create(AOwner);
   try
     frm.fAliquota := TipoAliquota;
+
+    if frm.chkProdutoComEstoque.Checked then
+      frm.WhereAdditional := 'p.Qtde > 0'
+    else
+      frm.WhereAdditional := EmptyStr;  
+
     frm.ShowModal;
   finally
     frm.Destroy;
@@ -257,6 +275,9 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
+    if frm.chkProdutoComEstoque.Checked then
+      whr := whr + ' and p.Qtde > 0';
+
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
     if ( Result ) then
@@ -266,7 +287,7 @@ begin
   end;
 end;
 
-function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
+function SelecionarProduto(const AOwner : TComponent; var Codigo : Integer; var CodigoAlfa, Nome, sUnidade, CST : String; var iUnidade, CFOP : Integer; var Aliquota, AliquotaPIS, AliquotaCOFINS, ValorVenda, ValorPromocao, ValorIPI, PercentualRedBC : Currency;
   var Estoque, Reserva : Integer; const TipoAliquota : TAliquota = taICMS) : Boolean; overload;
 var
   frm : TfrmGeProduto;
@@ -281,6 +302,9 @@ begin
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
 
+    if frm.chkProdutoComEstoque.Checked then
+      whr := whr + ' and p.Qtde > 0';
+
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
     if ( Result ) then
@@ -290,10 +314,12 @@ begin
       sUnidade   := frm.IbDtstTabelaUNP_SIGLA.AsString;
       CST        := frm.IbDtstTabelaCST.AsString;
       CFOP       := frm.IbDtstTabelaCODCFOP.AsInteger;
-      Aliquota   := frm.IbDtstTabelaALIQUOTA.AsCurrency;
-      ValorVenda := frm.IbDtstTabelaPRECO.AsCurrency;
+      Aliquota       := frm.IbDtstTabelaALIQUOTA.AsCurrency;
+      AliquotaPIS    := frm.IbDtstTabelaALIQUOTA_PIS.AsCurrency;
+      AliquotaCOFINS := frm.IbDtstTabelaALIQUOTA_COFINS.AsCurrency;
+      ValorVenda    := frm.IbDtstTabelaPRECO.AsCurrency;
       ValorPromocao := frm.IbDtstTabelaPRECO_PROMOCAO.AsCurrency;
-      ValorIPI   := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
+      ValorIPI      := frm.IbDtstTabelaVALOR_IPI.AsCurrency;
 
       PercentualRedBC := frm.IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency;
 
@@ -318,6 +344,9 @@ begin
     frm.dbAliquotaTipo.Enabled  := False;
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+    if frm.chkProdutoComEstoque.Checked then
+      whr := whr + ' and p.Qtde > 0';
 
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
@@ -344,6 +373,9 @@ begin
     frm.dbAliquotaTipo.Enabled  := False;
 
     whr := 'p.Aliquota_tipo = ' + IntToStr(Ord(TipoAliquota));
+
+    if frm.chkProdutoComEstoque.Checked then
+      whr := whr + ' and p.Qtde > 0';
 
     Result := frm.SelecionarRegistro(Codigo, Nome, whr);
 
@@ -372,6 +404,8 @@ begin
   tblTributacaoNM.Open;
   tblTributacaoSN.Open;
   tblAliquota.Open;
+  qryAliquotaPIS.Open;
+  qryAliquotaCOFINS.Open;
 
   if ( GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID ) then
   begin
@@ -520,6 +554,11 @@ begin
   IbDtstTabelaCHASSI_VEICULO.Clear;
   IbDtstTabelaANO_MODELO_VEICULO.Clear;
   IbDtstTabelaANO_FABRICACAO_VEICULO.Clear;
+
+  IbDtstTabelaCST_PIS.AsString    := '99';
+  IbDtstTabelaCST_COFINS.AsString := '99';
+  IbDtstTabelaALIQUOTA_PIS.AsCurrency    := 0.0;
+  IbDtstTabelaALIQUOTA_COFINS.AsCurrency := 0.0;
 end;
 
 procedure TfrmGeProduto.FormShow(Sender: TObject);
@@ -603,7 +642,12 @@ begin
   else
     ShowWarning('Falta cruzar nova função com EvUserID!');
   end;
-  
+
+  if pgcGuias.ActivePage = tbsTabela then
+  begin
+    FiltarDados;
+    edtFiltrar.SetFocus;
+  end;
 end;
 
 procedure TfrmGeProduto.dbgDadosDrawColumnCell(Sender: TObject;
@@ -646,7 +690,7 @@ begin
       Exit;
     end
     else
-    if ( (ActiveControl = dbIPI) and tbsEspecificacaoVeiculo.TabVisible ) then
+    if ( (ActiveControl = dbAliquotaCOFINS) and tbsEspecificacaoVeiculo.TabVisible ) then
     begin
       pgcMaisDados.ActivePage := tbsEspecificacaoVeiculo;
       dbTipoVeiculo.SetFocus;

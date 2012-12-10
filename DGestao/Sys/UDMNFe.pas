@@ -226,6 +226,12 @@ type
     qryDadosProdutoMODELO: TIBStringField;
     qryDadosProdutoPERCENTUAL_REDUCAO_BC: TIBBCDField;
     qryDadosProdutoVALOR_REDUCAO_BC: TIBBCDField;
+    qryDadosProdutoCST_PIS: TIBStringField;
+    qryDadosProdutoCST_COFINS: TIBStringField;
+    qryDadosProdutoCST_PIS_INDICE_ACBR: TIntegerField;
+    qryDadosProdutoCST_COFINS_INDICE_ACBR: TIntegerField;
+    qryDadosProdutoALIQUOTA_PIS: TIBBCDField;
+    qryDadosProdutoALIQUOTA_COFINS: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -1284,21 +1290,29 @@ begin
 
                 PIS.qBCProd   := 0;
                 PIS.vAliqProd := 0;
-                PIS.vPIS      := 0;
 
               end
               else
               begin
 
-                CST      := pis99;
-                PIS.vBC  := 0;
-                PIS.pPIS := 0;
-                PIS.vPIS := 0;
+                CST := TpcnCstPis(qryDadosProdutoCST_PIS_INDICE_ACBR.AsInteger);
+
+                if ( CST = pis99 ) then
+                begin
+                  PIS.vBC  := 0;
+                  PIS.pPIS := 0;
+                  PIS.vPIS := 0;
+                end
+                else
+                begin
+                  PIS.vBC  := qryDadosProdutoPFINAL.AsCurrency;
+                  PIS.pPIS := qryDadosProdutoALIQUOTA_PIS.AsCurrency;
+                  PIS.vPIS := PIS.vBC * PIS.pPIS / 100;
+                end;
 
                 PIS.qBCProd   := 0;
                 PIS.vAliqProd := 0;
-                PIS.vPIS      := 0;
-                
+
               end;
             end;
 
@@ -1319,10 +1333,20 @@ begin
               else
               begin
 
-                CST            := cof99;
-                COFINS.vBC     := 0;
-                COFINS.pCOFINS := 0;
-                COFINS.vCOFINS := 0;
+                CST := TpcnCstCofins(qryDadosProdutoCST_COFINS_INDICE_ACBR.AsInteger);
+
+                if ( CST = cof99 ) then
+                begin
+                  COFINS.vBC     := 0;
+                  COFINS.pCOFINS := 0;
+                  COFINS.vCOFINS := 0;
+                end
+                else
+                begin
+                  COFINS.vBC     := qryDadosProdutoPFINAL.AsCurrency;
+                  COFINS.pCOFINS := qryDadosProdutoALIQUOTA_COFINS.AsCurrency;
+                  COFINS.vCOFINS := COFINS.vBC * COFINS.pCOFINS / 100;
+                end;
 
                 COFINS.qBCProd   := 0;
                 COFINS.vAliqProd := 0;
@@ -1672,8 +1696,98 @@ begin
 end;
 
 procedure TDMNFe.GerarTabela_CST_COFINS;
+var
+  I : Integer;
+const
+  sCST_PIS_ID : Array[0..32] of String = (
+      '01'
+    , '02'
+    , '03'
+    , '04'
+    , '05'
+    , '06'
+    , '07'
+    , '08'
+    , '09'
+    , '49'
+    , '50'
+    , '51'
+    , '52'
+    , '53'
+    , '54'
+    , '55'
+    , '56'
+    , '60'
+    , '61'
+    , '62'
+    , '63'
+    , '64'
+    , '65'
+    , '66'
+    , '67'
+    , '70'
+    , '71'
+    , '72'
+    , '73'
+    , '74'
+    , '75'
+    , '98'
+    , '99'
+  );
+  CST_PIS_DESC : Array[0..32] of String = (
+      'Operação Tributável com Alíquota Básica'
+    , 'Operação Tributável com Alíquota Diferenciada'
+    , 'Operação Tributável com Alíquota por Unidade de Medida de Produto'
+    , 'Operação Tributável Monofásica - Revenda a Alíquota Zero'
+    , 'Operação Tributável por Substituição Tributária'
+    , 'Operação Tributável a Alíquota Zero'
+    , 'Operação Isenta da Contribuição'
+    , 'Operação sem Incidência da Contribuição'
+    , 'Operação com Suspensão da Contribuição'
+    , 'Outras Operações de Saída'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Tributada no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada Exclusivamente a Receita de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas no Mercado Interno e de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Não Tributadas no Mercado Interno e de Exportação'
+    , 'Operação com Direito a Crédito - Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Tributada no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita Não-Tributada no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada Exclusivamente a Receita de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Não-Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Operação de Aquisição Vinculada a Receitas Tributadas e Não-Tributadas no Mercado Interno e de Exportação'
+    , 'Crédito Presumido - Outras Operações'
+    , 'Operação de Aquisição sem Direito a Crédito'
+    , 'Operação de Aquisição com Isenção'
+    , 'Operação de Aquisição com Suspensão'
+    , 'Operação de Aquisição a Alíquota Zero'
+    , 'Operação de Aquisição sem Incidência da Contribuição'
+    , 'Operação de Aquisição por Substituição Tributária'
+    , 'Outras Operações de Entrada'
+    , 'Outras Operações'
+  );
 begin
-  ;
+  try
+    for I := Low(sCST_PIS_ID) to High(sCST_PIS_ID) do
+      with IBSQL do
+      begin
+        SQL.Clear;
+        SQL.Add( 'Execute Procedure SET_CST_COFINS ('     );
+        SQL.Add( '    ' + QuotedStr(sCST_PIS_ID[I])    );
+        SQL.Add( '  , ' + QuotedStr(CST_PIS_DESC[I])   );
+        SQL.Add( '  , ' + IntToStr(Ord(TpcnCstCofins(I))) );
+        SQL.Add( ')' );
+
+        ExecQuery;
+        CommitTransaction;
+      end;
+  except
+    On E : Exception do
+      raise Exception.Create('Erro no procedimento GerarTabela_CST_COFINS - ' + E.Message);
+  end;
 end;
 
 end.
