@@ -1606,8 +1606,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object tblContaCorrente: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -1649,8 +1647,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 1064
     Top = 280
@@ -1663,8 +1659,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object qrySaldosDias: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    s.Saldo_anterior_data'
@@ -1745,8 +1739,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object tblTipoMovimento: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TIPO'
@@ -1776,8 +1768,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryConsolidadoFormaPagtoCalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    f.Data'
@@ -1861,8 +1851,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object qryFluxoSintetico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    f.Data'
@@ -1912,6 +1900,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       'ENTRADA=ENTRADA'
       'SAIDA=SAIDA')
     DataSet = qryFluxoSintetico
+    BCDToCurrency = False
     Left = 1096
     Top = 408
   end
@@ -1933,14 +1922,13 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       'CAIXA_NUM=CAIXA_NUM'
       'CAIXA=CAIXA')
     DataSet = qryFluxoAnalitico
+    BCDToCurrency = False
     Left = 1096
     Top = 440
   end
   object qryFluxoAnalitico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    f.Data'
@@ -1981,7 +1969,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       end>
   end
   object frrFluxoAnalitico: TfrxReport
-    Version = '4.6.32'
+    Version = '4.9.72'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -3055,8 +3043,6 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
   object qryFluxoSaldos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    s.Saldo_anterior_data'
@@ -3098,6 +3084,7 @@ inherited frmGeFluxoCaixa: TfrmGeFluxoCaixa
       'SALDO_FINAL_DATA=SALDO_FINAL_DATA'
       'SALDO_FINAL_VALOR=SALDO_FINAL_VALOR')
     DataSet = qryFluxoSaldos
+    BCDToCurrency = False
     Left = 1096
     Top = 376
   end

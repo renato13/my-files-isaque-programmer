@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, ToolEdit, RXDBCtrl, Menus, IBStoredProc, frxClass,
+  ToolWin, IBTable, rxToolEdit, RXDBCtrl, Menus, IBStoredProc, frxClass,
   frxDBSet, IBQuery;
 
 type

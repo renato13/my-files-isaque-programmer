@@ -698,8 +698,6 @@ object frmGrVendas: TfrmGrVendas
   object ibdtstVendas: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBVENDAS'
       'where'
@@ -838,8 +836,6 @@ object frmGrVendas: TfrmGrVendas
   object ibqryTotal: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select count(*) from TBVENDAS')
     Left = 264
@@ -852,8 +848,6 @@ object frmGrVendas: TfrmGrVendas
   object ibdtstEmp: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SelectSQL.Strings = (
       'select CNPJ, RZSOC from TBEMPRESA')
     Left = 304
@@ -862,8 +856,6 @@ object frmGrVendas: TfrmGrVendas
   object ibdtstVendasItens: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'
@@ -1002,8 +994,6 @@ object frmGrVendas: TfrmGrVendas
   object ibdtstClient: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
@@ -1045,8 +1035,6 @@ object frmGrVendas: TfrmGrVendas
   object ibdtstProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'

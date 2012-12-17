@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, DBCtrls, StdCtrls, Mask, Buttons, ToolEdit, RXDBCtrl;
+  Dialogs, DBCtrls, StdCtrls, Mask, Buttons, rxToolEdit, RXDBCtrl;
 
 type
   TfrmBxCR = class(TForm)

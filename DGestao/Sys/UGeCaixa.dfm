@@ -789,7 +789,6 @@ inherited frmGeCaixa: TfrmGeCaixa
                 Expanded = False
                 FieldName = 'TIPO'
                 Title.Alignment = taCenter
-                Width = -1
                 Visible = False
               end
               item
@@ -1002,8 +1001,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object tblOperador: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBUSERS'
     Left = 720
     Top = 8
@@ -1016,8 +1013,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object tblContaCorrente: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBCONTA_CORRENTE'
     Left = 720
     Top = 40
@@ -1030,7 +1025,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object cdsCosolidado: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1159,8 +1153,6 @@ inherited frmGeCaixa: TfrmGeCaixa
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryMovimentoCalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -1423,8 +1415,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object qryCaixaSintetico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.Ano'
@@ -1516,11 +1506,12 @@ inherited frmGeCaixa: TfrmGeCaixa
       'QTDE_CREDITO=QTDE_CREDITO'
       'QTDE_DEBITO=QTDE_DEBITO')
     DataSet = qryCaixaSintetico
+    BCDToCurrency = False
     Left = 848
     Top = 8
   end
   object frrCaixaSintetico: TfrxReport
-    Version = '4.6.32'
+    Version = '4.9.72'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -2405,7 +2396,7 @@ inherited frmGeCaixa: TfrmGeCaixa
     end
   end
   object frrCaixaAnalitico: TfrxReport
-    Version = '4.6.32'
+    Version = '4.9.72'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -3609,8 +3600,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object qryCaixaAnalitico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.Ano'
@@ -3699,6 +3688,7 @@ inherited frmGeCaixa: TfrmGeCaixa
       'VALOR_CREDITO=VALOR_CREDITO'
       'VALOR_DEBITO=VALOR_DEBITO')
     DataSet = qryCaixaAnalitico
+    BCDToCurrency = False
     Left = 848
     Top = 40
   end

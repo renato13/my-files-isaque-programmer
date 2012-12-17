@@ -1024,8 +1024,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 864
     Top = 8
@@ -1038,8 +1036,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 864
     Top = 40
@@ -1052,8 +1048,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'COND_COD'
@@ -1136,7 +1130,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object cdsPagamentos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1247,8 +1240,6 @@ inherited frmGeContasAPagar: TfrmGeContasAPagar
   object qryTpDespesa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select * from TBTPDESPESA'
       'order by tipodesp')

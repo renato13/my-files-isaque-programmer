@@ -1155,8 +1155,6 @@ inherited frmGeFornecedor: TfrmGeFornecedor
   object tblGrupo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBFORNECEDOR_GRUPO'
     Left = 640
     Top = 72
