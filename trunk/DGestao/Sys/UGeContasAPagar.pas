@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, ToolEdit, RXDBCtrl, IBTable, IBQuery;
+  ToolWin, rxToolEdit, RXDBCtrl, IBTable, IBQuery;
 
 type
   TfrmGeContasAPagar = class(TfrmGrPadraoCadastro)

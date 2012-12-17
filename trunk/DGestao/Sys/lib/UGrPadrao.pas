@@ -5,8 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, HPL_Strings, StdCtrls, DBCtrls, IBCustomDataSet, DB, DBClient,
-  ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, ToolEdit, RXDBCtrl,
-  ComCtrls, CurrEdit, RxLookup;
+  ExtCtrls, Mask, Grids, DBGrids, TypInfo, StrUtils, RXDBCtrl, 
+  ComCtrls, RxLookup, rxToolEdit, rxCurrEdit;
 
 type
   TfrmGrPadrao = class(TForm)

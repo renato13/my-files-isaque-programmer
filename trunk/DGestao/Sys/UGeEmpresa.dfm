@@ -1459,8 +1459,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   object tblTipoRegimeNFe: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'VW_TIPO_REGIME_NFE'
     TableTypes = [ttView]
     Left = 544
@@ -1474,8 +1472,6 @@ inherited frmGeEmpresa: TfrmGeEmpresa
   object tblSegmento: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBSEGMENTO'
     Left = 544
     Top = 40

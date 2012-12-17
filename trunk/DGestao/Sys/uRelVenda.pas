@@ -54,7 +54,7 @@ var
 
 implementation
 
-uses UDMBusiness, uGrVendas;
+uses UDMBusiness;
 
 {$R *.dfm}
 

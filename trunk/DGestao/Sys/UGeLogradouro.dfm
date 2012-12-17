@@ -256,8 +256,6 @@ inherited frmGeLogradouro: TfrmGeLogradouro
   object tblTipo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBTIPO_LOGRADOURO'
     Left = 656
     Top = 104

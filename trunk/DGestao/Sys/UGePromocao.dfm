@@ -969,7 +969,6 @@ inherited frmGePromocao: TfrmGePromocao
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = cdsProdutosCalcFields
     OnNewRecord = cdsProdutosNewRecord
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1105,8 +1104,6 @@ inherited frmGePromocao: TfrmGePromocao
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (

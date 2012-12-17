@@ -105,13 +105,8 @@ object frmKardex: TfrmKardex
       Top = 32
       Width = 89
       Height = 21
-      CalAlignment = dtaLeft
-      Date = 39934
-      Time = 39934
-      DateFormat = dfShort
-      DateMode = dmComboBox
-      Kind = dtkDate
-      ParseInput = False
+      Date = 39934.000000000000000000
+      Time = 39934.000000000000000000
       TabOrder = 0
     end
     object DateTimePicker2: TDateTimePicker
@@ -119,13 +114,8 @@ object frmKardex: TfrmKardex
       Top = 32
       Width = 89
       Height = 21
-      CalAlignment = dtaLeft
-      Date = 39964.9993055556
-      Time = 39964.9993055556
-      DateFormat = dfShort
-      DateMode = dmComboBox
-      Kind = dtkDate
-      ParseInput = False
+      Date = 39964.999305555600000000
+      Time = 39964.999305555600000000
       TabOrder = 1
     end
     object ComboEdit1: TComboEdit
@@ -135,7 +125,7 @@ object frmKardex: TfrmKardex
       Height = 21
       CharCase = ecUpperCase
       Glyph.Data = {
-        76080000424DB608000000000000B60000002800000020000000100000000100
+        B6080000424DB608000000000000B60000002800000020000000100000000100
         2000000000000008000000000000000000001000000000000000000000000000
         800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
         FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00008080000080
@@ -359,8 +349,6 @@ object frmKardex: TfrmKardex
   object ibqryProdHist: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select * from TBPRODHIST'
       'where (CODPROD = :cod) and DTHIST between :dtini and :dtfim'

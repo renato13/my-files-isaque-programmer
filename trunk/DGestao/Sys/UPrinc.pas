@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ComCtrls, BarMenus, SpeedBar, RXCtrls, ExtCtrls, jpeg,
-  EUserAcs, StdCtrls, Buttons;
+  Dialogs, Menus, ComCtrls, BarMenus, RXCtrls, ExtCtrls, jpeg, // , SpeedBar
+  EUserAcs, StdCtrls, Buttons, rxSpeedbar;
 
 type
   TfrmPrinc = class(TForm)
