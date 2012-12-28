@@ -12,10 +12,10 @@ File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UFormPagto.pas',0,1,1,6
 
 [Modules]
 Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
 Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
 Module6=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 Count=7
@@ -26,6 +26,16 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
@@ -34,16 +44,6 @@ FormOnTop=0
 [E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas]
 ModuleType=SourceModule
 FormState=0
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
@@ -95,9 +95,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -115,8 +115,8 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-CursorX=29
-CursorY=938
+CursorX=16
+CursorY=943
 TopLine=935
 LeftCol=1
 
@@ -129,9 +129,9 @@ LeftCol=1
 
 [View4]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-CursorX=1
-CursorY=1694
-TopLine=1686
+CursorX=144
+CursorY=1528
+TopLine=1505
 LeftCol=1
 
 [View5]
@@ -218,8 +218,8 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Name
-ExpandedItems=ProviderFlags
+SelectedItem=Connected
+ExpandedItems=
 HiddenCategories=
 
 [ObjectTree]
@@ -277,18 +277,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=770
+Height=858
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=770
+ClientHeight=858
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0

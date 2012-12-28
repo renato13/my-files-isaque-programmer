@@ -2676,3 +2676,91 @@ end
 
 SET TERM ; ^
 
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
