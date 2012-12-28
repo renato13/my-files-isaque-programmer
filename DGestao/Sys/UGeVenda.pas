@@ -31,7 +31,6 @@ type
     dbProduto: TRxDBComboEdit;
     dbProdutoNome: TDBEdit;
     dbgProdutos: TDBGrid;
-    dbObservacao: TDBMemo;
     lblQuantidade: TLabel;
     dbQuantidade: TDBEdit;
     lblValorUnit: TLabel;
@@ -57,35 +56,6 @@ type
     btnProdutoEditar: TBitBtn;
     btnProdutoSalvar: TBitBtn;
     btnProdutoExcluir: TBitBtn;
-    lblObservacao: TLabel;
-    lblFormaPagto: TLabel;
-    dbFormaPagto: TDBLookupComboBox;
-    lblCondicaoPagto: TLabel;
-    dbCondicaoPagto: TDBLookupComboBox;
-    lblPrazo01: TLabel;
-    dbPrazo01: TDBEdit;
-    lblPrazo02: TLabel;
-    dbPrazo02: TDBEdit;
-    lblPrazo03: TLabel;
-    dbPrazo03: TDBEdit;
-    lblPrazo04: TLabel;
-    dbPrazo04: TDBEdit;
-    lblPrazo05: TLabel;
-    dbPrazo05: TDBEdit;
-    lblPrazo06: TLabel;
-    dbPrazo06: TDBEdit;
-    lblPrazo07: TLabel;
-    dbPrazo07: TDBEdit;
-    lblPrazo08: TLabel;
-    dbPrazo08: TDBEdit;
-    lblPrazo09: TLabel;
-    dbPrazo09: TDBEdit;
-    lblPrazo10: TLabel;
-    dbPrazo10: TDBEdit;
-    lblPrazo11: TLabel;
-    dbPrazo11: TDBEdit;
-    lblPrazo12: TLabel;
-    dbPrazo12: TDBEdit;
     lblSerie: TLabel;
     dbSerie: TDBEdit;
     lblNFe: TLabel;
@@ -263,6 +233,47 @@ type
     dbPercRedBC: TDBEdit;
     cdsTabelaItensALIQUOTA_PIS: TIBBCDField;
     cdsTabelaItensALIQUOTA_COFINS: TIBBCDField;
+    pnlObservacao: TPanel;
+    lblObservacao: TLabel;
+    dbObservacao: TDBMemo;
+    pnlFormaPagto: TPanel;
+    lblFormaPagto: TLabel;
+    dbFormaPagto: TDBLookupComboBox;
+    dbCondicaoPagto: TDBLookupComboBox;
+    lblCondicaoPagto: TLabel;
+    Bevel14: TBevel;
+    Bevel15: TBevel;
+    Label2: TLabel;
+    dbValorFormaPagto: TDBEdit;
+    btnFormaPagtoSalvar: TBitBtn;
+    dbgFormaPagto: TDBGrid;
+    btnFormaPagtoExcluir: TBitBtn;
+    btnFormaPagtoInserir: TBitBtn;
+    btnFormaPagtoEditar: TBitBtn;
+    cdsVendaFormaPagto: TIBDataSet;
+    updVendaFormaPagto: TIBUpdateSQL;
+    dtsVendaFormaPagto: TDataSource;
+    cdsVendaFormaPagtoANO_VENDA: TSmallintField;
+    cdsVendaFormaPagtoCONTROLE_VENDA: TIntegerField;
+    cdsVendaFormaPagtoFORMAPAGTO_COD: TSmallintField;
+    cdsVendaFormaPagtoCONDICAOPAGTO_COD: TSmallintField;
+    cdsVendaFormaPagtoVENDA_PRAZO: TSmallintField;
+    cdsVendaFormaPagtoVALOR_FPAGTO: TIBBCDField;
+    cdsVendaFormaPagtoPRAZO_01: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_02: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_03: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_04: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_05: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_06: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_07: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_08: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_09: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_10: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_11: TSmallintField;
+    cdsVendaFormaPagtoPRAZO_12: TSmallintField;
+    cdsVendaFormaPagtoFormaPagto: TStringField;
+    cdsVendaFormaPagtoCondicaoPagto: TStringField;
+    qryTitulosFORMA_PAGTO: TSmallintField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -304,22 +315,32 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure dbgTitulosKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure dbgFormaPagtoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure cdsVendaFormaPagtoNewRecord(DataSet: TDataSet);
+    procedure cdsVendaFormaPagtoBeforePost(DataSet: TDataSet);
+    procedure dbgFormaPagtoEnter(Sender: TObject);
   private
     { Private declarations }
     sGeneratorName : String;
     iSeq : Integer;
-    SQL_Itens   ,
-    SQL_Titulos : TStringList;
+    SQL_Itens     ,
+    SQL_FormaPagto,
+    SQL_Titulos   : TStringList;
     procedure AbrirTabelaItens(const AnoVenda : Smallint; const ControleVenda : Integer);
+    procedure AbrirTabelaFormasPagto(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure GerarTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure CarregarDadosProduto( Codigo : Integer );
     procedure CarregarDadosCFOP( iCodigo : Integer );
     procedure HabilitarDesabilitar_Btns;
     procedure GetComprasAbertas(sCNPJ : String);
+    procedure ZerarFormaPagto;
 
     function ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
     function PossuiTitulosPagos(AnoVenda : Smallint; NumVenda : Integer) : Boolean;
+    function GetTotalValorFormaPagto : Currency;
+    function GetTotalValorFormaPagto_APrazo : Currency;
   public
     { Public declarations }
   end;
@@ -333,7 +354,7 @@ implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC;
+  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto;
 
 {$R *.dfm}
 
@@ -373,6 +394,10 @@ begin
   SQL_Itens := TStringList.Create;
   SQL_Itens.Clear;
   SQL_Itens.AddStrings( cdsTabelaItens.SelectSQL );
+
+  SQL_FormaPagto := TStringList.Create;
+  SQL_FormaPagto.Clear;
+  SQL_FormaPagto.AddStrings( cdsVendaFormaPagto.SelectSQL );
 
   SQL_Titulos := TStringList.Create;
   SQL_Titulos.Clear;
@@ -418,9 +443,7 @@ begin
   IbDtstTabelaCODCLI.Value  := GetClienteIDDefault;
   IbDtstTabelaNOME.Value    := GetClienteNomeDefault;
   IbDtstTabelaVENDEDOR_COD.Value      := GetVendedorIDDefault;
-  IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
   IbDtstTabelaFORMAPAG.Value          := GetFormaPagtoNomeDefault;
-  IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
   IbDtstTabelaCFOP.Value              := GetCfopIDDefault;
   IbDtstTabelaVENDA_PRAZO.Value := 0;
   IbDtstTabelaSTATUS.Value      := STATUS_VND_AND;
@@ -428,6 +451,12 @@ begin
   IbDtstTabelaTOTALVENDA.Value  := 0;
   IbDtstTabelaNFE_ENVIADA.Value := 0;
   IbDtstTabelaUSUARIO.Value     := GetUserApp;
+
+//  IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
+//  IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
+
+  IbDtstTabelaFORMAPAGTO_COD.Clear;
+  IbDtstTabelaCONDICAOPAGTO_COD.Clear;
 
   IbDtstTabelaSERIE.Clear;
   IbDtstTabelaNFE.Clear;
@@ -482,15 +511,15 @@ procedure TfrmGeVenda.dbCondicaoPagtoClick(Sender: TObject);
 var
   I : Integer;
 begin
-  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+  if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
     if ( tblCondicaoPagto.Locate('cond_cod', dbCondicaoPagto.Field.AsInteger, []) ) then
     begin
-      IbDtstTabelaVENDA_PRAZO.AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo').AsInteger;
+      cdsVendaFormaPagtoVENDA_PRAZO.AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo').AsInteger;
       for I := COND_PARCELA_MIN to COND_PARCELA_MAX do
       begin
-        IbDtstTabela.FieldByName('PRAZO_' + FormatFloat('00', I)).Clear;
+        cdsVendaFormaPagto.FieldByName('PRAZO_' + FormatFloat('00', I)).Clear;
         if ( not tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).IsNull ) then
-          IbDtstTabela.FieldByName('PRAZO_' + FormatFloat('00', I)).AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).AsInteger;
+          cdsVendaFormaPagto.FieldByName('PRAZO_' + FormatFloat('00', I)).AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).AsInteger;
       end;
     end;
 end;
@@ -500,7 +529,8 @@ begin
   inherited;
   pgcMaisDados.ActivePageIndex := 0;
   
-  DtSrcTabelaItens.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN );
+  DtSrcTabelaItens.AutoEdit   := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN );
+  dtsVendaFormaPagto.AutoEdit := DtSrcTabela.AutoEdit and (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN );
   DtSrcTabelaItensStateChange( DtSrcTabelaItens );
 end;
 
@@ -531,6 +561,21 @@ begin
   cdsTabelaItens.Open;
 
   HabilitarDesabilitar_Btns;
+end;
+
+procedure TfrmGeVenda.AbrirTabelaFormasPagto(const AnoVenda : Smallint; const ControleVenda : Integer);
+begin
+  cdsVendaFormaPagto.Close;
+
+  with cdsVendaFormaPagto, SelectSQL do
+  begin
+    Clear;
+    AddStrings( SQL_FormaPagto );
+    Add('where f.ano_venda      = ' + IntToStr(AnoVenda));
+    Add('  and f.controle_venda = ' + IntToStr(ControleVenda));
+  end;
+
+  cdsVendaFormaPagto.Open;
 end;
 
 procedure TfrmGeVenda.AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
@@ -647,11 +692,11 @@ procedure TfrmGeVenda.HabilitarDesabilitar_Btns;
 begin
   if ( pgcGuias.ActivePage = tbsCadastro ) then
   begin
-    btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty) and (not cdsVendaFormaPagto.IsEmpty);
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
 
-    btnGerarBoleto.Enabled   := GetEmitirBoleto and (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto);
+    btnGerarBoleto.Enabled   := GetEmitirBoleto and (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN); // and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto);
 
     nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
     nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
@@ -696,6 +741,7 @@ procedure TfrmGeVenda.IbDtstTabelaAfterCancel(DataSet: TDataSet);
 begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 end;
 
@@ -720,6 +766,7 @@ begin
     if ( not OcorreuErro ) then
     begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     end;  
   end;
@@ -838,7 +885,7 @@ begin
     else
     if ( cdsTabelaItensQTDE.Value < 0 ) then
     begin
-      ShowWarning('QUantidade inválida.');
+      ShowWarning('Quantidade inválida.');
       dbQuantidade.SetFocus;
     end
     else
@@ -869,6 +916,14 @@ begin
       IbDtstTabelaDESCONTO.AsCurrency   := cDescontos;
       IbDtstTabelaTOTALVENDA.AsCurrency := cTotalLiquido;
 
+      if ( cdsVendaFormaPagto.RecordCount <= 1 ) then
+      begin
+        if ( not (cdsVendaFormaPagto.State in [dsEdit, dsInsert]) ) then
+          cdsVendaFormaPagto.Edit;
+          
+        cdsVendaFormaPagtoVALOR_FPAGTO.Value := cTotalLiquido;
+      end;
+
       if ( btnProdutoInserir.Visible and btnProdutoInserir.Enabled ) then
         btnProdutoInserir.SetFocus;
 
@@ -888,10 +943,20 @@ begin
 
     if ( not OcorreuErro ) then
     begin
+      // Salvar Itens
+
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
         cdsTabelaItens.Post;
 
       cdsTabelaItens.ApplyUpdates;
+
+      // Salvar Formas de Pagamentos
+      
+      if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
+        cdsVendaFormaPagto.Post;
+
+      cdsVendaFormaPagto.ApplyUpdates;
+
       CommitTransaction;
 
       iNumero := IbDtstTabelaCODCONTROL.AsInteger;
@@ -953,6 +1018,7 @@ procedure TfrmGeVenda.pgcGuiasChange(Sender: TObject);
 begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
   pgcMaisDados.ActivePage := tbsRecebimento;
@@ -973,7 +1039,10 @@ begin
     IbDtstTabelaCODCONTROL.AsInteger := iNum;
 
     AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+    ZerarFormaPagto;
   end;
 end;
 
@@ -998,6 +1067,7 @@ begin
     if ( not OcorreuErro ) then
     begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     end;  
   end;
@@ -1123,7 +1193,7 @@ begin
   CxContaCorrente := 0;
 
   AbrirTabelaItens(IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
-
+  AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
   // Verificar se cliente está bloqueado, caso a venda seja a prazo
 
@@ -1136,10 +1206,10 @@ begin
 
   // Verificar se existe caixa aberto para o usuário do sistema
 
-  if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
-    if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+  if cdsVendaFormaPagto.Locate('VENDA_PRAZO', 0, []) then
+    if ( not CaixaAberto(GetUserApp, GetDateDB, cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
     begin
-      ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
+      ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento ' + QuotedStr(cdsVendaFormaPagtoFormaPagto.AsString) + '.');
       Exit;
     end;
 
@@ -1158,16 +1228,38 @@ begin
       btnProdutoEditar.SetFocus;
   end
   else
-  if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 0 ) then
+//  if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 0 ) then
+//  begin
+//    ShowWarning('Favor informar a forma de pagamento');
+//    dbFormaPagto.SetFocus;
+//  end
+//  else
+//  if ( IbDtstTabelaCONDICAOPAGTO_COD.AsInteger = 0 ) then
+//  begin
+//    ShowWarning('Favor informar a condição de pagamento');
+//    dbCondicaoPagto.SetFocus;
+//  end
+  if ( cdsVendaFormaPagto.RecordCount = 0 ) then
   begin
-    ShowWarning('Favor informar a forma de pagamento');
+    ShowWarning('Favor informar a forma e/ou condição de pagamento');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
+  if ( GetTotalValorFormaPagto <= 0 ) then
+  begin
+    ShowWarning('Favor informar corretamente o valor de cada forma/condição de pagamento');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    
     dbFormaPagto.SetFocus;
   end
   else
-  if ( IbDtstTabelaCONDICAOPAGTO_COD.AsInteger = 0 ) then
+  if ( GetTotalValorFormaPagto > IbDtstTabelaTOTALVENDA.AsCurrency ) then
   begin
-    ShowWarning('Favor informar a condição de pagamento');
-    dbCondicaoPagto.SetFocus;
+    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é maior que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+
+    dbFormaPagto.SetFocus;
   end
   else
   if ( ShowConfirm('Confirma a finalização da venda selecionada?') ) then
@@ -1175,9 +1267,10 @@ begin
     if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 1 ) then
     begin
       GetComprasAbertas( IbDtstTabelaCODCLI.AsString );
-      if ( IbDtstTabelaTOTALVENDA.AsCurrency > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
+//      if ( IbDtstTabelaTOTALVENDA.AsCurrency > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
+      if ( GetTotalValorFormaPagto_APrazo > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
       begin
-        ShowWarning('O Valor Total da venda está acima do Valor Limite disponível para o cliente.' + #13#13 + 'Favor comunicar ao setor financeiro.');
+        ShowWarning('O Valor Total A Parzo da venda está acima do Valor Limite disponível para o cliente.' + #13#13 + 'Favor comunicar ao setor financeiro.');
         Exit;
       end;
     end;
@@ -1202,16 +1295,32 @@ begin
 
     // Forma de Pagamento: BOLETA BANCÁRIA
 
-    if ( GetEmitirBoleto and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto) ) then
-      if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
-        btnGerarBoleto.Click;
-
+    if GetEmitirBoleto then
+      if ( cdsVendaFormaPagto.Locate('VENDA_PRAZO', 1, []) ) then
+        if ( cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto ) then
+          if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
+            btnGerarBoleto.Click;
+(*
     // Formas de Pagamento que nao seja a prazo
-    
+
     if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
       if ( not qryTitulos.IsEmpty ) then
         RegistrarPagamento(qryTitulosANOLANC.AsInteger, qryTitulosNUMLANC.AsInteger, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger,
           IbDtstTabelaTOTALVENDA.AsCurrency, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
+*)
+
+    // Formas de Pagamento que nao seja a prazo
+
+    cdsVendaFormaPagto.First;
+    while not cdsVendaFormaPagto.Eof do
+    begin
+      if ( cdsVendaFormaPagtoVENDA_PRAZO.AsInteger = 0 ) then
+        if ( qryTitulos.Locate('FORMA_PAGTO', cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger, []) ) then
+          RegistrarPagamento(qryTitulosANOLANC.AsInteger, qryTitulosNUMLANC.AsInteger, GetDateDB, cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger,
+            cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
+
+      cdsVendaFormaPagto.Next;
+    end;
 
     if ( CxContaCorrente > 0 ) then
       GerarSaldoContaCorrente(CxContaCorrente, GetDateDB);
@@ -1604,9 +1713,9 @@ begin
       CxNumero := 0;
       CxContaCorrente := 0;
 
-      if ( tblFormaPagto.Locate('cod', IbDtstTabelaFORMAPAGTO_COD.AsInteger, []) ) then
+      if ( tblFormaPagto.Locate('cod', qryTitulosFORMA_PAGTO.AsInteger, []) ) then
         if ( tblFormaPagto.FieldByName('Conta_corrente').AsInteger > 0 ) then
-          if ( not CaixaAberto(GetUserApp, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
+          if ( not CaixaAberto(GetUserApp, GetDateDB, qryTitulosFORMA_PAGTO.AsInteger, CxAno, CxNumero, CxContaCorrente) ) then
           begin
             ShowWarning('Não existe caixa aberto para o usuário na forma de pagamento deste movimento.');
             Exit;
@@ -1652,6 +1761,153 @@ begin
       end;
     end;
   end;
+end;
+
+function TfrmGeVenda.GetTotalValorFormaPagto: Currency;
+var
+  cReturn : Currency;
+begin
+  cReturn := 0;
+
+  with cdsVendaFormaPagto do
+  begin
+    DisableControls;
+
+    if (State in [dsEdit, dsInsert]) then
+      Post;
+
+    First;
+    while not Eof do
+    begin
+      cReturn := cReturn + cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency;
+      Next;
+    end;
+    First;
+
+    EnableControls;
+  end;
+  Result := cReturn;
+end;
+
+procedure TfrmGeVenda.dbgFormaPagtoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  cAPagar : Currency;
+begin
+  // Inserir
+
+  if (Shift = [ssCtrl]) and (Key = VK_INSERT) Then
+  begin
+    if not dtsVendaFormaPagto.AutoEdit then
+      Exit;
+
+    cAPagar := dbValorTotal.Field.AsCurrency - GetTotalValorFormaPagto;
+    if ( cAPagar > 0 ) then
+    begin
+      cdsVendaFormaPagto.Append;
+      cdsVendaFormaPagtoFORMAPAGTO_COD.Clear;
+      cdsVendaFormaPagtoCONDICAOPAGTO_COD.Clear;
+      cdsVendaFormaPagtoVALOR_FPAGTO.Value := cAPagar;
+      cdsVendaFormaPagtoVENDA_PRAZO.Value  := 0;
+
+      dbFormaPagto.SetFocus;
+    end;
+  end
+  else
+
+  // Editar
+
+  if (Shift = [ssCtrl]) and (Key = VK_RETURN) Then
+  begin
+    if not dtsVendaFormaPagto.AutoEdit then
+      Exit;
+
+    cdsVendaFormaPagto.Edit;
+    dbFormaPagto.SetFocus;
+  end
+  else
+
+  // Excluir Tudo e reiniciar forma de pagamento
+
+  if (Shift = [ssCtrl]) and (Key = VK_DELETE) Then
+  begin
+    if not dtsVendaFormaPagto.AutoEdit then
+      Exit;
+      
+    ZerarFormaPagto;
+  end;
+end;
+
+procedure TfrmGeVenda.ZerarFormaPagto;
+begin
+  if not dtsVendaFormaPagto.AutoEdit then
+    Exit;
+
+  cdsVendaFormaPagto.First;
+
+  while not cdsVendaFormaPagto.Eof do
+    cdsVendaFormaPagto.Delete;
+
+  // Adicionar forma de pagamento inicial
+  
+  cdsVendaFormaPagto.Append;
+  cdsVendaFormaPagtoFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
+  cdsVendaFormaPagtoCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
+  cdsVendaFormaPagtoVALOR_FPAGTO.Value      := dbValorTotal.Field.AsCurrency;
+  cdsVendaFormaPagtoVENDA_PRAZO.Value       := 0;
+
+  if not (IbDtstTabela.State in [dsEdit, dsInsert]) then
+    IbDtstTabela.Edit;
+  IbDtstTabelaVENDA_PRAZO.AsInteger := 1;
+end;
+
+procedure TfrmGeVenda.cdsVendaFormaPagtoNewRecord(DataSet: TDataSet);
+begin
+  cdsVendaFormaPagtoANO_VENDA.Assign( IbDtstTabelaANO );
+  cdsVendaFormaPagtoCONTROLE_VENDA.Assign( IbDtstTabelaCODCONTROL );
+end;
+
+procedure TfrmGeVenda.cdsVendaFormaPagtoBeforePost(DataSet: TDataSet);
+begin
+  if ( cdsVendaFormaPagtoVENDA_PRAZO.AsInteger = 1 ) then
+  begin
+    if not (IbDtstTabela.State in [dsEdit, dsInsert]) then
+      IbDtstTabela.Edit;
+    IbDtstTabelaVENDA_PRAZO.AsInteger := 1;
+  end;
+end;
+
+function TfrmGeVenda.GetTotalValorFormaPagto_APrazo: Currency;
+var
+  cReturn : Currency;
+begin
+  cReturn := 0;
+
+  with cdsVendaFormaPagto do
+  begin
+    DisableControls;
+
+    if (State in [dsEdit, dsInsert]) then
+      Post;
+
+    First;
+    while not Eof do
+    begin
+      if ( cdsVendaFormaPagtoVENDA_PRAZO.AsInteger = 1 ) then
+        cReturn := cReturn + cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency;
+      Next;
+    end;
+    First;
+
+    EnableControls;
+  end;
+  Result := cReturn;
+end;
+
+procedure TfrmGeVenda.dbgFormaPagtoEnter(Sender: TObject);
+begin
+  if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
+    cdsVendaFormaPagto.Post;
 end;
 
 end.

@@ -493,7 +493,7 @@ inherited frmGeVenda: TfrmGeVenda
       end
       object Bevel6: TBevel [2]
         Left = 0
-        Top = 460
+        Top = 420
         Width = 1091
         Height = 4
         Align = alBottom
@@ -1844,505 +1844,477 @@ inherited frmGeVenda: TfrmGeVenda
       end
       object pgcMaisDados: TPageControl
         Left = 0
-        Top = 464
+        Top = 424
         Width = 1091
-        Height = 150
+        Height = 190
         ActivePage = tbsRecebimento
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
           BorderWidth = 4
           Caption = 'Recebimento'
-          DesignSize = (
-            1075
-            114)
-          object lblObservacao: TLabel
+          object pnlObservacao: TPanel
             Left = 0
             Top = 0
-            Width = 1075
-            Height = 13
-            Align = alTop
-            Caption = '&Observa'#231#245'es:'
-            FocusControl = dbObservacao
-          end
-          object lblFormaPagto: TLabel
-            Left = 0
-            Top = 71
-            Width = 106
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = '&Forma de Pagamento:'
-            FocusControl = dbFormaPagto
-          end
-          object lblCondicaoPagto: TLabel
-            Left = 200
-            Top = 71
-            Width = 120
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'Condi'#231#227'o de Pagamento:'
-            FocusControl = dbCondicaoPagto
-          end
-          object lblPrazo01: TLabel
-            Left = 504
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P01:'
-            FocusControl = dbPrazo01
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo02: TLabel
-            Left = 552
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P02:'
-            FocusControl = dbPrazo02
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo03: TLabel
-            Left = 600
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P03:'
-            FocusControl = dbPrazo03
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo04: TLabel
-            Left = 648
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P04:'
-            FocusControl = dbPrazo04
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo05: TLabel
-            Left = 696
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P05:'
-            FocusControl = dbPrazo05
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo06: TLabel
-            Left = 744
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P06:'
-            FocusControl = dbPrazo06
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo07: TLabel
-            Left = 792
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P07:'
-            FocusControl = dbPrazo07
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo08: TLabel
-            Left = 840
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P08:'
-            FocusControl = dbPrazo08
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo09: TLabel
-            Left = 888
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P09:'
-            FocusControl = dbPrazo09
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo10: TLabel
-            Left = 936
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P10:'
-            FocusControl = dbPrazo10
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo11: TLabel
-            Left = 984
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P11:'
-            FocusControl = dbPrazo11
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object lblPrazo12: TLabel
-            Left = 1032
-            Top = 71
-            Width = 24
-            Height = 13
-            Anchors = [akLeft, akBottom]
-            Caption = 'P12:'
-            FocusControl = dbPrazo12
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-          end
-          object dbObservacao: TDBMemo
-            Left = 0
-            Top = 13
-            Width = 1075
-            Height = 56
-            Align = alTop
-            Anchors = [akLeft, akTop, akRight, akBottom]
-            DataField = 'OBS'
-            DataSource = DtSrcTabela
+            Width = 503
+            Height = 154
+            Align = alClient
+            BevelOuter = bvNone
             TabOrder = 0
+            object lblObservacao: TLabel
+              Left = 0
+              Top = 0
+              Width = 503
+              Height = 13
+              Align = alTop
+              Caption = '&Observa'#231#245'es:'
+            end
+            object Bevel14: TBevel
+              Left = 499
+              Top = 17
+              Width = 4
+              Height = 137
+              Align = alRight
+              Shape = bsSpacer
+            end
+            object Bevel15: TBevel
+              Left = 0
+              Top = 13
+              Width = 503
+              Height = 4
+              Align = alTop
+              Shape = bsSpacer
+            end
+            object dbObservacao: TDBMemo
+              Left = 0
+              Top = 17
+              Width = 499
+              Height = 137
+              Align = alClient
+              DataField = 'OBS'
+              DataSource = DtSrcTabela
+              ScrollBars = ssBoth
+              TabOrder = 0
+            end
           end
-          object dbFormaPagto: TDBLookupComboBox
-            Left = 0
-            Top = 87
-            Width = 193
-            Height = 21
-            Anchors = [akLeft, akBottom]
-            DataField = 'FORMAPAGTO_COD'
-            DataSource = DtSrcTabela
-            DropDownRows = 10
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
+          object pnlFormaPagto: TPanel
+            Left = 503
+            Top = 0
+            Width = 572
+            Height = 154
+            Align = alRight
+            BevelOuter = bvNone
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlue
             Font.Height = -11
-            Font.Name = 'MS Sans Serif'
-            Font.Style = []
-            KeyField = 'COD'
-            ListField = 'DESCRI'
-            ListSource = dtsFormaPagto
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
             ParentFont = False
             TabOrder = 1
-            OnClick = dbFormaPagtoClick
-          end
-          object dbCondicaoPagto: TDBLookupComboBox
-            Left = 200
-            Top = 87
-            Width = 297
-            Height = 21
-            Anchors = [akLeft, akBottom]
-            DataField = 'CONDICAOPAGTO_COD'
-            DataSource = DtSrcTabela
-            DropDownRows = 10
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'MS Sans Serif'
-            Font.Style = []
-            KeyField = 'COND_COD'
-            ListField = 'COND_DESCRICAO'
-            ListSource = dtsCondicaoPagto
-            ParentFont = False
-            TabOrder = 2
-            OnClick = dbCondicaoPagtoClick
-          end
-          object dbPrazo01: TDBEdit
-            Left = 504
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_01'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 3
-          end
-          object dbPrazo02: TDBEdit
-            Left = 552
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_02'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 4
-          end
-          object dbPrazo03: TDBEdit
-            Left = 600
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_03'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 5
-          end
-          object dbPrazo04: TDBEdit
-            Left = 648
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_04'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 6
-          end
-          object dbPrazo05: TDBEdit
-            Left = 696
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_05'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 7
-          end
-          object dbPrazo06: TDBEdit
-            Left = 744
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_06'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 8
-          end
-          object dbPrazo07: TDBEdit
-            Left = 792
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_07'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 9
-          end
-          object dbPrazo08: TDBEdit
-            Left = 840
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_08'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 10
-          end
-          object dbPrazo09: TDBEdit
-            Left = 888
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_09'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 11
-          end
-          object dbPrazo10: TDBEdit
-            Left = 936
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_10'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 12
-          end
-          object dbPrazo11: TDBEdit
-            Left = 984
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_11'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 13
-          end
-          object dbPrazo12: TDBEdit
-            Left = 1032
-            Top = 87
-            Width = 41
-            Height = 21
-            TabStop = False
-            Anchors = [akLeft, akBottom]
-            Color = clMoneyGreen
-            DataField = 'PRAZO_12'
-            DataSource = DtSrcTabela
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clBlack
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 14
+            object lblFormaPagto: TLabel
+              Left = 0
+              Top = 1
+              Width = 124
+              Height = 13
+              Caption = '&Forma de Pagamento:'
+              FocusControl = dbFormaPagto
+            end
+            object lblCondicaoPagto: TLabel
+              Left = 187
+              Top = 1
+              Width = 139
+              Height = 13
+              Caption = 'Condi'#231#227'o de Pagamento:'
+              FocusControl = dbCondicaoPagto
+            end
+            object Label2: TLabel
+              Left = 470
+              Top = 1
+              Width = 60
+              Height = 13
+              Caption = 'Valor (R$):'
+              FocusControl = dbValorFormaPagto
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlue
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object dbFormaPagto: TDBLookupComboBox
+              Left = 0
+              Top = 17
+              Width = 185
+              Height = 21
+              DataField = 'FORMAPAGTO_COD'
+              DataSource = dtsVendaFormaPagto
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'COD'
+              ListField = 'DESCRI'
+              ListSource = dtsFormaPagto
+              ParentFont = False
+              TabOrder = 0
+              OnClick = dbFormaPagtoClick
+            end
+            object dbCondicaoPagto: TDBLookupComboBox
+              Left = 187
+              Top = 17
+              Width = 281
+              Height = 21
+              DataField = 'CONDICAOPAGTO_COD'
+              DataSource = dtsVendaFormaPagto
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'COND_COD'
+              ListField = 'COND_DESCRICAO'
+              ListSource = dtsCondicaoPagto
+              ParentFont = False
+              TabOrder = 1
+              OnClick = dbCondicaoPagtoClick
+            end
+            object dbValorFormaPagto: TDBEdit
+              Left = 470
+              Top = 17
+              Width = 102
+              Height = 21
+              DataField = 'VALOR_FPAGTO'
+              DataSource = dtsVendaFormaPagto
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlue
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 2
+            end
+            object btnFormaPagtoSalvar: TBitBtn
+              Left = 210
+              Top = 40
+              Width = 70
+              Height = 25
+              Hint = 'Salvar Forma/Condi'#231#227'o de Pagamento'
+              Caption = 'Salvar'
+              Enabled = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 6
+              Visible = False
+              Glyph.Data = {
+                36060000424D3606000000000000360000002800000020000000100000000100
+                18000000000000060000000000000000000000000000000000000000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                C06860B05850A05050A05050A050509048509048409048408040408038408038
+                407038407038300000FF0000FF0000FF6E6E6E5E5E5E58585858585858585851
+                51514C4C4C4C4C4C4646464141414141414040403B3B3B0000FF0000FFD06870
+                F09090E08080B04820403020C0B8B0C0B8B0D0C0C0D0C8C0505050A04030A040
+                30A038307038400000FF0000FF7474749999998989894646462C2C2CB6B6B6B6
+                B6B6C1C1C1C6C6C65050504444444444444040404040400000FF0000FFD07070
+                FF98A0F08880E08080705850404030907870F0E0E0F0E8E0908070A04030A040
+                40A040308038400000FF0000FF797979A4A4A49090908989895858583B3B3B78
+                7878E1E1E1E6E6E67C7C7C4444444949494444444141410000FF0000FFD07870
+                FFA0A0F09090F08880705850000000404030F0D8D0F0E0D0807860B04840B048
+                40A040408040400000FF0000FF7E7E7EA9A9A99999999090905858580000003B
+                3B3BD8D8D8DCDCDC7171715050505050504949494646460000FF0000FFD07880
+                FFA8B0FFA0A0F09090705850705850705850705850706050806860C05850B050
+                50B048408040400000FF0000FF838383B3B3B3A9A9A999999958585858585858
+                58585858585C5C5C6868686060605959595050504646460000FF0000FFE08080
+                FFB0B0FFB0B0FFA0A0F09090F08880E08080E07880D07070D06870C06060C058
+                50B050509048400000FF0000FF898989B7B7B7B7B7B7A9A9A999999990909089
+                89898484847979797474746969696060605959594C4C4C0000FF0000FFE08890
+                FFB8C0FFB8B0D06060C06050C05850C05040B05030B04830A04020A03810C060
+                60C058509048400000FF0000FF939393C1C1C1BCBCBC6B6B6B64646460606056
+                56565050504B4B4B4040403636366969696060604C4C4C0000FF0000FFE09090
+                FFC0C0D06860FFFFFFFFFFFFFFF8F0F0F0F0F0E8E0F0D8D0E0D0C0E0C8C0A038
+                10C060609048500000FF0000FF989898C6C6C6707070FFFFFFFFFFFFF6F6F6F0
+                F0F0E6E6E6D8D8D8CCCCCCC8C8C83636366969695151510000FF0000FFE098A0
+                FFC0C0D07070FFFFFFFFFFFFFFFFFFFFF8F0F0F0F0F0E8E0F0D8D0E0D0C0A040
+                20D06860A050500000FF0000FFA1A1A1C6C6C6797979FFFFFFFFFFFFFFFFFFF6
+                F6F6F0F0F0E6E6E6D8D8D8CCCCCC4040407070705858580000FF0000FFF0A0A0
+                FFC0C0E07870FFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0F0E8E0F0D8D0B048
+                30D07070A050500000FF0000FFA8A8A8C6C6C6808080FFFFFFFFFFFFFFFFFFFF
+                FFFFF6F6F6F0F0F0E6E6E6D8D8D84B4B4B7979795858580000FF0000FFF0A8A0
+                FFC0C0E08080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0F0E8E0B050
+                30E07880A050500000FF0000FFACACACC6C6C6898989FFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFF6F6F6F0F0F0E6E6E65050508484845858580000FF0000FFF0B0B0
+                FFC0C0F08890FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0C050
+                40603030B058500000FF0000FFB6B6B6C6C6C6949494FFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFF6F6F6F0F0F05656563434345E5E5E0000FF0000FFF0B0B0
+                FFC0C0FF9090FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0C058
+                50B05860B058600000FF0000FFB6B6B6C6C6C69B9B9BFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFF6F6F66060606363636363630000FF0000FFF0B8B0
+                F0B8B0F0B0B0F0B0B0F0A8B0F0A0A0E098A0E09090E09090E08890E08080D078
+                80D07870D070700000FF0000FFBBBBBBBBBBBBB6B6B6B6B6B6B1B1B1A8A8A8A1
+                A1A19898989898989393938989898383837E7E7E7979790000FF0000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF}
+              NumGlyphs = 2
+            end
+            object btnFormaPagtoExcluir: TBitBtn
+              Left = 140
+              Top = 40
+              Width = 70
+              Height = 25
+              Hint = 'Excluir Forma/Condi'#231#227'o de Pagamento'
+              Caption = 'Excluir'
+              Enabled = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 5
+              TabStop = False
+              Visible = False
+              Glyph.Data = {
+                36060000424D3606000000000000360000002800000020000000100000000100
+                1800000000000006000000000000000000000000000000000000FF00FFFF00FF
+                FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFCFC1C52030902030902030802028
+                70C6A797FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+                00FFC3C3C34B4B4B4B4B4B4646463C3C3CA5A5A5FF00FFFF00FFFF00FFFF00FF
+                B0A0906048306048306048307058406050601038C02050D01038C01030B01030
+                A0102070C5A392FF00FFFF00FFFF00FF9C9C9C43434343434343434353535356
+                56565C5C5C7171715C5C5C5353534E4E4E363636A1A1A1FF00FFFF00FFFF00FF
+                B0A090FFFFFFD0C8C0D0C8C0D0C8C01040E04068E03058E00038E00038D01030
+                C01030A0202870FF00FFFF00FFFF00FF9C9C9CFFFFFFC6C6C6C6C6C6C6C6C66B
+                6B6B8888887C7C7C6464646060605858584E4E4E3C3C3CFF00FFFF00FFFF00FF
+                B0A090FFFFFFFFFFFFFFF8FFFFF0F03068F0F0F8FFFFF8FFFFF8FFFFF8FFFFF8
+                FFFFF8FF203090FF00FFFF00FFFF00FF9C9C9CFFFFFFFFFFFFFAFAFAF1F1F18B
+                8B8BF9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFA4B4B4BFF00FFFF00FFFF00FF
+                B0A090FFFFFFFFFFFFFFFFFFFFF8F03068F0FFF8FFFFF8FFFFF8FFFFF8FFFFF8
+                FFFFF8FF203090FF00FFFF00FFFF00FF9C9C9CFFFFFFFFFFFFFFFFFFF6F6F68B
+                8B8BFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA4B4B4BFF00FFFF00FFFF00FF
+                B0A090FFFFFFFFFFFFFFFFFFFFFFFF3060FF80A0F06080F04060E02058E00038
+                D01038C02038A0FF00FFFF00FFFF00FF9C9C9CFFFFFFFFFFFFFFFFFFFFFFFF8A
+                8A8AB4B4B49E9E9E8383837B7B7B6060605C5C5C545454FF00FFFF00FFFF00FF
+                C0A890FFFFFFFFFFFFFFFFFFFFFFFFD0D8F03068F090A8F06080F05078E02048
+                D02038B0C8ACAAFF00FFFF00FFFF00FFA3A3A3FFFFFFFFFFFFFFFFFFFFFFFFDE
+                DEDE8B8B8BBBBBBB9E9E9E9393936C6C6C595959AEAEAEFF00FFFF00FFFF00FF
+                C0A8A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD0D8F03060F03060F03060E02048
+                C0C9B0AFFF00FFFF00FFFF00FFFF00FFA8A8A8FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFDEDEDE868686868686818181686868B2B2B2FF00FFFF00FFFF00FFFF00FF
+                C0B0A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8FFF0F0F0F0F0F0D0C8C08068
+                50FF00FFFF00FFFF00FFFF00FFFF00FFACACACFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFAFAFAF0F0F0F0F0F0C6C6C6636363FF00FFFF00FFFF00FFFF00FFFF00FF
+                D0B0A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0D0C8C06048
+                30FF00FFFF00FFFF00FFFF00FFFF00FFAEAEAEFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFF6F6F6F0F0F0C6C6C6434343FF00FFFF00FFFF00FFFF00FFFF00FF
+                D0B8A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0C0A8A06048
+                30FF00FFFF00FFFF00FFFF00FFFF00FFB3B3B3FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFA8A8A8A8A8A8434343FF00FFFF00FFFF00FFFF00FFFF00FF
+                D0B8B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A0906048306048306048
+                30FF00FFFF00FFFF00FFFF00FFFF00FFB8B8B8FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFF9C9C9C434343434343434343FF00FFFF00FFFF00FFFF00FFFF00FF
+                D0C0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C0604830DFBD
+                A7FF00FFFF00FFFF00FFFF00FFFF00FFBCBCBCFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFA3A3A3C6C6C6434343B9B9B9FF00FFFF00FFFF00FFFF00FFFF00FF
+                E0C0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0604830E0BEAAFF00
+                FFFF00FFFF00FFFF00FFFF00FFFF00FFBEBEBEFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFA8A8A8434343BBBBBBFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+                E0C0B0E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0E0C0ADFF00FFFF00
+                FFFF00FFFF00FFFF00FFFF00FFFF00FFBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBC
+                BCBCB8B8B8AEAEAEBDBDBDFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF
+                FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00
+                FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
+                00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+              NumGlyphs = 2
+            end
+            object btnFormaPagtoInserir: TBitBtn
+              Left = 0
+              Top = 40
+              Width = 70
+              Height = 25
+              Hint = 'Inserir Forma/Condi'#231#227'o de Pagamento'
+              Caption = 'Inserir'
+              Enabled = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 3
+              Visible = False
+              OnClick = btnProdutoInserirClick
+              Glyph.Data = {
+                36060000424D3606000000000000360000002800000020000000100000000100
+                18000000000000060000000000000000000000000000000000000000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                B0A0906048306048306048306048306048306048306048306048306048306048
+                300000FF0000FF0000FF0000FF0000FF9C9C9C43434343434343434343434343
+                43434343434343434343434343434343430000FF0000FF0000FF0000FF0000FF
+                B0A090FFFFFFB0A090B0A090B0A090B0A090B0A090B0A090B0A090B0A0906048
+                300000FF0000FF0000FF0000FF0000FF9C9C9CFFFFFF9C9C9C9C9C9C9C9C9C9C
+                9C9C9C9C9C9C9C9C9C9C9C9C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                B0A090FFFFFFFFFFFFFFF8FFF0F0F0F0E8E0F0E0D0E0D0D0E0C8C0B0A0906048
+                300000FF0000FF0000FF0000FF0000FF9C9C9CFFFFFFFFFFFFFAFAFAF0F0F0E6
+                E6E6DCDCDCD1D1D1C8C8C89C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                B0A090FFFFFFFFFFFFFFFFFFFFF8F0F0F0F0F0E0E0F0D8D0E0D0C0B0A0906048
+                300000FF0000FF0000FF0000FF0000FF9C9C9CFFFFFFFFFFFFFFFFFFF6F6F6F0
+                F0F0E1E1E1D8D8D8CCCCCC9C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                B0A090FFFFFFFFFFFFFFFFFFFFFFFFFFF0F0F0E8E0F0E0E0E0D8D0B0A0906048
+                300000FF0000FF0000FF0000FF0000FF9C9C9CFFFFFFFFFFFFFFFFFFFFFFFFF1
+                F1F1E6E6E6E1E1E1D6D6D69C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                C0A890FFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0F0E8E0F0D8D0B0A0906048
+                300000FF0000FF0000FF0000FF0000FFA3A3A3FFFFFFFFFFFFFFFFFFFFFFFFF6
+                F6F6F0F0F0E6E6E6D8D8D89C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                C0A8A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0E8E0F0E0E0B0A0906048
+                300000FF0000FF0000FF0000FF0000FFA8A8A8FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFF6F6F6E6E6E6E1E1E19C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                C0B0A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8FFF0F0F0F0E8E0B0A0906048
+                300000FF0000FF0000FF0000FF0000FFACACACFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFAFAFAF0F0F0E6E6E69C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                D0B0A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8F0F0F0F0B0A0906048
+                300000FF0000FF0000FF0000FF0000FFAEAEAEFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFF6F6F6F0F0F09C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                D0B8A0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A090B0A0906048
+                300000FF0000FF0000FF0000FF0000FFB3B3B3FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFF9C9C9C9C9C9C4343430000FF0000FF0000FF0000FF0000FF
+                D0B8B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A0906048306048306048
+                300000FF0000FF0000FF0000FF0000FFB8B8B8FFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFF9C9C9C4343434343434343430000FF0000FF0000FF0000FF0000FF
+                D0C0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C0604830DACA
+                C10000FF0000FF0000FF0000FF0000FFBCBCBCFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFA3A3A3C6C6C6434343C8C8C80000FF0000FF0000FF0000FF0000FF
+                E0C0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0604830DBCAC20000
+                FF0000FF0000FF0000FF0000FF0000FFBEBEBEFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFA8A8A8434343C9C9C90000FF0000FF0000FF0000FF0000FF0000FF
+                E0C0B0E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0DCCAC20000FF0000
+                FF0000FF0000FF0000FF0000FF0000FFBEBEBEBEBEBEBEBEBEBEBEBEBEBEBEBC
+                BCBCB8B8B8AEAEAEC9C9C90000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF}
+              NumGlyphs = 2
+            end
+            object btnFormaPagtoEditar: TBitBtn
+              Left = 70
+              Top = 40
+              Width = 70
+              Height = 25
+              Hint = 'Editar Forma/Condi'#231#227'o de Pagamento'
+              Caption = 'Editar'
+              Enabled = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 4
+              Visible = False
+              OnClick = btnProdutoEditarClick
+              Glyph.Data = {
+                36060000424D3606000000000000360000002800000020000000100000000100
+                180000000000000600000000000000000000000000000000000000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF
+                0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00B0A090604830
+                60483060483060483060483060483060483060483060483060483070504000FF
+                0000FF0000FF0000FF009C9C9C43434343434343434343434343434343434343
+                43434343434343434343434E4E4E00FF0000FF0000FF0000FF00C0A8A0FFFFFF
+                E0E8E0E0E0E0E0E0D0E0D8D0E0D0C0E0C8C0E0C8B0E0C0B0C0A8A070504000FF
+                0000FF0000FF0000FF00A8A8A8FFFFFFE4E4E4E0E0E0DBDBDBD6D6D6CCCCCCC8
+                C8C8C3C3C3BEBEBEA8A8A84E4E4E00FF0000FF0000FF0000FF00C0B0A0FFFFFF
+                E0C8C0D0C0B0D0C0B0FFF0E0D0B0A0D0B0A0D0B0A0F0D8D0C0A8A070504000FF
+                0000FF0000FF0000FF00ACACACFFFFFFC8C8C8BCBCBCBCBCBCECECECAEAEAEAE
+                AEAEAEAEAED8D8D8A8A8A84E4E4E00FF0000FF0000FF0000FF00D0B8A0FFFFFF
+                FFFFFFFFFFFFFFF8F0FFF8F0707070505850000000D0C0B0D0B0A070504000FF
+                0000FF0000FF0000FF00B3B3B3FFFFFFFFFFFFFFFFFFF6F6F6F6F6F670707054
+                5454000000BCBCBCAEAEAE4E4E4E00FF0000FF0000FF0000FF00D0B8A0FFFFFF
+                E0C8C0E0C8C0E0C8C0FFF8F0A0A0A0FFFFFF5090B0101010C0B0B080605000FF
+                0000FF0000FF0000FF00B3B3B3FFFFFFC8C8C8C8C8C8C8C8C8F6F6F6A0A0A0FF
+                FFFF939393101010B1B1B15E5E5E00FF0000FF0000FF0000FF00D0B8A0FFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFA0A0A090B8C070D0E05098B010101080706000FF
+                0000FF0000FF0000FF00B3B3B3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA0A0A0B6
+                B6B6CBCBCB9898981010106C6C6C00FF0000FF0000FF0000FF00D0B8A0FFFFFF
+                E0C8C0E0C8C0E0C8C0FFFFFFC0B8B050A0B090E0F060C0D05098B0101010C8C0
+                B400FF0000FF0000FF00B3B3B3FFFFFFC8C8C8C8C8C8C8C8C8FFFFFFB6B6B69C
+                9C9CDCDCDCBBBBBB989898101010BDBDBD00FF0000FF0000FF00D0B8A0FFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFF8F0D0D0D050A0B090E0F060C0D05098B01010
+                10C8C1B400FF0000FF00B3B3B3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F6F6D0
+                D0D09C9C9CDCDCDCBBBBBB989898101010BDBDBD00FF0000FF00F0B090F0A890
+                F0A890F0A080F09870E09060E08860E09060D0A89060A8B090E0F060C0D05098
+                B0101010D5C8B900FF00ACACACA8A8A8A8A8A89E9E9E94949489898984848489
+                8989A4A4A4A3A3A3DCDCDCBBBBBB989898101010C4C4C400FF00F0B090FFC0A0
+                FFC0A0FFB8A0FFB890FFB090FFA880FFA880F0A880D0B0A070B0C090E0F070C8
+                E0808880303890BCAEB6ACACACBCBCBCBCBCBCB7B7B7B3B3B3AEAEAEA4A4A4A4
+                A4A4A3A3A3AEAEAEAEAEAEDCDCDCC6C6C6848484515151B1B1B1F0B090F0A890
+                F0A890F0A890F0A080F0A070E09870E09060E08850E09060D0988080B0C0D0B8
+                B07088D06070B0303890ACACACA8A8A8A8A8A8A8A8A89E9E9E99999993939389
+                8989808080898989969696B0B0B0B8B8B89B9B9B81818151515100FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00DDD4CA6070
+                B07090E06078D06070B000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF00D1D1D1818181A4A4A490909081818100FF0000FF00
+                00FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00D0C6
+                CE6070B06070B0DFD2D100FF0000FF0000FF0000FF0000FF0000FF0000FF0000
+                FF0000FF0000FF0000FF0000FF00C9C9C9818181818181D3D3D3}
+              NumGlyphs = 2
+            end
+            object dbgFormaPagto: TDBGrid
+              Left = 0
+              Top = 40
+              Width = 572
+              Height = 114
+              Hint = 
+                'Para inserir nova Formas/Condi'#231#227'o de Pagamento CTRL + INSERT'#13#10#13#10 +
+                'Para inserir editar Formas/Condi'#231#227'o de Pagamento selecionada CTR' +
+                'L + ENTER'#13#10#13#10'Para a exclus'#227'o das Formas/Condi'#231#245'es de Pagamentos ' +
+                'CTRL + DELETE'#13#10#13#10'Observa'#231#227'o:'#13#10'======================='#13#10'Todas as ' +
+                'formas/condi'#231#245'es de pagamentos ser'#227'o exclu'#237'das, zerando o proces' +
+                'so'#13#10'de encerramento da venda com uma forma/condi'#231#227'o de pagamento' +
+                ' definida como'#13#10'padr'#227'o.'
+              Align = alBottom
+              Anchors = [akLeft, akTop, akRight, akBottom]
+              DataSource = dtsVendaFormaPagto
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              Options = [dgIndicator, dgColumnResize, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+              ParentFont = False
+              ParentShowHint = False
+              ReadOnly = True
+              ShowHint = True
+              TabOrder = 7
+              TitleFont.Charset = ANSI_CHARSET
+              TitleFont.Color = clBlue
+              TitleFont.Height = -11
+              TitleFont.Name = 'Tahoma'
+              TitleFont.Style = [fsBold]
+              OnDrawColumnCell = dbgDadosDrawColumnCell
+              OnEnter = dbgFormaPagtoEnter
+              OnKeyDown = dbgFormaPagtoKeyDown
+              Columns = <
+                item
+                  Expanded = False
+                  FieldName = 'FormaPagto'
+                  Width = 170
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'CondicaoPagto'
+                  Width = 285
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'VALOR_FPAGTO'
+                  Title.Caption = 'A Pagar (R$)'
+                  Width = 80
+                  Visible = True
+                end>
+            end
           end
         end
         object tbsITitulos: TTabSheet
@@ -2352,7 +2324,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 74
             Top = 0
             Width = 4
-            Height = 122
+            Height = 162
             Align = alLeft
             Shape = bsSpacer
           end
@@ -2360,7 +2332,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 0
             Top = 0
             Width = 4
-            Height = 122
+            Height = 162
             Align = alLeft
             Shape = bsSpacer
           end
@@ -2368,7 +2340,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 4
             Top = 0
             Width = 70
-            Height = 122
+            Height = 162
             Align = alLeft
             AutoSize = True
             BevelOuter = bvNone
@@ -2458,7 +2430,7 @@ inherited frmGeVenda: TfrmGeVenda
             Left = 78
             Top = 0
             Width = 1005
-            Height = 122
+            Height = 162
             Hint = 
               'Para a exclus'#227'o de baixas basta pressionar CTRL + DELETE'#13#10#13#10'Obse' +
               'rva'#231#227'o:'#13#10'======================='#13#10'Apenas usu'#225'rios nas fun'#231#245'es Di' +
@@ -2552,7 +2524,7 @@ inherited frmGeVenda: TfrmGeVenda
         Left = 0
         Top = 237
         Width = 1091
-        Height = 223
+        Height = 183
         TabStop = False
         Align = alClient
         DataSource = DtSrcTabelaItens
@@ -3169,6 +3141,40 @@ inherited frmGeVenda: TfrmGeVenda
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    FieldDefs = <
+      item
+        Name = 'COD'
+        Attributes = [faRequired]
+        DataType = ftSmallint
+      end
+      item
+        Name = 'DESCRI'
+        DataType = ftString
+        Size = 30
+      end
+      item
+        Name = 'ACRESCIMO'
+        DataType = ftFloat
+      end
+      item
+        Name = 'CONTA_CORRENTE'
+        DataType = ftInteger
+      end
+      item
+        Name = 'DEBITAR_LIMITE_CLIENTE'
+        DataType = ftSmallint
+      end>
+    IndexDefs = <
+      item
+        Name = 'PK_TBFORMPAGTO'
+        Fields = 'COD'
+        Options = [ixUnique]
+      end
+      item
+        Name = 'FK_TBFORMPAGTO_CCORRENTE'
+        Fields = 'CONTA_CORRENTE'
+      end>
+    StoreDefs = True
     TableName = 'TBFORMPAGTO'
     Left = 832
     Top = 136
@@ -3639,6 +3645,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , r.Baixado'
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Baixado_'
       '  , r.Dtrec'
+      '  , r.forma_pagto'
       'from TBCONTREC r')
     ModifySQL.Strings = (
       '')
@@ -3766,6 +3773,11 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'DTREC'
       Origin = 'TBCONTREC.DTREC'
       DisplayFormat = 'dd/mm/yyyy'
+    end
+    object qryTitulosFORMA_PAGTO: TSmallintField
+      FieldName = 'FORMA_PAGTO'
+      Origin = '"TBCONTREC"."FORMA_PAGTO"'
+      ProviderFlags = []
     end
     object qryTitulosLancamento: TStringField
       Alignment = taCenter
@@ -4065,5 +4077,234 @@ inherited frmGeVenda: TfrmGeVenda
     DataSet = qryTotalComprasAbertas
     Left = 1056
     Top = 137
+  end
+  object cdsVendaFormaPagto: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    BeforePost = cdsVendaFormaPagtoBeforePost
+    OnNewRecord = cdsVendaFormaPagtoNewRecord
+    CachedUpdates = True
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'Select'
+      '    f.ano_venda'
+      '  , f.controle_venda'
+      '  , f.formapagto_cod'
+      '  , f.condicaopagto_cod'
+      '  , f.venda_prazo'
+      '  , f.valor_fpagto'
+      '  , f.prazo_01'
+      '  , f.prazo_02'
+      '  , f.prazo_03'
+      '  , f.prazo_04'
+      '  , f.prazo_05'
+      '  , f.prazo_06'
+      '  , f.prazo_07'
+      '  , f.prazo_08'
+      '  , f.prazo_09'
+      '  , f.prazo_10'
+      '  , f.prazo_11'
+      '  , f.prazo_12'
+      'from TBVENDAS_FORMAPAGTO f')
+    ModifySQL.Strings = (
+      '')
+    UpdateObject = updVendaFormaPagto
+    Left = 992
+    Top = 168
+    object cdsVendaFormaPagtoANO_VENDA: TSmallintField
+      FieldName = 'ANO_VENDA'
+      Origin = '"TBVENDAS_FORMAPAGTO"."ANO_VENDA"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object cdsVendaFormaPagtoCONTROLE_VENDA: TIntegerField
+      FieldName = 'CONTROLE_VENDA'
+      Origin = '"TBVENDAS_FORMAPAGTO"."CONTROLE_VENDA"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsVendaFormaPagtoFORMAPAGTO_COD: TSmallintField
+      DisplayLabel = 'Forma de Pagamento'
+      FieldName = 'FORMAPAGTO_COD'
+      Origin = '"TBVENDAS_FORMAPAGTO"."FORMAPAGTO_COD"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object cdsVendaFormaPagtoCONDICAOPAGTO_COD: TSmallintField
+      DisplayLabel = 'Condi'#231#227'o de Pagamento'
+      FieldName = 'CONDICAOPAGTO_COD'
+      Origin = '"TBVENDAS_FORMAPAGTO"."CONDICAOPAGTO_COD"'
+    end
+    object cdsVendaFormaPagtoVENDA_PRAZO: TSmallintField
+      FieldName = 'VENDA_PRAZO'
+      Origin = '"TBVENDAS_FORMAPAGTO"."VENDA_PRAZO"'
+    end
+    object cdsVendaFormaPagtoVALOR_FPAGTO: TIBBCDField
+      DisplayLabel = 'Valor (R$)'
+      FieldName = 'VALOR_FPAGTO'
+      Origin = '"TBVENDAS_FORMAPAGTO"."VALOR_FPAGTO"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsVendaFormaPagtoPRAZO_01: TSmallintField
+      FieldName = 'PRAZO_01'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_01"'
+    end
+    object cdsVendaFormaPagtoPRAZO_02: TSmallintField
+      FieldName = 'PRAZO_02'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_02"'
+    end
+    object cdsVendaFormaPagtoPRAZO_03: TSmallintField
+      FieldName = 'PRAZO_03'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_03"'
+    end
+    object cdsVendaFormaPagtoPRAZO_04: TSmallintField
+      FieldName = 'PRAZO_04'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_04"'
+    end
+    object cdsVendaFormaPagtoPRAZO_05: TSmallintField
+      FieldName = 'PRAZO_05'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_05"'
+    end
+    object cdsVendaFormaPagtoPRAZO_06: TSmallintField
+      FieldName = 'PRAZO_06'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_06"'
+    end
+    object cdsVendaFormaPagtoPRAZO_07: TSmallintField
+      FieldName = 'PRAZO_07'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_07"'
+    end
+    object cdsVendaFormaPagtoPRAZO_08: TSmallintField
+      FieldName = 'PRAZO_08'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_08"'
+    end
+    object cdsVendaFormaPagtoPRAZO_09: TSmallintField
+      FieldName = 'PRAZO_09'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_09"'
+    end
+    object cdsVendaFormaPagtoPRAZO_10: TSmallintField
+      FieldName = 'PRAZO_10'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_10"'
+    end
+    object cdsVendaFormaPagtoPRAZO_11: TSmallintField
+      FieldName = 'PRAZO_11'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_11"'
+    end
+    object cdsVendaFormaPagtoPRAZO_12: TSmallintField
+      FieldName = 'PRAZO_12'
+      Origin = '"TBVENDAS_FORMAPAGTO"."PRAZO_12"'
+    end
+    object cdsVendaFormaPagtoFormaPagto: TStringField
+      DisplayLabel = 'Forma de Pagamento'
+      FieldKind = fkLookup
+      FieldName = 'FormaPagto'
+      LookupDataSet = tblFormaPagto
+      LookupKeyFields = 'COD'
+      LookupResultField = 'DESCRI'
+      KeyFields = 'FORMAPAGTO_COD'
+      ProviderFlags = []
+      Size = 50
+      Lookup = True
+    end
+    object cdsVendaFormaPagtoCondicaoPagto: TStringField
+      DisplayLabel = 'Condi'#231#227'o de Pagamento'
+      FieldKind = fkLookup
+      FieldName = 'CondicaoPagto'
+      LookupDataSet = tblCondicaoPagto
+      LookupKeyFields = 'COND_COD'
+      LookupResultField = 'COND_DESCRICAO_FULL'
+      KeyFields = 'CONDICAOPAGTO_COD'
+      ProviderFlags = []
+      Size = 250
+      Lookup = True
+    end
+  end
+  object updVendaFormaPagto: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  ANO_VENDA,'
+      '  CONTROLE_VENDA,'
+      '  FORMAPAGTO_COD,'
+      '  CONDICAOPAGTO_COD,'
+      '  VENDA_PRAZO,'
+      '  VALOR_FPAGTO,'
+      '  PRAZO_01,'
+      '  PRAZO_02,'
+      '  PRAZO_03,'
+      '  PRAZO_04,'
+      '  PRAZO_05,'
+      '  PRAZO_06,'
+      '  PRAZO_07,'
+      '  PRAZO_08,'
+      '  PRAZO_09,'
+      '  PRAZO_10,'
+      '  PRAZO_11,'
+      '  PRAZO_12'
+      'from TBVENDAS_FORMAPAGTO '
+      'where'
+      '  ANO_VENDA = :ANO_VENDA and'
+      '  CONTROLE_VENDA = :CONTROLE_VENDA and'
+      '  FORMAPAGTO_COD = :FORMAPAGTO_COD')
+    ModifySQL.Strings = (
+      'update TBVENDAS_FORMAPAGTO'
+      'set'
+      '  ANO_VENDA = :ANO_VENDA,'
+      '  CONDICAOPAGTO_COD = :CONDICAOPAGTO_COD,'
+      '  CONTROLE_VENDA = :CONTROLE_VENDA,'
+      '  FORMAPAGTO_COD = :FORMAPAGTO_COD,'
+      '  PRAZO_01 = :PRAZO_01,'
+      '  PRAZO_02 = :PRAZO_02,'
+      '  PRAZO_03 = :PRAZO_03,'
+      '  PRAZO_04 = :PRAZO_04,'
+      '  PRAZO_05 = :PRAZO_05,'
+      '  PRAZO_06 = :PRAZO_06,'
+      '  PRAZO_07 = :PRAZO_07,'
+      '  PRAZO_08 = :PRAZO_08,'
+      '  PRAZO_09 = :PRAZO_09,'
+      '  PRAZO_10 = :PRAZO_10,'
+      '  PRAZO_11 = :PRAZO_11,'
+      '  PRAZO_12 = :PRAZO_12,'
+      '  VALOR_FPAGTO = :VALOR_FPAGTO,'
+      '  VENDA_PRAZO = :VENDA_PRAZO'
+      'where'
+      '  ANO_VENDA = :OLD_ANO_VENDA and'
+      '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
+      '  FORMAPAGTO_COD = :OLD_FORMAPAGTO_COD')
+    InsertSQL.Strings = (
+      'insert into TBVENDAS_FORMAPAGTO'
+      
+        '  (ANO_VENDA, CONDICAOPAGTO_COD, CONTROLE_VENDA, FORMAPAGTO_COD,' +
+        ' PRAZO_01, '
+      
+        '   PRAZO_02, PRAZO_03, PRAZO_04, PRAZO_05, PRAZO_06, PRAZO_07, P' +
+        'RAZO_08, '
+      
+        '   PRAZO_09, PRAZO_10, PRAZO_11, PRAZO_12, VALOR_FPAGTO, VENDA_P' +
+        'RAZO)'
+      'values'
+      
+        '  (:ANO_VENDA, :CONDICAOPAGTO_COD, :CONTROLE_VENDA, :FORMAPAGTO_' +
+        'COD, :PRAZO_01, '
+      
+        '   :PRAZO_02, :PRAZO_03, :PRAZO_04, :PRAZO_05, :PRAZO_06, :PRAZO' +
+        '_07, :PRAZO_08, '
+      
+        '   :PRAZO_09, :PRAZO_10, :PRAZO_11, :PRAZO_12, :VALOR_FPAGTO, :V' +
+        'ENDA_PRAZO)')
+    DeleteSQL.Strings = (
+      'delete from TBVENDAS_FORMAPAGTO'
+      'where'
+      '  ANO_VENDA = :OLD_ANO_VENDA and'
+      '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
+      '  FORMAPAGTO_COD = :OLD_FORMAPAGTO_COD')
+    Left = 1024
+    Top = 168
+  end
+  object dtsVendaFormaPagto: TDataSource
+    AutoEdit = False
+    DataSet = cdsVendaFormaPagto
+    OnStateChange = DtSrcTabelaItensStateChange
+    Left = 1056
+    Top = 168
   end
 end
