@@ -82,7 +82,8 @@ uses
   UConstantesDGE in 'UConstantesDGE.pas',
   FormFactoryU in 'lib\FormFactoryU.pas',
   FuncoesFormulario in 'lib\FuncoesFormulario.pas',
-  UGrUsuarioAlterarSenha in 'lib\UGrUsuarioAlterarSenha.pas' {frmGrUsuarioAlterarSenha};
+  UGrUsuarioAlterarSenha in 'lib\UGrUsuarioAlterarSenha.pas' {frmGrUsuarioAlterarSenha},
+  UGeVendaFormaPagto in 'UGeVendaFormaPagto.pas' {frmGeVendaFormaPagto};
 
 {$R *.res}
 
