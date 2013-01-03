@@ -63,6 +63,8 @@ var
   FileINI : TIniFile;
   FormFunction : TFormularios;
 
+  function NetWorkActive(const Alertar : Boolean = FALSE) : Boolean;
+
   procedure ShowInformation(sMsg : String);
   procedure ShowWarning(sMsg : String);
   procedure ShowError(sMsg : String);
@@ -160,6 +162,147 @@ const
 implementation
 
 {$R *.dfm}
+
+function NetWorkActive(const Alertar : Boolean = FALSE) : Boolean;
+var
+  Enviar    ,
+  Return    : Boolean;
+  sFileName : String;
+  Registro  : TStringList;
+
+  sCNPJ     ,
+  sRazao    ,
+  sFantasia ,
+  sTelefone ,
+  sSistema  ,
+  sHostID   ,
+  sHostName : String;
+const
+  sLocalHost : String = '127.0.0.1';
+begin
+  Return   := False;
+
+  Registro := TStringList.Create;
+  try
+
+    try
+(*
+      if ( IdIP = nil ) then
+        IdIP  := TIdIPWatch.Create(Application);
+
+      if ( IdFTP = nil ) then
+        IdFTP := TIdFTP.Create(Application);
+*)
+      sSistema  := StringReplace( ExtractFileName(ParamStr(0)), '.exe', '', [rfReplaceAll] );
+      sFileName := ExtractFilePath(ParamStr(0)) + 'NetWorkActive' + sSistema + '.dll';
+
+      Return := FileExists( sFileName );
+      Enviar := not Return;
+
+      // Abrir arquivo para verificar a data
+      if ( Return ) then
+      begin
+        Registro.LoadFromFile( sFileName );
+        Return := ( FormatDateTime('dd/mm/yyyy', Date) = Trim(Registro.Strings[0]) );
+        if ( not Return ) then
+        begin
+          DeleteFile( sFileName );
+          Enviar := True;
+        end;
+      end;
+
+      // --- Conectar ao servidor para registrar cliente (INICIO)
+      if ( not Return ) then
+      begin
+(*        sHostID   := IdIP.LocalIP;
+        sHostName := IdIP.LocalName;
+*)
+        Registro.Clear;
+        Registro.BeginUpdate;
+        Registro.Add( FormatDateTime('dd/mm/yyyy', Date) );
+        Registro.Add( sHostID );
+        Registro.Add( sHostName );
+        Registro.Add( sSistema );
+
+        {$IFDEF DGE}
+        with DMBusiness, qryBusca do
+        begin
+          Close;
+          SQL.Clear;
+          SQL.Add('Select * from TBEMPRESA');
+          Open;
+
+          while not Eof do
+          begin
+            sCNPJ     := Trim( FieldByName('CNPJ').AsString );
+            sRazao    := Trim( FieldByName('RZSOC').AsString );
+            sFantasia := Trim( FieldByName('NMFANT').AsString );
+            sTelefone := Trim( FieldByName('FONE').AsString );
+
+            Registro.Add( '-- CLIENTE --' );
+            Registro.Add( 'CNPJ     : ' + sCNPJ );
+            Registro.Add( 'Razão    : ' + sRazao );
+            Registro.Add( 'Fantasia : ' + sFantasia );
+            Registro.Add( 'Fone     : ' + sTelefone );
+            Registro.Add( '--' );
+
+            Next;
+          end;
+
+          Close;
+
+          Return := True;
+        end;
+        {$ENDIF}
+
+        Registro.EndUpdate;
+        Registro.SaveToFile( sFileName );
+
+      end;
+
+      if ( Return and Enviar ) then
+      begin
+
+        // Enviando dados para o FTP MasterDados
+        try
+
+          try
+//            IdFTP.Username := 'masterdados';
+//            IdFTP.Password := 'masterdados';
+//            IdFTP.Host     := 'ftp.masterdados.com.br';
+//            IdFTP.Connect;
+//
+//            IdFTP.ChangeDir('/client_license');
+//            IdFTP.Put(sFileName, Trim(sHostName) + '_' + Trim(sCNPJ) + '.txt');
+
+            Return := True;
+          except
+//            Return := False;
+          end;
+
+        finally
+//          IdFTP.Disconnect;
+        end;
+
+      end;
+      // --- Conectar ao servidor para registrar cliente (FINAL)
+
+      if ( Alertar and (not Return) ) then
+        if ( sHostID =  sLocalHost ) then
+          Application.MessageBox('Não foi possível conectar a Internet para validação de recursos visto que a máquina não está em rede.', 'Alerta', MB_ICONEXCLAMATION)
+        else
+          Application.MessageBox('Não foi possível conectar a Internet para validação de recursos.', 'Alerta', MB_ICONEXCLAMATION);
+
+    except
+      Return := False;
+    end;
+
+  finally
+    Registro.Free;
+
+    Result := Return;
+  end;
+end;
 
 procedure ShowInformation(sMsg : String);
 begin
