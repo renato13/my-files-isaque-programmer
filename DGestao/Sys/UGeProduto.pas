@@ -423,6 +423,15 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
+
+  Case GetUserFunctionID of
+    FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
+      begin
+        btbtnIncluir.Visible := False;
+        btbtnAlterar.Visible := False;
+        btbtnExcluir.Visible := False;
+      end;
+  end
 end;
 
 procedure TfrmGeProduto.dbGrupoButtonClick(Sender: TObject);
@@ -626,7 +635,7 @@ procedure TfrmGeProduto.FormActivate(Sender: TObject);
 begin
   inherited;
 
-  case DMBusiness.ibdtstUsersCODFUNCAO.Value of
+  case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
     1 : EvUA.UserID := 1;   // Diretoria
     2 : EvUA.UserID := 2;   // Gerente de Vendas
     3 : EvUA.UserID := 3;   // Gerente Financeiro
