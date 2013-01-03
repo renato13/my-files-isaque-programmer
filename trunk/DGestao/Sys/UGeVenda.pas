@@ -354,7 +354,7 @@ implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto;
+  UGeGerarBoletos, UGeEfetuarPagtoREC;
 
 {$R *.dfm}
 

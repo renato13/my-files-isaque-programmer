@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, DB, IBCustomDataSet, ExtCtrls, DBCtrls, StdCtrls, ToolEdit,
+  Dialogs, DB, IBCustomDataSet, ExtCtrls, DBCtrls, StdCtrls, RXToolEdit,
   RXDBCtrl, Mask, Grids, DBGrids, ComCtrls, Buttons, ToolWin;
 
 type

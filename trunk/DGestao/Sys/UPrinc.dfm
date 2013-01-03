@@ -60,7 +60,7 @@ object frmPrinc: TfrmPrinc
     BevelOuter = bvLowered
     TabOrder = 1
     InternalVer = 1
-    object RxSpeedButtonEmpresa: TRxSpeedButton
+    object btnEmpresa: TRxSpeedButton
       Left = 3
       Top = 3
       Width = 75
@@ -174,9 +174,9 @@ object frmPrinc: TfrmPrinc
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedButtonEmpresaClick
+      OnClick = btnEmpresaClick
     end
-    object RxSpeedBtnCRec: TRxSpeedButton
+    object btnContaAReceber: TRxSpeedButton
       Left = 526
       Top = 3
       Width = 75
@@ -290,9 +290,9 @@ object frmPrinc: TfrmPrinc
         0080000080000080000080000080000080000080000080000080}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedBtnCRecClick
+      OnClick = btnContaAReceberClick
     end
-    object RxSpeedButton4: TRxSpeedButton
+    object btnFornecedor: TRxSpeedButton
       Left = 227
       Top = 3
       Width = 75
@@ -376,7 +376,7 @@ object frmPrinc: TfrmPrinc
       Transparent = True
       OnClick = nmFornecedorClick
     end
-    object RxSpeedButton5: TRxSpeedButton
+    object btnTesouraria: TRxSpeedButton
       Left = 451
       Top = 3
       Width = 75
@@ -493,7 +493,7 @@ object frmPrinc: TfrmPrinc
       Transparent = True
       OnClick = nmFluxoDeCaixaClick
     end
-    object RxSpeedBtnCPag: TRxSpeedButton
+    object btnContaAPagar: TRxSpeedButton
       Left = 601
       Top = 3
       Width = 75
@@ -639,9 +639,9 @@ object frmPrinc: TfrmPrinc
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedBtnCPagClick
+      OnClick = btnContaAPagarClick
     end
-    object btProduto: TRxSpeedButton
+    object btnProduto: TRxSpeedButton
       Left = 153
       Top = 3
       Width = 75
@@ -755,9 +755,9 @@ object frmPrinc: TfrmPrinc
         00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
       ParentFont = False
       Transparent = True
-      OnClick = btProdutoClick
+      OnClick = btnProdutoClick
     end
-    object RxSpeedBtnCliente: TRxSpeedButton
+    object btnCliente: TRxSpeedButton
       Left = 78
       Top = 3
       Width = 75
@@ -793,9 +793,9 @@ object frmPrinc: TfrmPrinc
         FFFFF088700FFFFFFFFFFFFFFF0000FFFFFFFF0000FFFFFFFFFF}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedBtnClienteClick
+      OnClick = btnClienteClick
     end
-    object RxSpeedButton2: TRxSpeedButton
+    object btnSair: TRxSpeedButton
       Left = 676
       Top = 3
       Width = 75
@@ -941,9 +941,9 @@ object frmPrinc: TfrmPrinc
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
       ParentFont = False
       Transparent = True
-      OnClick = RxSpeedButton2Click
+      OnClick = btnSairClick
     end
-    object RxSpeedButton1: TRxSpeedButton
+    object btnEstoque: TRxSpeedButton
       Left = 302
       Top = 3
       Width = 75
@@ -1060,7 +1060,7 @@ object frmPrinc: TfrmPrinc
       Spacing = 3
       Transparent = True
     end
-    object RxSpeedButton3: TRxSpeedButton
+    object btnVenda: TRxSpeedButton
       Left = 377
       Top = 3
       Width = 74
@@ -4748,7 +4748,7 @@ object frmPrinc: TfrmPrinc
           000000660000FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Empresa'
-        OnClick = RxSpeedButtonEmpresaClick
+        OnClick = btnEmpresaClick
       end
       object nmCliente: TMenuItem
         Bitmap.Data = {
@@ -4885,7 +4885,7 @@ object frmPrinc: TfrmPrinc
           FF0000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
         Caption = 'Cliente'
-        OnClick = RxSpeedBtnClienteClick
+        OnClick = btnClienteClick
       end
       object nmFornecedor: TMenuItem
         Bitmap.Data = {
@@ -5469,7 +5469,7 @@ object frmPrinc: TfrmPrinc
           FF004C39CE00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Produto'
-        OnClick = btProdutoClick
+        OnClick = btnProdutoClick
       end
       object nmPromocoes: TMenuItem
         Bitmap.Data = {
@@ -6418,7 +6418,7 @@ object frmPrinc: TfrmPrinc
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
           FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
         Caption = 'Contas A Pagar'
-        OnClick = RxSpeedBtnCPagClick
+        OnClick = btnContaAPagarClick
       end
       object nmContasAReceber: TMenuItem
         Bitmap.Data = {
@@ -6553,7 +6553,7 @@ object frmPrinc: TfrmPrinc
           8000000080000000000080808000000080000000800000008000000080000000
           8000000080000000800000008000000080000000800000008000}
         Caption = 'Contas A Receber'
-        OnClick = RxSpeedBtnCRecClick
+        OnClick = btnContaAReceberClick
       end
       object nmDeposito: TMenuItem
         Bitmap.Data = {
