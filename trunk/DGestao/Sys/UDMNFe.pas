@@ -3,9 +3,11 @@ unit UDMNFe;
 interface
 
 uses
+  // UFuncoesRede,
+
   Windows, SysUtils, Classes, ACBrNFeDANFEClass, ACBrNFeDANFERave, ACBrNFe, DB,
   IBCustomDataSet, IBQuery, frxClass, frxDBSet, frxExportRTF, frxExportXLS,
-  frxExportPDF, frxExportMail, UFuncoesRede, UGeConfigurarNFeACBr,
+  frxExportPDF, frxExportMail, UGeConfigurarNFeACBr,
 
   ACBrUtil, pcnConversao, pcnNFeW, pcnNFeRTXT, pcnAuxiliar, ACBrNFeUtil, SHDocVw,
   IBUpdateSQL, IBSQL, frxDesgn;
