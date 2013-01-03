@@ -16,7 +16,7 @@ object frmFormPagto: TfrmFormPagto
   TextHeight = 13
   object tlbrGridFornec: TToolBar
     Left = 0
-    Top = 189
+    Top = 187
     Width = 538
     Height = 35
     Align = alBottom
@@ -189,7 +189,7 @@ object frmFormPagto: TfrmFormPagto
     Left = 0
     Top = 0
     Width = 538
-    Height = 189
+    Height = 187
     ActivePage = TabSheetLista
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
@@ -199,7 +199,6 @@ object frmFormPagto: TfrmFormPagto
     Font.Style = [fsBold]
     HotTrack = True
     ParentFont = False
-    TabIndex = 0
     TabOrder = 1
     object TabSheetLista: TTabSheet
       Caption = 'Lista'
@@ -213,7 +212,7 @@ object frmFormPagto: TfrmFormPagto
         Left = 0
         Top = 0
         Width = 530
-        Height = 161
+        Height = 159
         Align = alClient
         Color = clWhite
         DataSource = dtsrcFPagto
@@ -332,8 +331,6 @@ object frmFormPagto: TfrmFormPagto
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBFORMPAGTO'
       'where'

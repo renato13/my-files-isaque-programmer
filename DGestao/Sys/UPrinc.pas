@@ -29,22 +29,22 @@ type
     nmEntrada: TMenuItem;
     nmEmpresa: TMenuItem;
     SpeedBar1: TSpeedBar;
-    RxSpeedButtonEmpresa: TRxSpeedButton;
-    RxSpeedBtnCRec: TRxSpeedButton;
-    RxSpeedButton4: TRxSpeedButton;
-    RxSpeedButton5: TRxSpeedButton;
-    RxSpeedBtnCPag: TRxSpeedButton;
-    btProduto: TRxSpeedButton;
-    RxSpeedBtnCliente: TRxSpeedButton;
+    btnEmpresa: TRxSpeedButton;
+    btnContaAReceber: TRxSpeedButton;
+    btnFornecedor: TRxSpeedButton;
+    btnTesouraria: TRxSpeedButton;
+    btnContaAPagar: TRxSpeedButton;
+    btnProduto: TRxSpeedButton;
+    btnCliente: TRxSpeedButton;
     SpeedbarSection1: TSpeedbarSection;
     menuSobre: TMenuItem;
     pnlMain: TPanel;
     nmFornecedor: TMenuItem;
     imgFundo: TImage;
     nmTipoDespesa: TMenuItem;
-    RxSpeedButton2: TRxSpeedButton;
+    btnSair: TRxSpeedButton;
     N3: TMenuItem;
-    RxSpeedButton1: TRxSpeedButton;
+    btnEstoque: TRxSpeedButton;
     ppEstoque: TPopupMenu;
     popEntrada: TMenuItem;
     nmAjusteManual: TMenuItem;
@@ -59,7 +59,7 @@ type
     nmRelatorioFinanceiro: TMenuItem;
     nmRelatorioContasAReceber: TMenuItem;
     nmRelatorioContasAPagar: TMenuItem;
-    RxSpeedButton3: TRxSpeedButton;
+    btnVenda: TRxSpeedButton;
     nmAbout: TMenuItem;
     nmRelatorioVenda: TMenuItem;
     mnTabelasAuxiliares: TMenuItem;
@@ -113,13 +113,13 @@ type
     nmFabricanteProduto: TMenuItem;
     nmUsuarioAlterarSenha: TMenuItem;
     procedure RxSpeedButton8Click(Sender: TObject);
-    procedure RxSpeedButtonEmpresaClick(Sender: TObject);
-    procedure RxSpeedBtnClienteClick(Sender: TObject);
-    procedure RxSpeedBtnCRecClick(Sender: TObject);
-    procedure RxSpeedBtnCPagClick(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnClienteClick(Sender: TObject);
+    procedure btnContaAReceberClick(Sender: TObject);
+    procedure btnContaAPagarClick(Sender: TObject);
     procedure nmFornecedorClick(Sender: TObject);
-    procedure RxSpeedButton2Click(Sender: TObject);
-    procedure btProdutoClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure btnProdutoClick(Sender: TObject);
     procedure nmEntradaClick(Sender: TObject);
     procedure nmAjusteManualClick(Sender: TObject);
     procedure nmKardexClick(Sender: TObject);
@@ -189,22 +189,22 @@ begin
   Application.Terminate;
 end;
 
-procedure TfrmPrinc.RxSpeedButtonEmpresaClick(Sender: TObject);
+procedure TfrmPrinc.btnEmpresaClick(Sender: TObject);
 begin
   FormFunction.ShowForm(Self, 'frmGeEmpresa');
 end;
 
-procedure TfrmPrinc.RxSpeedBtnClienteClick(Sender: TObject);
+procedure TfrmPrinc.btnClienteClick(Sender: TObject);
 begin
   FormFunction.ShowForm(Self, 'frmGeCliente');
 end;
 
-procedure TfrmPrinc.RxSpeedBtnCRecClick(Sender: TObject);
+procedure TfrmPrinc.btnContaAReceberClick(Sender: TObject);
 begin
   MostrarControleContasAReceber(Self);
 end;
 
-procedure TfrmPrinc.RxSpeedBtnCPagClick(Sender: TObject);
+procedure TfrmPrinc.btnContaAPagarClick(Sender: TObject);
 begin
   MostrarControleContasAPagar(Self);
 end;
@@ -214,13 +214,13 @@ begin
   FormFunction.ShowForm(Self, 'frmGeFornecedor');
 end;
 
-procedure TfrmPrinc.RxSpeedButton2Click(Sender: TObject);
+procedure TfrmPrinc.btnSairClick(Sender: TObject);
 begin
   if Application.MessageBox('Deseja SAIR do Sistema?', 'Confirmação ...', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON1) = ID_YES then
     Application.Terminate;
 end;
 
-procedure TfrmPrinc.btProdutoClick(Sender: TObject);
+procedure TfrmPrinc.btnProdutoClick(Sender: TObject);
 begin
   MostrarTabelaProdutos(Self, taICMS);
 end;
@@ -400,29 +400,29 @@ begin
 
   Case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
     FUNCTION_USER_ID_DIRETORIA :
-      EvUAfrmPrinc.UserID := 1;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_DIRETORIA;
 
     FUNCTION_USER_ID_GERENTE_VND :
       begin
-        EvUAfrmPrinc.UserID := 2;   
-        RxSpeedButton5.Enabled := false;
-        RxSpeedBtnCRec.Enabled := false;
-        RxSpeedBtnCPag.Enabled := false;
+        EvUAfrmPrinc.UserID      := FUNCTION_USER_ID_GERENTE_VND;
+        btnTesouraria.Enabled    := False;
+        btnContaAReceber.Enabled := False;
+        btnContaAPagar.Enabled   := False;
       end;
 
     FUNCTION_USER_ID_GERENTE_FIN :
-      EvUAfrmPrinc.UserID := 3;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_GERENTE_FIN;
 
     FUNCTION_USER_ID_VENDEDOR :
       begin
-        EvUAfrmPrinc.UserID := 4;   
-        RxSpeedButtonEmpresa.Visible := false;
-        btProduto.Enabled      := false;
-        RxSpeedButton4.Enabled := false;
-        RxSpeedButton1.Enabled := false;
-        RxSpeedButton5.Enabled := false;
-        RxSpeedBtnCRec.Enabled := false;
-        RxSpeedBtnCPag.Enabled := false;
+        EvUAfrmPrinc.UserID      := FUNCTION_USER_ID_VENDEDOR;
+        btnEmpresa.Visible       := False;
+        btnProduto.Enabled       := False;
+        btnFornecedor.Enabled    := False;
+        btnEstoque.Enabled       := False;
+        btnTesouraria.Enabled    := False;
+        btnContaAReceber.Enabled := False;
+        btnContaAPagar.Enabled   := False;
       end;
 
     FUNCTION_USER_ID_GERENTE_ADM :
@@ -485,8 +485,8 @@ begin
   end;
 
   // Configurar Legendas de acordo com o segmento
-  nmProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
-  btProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
+  nmProduto.Caption  := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
+  btnProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
