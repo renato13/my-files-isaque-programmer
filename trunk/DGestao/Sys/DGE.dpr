@@ -14,7 +14,6 @@ uses
   UCdVendedor in 'UCdVendedor.pas' {frmCdVendedor},
   UDMBusiness in 'UDMBusiness.pas' {DMBusiness: TDataModule},
   UGrDepositos in 'UGrDepositos.pas' {frmGrDepositos},
-  UGrProduto in 'UGrProduto.pas' {frmGrProdutos},
   USobre in 'USobre.pas' {frmSobre},
   UPesq in 'UPesq.pas' {frmPesq},
   UPesqProd in 'UPesqProd.pas' {frmPesqProd},

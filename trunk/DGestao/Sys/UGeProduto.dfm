@@ -1,8 +1,9 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 148
-  Top = 23
+  Left = 523
+  Top = 150
   Width = 977
   Height = 648
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -23,6 +24,7 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
