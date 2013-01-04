@@ -1,14 +1,14 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas',0,1,1491,1,1504,1,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas',0,1,454,30,430,1,0
-File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGrProduto.pas',0,1,1,1,1,1,1
-File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeGerarBoletos.pas',0,1,157,1,186,1,0
-File_4=SourceModule,'c:\program files (x86)\borland\delphi7\Source\rtl\Win\Windows.pas',0,1,18220,1,18249,0,0
-File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,1,1,52,1,0
-File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas',0,1,28,1,79,1,0
-File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelVenda.pas',0,1,16,17,57,1,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uGrVendas.pas',0,1,1,63,7,1,0
-File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeEmpresa.pas',0,1,1,23,9,1,0
+File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrUsuarioAlterarSenha.pas',0,1,1,6,1,0,0
+File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys_ImR\UPrinc.pas',0,1,1,142,16,1,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas',0,1,1491,1,1504,1,0
+File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas',0,1,454,30,430,1,0
+File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGrProduto.pas',0,1,1,1,1,1,1
+File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeGerarBoletos.pas',0,1,157,1,186,1,0
+File_6=SourceModule,'c:\program files (x86)\borland\delphi7\Source\rtl\Win\Windows.pas',0,1,18220,1,18249,0,0
+File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,1,1,52,1,0
+File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas',0,1,28,1,79,1,0
+File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelVenda.pas',0,1,16,17,57,1,0
 
 [Modules]
 Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
@@ -54,6 +54,10 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadrao.pas]
+FormState=0
+FormOnTop=0
+
 [EditWindow0]
 ViewCount=6
 CurrentView=5
@@ -80,9 +84,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -100,9 +104,9 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-CursorX=19
-CursorY=188
-TopLine=163
+CursorX=1
+CursorY=134
+TopLine=101
 LeftCol=1
 
 [View3]
@@ -121,9 +125,9 @@ LeftCol=1
 
 [View5]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-CursorX=23
-CursorY=408
-TopLine=364
+CursorX=90
+CursorY=541
+TopLine=517
 LeftCol=1
 
 [Watches]
@@ -255,26 +259,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=770
+Height=858
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=770
+ClientHeight=858
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
-Left=12
-Top=0
-Width=1636
+Left=-10
+Top=-713
+Width=443
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1636
+ClientWidth=443
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443

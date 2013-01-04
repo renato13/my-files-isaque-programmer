@@ -63,7 +63,7 @@ begin
   ProductName.Caption     := GetInternalName;
   FileDescription.Caption := GetFileDescription;
   {$IFDEF DGE}
-  Version.Caption     := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
+  Version.Caption     := 'Versão ' + VERSION_NUMBER; 
   {$ELSE}
   Version.Caption     := 'Versão ' + GetExeVersion;
   {$ENDIF}

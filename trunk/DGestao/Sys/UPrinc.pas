@@ -108,11 +108,10 @@ type
     imgEmpresa: TImage;
     ProductName: TLabel;
     Copyright: TLabel;
-    CompanyName: TLabel;
+    FileDescription: TLabel;
     Version: TLabel;
     nmFabricanteProduto: TMenuItem;
     nmUsuarioAlterarSenha: TMenuItem;
-    procedure RxSpeedButton8Click(Sender: TObject);
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -183,11 +182,6 @@ uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   UGeFabricante, UConstantesDGE;
 
 {$R *.dfm}
-
-procedure TfrmPrinc.RxSpeedButton8Click(Sender: TObject);
-begin
-  Application.Terminate;
-end;
 
 procedure TfrmPrinc.btnEmpresaClick(Sender: TObject);
 begin
@@ -426,28 +420,28 @@ begin
       end;
 
     FUNCTION_USER_ID_GERENTE_ADM :
-      EvUAfrmPrinc.UserID := 5;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_GERENTE_ADM;
 
     FUNCTION_USER_ID_CAIXA :
-      EvUAfrmPrinc.UserID := 6;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_CAIXA;
 
     FUNCTION_USER_ID_AUX_FINANC1 :
-      EvUAfrmPrinc.UserID := 7;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_AUX_FINANC1;
 
     FUNCTION_USER_ID_AUX_FINANC2 :
-      EvUAfrmPrinc.UserID := 8;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_AUX_FINANC2;
 
     FUNCTION_USER_ID_SUPERV_CX :
-      EvUAfrmPrinc.UserID := 9;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SUPERV_CX;
 
     FUNCTION_USER_ID_ESTOQUISTA :
-      EvUAfrmPrinc.UserID := 10;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_ESTOQUISTA;
 
     FUNCTION_USER_ID_SUPORTE_TI :
-      EvUAfrmPrinc.UserID := 11;
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SUPORTE_TI;
 
     FUNCTION_USER_ID_SYSTEM_ADM :
-      EvUAfrmPrinc.UserID := 12;  
+      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SYSTEM_ADM;
   else
     ShowWarning('Falta cruzar nova função com UserID!');
     Application.Terminate;
@@ -461,8 +455,8 @@ var
   sFileImage : String;
 begin
   {$IFDEF DGE}
-  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER; //[ v' + GetExeVersion + ' ]';
-  Self.Version.Caption   := 'Versão ' + VERSION_NUMBER; // + GetExeVersion;
+  Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER;
+  Self.Version.Caption   := 'Versão ' + VERSION_NUMBER; 
   {$ELSE}
   Self.Caption := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion + ' ]';
   Self.Version.Caption   := 'Versão ' + GetExeVersion;
@@ -480,8 +474,8 @@ begin
     imgEmpresa.Visible  := False;
     ProductName.Visible := False;
     Version.Visible     := False;
-    CompanyName.Visible := False;
-    Copyright.Visible   := False;
+    FileDescription.Visible := False;
+    Copyright.Visible       := False;
   end;
 
   // Configurar Legendas de acordo com o segmento
