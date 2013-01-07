@@ -1,8 +1,8 @@
 object frmPrinc: TfrmPrinc
-  Left = 397
-  Top = 100
-  Width = 841
-  Height = 556
+  Left = -8
+  Top = -8
+  Width = 1296
+  Height = 776
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,8 +18,8 @@ object frmPrinc: TfrmPrinc
   TextHeight = 13
   object stbMain: TStatusBar
     Left = 0
-    Top = 479
-    Width = 825
+    Top = 699
+    Width = 1280
     Height = 19
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlue
@@ -45,7 +45,7 @@ object frmPrinc: TfrmPrinc
   object SpeedBar1: TSpeedBar
     Left = 0
     Top = 0
-    Width = 825
+    Width = 1280
     Height = 64
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1201,20 +1201,20 @@ object frmPrinc: TfrmPrinc
   object pnlMain: TPanel
     Left = 0
     Top = 64
-    Width = 825
-    Height = 415
+    Width = 1280
+    Height = 635
     Align = alClient
     BevelOuter = bvLowered
     Color = clWhite
     TabOrder = 2
     DesignSize = (
-      825
-      415)
+      1280
+      635)
     object imgFundo: TImage
       Left = 1
       Top = 1
-      Width = 823
-      Height = 413
+      Width = 1278
+      Height = 633
       Align = alClient
       AutoSize = True
       Center = True
@@ -4391,7 +4391,7 @@ object frmPrinc: TfrmPrinc
     end
     object imgEmpresa: TImage
       Left = 8
-      Top = 294
+      Top = 514
       Width = 110
       Height = 110
       Anchors = [akLeft, akBottom]
@@ -4403,7 +4403,7 @@ object frmPrinc: TfrmPrinc
     end
     object ProductName: TLabel
       Left = 120
-      Top = 328
+      Top = 548
       Width = 40
       Height = 23
       Anchors = [akLeft, akBottom]
@@ -4419,7 +4419,7 @@ object frmPrinc: TfrmPrinc
     end
     object Copyright: TLabel
       Left = 120
-      Top = 367
+      Top = 587
       Width = 248
       Height = 26
       Anchors = [akLeft, akBottom]
@@ -4439,7 +4439,7 @@ object frmPrinc: TfrmPrinc
     end
     object FileDescription: TLabel
       Left = 120
-      Top = 350
+      Top = 570
       Width = 236
       Height = 13
       Anchors = [akLeft, akBottom]
@@ -4457,12 +4457,12 @@ object frmPrinc: TfrmPrinc
     end
     object Version: TLabel
       Left = 284
-      Top = 332
+      Top = 552
       Width = 72
       Height = 13
       Alignment = taRightJustify
       Anchors = [akLeft, akBottom]
-      Caption = 'Vers'#227'o 1.0.1.6'
+      Caption = 'Vers'#227'o 1.0.2.1'
       Font.Charset = ANSI_CHARSET
       Font.Color = 1137134
       Font.Height = -11
