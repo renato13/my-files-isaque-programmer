@@ -97,7 +97,8 @@ end;
 
 function GetCopyright : String;
 begin
-  Result := TInfoVersao.GetInstance().getPropertyValue(ivLEGAL_COPYRIGHT);
+  Result :=  '© 2012|2013 - Masterdados Tecnologia da Informação'+ #13 + 'Todos os direitos reservados.'
+  //TInfoVersao.GetInstance().getPropertyValue(ivLEGAL_COPYRIGHT);
 end;
 
 function GetInternalName : String;
