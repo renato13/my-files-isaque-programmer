@@ -1036,7 +1036,7 @@ begin
 
         with Det.Add do
         begin
-          Prod.nItem    := qryDadosProdutoSEQ.AsInteger;              // Número sequencial, para cada item deve ser incrementado
+          Prod.nItem    := qryDadosProduto.RecNo; // qryDadosProdutoSEQ.AsInteger;              // Número sequencial, para cada item deve ser incrementado
           Prod.cProd    := qryDadosProdutoCODPROD.AsString;
 
           if ( GetSegmentoID(qryEmitenteCNPJ.AsString) <> SEGMENTO_MERCADO_CARRO_ID ) then

@@ -443,6 +443,28 @@ begin
       if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
       begin
 
+        // Registrar Estorno
+        
+        if ( CxContaCorrente > 0 ) then
+        begin
+          cdsPagamentos.First;
+
+          while not cdsPagamentos.Eof do
+          begin
+            SetMovimentoCaixaEstorno(
+              GetUserApp,
+              cdsPagamentosDATA_PAGTO.AsDateTime + Time,
+              cdsPagamentosFORMA_PAGTO.AsInteger,
+              cdsPagamentosANOLANC.AsInteger,
+              cdsPagamentosNUMLANC.AsInteger,
+              cdsPagamentosSEQ.AsInteger,
+              cdsPagamentosVALOR_BAIXA.AsCurrency,
+              tmcxCredito);
+
+            cdsPagamentos.Next;
+          end;
+        end;
+
         with DMBusiness, qryBusca do
         begin
           Close;

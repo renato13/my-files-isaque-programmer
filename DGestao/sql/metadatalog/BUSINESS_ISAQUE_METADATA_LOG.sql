@@ -2764,3 +2764,774 @@ SQL error code = -104.
 Invalid expression in the ORDER BY clause (not contained in either an aggregate function or the GROUP BY clause).
 
 */
+
+
+
+/*------ SYSDBA 07/01/2013 12:34:21 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure SET_CAIXA_MOVIMENTO_ESTORNO_PAG (
+    USUARIO varchar(12),
+    DATA_PAGTO timestamp,
+    FORMA_PAGTO smallint,
+    ANOLANC smallint,
+    NUMLANC integer,
+    SEQ smallint,
+    VALOR_BAIXA numeric(18,2))
+as
+declare variable EMPRESA varchar(18);
+declare variable FORNECEDOR integer;
+declare variable ANO_CAIXA smallint;
+declare variable NUM_CAIXA integer;
+declare variable CCR_CAIXA integer;
+declare variable HISTORICO varchar(250);
+declare variable ANO_COMPRA smallint;
+declare variable NUM_COMPRA integer;
+begin
+  -- Buscar Numero do Caixa Aberto
+  Select
+      cx.Ano_caixa
+    , cx.Num_caixa
+    , cx.Conta_corrente
+  from GET_CAIXA_ABERTO(:Usuario, :Data_pagto, :Forma_pagto) cx
+  into
+      Ano_caixa
+    , Num_caixa
+    , Ccr_caixa;
+
+  -- Montar Historico
+  Select
+      cc.Codemp
+    , cc.Codforn
+    , 'COMPRA No. ' || r.Anocompra || '/' || r.Numcompra || ' - ' || f.Nomeforn
+    , r.Anocompra
+    , r.Numcompra
+  from TBCONTPAG r
+    left join TBFORNECEDOR f on (f.Codforn = r.Codforn)
+    left join TBCOMPRAS cc on (cc.Ano = r.Anocompra and cc.Codcontrol = r.Numcompra)
+  where r.Anolanc = :Anolanc
+    and r.Numlanc = :Numlanc
+  into
+      Empresa
+    , Fornecedor
+    , Historico
+    , Ano_compra
+    , Num_compra;
+
+  Historico = coalesce(:Historico, 'ESTORNO DO PAGTO. DA DUPLICATA No. ' || :Anolanc || '/' || :Numlanc || ' P' || :Seq);
+
+  -- Inserir Movimento Caixa
+  Insert Into TBCAIXA_MOVIMENTO (
+      Ano
+    , Numero
+    , Caixa_ano
+    , Caixa_num
+    , Conta_corrente
+    , Forma_pagto
+    , Datahora
+    , Tipo
+    , Historico
+    , Valor
+    , Situacao
+    , Venda_ano
+    , Venda_num
+    , Cliente
+    , Compra_ano
+    , Compra_num
+    , Empresa
+    , Fornecedor
+    , Usuario
+    , Apagar_ano
+    , Apagar_num
+  ) values (
+      Extract(Year from :Data_pagto)
+    , Null
+    , :Ano_caixa
+    , :Num_caixa
+    , :Ccr_caixa
+    , :Forma_pagto
+    , :Data_pagto
+    , 'C'
+    , :Historico
+    , :Valor_baixa
+    , 1
+    , Null
+    , Null
+    , Null
+    , :Ano_compra
+    , :Num_compra
+    , :Empresa
+    , :Fornecedor
+    , :Usuario
+    , :Anolanc
+    , :Numlanc
+  );
+
+end
+^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 07/01/2013 12:34:45 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure SET_CAIXA_MOVIMENTO_PAG_ESTORNO (
+    USUARIO varchar(12),
+    DATA_PAGTO timestamp,
+    FORMA_PAGTO smallint,
+    ANOLANC smallint,
+    NUMLANC integer,
+    SEQ smallint,
+    VALOR_BAIXA numeric(18,2))
+as
+declare variable EMPRESA varchar(18);
+declare variable FORNECEDOR integer;
+declare variable ANO_CAIXA smallint;
+declare variable NUM_CAIXA integer;
+declare variable CCR_CAIXA integer;
+declare variable HISTORICO varchar(250);
+declare variable ANO_COMPRA smallint;
+declare variable NUM_COMPRA integer;
+begin
+  -- Buscar Numero do Caixa Aberto
+  Select
+      cx.Ano_caixa
+    , cx.Num_caixa
+    , cx.Conta_corrente
+  from GET_CAIXA_ABERTO(:Usuario, :Data_pagto, :Forma_pagto) cx
+  into
+      Ano_caixa
+    , Num_caixa
+    , Ccr_caixa;
+
+  -- Montar Historico
+  Select
+      cc.Codemp
+    , cc.Codforn
+    , 'COMPRA No. ' || r.Anocompra || '/' || r.Numcompra || ' - ' || f.Nomeforn
+    , r.Anocompra
+    , r.Numcompra
+  from TBCONTPAG r
+    left join TBFORNECEDOR f on (f.Codforn = r.Codforn)
+    left join TBCOMPRAS cc on (cc.Ano = r.Anocompra and cc.Codcontrol = r.Numcompra)
+  where r.Anolanc = :Anolanc
+    and r.Numlanc = :Numlanc
+  into
+      Empresa
+    , Fornecedor
+    , Historico
+    , Ano_compra
+    , Num_compra;
+
+  Historico = coalesce(:Historico, 'ESTORNO DO PAGTO. DA DUPLICATA No. ' || :Anolanc || '/' || :Numlanc || ' P' || :Seq);
+
+  -- Inserir Movimento Caixa
+  Insert Into TBCAIXA_MOVIMENTO (
+      Ano
+    , Numero
+    , Caixa_ano
+    , Caixa_num
+    , Conta_corrente
+    , Forma_pagto
+    , Datahora
+    , Tipo
+    , Historico
+    , Valor
+    , Situacao
+    , Venda_ano
+    , Venda_num
+    , Cliente
+    , Compra_ano
+    , Compra_num
+    , Empresa
+    , Fornecedor
+    , Usuario
+    , Apagar_ano
+    , Apagar_num
+  ) values (
+      Extract(Year from :Data_pagto)
+    , Null
+    , :Ano_caixa
+    , :Num_caixa
+    , :Ccr_caixa
+    , :Forma_pagto
+    , :Data_pagto
+    , 'C'
+    , :Historico
+    , :Valor_baixa
+    , 1
+    , Null
+    , Null
+    , Null
+    , :Ano_compra
+    , :Num_compra
+    , :Empresa
+    , :Fornecedor
+    , :Usuario
+    , :Anolanc
+    , :Numlanc
+  );
+
+end
+^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 07/01/2013 12:34:51 --------*/
+
+DROP PROCEDURE SET_CAIXA_MOVIMENTO_ESTORNO_PAG;
+
+
+
+
+/*------ SYSDBA 07/01/2013 12:35:28 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure SET_CAIXA_MOVIMENTO_REC_ESTORNO (
+    USUARIO varchar(12),
+    DATA_PAGTO timestamp,
+    FORMA_PAGTO smallint,
+    ANOLANC smallint,
+    NUMLANC integer,
+    SEQ smallint,
+    VALOR_BAIXA numeric(18,2))
+as
+declare variable EMPRESA varchar(18);
+declare variable CLIENTE varchar(18);
+declare variable ANO_CAIXA smallint;
+declare variable NUM_CAIXA integer;
+declare variable CCR_CAIXA integer;
+declare variable HISTORICO varchar(250);
+declare variable ANO_VENDA smallint;
+declare variable NUM_VENDA integer;
+begin
+  -- Buscar Numero do Caixa Aberto
+  Select
+      cx.Ano_caixa
+    , cx.Num_caixa
+    , cx.Conta_corrente
+  from GET_CAIXA_ABERTO(:Usuario, :Data_pagto, :Forma_pagto) cx
+  into
+      Ano_caixa
+    , Num_caixa
+    , Ccr_caixa;
+
+  -- Montar Historico
+  Select
+      v.Codemp
+    , r.Cnpj
+    , 'VENDA No. ' || r.Anovenda || '/' || r.Numvenda || ' - ' || c.Nome
+    , r.Anovenda
+    , r.Numvenda
+  from TBCONTREC r
+    left join TBCLIENTE c on (c.Cnpj = r.Cnpj)
+    left join TBVENDAS v on (v.Ano = r.Anovenda and v.Codcontrol = r.Numvenda)
+  where r.Anolanc = :Anolanc
+    and r.Numlanc = :Numlanc
+  into
+      Empresa
+    , Cliente
+    , Historico
+    , Ano_venda
+    , Num_venda;
+
+  Historico = coalesce(:Historico, 'ESTORNO DO RECEBIMENTO DO TITULO No. ' || :Anolanc || '/' || :Numlanc || ' P' || :Seq);
+
+  -- Inserir Movimento Caixa
+  Insert Into TBCAIXA_MOVIMENTO (
+      Ano
+    , Numero
+    , Caixa_ano
+    , Caixa_num
+    , Conta_corrente
+    , Forma_pagto
+    , Datahora
+    , Tipo
+    , Historico
+    , Valor
+    , Situacao
+    , Venda_ano
+    , Venda_num
+    , Cliente
+    , Compra_ano
+    , Compra_num
+    , Empresa
+    , Fornecedor
+    , Usuario
+    , Areceber_ano
+    , Areceber_num
+  ) values (
+      Extract(Year from :Data_pagto)
+    , Null
+    , :Ano_caixa
+    , :Num_caixa
+    , :Ccr_caixa
+    , :Forma_pagto
+    , :Data_pagto
+    , 'D'
+    , :Historico
+    , :Valor_baixa
+    , 1
+    , :Ano_venda
+    , :Num_venda
+    , :Cliente
+    , Null
+    , Null
+    , :Empresa
+    , Null
+    , :Usuario
+    , :Anolanc
+    , :Numlanc
+  );
+
+end
+^
+
+SET TERM ; ^
+
+
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBCLIENTE DROP DTCAD;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBCLIENTE
+    ADD DTCAD DMN_DATE_NN;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBCLIENTE
+    ADD VENDEDOR_COD INTEGER;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBCLIENTE
+ADD CONSTRAINT FK_TBCLIENTE_VENDEDOR
+FOREIGN KEY (VENDEDOR_COD)
+REFERENCES TBVENDEDOR(COD);
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBCLIENTE
+    ADD FONECEL DMN_FONERSD,
+    ADD FONECOMERC DMN_FONERSD;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+ALTER TABLE TBEMPRESA
+    ADD FONE2 DMN_FONERSD;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CODIGO position 1;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter PESSOA_FISICA position 2;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CNPJ position 3;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter RZSOC position 4;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter NMFANT position 5;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter IE position 6;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter IM position 7;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter SEGMENTO position 8;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CNAE position 9;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter ENDER position 10;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter COMPLEMENTO position 11;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter BAIRRO position 12;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CEP position 13;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CIDADE position 14;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter UF position 15;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter FONE position 16;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter FONE2 position 17;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter LOGO position 18;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter TLG_TIPO position 19;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter LOG_COD position 20;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter BAI_COD position 21;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CID_COD position 22;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter EST_COD position 23;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter NUMERO_END position 24;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter EMAIL position 25;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter HOME_PAGE position 26;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter CHAVE_ACESSO_NFE position 27;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter PAIS_ID position 28;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter TIPO_REGIME_NFE position 29;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter SERIE_NFE position 30;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter NUMERO_NFE position 31;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter LOTE_ANO_NFE position 32;
+
+/*------ 07/01/2013 21:10:33 --------*/
+
+alter table TBEMPRESA
+alter LOTE_NUM_NFE position 33;
+
+
+/*------ SYSDBA 07/01/2013 21:11:44 --------*/
+
+COMMENT ON COLUMN TBEMPRESA.FONE IS
+'Telefone 1.';
+
+
+
+
+/*------ SYSDBA 07/01/2013 21:11:50 --------*/
+
+COMMENT ON COLUMN TBEMPRESA.FONE2 IS
+'Telefone 1.';
+
+
+
+
+/*------ SYSDBA 07/01/2013 21:12:16 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.VENDEDOR_COD IS
+'Vendedor responsavel pelo cliente.';
+
+
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column CODIGO position 1;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column PESSOA_FISICA position 2;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column CNPJ position 3;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column NOME position 4;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column INSCEST position 5;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column INSCMUN position 6;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column ENDER position 7;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column COMPLEMENTO position 8;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BAIRRO position 9;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column CEP position 10;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column CIDADE position 11;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column UF position 12;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column FONE position 13;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column FONECEL position 14;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column FONECOMERC position 15;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column EMAIL position 16;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column SITE position 17;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column TLG_TIPO position 18;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column LOG_COD position 19;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BAI_COD position 20;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column CID_COD position 21;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column EST_COD position 22;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column NUMERO_END position 23;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column PAIS_ID position 24;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column VALOR_LIMITE_COMPRA position 25;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BLOQUEADO position 26;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BLOQUEADO_DATA position 27;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BLOQUEADO_MOTIVO position 28;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column BLOQUEADO_USUARIO position 29;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column DESBLOQUEADO_DATA position 30;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column DTCAD position 31;
+
+
+/*------ SYSDBA 07/01/2013 21:12:31 --------*/
+
+alter table TBCLIENTE
+alter column VENDEDOR_COD position 32;
+
+
+/*------ SYSDBA 07/01/2013 21:12:42 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONE IS
+'Telefone Fixo.';
+
+
+
+
+/*------ SYSDBA 07/01/2013 21:12:49 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONECEL IS
+'Telefone Celular.';
+
+
+
+
+/*------ SYSDBA 07/01/2013 21:12:57 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONECOMERC IS
+'Telefone Comercial.';
+

@@ -50,6 +50,8 @@ type
     stpCaixaMovimentoPAG: TIBStoredProc;
     stpContaCorrenteSaldo: TIBStoredProc;
     qryCaixaAbertoCONTA_CORRENTE: TIntegerField;
+    stpCaixaMovimentoREC_ESTORNO: TIBStoredProc;
+    stpCaixaMovimentoPAG_ESTORNO: TIBStoredProc;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -122,6 +124,8 @@ var
   function GetLimiteDescontoUser : Currency;
   function CaixaAberto(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint; var CxAno, CxNumero, CxContaCorrente : Integer) : Boolean;
   function SetMovimentoCaixa(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
+    const AnoLancamento, NumLancamento, SeqPagto : Integer; const Valor : Currency; const TipoMov : TTipoMovimentoCaixa) : Boolean;
+  function SetMovimentoCaixaEstorno(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
     const AnoLancamento, NumLancamento, SeqPagto : Integer; const Valor : Currency; const TipoMov : TTipoMovimentoCaixa) : Boolean;
 
 const
@@ -1067,6 +1071,64 @@ begin
       begin
         DMBusiness.ibtrnsctnBusiness.Rollback;
         ShowError('Erro ao tentar registrar o pagamento no movimento de caixa.' + #13#13 + E.Message);
+      end;
+    end;
+
+  finally
+    Result := Return;
+  end;
+end;
+
+function SetMovimentoCaixaEstorno(const Usuario : String; const Data : TDateTime; const FormaPagto : Smallint;
+  const AnoLancamento, NumLancamento, SeqPagto : Integer; const Valor : Currency; const TipoMov : TTipoMovimentoCaixa) : Boolean;
+var
+  Return : Boolean;
+begin
+  try
+
+    Return := False;
+
+    try
+
+      UpdateSequence('GEN_CX_MOVIMENTO_' + IntToStr(YearOf(Data)), 'TBCAIXA_MOVIMENTO', 'NUMERO', 'where ANO = ' + IntToStr(YearOf(Data)));
+
+      if ( TipoMov = tmcxCredito ) then
+        with DMBusiness, stpCaixaMovimentoREC_ESTORNO do
+        begin
+          ParamByName('USUARIO').AsString       := Usuario;
+          ParamByName('DATA_PAGTO').AsDateTime  := Data;
+          ParamByName('FORMA_PAGTO').AsInteger  := FormaPagto;
+          ParamByName('ANOLANC').AsInteger      := AnoLancamento;
+          ParamByName('NUMLANC').AsInteger      := NumLancamento;
+          ParamByName('SEQ').AsInteger          := SeqPagto;
+          ParamByName('VALOR_BAIXA').AsCurrency := Valor;
+
+          ExecProc;
+          CommitTransaction;
+        end
+      else
+      if ( TipoMov = tmcxDebito ) then
+        with DMBusiness, stpCaixaMovimentoPAG_ESTORNO do
+        begin
+          ParamByName('USUARIO').AsString       := Usuario;
+          ParamByName('DATA_PAGTO').AsDateTime  := Data;
+          ParamByName('FORMA_PAGTO').AsInteger  := FormaPagto;
+          ParamByName('ANOLANC').AsInteger      := AnoLancamento;
+          ParamByName('NUMLANC').AsInteger      := NumLancamento;
+          ParamByName('SEQ').AsInteger          := SeqPagto;
+          ParamByName('VALOR_BAIXA').AsCurrency := Valor;
+
+          ExecProc;
+          CommitTransaction;
+        end;
+
+      Return := True;
+
+    except
+      On E : Exception do
+      begin
+        DMBusiness.ibtrnsctnBusiness.Rollback;
+        ShowError('Erro ao tentar registrar o estorno de movimento no caixa.' + #13#13 + E.Message);
       end;
     end;
 

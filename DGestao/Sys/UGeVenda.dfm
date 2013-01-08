@@ -1959,6 +1959,7 @@ inherited frmGeVenda: TfrmGeVenda
               ListSource = dtsFormaPagto
               ParentFont = False
               TabOrder = 0
+              Visible = False
               OnClick = dbFormaPagtoClick
             end
             object dbCondicaoPagto: TDBLookupComboBox
@@ -1979,6 +1980,7 @@ inherited frmGeVenda: TfrmGeVenda
               ListSource = dtsCondicaoPagto
               ParentFont = False
               TabOrder = 1
+              Visible = False
               OnClick = dbCondicaoPagtoClick
             end
             object dbValorFormaPagto: TDBEdit
@@ -1995,6 +1997,7 @@ inherited frmGeVenda: TfrmGeVenda
               Font.Style = [fsBold]
               ParentFont = False
               TabOrder = 2
+              Visible = False
             end
             object btnFormaPagtoSalvar: TBitBtn
               Left = 210
@@ -2261,17 +2264,17 @@ inherited frmGeVenda: TfrmGeVenda
             end
             object dbgFormaPagto: TDBGrid
               Left = 0
-              Top = 40
+              Top = 16
               Width = 572
-              Height = 114
+              Height = 138
               Hint = 
-                'Para inserir nova Formas/Condi'#231#227'o de Pagamento CTRL + INSERT'#13#10#13#10 +
-                'Para inserir editar Formas/Condi'#231#227'o de Pagamento selecionada CTR' +
-                'L + ENTER'#13#10#13#10'Para a exclus'#227'o das Formas/Condi'#231#245'es de Pagamentos ' +
-                'CTRL + DELETE'#13#10#13#10'Observa'#231#227'o:'#13#10'======================='#13#10'Todas as ' +
-                'formas/condi'#231#245'es de pagamentos ser'#227'o exclu'#237'das, zerando o proces' +
-                'so'#13#10'de encerramento da venda com uma forma/condi'#231#227'o de pagamento' +
-                ' definida como'#13#10'padr'#227'o.'
+                'Para inserir nova Forma/Condi'#231#227'o de Pagamento CTRL + INSERT'#13#10#13#10'P' +
+                'ara editar Forma/Condi'#231#227'o de Pagamento selecionada CTRL + ENTER'#13 +
+                #10#13#10'Para a exclus'#227'o das Formas/Condi'#231#245'es de Pagamentos CTRL + DEL' +
+                'ETE'#13#10#13#10'Observa'#231#227'o:'#13#10'======================='#13#10'Todas as formas/con' +
+                'di'#231#245'es de pagamentos ser'#227'o exclu'#237'das, zerando o processo'#13#10'de enc' +
+                'erramento da venda com uma forma/condi'#231#227'o de pagamento definida ' +
+                'como'#13#10'padr'#227'o.'
               Align = alBottom
               Anchors = [akLeft, akTop, akRight, akBottom]
               DataSource = dtsVendaFormaPagto
@@ -3263,6 +3266,7 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'SEQ'
       Origin = 'TVENDASITENS.SEQ'
       Required = True
+      OnGetText = cdsTabelaItensSEQGetText
       DisplayFormat = '00'
     end
     object cdsTabelaItensCODPROD: TIBStringField
@@ -4128,11 +4132,13 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'FORMAPAGTO_COD'
       Origin = '"TBVENDAS_FORMAPAGTO"."FORMAPAGTO_COD"'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
     end
     object cdsVendaFormaPagtoCONDICAOPAGTO_COD: TSmallintField
       DisplayLabel = 'Condi'#231#227'o de Pagamento'
       FieldName = 'CONDICAOPAGTO_COD'
       Origin = '"TBVENDAS_FORMAPAGTO"."CONDICAOPAGTO_COD"'
+      Required = True
     end
     object cdsVendaFormaPagtoVENDA_PRAZO: TSmallintField
       FieldName = 'VENDA_PRAZO'
@@ -4142,6 +4148,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Valor (R$)'
       FieldName = 'VALOR_FPAGTO'
       Origin = '"TBVENDAS_FORMAPAGTO"."VALOR_FPAGTO"'
+      Required = True
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
@@ -4303,7 +4310,6 @@ inherited frmGeVenda: TfrmGeVenda
   object dtsVendaFormaPagto: TDataSource
     AutoEdit = False
     DataSet = cdsVendaFormaPagto
-    OnStateChange = DtSrcTabelaItensStateChange
     Left = 1056
     Top = 168
   end

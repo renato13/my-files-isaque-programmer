@@ -360,4 +360,18 @@ object DMBusiness: TDMBusiness
     Left = 144
     Top = 312
   end
+  object stpCaixaMovimentoREC_ESTORNO: TIBStoredProc
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    StoredProcName = 'SET_CAIXA_MOVIMENTO_REC_ESTORNO'
+    Left = 176
+    Top = 216
+  end
+  object stpCaixaMovimentoPAG_ESTORNO: TIBStoredProc
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    StoredProcName = 'SET_CAIXA_MOVIMENTO_PAG_ESTORNO'
+    Left = 176
+    Top = 264
+  end
 end
