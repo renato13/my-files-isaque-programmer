@@ -388,7 +388,7 @@ end;
 procedure TfrmGeVenda.FormCreate(Sender: TObject);
 begin
   Desativar_Promocoes;
-  
+
   sGeneratorName := 'GEN_VENDAS_CONTROLE_' + FormatFloat('0000', YearOf(GetDateDB));
   
   inherited;
