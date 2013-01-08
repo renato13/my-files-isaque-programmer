@@ -268,7 +268,7 @@ inherited frmGeCliente: TfrmGeCliente
           FocusControl = dbIE
         end
         object lblIM: TLabel [4]
-          Left = 176
+          Left = 192
           Top = 64
           Width = 93
           Height = 13
@@ -288,6 +288,14 @@ inherited frmGeCliente: TfrmGeCliente
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+        end
+        object lblVendedor: TLabel [6]
+          Left = 352
+          Top = 64
+          Width = 111
+          Height = 13
+          Caption = 'Vendedor respons'#225'vel:'
+          FocusControl = dbVendedor
         end
         inherited dbCodigo: TDBEdit
           Color = clMoneyGreen
@@ -340,7 +348,7 @@ inherited frmGeCliente: TfrmGeCliente
         object dbIE: TDBEdit
           Left = 16
           Top = 80
-          Width = 153
+          Width = 169
           Height = 21
           CharCase = ecUpperCase
           DataField = 'INSCEST'
@@ -354,7 +362,7 @@ inherited frmGeCliente: TfrmGeCliente
           TabOrder = 5
         end
         object dbIM: TDBEdit
-          Left = 176
+          Left = 192
           Top = 80
           Width = 153
           Height = 21
@@ -386,6 +394,25 @@ inherited frmGeCliente: TfrmGeCliente
           ParentFont = False
           ReadOnly = True
           TabOrder = 4
+        end
+        object dbVendedor: TDBLookupComboBox
+          Left = 352
+          Top = 80
+          Width = 305
+          Height = 21
+          DataField = 'VENDEDOR_COD'
+          DataSource = DtSrcTabela
+          DropDownRows = 10
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          KeyField = 'COD'
+          ListField = 'NOME'
+          ListSource = dtsVendedor
+          ParentFont = False
+          TabOrder = 7
         end
       end
       object GroupBox1: TGroupBox
@@ -885,7 +912,7 @@ inherited frmGeCliente: TfrmGeCliente
         Top = 237
         Width = 836
         Height = 189
-        ActivePage = tbsFinanceiro
+        ActivePage = tbsContato
         Align = alClient
         TabOrder = 2
         TabStop = False
@@ -1293,6 +1320,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Site'
       '  , cl.Pais_id'
       '  , cl.Valor_limite_compra'
+      '  , cl.Vendedor_cod'
       '  , cl.DtCad '
       '  , cl.Bloqueado'
       '  , cl.Bloqueado_data'
@@ -1485,6 +1513,11 @@ inherited frmGeCliente: TfrmGeCliente
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
+    end
+    object IbDtstTabelaVENDEDOR_COD: TIntegerField
+      DisplayLabel = 'Vendedor repons'#225'vel'
+      FieldName = 'VENDEDOR_COD'
+      Origin = '"TBCLIENTE"."VENDEDOR_COD"'
     end
     object IbDtstTabelaDTCAD: TDateField
       Alignment = taCenter
@@ -1841,5 +1874,17 @@ inherited frmGeCliente: TfrmGeCliente
     DataSet = qryTitulos
     Left = 704
     Top = 73
+  end
+  object tblVendedor: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    TableName = 'TBVENDEDOR'
+    Left = 672
+    Top = 104
+  end
+  object dtsVendedor: TDataSource
+    DataSet = tblVendedor
+    Left = 704
+    Top = 104
   end
 end

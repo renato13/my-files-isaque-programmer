@@ -133,6 +133,11 @@ type
     dbFoneCelular: TDBEdit;
     lblFoneComercial: TLabel;
     dbFoneComercial: TDBEdit;
+    tblVendedor: TIBTable;
+    dtsVendedor: TDataSource;
+    IbDtstTabelaVENDEDOR_COD: TIntegerField;
+    lblVendedor: TLabel;
+    dbVendedor: TDBLookupComboBox;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -235,6 +240,8 @@ end;
 procedure TfrmGeCliente.FormCreate(Sender: TObject);
 begin
   inherited;
+  tblVendedor.Open;
+  
   BloquearClientes;
   
   ControlFirstEdit := dbPessoaFisica;
@@ -346,6 +353,7 @@ begin
   IbDtstTabelaDTCAD.AsDateTime          := GetDateDB;
   IbDtstTabelaBLOQUEADO.AsInteger       := Ord(False);
 
+  IbDtstTabelaVENDEDOR_COD.Clear;
   IbDtstTabelaBLOQUEADO_DATA.Clear;
   IbDtstTabelaBLOQUEADO_MOTIVO.Clear;
   IbDtstTabelaBLOQUEADO_USUARIO.Clear;
