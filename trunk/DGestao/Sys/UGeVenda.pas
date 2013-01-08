@@ -320,6 +320,8 @@ type
     procedure cdsVendaFormaPagtoNewRecord(DataSet: TDataSet);
     procedure cdsVendaFormaPagtoBeforePost(DataSet: TDataSet);
     procedure dbgFormaPagtoEnter(Sender: TObject);
+    procedure cdsTabelaItensSEQGetText(Sender: TField; var Text: String;
+      DisplayText: Boolean);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -354,7 +356,7 @@ implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC;
+  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto;
 
 {$R *.dfm}
 
@@ -556,6 +558,7 @@ begin
     AddStrings( SQL_Itens );
     Add('where i.Ano        = ' + IntToStr(AnoVenda));
     Add('  and i.Codcontrol = ' + IntToStr(ControleVenda));
+    Add('order by i.Ano, i.Codcontrol, i.Seq');
   end;
 
   cdsTabelaItens.Open;
@@ -1228,17 +1231,6 @@ begin
       btnProdutoEditar.SetFocus;
   end
   else
-//  if ( IbDtstTabelaFORMAPAGTO_COD.AsInteger = 0 ) then
-//  begin
-//    ShowWarning('Favor informar a forma de pagamento');
-//    dbFormaPagto.SetFocus;
-//  end
-//  else
-//  if ( IbDtstTabelaCONDICAOPAGTO_COD.AsInteger = 0 ) then
-//  begin
-//    ShowWarning('Favor informar a condição de pagamento');
-//    dbCondicaoPagto.SetFocus;
-//  end
   if ( cdsVendaFormaPagto.RecordCount = 0 ) then
   begin
     ShowWarning('Favor informar a forma e/ou condição de pagamento');
@@ -1250,16 +1242,14 @@ begin
   begin
     ShowWarning('Favor informar corretamente o valor de cada forma/condição de pagamento');
     pgcMaisDados.ActivePage := tbsRecebimento;
-    
-    dbFormaPagto.SetFocus;
+    dbgFormaPagto.SetFocus;
   end
   else
   if ( GetTotalValorFormaPagto > IbDtstTabelaTOTALVENDA.AsCurrency ) then
   begin
     ShowWarning('O Total A Pagar informado na forma/condição de pagamento é maior que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
     pgcMaisDados.ActivePage := tbsRecebimento;
-
-    dbFormaPagto.SetFocus;
+    dbgFormaPagto.SetFocus;
   end
   else
   if ( ShowConfirm('Confirma a finalização da venda selecionada?') ) then
@@ -1776,6 +1766,7 @@ begin
     if (State in [dsEdit, dsInsert]) then
       Post;
 
+
     First;
     while not Eof do
     begin
@@ -1793,6 +1784,7 @@ procedure TfrmGeVenda.dbgFormaPagtoKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   cAPagar : Currency;
+  iFormPG : Integer;
 begin
   // Inserir
 
@@ -1802,16 +1794,17 @@ begin
       Exit;
 
     cAPagar := dbValorTotal.Field.AsCurrency - GetTotalValorFormaPagto;
-    if ( cAPagar > 0 ) then
-    begin
-      cdsVendaFormaPagto.Append;
-      cdsVendaFormaPagtoFORMAPAGTO_COD.Clear;
-      cdsVendaFormaPagtoCONDICAOPAGTO_COD.Clear;
-      cdsVendaFormaPagtoVALOR_FPAGTO.Value := cAPagar;
-      cdsVendaFormaPagtoVENDA_PRAZO.Value  := 0;
 
-      dbFormaPagto.SetFocus;
-    end;
+    cdsVendaFormaPagto.Append;
+    cdsVendaFormaPagtoFORMAPAGTO_COD.Clear;
+    cdsVendaFormaPagtoCONDICAOPAGTO_COD.Clear;
+    cdsVendaFormaPagtoVALOR_FPAGTO.Value := cAPagar;
+    cdsVendaFormaPagtoVENDA_PRAZO.Value  := 0;
+
+    if InserirFormaPagto(Self, cAPagar) then
+      cdsVendaFormaPagto.Post
+    else
+      cdsVendaFormaPagto.Cancel;
   end
   else
 
@@ -1822,8 +1815,18 @@ begin
     if not dtsVendaFormaPagto.AutoEdit then
       Exit;
 
+    iFormPG := cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger;
+
+    cAPagar := dbValorTotal.Field.AsCurrency + cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency;
+    cAPagar := cAPagar - GetTotalValorFormaPagto;
+
+    cdsVendaFormaPagto.Locate('FORMAPAGTO_COD', iFormPG, []);
     cdsVendaFormaPagto.Edit;
-    dbFormaPagto.SetFocus;
+
+    if InserirFormaPagto(Self, cAPagar) then
+      cdsVendaFormaPagto.Post
+    else
+      cdsVendaFormaPagto.Cancel;
   end
   else
 
@@ -1908,6 +1911,15 @@ procedure TfrmGeVenda.dbgFormaPagtoEnter(Sender: TObject);
 begin
   if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
     cdsVendaFormaPagto.Post;
+end;
+
+procedure TfrmGeVenda.cdsTabelaItensSEQGetText(Sender: TField;
+  var Text: String; DisplayText: Boolean);
+begin
+  if Sender.IsNull then
+    Exit;
+
+  Text := IntToStr(cdsTabelaItens.RecNo);
 end;
 
 end.

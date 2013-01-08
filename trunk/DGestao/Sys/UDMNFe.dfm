@@ -400,7 +400,11 @@ object DMNFe: TDMNFe
       '  left join TBCST_COFINS cs on (cs.Codigo = p.Cst_cofins)'
       'where i.Ano = :anovenda'
       '  and i.Codcontrol = :numvenda'
-      '')
+      ''
+      'order by '
+      '    i.Ano'
+      '  , i.Codcontrol'
+      '  , i.Seq')
     Left = 144
     Top = 168
     ParamData = <
@@ -1061,7 +1065,6 @@ object DMNFe: TDMNFe
           Width = 22.677180000000000000
           Height = 18.897650000000000000
           ShowHint = False
-          DataField = 'SEQ'
           DataSet = frdItens
           DataSetName = 'frdItens'
           Font.Charset = DEFAULT_CHARSET
@@ -1071,7 +1074,7 @@ object DMNFe: TDMNFe
           Font.Style = []
           HAlign = haCenter
           Memo.UTF8 = (
-            '[frdItens."SEQ"]')
+            '[Line]')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter
@@ -2848,7 +2851,7 @@ object DMNFe: TDMNFe
           Font.Name = 'Arial Narrow'
           Font.Style = []
           Memo.UTF8 = (
-            '[FormatFloat('#39'#00'#39',<frdItens."SEQ">)]')
+            '[FormatFloat('#39'#00'#39',<Line>)]')
           ParentFont = False
           WordWrap = False
           VAlign = vaCenter

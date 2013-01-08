@@ -56,8 +56,8 @@ type
     dbNumero: TDBEdit;
     lblComplemento: TLabel;
     dbComplemento: TDBEdit;
-    lblFone: TLabel;
-    dbFone: TDBEdit;
+    lblFoneFixo: TLabel;
+    dbFoneFixo: TDBEdit;
     lblEmail: TLabel;
     dbEmail: TDBEdit;
     lblHome: TLabel;
@@ -127,6 +127,12 @@ type
     IbDtstTabelaDESBLOQUEADO_DATA: TDateField;
     Bevel10: TBevel;
     BtBtnDesbloquear: TBitBtn;
+    IbDtstTabelaFONECEL: TIBStringField;
+    IbDtstTabelaFONECOMERC: TIBStringField;
+    lblFoneCelular: TLabel;
+    dbFoneCelular: TDBEdit;
+    lblFoneComercial: TLabel;
+    dbFoneComercial: TDBEdit;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);

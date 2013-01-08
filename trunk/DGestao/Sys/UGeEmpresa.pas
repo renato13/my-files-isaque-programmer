@@ -65,8 +65,8 @@ type
     dbNumero: TDBEdit;
     lblComplemento: TLabel;
     dbComplemento: TDBEdit;
-    lblFone: TLabel;
-    dbFone: TDBEdit;
+    lblFone1: TLabel;
+    dbFone1: TDBEdit;
     lblEmail: TLabel;
     dbEmail: TDBEdit;
     lblHome: TLabel;
@@ -109,6 +109,9 @@ type
     IbDtstTabelaSEGMENTO: TSmallintField;
     lblSegmento: TLabel;
     dbSegmento: TDBLookupComboBox;
+    IbDtstTabelaFONE2: TIBStringField;
+    lblFone2: TLabel;
+    dbFone2: TDBEdit;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);

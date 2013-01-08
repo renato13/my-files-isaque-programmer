@@ -399,9 +399,15 @@ begin
   begin
     // Diretoria, Gerente Financeiro, Gerente ADM, Masterdados
 
-    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
-      Exit;
+    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [
+        FUNCTION_USER_ID_DIRETORIA
+      , FUNCTION_USER_ID_GERENTE_ADM
+      , FUNCTION_USER_ID_GERENTE_FIN
+      , FUNCTION_USER_ID_SYSTEM_ADM])) then Exit;
 
+//    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
+//      Exit;
+//
     if ( not cdsPagamentos.IsEmpty ) then
     begin
       CxAno    := 0;
@@ -422,6 +428,28 @@ begin
 
       if ShowConfirm('Confirma a exclusão do(s) registro(s) de pagamento(s)?') then
       begin
+
+        // Registrar Estorno
+        
+        if ( CxContaCorrente > 0 ) then
+        begin
+          cdsPagamentos.First;
+
+          while not cdsPagamentos.Eof do
+          begin
+            SetMovimentoCaixaEstorno(
+              GetUserApp,
+              cdsPagamentosDATA_PAGTO.AsDateTime + Time,
+              cdsPagamentosFORMA_PAGTO.AsInteger,
+              cdsPagamentosANOLANC.AsInteger,
+              cdsPagamentosNUMLANC.AsInteger,
+              cdsPagamentosSEQ.AsInteger,
+              cdsPagamentosVALOR_BAIXA.AsCurrency,
+              tmcxDebito);
+
+            cdsPagamentos.Next;
+          end;
+        end;
 
         with DMBusiness, qryBusca do
         begin

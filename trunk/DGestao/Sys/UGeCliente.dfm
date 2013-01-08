@@ -885,22 +885,22 @@ inherited frmGeCliente: TfrmGeCliente
         Top = 237
         Width = 836
         Height = 189
-        ActivePage = tbsContato
+        ActivePage = tbsFinanceiro
         Align = alClient
         TabOrder = 2
         TabStop = False
         object tbsContato: TTabSheet
           Caption = 'Contato'
-          object lblFone: TLabel
+          object lblFoneFixo: TLabel
             Left = 8
             Top = 0
-            Width = 28
+            Width = 69
             Height = 13
-            Caption = 'Fone:'
-            FocusControl = dbFone
+            Caption = 'Telefone Fixo:'
+            FocusControl = dbFoneFixo
           end
           object lblEmail: TLabel
-            Left = 168
+            Left = 488
             Top = 0
             Width = 32
             Height = 13
@@ -915,7 +915,23 @@ inherited frmGeCliente: TfrmGeCliente
             Caption = 'Home page:'
             FocusControl = dbHome
           end
-          object dbFone: TDBEdit
+          object lblFoneCelular: TLabel
+            Left = 168
+            Top = 0
+            Width = 82
+            Height = 13
+            Caption = 'Telefone Celular:'
+            FocusControl = dbFoneCelular
+          end
+          object lblFoneComercial: TLabel
+            Left = 328
+            Top = 0
+            Width = 82
+            Height = 13
+            Caption = 'Telefone Celular:'
+            FocusControl = dbFoneComercial
+          end
+          object dbFoneFixo: TDBEdit
             Left = 8
             Top = 16
             Width = 153
@@ -933,7 +949,7 @@ inherited frmGeCliente: TfrmGeCliente
             TabOrder = 0
           end
           object dbEmail: TDBEdit
-            Left = 168
+            Left = 488
             Top = 16
             Width = 305
             Height = 21
@@ -946,12 +962,12 @@ inherited frmGeCliente: TfrmGeCliente
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 3
           end
           object dbHome: TDBEdit
             Left = 8
             Top = 56
-            Width = 465
+            Width = 473
             Height = 21
             CharCase = ecLowerCase
             DataField = 'SITE'
@@ -962,8 +978,42 @@ inherited frmGeCliente: TfrmGeCliente
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 4
             OnKeyPress = ProximoCampoKeyPress
+          end
+          object dbFoneCelular: TDBEdit
+            Left = 168
+            Top = 16
+            Width = 153
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'FONECEL'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            MaxLength = 13
+            ParentFont = False
+            TabOrder = 1
+          end
+          object dbFoneComercial: TDBEdit
+            Left = 328
+            Top = 16
+            Width = 153
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'FONECOMERC'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            MaxLength = 13
+            ParentFont = False
+            TabOrder = 2
           end
         end
         object tbsFinanceiro: TTabSheet
@@ -1232,6 +1282,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Cidade'
       '  , cl.Uf'
       '  , cl.Fone'
+      '  , cl.FoneCel'
+      '  , cl.FoneComerc'
       '  , cl.Tlg_tipo'
       '  , cl.Log_cod'
       '  , cl.Bai_cod'
@@ -1342,9 +1394,23 @@ inherited frmGeCliente: TfrmGeCliente
       Size = 2
     end
     object IbDtstTabelaFONE: TIBStringField
-      DisplayLabel = 'Fone'
+      DisplayLabel = 'Telefone Fixo'
       FieldName = 'FONE'
       Origin = 'TBEMPRESA.FONE'
+      EditMask = '(99)9999.9999;0; '
+      Size = 11
+    end
+    object IbDtstTabelaFONECEL: TIBStringField
+      DisplayLabel = 'Telefone Celular'
+      FieldName = 'FONECEL'
+      Origin = '"TBCLIENTE"."FONECEL"'
+      EditMask = '(99)9999.9999;0; '
+      Size = 11
+    end
+    object IbDtstTabelaFONECOMERC: TIBStringField
+      DisplayLabel = 'Telefone Comercial'
+      FieldName = 'FONECOMERC'
+      Origin = '"TBCLIENTE"."FONECOMERC"'
       EditMask = '(99)9999.9999;0; '
       Size = 11
     end
@@ -1473,6 +1539,8 @@ inherited frmGeCliente: TfrmGeCliente
       '  CIDADE,'
       '  UF,'
       '  FONE,'
+      '  FONECEL,'
+      '  FONECOMERC,'
       '  EMAIL,'
       '  SITE,'
       '  TLG_TIPO,'
@@ -1483,77 +1551,82 @@ inherited frmGeCliente: TfrmGeCliente
       '  NUMERO_END,'
       '  PAIS_ID,'
       '  VALOR_LIMITE_COMPRA,'
-      '  DTCAD,'
       '  BLOQUEADO,'
       '  BLOQUEADO_DATA,'
       '  BLOQUEADO_MOTIVO,'
       '  BLOQUEADO_USUARIO,'
-      '  DESBLOQUEADO_DATA'
+      '  DESBLOQUEADO_DATA,'
+      '  DTCAD,'
+      '  VENDEDOR_COD'
       'from TBCLIENTE '
       'where'
       '  CNPJ = :CNPJ')
     ModifySQL.Strings = (
       'update TBCLIENTE'
       'set'
-      '  CODIGO = :CODIGO,'
-      '  PESSOA_FISICA = :PESSOA_FISICA,'
-      '  CNPJ = :CNPJ,'
-      '  NOME = :NOME,'
-      '  INSCEST = :INSCEST,'
-      '  INSCMUN = :INSCMUN,'
-      '  ENDER = :ENDER,'
-      '  COMPLEMENTO = :COMPLEMENTO,'
-      '  BAIRRO = :BAIRRO,'
-      '  CEP = :CEP,'
-      '  CIDADE = :CIDADE,'
-      '  UF = :UF,'
-      '  FONE = :FONE,'
-      '  EMAIL = :EMAIL,'
-      '  SITE = :SITE,'
-      '  TLG_TIPO = :TLG_TIPO,'
-      '  LOG_COD = :LOG_COD,'
       '  BAI_COD = :BAI_COD,'
-      '  CID_COD = :CID_COD,'
-      '  EST_COD = :EST_COD,'
-      '  NUMERO_END = :NUMERO_END,'
-      '  PAIS_ID = :PAIS_ID,'
-      '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA,'
-      '  DTCAD = :DTCAD,'
+      '  BAIRRO = :BAIRRO,'
       '  BLOQUEADO = :BLOQUEADO,'
       '  BLOQUEADO_DATA = :BLOQUEADO_DATA,'
       '  BLOQUEADO_MOTIVO = :BLOQUEADO_MOTIVO,'
       '  BLOQUEADO_USUARIO = :BLOQUEADO_USUARIO,'
-      '  DESBLOQUEADO_DATA = :DESBLOQUEADO_DATA'
+      '  CEP = :CEP,'
+      '  CID_COD = :CID_COD,'
+      '  CIDADE = :CIDADE,'
+      '  CNPJ = :CNPJ,'
+      '  CODIGO = :CODIGO,'
+      '  COMPLEMENTO = :COMPLEMENTO,'
+      '  DESBLOQUEADO_DATA = :DESBLOQUEADO_DATA,'
+      '  DTCAD = :DTCAD,'
+      '  EMAIL = :EMAIL,'
+      '  ENDER = :ENDER,'
+      '  EST_COD = :EST_COD,'
+      '  FONE = :FONE,'
+      '  FONECEL = :FONECEL,'
+      '  FONECOMERC = :FONECOMERC,'
+      '  INSCEST = :INSCEST,'
+      '  INSCMUN = :INSCMUN,'
+      '  LOG_COD = :LOG_COD,'
+      '  NOME = :NOME,'
+      '  NUMERO_END = :NUMERO_END,'
+      '  PAIS_ID = :PAIS_ID,'
+      '  PESSOA_FISICA = :PESSOA_FISICA,'
+      '  SITE = :SITE,'
+      '  TLG_TIPO = :TLG_TIPO,'
+      '  UF = :UF,'
+      '  VALOR_LIMITE_COMPRA = :VALOR_LIMITE_COMPRA,'
+      '  VENDEDOR_COD = :VENDEDOR_COD'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBCLIENTE'
       
-        '  (CODIGO, PESSOA_FISICA, CNPJ, NOME, INSCEST, INSCMUN, ENDER, C' +
-        'OMPLEMENTO, '
+        '  (BAI_COD, BAIRRO, BLOQUEADO, BLOQUEADO_DATA, BLOQUEADO_MOTIVO,' +
+        ' BLOQUEADO_USUARIO, '
       
-        '   BAIRRO, CEP, CIDADE, UF, FONE, EMAIL, SITE, TLG_TIPO, LOG_COD' +
-        ', BAI_COD, '
+        '   CEP, CID_COD, CIDADE, CNPJ, CODIGO, COMPLEMENTO, DESBLOQUEADO' +
+        '_DATA, '
       
-        '   CID_COD, EST_COD, NUMERO_END, PAIS_ID, VALOR_LIMITE_COMPRA, D' +
-        'TCAD, BLOQUEADO, '
+        '   DTCAD, EMAIL, ENDER, EST_COD, FONE, FONECEL, FONECOMERC, INSC' +
+        'EST, INSCMUN, '
       
-        '   BLOQUEADO_DATA, BLOQUEADO_MOTIVO, BLOQUEADO_USUARIO, DESBLOQU' +
-        'EADO_DATA)'
+        '   LOG_COD, NOME, NUMERO_END, PAIS_ID, PESSOA_FISICA, SITE, TLG_' +
+        'TIPO, UF, '
+      '   VALOR_LIMITE_COMPRA, VENDEDOR_COD)'
       'values'
       
-        '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :NOME, :INSCEST, :INSCMUN, :E' +
-        'NDER, :COMPLEMENTO, '
+        '  (:BAI_COD, :BAIRRO, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MO' +
+        'TIVO, :BLOQUEADO_USUARIO, '
       
-        '   :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :EMAIL, :SITE, :TLG_TIPO,' +
-        ' :LOG_COD, '
+        '   :CEP, :CID_COD, :CIDADE, :CNPJ, :CODIGO, :COMPLEMENTO, :DESBL' +
+        'OQUEADO_DATA, '
       
-        '   :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :PAIS_ID, :VALOR_L' +
-        'IMITE_COMPRA, '
+        '   :DTCAD, :EMAIL, :ENDER, :EST_COD, :FONE, :FONECEL, :FONECOMER' +
+        'C, :INSCEST, '
       
-        '   :DTCAD, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MOTIVO, :BLOQ' +
-        'UEADO_USUARIO, '
-      '   :DESBLOQUEADO_DATA)')
+        '   :INSCMUN, :LOG_COD, :NOME, :NUMERO_END, :PAIS_ID, :PESSOA_FIS' +
+        'ICA, :SITE, '
+      '   :TLG_TIPO, :UF, :VALOR_LIMITE_COMPRA, :VENDEDOR_COD)')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'

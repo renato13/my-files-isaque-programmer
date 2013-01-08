@@ -711,21 +711,21 @@ inherited frmGeEmpresa: TfrmGeEmpresa
         Top = 237
         Width = 739
         Height = 118
-        ActivePage = tbsParametros
+        ActivePage = tbsContato
         Align = alClient
         TabOrder = 2
         object tbsContato: TTabSheet
           Caption = 'Contato'
-          object lblFone: TLabel
+          object lblFone1: TLabel
             Left = 8
             Top = 0
-            Width = 28
+            Width = 37
             Height = 13
-            Caption = 'Fone:'
-            FocusControl = dbFone
+            Caption = 'Fone 1:'
+            FocusControl = dbFone1
           end
           object lblEmail: TLabel
-            Left = 168
+            Left = 328
             Top = 0
             Width = 32
             Height = 13
@@ -740,7 +740,15 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             Caption = 'Home page:'
             FocusControl = dbHome
           end
-          object dbFone: TDBEdit
+          object lblFone2: TLabel
+            Left = 168
+            Top = 0
+            Width = 37
+            Height = 13
+            Caption = 'Fone 2:'
+            FocusControl = dbFone2
+          end
+          object dbFone1: TDBEdit
             Left = 8
             Top = 16
             Width = 153
@@ -757,7 +765,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             TabOrder = 0
           end
           object dbEmail: TDBEdit
-            Left = 168
+            Left = 328
             Top = 16
             Width = 305
             Height = 21
@@ -770,7 +778,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 2
           end
           object dbHome: TDBEdit
             Left = 8
@@ -786,7 +794,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 3
             OnKeyPress = ProximoCampoKeyPress
           end
           object dbLogo: TDBImage
@@ -799,7 +807,23 @@ inherited frmGeEmpresa: TfrmGeEmpresa
             DataSource = DtSrcTabela
             PopupMenu = ppmLogo
             Stretch = True
-            TabOrder = 3
+            TabOrder = 4
+          end
+          object dbFone2: TDBEdit
+            Left = 168
+            Top = 16
+            Width = 153
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'FONE2'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 1
           end
         end
         object tbsParametros: TTabSheet
@@ -1089,6 +1113,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  , e.Cidade'
       '  , e.Uf'
       '  , e.Fone'
+      '  , e.Fone2'
       '  , e.Logo'
       '  , e.Tlg_tipo'
       '  , e.Log_cod'
@@ -1216,9 +1241,16 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       Size = 2
     end
     object IbDtstTabelaFONE: TIBStringField
-      DisplayLabel = 'Fone'
+      DisplayLabel = 'Fone 1'
       FieldName = 'FONE'
       Origin = 'TBEMPRESA.FONE'
+      EditMask = '(99)9999.9999;0; '
+      Size = 11
+    end
+    object IbDtstTabelaFONE2: TIBStringField
+      DisplayLabel = 'Fone 2'
+      FieldName = 'FONE2'
+      Origin = '"TBEMPRESA"."FONE2"'
       EditMask = '(99)9999.9999;0; '
       Size = 11
     end
@@ -1335,8 +1367,8 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  NMFANT,'
       '  IE,'
       '  IM,'
-      '  CNAE,'
       '  SEGMENTO,'
+      '  CNAE,'
       '  ENDER,'
       '  COMPLEMENTO,'
       '  BAIRRO,'
@@ -1344,6 +1376,7 @@ inherited frmGeEmpresa: TfrmGeEmpresa
       '  CIDADE,'
       '  UF,'
       '  FONE,'
+      '  FONE2,'
       '  LOGO,'
       '  TLG_TIPO,'
       '  LOG_COD,'
@@ -1366,68 +1399,70 @@ inherited frmGeEmpresa: TfrmGeEmpresa
     ModifySQL.Strings = (
       'update TBEMPRESA'
       'set'
-      '  CODIGO = :CODIGO,'
-      '  PESSOA_FISICA = :PESSOA_FISICA,'
-      '  CNPJ = :CNPJ,'
-      '  RZSOC = :RZSOC,'
-      '  NMFANT = :NMFANT,'
-      '  IE = :IE,'
-      '  IM = :IM,'
-      '  CNAE = :CNAE,'
-      '  SEGMENTO = :SEGMENTO,'
-      '  ENDER = :ENDER,'
-      '  COMPLEMENTO = :COMPLEMENTO,'
+      '  BAI_COD = :BAI_COD,'
       '  BAIRRO = :BAIRRO,'
       '  CEP = :CEP,'
-      '  CIDADE = :CIDADE,'
-      '  UF = :UF,'
-      '  FONE = :FONE,'
-      '  LOGO = :LOGO,'
-      '  TLG_TIPO = :TLG_TIPO,'
-      '  LOG_COD = :LOG_COD,'
-      '  BAI_COD = :BAI_COD,'
-      '  CID_COD = :CID_COD,'
-      '  EST_COD = :EST_COD,'
-      '  NUMERO_END = :NUMERO_END,'
-      '  EMAIL = :EMAIL,'
-      '  HOME_PAGE = :HOME_PAGE,'
       '  CHAVE_ACESSO_NFE = :CHAVE_ACESSO_NFE,'
-      '  PAIS_ID = :PAIS_ID,'
-      '  TIPO_REGIME_NFE = :TIPO_REGIME_NFE,'
-      '  SERIE_NFE = :SERIE_NFE,'
-      '  NUMERO_NFE = :NUMERO_NFE,'
+      '  CID_COD = :CID_COD,'
+      '  CIDADE = :CIDADE,'
+      '  CNAE = :CNAE,'
+      '  CNPJ = :CNPJ,'
+      '  CODIGO = :CODIGO,'
+      '  COMPLEMENTO = :COMPLEMENTO,'
+      '  EMAIL = :EMAIL,'
+      '  ENDER = :ENDER,'
+      '  EST_COD = :EST_COD,'
+      '  FONE = :FONE,'
+      '  FONE2 = :FONE2,'
+      '  HOME_PAGE = :HOME_PAGE,'
+      '  IE = :IE,'
+      '  IM = :IM,'
+      '  LOG_COD = :LOG_COD,'
+      '  LOGO = :LOGO,'
       '  LOTE_ANO_NFE = :LOTE_ANO_NFE,'
-      '  LOTE_NUM_NFE = :LOTE_NUM_NFE'
+      '  LOTE_NUM_NFE = :LOTE_NUM_NFE,'
+      '  NMFANT = :NMFANT,'
+      '  NUMERO_END = :NUMERO_END,'
+      '  NUMERO_NFE = :NUMERO_NFE,'
+      '  PAIS_ID = :PAIS_ID,'
+      '  PESSOA_FISICA = :PESSOA_FISICA,'
+      '  RZSOC = :RZSOC,'
+      '  SEGMENTO = :SEGMENTO,'
+      '  SERIE_NFE = :SERIE_NFE,'
+      '  TIPO_REGIME_NFE = :TIPO_REGIME_NFE,'
+      '  TLG_TIPO = :TLG_TIPO,'
+      '  UF = :UF'
       'where'
       '  CNPJ = :OLD_CNPJ')
     InsertSQL.Strings = (
       'insert into TBEMPRESA'
       
-        '  (CODIGO, PESSOA_FISICA, CNPJ, RZSOC, NMFANT, IE, IM, CNAE, SEG' +
-        'MENTO, '
+        '  (BAI_COD, BAIRRO, CEP, CHAVE_ACESSO_NFE, CID_COD, CIDADE, CNAE' +
+        ', CNPJ, '
       
-        '   ENDER, COMPLEMENTO, BAIRRO, CEP, CIDADE, UF, FONE, LOGO, TLG_' +
-        'TIPO, LOG_COD, '
+        '   CODIGO, COMPLEMENTO, EMAIL, ENDER, EST_COD, FONE, FONE2, HOME' +
+        '_PAGE, '
       
-        '   BAI_COD, CID_COD, EST_COD, NUMERO_END, EMAIL, HOME_PAGE, CHAV' +
-        'E_ACESSO_NFE, '
+        '   IE, IM, LOG_COD, LOGO, LOTE_ANO_NFE, LOTE_NUM_NFE, NMFANT, NU' +
+        'MERO_END, '
       
-        '   PAIS_ID, TIPO_REGIME_NFE, SERIE_NFE, NUMERO_NFE, LOTE_ANO_NFE' +
-        ', LOTE_NUM_NFE)'
+        '   NUMERO_NFE, PAIS_ID, PESSOA_FISICA, RZSOC, SEGMENTO, SERIE_NF' +
+        'E, TIPO_REGIME_NFE, '
+      '   TLG_TIPO, UF)'
       'values'
       
-        '  (:CODIGO, :PESSOA_FISICA, :CNPJ, :RZSOC, :NMFANT, :IE, :IM, :C' +
-        'NAE, :SEGMENTO, '
+        '  (:BAI_COD, :BAIRRO, :CEP, :CHAVE_ACESSO_NFE, :CID_COD, :CIDADE' +
+        ', :CNAE, '
       
-        '   :ENDER, :COMPLEMENTO, :BAIRRO, :CEP, :CIDADE, :UF, :FONE, :LO' +
-        'GO, :TLG_TIPO, '
+        '   :CNPJ, :CODIGO, :COMPLEMENTO, :EMAIL, :ENDER, :EST_COD, :FONE' +
+        ', :FONE2, '
       
-        '   :LOG_COD, :BAI_COD, :CID_COD, :EST_COD, :NUMERO_END, :EMAIL, ' +
-        ':HOME_PAGE, '
+        '   :HOME_PAGE, :IE, :IM, :LOG_COD, :LOGO, :LOTE_ANO_NFE, :LOTE_N' +
+        'UM_NFE, '
       
-        '   :CHAVE_ACESSO_NFE, :PAIS_ID, :TIPO_REGIME_NFE, :SERIE_NFE, :N' +
-        'UMERO_NFE, '
-      '   :LOTE_ANO_NFE, :LOTE_NUM_NFE)')
+        '   :NMFANT, :NUMERO_END, :NUMERO_NFE, :PAIS_ID, :PESSOA_FISICA, ' +
+        ':RZSOC, '
+      '   :SEGMENTO, :SERIE_NFE, :TIPO_REGIME_NFE, :TLG_TIPO, :UF)')
     DeleteSQL.Strings = (
       'delete from TBEMPRESA'
       'where'
