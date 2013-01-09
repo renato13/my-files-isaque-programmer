@@ -417,7 +417,7 @@ begin
   DisplayFormatCodigo := '###0000000';
 
   NomeTabela     := 'TBPRODUTO';
-  CampoCodigo    := 'Codigo';
+  CampoCodigo    := 'p.Codigo';
   CampoDescricao := 'p.Descri';
 
   UpdateGenerator;

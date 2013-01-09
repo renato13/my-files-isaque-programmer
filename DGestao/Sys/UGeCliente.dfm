@@ -1321,7 +1321,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Pais_id'
       '  , cl.Valor_limite_compra'
       '  , cl.Vendedor_cod'
-      '  , cl.DtCad '
+      '  , coalesce(cl.DtCad, current_date) as DtCad'
       '  , cl.Bloqueado'
       '  , cl.Bloqueado_data'
       '  , cl.Bloqueado_motivo'
@@ -1524,7 +1524,7 @@ inherited frmGeCliente: TfrmGeCliente
       DisplayLabel = 'Data Cadastro'
       FieldName = 'DTCAD'
       Origin = 'TBCLIENTE.DTCAD'
-      Required = True
+      ProviderFlags = [pfInUpdate]
       DisplayFormat = 'dd/mm/yyyy'
     end
     object IbDtstTabelaBLOQUEADO: TSmallintField

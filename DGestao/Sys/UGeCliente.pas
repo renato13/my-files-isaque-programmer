@@ -155,6 +155,7 @@ type
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure BtBtnDesbloquearClick(Sender: TObject);
+    procedure btbtnAlterarClick(Sender: TObject);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -241,7 +242,7 @@ procedure TfrmGeCliente.FormCreate(Sender: TObject);
 begin
   inherited;
   tblVendedor.Open;
-  
+
   BloquearClientes;
   
   ControlFirstEdit := dbPessoaFisica;
@@ -516,6 +517,14 @@ begin
         IbDtstTabela.Open;
         IbDtstTabela.Locate('CNPJ', sCNPJ, []);
       end;
+end;
+
+procedure TfrmGeCliente.btbtnAlterarClick(Sender: TObject);
+begin
+  inherited;
+  if ( not btbtnAlterar.Enabled ) then
+    if ( IbDtstTabelaDTCAD.IsNull ) then
+      IbDtstTabelaDTCAD.AsDateTime := GetDateTimeDB;
 end;
 
 initialization

@@ -492,7 +492,7 @@ begin
         IbDtstTabela.Close;
         IbDtstTabela.Open;
 
-        IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
+        IbDtstTabela.Locate('ANOLANC;NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
 
         AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
 

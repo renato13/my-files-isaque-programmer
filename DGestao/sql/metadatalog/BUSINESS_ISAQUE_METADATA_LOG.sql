@@ -7089,3 +7089,9 @@ COMMENT ON COLUMN TBCLIENTE.FONECOMERC IS
 /*------ 07/01/2013 21:38:37 --------*/
 
 GRANT ALL ON VW_TIPO_MOVIMENTO_CAIXA TO "PUBLIC";
+/*!!! Error occured !!!
+Invalid token.
+SQL error code = -104.
+Datatypes are not comparable in expression COALESCE.
+
+*/

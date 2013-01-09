@@ -242,8 +242,6 @@ inherited frmGeFormaPagto: TfrmGeFormaPagto
   object tblContaCorrente: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
