@@ -1,23 +1,22 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas',0,1,299,27,351,0,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendedor.pas',0,1,45,132,56,0,0
-File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeCliente.pas',0,1,241,141,252,1,0
+File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFormaPagto.pas',0,1,52,141,63,1,0
+File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeCliente.pas',0,1,241,120,244,1,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendedor.pas',0,1,45,132,56,0,0
 File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFornecedor.pas',0,1,132,141,143,0,0
 File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeGrupoProduto.pas',0,1,38,141,49,0,0
 File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeSecaoProduto.pas',0,1,38,141,49,0,0
 File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeUnidade.pas',0,1,55,141,66,0,0
 File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeTabelaCFOP.pas',0,1,41,141,52,0,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFormaPagto.pas',0,1,52,141,63,0,0
-File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeBancos.pas',0,1,96,135,107,0,0
+File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeBancos.pas',0,1,96,135,107,0,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAPagar.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAPagar.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
 Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UGeTeste.pas
 Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UGeCondicaoPagto.pas
 Module9=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
@@ -26,22 +25,17 @@ Module11=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 Count=12
 EditWindowCount=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -51,12 +45,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -86,11 +85,11 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
@@ -100,7 +99,7 @@ FormOnTop=0
 
 [EditWindow0]
 ViewCount=12
-CurrentView=2
+CurrentView=11
 View0=0
 View1=1
 View2=2
@@ -130,9 +129,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -288,7 +287,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Name
+SelectedItem=
 ExpandedItems=
 HiddenCategories=
 
@@ -347,18 +346,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=858
+Height=770
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=858
+ClientHeight=770
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=12
 Top=0
