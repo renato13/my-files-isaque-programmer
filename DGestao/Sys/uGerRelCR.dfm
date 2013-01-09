@@ -1,11 +1,11 @@
 object frmGerRelCR: TfrmGerRelCR
-  Left = 337
-  Top = 169
+  Left = 373
+  Top = 147
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio Contas a Receber'
-  ClientHeight = 218
-  ClientWidth = 308
+  ClientHeight = 260
+  ClientWidth = 309
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,8 +20,8 @@ object frmGerRelCR: TfrmGerRelCR
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 177
-    Width = 308
+    Top = 217
+    Width = 309
     Height = 48
     Align = alTop
     BevelOuter = bvLowered
@@ -116,10 +116,10 @@ object frmGerRelCR: TfrmGerRelCR
     end
   end
   object qckrpCR: TQuickRep
-    Left = 14
+    Left = -2
     Top = 294
-    Width = 952
-    Height = 1347
+    Width = 794
+    Height = 1123
     Frame.Color = clBlack
     Frame.DrawTop = False
     Frame.DrawBottom = False
@@ -159,12 +159,12 @@ object frmGerRelCR: TfrmGerRelCR
     PrintIfEmpty = True
     SnapToGrid = True
     Units = MM
-    Zoom = 120
+    Zoom = 100
     object TitleBand1: TQRBand
-      Left = 36
-      Top = 45
-      Width = 879
-      Height = 97
+      Left = 30
+      Top = 38
+      Width = 734
+      Height = 81
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -176,23 +176,23 @@ object frmGerRelCR: TfrmGerRelCR
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        213.871527777777800000
-        1938.072916666667000000)
+        214.312500000000000000
+        1942.041666666667000000)
       BandType = rbTitle
       object QRLabel6: TQRLabel
         Left = 0
-        Top = 5
-        Width = 204
-        Height = 13
+        Top = 4
+        Width = 170
+        Height = 11
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          28.663194444444440000
+          29.104166666666670000
           0.000000000000000000
-          11.024305555555560000
+          10.583333333333330000
           449.791666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
@@ -211,20 +211,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 6
       end
       object QRSysData1: TQRSysData
-        Left = 826
+        Left = 690
         Top = 0
-        Width = 53
-        Height = 19
+        Width = 44
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1821.215277777778000000
+          42.333333333333330000
+          1825.625000000000000000
           0.000000000000000000
-          116.857638888888900000)
+          116.416666666666700000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -241,18 +241,18 @@ object frmGerRelCR: TfrmGerRelCR
       end
       object qrlblPeriodo: TQRLabel
         Left = 0
-        Top = 57
-        Width = 54
-        Height = 17
+        Top = 48
+        Width = 45
+        Height = 15
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          37.482638888888890000
+          39.687500000000000000
           0.000000000000000000
-          125.677083333333300000
+          127.000000000000000000
           119.062500000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
@@ -271,10 +271,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel2: TQRLabel
-        Left = 317
-        Top = 38
-        Width = 244
-        Height = 19
+        Left = 265
+        Top = 32
+        Width = 203
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -282,10 +282,10 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Frame.Style = psDashDotDot
         Size.Values = (
-          41.892361111111110000
-          698.940972222222200000
-          83.784722222222220000
-          537.986111111111100000)
+          42.333333333333330000
+          701.145833333333300000
+          84.666666666666670000
+          537.104166666666700000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
@@ -304,19 +304,19 @@ object frmGerRelCR: TfrmGerRelCR
       end
       object qrlblCliente: TQRLabel
         Left = 0
-        Top = 76
-        Width = 49
-        Height = 17
+        Top = 63
+        Width = 41
+        Height = 15
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          37.482638888888890000
+          39.687500000000000000
           0.000000000000000000
-          167.569444444444400000
-          108.038194444444400000)
+          166.687500000000000000
+          108.479166666666700000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -334,10 +334,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText5: TQRDBText
-        Left = 401
-        Top = 10
-        Width = 76
-        Height = 24
+        Left = 335
+        Top = 8
+        Width = 63
+        Height = 20
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -345,15 +345,15 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           52.916666666666670000
-          884.149305555555600000
-          22.048611111111110000
-          167.569444444444400000)
+          886.354166666666700000
+          21.166666666666670000
+          166.687500000000000000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = ibqryEmp
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -366,20 +366,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 10
       end
       object qrlblStatus: TQRLabel
-        Left = 829
-        Top = 76
-        Width = 50
-        Height = 19
+        Left = 692
+        Top = 63
+        Width = 42
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1827.829861111111000000
-          167.569444444444400000
-          110.243055555555600000)
+          42.333333333333330000
+          1830.916666666667000000
+          166.687500000000000000
+          111.125000000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -398,10 +398,10 @@ object frmGerRelCR: TfrmGerRelCR
       end
     end
     object ColumnHeaderBand1: TQRBand
-      Left = 36
-      Top = 142
-      Width = 879
-      Height = 19
+      Left = 30
+      Top = 119
+      Width = 734
+      Height = 16
       Frame.Color = clBlack
       Frame.DrawTop = True
       Frame.DrawBottom = True
@@ -418,24 +418,24 @@ object frmGerRelCR: TfrmGerRelCR
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        41.892361111111110000
-        1938.072916666667000000)
+        42.333333333333330000
+        1942.041666666667000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
-        Left = 47
+        Left = 266
         Top = 1
-        Width = 34
-        Height = 19
+        Width = 24
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          103.628472222222200000
-          2.204861111111111000
-          74.965277777777780000)
+          42.333333333333330000
+          703.791666666666700000
+          2.645833333333333000
+          63.500000000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -453,20 +453,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel5: TQRLabel
-        Left = 814
+        Left = 688
         Top = 1
-        Width = 65
-        Height = 19
+        Width = 46
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1794.756944444444000000
-          2.204861111111111000
-          143.315972222222200000)
+          42.333333333333330000
+          1820.333333333333000000
+          2.645833333333333000
+          121.708333333333300000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -484,22 +484,22 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object qrlblCliMot: TQRLabel
-        Left = 86
+        Left = 0
         Top = 1
-        Width = 56
-        Height = 19
+        Width = 41
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          189.618055555555600000
-          2.204861111111111000
-          123.472222222222200000)
+          42.333333333333330000
+          0.000000000000000000
+          2.645833333333333000
+          108.479166666666700000)
         Alignment = taLeftJustify
-        AlignToBand = False
+        AlignToBand = True
         AutoSize = True
         AutoStretch = False
         Caption = 'CLIENTE'
@@ -515,20 +515,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel7: TQRLabel
-        Left = 6
+        Left = 221
         Top = 1
-        Width = 41
-        Height = 19
+        Width = 31
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          13.229166666666670000
-          2.204861111111111000
-          90.399305555555560000)
+          42.333333333333330000
+          584.729166666666700000
+          2.645833333333333000
+          82.020833333333330000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -546,10 +546,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel3: TQRLabel
-        Left = 518
-        Top = 1
-        Width = 80
-        Height = 19
+        Left = 1972
+        Top = 4
+        Width = 59
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -557,9 +557,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          1142.118055555556000000
-          2.204861111111111000
-          176.388888888888900000)
+          5218.906250000000000000
+          11.024305555555560000
+          156.545138888888900000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -577,10 +577,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel12: TQRLabel
-        Left = 346
-        Top = 1
-        Width = 82
-        Height = 19
+        Left = 1334
+        Top = 4
+        Width = 57
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -588,9 +588,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          762.881944444444400000
-          2.204861111111111000
-          180.798611111111100000)
+          3529.982638888889000000
+          11.024305555555560000
+          149.930555555555600000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -608,10 +608,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel14: TQRLabel
-        Left = 426
-        Top = 1
-        Width = 90
-        Height = 19
+        Left = 1633
+        Top = 4
+        Width = 64
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -619,9 +619,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          939.270833333333300000
-          2.204861111111111000
-          198.437500000000000000)
+          4319.322916666667000000
+          11.024305555555560000
+          169.774305555555600000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -639,10 +639,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel1: TQRLabel
-        Left = 609
-        Top = 1
-        Width = 64
-        Height = 19
+        Left = 2317
+        Top = 4
+        Width = 47
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -650,9 +650,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          1342.760416666667000000
-          2.204861111111111000
-          141.111111111111100000)
+          6129.513888888889000000
+          11.024305555555560000
+          123.472222222222200000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -670,10 +670,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel16: TQRLabel
-        Left = 687
-        Top = 1
-        Width = 102
-        Height = 19
+        Left = 2619
+        Top = 4
+        Width = 74
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -681,9 +681,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          1514.739583333333000000
-          2.204861111111111000
-          224.895833333333300000)
+          6929.878472222222000000
+          11.024305555555560000
+          196.232638888888900000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -700,12 +700,136 @@ object frmGerRelCR: TfrmGerRelCR
         WordWrap = True
         FontSize = 8
       end
+      object QRLabel21: TQRLabel
+        Left = 313
+        Top = 1
+        Width = 45
+        Height = 16
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          42.333333333333330000
+          828.145833333333300000
+          2.645833333333333000
+          119.062500000000000000)
+        Alignment = taCenter
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'DT.VENC.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial Narrow'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object QRLabel22: TQRLabel
+        Left = 387
+        Top = 1
+        Width = 39
+        Height = 16
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          42.333333333333330000
+          1023.937500000000000000
+          2.645833333333333000
+          103.187500000000000000)
+        Alignment = taCenter
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'DT.REC.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial Narrow'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object QRLabel23: TQRLabel
+        Left = 454
+        Top = 1
+        Width = 48
+        Height = 16
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          42.333333333333330000
+          1201.208333333333000000
+          2.645833333333333000
+          127.000000000000000000)
+        Alignment = taCenter
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'DT.EMISS.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial Narrow'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
+      object QRLabel24: TQRLabel
+        Left = 543
+        Top = 1
+        Width = 34
+        Height = 16
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          42.333333333333330000
+          1436.687500000000000000
+          2.645833333333333000
+          89.958333333333330000)
+        Alignment = taCenter
+        AlignToBand = False
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'VENDA'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial Narrow'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 8
+      end
     end
     object PageFooterBand1: TQRBand
-      Left = 36
-      Top = 180
-      Width = 879
-      Height = 29
+      Left = 30
+      Top = 151
+      Width = 734
+      Height = 24
       Frame.Color = clBlack
       Frame.DrawTop = True
       Frame.DrawBottom = False
@@ -717,24 +841,24 @@ object frmGerRelCR: TfrmGerRelCR
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        63.940972222222220000
-        1938.072916666667000000)
+        63.500000000000000000
+        1942.041666666667000000)
       BandType = rbSummary
       object QRLabel11: TQRLabel
         Left = 0
-        Top = 6
-        Width = 48
-        Height = 20
+        Top = 5
+        Width = 39
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.097222222222220000
+          44.979166666666670000
           0.000000000000000000
           13.229166666666670000
-          105.833333333333300000)
+          103.187500000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -752,20 +876,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 9
       end
       object QRExpr1: TQRExpr
-        Left = 703
-        Top = 6
-        Width = 176
-        Height = 20
+        Left = 609
+        Top = 5
+        Width = 125
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.097222222222220000
-          1550.017361111111000000
+          44.979166666666670000
+          1611.312500000000000000
           13.229166666666670000
-          388.055555555555600000)
+          330.729166666666700000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -785,20 +909,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 9
       end
       object QRSysData3: TQRSysData
-        Left = 49
-        Top = 6
-        Width = 83
-        Height = 20
+        Left = 42
+        Top = 5
+        Width = 62
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.097222222222220000
-          108.038194444444400000
+          44.979166666666670000
+          111.125000000000000000
           13.229166666666670000
-          183.003472222222200000)
+          164.041666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -815,10 +939,10 @@ object frmGerRelCR: TfrmGerRelCR
       end
     end
     object PageFooterBand2: TQRBand
-      Left = 36
-      Top = 209
-      Width = 879
-      Height = 29
+      Left = 30
+      Top = 175
+      Width = 734
+      Height = 24
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = False
@@ -829,24 +953,24 @@ object frmGerRelCR: TfrmGerRelCR
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        63.940972222222220000
-        1938.072916666667000000)
+        63.500000000000000000
+        1942.041666666667000000)
       BandType = rbPageFooter
       object QRSysData2: TQRSysData
-        Left = 839
-        Top = 5
-        Width = 40
-        Height = 19
+        Left = 701
+        Top = 4
+        Width = 33
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1849.878472222222000000
-          11.024305555555560000
-          88.194444444444440000)
+          42.333333333333330000
+          1854.729166666667000000
+          10.583333333333330000
+          87.312500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -863,10 +987,10 @@ object frmGerRelCR: TfrmGerRelCR
       end
     end
     object QRBand6: TQRBand
-      Left = 36
-      Top = 161
-      Width = 879
-      Height = 19
+      Left = 30
+      Top = 135
+      Width = 734
+      Height = 16
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -883,14 +1007,14 @@ object frmGerRelCR: TfrmGerRelCR
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        41.892361111111110000
-        1938.072916666667000000)
+        42.333333333333330000
+        1942.041666666667000000)
       BandType = rbDetail
       object QRDBText7: TQRDBText
-        Left = 53
+        Left = 270
         Top = 1
-        Width = 17
-        Height = 19
+        Width = 14
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -898,7 +1022,7 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          116.857638888888900000
+          714.375000000000000000
           2.204861111111111000
           37.482638888888890000)
         Alignment = taCenter
@@ -919,22 +1043,22 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText13: TQRDBText
-        Left = 86
+        Left = 0
         Top = 1
-        Width = 259
-        Height = 19
+        Width = 216
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          189.618055555555600000
-          2.204861111111111000
-          571.059027777777800000)
+          42.333333333333330000
+          0.000000000000000000
+          2.645833333333333000
+          571.500000000000000000)
         Alignment = taLeftJustify
-        AlignToBand = False
+        AlignToBand = True
         AutoSize = False
         AutoStretch = False
         Color = clWhite
@@ -951,20 +1075,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText14: TQRDBText
-        Left = 817
+        Left = 682
         Top = 1
-        Width = 62
-        Height = 19
+        Width = 52
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1801.371527777778000000
-          2.204861111111111000
-          136.701388888888900000)
+          42.333333333333330000
+          1804.458333333333000000
+          2.645833333333333000
+          137.583333333333300000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -984,10 +1108,10 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText15: TQRDBText
-        Left = 0
+        Left = 220
         Top = 1
-        Width = 35
-        Height = 19
+        Width = 29
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -995,7 +1119,7 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           41.892361111111110000
-          0.000000000000000000
+          582.083333333333300000
           2.204861111111111000
           77.170138888888890000)
         Alignment = taRightJustify
@@ -1016,20 +1140,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText16: TQRDBText
-        Left = 363
+        Left = 316
         Top = 1
-        Width = 47
-        Height = 19
+        Width = 39
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          800.364583333333300000
-          2.204861111111111000
-          103.628472222222200000)
+          42.333333333333330000
+          836.083333333333300000
+          2.645833333333333000
+          103.187500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1048,20 +1172,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText3: TQRDBText
-        Left = 450
+        Left = 388
         Top = 1
-        Width = 40
-        Height = 19
+        Width = 33
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          992.187500000000000000
-          2.204861111111111000
-          88.194444444444440000)
+          42.333333333333330000
+          1026.583333333333000000
+          2.645833333333333000
+          87.312500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1080,20 +1204,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText17: TQRDBText
-        Left = 533
+        Left = 458
         Top = 1
-        Width = 49
-        Height = 19
+        Width = 41
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1175.190972222222000000
-          2.204861111111111000
-          108.038194444444400000)
+          42.333333333333330000
+          1211.791666666667000000
+          2.645833333333333000
+          108.479166666666700000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1112,20 +1236,20 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRDBText18: TQRDBText
-        Left = 608
+        Left = 533
         Top = 1
-        Width = 65
-        Height = 19
+        Width = 54
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.892361111111110000
-          1340.555555555556000000
-          2.204861111111111000
-          143.315972222222200000)
+          42.333333333333330000
+          1410.229166666667000000
+          2.645833333333333000
+          142.875000000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1143,44 +1267,12 @@ object frmGerRelCR: TfrmGerRelCR
         WordWrap = True
         FontSize = 8
       end
-      object QRDBText19: TQRDBText
-        Left = 716
-        Top = 1
-        Width = 41
-        Height = 19
-        Frame.Color = clBlack
-        Frame.DrawTop = False
-        Frame.DrawBottom = False
-        Frame.DrawLeft = False
-        Frame.DrawRight = False
-        Size.Values = (
-          41.892361111111110000
-          1578.680555555556000000
-          2.204861111111111000
-          90.399305555555560000)
-        Alignment = taCenter
-        AlignToBand = False
-        AutoSize = True
-        AutoStretch = False
-        Color = clWhite
-        DataSet = ibqryCR
-        DataField = 'TIPPAG'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Arial Narrow'
-        Font.Style = []
-        ParentFont = False
-        Transparent = False
-        WordWrap = True
-        FontSize = 8
-      end
     end
   end
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 0
-    Width = 308
+    Width = 309
     Height = 60
     Align = alTop
     Caption = 'Cliente'
@@ -1210,8 +1302,8 @@ object frmGerRelCR: TfrmGerRelCR
     end
   end
   object qckrpVendasSintetico: TQuickRep
-    Left = 626
-    Top = 525
+    Left = 818
+    Top = 341
     Width = 794
     Height = 1123
     Frame.Color = clBlack
@@ -1415,7 +1507,7 @@ object frmGerRelCR: TfrmGerRelCR
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = ibqryEmp
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1484,9 +1576,9 @@ object frmGerRelCR: TfrmGerRelCR
         1740.958333333333000000)
       BandType = rbColumnHeader
       object QRLabel15: TQRLabel
-        Left = 228
+        Left = 241
         Top = 1
-        Width = 98
+        Width = 85
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1495,9 +1587,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          603.250000000000000000
+          637.645833333333300000
           2.645833333333333000
-          259.291666666666700000)
+          224.895833333333300000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1517,7 +1609,7 @@ object frmGerRelCR: TfrmGerRelCR
       object QRLabel17: TQRLabel
         Left = 0
         Top = 1
-        Width = 60
+        Width = 54
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1528,7 +1620,7 @@ object frmGerRelCR: TfrmGerRelCR
           42.333333333333330000
           0.000000000000000000
           2.645833333333333000
-          158.750000000000000000)
+          142.875000000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1577,9 +1669,9 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel19: TQRLabel
-        Left = 422
+        Left = 431
         Top = 1
-        Width = 75
+        Width = 66
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1588,9 +1680,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1116.541666666667000000
+          1140.354166666667000000
           2.645833333333333000
-          198.437500000000000000)
+          174.625000000000000000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1782,7 +1874,7 @@ object frmGerRelCR: TfrmGerRelCR
       object QRLabel20: TQRLabel
         Left = 0
         Top = 5
-        Width = 40
+        Width = 39
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1793,7 +1885,7 @@ object frmGerRelCR: TfrmGerRelCR
           44.979166666666670000
           0.000000000000000000
           13.229166666666670000
-          105.833333333333300000)
+          103.187500000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1811,9 +1903,9 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 9
       end
       object QRExpr2: TQRExpr
-        Left = 406
+        Left = 437
         Top = 5
-        Width = 252
+        Width = 221
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1822,9 +1914,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          1074.208333333333000000
+          1156.229166666667000000
           13.229166666666670000
-          666.750000000000000000)
+          584.729166666666700000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -1846,7 +1938,7 @@ object frmGerRelCR: TfrmGerRelCR
       object QRSysData5: TQRSysData
         Left = 41
         Top = 5
-        Width = 69
+        Width = 62
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1857,7 +1949,7 @@ object frmGerRelCR: TfrmGerRelCR
           44.979166666666670000
           108.479166666666700000
           13.229166666666670000
-          182.562500000000000000)
+          164.041666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -1958,10 +2050,11 @@ object frmGerRelCR: TfrmGerRelCR
   object rdgrpPeriodo: TRadioGroup
     Left = 0
     Top = 60
-    Width = 308
+    Width = 309
     Height = 69
     Align = alTop
     Caption = 'Per'#237'odo'
+    Columns = 2
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -1975,56 +2068,10 @@ object frmGerRelCR: TfrmGerRelCR
     ParentFont = False
     TabOrder = 4
   end
-  object dttmpcIni: TDateTimePicker
-    Left = 195
-    Top = 72
-    Width = 101
-    Height = 22
-    Date = 41061.729982395800000000
-    Time = 41061.729982395800000000
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 5
-  end
-  object dttmpcFim: TDateTimePicker
-    Left = 195
-    Top = 100
-    Width = 101
-    Height = 21
-    Date = 41090.729982395800000000
-    Time = 41090.729982395800000000
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
-    TabOrder = 6
-  end
-  object StaticText1: TStaticText
-    Left = 172
-    Top = 74
-    Width = 21
-    Height = 17
-    Caption = 'De:'
-    TabOrder = 7
-  end
-  object StaticText2: TStaticText
-    Left = 179
-    Top = 101
-    Width = 14
-    Height = 17
-    Caption = 'A:'
-    TabOrder = 8
-  end
   object rdgrpStatus: TRadioGroup
     Left = 0
-    Top = 129
-    Width = 308
+    Top = 169
+    Width = 309
     Height = 48
     Align = alTop
     Caption = 'Status Duplicatas'
@@ -2037,10 +2084,70 @@ object frmGerRelCR: TfrmGerRelCR
     ItemIndex = 0
     Items.Strings = (
       'Todas'
-      'Baixada'
-      'A Receber')
+      'Quitadas'
+      'Pendentes')
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 5
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 129
+    Width = 309
+    Height = 40
+    Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+    object StaticText1: TStaticText
+      Left = 10
+      Top = 16
+      Width = 24
+      Height = 17
+      Caption = 'De:'
+      TabOrder = 0
+    end
+    object dttmpcIni: TDateTimePicker
+      Left = 35
+      Top = 11
+      Width = 110
+      Height = 21
+      Date = 41061.729982395800000000
+      Time = 41061.729982395800000000
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+    end
+    object StaticText2: TStaticText
+      Left = 161
+      Top = 16
+      Width = 11
+      Height = 17
+      Caption = 'a'
+      TabOrder = 2
+    end
+    object dttmpcFim: TDateTimePicker
+      Left = 187
+      Top = 12
+      Width = 110
+      Height = 21
+      Date = 41090.729982395800000000
+      Time = 41090.729982395800000000
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+    end
   end
   object ibqryCR: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
@@ -2054,18 +2161,18 @@ object frmGerRelCR: TfrmGerRelCR
       'C.nome'
       'from TBCONTREC CR inner join tbcliente C'
       '    on CR.cnpj = C.cnpj')
-    Left = 313
-    Top = 8
+    Left = 65
+    Top = 288
   end
-  object ibqryEmpresa: TIBQuery
+  object ibqryEmp: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 384
-    Top = 8
+    Left = 128
+    Top = 288
   end
   object ibqryCli: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
@@ -2075,8 +2182,8 @@ object frmGerRelCR: TfrmGerRelCR
     SQL.Strings = (
       'select NOME from TBCLIENTE'
       'order by nome')
-    Left = 328
-    Top = 72
+    Left = 16
+    Top = 288
     object ibqryCliNOME: TIBStringField
       FieldName = 'NOME'
       Origin = 'TBCLIENTE.NOME'

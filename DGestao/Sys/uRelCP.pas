@@ -19,7 +19,6 @@ type
     QRSysData1: TQRSysData;
     ColumnHeaderBand1: TQRBand;
     QRLabel5: TQRLabel;
-    QRLabel10: TQRLabel;
     QRLabel7: TQRLabel;
     QRLabel8: TQRLabel;
     QRLabel12: TQRLabel;
@@ -40,9 +39,9 @@ type
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
     ibqryEmpresa: TIBQuery;
-    QRDBText2: TQRDBText;
     QRLabel3: TQRLabel;
     QRDBText4: TQRDBText;
+    qrlblFornec: TQRLabel;
   private
     { Private declarations }
   public

@@ -9,7 +9,6 @@ uses
 
 type
   TfrmGerRelCP = class(TForm)
-    Label3: TLabel;
     rdgrpStatus: TRadioGroup;
     Panel1: TPanel;
     BitBtn2: TBitBtn;
@@ -20,6 +19,10 @@ type
     Label2: TLabel;
     dttmpcIni: TDateTimePicker;
     dttmpcFim: TDateTimePicker;
+    grpbxVendedor: TGroupBox;
+    cmbbxFornecedor: TComboBox;
+    ibqryFornec: TIBQuery;
+    ibqryFornecNOMEFORN: TIBStringField;
     procedure btbtnGrupoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -33,7 +36,7 @@ var
 
 implementation
 
-uses uRelCP;
+uses uRelCP, UDMBusiness;
 
 {$R *.dfm}
 
@@ -50,15 +53,20 @@ if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=0)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTEMISS between :dataini and :datafim)');
-     IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTEMISS');
+     IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTEMISS'); 
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      qrlblStatus.Caption := 'TODAS';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end
 
@@ -72,15 +80,20 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=0)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTVENC between :dataini and :datafim)');
      IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTVENC');
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      qrlblStatus.Caption := 'TODAS';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end
 
@@ -94,17 +107,22 @@ else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=1)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTPAG is not null)');
      IBQuery1.SQL.Add('and (P.DTEMISS between :dataini and :datafim)');
      IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTEMISS, P.DTPAG');
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
      qrlblStatus.Caption := 'QUITADAS';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end
 
@@ -118,16 +136,21 @@ else if (rdgrpData.ItemIndex=0) and (rdgrpStatus.ItemIndex=2)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTPAG is null)');
      IBQuery1.SQL.Add('and (P.DTEMISS between :dataini and :datafim)');
      IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTEMISS');
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Emissão: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      qrlblStatus.Caption := 'PENDENTES';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end
 
@@ -141,17 +164,22 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=1)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTPAG is not null)');
      IBQuery1.SQL.Add('and (P.DTVENC between :dataini and :datafim)');
      IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTVENC, P.DTPAG');
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
      qrlblStatus.Caption := 'QUITADAS';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end
 
@@ -165,20 +193,26 @@ else if (rdgrpData.ItemIndex=1) and (rdgrpStatus.ItemIndex=2)
      IBQuery1.SQL.Clear;
      IBQuery1.SQL.Add('select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.NUMLANC, P.VALORPAG, P.TIPPAG');
      IBQuery1.SQL.Add('from TBCONTPAG P, TBFORNECEDOR F');
-     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN)');
+     IBQuery1.SQL.Add('where (P.CODFORN = F.CODFORN) and F.NOMEFORN like :fornec');
      IBQuery1.SQL.Add('and (P.DTPAG is null)');
      IBQuery1.SQL.Add('and (P.DTVENC between :dataini and :datafim)');
      IBQuery1.SQL.Add('order by F.NOMEFORN, P.DTVENC');
+     if cmbbxFornecedor.Text = 'TODOS' then  IBQuery1.ParamByName('fornec').Value := '%'
+       else IBQuery1.ParamByName('fornec').Value := cmbbxFornecedor.Text;
      IBQuery1.ParamByName('dataini').value := DateToStr(dttmpcIni.Date);
      IBQuery1.ParamByName('datafim').value := DateToStr(dttmpcFim.Date);
      IBQuery1.Open;
      qrlblPeriodo.Caption:= 'Data de Vencimento: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
      //qrlblStatus.Caption := rdgrpStatus.Items.Strings[1];
      qrlblStatus.Caption := 'PENDENTES';
-     qckrpCP.Preview;
+     qrlblFornec.Caption := 'FORNECEDOR: ' + cmbbxFornecedor.Text;
+     if IBQuery1.IsEmpty then
+       MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+     else qckrpCP.Preview;
     end;
   end;
-frmRelCP.Destroy;
+
+ frmRelCP.Destroy;
 
 end;
 
@@ -186,6 +220,18 @@ procedure TfrmGerRelCP.FormCreate(Sender: TObject);
 begin
  dttmpcIni.Date := IncMonth(Date, -1);
  dttmpcFim.Date := Date;
+
+ ibqryFornec.Open;
+ cmbbxFornecedor.Items.Add('TODOS');
+ while not ibqryFornec.Eof do
+  begin
+   cmbbxFornecedor.Items.Add(ibqryFornecNOMEFORN.Value);
+   ibqryFornec.Next;
+  end;
+ ibqryFornec.Close;
+
+ cmbbxFornecedor.ItemIndex := 1;
+
 end;
 
 end.
