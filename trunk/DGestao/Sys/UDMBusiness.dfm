@@ -1,10 +1,10 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 595
-  Top = 155
-  Height = 400
-  Width = 575
+  Left = 718
+  Top = 175
+  Height = 426
+  Width = 706
   object ibdtbsBusiness: TIBDatabase
     Connected = True
     DatabaseName = 'localhost:BUSINESS'
@@ -14,14 +14,10 @@ object DMBusiness: TDMBusiness
       'lc_ctype=ISO8859_2')
     LoginPrompt = False
     DefaultTransaction = ibtrnsctnBusiness
-    IdleTimer = 0
-    SQLDialect = 3
-    TraceFlags = []
     Left = 40
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -39,8 +35,6 @@ object DMBusiness: TDMBusiness
   object ibdtstAjustEstoq: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBAJUSTESTOQ'
       'where'
@@ -152,8 +146,6 @@ object DMBusiness: TDMBusiness
   object ibdtstProduto: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SelectSQL.Strings = (
       'select COD, DESCRI, QTDE from TBPRODUTO'
       'order by cod')
@@ -163,8 +155,6 @@ object DMBusiness: TDMBusiness
   object ibdtstFornec: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SelectSQL.Strings = (
       'select CODFORN, NOMEFORN from TBFORNECEDOR'
       'order by NOMEFORN')
@@ -174,16 +164,12 @@ object DMBusiness: TDMBusiness
   object qryBusca: TIBQuery
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     Left = 232
     Top = 56
   end
   object ibdtstUsers: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBUSERS'
       'where'
@@ -215,7 +201,6 @@ object DMBusiness: TDMBusiness
       '  LIMIDESC = :LIMIDESC'
       'where'
       '  NOME = :OLD_NOME')
-    Active = True
     Left = 144
     Top = 120
     object ibdtstUsersNOME: TIBStringField
@@ -280,8 +265,6 @@ object DMBusiness: TDMBusiness
   object qryCaixaAberto: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBUSERS'
       'where'
@@ -391,5 +374,74 @@ object DMBusiness: TDMBusiness
     StoredProcName = 'SET_CAIXA_MOVIMENTO_PAG_ESTORNO'
     Left = 176
     Top = 264
+  end
+  object qryEvAcessUser: TIBDataSet
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    ForcedRefresh = True
+    CachedUpdates = True
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'Select'
+      '    ev.form_name'
+      '  , ev.object_name'
+      '  , ev.consents_string'
+      'from TBUSERALLOW ev'
+      'where ev.form_name   = :formulario'
+      '  and ev.object_name = :objeto')
+    ModifySQL.Strings = (
+      '')
+    UpdateObject = updEvAcessUser
+    Left = 376
+    Top = 216
+    object qryEvAcessUserFORM_NAME: TIBStringField
+      FieldName = 'FORM_NAME'
+      Origin = '"TBUSERALLOW"."FORM_NAME"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 250
+    end
+    object qryEvAcessUserOBJECT_NAME: TIBStringField
+      FieldName = 'OBJECT_NAME'
+      Origin = '"TBUSERALLOW"."OBJECT_NAME"'
+      Size = 50
+    end
+    object qryEvAcessUserCONSENTS_STRING: TMemoField
+      FieldName = 'CONSENTS_STRING'
+      Origin = '"TBUSERALLOW"."CONSENTS_STRING"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+  end
+  object updEvAcessUser: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  FORM_NAME,'
+      '  OBJECT_NAME,'
+      '  CONSENTS_STRING'
+      'from TBUSERALLOW '
+      'where'
+      '  FORM_NAME = :FORM_NAME')
+    ModifySQL.Strings = (
+      'update TBUSERALLOW'
+      'set'
+      '  CONSENTS_STRING = :CONSENTS_STRING,'
+      '  FORM_NAME = :FORM_NAME,'
+      '  OBJECT_NAME = :OBJECT_NAME'
+      'where'
+      '  FORM_NAME = :OLD_FORM_NAME')
+    InsertSQL.Strings = (
+      'insert into TBUSERALLOW'
+      '  (CONSENTS_STRING, FORM_NAME, OBJECT_NAME)'
+      'values'
+      '  (:CONSENTS_STRING, :FORM_NAME, :OBJECT_NAME)')
+    DeleteSQL.Strings = (
+      'delete from TBUSERALLOW'
+      'where'
+      '  FORM_NAME = :OLD_FORM_NAME')
+    Left = 408
+    Top = 216
   end
 end

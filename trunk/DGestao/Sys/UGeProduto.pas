@@ -92,7 +92,7 @@ type
     dbPrecoPromocao: TDBEdit;
     lblProdutoPromocao: TLabel;
     lblProdutoSemEstoque: TLabel;
-    Label1: TLabel;
+    lblProdutoMsgLivre: TLabel;
     lblFabricante: TLabel;
     dbFabricante: TRxDBComboEdit;
     IbDtstTabelaCODFABRICANTE: TIntegerField;
@@ -155,7 +155,7 @@ type
     lblNCM_SH: TLabel;
     lblTipoTributacaoSN: TLabel;
     lblAliquotaSN: TLabel;
-    Label2: TLabel;
+    lblPercentualReducaoBC: TLabel;
     dbOrigem: TDBLookupComboBox;
     dbTipoTributacaoNM: TDBLookupComboBox;
     dbCFOP: TRxDBComboEdit;
@@ -424,12 +424,18 @@ begin
 
   pgcMaisDados.ActivePageIndex := 0;
 
+  EvUA.UserID := GetUserFunctionID;
+
   Case GetUserFunctionID of
-    FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
+    FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
       begin
-        btbtnIncluir.Visible := False;
-        btbtnAlterar.Visible := False;
-        btbtnExcluir.Visible := False;
+        btbtnIncluir.Visible  := False;
+        btbtnAlterar.Visible  := False;
+        btbtnExcluir.Visible  := False;
+        btbtnCancelar.Visible := False;
+        btbtnSalvar.Visible   := False;
+
+        DtSrcTabela.AutoEdit := False;
       end;
   end
 end;

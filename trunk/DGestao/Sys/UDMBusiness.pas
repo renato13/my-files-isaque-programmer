@@ -6,7 +6,7 @@ uses
   Windows, Forms, SysUtils, Classes, IBDatabase, DB, IBCustomDataSet, IniFIles,
   ShellApi, Printers, DateUtils, IBQuery, RpDefine, RpRave,
   frxClass, frxDBSet, EMsgDlg, IdBaseComponent, IdComponent, IdIPWatch, IBStoredProc,
-  FuncoesFormulario, UConstantesDGE;
+  FuncoesFormulario, UConstantesDGE, IBUpdateSQL, EUserAcs;
 
 type
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
@@ -52,6 +52,11 @@ type
     qryCaixaAbertoCONTA_CORRENTE: TIntegerField;
     stpCaixaMovimentoREC_ESTORNO: TIBStoredProc;
     stpCaixaMovimentoPAG_ESTORNO: TIBStoredProc;
+    qryEvAcessUser: TIBDataSet;
+    updEvAcessUser: TIBUpdateSQL;
+    qryEvAcessUserFORM_NAME: TIBStringField;
+    qryEvAcessUserOBJECT_NAME: TIBStringField;
+    qryEvAcessUserCONSENTS_STRING: TMemoField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -78,6 +83,7 @@ var
   procedure BloquearClientes;
   procedure DesbloquearCliente(CNPJ : String; const Motivo : String = '');
   procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
+  procedure RegistrarControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess);
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -95,6 +101,7 @@ var
   function GetEmitirCupom : Boolean;
   function GetModeloEmissaoCupom : Integer;
   function GetSegmentoID(const CNPJ : String) : Integer;
+  function GetControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess) : Boolean;
 
   function StrIsCNPJ(const Num: string): Boolean;
   function StrIsCPF(const Num: string): Boolean;
@@ -159,6 +166,7 @@ const
   STATUS_CMP_ABR = 1;
   STATUS_CMP_FIN = 2;
   STATUS_CMP_CAN = 3;
+  STATUS_CMP_NFE = 4;
 
   // Mensagens padrões do sistema
   CLIENTE_BLOQUEADO_PORDEBITO = 'Cliente bloqueado, automaticamente, pelo sistema por se encontrar com títulos vencidos. Favor buscar mais informações junto ao FINANCEIRO.';
@@ -426,7 +434,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('Update TBCLIENTE Set Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
+    SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
 
     if Trim(Motivo) = EmptyStr then
       SQL.Add('  Bloqueado_motivo = Null')
@@ -448,6 +456,29 @@ begin
     SQL.Clear;
     SQL.Add('Execute Procedure SET_SEGMENTO(' + IntToStr(Codigo) + ', ' + QuotedStr(Trim(Descricao)) + ')');
     ExecSQL;
+
+    CommitTransaction;
+  end;
+end;
+
+procedure RegistrarControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess);
+begin
+  with DMBusiness, qryEvAcessUser do
+  begin
+    Close;
+    ParamByName('formulario').AsString := TForm(AOnwer).Name;
+    ParamByName('objeto').AsString     := EvUserAcesso.Name;
+    Open;
+
+    if IsEmpty then
+    begin
+      Append;
+      qryEvAcessUserFORM_NAME.AsString       := TForm(AOnwer).Name;
+      qryEvAcessUserOBJECT_NAME.AsString     := EvUserAcesso.Name;
+      qryEvAcessUserCONSENTS_STRING.AsString := EvUserAcesso.Consents.Text;
+      Post;
+      ApplyUpdates;
+    end;
 
     CommitTransaction;
   end;
@@ -541,6 +572,25 @@ begin
     Result := FieldByName('SegmentoID').AsInteger;
 
     Close;
+  end;
+end;
+
+function GetControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess) : Boolean;
+begin
+  with DMBusiness, qryEvAcessUser do
+  begin
+    Close;
+    ParamByName('formulario').AsString := TForm(AOnwer).Name;
+    ParamByName('objeto').AsString     := EvUserAcesso.Name;
+    Open;
+
+    Result := not IsEmpty;
+
+    if Result then
+    begin
+      EvUserAcesso.Consents.Clear;
+      EvUserAcesso.Consents.Text := qryEvAcessUserCONSENTS_STRING.AsString;
+    end;
   end;
 end;
 

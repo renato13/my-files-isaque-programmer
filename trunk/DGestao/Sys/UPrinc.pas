@@ -28,8 +28,7 @@ type
     nmUsuario: TMenuItem;
     nmEntrada: TMenuItem;
     nmEmpresa: TMenuItem;
-    SpeedBar1: TSpeedBar;
-    btnEmpresa: TRxSpeedButton;
+    spbBarraAcessoRapido: TSpeedBar;
     btnContaAReceber: TRxSpeedButton;
     btnFornecedor: TRxSpeedButton;
     btnTesouraria: TRxSpeedButton;
@@ -56,12 +55,12 @@ type
     nmRelatorioCliente: TMenuItem;
     nmRelatorioFornecedor: TMenuItem;
     nmRelatorioProduto: TMenuItem;
-    nmRelatorioFinanceiro: TMenuItem;
-    nmRelatorioContasAReceber: TMenuItem;
-    nmRelatorioContasAPagar: TMenuItem;
+    mnRelatorioFinanceiro: TMenuItem;
+    mnRelatorioFinanceiroContasAPagar: TMenuItem;
+    mnRelatorioFinanceiroContasAReceber: TMenuItem;
     btnVenda: TRxSpeedButton;
     nmAbout: TMenuItem;
-    nmRelatorioVenda: TMenuItem;
+    mnRelatorioFaturamentoVendas: TMenuItem;
     mnTabelasAuxiliares: TMenuItem;
     nmEstados: TMenuItem;
     nmCidades: TMenuItem;
@@ -90,7 +89,7 @@ type
     nmGerarBoleto: TMenuItem;
     nmCancelarNFe: TMenuItem;
     nmInutilizarNumeroNFe: TMenuItem;
-    EvUAfrmPrinc: TEvUserAccess;
+    EvAcessUserPrincipal: TEvUserAccess;
     SpeedbarSection2: TSpeedbarSection;
     SpeedItem1: TSpeedItem;
     SpeedItem2: TSpeedItem;
@@ -104,7 +103,7 @@ type
     N12: TMenuItem;
     nmEncerramentoCaixa: TMenuItem;
     nmGerenciaCaixa: TMenuItem;
-    Faturamento1: TMenuItem;
+    mnRelatorioFaturamento: TMenuItem;
     imgEmpresa: TImage;
     ProductName: TLabel;
     Copyright: TLabel;
@@ -112,6 +111,7 @@ type
     Version: TLabel;
     nmFabricanteProduto: TMenuItem;
     nmUsuarioAlterarSenha: TMenuItem;
+    btnEmpresa: TRxSpeedButton;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -126,8 +126,8 @@ type
     procedure nmRelatorioClienteClick(Sender: TObject);
     procedure nmRelatorioFornecedorClick(Sender: TObject);
     procedure nmRelatorioProdutoClick(Sender: TObject);
-    procedure nmRelatorioContasAReceberClick(Sender: TObject);
-    procedure nmRelatorioContasAPagarClick(Sender: TObject);
+    procedure mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
+    procedure mnRelatorioFinanceiroContasAReceberClick(Sender: TObject);
     procedure nmAboutClick(Sender: TObject);
     procedure mnBancoClick(Sender: TObject);
     procedure nmTiposdeLogradourosClick(Sender: TObject);
@@ -157,7 +157,7 @@ type
     procedure nmAberturaCaixaClick(Sender: TObject);
     procedure nmEncerramentoCaixaClick(Sender: TObject);
     procedure nmFluxoDeCaixaClick(Sender: TObject);
-    procedure nmRelatorioVendaClick(Sender: TObject);
+    procedure mnRelatorioFaturamentoVendasClick(Sender: TObject);
     procedure nmFabricanteProdutoClick(Sender: TObject);
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
   private
@@ -276,14 +276,14 @@ begin
   frmRelProdutos.Destroy;
 end;
 
-procedure TfrmPrinc.nmRelatorioContasAReceberClick(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmGerRelCR, frmGerRelCR);
   frmGerRelCR.ShowModal;
   frmGerRelCR.Destroy;
 end;
 
-procedure TfrmPrinc.nmRelatorioContasAPagarClick(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioFinanceiroContasAReceberClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmGerRelCP, frmGerRelCP);
   frmGerRelCP.ShowModal;
@@ -392,24 +392,29 @@ begin
   stbMain.Panels.Items[2].Text  := 'Licenciado a empresa ' + GetEmpresaNomeDefault;
   nmUsuarioAlterarSenha.Caption := Format('Alteração de Senha (%s)', [GetUserApp]);
 
-  Case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
+  RegistrarControleAcesso(Self, EvAcessUserPrincipal);
+  GetControleAcesso(Self, EvAcessUserPrincipal);
+
+  EvAcessUserPrincipal.UserID := GetUserFunctionID;
+  
+  Case GetUserFunctionID of
     FUNCTION_USER_ID_DIRETORIA :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_DIRETORIA;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_DIRETORIA;
 
     FUNCTION_USER_ID_GERENTE_VND :
       begin
-        EvUAfrmPrinc.UserID      := FUNCTION_USER_ID_GERENTE_VND;
+        EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_GERENTE_VND;
         btnTesouraria.Enabled    := False;
         btnContaAReceber.Enabled := False;
         btnContaAPagar.Enabled   := False;
       end;
 
     FUNCTION_USER_ID_GERENTE_FIN :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_GERENTE_FIN;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_GERENTE_FIN;
 
     FUNCTION_USER_ID_VENDEDOR :
       begin
-        EvUAfrmPrinc.UserID      := FUNCTION_USER_ID_VENDEDOR;
+        EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_VENDEDOR;
         btnEmpresa.Visible       := False;
         btnProduto.Enabled       := False;
         btnFornecedor.Enabled    := False;
@@ -417,31 +422,33 @@ begin
         btnTesouraria.Enabled    := False;
         btnContaAReceber.Enabled := False;
         btnContaAPagar.Enabled   := False;
+        mnRelatorioFinanceiro.Enabled := False;
+        nmRelatorioProduto.Enabled := False;
       end;
 
     FUNCTION_USER_ID_GERENTE_ADM :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_GERENTE_ADM;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_GERENTE_ADM;
 
     FUNCTION_USER_ID_CAIXA :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_CAIXA;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_CAIXA;
 
     FUNCTION_USER_ID_AUX_FINANC1 :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_AUX_FINANC1;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_AUX_FINANC1;
 
     FUNCTION_USER_ID_AUX_FINANC2 :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_AUX_FINANC2;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_AUX_FINANC2;
 
     FUNCTION_USER_ID_SUPERV_CX :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SUPERV_CX;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_SUPERV_CX;
 
     FUNCTION_USER_ID_ESTOQUISTA :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_ESTOQUISTA;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_ESTOQUISTA;
 
     FUNCTION_USER_ID_SUPORTE_TI :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SUPORTE_TI;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_SUPORTE_TI;
 
     FUNCTION_USER_ID_SYSTEM_ADM :
-      EvUAfrmPrinc.UserID := FUNCTION_USER_ID_SYSTEM_ADM;
+      EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_SYSTEM_ADM;
   else
     ShowWarning('Falta cruzar nova função com UserID!');
     Application.Terminate;
@@ -530,7 +537,7 @@ begin
   MostrarTabelaFluxoCaixas(Self);
 end;
 
-procedure TfrmPrinc.nmRelatorioVendaClick(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioFaturamentoVendasClick(Sender: TObject);
 begin
  Application.CreateForm(TfrmRelVendas, frmRelVendas);
  frmRelVendas.ShowModal;

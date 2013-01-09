@@ -3,7 +3,6 @@ inherited frmGeCliente: TfrmGeCliente
   Top = 134
   Width = 860
   Height = 536
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   OnClose = FormClose
@@ -106,7 +105,6 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 844
     Height = 455
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -912,7 +910,7 @@ inherited frmGeCliente: TfrmGeCliente
         Top = 237
         Width = 836
         Height = 189
-        ActivePage = tbsContato
+        ActivePage = tbsFinanceiro
         Align = alClient
         TabOrder = 2
         TabStop = False
@@ -1672,6 +1670,8 @@ inherited frmGeCliente: TfrmGeCliente
   object qryTotalComprasAbertas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    g.Valor_limite'
@@ -1717,6 +1717,8 @@ inherited frmGeCliente: TfrmGeCliente
   object qryTitulos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    r.Anolanc'
@@ -1878,6 +1880,8 @@ inherited frmGeCliente: TfrmGeCliente
   object tblVendedor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBVENDEDOR'
     Left = 672
     Top = 104
