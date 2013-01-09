@@ -61,12 +61,8 @@ type
     QRBand5: TQRBand;
     QRSysData6: TQRSysData;
     ibqryCR: TIBQuery;
-    ibqryEmpresa: TIBQuery;
+    ibqryEmp: TIBQuery;
     rdgrpPeriodo: TRadioGroup;
-    dttmpcIni: TDateTimePicker;
-    dttmpcFim: TDateTimePicker;
-    StaticText1: TStaticText;
-    StaticText2: TStaticText;
     rdgrpStatus: TRadioGroup;
     ibqryCli: TIBQuery;
     ibqryCliNOME: TIBStringField;
@@ -83,7 +79,15 @@ type
     QRLabel1: TQRLabel;
     QRDBText18: TQRDBText;
     QRLabel16: TQRLabel;
-    QRDBText19: TQRDBText;
+    GroupBox1: TGroupBox;
+    StaticText1: TStaticText;
+    dttmpcIni: TDateTimePicker;
+    StaticText2: TStaticText;
+    dttmpcFim: TDateTimePicker;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
     procedure FormCreate(Sender: TObject);
     procedure btbtnListaClick(Sender: TObject);
   private
