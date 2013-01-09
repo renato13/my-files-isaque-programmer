@@ -1,8 +1,9 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 251
-  Top = 103
+  Left = 523
+  Top = 150
   Width = 977
   Height = 648
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -23,6 +24,7 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
@@ -161,7 +163,7 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object Label1: TLabel [2]
+        object lblProdutoMsgLivre: TLabel [2]
           Left = 2
           Top = 44
           Width = 16
@@ -698,7 +700,7 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Style = [fsBold]
           ParentFont = False
           object lblCusto: TLabel
-            Left = 16
+            Left = 256
             Top = 8
             Width = 63
             Height = 13
@@ -712,7 +714,7 @@ inherited frmGeProduto: TfrmGeProduto
             ParentFont = False
           end
           object lblPreco: TLabel
-            Left = 136
+            Left = 16
             Top = 8
             Width = 101
             Height = 13
@@ -720,7 +722,7 @@ inherited frmGeProduto: TfrmGeProduto
             FocusControl = dbPreco
           end
           object lblPrecoPromocao: TLabel
-            Left = 256
+            Left = 136
             Top = 8
             Width = 99
             Height = 13
@@ -734,7 +736,7 @@ inherited frmGeProduto: TfrmGeProduto
             ParentFont = False
           end
           object dbCusto: TDBEdit
-            Left = 16
+            Left = 256
             Top = 24
             Width = 113
             Height = 21
@@ -748,10 +750,10 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Style = [fsBold]
             ParentFont = False
             ReadOnly = True
-            TabOrder = 0
+            TabOrder = 2
           end
           object dbPreco: TDBEdit
-            Left = 136
+            Left = 16
             Top = 24
             Width = 113
             Height = 21
@@ -764,10 +766,10 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Name = 'MS Sans Serif'
             Font.Style = []
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 0
           end
           object dbPrecoPromocao: TDBEdit
-            Left = 256
+            Left = 136
             Top = 24
             Width = 113
             Height = 21
@@ -781,7 +783,7 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Style = [fsBold]
             ParentFont = False
             ReadOnly = True
-            TabOrder = 2
+            TabOrder = 1
           end
           object dbProdutoNovo: TDBCheckBox
             Left = 16
@@ -907,7 +909,7 @@ inherited frmGeProduto: TfrmGeProduto
               Font.Style = []
               ParentFont = False
             end
-            object Label2: TLabel
+            object lblPercentualReducaoBC: TLabel
               Left = 760
               Top = 64
               Width = 76
@@ -2254,8 +2256,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 296
   end
@@ -2266,8 +2266,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblOrigem: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'ORP_COD'
@@ -2304,8 +2302,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoNM: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2346,8 +2342,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2384,8 +2378,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoSN: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2424,8 +2416,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2448,8 +2438,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCombustivel: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2474,8 +2462,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTipoVeiculo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2509,8 +2495,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaPIS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -2527,8 +2511,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaCOFINS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (

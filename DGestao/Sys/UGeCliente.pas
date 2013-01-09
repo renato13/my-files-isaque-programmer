@@ -244,7 +244,7 @@ begin
   tblVendedor.Open;
 
   BloquearClientes;
-  
+
   ControlFirstEdit := dbPessoaFisica;
 
   NomeTabela     := 'TBCLIENTE';
@@ -254,6 +254,10 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
+
+  if not (GetUserFunctionID in [FUNCTION_USER_ID_DIRETORIA, FUNCTION_USER_ID_GERENTE_FIN, FUNCTION_USER_ID_SYSTEM_ADM])
+  then  dbValorLimiteCompra.Enabled := False;   
+
 end;
 
 procedure TfrmGeCliente.ProximoCampoKeyPress(Sender: TObject;
