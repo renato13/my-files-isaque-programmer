@@ -1,9 +1,11 @@
 inherited frmGeTeste: TfrmGeTeste
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Teste'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcGuias: TPageControl
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited dbgDados: TDBGrid
         Columns = <

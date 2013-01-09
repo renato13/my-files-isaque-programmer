@@ -392,11 +392,11 @@ begin
   stbMain.Panels.Items[2].Text  := 'Licenciado a empresa ' + GetEmpresaNomeDefault;
   nmUsuarioAlterarSenha.Caption := Format('Alteração de Senha (%s)', [GetUserApp]);
 
+  EvAcessUserPrincipal.UserID := GetUserFunctionID;
+
   RegistrarControleAcesso(Self, EvAcessUserPrincipal);
   GetControleAcesso(Self, EvAcessUserPrincipal);
 
-  EvAcessUserPrincipal.UserID := GetUserFunctionID;
-  
   Case GetUserFunctionID of
     FUNCTION_USER_ID_DIRETORIA :
       EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_DIRETORIA;
@@ -415,15 +415,17 @@ begin
     FUNCTION_USER_ID_VENDEDOR :
       begin
         EvAcessUserPrincipal.UserID := FUNCTION_USER_ID_VENDEDOR;
-        btnEmpresa.Visible       := False;
+
+        mnRelatorioFinanceiro.Enabled := False;
+        nmRelatorioProduto.Enabled    := False;
+
+        btnEmpresa.Enabled       := False;
         btnProduto.Enabled       := False;
         btnFornecedor.Enabled    := False;
         btnEstoque.Enabled       := False;
         btnTesouraria.Enabled    := False;
         btnContaAReceber.Enabled := False;
         btnContaAPagar.Enabled   := False;
-        mnRelatorioFinanceiro.Enabled := False;
-        nmRelatorioProduto.Enabled := False;
       end;
 
     FUNCTION_USER_ID_GERENTE_ADM :

@@ -10,8 +10,6 @@ uses
 
 type
   TfrmGeEntradaEstoque = class(TfrmGrPadraoCadastro)
-    lblData: TLabel;
-    edData: TDateTimePicker;
     tblEmpresa: TIBTable;
     dtsEmpresa: TDataSource;
     lblDataHora: TLabel;
@@ -240,6 +238,19 @@ type
     lblEntradaAberta: TLabel;
     lblEntradaCancelada: TLabel;
     Label1: TLabel;
+    lblData: TLabel;
+    e1Data: TDateEdit;
+    e2Data: TDateEdit;
+    btbtnGerarNFe: TBitBtn;
+    lblAliquota: TLabel;
+    dbAliquota: TDBEdit;
+    lblPercRedBC: TLabel;
+    dbPercRedBC: TDBEdit;
+    cdsTabelaItensALIQUOTA: TIBBCDField;
+    cdsTabelaItensALIQUOTA_CSOSN: TIBBCDField;
+    cdsTabelaItensALIQUOTA_PIS: TIBBCDField;
+    cdsTabelaItensALIQUOTA_COFINS: TIBBCDField;
+    cdsTabelaItensPERCENTUAL_REDUCAO_BC: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -302,7 +313,9 @@ var
 begin
   frm := TfrmGeEntradaEstoque.Create(AOwner);
   try
-    whr := 'cast(c.dtent as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+    whr := 'cast(c.dtent as date) between ' +
+              QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e1Data.Date) ) + ' and ' +
+              QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e2Data.Date) );
 
     with frm, IbDtstTabela do
     begin
@@ -332,7 +345,8 @@ begin
   SQL_Duplicatas.Clear;
   SQL_Duplicatas.AddStrings( qryDuplicatas.SelectSQL );
 
-  edData.Date      := Date;
+  e1Data.Date      := Date;
+  e2Data.Date      := Date;
   ControlFirstEdit := dbEmpresa;
 
   tblEmpresa.Open;
@@ -350,7 +364,9 @@ end;
 
 procedure TfrmGeEntradaEstoque.btnFiltrarClick(Sender: TObject);
 begin
-  WhereAdditional := 'cast(c.dtent as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+  WhereAdditional := 'cast(c.dtent as date) between ' +
+                       QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) + ' and ' +
+                       QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) );
   inherited;
 end;
 
@@ -491,6 +507,15 @@ begin
         cdsTabelaItensDESCRI.AsString      := FieldByName('Descri').AsString;
         cdsTabelaItensUNP_SIGLA.AsString   := FieldByName('Unp_sigla').AsString;
         cdsTabelaItensQTDEANTES.AsInteger  := FieldByName('Qtde').AsInteger;
+
+        cdsTabelaItensALIQUOTA.AsCurrency              := FieldByName('Aliquota').AsCurrency;
+        cdsTabelaItensALIQUOTA_CSOSN.AsCurrency        := FieldByName('Aliquota_csosn').AsCurrency;
+        cdsTabelaItensALIQUOTA_PIS.AsCurrency          := FieldByName('Aliquota_pis').AsCurrency;
+        cdsTabelaItensALIQUOTA_COFINS.AsCurrency       := FieldByName('Aliquota_cofins').AsCurrency;
+        cdsTabelaItensPERCENTUAL_REDUCAO_BC.AsCurrency := FieldByName('Percentual_reducao_BC').AsCurrency;
+
+        if ( Trim(FieldByName('Cst').AsString) <> EmptyStr ) then
+          cdsTabelaItensCST.AsString       := FieldByName('Cst').AsString;
 
         if ( FieldByName('Codunidade').AsInteger > 0 ) then
           cdsTabelaItensUNID_COD.AsInteger   := FieldByName('Codunidade').AsInteger;
@@ -750,6 +775,12 @@ begin
       cdsTabelaItensDESCRI.AsString      := sDescricao;
       cdsTabelaItensUNP_SIGLA.AsString   := sUnidade;
 
+      cdsTabelaItensCST.AsString                     := sCST;
+      cdsTabelaItensALIQUOTA.AsCurrency              := cAliquota;
+      cdsTabelaItensALIQUOTA_PIS.AsCurrency          := cAliquotaPIS;
+      cdsTabelaItensALIQUOTA_COFINS.AsCurrency       := cAliquotaCOFINS;
+      cdsTabelaItensPERCENTUAL_REDUCAO_BC.AsCurrency := cPercRedBC;
+
       if ( iUnidade > 0 ) then
         cdsTabelaItensUNID_COD.AsInteger := iUnidade;
     end;
@@ -765,6 +796,12 @@ begin
   cdsTabelaItensNF.Value         := IbDtstTabelaNF.Value;
   cdsTabelaItensCFOP.Value       := GetCfopIDDefault;
   cdsTabelaItensSEQ.Value        := cdsTabelaItens.RecordCount + 1;
+
+  cdsTabelaItensALIQUOTA.Value              := 0.0;
+  cdsTabelaItensALIQUOTA_CSOSN.Value        := 0.0;
+  cdsTabelaItensALIQUOTA_PIS.Value          := 0.0;
+  cdsTabelaItensALIQUOTA_COFINS.Value       := 0.0;
+  cdsTabelaItensPERCENTUAL_REDUCAO_BC.Value := 0.0;
 end;
 
 procedure TfrmGeEntradaEstoque.btbtnFinalizarClick(Sender: TObject);
