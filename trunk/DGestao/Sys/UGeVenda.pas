@@ -322,6 +322,8 @@ type
     procedure dbgFormaPagtoEnter(Sender: TObject);
     procedure cdsTabelaItensSEQGetText(Sender: TField; var Text: String;
       DisplayText: Boolean);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -968,6 +970,10 @@ begin
       IbDtstTabela.Open;
 
       IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+
+      AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     end;
 
     HabilitarDesabilitar_Btns;
@@ -1837,7 +1843,8 @@ begin
     if not dtsVendaFormaPagto.AutoEdit then
       Exit;
       
-    ZerarFormaPagto;
+    if ShowConfirm('Deseja zerar as formas/condições de pagamento e colocar a forma/condição de pagamento padrão?') then
+      ZerarFormaPagto;
   end;
 end;
 
@@ -1920,6 +1927,46 @@ begin
     Exit;
 
   Text := IntToStr(cdsTabelaItens.RecNo);
+end;
+
+procedure TfrmGeVenda.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  // Inserir
+
+  if (Shift = [ssCtrl]) and (Key = VK_INSERT) Then
+    Case pgcMaisDados.ActivePageIndex of
+      0: dbgFormaPagtoKeyDown(Sender, Key, Shift);
+      1: dbgTitulosKeyDown(Sender, Key, Shift);
+    end
+  else
+
+  // Editar
+
+  if (Shift = [ssCtrl]) and (Key = VK_RETURN) Then
+    Case pgcMaisDados.ActivePageIndex of
+      0: dbgFormaPagtoKeyDown(Sender, Key, Shift);
+      1: dbgTitulosKeyDown(Sender, Key, Shift);
+    end
+  else
+
+  // Excluir Tudo e reiniciar forma de pagamento
+
+  if (Shift = [ssCtrl]) and (Key = VK_DELETE) Then
+    Case pgcMaisDados.ActivePageIndex of
+      0: dbgFormaPagtoKeyDown(Sender, Key, Shift);
+      1: dbgTitulosKeyDown(Sender, Key, Shift);
+    end
+  else
+    inherited;
+(*
+  if Key = VK_F10 then
+    if pgcGuias.ActivePage = tbsCadastro then
+    begin
+      pgcMaisDados.ActivePage := tbsRecebimento;
+      dbgFormaPagto.SetFocus;
+    end;
+*)    
 end;
 
 end.

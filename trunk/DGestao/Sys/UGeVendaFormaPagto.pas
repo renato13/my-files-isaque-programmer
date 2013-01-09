@@ -101,12 +101,12 @@ end;
 
 procedure TfrmGeVendaFormaPagto.dbFormaPagtoClick(Sender: TObject);
 begin
-  with frmGeVenda do
+  with TIBDataSet(dbCodigo.DataSource.DataSet) do
   begin
 
-    if (  IbDtstTabela.State in [dsEdit, dsInsert] ) then
-      if ( tblFormaPagto.Locate('cod', dbFormaPagto.Field.AsInteger, []) ) then
-        IbDtstTabelaFORMAPAG.AsString := tblFormaPagto.FieldByName('descri').AsString;
+    if (  State in [dsEdit, dsInsert] ) then
+      if ( dbFormaPagto.ListSource.DataSet.Locate('cod', dbFormaPagto.Field.AsInteger, []) ) then
+        FieldByName('FORMAPAG').AsString := dbFormaPagto.ListSource.DataSet.FieldByName('descri').AsString;
 
   end;
 end;
@@ -115,18 +115,18 @@ procedure TfrmGeVendaFormaPagto.dbCondicaoPagtoClick(Sender: TObject);
 var
   I : Integer;
 begin
-  with frmGeVenda do
+  with TIBDataSet(dbFormaPagto.DataSource.DataSet) do
   begin
 
-    if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
-      if ( tblCondicaoPagto.Locate('cond_cod', dbCondicaoPagto.Field.AsInteger, []) ) then
+    if ( State in [dsEdit, dsInsert] ) then
+      if ( dbCondicaoPagto.ListSource.DataSet.Locate('cond_cod', dbCondicaoPagto.Field.AsInteger, []) ) then
       begin
-        cdsVendaFormaPagtoVENDA_PRAZO.AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo').AsInteger;
+        FieldByName('VENDA_PRAZO').AsInteger := dbCondicaoPagto.ListSource.DataSet.FieldByName('Cond_prazo').AsInteger;
         for I := COND_PARCELA_MIN to COND_PARCELA_MAX do
         begin
-          cdsVendaFormaPagto.FieldByName('PRAZO_' + FormatFloat('00', I)).Clear;
-          if ( not tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).IsNull ) then
-            cdsVendaFormaPagto.FieldByName('PRAZO_' + FormatFloat('00', I)).AsInteger := tblCondicaoPagto.FieldByName('Cond_prazo_' + FormatFloat('00', I)).AsInteger;
+          FieldByName('PRAZO_' + FormatFloat('00', I)).Clear;
+          if ( not dbCondicaoPagto.ListSource.DataSet.FieldByName('Cond_prazo_' + FormatFloat('00', I)).IsNull ) then
+            FieldByName('PRAZO_' + FormatFloat('00', I)).AsInteger := dbCondicaoPagto.ListSource.DataSet.FieldByName('Cond_prazo_' + FormatFloat('00', I)).AsInteger;
         end;
       end;
 
@@ -146,7 +146,7 @@ end;
 
 procedure TfrmGeVendaFormaPagto.btnConfirmarClick(Sender: TObject);
 begin
-  if not CamposRequiridos(Self, frmGeVenda.cdsVendaFormaPagto, 'Forma/Condição de Pagamento') then
+  if not CamposRequiridos(Self, TIBDataSet(dbCodigo.DataSource.DataSet), 'Forma/Condição de Pagamento') then
     try
       if dbValorFormaPagto.Field.AsCurrency <= 0 then
       begin

@@ -400,7 +400,7 @@ begin
   begin
     Close;
     SQL.Clear;
-    SQL.Add('Update TBCLIENTE Set Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = user,');
+    SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = user,');
     SQL.Add('  Desbloqueado_data = null, Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
     SQL.Add('where Bloqueado = 0');
     SQL.Add('  and ((Desbloqueado_data is null) or (Desbloqueado_data <> Current_date))');

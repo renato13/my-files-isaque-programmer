@@ -1213,7 +1213,7 @@ object DMNFe: TDMNFe
       end
       object bndPageFooter: TfrxPageFooter
         Height = 22.677180000000000000
-        Top = 684.094930000000000000
+        Top = 710.551640000000000000
         Width = 718.110700000000000000
         object Memo1: TfrxMemoView
           Left = 566.929500000000000000
@@ -1559,7 +1559,7 @@ object DMNFe: TDMNFe
         end
       end
       object bndReportSummary: TfrxReportSummary
-        Height = 306.141930000000000000
+        Height = 332.598640000000000000
         Top = 355.275820000000000000
         Width = 718.110700000000000000
         object SysMemo1: TfrxSysMemoView
@@ -1602,7 +1602,7 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo28: TfrxMemoView
-          Top = 68.031540000000000000
+          Top = 98.267780000000000000
           Width = 366.614410000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1612,14 +1612,14 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
+          Font.Style = []
           Memo.UTF8 = (
             ' [frdVenda."VENDEDOR_NOME"]')
           ParentFont = False
           VAlign = vaCenter
         end
         object Memo29: TfrxMemoView
-          Top = 56.692950000000000000
+          Top = 86.929190000000000000
           Width = 366.614410000000000000
           Height = 11.338590000000000000
           ShowHint = False
@@ -1641,7 +1641,7 @@ object DMNFe: TDMNFe
         end
         object Memo30: TfrxMemoView
           Top = 37.795300000000000000
-          Width = 226.771800000000000000
+          Width = 718.110700000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdVenda
@@ -1650,7 +1650,7 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
+          Font.Style = []
           Memo.UTF8 = (
             ' [frdVenda."LISTA_FORMA_PAGO"]')
           ParentFont = False
@@ -1658,7 +1658,7 @@ object DMNFe: TDMNFe
         end
         object Memo31: TfrxMemoView
           Top = 26.456710000000000000
-          Width = 226.771800000000000000
+          Width = 718.110700000000000000
           Height = 11.338590000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1672,9 +1672,8 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo32: TfrxMemoView
-          Left = 226.771800000000000000
-          Top = 37.795300000000000000
-          Width = 491.338900000000000000
+          Top = 68.031540000000000000
+          Width = 718.110700000000000000
           Height = 18.897650000000000000
           ShowHint = False
           DataSet = frdVenda
@@ -1683,16 +1682,15 @@ object DMNFe: TDMNFe
           Font.Color = clBlack
           Font.Height = -9
           Font.Name = 'Lucida Console'
-          Font.Style = [fsBold]
+          Font.Style = []
           Memo.UTF8 = (
             ' [frdVenda."LISTA_COND_PAGO"]')
           ParentFont = False
           VAlign = vaCenter
         end
         object Memo33: TfrxMemoView
-          Left = 226.771800000000000000
-          Top = 26.456710000000000000
-          Width = 491.338900000000000000
+          Top = 56.692950000000000000
+          Width = 718.110700000000000000
           Height = 11.338590000000000000
           ShowHint = False
           Font.Charset = DEFAULT_CHARSET
@@ -1707,7 +1705,7 @@ object DMNFe: TDMNFe
         end
         object Memo34: TfrxMemoView
           Left = 366.614410000000000000
-          Top = 68.031540000000000000
+          Top = 98.267780000000000000
           Width = 128.504020000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1727,7 +1725,7 @@ object DMNFe: TDMNFe
         end
         object Memo35: TfrxMemoView
           Left = 366.614410000000000000
-          Top = 56.692950000000000000
+          Top = 86.929190000000000000
           Width = 128.504020000000000000
           Height = 11.338590000000000000
           ShowHint = False
@@ -1744,7 +1742,7 @@ object DMNFe: TDMNFe
         end
         object Memo36: TfrxMemoView
           Left = 495.118430000000000000
-          Top = 68.031540000000000000
+          Top = 98.267780000000000000
           Width = 94.488250000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1764,7 +1762,7 @@ object DMNFe: TDMNFe
         end
         object Memo37: TfrxMemoView
           Left = 495.118430000000000000
-          Top = 56.692950000000000000
+          Top = 86.929190000000000000
           Width = 94.488250000000000000
           Height = 11.338590000000000000
           ShowHint = False
@@ -1781,7 +1779,7 @@ object DMNFe: TDMNFe
         end
         object Memo38: TfrxMemoView
           Left = 589.606680000000000000
-          Top = 68.031540000000000000
+          Top = 98.267780000000000000
           Width = 128.504020000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1801,7 +1799,7 @@ object DMNFe: TDMNFe
         end
         object Memo39: TfrxMemoView
           Left = 589.606680000000000000
-          Top = 56.692950000000000000
+          Top = 86.929190000000000000
           Width = 128.504020000000000000
           Height = 11.338590000000000000
           ShowHint = False
@@ -1817,7 +1815,7 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo40: TfrxMemoView
-          Top = 102.047310000000000000
+          Top = 132.283550000000000000
           Width = 718.110700000000000000
           Height = 45.354360000000000000
           ShowHint = False
@@ -1836,7 +1834,7 @@ object DMNFe: TDMNFe
           VAlign = vaCenter
         end
         object Memo41: TfrxMemoView
-          Top = 86.929190000000000000
+          Top = 117.165430000000000000
           Width = 718.110700000000000000
           Height = 15.118120000000000000
           ShowHint = False
@@ -1853,7 +1851,7 @@ object DMNFe: TDMNFe
         end
         object Memo42: TfrxMemoView
           Left = 234.330860000000000000
-          Top = 278.685220000000000000
+          Top = 308.921460000000000000
           Width = 249.448980000000000000
           Height = 18.897650000000000000
           ShowHint = False
@@ -1871,7 +1869,7 @@ object DMNFe: TDMNFe
         end
         object Memo43: TfrxMemoView
           Left = 37.795300000000000000
-          Top = 162.519790000000000000
+          Top = 192.756030000000000000
           Width = 623.622450000000000000
           Height = 45.354360000000000000
           ShowHint = False

@@ -1141,7 +1141,6 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          Visible = False
         end
         object dbProduto: TRxDBComboEdit
           Left = 88
@@ -1839,7 +1838,6 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
           ReadOnly = True
           TabOrder = 7
-          Visible = False
         end
       end
       object pgcMaisDados: TPageControl
@@ -1916,8 +1914,8 @@ inherited frmGeVenda: TfrmGeVenda
               Top = 1
               Width = 124
               Height = 13
-              Caption = '&Forma de Pagamento:'
-              FocusControl = dbFormaPagto
+              Caption = 'Forma de Pagamento:'
+              FocusControl = dbgFormaPagto
             end
             object lblCondicaoPagto: TLabel
               Left = 187

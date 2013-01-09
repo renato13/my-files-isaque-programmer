@@ -329,6 +329,7 @@ end;
 procedure TfrmGrPadraoCadastro.FiltarDados;
 begin
   try
+
     fOcorreuErro := False;
     if (Trim(CampoCodigo) = EmptyStr) or ((Trim(CampoDescricao) = EmptyStr)) then
     begin
@@ -497,16 +498,23 @@ begin
 end;
 
 procedure TfrmGrPadraoCadastro.CentralizarCodigo;
+var
+  sCampoCodigo : String;
 begin
   if ( dbgDados.Columns.Count > 0 ) then
   begin
+    if ( pos('.', CampoCodigo) > 0 ) then
+      sCampoCodigo := Copy(CampoCodigo, pos('.', CampoCodigo) + 1, Length(CampoCodigo))
+    else
+      sCampoCodigo := Trim(CampoCodigo);
+
     dbgDados.Columns[0].Alignment       := taCenter;
     dbgDados.Columns[0].Title.Alignment := taCenter;
     if ( Trim(CampoCodigo) <> EmptyStr ) then
     begin
-      IbDtstTabela.FieldByName(CampoCodigo).Alignment := taCenter;
-      IbDtstTabela.FieldByName(CampoCodigo).Required  := False;
-      TIntegerField(IbDtstTabela.FieldByName(CampoCodigo)).DisplayFormat := DisplayFormatCodigo;
+      IbDtstTabela.FieldByName(sCampoCodigo).Alignment := taCenter;
+      IbDtstTabela.FieldByName(sCampoCodigo).Required  := False;
+      TIntegerField(IbDtstTabela.FieldByName(sCampoCodigo)).DisplayFormat := DisplayFormatCodigo;
     end;
   end;
 end;
@@ -538,7 +546,11 @@ begin
 
   sGenerator   := IbDtstTabela.GeneratorField.Generator;
   sTabela      := NomeTabela;
-  sCampoCodigo := CampoCodigo;
+  if ( pos('.', CampoCodigo) > 0 ) then
+    sCampoCodigo := Copy(CampoCodigo, pos('.', CampoCodigo) + 1, Length(CampoCodigo))
+  else
+    sCampoCodigo := Trim(CampoCodigo);
+
 
   if ( (sGenerator <> EmptyStr) and (sTabela <> EmptyStr) and (sCampoCodigo <> EmptyStr) ) then
     UpdateSequence(sGenerator, sTabela, sCampoCodigo, sWhr);

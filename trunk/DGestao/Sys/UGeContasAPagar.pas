@@ -405,9 +405,6 @@ begin
       , FUNCTION_USER_ID_GERENTE_FIN
       , FUNCTION_USER_ID_SYSTEM_ADM])) then Exit;
 
-//    if (not (DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [1, 3, 5, 12])) then
-//      Exit;
-//
     if ( not cdsPagamentos.IsEmpty ) then
     begin
       CxAno    := 0;
@@ -478,7 +475,7 @@ begin
         IbDtstTabela.Close;
         IbDtstTabela.Open;
 
-        IbDtstTabela.Locate('ANOLANC,NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
+        IbDtstTabela.Locate('ANOLANC;NUMLANC', VarArrayOf([MovAno, MovNumero]), []);
 
         AbrirPagamentos( IbDtstTabelaANOLANC.AsInteger, IbDtstTabelaNUMLANC.AsInteger );
 
