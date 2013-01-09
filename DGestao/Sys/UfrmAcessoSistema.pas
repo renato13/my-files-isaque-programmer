@@ -127,9 +127,11 @@ begin
   inherited;
   if ( DelphiIsRunning ) then
   begin
+//    edNome.Text  := 'FERREIRA';
+//    edSenha.Text := 'PONTOLUZ';
     edNome.Text  := 'ISAQUE';
     edSenha.Text := '123';
-    
+
     btbtnEntrar.Click;
   end;
 end;

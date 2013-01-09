@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, UGrPadrao, IBCustomDataSet, StdCtrls, Buttons, ExtCtrls, Grids,
   DBGrids, ComCtrls, ToolWin, Mask, DBCtrls, IBUpdateSQL, ImgList, TypInfo,
-  DBClient;
+  DBClient, EUserAcs;
 
 type
   TfrmGrPadraoCadastro = class(TfrmGrPadrao)
@@ -84,6 +84,7 @@ type
     procedure CentralizarCodigo;
     procedure SetWhereAdditional(Value : String);
     procedure ClearFieldEmptyStr;
+    procedure CarregarControleAcesso;
   public
     { Public declarations }
     property DisplayFormatCodigo : String read fDisplayFormat write fDisplayFormat;
@@ -139,6 +140,8 @@ begin
   pgcGuias.ActivePage := tbsTabela;
 
   ControlFirstEdit := nil;
+
+  CarregarControleAcesso;
 end;
 
 procedure TfrmGrPadraoCadastro.dbgDadosDrawColumnCell(Sender: TObject;
@@ -219,6 +222,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnIncluirClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( not IbDtstTabela.Active ) then
     FecharAbrirTabela(IbDtstTabela, True);
 
@@ -227,6 +233,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnAlterarClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( not IbDtstTabela.Active ) then
     Exit;
   IbDtstTabela.Edit;
@@ -234,6 +243,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnExcluirClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( not IbDtstTabela.Active ) then
     Exit;
   try
@@ -255,6 +267,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnCancelarClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     if ( Application.MessageBox('Deseja cancelar a inserção/edição do registro?', 'Cancelar', MB_YESNO + MB_ICONQUESTION + MB_DEFBUTTON2) = ID_YES ) then
       IbDtstTabela.Cancel;
@@ -262,6 +277,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnSalvarClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
     try
       ClearFieldEmptyStr;
@@ -526,6 +544,9 @@ end;
 
 procedure TfrmGrPadraoCadastro.btbtnSelecionarClick(Sender: TObject);
 begin
+  if not TBitBtn(Sender).Visible then
+    Exit;
+
   if ( not IbDtstTabela.Active ) then
     Exit;
   ModalResult := mrOk;
@@ -590,6 +611,18 @@ begin
     ukDelete:
       ShowError('Erro ao tentar gravar excluir registro.' + #13#13 + E.Message);
   end;
+end;
+
+procedure TfrmGrPadraoCadastro.CarregarControleAcesso;
+var
+  I : Integer;
+begin
+  for I := 0 to ComponentCount - 1 do
+    if Components[I] is TEvUserAccess then
+    begin
+      RegistrarControleAcesso(Self, TEvUserAccess(Components[I]));
+      GetControleAcesso(Self, TEvUserAccess(Components[I]));
+    end;
 end;
 
 end.

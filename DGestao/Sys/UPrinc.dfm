@@ -1,7 +1,7 @@
 object frmPrinc: TfrmPrinc
-  Left = 281
-  Top = 119
-  Width = 901
+  Left = 497
+  Top = 295
+  Width = 1134
   Height = 499
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
   Color = clBtnFace
@@ -19,7 +19,7 @@ object frmPrinc: TfrmPrinc
   object stbMain: TStatusBar
     Left = 0
     Top = 422
-    Width = 885
+    Width = 1118
     Height = 19
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlue
@@ -45,7 +45,7 @@ object frmPrinc: TfrmPrinc
   object spbBarraAcessoRapido: TSpeedBar
     Left = 0
     Top = 0
-    Width = 885
+    Width = 1118
     Height = 64
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1203,19 +1203,19 @@ object frmPrinc: TfrmPrinc
   object pnlMain: TPanel
     Left = 0
     Top = 64
-    Width = 885
+    Width = 1118
     Height = 358
     Align = alClient
     BevelOuter = bvLowered
     Color = clWhite
     TabOrder = 2
     DesignSize = (
-      885
+      1118
       358)
     object imgFundo: TImage
       Left = 1
       Top = 1
-      Width = 883
+      Width = 1116
       Height = 356
       Align = alClient
       AutoSize = True

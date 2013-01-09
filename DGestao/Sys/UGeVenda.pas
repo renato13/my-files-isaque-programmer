@@ -407,9 +407,9 @@ begin
   SQL_Titulos.Clear;
   SQL_Titulos.AddStrings( qryTitulos.SelectSQL );
 
-  e1Data.Date := Date;
-  e2Data.Date   := Date;
-  ControlFirstEdit   := dbEmpresa;
+  e1Data.Date      := Date;
+  e2Data.Date      := Date;
+  ControlFirstEdit := dbEmpresa;
 
   tblEmpresa.Open;
   tblVendedor.Open;
