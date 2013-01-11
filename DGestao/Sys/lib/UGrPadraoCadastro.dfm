@@ -1,7 +1,7 @@
 object frmGrPadraoCadastro: TfrmGrPadraoCadastro
-  Left = 433
-  Top = 208
-  Width = 742
+  Left = 333
+  Top = 198
+  Width = 751
   Height = 440
   ActiveControl = dbgDados
   BorderIcons = [biSystemMenu, biMinimize]
@@ -24,7 +24,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   object Bevel1: TBevel
     Left = 0
     Top = 398
-    Width = 726
+    Width = 735
     Height = 4
     Align = alBottom
     Shape = bsSpacer
@@ -32,7 +32,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   object Bevel3: TBevel
     Left = 0
     Top = 359
-    Width = 726
+    Width = 735
     Height = 4
     Align = alBottom
     Shape = bsSpacer
@@ -40,7 +40,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   object tlbBotoes: TToolBar
     Left = 0
     Top = 363
-    Width = 726
+    Width = 735
     Height = 35
     Align = alBottom
     ButtonHeight = 31
@@ -340,7 +340,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
   object pgcGuias: TPageControl
     Left = 0
     Top = 0
-    Width = 726
+    Width = 735
     Height = 359
     ActivePage = tbsTabela
     Align = alClient
@@ -352,7 +352,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       object Bevel4: TBevel
         Left = 0
         Top = 264
-        Width = 718
+        Width = 727
         Height = 4
         Align = alBottom
         Shape = bsSpacer
@@ -360,7 +360,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       object dbgDados: TDBGrid
         Left = 0
         Top = 0
-        Width = 718
+        Width = 727
         Height = 264
         Align = alClient
         DataSource = DtSrcTabela
@@ -386,14 +386,14 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
       object pnlFiltros: TPanel
         Left = 0
         Top = 268
-        Width = 718
+        Width = 727
         Height = 62
         Align = alBottom
         BevelOuter = bvNone
         BorderWidth = 4
         TabOrder = 1
         object grpBxFiltro: TGroupBox
-          Left = 462
+          Left = 471
           Top = 4
           Width = 252
           Height = 54
@@ -515,6 +515,7 @@ object frmGrPadraoCadastro: TfrmGrPadraoCadastro
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
     OnUpdateError = IbDtstTabelaUpdateError
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')

@@ -128,7 +128,7 @@ begin
   CampoDescricao  := EmptyStr;
   CampoOrdenacao  := EmptyStr;
   fOcorreuErro    := False;
-  AbrirTabelaAuto := True;
+  AbrirTabelaAuto := False;    //True; alterado em 11-01-2013 Dorivaldo
 
   if ( IbDtstTabela.Database = nil ) then
     IbDtstTabela.Database := DMBusiness.ibdtbsBusiness;

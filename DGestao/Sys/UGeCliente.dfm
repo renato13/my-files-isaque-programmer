@@ -1,6 +1,6 @@
 inherited frmGeCliente: TfrmGeCliente
-  Left = 403
-  Top = 134
+  Left = 254
+  Top = 131
   Width = 860
   Height = 536
   Caption = 'Cadastro de Clientes'

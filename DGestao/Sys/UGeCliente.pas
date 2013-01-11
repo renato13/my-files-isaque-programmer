@@ -520,7 +520,7 @@ begin
         IbDtstTabela.Close;
         IbDtstTabela.Open;
         IbDtstTabela.Locate('CNPJ', sCNPJ, []);
-      end;
+      end;   
 end;
 
 procedure TfrmGeCliente.btbtnAlterarClick(Sender: TObject);

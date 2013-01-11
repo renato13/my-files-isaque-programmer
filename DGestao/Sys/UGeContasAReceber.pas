@@ -228,7 +228,8 @@ end;
 procedure TfrmGeContasAReceber.btnFiltrarClick(Sender: TObject);
 begin
   WhereAdditional :=
-    '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' + 
+    //'( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' +
+    '( r.Parcela > 0 ) and (' +
     'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
     ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
   inherited;

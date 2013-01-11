@@ -137,17 +137,17 @@ begin
         periodo := 'DATA DE VENCIMENTO: ';
         case rdgrpStatus.ItemIndex of
          0 : begin  // DUPLICATAS - TODAS
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtvenc, c.nome');
                status := 'TODAS' ;
              end;
           1 : begin  // DUPLICATAS - BAIXADAS
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is not null) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is not null) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtvenc, c.nome, CR.dtrec');
                status := 'BAIXADAS' ;
              end;
           2 : begin  // DUPLICATAS - A RECEBER
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is null) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtvenc between :dataini and :datafim) and (CR.dtrec is null) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtvenc, c.nome');
                status := 'A RECEBER' ;
              end;
@@ -159,7 +159,7 @@ begin
       //  case rdgrpStatus.ItemIndex of
         // 0 :
              begin  // DUPLICATAS - TODAS
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtrec between :dataini and :datafim) and (CR.dtrec is not null) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtrec between :dataini and :datafim) and (CR.dtrec is not null) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtrec, c.nome');
                status := 'BAIXADAS' ;
              end;
@@ -170,17 +170,17 @@ begin
         periodo := 'DATA DE EMISSÃO: ';
         case rdgrpStatus.ItemIndex of
          0 : begin  // DUPLICATAS - TODAS
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtemiss, c.nome');
                status := 'TODAS' ;
              end;
           1 : begin  // DUPLICATAS - BAIXADAS
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is not null) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is not null) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtemiss, c.nome, CR.dtrec');
                status := 'BAIXADAS' ;
              end;
           2 : begin  // DUPLICATAS - A RECEBER
-               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is null) and ((v.venda_prazo=1) or (cr.anovenda is null) ) ');
+               ibqryCR.SQL.Add('where (C.nome like :cliente) and (CR.dtemiss between :dataini and :datafim) and (CR.dtrec is null) and (CR.parcela > 0) ');
                ibqryCR.SQL.Add('order by CR.dtemiss, c.nome, CR.dtvenc');
                status := 'A RECEBER' ;
              end;
