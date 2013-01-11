@@ -1,9 +1,8 @@
 inherited frmGeContasAReceber: TfrmGeContasAReceber
-  Left = 445
-  Top = 203
+  Left = 244
+  Top = 121
   Width = 950
   Height = 600
-  ActiveControl = dbCodigo
   Caption = 'Controle de Contas A Receber'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -95,7 +94,6 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   inherited pgcGuias: TPageControl
     Width = 934
     Height = 519
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -1482,6 +1480,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 864
     Top = 8
@@ -1494,6 +1494,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 864
     Top = 40
@@ -1506,6 +1508,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 864
@@ -1519,6 +1523,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object cdsPagamentos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1624,6 +1629,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblBanco: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBBANCO_BOLETO'
     TableTypes = [ttView]
     Left = 864
