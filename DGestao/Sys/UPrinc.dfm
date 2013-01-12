@@ -1,7 +1,7 @@
 object frmPrinc: TfrmPrinc
-  Left = 209
-  Top = 246
-  Width = 1134
+  Left = 277
+  Top = 144
+  Width = 916
   Height = 499
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
   Color = clBtnFace
@@ -19,7 +19,7 @@ object frmPrinc: TfrmPrinc
   object stbMain: TStatusBar
     Left = 0
     Top = 422
-    Width = 1118
+    Width = 900
     Height = 19
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlue
@@ -45,7 +45,7 @@ object frmPrinc: TfrmPrinc
   object spbBarraAcessoRapido: TSpeedBar
     Left = 0
     Top = 0
-    Width = 1118
+    Width = 900
     Height = 64
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -1203,19 +1203,19 @@ object frmPrinc: TfrmPrinc
   object pnlMain: TPanel
     Left = 0
     Top = 64
-    Width = 1118
+    Width = 900
     Height = 358
     Align = alClient
     BevelOuter = bvLowered
     Color = clWhite
     TabOrder = 2
     DesignSize = (
-      1118
+      900
       358)
     object imgFundo: TImage
       Left = 1
       Top = 1
-      Width = 1116
+      Width = 898
       Height = 356
       Align = alClient
       AutoSize = True
@@ -6208,6 +6208,7 @@ object frmPrinc: TfrmPrinc
           3E3E3E3E3E3E3E3E00003E3E3E3E3E3E3E3E3E3E3E3E3E3E00003E3E3E3E3E3E
           3E3E3E3E3E3E3E3E00003E3E3E3E3E3E3E3E3E3E3E3E3E3E0000}
         Caption = 'Ajuste Manual'
+        Visible = False
         OnClick = nmAjusteManualClick
       end
       object nmKardex: TMenuItem
@@ -7429,10 +7430,6 @@ object frmPrinc: TfrmPrinc
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
       Caption = 'Entradas'
       OnClick = nmEntradaClick
-    end
-    object popAjusteEstoque: TMenuItem
-      Caption = 'Ajuste Estoque'
-      OnClick = nmAjusteManualClick
     end
     object popKardex: TMenuItem
       Caption = 'Kardex'

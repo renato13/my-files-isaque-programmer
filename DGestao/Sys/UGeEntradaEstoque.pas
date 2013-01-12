@@ -336,7 +336,9 @@ begin
   IbDtstTabela.GeneratorField.Generator := 'GEN_COMPRAS_CONTROLE_' + FormatFloat('0000', YearOf(Date));
 
   inherited;
-  
+
+  AbrirTabelaAuto:= True;
+
   SQL_Itens := TStringList.Create;
   SQL_Itens.Clear;
   SQL_Itens.AddStrings( cdsTabelaItens.SelectSQL );
