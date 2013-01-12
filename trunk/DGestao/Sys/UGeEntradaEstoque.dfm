@@ -222,7 +222,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   inherited pgcGuias: TPageControl
     Width = 1099
     Height = 635
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -334,6 +333,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
           Visible = False
         end
         inherited grpBxFiltro: TGroupBox
+          Left = 462
           Width = 625
           inherited lbltFiltrar: TLabel
             Left = 294
@@ -3242,6 +3242,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 744
     Top = 8
@@ -3254,6 +3256,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3310,6 +3314,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3326,6 +3332,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 744
     Top = 40
@@ -3338,6 +3346,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 744
@@ -3352,6 +3362,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnNewRecord = cdsTabelaItensNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -3709,6 +3720,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryDuplicatasCalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (

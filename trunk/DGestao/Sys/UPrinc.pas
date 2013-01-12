@@ -48,7 +48,6 @@ type
     popEntrada: TMenuItem;
     nmAjusteManual: TMenuItem;
     nmKardex: TMenuItem;
-    popAjusteEstoque: TMenuItem;
     popKardex: TMenuItem;
     menuFaturamento: TMenuItem;
     nmVendas: TMenuItem;

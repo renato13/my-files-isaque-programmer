@@ -273,6 +273,8 @@ begin
 
   inherited;
 
+  AbrirTabelaAuto:= True;
+
   SQL_Consolidado := TStringList.Create;
   SQL_Consolidado.Clear;
   SQL_Consolidado.AddStrings( cdsCosolidado.SelectSQL );
