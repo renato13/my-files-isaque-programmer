@@ -146,6 +146,18 @@ end;
 
 procedure TfrmGeVendaFormaPagto.btnConfirmarClick(Sender: TObject);
 begin
+  if ( Trim(dbFormaPagto.Text) = EmptyStr ) then
+  begin
+    ShowWarning('Favor informa uma Forma de Pagamento');
+    Exit;
+  end;
+
+  if ( Trim(dbCondicaoPagto.Text) = EmptyStr ) then
+  begin
+    ShowWarning('Favor informa uma Condição de Pagamento');
+    Exit;
+  end;
+
   if not CamposRequiridos(Self, TIBDataSet(dbCodigo.DataSource.DataSet), 'Forma/Condição de Pagamento') then
     try
       if dbValorFormaPagto.Field.AsCurrency <= 0 then
