@@ -138,4 +138,5 @@ System Analisty=Isaque Marinho Ribeiro
 ReleaseDate=30/05/2012
 Contacts=(91) 8717-1057 / 8129-1567
 [Excluded Packages]
-C:\Program Files\FastReports\FastReport 4632\LibD7\dclfsIBX7.bpl=FastScript 1.9 IBX Components
+c:\program files (x86)\borland\delphi7\Projects\Bpl\RVDBPkgD7.bpl=RichView DataAware
+c:\program files (x86)\borland\delphi7\Projects\Bpl\BackupComp.bpl=(untitled)
