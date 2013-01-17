@@ -239,6 +239,85 @@ type
     qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
     qryCalculoImportoLISTA_COND_PAGO_FULL: TMemoField;
+    qryFornecedorDestinatario: TIBQuery;
+    frdFornecedor: TfrxDBDataset;
+    qryFornecedorDestinatarioCODIGO: TIntegerField;
+    qryFornecedorDestinatarioPESSOA_FISICA: TSmallintField;
+    qryFornecedorDestinatarioCNPJ: TIBStringField;
+    qryFornecedorDestinatarioNOME: TIBStringField;
+    qryFornecedorDestinatarioINSCEST: TIBStringField;
+    qryFornecedorDestinatarioINSCMUN: TIBStringField;
+    qryFornecedorDestinatarioFONE: TIBStringField;
+    qryFornecedorDestinatarioEMAIL: TIBStringField;
+    qryFornecedorDestinatarioSITE: TIBStringField;
+    qryFornecedorDestinatarioTLG_TIPO: TSmallintField;
+    qryFornecedorDestinatarioTLG_DESCRICAO: TIBStringField;
+    qryFornecedorDestinatarioTLG_SIGLA: TIBStringField;
+    qryFornecedorDestinatarioLOG_COD: TIntegerField;
+    qryFornecedorDestinatarioLOG_NOME: TIBStringField;
+    qryFornecedorDestinatarioCOMPLEMENTO: TIBStringField;
+    qryFornecedorDestinatarioNUMERO_END: TIBStringField;
+    qryFornecedorDestinatarioCEP: TIBStringField;
+    qryFornecedorDestinatarioBAI_COD: TIntegerField;
+    qryFornecedorDestinatarioBAI_NOME: TIBStringField;
+    qryFornecedorDestinatarioCID_COD: TIntegerField;
+    qryFornecedorDestinatarioCID_NOME: TIBStringField;
+    qryFornecedorDestinatarioCID_SIAFI: TIntegerField;
+    qryFornecedorDestinatarioCID_IBGE: TIntegerField;
+    qryFornecedorDestinatarioCID_DDD: TSmallintField;
+    qryFornecedorDestinatarioEST_COD: TSmallintField;
+    qryFornecedorDestinatarioEST_NOME: TIBStringField;
+    qryFornecedorDestinatarioEST_SIGLA: TIBStringField;
+    qryFornecedorDestinatarioEST_SIAFI: TIntegerField;
+    qryFornecedorDestinatarioPAIS_ID: TIBStringField;
+    qryFornecedorDestinatarioPAIS_NOME: TIBStringField;
+    frdEntrada: TfrxDBDataset;
+    qryEntradaCalculoImporto: TIBDataSet;
+    qryEntradaCalculoImportoANO: TSmallintField;
+    qryEntradaCalculoImportoCODCONTROL: TIntegerField;
+    qryEntradaCalculoImportoCODEMP: TIBStringField;
+    qryEntradaCalculoImportoCODFORN: TIntegerField;
+    qryEntradaCalculoImportoDTENT: TDateField;
+    qryEntradaCalculoImportoSTATUS: TSmallintField;
+    qryEntradaCalculoImportoDESCONTO: TIBBCDField;
+    qryEntradaCalculoImportoDTFINALIZACAO_COMPRA: TDateTimeField;
+    qryEntradaCalculoImportoOBS: TMemoField;
+    qryEntradaCalculoImportoSERIE: TIBStringField;
+    qryEntradaCalculoImportoNF: TIntegerField;
+    qryEntradaCalculoImportoLOTE_NFE_ANO: TSmallintField;
+    qryEntradaCalculoImportoLOTE_NFE_NUMERO: TIntegerField;
+    qryEntradaCalculoImportoNFE_ENVIADA: TSmallintField;
+    qryEntradaCalculoImportoDATAEMISSAO: TDateField;
+    qryEntradaCalculoImportoHORAEMISSAO: TTimeField;
+    qryEntradaCalculoImportoCANCEL_USUARIO: TIBStringField;
+    qryEntradaCalculoImportoCANCEL_DATAHORA: TDateTimeField;
+    qryEntradaCalculoImportoCANCEL_MOTIVO: TMemoField;
+    qryEntradaCalculoImportoCFOP: TIntegerField;
+    qryEntradaCalculoImportoCFOP_DESCRICAO: TIBStringField;
+    qryEntradaCalculoImportoVERIFICADOR_NFE: TIBStringField;
+    qryEntradaCalculoImportoXML_NFE_FILENAME: TIBStringField;
+    qryEntradaCalculoImportoXML_NFE: TMemoField;
+    qryEntradaCalculoImportoUSUARIO: TIBStringField;
+    qryEntradaCalculoImportoUSUARIO_NOME_COMPLETO: TIBStringField;
+    qryEntradaCalculoImportoUSUARIO_FUNCAO: TIBStringField;
+    qryEntradaCalculoImportoFORMA_PAGO: TIBStringField;
+    qryEntradaCalculoImportoCOND_PAGO: TIBStringField;
+    qryEntradaCalculoImportoCOND_PAGO_FULL: TIBStringField;
+    qryEntradaCalculoImportoCOMPRA_PRAZO: TSmallintField;
+    qryEntradaCalculoImportoNFE_VALOR_BASE_ICMS: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_ICMS: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_ICMS_SUBST: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_TOTAL_PRODUTO: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_FRETE: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_SEGURO: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_DESCONTO: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_TOTAL_II: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_TOTAL_IPI: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_PIS: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_COFINS: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
+    qryEntradaCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -255,6 +334,8 @@ type
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
+      var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
+    procedure GerarNFEEntradaACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
   public
     { Public declarations }
@@ -277,9 +358,18 @@ type
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
       const Imprimir : Boolean = TRUE) : Boolean;
+
     function CancelarNFeACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; const Motivo : String) : Boolean;
-    function ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; 
+
+    function ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       const IsPDF : Boolean = FALSE) : Boolean;
+
+    function GerarNFeEntradaOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+      var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
+      const Imprimir : Boolean = TRUE) : Boolean;
+    function GerarNFeEntradaOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+      var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
+      const Imprimir : Boolean = TRUE) : Boolean;
   end;
 
 var
@@ -1803,6 +1893,36 @@ begin
     On E : Exception do
       raise Exception.Create('Erro no procedimento GerarTabela_CST_COFINS - ' + E.Message);
   end;
+end;
+
+function TDMNFe.GerarNFeEntradaOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra: Integer;
+  var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
+  const Imprimir : Boolean = TRUE): Boolean;
+var
+  DtHoraEmiss : TDateTime;
+begin
+
+  Result := False;
+
+end;
+
+function TDMNFe.GerarNFeEntradaOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+  var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
+  const Imprimir : Boolean = TRUE) : Boolean;
+var
+  DtHoraEmiss : TDateTime;
+begin
+
+  Result := False;
+
+end;
+
+procedure TDMNFe.GerarNFEEntradaACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+  var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
+begin
+
+  ;
+  
 end;
 
 end.

@@ -75,7 +75,8 @@ uses
   FormFactoryU in 'lib\FormFactoryU.pas',
   FuncoesFormulario in 'lib\FuncoesFormulario.pas',
   UGrUsuarioAlterarSenha in 'lib\UGrUsuarioAlterarSenha.pas' {frmGrUsuarioAlterarSenha},
-  UGeVendaFormaPagto in 'UGeVendaFormaPagto.pas' {frmGeVendaFormaPagto};
+  UGeVendaFormaPagto in 'UGeVendaFormaPagto.pas' {frmGeVendaFormaPagto},
+  UGeEntradaEstoqueGerarNFe in 'UGeEntradaEstoqueGerarNFe.pas' {frmGeEntradaEstoqueGerarNFe};
 
 {$R *.res}
 
