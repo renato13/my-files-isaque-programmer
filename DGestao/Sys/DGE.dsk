@@ -1,6 +1,6 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas',0,1,202,94,207,1,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas',0,1,444,27,484,1,0
+File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,147,44,157,1,0
+File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas',0,1,202,94,207,1,0
 File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeCliente.pas',0,1,249,25,514,1,0
 File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeProduto.pas',0,1,1,156,19,1,0
 File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UPesq.pas',0,1,49,33,85,1,0
@@ -11,13 +11,13 @@ File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAPagar.pas',0,
 
 [Modules]
 Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
 Module8=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 Count=9
 EditWindowCount=1
@@ -27,27 +27,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=1
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -57,7 +42,22 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
 [E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -67,11 +67,11 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
 FormState=0
 FormOnTop=0
 
@@ -135,9 +135,9 @@ LeftCol=1
 
 [View3]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-CursorX=15
-CursorY=103
-TopLine=101
+CursorX=17
+CursorY=169
+TopLine=135
 LeftCol=1
 
 [View4]
@@ -149,9 +149,9 @@ LeftCol=1
 
 [View5]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-CursorX=106
-CursorY=1017
-TopLine=1006
+CursorX=75
+CursorY=1089
+TopLine=1085
 LeftCol=1
 
 [View6]
@@ -163,15 +163,15 @@ LeftCol=1
 
 [View7]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas
-CursorX=1
-CursorY=494
-TopLine=465
+CursorX=97
+CursorY=1000
+TopLine=913
 LeftCol=1
 
 [View8]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
 CursorX=1
-CursorY=639
+CursorY=638
 TopLine=584
 LeftCol=1
 
@@ -245,7 +245,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Caption
+SelectedItem=
 ExpandedItems=
 HiddenCategories=
 

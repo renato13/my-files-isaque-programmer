@@ -3601,4 +3601,618 @@ object DMNFe: TDMNFe
     Left = 180
     Top = 265
   end
+  object qryFornecedorDestinatario: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    f.codforn as Codigo'
+      '  , f.pessoa_fisica'
+      '  , f.cnpj'
+      '  , f.nomeforn as Nome'
+      '  , f.inscest'
+      '  , f.inscmun'
+      ''
+      '  , f.fone'
+      '  , f.email'
+      '  , f.site'
+      ''
+      '  , f.tlg_tipo'
+      '  , tl.Tlg_descricao'
+      '  , tl.Tlg_sigla'
+      '  , f.log_cod'
+      '  , lg.Log_nome'
+      '  , f.complemento'
+      '  , f.numero_end'
+      '  , f.cep'
+      ''
+      '  , f.bai_cod'
+      '  , br.Bai_nome'
+      ''
+      '  , f.cid_cod'
+      '  , cd.Cid_nome'
+      '  , cd.Cid_siafi'
+      '  , cd.Cid_ibge'
+      '  , cd.Cid_ddd'
+      ''
+      '  , f.est_cod'
+      '  , uf.Est_nome'
+      '  , uf.Est_sigla'
+      '  , uf.Est_siafi'
+      ''
+      '  , f.pais_id'
+      '  , pa.Pais_nome'
+      'from TBFORNECEDOR f'
+      '  left join TBESTADO uf on (uf.Est_cod = f.Est_cod)'
+      '  left join TBCIDADE cd on (cd.Cid_cod = f.Cid_cod)'
+      '  left join TBBAIRRO br on (br.Bai_cod = f.Bai_cod)'
+      '  left join TBLOGRADOURO lg on (lg.Log_cod = f.Log_cod)'
+      '  left join TBTIPO_LoGRADOURO tl on (tl.Tlg_cod = f.Tlg_tipo)'
+      '  left Join TBPAIS pa on (pa.Pais_id = f.Pais_id)'
+      'where f.Cnpj = :Cnpj')
+    Left = 224
+    Top = 72
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'Cnpj'
+        ParamType = ptInput
+        Value = ''
+      end>
+    object qryFornecedorDestinatarioCODIGO: TIntegerField
+      FieldName = 'CODIGO'
+      Origin = '"TBFORNECEDOR"."CODFORN"'
+      Required = True
+    end
+    object qryFornecedorDestinatarioPESSOA_FISICA: TSmallintField
+      FieldName = 'PESSOA_FISICA'
+      Origin = '"TBFORNECEDOR"."PESSOA_FISICA"'
+    end
+    object qryFornecedorDestinatarioCNPJ: TIBStringField
+      FieldName = 'CNPJ'
+      Origin = '"TBFORNECEDOR"."CNPJ"'
+      Size = 18
+    end
+    object qryFornecedorDestinatarioNOME: TIBStringField
+      FieldName = 'NOME'
+      Origin = '"TBFORNECEDOR"."NOMEFORN"'
+      Size = 60
+    end
+    object qryFornecedorDestinatarioINSCEST: TIBStringField
+      FieldName = 'INSCEST'
+      Origin = '"TBFORNECEDOR"."INSCEST"'
+    end
+    object qryFornecedorDestinatarioINSCMUN: TIBStringField
+      FieldName = 'INSCMUN'
+      Origin = '"TBFORNECEDOR"."INSCMUN"'
+    end
+    object qryFornecedorDestinatarioFONE: TIBStringField
+      FieldName = 'FONE'
+      Origin = '"TBFORNECEDOR"."FONE"'
+      Size = 11
+    end
+    object qryFornecedorDestinatarioEMAIL: TIBStringField
+      FieldName = 'EMAIL'
+      Origin = '"TBFORNECEDOR"."EMAIL"'
+      Size = 40
+    end
+    object qryFornecedorDestinatarioSITE: TIBStringField
+      FieldName = 'SITE'
+      Origin = '"TBFORNECEDOR"."SITE"'
+      Size = 35
+    end
+    object qryFornecedorDestinatarioTLG_TIPO: TSmallintField
+      FieldName = 'TLG_TIPO'
+      Origin = '"TBFORNECEDOR"."TLG_TIPO"'
+    end
+    object qryFornecedorDestinatarioTLG_DESCRICAO: TIBStringField
+      FieldName = 'TLG_DESCRICAO'
+      Origin = '"TBTIPO_LOGRADOURO"."TLG_DESCRICAO"'
+      Size = 50
+    end
+    object qryFornecedorDestinatarioTLG_SIGLA: TIBStringField
+      FieldName = 'TLG_SIGLA'
+      Origin = '"TBTIPO_LOGRADOURO"."TLG_SIGLA"'
+      Size = 10
+    end
+    object qryFornecedorDestinatarioLOG_COD: TIntegerField
+      FieldName = 'LOG_COD'
+      Origin = '"TBFORNECEDOR"."LOG_COD"'
+    end
+    object qryFornecedorDestinatarioLOG_NOME: TIBStringField
+      FieldName = 'LOG_NOME'
+      Origin = '"TBLOGRADOURO"."LOG_NOME"'
+      Size = 250
+    end
+    object qryFornecedorDestinatarioCOMPLEMENTO: TIBStringField
+      FieldName = 'COMPLEMENTO'
+      Origin = '"TBFORNECEDOR"."COMPLEMENTO"'
+      Size = 50
+    end
+    object qryFornecedorDestinatarioNUMERO_END: TIBStringField
+      FieldName = 'NUMERO_END'
+      Origin = '"TBFORNECEDOR"."NUMERO_END"'
+      Size = 10
+    end
+    object qryFornecedorDestinatarioCEP: TIBStringField
+      FieldName = 'CEP'
+      Origin = '"TBFORNECEDOR"."CEP"'
+      Size = 8
+    end
+    object qryFornecedorDestinatarioBAI_COD: TIntegerField
+      FieldName = 'BAI_COD'
+      Origin = '"TBFORNECEDOR"."BAI_COD"'
+    end
+    object qryFornecedorDestinatarioBAI_NOME: TIBStringField
+      FieldName = 'BAI_NOME'
+      Origin = '"TBBAIRRO"."BAI_NOME"'
+      Size = 100
+    end
+    object qryFornecedorDestinatarioCID_COD: TIntegerField
+      FieldName = 'CID_COD'
+      Origin = '"TBFORNECEDOR"."CID_COD"'
+    end
+    object qryFornecedorDestinatarioCID_NOME: TIBStringField
+      FieldName = 'CID_NOME'
+      Origin = '"TBCIDADE"."CID_NOME"'
+      Size = 100
+    end
+    object qryFornecedorDestinatarioCID_SIAFI: TIntegerField
+      FieldName = 'CID_SIAFI'
+      Origin = '"TBCIDADE"."CID_SIAFI"'
+    end
+    object qryFornecedorDestinatarioCID_IBGE: TIntegerField
+      FieldName = 'CID_IBGE'
+      Origin = '"TBCIDADE"."CID_IBGE"'
+    end
+    object qryFornecedorDestinatarioCID_DDD: TSmallintField
+      FieldName = 'CID_DDD'
+      Origin = '"TBCIDADE"."CID_DDD"'
+    end
+    object qryFornecedorDestinatarioEST_COD: TSmallintField
+      FieldName = 'EST_COD'
+      Origin = '"TBFORNECEDOR"."EST_COD"'
+    end
+    object qryFornecedorDestinatarioEST_NOME: TIBStringField
+      FieldName = 'EST_NOME'
+      Origin = '"TBESTADO"."EST_NOME"'
+      Size = 100
+    end
+    object qryFornecedorDestinatarioEST_SIGLA: TIBStringField
+      FieldName = 'EST_SIGLA'
+      Origin = '"TBESTADO"."EST_SIGLA"'
+      Size = 2
+    end
+    object qryFornecedorDestinatarioEST_SIAFI: TIntegerField
+      FieldName = 'EST_SIAFI'
+      Origin = '"TBESTADO"."EST_SIAFI"'
+    end
+    object qryFornecedorDestinatarioPAIS_ID: TIBStringField
+      FieldName = 'PAIS_ID'
+      Origin = '"TBFORNECEDOR"."PAIS_ID"'
+      Size = 5
+    end
+    object qryFornecedorDestinatarioPAIS_NOME: TIBStringField
+      FieldName = 'PAIS_NOME'
+      Origin = '"TBPAIS"."PAIS_NOME"'
+      Size = 150
+    end
+  end
+  object frdFornecedor: TfrxDBDataset
+    UserName = 'frdFornecedor'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CODIGO=CODIGO'
+      'PESSOA_FISICA=PESSOA_FISICA'
+      'CNPJ=CNPJ'
+      'NOME=NOME'
+      'INSCEST=INSCEST'
+      'INSCMUN=INSCMUN'
+      'FONE=FONE'
+      'EMAIL=EMAIL'
+      'SITE=SITE'
+      'TLG_TIPO=TLG_TIPO'
+      'TLG_DESCRICAO=TLG_DESCRICAO'
+      'TLG_SIGLA=TLG_SIGLA'
+      'LOG_COD=LOG_COD'
+      'LOG_NOME=LOG_NOME'
+      'COMPLEMENTO=COMPLEMENTO'
+      'NUMERO_END=NUMERO_END'
+      'CEP=CEP'
+      'BAI_COD=BAI_COD'
+      'BAI_NOME=BAI_NOME'
+      'CID_COD=CID_COD'
+      'CID_NOME=CID_NOME'
+      'CID_SIAFI=CID_SIAFI'
+      'CID_IBGE=CID_IBGE'
+      'CID_DDD=CID_DDD'
+      'EST_COD=EST_COD'
+      'EST_NOME=EST_NOME'
+      'EST_SIGLA=EST_SIGLA'
+      'EST_SIAFI=EST_SIAFI'
+      'PAIS_ID=PAIS_ID'
+      'PAIS_NOME=PAIS_NOME')
+    DataSet = qryFornecedorDestinatario
+    BCDToCurrency = False
+    Left = 264
+    Top = 72
+  end
+  object frdEntrada: TfrxDBDataset
+    UserName = 'frdEntrada'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ANO=ANO'
+      'CODCONTROL=CODCONTROL'
+      'CODEMP=CODEMP'
+      'CODCLI=CODCLI'
+      'DTVENDA=DTVENDA'
+      'STATUS=STATUS'
+      'DESCONTO=DESCONTO'
+      'TOTALVENDA=TOTALVENDA'
+      'TOTALVENDABRUTA=TOTALVENDABRUTA'
+      'DTFINALIZACAO_VENDA=DTFINALIZACAO_VENDA'
+      'OBS=OBS'
+      'SERIE=SERIE'
+      'NFE=NFE'
+      'LOTE_NFE_ANO=LOTE_NFE_ANO'
+      'LOTE_NFE_NUMERO=LOTE_NFE_NUMERO'
+      'NFE_ENVIADA=NFE_ENVIADA'
+      'DATAEMISSAO=DATAEMISSAO'
+      'HORAEMISSAO=HORAEMISSAO'
+      'CANCEL_USUARIO=CANCEL_USUARIO'
+      'CANCEL_DATAHORA=CANCEL_DATAHORA'
+      'CANCEL_MOTIVO=CANCEL_MOTIVO'
+      'CFOP=CFOP'
+      'CFOP_DESCRICAO=CFOP_DESCRICAO'
+      'VERIFICADOR_NFE=VERIFICADOR_NFE'
+      'XML_NFE_FILENAME=XML_NFE_FILENAME'
+      'XML_NFE=XML_NFE'
+      'VENDEDOR_COD=VENDEDOR_COD'
+      'VENDEDOR_NOME=VENDEDOR_NOME'
+      'VENDEDOR_CPF=VENDEDOR_CPF'
+      'USUARIO=USUARIO'
+      'LISTA_FORMA_PAGO=LISTA_FORMA_PAGO'
+      'LISTA_COND_PAGO=LISTA_COND_PAGO'
+      'LISTA_COND_PAGO_FULL=LISTA_COND_PAGO_FULL'
+      'VENDA_PRAZO=VENDA_PRAZO'
+      'NFE_VALOR_BASE_ICMS=NFE_VALOR_BASE_ICMS'
+      'NFE_VALOR_ICMS=NFE_VALOR_ICMS'
+      'NFE_VALOR_BASE_ICMS_SUBST=NFE_VALOR_BASE_ICMS_SUBST'
+      'NFE_VALOR_ICMS_SUBST=NFE_VALOR_ICMS_SUBST'
+      'NFE_VALOR_TOTAL_PRODUTO=NFE_VALOR_TOTAL_PRODUTO'
+      'NFE_VALOR_FRETE=NFE_VALOR_FRETE'
+      'NFE_VALOR_SEGURO=NFE_VALOR_SEGURO'
+      'NFE_VALOR_DESCONTO=NFE_VALOR_DESCONTO'
+      'NFE_VALOR_TOTAL_II=NFE_VALOR_TOTAL_II'
+      'NFE_VALOR_TOTAL_IPI=NFE_VALOR_TOTAL_IPI'
+      'NFE_VALOR_PIS=NFE_VALOR_PIS'
+      'NFE_VALOR_COFINS=NFE_VALOR_COFINS'
+      'NFE_VALOR_OUTROS=NFE_VALOR_OUTROS'
+      'NFE_VALOR_TOTAL_NOTA=NFE_VALOR_TOTAL_NOTA')
+    DataSet = qryEntradaCalculoImporto
+    BCDToCurrency = False
+    Left = 264
+    Top = 120
+  end
+  object qryEntradaCalculoImporto: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    ForcedRefresh = True
+    CachedUpdates = True
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'Select'
+      '    c.Ano'
+      '  , c.Codcontrol'
+      '  , c.Codemp'
+      '  , c.codforn'
+      '  , c.dtent'
+      '  , c.status'
+      '  , c.desconto'
+      '  , c.dtfinalizacao_compra'
+      '  , c.obs'
+      '  , c.nfserie as Serie'
+      '  , c.nf'
+      '  , c.Lote_nfe_ano'
+      '  , c.Lote_nfe_numero'
+      '  , c.Nfe_enviada'
+      '  , c.dtemiss as Dataemissao'
+      '  , current_time as Horaemissao'
+      '  , c.Cancel_usuario'
+      '  , c.Cancel_datahora'
+      '  , c.Cancel_motivo'
+      '  , c.nfcfop as Cfop'
+      '  , cf.Cfop_descricao'
+      '  , c.Verificador_nfe'
+      '  , c.Xml_nfe_filename'
+      '  , c.Xml_nfe'
+      '  , c.Usuario'
+      '  , usr.nome_completo  as usuario_nome_completo'
+      '  , usr.funcao_usuario as usuario_funcao'
+      ''
+      '  , fp.descri as forma_pago'
+      '  , cp.cond_descricao as cond_pago'
+      '  , cp.cond_descricao_full as cond_pago_full'
+      ''
+      '  , c.compra_prazo'
+      '  , c.icmsbase  as Nfe_valor_base_icms'
+      '  , c.icmsvalor as Nfe_valor_icms'
+      '  , c.icmssubstbase  as Nfe_valor_base_icms_subst'
+      '  , c.icmssubstvalor as Nfe_valor_icms_subst'
+      '  , c.totalprod   as Nfe_valor_total_produto'
+      '  , c.frete       as Nfe_valor_frete'
+      '  , c.valorseguro as Nfe_valor_seguro'
+      '  , c.desconto    as Nfe_valor_desconto'
+      '  , c.valortotal_ii  as Nfe_valor_total_ii'
+      '  , c.valortotal_ipi as Nfe_valor_total_ipi'
+      '  , c.valorpis     as Nfe_valor_pis'
+      '  , c.valorcofins  as Nfe_valor_cofins'
+      '  , c.outroscustos as Nfe_valor_outros'
+      '  , c.totalnf      as Nfe_valor_total_nota'
+      ''
+      'from TBCOMPRAS c'
+      '  inner join TBCFOP cf on (cf.Cfop_cod = c.nfcfop)'
+      '  inner join TBFORMPAGTO fp on (fp.cod = c.formapagto_cod)'
+      
+        '  inner join VW_CONDICAOPAGTO cp on (cp.cond_cod = c.condicaopag' +
+        'to_cod)'
+      '  left join ('
+      '    Select'
+      '        cast(u.nome as varchar(50)) as Usuario'
+      '      , u.nomecompleto as nome_completo'
+      '      , fu.funcao as funcao_usuario'
+      '    from TBUSERS u'
+      '      left join TBFUNCAO fu on (fu.cod = u.codfuncao)'
+      '  ) usr on (usr.usuario = c.usuario)'
+      'where c.ano = :anocompra'
+      '  and c.codcontrol = :numcompra'
+      '')
+    ModifySQL.Strings = (
+      '')
+    GeneratorField.ApplyEvent = gamOnPost
+    Left = 224
+    Top = 120
+    object qryEntradaCalculoImportoANO: TSmallintField
+      FieldName = 'ANO'
+      Origin = '"TBCOMPRAS"."ANO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaCalculoImportoCODCONTROL: TIntegerField
+      FieldName = 'CODCONTROL'
+      Origin = '"TBCOMPRAS"."CODCONTROL"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaCalculoImportoCODEMP: TIBStringField
+      FieldName = 'CODEMP'
+      Origin = '"TBCOMPRAS"."CODEMP"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 18
+    end
+    object qryEntradaCalculoImportoCODFORN: TIntegerField
+      FieldName = 'CODFORN'
+      Origin = '"TBCOMPRAS"."CODFORN"'
+    end
+    object qryEntradaCalculoImportoDTENT: TDateField
+      FieldName = 'DTENT'
+      Origin = '"TBCOMPRAS"."DTENT"'
+    end
+    object qryEntradaCalculoImportoSTATUS: TSmallintField
+      FieldName = 'STATUS'
+      Origin = '"TBCOMPRAS"."STATUS"'
+    end
+    object qryEntradaCalculoImportoDESCONTO: TIBBCDField
+      FieldName = 'DESCONTO'
+      Origin = '"TBCOMPRAS"."DESCONTO"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoDTFINALIZACAO_COMPRA: TDateTimeField
+      FieldName = 'DTFINALIZACAO_COMPRA'
+      Origin = '"TBCOMPRAS"."DTFINALIZACAO_COMPRA"'
+    end
+    object qryEntradaCalculoImportoOBS: TMemoField
+      FieldName = 'OBS'
+      Origin = '"TBCOMPRAS"."OBS"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryEntradaCalculoImportoSERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = '"TBCOMPRAS"."NFSERIE"'
+      FixedChar = True
+      Size = 1
+    end
+    object qryEntradaCalculoImportoNF: TIntegerField
+      FieldName = 'NF'
+      Origin = '"TBCOMPRAS"."NF"'
+      Required = True
+    end
+    object qryEntradaCalculoImportoLOTE_NFE_ANO: TSmallintField
+      FieldName = 'LOTE_NFE_ANO'
+      Origin = '"TBCOMPRAS"."LOTE_NFE_ANO"'
+    end
+    object qryEntradaCalculoImportoLOTE_NFE_NUMERO: TIntegerField
+      FieldName = 'LOTE_NFE_NUMERO'
+      Origin = '"TBCOMPRAS"."LOTE_NFE_NUMERO"'
+    end
+    object qryEntradaCalculoImportoNFE_ENVIADA: TSmallintField
+      FieldName = 'NFE_ENVIADA'
+      Origin = '"TBCOMPRAS"."NFE_ENVIADA"'
+    end
+    object qryEntradaCalculoImportoDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = '"TBCOMPRAS"."DTEMISS"'
+    end
+    object qryEntradaCalculoImportoHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      ProviderFlags = []
+    end
+    object qryEntradaCalculoImportoCANCEL_USUARIO: TIBStringField
+      FieldName = 'CANCEL_USUARIO'
+      Origin = '"TBCOMPRAS"."CANCEL_USUARIO"'
+      Size = 50
+    end
+    object qryEntradaCalculoImportoCANCEL_DATAHORA: TDateTimeField
+      FieldName = 'CANCEL_DATAHORA'
+      Origin = '"TBCOMPRAS"."CANCEL_DATAHORA"'
+    end
+    object qryEntradaCalculoImportoCANCEL_MOTIVO: TMemoField
+      FieldName = 'CANCEL_MOTIVO'
+      Origin = '"TBCOMPRAS"."CANCEL_MOTIVO"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryEntradaCalculoImportoCFOP: TIntegerField
+      FieldName = 'CFOP'
+      Origin = '"TBCOMPRAS"."NFCFOP"'
+    end
+    object qryEntradaCalculoImportoCFOP_DESCRICAO: TIBStringField
+      FieldName = 'CFOP_DESCRICAO'
+      Origin = '"TBCFOP"."CFOP_DESCRICAO"'
+      Size = 250
+    end
+    object qryEntradaCalculoImportoVERIFICADOR_NFE: TIBStringField
+      FieldName = 'VERIFICADOR_NFE'
+      Origin = '"TBCOMPRAS"."VERIFICADOR_NFE"'
+      Size = 250
+    end
+    object qryEntradaCalculoImportoXML_NFE_FILENAME: TIBStringField
+      FieldName = 'XML_NFE_FILENAME'
+      Origin = '"TBCOMPRAS"."XML_NFE_FILENAME"'
+      Size = 250
+    end
+    object qryEntradaCalculoImportoXML_NFE: TMemoField
+      FieldName = 'XML_NFE'
+      Origin = '"TBCOMPRAS"."XML_NFE"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryEntradaCalculoImportoUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = '"TBCOMPRAS"."USUARIO"'
+      Size = 50
+    end
+    object qryEntradaCalculoImportoUSUARIO_NOME_COMPLETO: TIBStringField
+      FieldName = 'USUARIO_NOME_COMPLETO'
+      ProviderFlags = []
+      Size = 60
+    end
+    object qryEntradaCalculoImportoUSUARIO_FUNCAO: TIBStringField
+      FieldName = 'USUARIO_FUNCAO'
+      ProviderFlags = []
+      Size = 25
+    end
+    object qryEntradaCalculoImportoFORMA_PAGO: TIBStringField
+      FieldName = 'FORMA_PAGO'
+      Origin = '"TBFORMPAGTO"."DESCRI"'
+      Size = 30
+    end
+    object qryEntradaCalculoImportoCOND_PAGO: TIBStringField
+      FieldName = 'COND_PAGO'
+      Origin = '"VW_CONDICAOPAGTO"."COND_DESCRICAO"'
+      Size = 80
+    end
+    object qryEntradaCalculoImportoCOND_PAGO_FULL: TIBStringField
+      FieldKind = fkInternalCalc
+      FieldName = 'COND_PAGO_FULL'
+      Origin = '"VW_CONDICAOPAGTO"."COND_DESCRICAO_FULL"'
+      ReadOnly = True
+      Size = 177
+    end
+    object qryEntradaCalculoImportoCOMPRA_PRAZO: TSmallintField
+      FieldName = 'COMPRA_PRAZO'
+      Origin = '"TBCOMPRAS"."COMPRA_PRAZO"'
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_BASE_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS'
+      Origin = '"TBCOMPRAS"."ICMSBASE"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_ICMS: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS'
+      Origin = '"TBCOMPRAS"."ICMSVALOR"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_BASE_ICMS_SUBST'
+      Origin = '"TBCOMPRAS"."ICMSSUBSTBASE"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_ICMS_SUBST: TIBBCDField
+      FieldName = 'NFE_VALOR_ICMS_SUBST'
+      Origin = '"TBCOMPRAS"."ICMSSUBSTVALOR"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_TOTAL_PRODUTO: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_PRODUTO'
+      Origin = '"TBCOMPRAS"."TOTALPROD"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_FRETE: TIBBCDField
+      FieldName = 'NFE_VALOR_FRETE'
+      Origin = '"TBCOMPRAS"."FRETE"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_SEGURO: TIBBCDField
+      FieldName = 'NFE_VALOR_SEGURO'
+      Origin = '"TBCOMPRAS"."VALORSEGURO"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_DESCONTO: TIBBCDField
+      FieldName = 'NFE_VALOR_DESCONTO'
+      Origin = '"TBCOMPRAS"."DESCONTO"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_TOTAL_II: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_II'
+      Origin = '"TBCOMPRAS"."VALORTOTAL_II"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_TOTAL_IPI: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_IPI'
+      Origin = '"TBCOMPRAS"."VALORTOTAL_IPI"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_PIS: TIBBCDField
+      FieldName = 'NFE_VALOR_PIS'
+      Origin = '"TBCOMPRAS"."VALORPIS"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_COFINS: TIBBCDField
+      FieldName = 'NFE_VALOR_COFINS'
+      Origin = '"TBCOMPRAS"."VALORCOFINS"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_OUTROS: TIBBCDField
+      FieldName = 'NFE_VALOR_OUTROS'
+      Origin = '"TBCOMPRAS"."OUTROSCUSTOS"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField
+      FieldName = 'NFE_VALOR_TOTAL_NOTA'
+      Origin = '"TBCOMPRAS"."TOTALNF"'
+      Precision = 18
+      Size = 2
+    end
+  end
 end
