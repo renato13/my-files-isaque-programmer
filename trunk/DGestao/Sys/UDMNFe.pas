@@ -335,7 +335,7 @@ type
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
-    procedure GerarNFEEntradaACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+    procedure GerarNFEEntradaACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
   public
     { Public declarations }
@@ -347,6 +347,7 @@ type
 
     procedure AbrirEmitente(sCNPJ : String);
     procedure AbrirDestinatario(sCNPJ : String);
+    procedure AbrirDestinatarioFornecedor(iCodigo : Integer);
     procedure AbrirVenda(AnoVenda, NumeroVenda : Integer);
 
     function GerarNFeOnLine : Boolean;
@@ -355,6 +356,7 @@ type
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
       const Imprimir : Boolean = TRUE) : Boolean;
+
     function GerarNFeOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
       const Imprimir : Boolean = TRUE) : Boolean;
@@ -364,10 +366,14 @@ type
     function ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       const IsPDF : Boolean = FALSE) : Boolean;
 
-    function GerarNFeEntradaOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+    function ImprimirDANFEEntradaACBr(const sCNPJEmitente : String; const CodFornecedor: Integer; const iAnoCompra, iNumCompra : Integer;
+      const IsPDF : Boolean = FALSE) : Boolean;
+
+    function GerarNFeEntradaOnLineACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
       const Imprimir : Boolean = TRUE) : Boolean;
-    function GerarNFeEntradaOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+
+    function GerarNFeEntradaOffLineACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
       const Imprimir : Boolean = TRUE) : Boolean;
   end;
@@ -866,7 +872,7 @@ begin
 
 end;
 
-function TDMNFe.ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer; 
+function TDMNFe.ImprimirDANFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
   const IsPDF : Boolean = FALSE) : Boolean;
 var
   FileNameXML : String;
@@ -1895,34 +1901,93 @@ begin
   end;
 end;
 
-function TDMNFe.GerarNFeEntradaOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra: Integer;
+function TDMNFe.GerarNFeEntradaOnLineACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra: Integer;
   var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
   const Imprimir : Boolean = TRUE): Boolean;
 var
   DtHoraEmiss : TDateTime;
 begin
 
-  Result := False;
+  try
+
+    GerarNFEEntradaACBr(sCNPJEmitente, iCodFornecedor, iAnoCompra, iNumCompra, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
+
+    iNumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+
+    Result := ACBrNFe.Enviar( iNumeroLote, Imprimir );
+
+    if ( Result ) then
+    begin
+      ChaveNFE     := ACBrNFe.WebServices.Retorno.ChaveNFe;
+      ProtocoloNFE := ACBrNFe.WebServices.Retorno.Protocolo;
+      ReciboNFE    := ACBrNFe.WebServices.Retorno.Recibo;
+
+      UpdateNumeroNFe(sCNPJEmitente, qryEmitenteSERIE_NFE.AsInteger, iNumeroNFe);
+      UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
+    end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar gerar NF-e de Entrada.' + #13#13 + 'GerarNFeEntradaOnLineACBr() --> ' + E.Message);
+      Result := False;
+    end;
+  end;
 
 end;
 
-function TDMNFe.GerarNFeEntradaOffLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+function TDMNFe.GerarNFeEntradaOffLineACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
   var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
   const Imprimir : Boolean = TRUE) : Boolean;
 var
   DtHoraEmiss : TDateTime;
 begin
 
-  Result := False;
+  try
+
+    GerarNFEEntradaACBr(sCNPJEmitente, iCodFornecedor, iAnoCompra, iNumCompra, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
+
+    Result := True;
+
+    if ( Imprimir ) then
+      ACBrNFe.NotasFiscais.Imprimir;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar gerar NF-e de Entrada.' + #13#13 + 'GerarNFeEntradaOffLineACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
 
 end;
 
-procedure TDMNFe.GerarNFEEntradaACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoCompra, iNumCompra : Integer;
+procedure TDMNFe.GerarNFEEntradaACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
   var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
 begin
 
   ;
   
+end;
+
+function TDMNFe.ImprimirDANFEEntradaACBr(const sCNPJEmitente : String; const CodFornecedor: Integer; const iAnoCompra, iNumCompra : Integer;
+  const IsPDF : Boolean = FALSE) : Boolean;
+var
+  FileNameXML : String;
+begin
+
+  Result := False;
+
+end;
+
+procedure TDMNFe.AbrirDestinatarioFornecedor(iCodigo: Integer);
+begin
+  with qryFornecedorDestinatario do
+  begin
+    Close;
+    ParamByName('Codigo').AsInteger := iCodigo;
+    Open;
+  end;
 end;
 
 end.
