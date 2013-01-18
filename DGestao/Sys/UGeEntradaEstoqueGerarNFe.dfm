@@ -644,7 +644,7 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       Top = 240
       Width = 169
       Height = 24
-      Color = clMoneyGreen
+      Color = clWhite
       DataField = 'TOTALNF'
       DataSource = dtsCompra
       Font.Charset = ANSI_CHARSET
@@ -653,7 +653,6 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      ReadOnly = True
       TabOrder = 13
     end
     object btnCalcular: TBitBtn
@@ -879,6 +878,7 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       '  , c.icmssubstvalor'
       '  , c.totalprod'
       '  , c.frete'
+      '  , c.ipi'
       '  , c.valorseguro'
       '  , c.desconto'
       '  , c.valortotal_ii'
@@ -961,6 +961,7 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       '  , c.icmssubstvalor'
       '  , c.totalprod'
       '  , c.frete'
+      '  , c.ipi'
       '  , c.valorseguro'
       '  , c.desconto'
       '  , c.valortotal_ii'
@@ -1072,6 +1073,12 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       FieldName = 'FRETE'
       Origin = '"TBCOMPRAS"."FRETE"'
       DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsCompraIPI: TIBBCDField
+      FieldName = 'IPI'
+      Origin = '"TBCOMPRAS"."IPI"'
       Precision = 18
       Size = 2
     end

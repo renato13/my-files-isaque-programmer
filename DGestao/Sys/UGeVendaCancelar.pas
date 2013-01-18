@@ -129,7 +129,7 @@ begin
   else
   begin
     if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
-      sMsg := 'Esta venda possui Nota Fiscal Emitida e ao cancelar a venda a NF-e será cancelada.'#13#13'Confirma o cancelamento da venda?'
+      sMsg := 'Esta venda possui Nota Fiscal de Saída Emitida e ao cancelar a venda a NF-e será cancelada.'#13#13'Confirma o cancelamento da venda?'
     else
       sMsg := 'Confirma o cancelamento da venda?';
 

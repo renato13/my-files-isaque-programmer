@@ -94,6 +94,7 @@ type
     cdsCompraVALOR_TOTAL_PIS: TIBBCDField;
     cdsCompraVALOR_TOTAL_COFINS: TIBBCDField;
     cdsCompraHREMISS: TTimeField;
+    cdsCompraIPI: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -146,17 +147,17 @@ begin
         cdsCompraICMSVALOR.Value  := cdsCompraVALOR_TOTAL_ICMS_NORMAL_ENTRADA.AsCurrency;
         cdsCompraICMSSUBSTBASE.Value  := 0;
         cdsCompraICMSSUBSTVALOR.Value := 0;
-(*
-        cdsCompraNFE_VALOR_TOTAL_PRODUTO.Value   := cdsCompraVALOR_TOTAL_BRUTO.AsCurrency;
-        cdsCompraNFE_VALOR_FRETE.Value      := 0;
-        cdsCompraNFE_VALOR_SEGURO.Value     := 0;
-        cdsCompraNFE_VALOR_DESCONTO.Value   := cdsCompraVALOR_TOTAL_DESCONTO.AsCurrency;
-        cdsCompraNFE_VALOR_OUTROS.Value     := 0;
-        cdsCompraNFE_VALOR_TOTAL_IPI.Value  := cdsCompraVALOR_TOTAL_IPI.AsCurrency;
-        cdsCompraNFE_VALOR_PIS.Value        := cdsCompraVALOR_TOTAL_PIS.AsCurrency;
-        cdsCompraNFE_VALOR_COFINS.Value     := cdsCompraVALOR_TOTAL_COFINS.AsCurrency;
-        cdsCompraNFE_VALOR_TOTAL_II.Value   := 0;
-*)
+
+//        cdsCompraNFE_VALOR_TOTAL_PRODUTO.Value   := cdsCompraVALOR_TOTAL_BRUTO.AsCurrency;
+//        cdsCompraNFE_VALOR_FRETE.Value      := 0;
+        cdsCompraVALORSEGURO.Value     := 0;
+//        cdsCompraNFE_VALOR_DESCONTO.Value   := cdsCompraVALOR_TOTAL_DESCONTO.AsCurrency;
+//        cdsCompraNFE_VALOR_OUTROS.Value     := 0;
+        cdsCompraVALORTOTAL_IPI.Value  := cdsCompraIPI.AsCurrency;
+        cdsCompraVALORPIS.Value        := cdsCompraVALOR_TOTAL_PIS.AsCurrency;
+        cdsCompraVALORCOFINS.Value     := cdsCompraVALOR_TOTAL_COFINS.AsCurrency;
+        cdsCompraVALORTOTAL_II.Value   := 0;
+
         RecalcularTotalNota;
       end;
 

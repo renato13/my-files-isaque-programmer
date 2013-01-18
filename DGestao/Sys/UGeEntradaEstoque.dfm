@@ -19,6 +19,10 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   inherited tlbBotoes: TToolBar
     Top = 639
     Width = 1099
+    inherited btbtnLista: TBitBtn
+      Visible = True
+      OnClick = btbtnListaClick
+    end
     object btbtnFinalizar: TBitBtn
       Left = 726
       Top = 2
@@ -93,6 +97,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       ParentShowHint = False
       ShowHint = True
       TabOrder = 10
+      OnClick = btbtnGerarNFeClick
       Glyph.Data = {
         36060000424D3606000000000000360000002800000020000000100000000100
         180000000000000600000000000000000000000000000000000000FF0000FF00
@@ -222,6 +227,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   inherited pgcGuias: TPageControl
     Width = 1099
     Height = 635
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -2870,12 +2876,10 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       Required = True
     end
     object IbDtstTabelaNFSERIE: TIBStringField
-      Alignment = taCenter
       DisplayLabel = 'S'#233'rie'
       FieldName = 'NFSERIE'
-      Origin = 'TBCOMPRAS.NFSERIE'
-      FixedChar = True
-      Size = 1
+      Origin = '"TBCOMPRAS"."NFSERIE"'
+      Size = 4
     end
     object IbDtstTabelaDTLANCAMENTO: TDateTimeField
       Alignment = taCenter
@@ -3242,8 +3246,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 744
     Top = 8
@@ -3256,8 +3258,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3314,8 +3314,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3332,8 +3330,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 744
     Top = 40
@@ -3346,8 +3342,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 744
@@ -3362,7 +3356,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnNewRecord = cdsTabelaItensNewRecord
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -3720,8 +3713,6 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryDuplicatasCalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -4007,5 +3998,179 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       '  NUMLANC = :OLD_NUMLANC')
     Left = 480
     Top = 424
+  end
+  object qryNFE: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SelectSQL.Strings = (
+      'Select'
+      '    n.anocompra'
+      '  , n.numcompra'
+      '  , n.dataemissao'
+      '  , n.horaemissao'
+      '  , n.serie'
+      '  , n.numero'
+      '  , n.chave'
+      '  , n.protocolo'
+      '  , n.recibo'
+      '  , n.xml_filename'
+      '  , n.xml_file'
+      '  , n.lote_ano'
+      '  , n.lote_num'
+      'from TBNFE_ENVIADA n'
+      'where n.anocompra = :anoCompra'
+      '  and n.numcompra = :numCompra')
+    UpdateObject = updNFE
+    Left = 944
+    Top = 40
+    object qryNFEANOCOMPRA: TSmallintField
+      FieldName = 'ANOCOMPRA'
+      Origin = '"TBNFE_ENVIADA"."ANOCOMPRA"'
+    end
+    object qryNFENUMCOMPRA: TIntegerField
+      FieldName = 'NUMCOMPRA'
+      Origin = '"TBNFE_ENVIADA"."NUMCOMPRA"'
+    end
+    object qryNFEDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."DATAEMISSAO"'
+    end
+    object qryNFEHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."HORAEMISSAO"'
+    end
+    object qryNFESERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = '"TBNFE_ENVIADA"."SERIE"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 4
+    end
+    object qryNFENUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = '"TBNFE_ENVIADA"."NUMERO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryNFECHAVE: TIBStringField
+      FieldName = 'CHAVE'
+      Origin = '"TBNFE_ENVIADA"."CHAVE"'
+      Size = 250
+    end
+    object qryNFEPROTOCOLO: TIBStringField
+      FieldName = 'PROTOCOLO'
+      Origin = '"TBNFE_ENVIADA"."PROTOCOLO"'
+      Size = 250
+    end
+    object qryNFERECIBO: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = '"TBNFE_ENVIADA"."RECIBO"'
+      Size = 250
+    end
+    object qryNFEXML_FILENAME: TIBStringField
+      FieldName = 'XML_FILENAME'
+      Origin = '"TBNFE_ENVIADA"."XML_FILENAME"'
+      Size = 250
+    end
+    object qryNFEXML_FILE: TMemoField
+      FieldName = 'XML_FILE'
+      Origin = '"TBNFE_ENVIADA"."XML_FILE"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryNFELOTE_ANO: TSmallintField
+      FieldName = 'LOTE_ANO'
+      Origin = '"TBNFE_ENVIADA"."LOTE_ANO"'
+    end
+    object qryNFELOTE_NUM: TIntegerField
+      FieldName = 'LOTE_NUM'
+      Origin = '"TBNFE_ENVIADA"."LOTE_NUM"'
+      Required = True
+    end
+  end
+  object updNFE: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  ANOVENDA,'
+      '  NUMVENDA,'
+      '  ANOCOMPRA,'
+      '  NUMCOMPRA,'
+      '  DATAEMISSAO,'
+      '  HORAEMISSAO,'
+      '  SERIE,'
+      '  NUMERO,'
+      '  CHAVE,'
+      '  PROTOCOLO,'
+      '  RECIBO,'
+      '  XML_FILENAME,'
+      '  XML_FILE,'
+      '  LOTE_ANO,'
+      '  LOTE_NUM'
+      'from TBNFE_ENVIADA '
+      'where'
+      '  NUMERO = :NUMERO and'
+      '  SERIE = :SERIE')
+    ModifySQL.Strings = (
+      'update TBNFE_ENVIADA'
+      'set'
+      '  ANOCOMPRA = :ANOCOMPRA,'
+      '  CHAVE = :CHAVE,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  LOTE_ANO = :LOTE_ANO,'
+      '  LOTE_NUM = :LOTE_NUM,'
+      '  NUMCOMPRA = :NUMCOMPRA,'
+      '  NUMERO = :NUMERO,'
+      '  PROTOCOLO = :PROTOCOLO,'
+      '  RECIBO = :RECIBO,'
+      '  SERIE = :SERIE,'
+      '  XML_FILE = :XML_FILE,'
+      '  XML_FILENAME = :XML_FILENAME'
+      'where'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
+    InsertSQL.Strings = (
+      'insert into TBNFE_ENVIADA'
+      
+        '  (ANOCOMPRA, CHAVE, DATAEMISSAO, HORAEMISSAO, LOTE_ANO, LOTE_NU' +
+        'M, NUMCOMPRA, '
+      '   NUMERO, PROTOCOLO, RECIBO, SERIE, XML_FILE, XML_FILENAME)'
+      'values'
+      
+        '  (:ANOCOMPRA, :CHAVE, :DATAEMISSAO, :HORAEMISSAO, :LOTE_ANO, :L' +
+        'OTE_NUM, '
+      
+        '   :NUMCOMPRA, :NUMERO, :PROTOCOLO, :RECIBO, :SERIE, :XML_FILE, ' +
+        ':XML_FILENAME)')
+    DeleteSQL.Strings = (
+      'delete from TBNFE_ENVIADA'
+      'where'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
+    Left = 976
+    Top = 40
+  end
+  object ppImprimir: TPopupMenu
+    Left = 392
+    Top = 592
+    object nmImprimirVenda: TMenuItem
+      Caption = 'Or'#231'amento / Venda'
+      Visible = False
+    end
+    object N1: TMenuItem
+      Caption = '-'
+      Visible = False
+    end
+    object nmImprimirDANFE: TMenuItem
+      Caption = 'Imprimir DANFE'
+      Enabled = False
+      OnClick = nmImprimirDANFEClick
+    end
+    object nmGerarDANFEXML: TMenuItem
+      Caption = 'Gerar/Salvar XML da NF-e'
+      Enabled = False
+      OnClick = nmGerarDANFEXMLClick
+    end
   end
 end
