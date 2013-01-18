@@ -111,6 +111,7 @@ type
     nmFabricanteProduto: TMenuItem;
     nmUsuarioAlterarSenha: TMenuItem;
     btnEmpresa: TRxSpeedButton;
+    Utilitrios1: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
