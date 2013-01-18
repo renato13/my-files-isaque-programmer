@@ -7242,3 +7242,1726 @@ ON TBUSERALLOW (FORM_NAME,OBJECT_NAME);
 COMMENT ON TABLE TBUSERALLOW IS 'Tabela utilizada para armazenar as configucoes de controle de acesso
 presentes nos objetos "EvUserAcess" presentes nos formularios do sistema.';
 
+
+
+
+/*------ SYSDBA 13/01/2013 20:28:54 --------*/
+
+ALTER TABLE TBCOMPRAS
+ADD CONSTRAINT FK_TBCOMPRAS_CFOP
+FOREIGN KEY (NFCFOP)
+REFERENCES TBCFOP(CFOP_COD);
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:43:56 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD LOTE_NFE_ANO SMALLINT,
+    ADD LOTE_NFE_NUMERO INTEGER;
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 9;
+
+alter table TBCOMPRAS
+alter DTEMISS position 10;
+
+alter table TBCOMPRAS
+alter DTENT position 11;
+
+alter table TBCOMPRAS
+alter NFCFOP position 12;
+
+alter table TBCOMPRAS
+alter NATUREZA position 13;
+
+alter table TBCOMPRAS
+alter STATUS position 14;
+
+alter table TBCOMPRAS
+alter IPI position 15;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 16;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 17;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 18;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 19;
+
+alter table TBCOMPRAS
+alter FRETE position 20;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 21;
+
+alter table TBCOMPRAS
+alter DESCONTO position 22;
+
+alter table TBCOMPRAS
+alter TOTALNF position 23;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 24;
+
+alter table TBCOMPRAS
+alter OBS position 25;
+
+alter table TBCOMPRAS
+alter USUARIO position 26;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 27;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 28;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 29;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 30;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 31;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 32;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 33;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 34;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 35;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 36;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 37;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 38;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 39;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 41;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 42;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 43;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 44;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 45;
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:44:52 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD NFE_ENVIADA SMALLINT DEFAULT 0;
+
+COMMENT ON COLUMN TBCOMPRAS.NFE_ENVIADA IS
+'NF de Entrada Enviada:
+0 - Nao
+1 - Sim';
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter NFE_ENVIADA position 9;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 10;
+
+alter table TBCOMPRAS
+alter DTEMISS position 11;
+
+alter table TBCOMPRAS
+alter DTENT position 12;
+
+alter table TBCOMPRAS
+alter NFCFOP position 13;
+
+alter table TBCOMPRAS
+alter NATUREZA position 14;
+
+alter table TBCOMPRAS
+alter STATUS position 15;
+
+alter table TBCOMPRAS
+alter IPI position 16;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 17;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 18;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 19;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 20;
+
+alter table TBCOMPRAS
+alter FRETE position 21;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 22;
+
+alter table TBCOMPRAS
+alter DESCONTO position 23;
+
+alter table TBCOMPRAS
+alter TOTALNF position 24;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 25;
+
+alter table TBCOMPRAS
+alter OBS position 26;
+
+alter table TBCOMPRAS
+alter USUARIO position 27;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 28;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 29;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 30;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 31;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 32;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 33;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 34;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 35;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 36;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 37;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 38;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 39;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 41;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 42;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 43;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 44;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 45;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 46;
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:48:31 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD VERIFICADOR_NFE VARCHAR(250),
+    ADD XML_NFE BLOB SUB_TYPE 1 SEGMENT SIZE 80,
+    ADD XML_NFE_FILENAME VARCHAR(250);
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter NFE_ENVIADA position 9;
+
+alter table TBCOMPRAS
+alter VERIFICADOR_NFE position 10;
+
+alter table TBCOMPRAS
+alter XML_NFE position 11;
+
+alter table TBCOMPRAS
+alter XML_NFE_FILENAME position 12;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 13;
+
+alter table TBCOMPRAS
+alter DTEMISS position 14;
+
+alter table TBCOMPRAS
+alter DTENT position 15;
+
+alter table TBCOMPRAS
+alter NFCFOP position 16;
+
+alter table TBCOMPRAS
+alter NATUREZA position 17;
+
+alter table TBCOMPRAS
+alter STATUS position 18;
+
+alter table TBCOMPRAS
+alter IPI position 19;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 20;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 21;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 22;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 23;
+
+alter table TBCOMPRAS
+alter FRETE position 24;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 25;
+
+alter table TBCOMPRAS
+alter DESCONTO position 26;
+
+alter table TBCOMPRAS
+alter TOTALNF position 27;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 28;
+
+alter table TBCOMPRAS
+alter OBS position 29;
+
+alter table TBCOMPRAS
+alter USUARIO position 30;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 31;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 32;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 33;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 34;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 35;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 36;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 37;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 38;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 39;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 41;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 42;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 43;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 44;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 45;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 46;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 47;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 48;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 49;
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:48:52 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VERIFICADOR_NFE IS
+'Condigo de verificacao da NFe gerada.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:49:06 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.XML_NFE IS
+'Arquivo XML da NF-e gerada.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:49:12 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VERIFICADOR_NFE IS
+'Condigo de verificacao da NF-e gerada.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:49:28 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.XML_NFE_FILENAME IS
+'Nome do arquivo XML da NF-e gerada.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 20:50:38 --------*/
+
+CREATE INDEX IDX_TBCOMPRAS_NFE
+ON TBCOMPRAS (CODFORN,NF,NFSERIE);
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:09:30 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD VALORSEGURO DMN_MONEY,
+    ADD VALORTOTAL_II DMN_MONEY,
+    ADD VALORTOTAL_IPI DMN_MONEY,
+    ADD VALORPIS DMN_MONEY,
+    ADD VALORCOFINS DMN_MONEY;
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter NFE_ENVIADA position 9;
+
+alter table TBCOMPRAS
+alter VERIFICADOR_NFE position 10;
+
+alter table TBCOMPRAS
+alter XML_NFE position 11;
+
+alter table TBCOMPRAS
+alter XML_NFE_FILENAME position 12;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 13;
+
+alter table TBCOMPRAS
+alter DTEMISS position 14;
+
+alter table TBCOMPRAS
+alter DTENT position 15;
+
+alter table TBCOMPRAS
+alter NFCFOP position 16;
+
+alter table TBCOMPRAS
+alter NATUREZA position 17;
+
+alter table TBCOMPRAS
+alter STATUS position 18;
+
+alter table TBCOMPRAS
+alter IPI position 19;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 20;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 21;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 22;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 23;
+
+alter table TBCOMPRAS
+alter FRETE position 24;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 25;
+
+alter table TBCOMPRAS
+alter DESCONTO position 26;
+
+alter table TBCOMPRAS
+alter VALORSEGURO position 27;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_II position 28;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_IPI position 29;
+
+alter table TBCOMPRAS
+alter VALORPIS position 30;
+
+alter table TBCOMPRAS
+alter VALORCOFINS position 31;
+
+alter table TBCOMPRAS
+alter TOTALNF position 32;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 33;
+
+alter table TBCOMPRAS
+alter OBS position 34;
+
+alter table TBCOMPRAS
+alter USUARIO position 35;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 36;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 37;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 38;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 39;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 41;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 42;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 43;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 44;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 45;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 46;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 47;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 48;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 49;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 50;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 51;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 52;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 53;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 54;
+
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+V.VENDEDOR_COD.
+At line 26, column 7.
+
+*/
+
+
+
+/*------ SYSDBA 13/01/2013 21:15:39 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.IPI IS
+'Valor Total IPI.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:15:48 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.ICMSBASE IS
+'Valor Base ICMS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:15:57 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.ICMSVALOR IS
+'Valor ICMS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:16:13 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.ICMSSUBSTBASE IS
+'Valor Base da Subst. Trib. ICMS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:16:24 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.ICMSSUBSTVALOR IS
+'Valor Subst. Trib. ICMS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:16:29 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.ICMSSUBSTBASE IS
+'Valor Base Subst. Trib. ICMS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:17:20 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.FRETE IS
+'Valot Total Frete.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:17:31 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.OUTROSCUSTOS IS
+'Valor Total de Outras Despesas.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:17:39 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.DESCONTO IS
+'Valor Total Descontos.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:17:47 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VALORSEGURO IS
+'Valor Total Seguro.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:17:53 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VALORTOTAL_II IS
+'Valor Total II.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:18:00 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VALORTOTAL_IPI IS
+'Valor Total IPI.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:18:06 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VALORPIS IS
+'Valor Total PIS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:18:14 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.VALORCOFINS IS
+'Valor Total COFINS.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column ANO position 1;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CODCONTROL position 2;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CODEMP position 3;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CODFORN position 4;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column NF position 5;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column NFSERIE position 6;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column LOTE_NFE_ANO position 7;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column LOTE_NFE_NUMERO position 8;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column NFE_ENVIADA position 9;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VERIFICADOR_NFE position 10;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column XML_NFE position 11;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column XML_NFE_FILENAME position 12;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column DTLANCAMENTO position 13;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column DTEMISS position 14;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column DTENT position 15;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column NFCFOP position 16;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column NATUREZA position 17;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column STATUS position 18;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column IPI position 19;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column ICMSBASE position 20;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column ICMSVALOR position 21;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column ICMSSUBSTBASE position 22;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column ICMSSUBSTVALOR position 23;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column FRETE position 24;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column OUTROSCUSTOS position 25;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column DESCONTO position 26;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VALORSEGURO position 27;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VALORTOTAL_II position 28;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VALORTOTAL_IPI position 29;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VALORPIS position 30;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column VALORCOFINS position 31;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column TOTALPROD position 32;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column TOTALNF position 33;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column OBS position 34;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column USUARIO position 35;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column FORMAPAGTO_COD position 36;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CONDICAOPAGTO_COD position 37;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column COMPRA_PRAZO position 38;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_01 position 39;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_02 position 40;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_03 position 41;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_04 position 42;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_05 position 43;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_06 position 44;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_07 position 45;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_08 position 46;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_09 position 47;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_10 position 48;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_11 position 49;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column PRAZO_12 position 50;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column DTFINALIZACAO_COMPRA position 51;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CANCEL_USUARIO position 52;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CANCEL_DATAHORA position 53;
+
+
+/*------ SYSDBA 13/01/2013 21:18:26 --------*/
+
+alter table TBCOMPRAS
+alter column CANCEL_MOTIVO position 54;
+
+
+/*------ SYSDBA 13/01/2013 21:18:39 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.TOTALPROD IS
+'Valor Total Produto.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:18:53 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.TOTALNF IS
+'Valor Total Nota Fiscal.';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:22:10 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.NF IS
+'Numero da NF-e';
+
+
+
+
+/*------ SYSDBA 13/01/2013 21:22:17 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.NFSERIE IS
+'Serie da NF-e.';
+
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.PUNIT.
+At line 28, column 34.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.DESCONTO_VALOR.
+At line 29, column 43.
+
+*/
+
+
+
+/*------ SYSDBA 16/01/2013 21:47:56 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_DESCONTO IS
+'Valor Total de Descontos do Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:07 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_FRETE IS
+'Valor Total do Frete.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:23 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_OUTROS IS
+'Valor Total de Outras Despesas por Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:29 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_FRETE IS
+'Valor Total do Frete por Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:39 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_DESCONTO IS
+'Valor Total de Descontos do Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:45 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_FRETE IS
+'Valor Total do Frete do Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:48:51 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_OUTROS IS
+'Valor Total de Outras Despesas do Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:49:34 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.VALOR_IPI IS
+'Valor Total IPI do Produto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:50:32 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.PERC_PARTICIPACAO IS
+'Percentual de participacao do produto no tocante ao valor total da nota.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:55:55 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.PRECOUNIT IS
+'Valor Unitario Bruto.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 21:56:03 --------*/
+
+COMMENT ON COLUMN TBCOMPRASITENS.CUSTOMEDIO IS
+'Valor Unitario Liquido.';
+
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.PFINAL.
+At line 36, column 141.
+
+*/
+
+
+
+/*------ SYSDBA 16/01/2013 22:27:38 --------*/
+
+ALTER TABLE TBNFE_ENVIADA
+    ADD ANOCOMPRA DMN_SMALLINT_N,
+    ADD NUMCOMPRA DMN_INTEGER_N;
+
+COMMENT ON COLUMN TBNFE_ENVIADA.ANOVENDA IS
+'Ano Venda.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.NUMVENDA IS
+'Numero de Controle Venda.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.ANOCOMPRA IS
+'Ano Compra.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.NUMCOMPRA IS
+'Numero de Controle Compra.';
+
+alter table TBNFE_ENVIADA
+alter ANOVENDA position 1;
+
+alter table TBNFE_ENVIADA
+alter NUMVENDA position 2;
+
+alter table TBNFE_ENVIADA
+alter ANOCOMPRA position 3;
+
+alter table TBNFE_ENVIADA
+alter NUMCOMPRA position 4;
+
+alter table TBNFE_ENVIADA
+alter DATAEMISSAO position 5;
+
+alter table TBNFE_ENVIADA
+alter HORAEMISSAO position 6;
+
+alter table TBNFE_ENVIADA
+alter SERIE position 7;
+
+alter table TBNFE_ENVIADA
+alter NUMERO position 8;
+
+alter table TBNFE_ENVIADA
+alter CHAVE position 9;
+
+alter table TBNFE_ENVIADA
+alter PROTOCOLO position 10;
+
+alter table TBNFE_ENVIADA
+alter RECIBO position 11;
+
+alter table TBNFE_ENVIADA
+alter XML_FILENAME position 12;
+
+alter table TBNFE_ENVIADA
+alter XML_FILE position 13;
+
+alter table TBNFE_ENVIADA
+alter LOTE_ANO position 14;
+
+alter table TBNFE_ENVIADA
+alter LOTE_NUM position 15;
+
+
+
+
+/*------ SYSDBA 16/01/2013 22:27:53 --------*/
+
+update RDB$RELATION_FIELDS set
+RDB$FIELD_SOURCE = 'DMN_SMALLINT_N',
+RDB$NULL_FLAG = NULL
+where (RDB$FIELD_NAME = 'ANOVENDA') and
+(RDB$RELATION_NAME = 'TBNFE_ENVIADA')
+;
+
+COMMENT ON COLUMN TBNFE_ENVIADA.ANOVENDA IS
+'Ano Venda.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 22:30:04 --------*/
+
+update RDB$RELATION_FIELDS set
+RDB$FIELD_SOURCE = 'DMN_VCHAR_04'
+where (RDB$FIELD_NAME = 'NFSERIE') and
+(RDB$RELATION_NAME = 'TBCOMPRAS')
+;
+
+COMMENT ON COLUMN TBCOMPRAS.NFSERIE IS
+'Serie da NF-e.';
+
+
+
+
+/*------ SYSDBA 16/01/2013 22:31:45 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD HREMISS TIME;
+
+COMMENT ON COLUMN TBCOMPRAS.DTEMISS IS
+'Data de Emissao da NF.';
+
+COMMENT ON COLUMN TBCOMPRAS.HREMISS IS
+'Hora de Emissao da NF.';
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter NFE_ENVIADA position 9;
+
+alter table TBCOMPRAS
+alter VERIFICADOR_NFE position 10;
+
+alter table TBCOMPRAS
+alter XML_NFE position 11;
+
+alter table TBCOMPRAS
+alter XML_NFE_FILENAME position 12;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 13;
+
+alter table TBCOMPRAS
+alter DTEMISS position 14;
+
+alter table TBCOMPRAS
+alter HREMISS position 15;
+
+alter table TBCOMPRAS
+alter DTENT position 16;
+
+alter table TBCOMPRAS
+alter NFCFOP position 17;
+
+alter table TBCOMPRAS
+alter NATUREZA position 18;
+
+alter table TBCOMPRAS
+alter STATUS position 19;
+
+alter table TBCOMPRAS
+alter IPI position 20;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 21;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 22;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 23;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 24;
+
+alter table TBCOMPRAS
+alter FRETE position 25;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 26;
+
+alter table TBCOMPRAS
+alter DESCONTO position 27;
+
+alter table TBCOMPRAS
+alter VALORSEGURO position 28;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_II position 29;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_IPI position 30;
+
+alter table TBCOMPRAS
+alter VALORPIS position 31;
+
+alter table TBCOMPRAS
+alter VALORCOFINS position 32;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 33;
+
+alter table TBCOMPRAS
+alter TOTALNF position 34;
+
+alter table TBCOMPRAS
+alter OBS position 35;
+
+alter table TBCOMPRAS
+alter USUARIO position 36;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 37;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 38;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 39;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 41;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 42;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 43;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 44;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 45;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 46;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 47;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 48;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 49;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 50;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 51;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 52;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 53;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 54;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 55;
+
+
+
+
+/*------ SYSDBA 16/01/2013 22:32:20 --------*/
+
+SET TERM ^ ;
+
+CREATE trigger tg_nfe_atualizar_compra for tbnfe_enviada
+active after insert position 0
+AS
+begin
+  if ( (new.anocompra > 0) and (new.numcompra > 0) ) then
+  begin
+    Update TBCOMPRAS c Set
+        c.nfserie = new.serie
+      , c.nf      = new.numero
+      , c.verificador_nfe  = new.chave
+      , c.xml_nfe_filename = new.xml_filename
+      , c.xml_nfe          = new.xml_file
+      , c.status  = 4 -- Nota Fiscal Gerada
+      , c.dtemiss = new.dataemissao
+      , c.hremiss = new.horaemissao
+    where c.ano        = new.anocompra
+      and c.codcontrol = new.numcompra;
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 16/01/2013 22:32:31 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_compra for tbnfe_enviada
+active after insert position 1
+AS
+begin
+  if ( (new.anocompra > 0) and (new.numcompra > 0) ) then
+  begin
+    Update TBCOMPRAS c Set
+        c.nfserie = new.serie
+      , c.nf      = new.numero
+      , c.verificador_nfe  = new.chave
+      , c.xml_nfe_filename = new.xml_filename
+      , c.xml_nfe          = new.xml_file
+      , c.status  = 4 -- Nota Fiscal Gerada
+      , c.dtemiss = new.dataemissao
+      , c.hremiss = new.horaemissao
+    where c.ano        = new.anocompra
+      and c.codcontrol = new.numcompra;
+  end 
+end
+^
+
+SET TERM ; ^
+
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the select list (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.CODCLI.
+At line 22, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.DTVENDA.
+At line 24, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.PUNIT.
+At line 26, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.DESCONTO.
+At line 27, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 27, column 80.
+.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.CFOP_COD.
+At line 34, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.PFINAL.
+At line 41, column 16.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+I.PUNIT.
+At line 42, column 16.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+P.VALORREC.
+At line 7, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+P.VALORMULTA.
+At line 8, column 7.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+P.PERCENTDESCONTO.
+At line 9, column 7.
+
+*/

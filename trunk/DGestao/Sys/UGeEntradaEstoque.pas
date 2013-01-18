@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, rxToolEdit, RXDBCtrl, IBStoredProc;
+  ToolWin, IBTable, rxToolEdit, RXDBCtrl, IBStoredProc, Menus;
 
 type
   TfrmGeEntradaEstoque = class(TfrmGrPadraoCadastro)
@@ -144,7 +144,6 @@ type
     IbDtstTabelaCODEMP: TIBStringField;
     IbDtstTabelaCODFORN: TIntegerField;
     IbDtstTabelaNF: TIntegerField;
-    IbDtstTabelaNFSERIE: TIBStringField;
     IbDtstTabelaDTLANCAMENTO: TDateTimeField;
     IbDtstTabelaDTEMISS: TDateField;
     IbDtstTabelaDTENT: TDateField;
@@ -251,6 +250,27 @@ type
     cdsTabelaItensALIQUOTA_PIS: TIBBCDField;
     cdsTabelaItensALIQUOTA_COFINS: TIBBCDField;
     cdsTabelaItensPERCENTUAL_REDUCAO_BC: TIBBCDField;
+    qryNFE: TIBDataSet;
+    updNFE: TIBUpdateSQL;
+    ppImprimir: TPopupMenu;
+    nmImprimirVenda: TMenuItem;
+    N1: TMenuItem;
+    nmImprimirDANFE: TMenuItem;
+    nmGerarDANFEXML: TMenuItem;
+    qryNFEANOCOMPRA: TSmallintField;
+    qryNFENUMCOMPRA: TIntegerField;
+    qryNFEDATAEMISSAO: TDateField;
+    qryNFEHORAEMISSAO: TTimeField;
+    qryNFESERIE: TIBStringField;
+    qryNFENUMERO: TIntegerField;
+    qryNFECHAVE: TIBStringField;
+    qryNFEPROTOCOLO: TIBStringField;
+    qryNFERECIBO: TIBStringField;
+    qryNFEXML_FILENAME: TIBStringField;
+    qryNFEXML_FILE: TMemoField;
+    qryNFELOTE_ANO: TSmallintField;
+    qryNFELOTE_NUM: TIntegerField;
+    IbDtstTabelaNFSERIE: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -280,6 +300,10 @@ type
     procedure btbtnCancelarENTClick(Sender: TObject);
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure btbtnGerarNFeClick(Sender: TObject);
+    procedure btbtnListaClick(Sender: TObject);
+    procedure nmImprimirDANFEClick(Sender: TObject);
+    procedure nmGerarDANFEXMLClick(Sender: TObject);
   private
     { Private declarations }
     SQL_Itens   ,
@@ -302,7 +326,7 @@ var
 implementation
 
 uses DateUtils, UDMBusiness, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
-  UGeFornecedor, UGeEntradaEstoqueCancelar, UGeEntradaConfirmaDuplicatas;
+  UGeFornecedor, UGeEntradaEstoqueCancelar, UGeEntradaConfirmaDuplicatas, UGeEntradaEstoqueGerarNFe, UDMNFe;
 
 {$R *.dfm}
 
@@ -421,6 +445,7 @@ begin
     STATUS_CMP_ABR : Text := 'Aberta';
     STATUS_CMP_FIN : Text := 'Finalizada';
     STATUS_CMP_CAN : Text := 'Cancelada';
+    STATUS_CMP_NFE : Text := 'NF-e Emitida';
     else
       Text := Sender.AsString;
   end;
@@ -539,11 +564,19 @@ begin
   begin
     btbtnFinalizar.Enabled   := (IbDtstTabelaSTATUS.AsInteger < STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarENT.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
+    btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_FIN) and (not cdsTabelaItens.IsEmpty);
+
+    nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_NFE);
+    nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_NFE);
   end
   else
   begin
     btbtnFinalizar.Enabled   := False;
     btbtnCancelarENT.Enabled := False;
+    btbtnGerarNFe.Enabled    := False;
+
+    nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_NFE);
+    nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_NFE);
   end;
 end;
 
@@ -561,8 +594,9 @@ begin
   if ( IbDtstTabelaSTATUS.AsInteger > STATUS_CMP_ABR ) then
   begin
     Case IbDtstTabelaSTATUS.AsInteger of
-      STATUS_CMP_FIN : sMsg := 'Esta entrada não pode ser alterada porque está finalizada.';
-      STATUS_CMP_CAN : sMsg := 'Esta entrada não pode ser alterada porque está cancelada';
+      STATUS_CMP_FIN : sMsg := 'Esta entrada não pode ser excluída porque está finalizada.';
+      STATUS_CMP_CAN : sMsg := 'Esta entrada não pode ser excluída porque está cancelada';
+      STATUS_CMP_NFE : sMsg := 'Esta entrada não pode ser excluída porque exite Nota Fiscal gerar para este movimento.';
     end;
 
     ShowWarning(sMsg);
@@ -735,6 +769,7 @@ begin
     Case IbDtstTabelaSTATUS.AsInteger of
       STATUS_CMP_FIN : sMsg := 'Esta entrada não pode ser alterada porque está finalizada.';
       STATUS_CMP_CAN : sMsg := 'Esta entrada não pode ser alterada porque está cancelada';
+      STATUS_CMP_NFE : sMsg := 'Esta entrada não pode ser alterada porque exite Nota Fiscal gerada para este movimento.';
     end;
 
     ShowWarning(sMsg);
@@ -965,7 +1000,13 @@ var
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
-
+(*
+  if ( PossuiTitulosPagos(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
+  begin
+    ShowWarning('A compra possui duplicata(s) já baixada(s).' + #13 + 'Favor providenciar a exclusão da(s) baixa(s) para que a compra possa ser cancelada!');
+    Exit;
+  end;
+*)
   if ( CancelarENT(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
     with IbDtstTabela do
     begin
@@ -989,16 +1030,112 @@ begin
   inherited;
   if ( Sender = dbgDados ) then
   begin
-    // Destacar produtos em Promocao
+    // Destacar Movimento de Entrada Aberto
     if ( IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_ABR ) then
       dbgDados.Canvas.Font.Color := lblEntradaAberta.Font.Color
     else
-    // Destacar produtos em Promocao
+    // Destacar Movimento de Entrada Cancelado
     if ( IbDtstTabelaSTATUS.AsInteger = STATUS_CMP_CAN ) then
       dbgDados.Canvas.Font.Color := lblEntradaCancelada.Font.Color;
 
     dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
   end;
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnGerarNFeClick(Sender: TObject);
+var
+  iNumero    ,
+  iSerieNFe  ,
+  iNumeroNFe : Integer;
+  sFileNameXML ,
+  sChaveNFE    ,
+  sProtocoloNFE,
+  sReciboNFE   : String;
+  iNumeroLote  : Int64;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  if ( GerarNFeEntrada(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
+                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
+  ) ) then
+    with IbDtstTabela do
+    begin
+      iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+      with qryNFE do
+      begin
+        Close;
+        ParamByName('anoCompra').AsInteger := IbDtstTabelaANO.Value;
+        ParamByName('numCompra').AsInteger := IbDtstTabelaCODCONTROL.Value;
+        Open;
+
+        Append;
+
+        qryNFEANOCOMPRA.Value    := IbDtstTabelaANO.Value;
+        qryNFENUMCOMPRA.Value    := IbDtstTabelaCODCONTROL.Value;
+        qryNFESERIE.Value       := FormatFloat('#00', iSerieNFe);
+        qryNFENUMERO.Value      := iNumeroNFe;
+        qryNFEDATAEMISSAO.Value := GetDateDB;
+        qryNFEHORAEMISSAO.Value := GetTimeDB;
+        qryNFECHAVE.Value     := sChaveNFE;
+        qryNFEPROTOCOLO.Value := sProtocoloNFE;
+        qryNFERECIBO.Value    := sReciboNFE;
+        qryNFELOTE_ANO.Value  := IbDtstTabelaANO.Value;
+        qryNFELOTE_NUM.Value  := iNumeroLote;
+
+        if ( FileExists(sFileNameXML) ) then
+        begin
+          qryNFEXML_FILENAME.Value := ExtractFileName( sFileNameXML );
+          qryNFEXML_FILE.LoadFromFile( sFileNameXML );
+        end;
+
+        Post;
+        ApplyUpdates;
+
+        CommitTransaction;
+      end;
+
+      IbDtstTabela.Close;
+      IbDtstTabela.Open;
+
+      IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+
+      ShowInformation('Nota Fiscal de Entrada gerada com sucesso.' + #13#13 + 'Série/Número: ' + IbDtstTabelaNFSERIE.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaNF.Value));
+
+      HabilitarDesabilitar_Btns;
+
+      nmImprimirDANFE.Click;
+    end;
+end;
+
+procedure TfrmGeEntradaEstoque.btbtnListaClick(Sender: TObject);
+begin
+  ppImprimir.Popup(btbtnLista.ClientOrigin.X, btbtnLista.ClientOrigin.Y + btbtnLista.Height);
+end;
+
+procedure TfrmGeEntradaEstoque.nmImprimirDANFEClick(Sender: TObject);
+var
+  isPDF : Boolean;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  isPDF := ( Sender = nmGerarDANFEXML );
+
+  DMNFe.ImprimirDANFEEntradaACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODFORN.AsInteger, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
+end;
+
+procedure TfrmGeEntradaEstoque.nmGerarDANFEXMLClick(Sender: TObject);
+var
+  isPDF : Boolean;
+begin
+  if ( IbDtstTabela.IsEmpty ) then
+    Exit;
+
+  isPDF := ( Sender = nmGerarDANFEXML );
+
+  DMNFe.ImprimirDANFEEntradaACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODFORN.AsInteger, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
 
 end.

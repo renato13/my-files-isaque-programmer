@@ -2686,8 +2686,8 @@ object DMNFe: TDMNFe
   object IBSQL: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Left = 304
-    Top = 248
+    Left = 144
+    Top = 312
   end
   object FrECFPooler: TfrxReport
     Version = '4.9.72'
@@ -3844,16 +3844,15 @@ object DMNFe: TDMNFe
       'ANO=ANO'
       'CODCONTROL=CODCONTROL'
       'CODEMP=CODEMP'
-      'CODCLI=CODCLI'
-      'DTVENDA=DTVENDA'
+      'CODFORN=CODFORN'
+      'CODFORN_CNPJ=CODFORN_CNPJ'
+      'DTENT=DTENT'
       'STATUS=STATUS'
       'DESCONTO=DESCONTO'
-      'TOTALVENDA=TOTALVENDA'
-      'TOTALVENDABRUTA=TOTALVENDABRUTA'
-      'DTFINALIZACAO_VENDA=DTFINALIZACAO_VENDA'
+      'DTFINALIZACAO_COMPRA=DTFINALIZACAO_COMPRA'
       'OBS=OBS'
       'SERIE=SERIE'
-      'NFE=NFE'
+      'NF=NF'
       'LOTE_NFE_ANO=LOTE_NFE_ANO'
       'LOTE_NFE_NUMERO=LOTE_NFE_NUMERO'
       'NFE_ENVIADA=NFE_ENVIADA'
@@ -3867,14 +3866,13 @@ object DMNFe: TDMNFe
       'VERIFICADOR_NFE=VERIFICADOR_NFE'
       'XML_NFE_FILENAME=XML_NFE_FILENAME'
       'XML_NFE=XML_NFE'
-      'VENDEDOR_COD=VENDEDOR_COD'
-      'VENDEDOR_NOME=VENDEDOR_NOME'
-      'VENDEDOR_CPF=VENDEDOR_CPF'
       'USUARIO=USUARIO'
-      'LISTA_FORMA_PAGO=LISTA_FORMA_PAGO'
-      'LISTA_COND_PAGO=LISTA_COND_PAGO'
-      'LISTA_COND_PAGO_FULL=LISTA_COND_PAGO_FULL'
-      'VENDA_PRAZO=VENDA_PRAZO'
+      'USUARIO_NOME_COMPLETO=USUARIO_NOME_COMPLETO'
+      'USUARIO_FUNCAO=USUARIO_FUNCAO'
+      'FORMA_PAGO=FORMA_PAGO'
+      'COND_PAGO=COND_PAGO'
+      'COND_PAGO_FULL=COND_PAGO_FULL'
+      'COMPRA_PRAZO=COMPRA_PRAZO'
       'NFE_VALOR_BASE_ICMS=NFE_VALOR_BASE_ICMS'
       'NFE_VALOR_ICMS=NFE_VALOR_ICMS'
       'NFE_VALOR_BASE_ICMS_SUBST=NFE_VALOR_BASE_ICMS_SUBST'
@@ -3907,6 +3905,7 @@ object DMNFe: TDMNFe
       '  , c.Codcontrol'
       '  , c.Codemp'
       '  , c.codforn'
+      '  , f.cnpj as codforn_cnpj'
       '  , c.dtent'
       '  , c.status'
       '  , c.desconto'
@@ -3918,7 +3917,7 @@ object DMNFe: TDMNFe
       '  , c.Lote_nfe_numero'
       '  , c.Nfe_enviada'
       '  , c.dtemiss as Dataemissao'
-      '  , current_time as Horaemissao'
+      '  , c.hremiss as Horaemissao'
       '  , c.Cancel_usuario'
       '  , c.Cancel_datahora'
       '  , c.Cancel_motivo'
@@ -3957,6 +3956,7 @@ object DMNFe: TDMNFe
       
         '  inner join VW_CONDICAOPAGTO cp on (cp.cond_cod = c.condicaopag' +
         'to_cod)'
+      '  inner join TBFORNECEDOR f on (f.codforn = c.codforn)'
       '  left join ('
       '    Select'
       '        cast(u.nome as varchar(50)) as Usuario'
@@ -3966,8 +3966,7 @@ object DMNFe: TDMNFe
       '      left join TBFUNCAO fu on (fu.cod = u.codfuncao)'
       '  ) usr on (usr.usuario = c.usuario)'
       'where c.ano = :anocompra'
-      '  and c.codcontrol = :numcompra'
-      '')
+      '  and c.codcontrol = :numcompra')
     ModifySQL.Strings = (
       '')
     GeneratorField.ApplyEvent = gamOnPost
@@ -3995,6 +3994,11 @@ object DMNFe: TDMNFe
     object qryEntradaCalculoImportoCODFORN: TIntegerField
       FieldName = 'CODFORN'
       Origin = '"TBCOMPRAS"."CODFORN"'
+    end
+    object qryEntradaCalculoImportoCODFORN_CNPJ: TIBStringField
+      FieldName = 'CODFORN_CNPJ'
+      Origin = '"TBFORNECEDOR"."CNPJ"'
+      Size = 18
     end
     object qryEntradaCalculoImportoDTENT: TDateField
       FieldName = 'DTENT'
@@ -4214,5 +4218,578 @@ object DMNFe: TDMNFe
       Precision = 18
       Size = 2
     end
+  end
+  object qryEntradaDadosProduto: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    i.Ano'
+      '  , i.Codcontrol'
+      '  , i.Seq'
+      '  , i.Codprod'
+      '  , p.Codbarra_ean'
+      '  , p.Descri'
+      '  , p.Apresentacao'
+      
+        '  , coalesce(p.Descri_apresentacao, p.Descri) as Descri_apresent' +
+        'acao'
+      '  , p.Modelo'
+      '  , p.Referencia'
+      '  , p.Ncm_sh'
+      '  , p.Codorigem'
+      '  , p.Codtributacao'
+      '  , p.Cst'
+      '  , p.Csosn'
+      '  , p.Cst_pis'
+      '  , p.Cst_cofins'
+      '  , coalesce(ps.Indice_acbr, 32) as Cst_pis_indice_ACBr'
+      '  , coalesce(cs.Indice_acbr, 32) as Cst_cofins_indice_ACBr'
+      '  , i.Codemp'
+      '  , i.codforn'
+      '  , f.cnpj as codforn_cnpj'
+      '  , i.dtent'
+      '  , i.Qtde'
+      
+        '--  , ( coalesce(i.precounit, 0) + (coalesce(i.valor_desconto, 0' +
+        ') / coalesce(i.Qtde, 1)) ) as PUNIT'
+      '  , i.precounit as PUNIT'
+      
+        '  , ( (coalesce(i.valor_desconto, 0) / coalesce(i.Qtde, 1)) / (c' +
+        'oalesce(i.precounit, 0) + (coalesce(i.valor_desconto, 0) / coale' +
+        'sce(i.Qtde, 1))) * 100 ) as Desconto'
+      
+        '  , ( coalesce(i.valor_desconto, 0) / coalesce(i.Qtde, 1) ) as d' +
+        'esconto_valor'
+      '  , i.customedio as PFINAL'
+      '  , i.Qtdefinal'
+      '  , i.Unid_cod'
+      '  , u.Unp_descricao'
+      '  , u.Unp_sigla'
+      '  , i.Cfop as Cfop_cod'
+      '  , i.Aliquota'
+      '  , i.Aliquota_csosn'
+      '  , coalesce(i.Aliquota_pis, 0.0) as Aliquota_pis'
+      '  , coalesce(i.Aliquota_cofins, 0.0) as Aliquota_cofins'
+      '  , i.Valor_ipi'
+      
+        '  , coalesce(i.Percentual_reducao_bc, 0.0) as Percentual_reducao' +
+        '_bc'
+      
+        '  , coalesce(i.customedio, 0) * coalesce(i.Percentual_reducao_bc' +
+        ', 0.0) / 100 as valor_reducao_bc'
+      
+        '--  , (i.Qtde * coalesce(i.precounit, 0)) + i.valor_desconto as ' +
+        'Total_bruto'
+      '  , i.Qtde * i.precounit as Total_Bruto'
+      '  , i.Qtde * i.customedio as Total_liquido'
+      '  , i.valor_desconto as Total_desconto'
+      '  , p.Qtde as Estoque'
+      '  , p.Reserva'
+      '  , p.Produto_novo'
+      '  , p.Cor_veiculo'
+      '  , cr.Descricao as Cor_veiculo_descricao'
+      '  , p.Combustivel_veiculo'
+      '  , cb.Descricao as Combustivel_veiculo_descricao'
+      '  , p.Ano_fabricacao_veiculo'
+      '  , p.Ano_modelo_veiculo'
+      
+        '  , p.Ano_fabricacao_veiculo || '#39'/'#39' || p.Ano_modelo_veiculo as a' +
+        'no_fab_modelo_veiculo'
+      '  , p.Tipo_veiculo'
+      '  , tv.Descricao as Tipo_veiculo_descricao'
+      '  , p.Renavam_veiculo'
+      '  , p.Chassi_veiculo'
+      '  , p.Kilometragem_veiculo'
+      '  , coalesce(p.Qtde, 0) - coalesce(p.Reserva, 0) as Disponivel'
+      'from TBCOMPRASITENS i'
+      '  inner join TBPRODUTO p on (p.Cod = i.codprod)'
+      '  inner join TBUNIDADEPROD u on (u.Unp_cod = i.unid_cod)'
+      '  inner join TBFORNECEDOR f on (f.codforn = i.codforn)'
+      '  left join RENAVAM_COR cr on (cr.Codigo = p.Cor_veiculo)'
+      
+        '  left join RENAVAM_COBUSTIVEL cb on (cb.Codigo = p.Combustivel_' +
+        'veiculo)'
+      
+        '  left join RENAVAM_TIPOVEICULO tv on (tv.Codigo = p.Tipo_veicul' +
+        'o)'
+      '  left join TBCST_PIS ps on (ps.Codigo = p.Cst_pis)'
+      '  left join TBCST_COFINS cs on (cs.Codigo = p.Cst_cofins)'
+      'where i.Ano = :anoCompra'
+      '  and i.Codcontrol = :numCompra'
+      ''
+      'order by '
+      '    i.Ano'
+      '  , i.Codcontrol'
+      '  , i.Seq')
+    Left = 224
+    Top = 168
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'anoCompra'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'numCompra'
+        ParamType = ptUnknown
+      end>
+    object qryEntradaDadosProdutoANO: TSmallintField
+      FieldName = 'ANO'
+      Origin = '"TBCOMPRASITENS"."ANO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaDadosProdutoCODCONTROL: TIntegerField
+      FieldName = 'CODCONTROL'
+      Origin = '"TBCOMPRASITENS"."CODCONTROL"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaDadosProdutoSEQ: TSmallintField
+      FieldName = 'SEQ'
+      Origin = '"TBCOMPRASITENS"."SEQ"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaDadosProdutoCODPROD: TIBStringField
+      FieldName = 'CODPROD'
+      Origin = '"TBCOMPRASITENS"."CODPROD"'
+      Size = 10
+    end
+    object qryEntradaDadosProdutoCODBARRA_EAN: TIBStringField
+      FieldName = 'CODBARRA_EAN'
+      Origin = '"TBPRODUTO"."CODBARRA_EAN"'
+      Size = 15
+    end
+    object qryEntradaDadosProdutoDESCRI: TIBStringField
+      FieldName = 'DESCRI'
+      Origin = '"TBPRODUTO"."DESCRI"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoAPRESENTACAO: TIBStringField
+      FieldName = 'APRESENTACAO'
+      Origin = '"TBPRODUTO"."APRESENTACAO"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoDESCRI_APRESENTACAO: TIBStringField
+      FieldName = 'DESCRI_APRESENTACAO'
+      ProviderFlags = []
+      Size = 100
+    end
+    object qryEntradaDadosProdutoMODELO: TIBStringField
+      FieldName = 'MODELO'
+      Origin = '"TBPRODUTO"."MODELO"'
+      Size = 40
+    end
+    object qryEntradaDadosProdutoREFERENCIA: TIBStringField
+      FieldName = 'REFERENCIA'
+      Origin = '"TBPRODUTO"."REFERENCIA"'
+      Size = 15
+    end
+    object qryEntradaDadosProdutoNCM_SH: TIBStringField
+      FieldName = 'NCM_SH'
+      Origin = '"TBPRODUTO"."NCM_SH"'
+      Size = 10
+    end
+    object qryEntradaDadosProdutoCODORIGEM: TIBStringField
+      FieldName = 'CODORIGEM'
+      Origin = '"TBPRODUTO"."CODORIGEM"'
+      Size = 1
+    end
+    object qryEntradaDadosProdutoCODTRIBUTACAO: TIBStringField
+      FieldName = 'CODTRIBUTACAO'
+      Origin = '"TBPRODUTO"."CODTRIBUTACAO"'
+      Size = 2
+    end
+    object qryEntradaDadosProdutoCST: TIBStringField
+      FieldName = 'CST'
+      Origin = '"TBPRODUTO"."CST"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCSOSN: TIBStringField
+      FieldName = 'CSOSN'
+      Origin = '"TBPRODUTO"."CSOSN"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCST_PIS: TIBStringField
+      FieldName = 'CST_PIS'
+      Origin = '"TBPRODUTO"."CST_PIS"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCST_COFINS: TIBStringField
+      FieldName = 'CST_COFINS'
+      Origin = '"TBPRODUTO"."CST_COFINS"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCST_PIS_INDICE_ACBR: TIntegerField
+      FieldName = 'CST_PIS_INDICE_ACBR'
+      ProviderFlags = []
+    end
+    object qryEntradaDadosProdutoCST_COFINS_INDICE_ACBR: TIntegerField
+      FieldName = 'CST_COFINS_INDICE_ACBR'
+      ProviderFlags = []
+    end
+    object qryEntradaDadosProdutoCODEMP: TIBStringField
+      FieldName = 'CODEMP'
+      Origin = '"TBCOMPRASITENS"."CODEMP"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 18
+    end
+    object qryEntradaDadosProdutoCODFORN: TIntegerField
+      FieldName = 'CODFORN'
+      Origin = '"TBCOMPRASITENS"."CODFORN"'
+    end
+    object qryEntradaDadosProdutoCODFORN_CNPJ: TIBStringField
+      FieldName = 'CODFORN_CNPJ'
+      Origin = '"TBFORNECEDOR"."CNPJ"'
+      Size = 18
+    end
+    object qryEntradaDadosProdutoDTENT: TDateField
+      FieldName = 'DTENT'
+      Origin = '"TBCOMPRASITENS"."DTENT"'
+    end
+    object qryEntradaDadosProdutoQTDE: TSmallintField
+      FieldName = 'QTDE'
+      Origin = '"TBCOMPRASITENS"."QTDE"'
+    end
+    object qryEntradaDadosProdutoPUNIT: TIBBCDField
+      FieldName = 'PUNIT'
+      Origin = '"TBCOMPRASITENS"."PRECOUNIT"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoDESCONTO: TIBBCDField
+      FieldName = 'DESCONTO'
+      ProviderFlags = []
+      Precision = 18
+      Size = 4
+    end
+    object qryEntradaDadosProdutoDESCONTO_VALOR: TIBBCDField
+      FieldName = 'DESCONTO_VALOR'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoPFINAL: TIBBCDField
+      FieldName = 'PFINAL'
+      Origin = '"TBCOMPRASITENS"."CUSTOMEDIO"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoQTDEFINAL: TIntegerField
+      FieldName = 'QTDEFINAL'
+      Origin = '"TBCOMPRASITENS"."QTDEFINAL"'
+    end
+    object qryEntradaDadosProdutoUNID_COD: TSmallintField
+      FieldName = 'UNID_COD'
+      Origin = '"TBCOMPRASITENS"."UNID_COD"'
+    end
+    object qryEntradaDadosProdutoUNP_DESCRICAO: TIBStringField
+      FieldName = 'UNP_DESCRICAO'
+      Origin = '"TBUNIDADEPROD"."UNP_DESCRICAO"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoUNP_SIGLA: TIBStringField
+      FieldName = 'UNP_SIGLA'
+      Origin = '"TBUNIDADEPROD"."UNP_SIGLA"'
+      Size = 5
+    end
+    object qryEntradaDadosProdutoCFOP_COD: TIntegerField
+      FieldName = 'CFOP_COD'
+      Origin = '"TBCOMPRASITENS"."CFOP"'
+    end
+    object qryEntradaDadosProdutoALIQUOTA: TIBBCDField
+      FieldName = 'ALIQUOTA'
+      Origin = '"TBCOMPRASITENS"."ALIQUOTA"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoALIQUOTA_CSOSN: TIBBCDField
+      FieldName = 'ALIQUOTA_CSOSN'
+      Origin = '"TBCOMPRASITENS"."ALIQUOTA_CSOSN"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoALIQUOTA_PIS: TIBBCDField
+      FieldName = 'ALIQUOTA_PIS'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoALIQUOTA_COFINS: TIBBCDField
+      FieldName = 'ALIQUOTA_COFINS'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoVALOR_IPI: TIBBCDField
+      FieldName = 'VALOR_IPI'
+      Origin = '"TBCOMPRASITENS"."VALOR_IPI"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoPERCENTUAL_REDUCAO_BC: TIBBCDField
+      FieldName = 'PERCENTUAL_REDUCAO_BC'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoVALOR_REDUCAO_BC: TIBBCDField
+      FieldName = 'VALOR_REDUCAO_BC'
+      ProviderFlags = []
+      Precision = 18
+      Size = 4
+    end
+    object qryEntradaDadosProdutoTOTAL_BRUTO: TIBBCDField
+      FieldName = 'TOTAL_BRUTO'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoTOTAL_LIQUIDO: TIBBCDField
+      FieldName = 'TOTAL_LIQUIDO'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoTOTAL_DESCONTO: TIBBCDField
+      FieldName = 'TOTAL_DESCONTO'
+      Origin = '"TBCOMPRASITENS"."VALOR_DESCONTO"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDadosProdutoESTOQUE: TIntegerField
+      FieldName = 'ESTOQUE'
+      Origin = '"TBPRODUTO"."QTDE"'
+    end
+    object qryEntradaDadosProdutoRESERVA: TIntegerField
+      FieldName = 'RESERVA'
+      Origin = '"TBPRODUTO"."RESERVA"'
+    end
+    object qryEntradaDadosProdutoPRODUTO_NOVO: TSmallintField
+      FieldName = 'PRODUTO_NOVO'
+      Origin = '"TBPRODUTO"."PRODUTO_NOVO"'
+    end
+    object qryEntradaDadosProdutoCOR_VEICULO: TIBStringField
+      FieldName = 'COR_VEICULO'
+      Origin = '"TBPRODUTO"."COR_VEICULO"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCOR_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'COR_VEICULO_DESCRICAO'
+      Origin = '"RENAVAM_COR"."DESCRICAO"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoCOMBUSTIVEL_VEICULO: TIBStringField
+      FieldName = 'COMBUSTIVEL_VEICULO'
+      Origin = '"TBPRODUTO"."COMBUSTIVEL_VEICULO"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoCOMBUSTIVEL_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'COMBUSTIVEL_VEICULO_DESCRICAO'
+      Origin = '"RENAVAM_COBUSTIVEL"."DESCRICAO"'
+      Size = 100
+    end
+    object qryEntradaDadosProdutoANO_FABRICACAO_VEICULO: TSmallintField
+      FieldName = 'ANO_FABRICACAO_VEICULO'
+      Origin = '"TBPRODUTO"."ANO_FABRICACAO_VEICULO"'
+    end
+    object qryEntradaDadosProdutoANO_MODELO_VEICULO: TSmallintField
+      FieldName = 'ANO_MODELO_VEICULO'
+      Origin = '"TBPRODUTO"."ANO_MODELO_VEICULO"'
+    end
+    object qryEntradaDadosProdutoANO_FAB_MODELO_VEICULO: TIBStringField
+      FieldName = 'ANO_FAB_MODELO_VEICULO'
+      ProviderFlags = []
+      Size = 13
+    end
+    object qryEntradaDadosProdutoTIPO_VEICULO: TIBStringField
+      FieldName = 'TIPO_VEICULO'
+      Origin = '"TBPRODUTO"."TIPO_VEICULO"'
+      Size = 3
+    end
+    object qryEntradaDadosProdutoTIPO_VEICULO_DESCRICAO: TIBStringField
+      FieldName = 'TIPO_VEICULO_DESCRICAO'
+      Origin = '"RENAVAM_TIPOVEICULO"."DESCRICAO"'
+      Size = 100
+    end
+    object qryEntradaDadosProdutoRENAVAM_VEICULO: TIBStringField
+      FieldName = 'RENAVAM_VEICULO'
+      Origin = '"TBPRODUTO"."RENAVAM_VEICULO"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoCHASSI_VEICULO: TIBStringField
+      FieldName = 'CHASSI_VEICULO'
+      Origin = '"TBPRODUTO"."CHASSI_VEICULO"'
+      Size = 50
+    end
+    object qryEntradaDadosProdutoKILOMETRAGEM_VEICULO: TIntegerField
+      FieldName = 'KILOMETRAGEM_VEICULO'
+      Origin = '"TBPRODUTO"."KILOMETRAGEM_VEICULO"'
+    end
+    object qryEntradaDadosProdutoDISPONIVEL: TLargeintField
+      FieldName = 'DISPONIVEL'
+      ProviderFlags = []
+    end
+  end
+  object frdEntradaItens: TfrxDBDataset
+    UserName = 'frdEntradaItens'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ANO=ANO'
+      'CODCONTROL=CODCONTROL'
+      'SEQ=SEQ'
+      'CODPROD=CODPROD'
+      'CODBARRA_EAN=CODBARRA_EAN'
+      'DESCRI=DESCRI'
+      'APRESENTACAO=APRESENTACAO'
+      'DESCRI_APRESENTACAO=DESCRI_APRESENTACAO'
+      'MODELO=MODELO'
+      'REFERENCIA=REFERENCIA'
+      'NCM_SH=NCM_SH'
+      'CODORIGEM=CODORIGEM'
+      'CODTRIBUTACAO=CODTRIBUTACAO'
+      'CST=CST'
+      'CSOSN=CSOSN'
+      'CST_PIS=CST_PIS'
+      'CST_COFINS=CST_COFINS'
+      'CST_PIS_INDICE_ACBR=CST_PIS_INDICE_ACBR'
+      'CST_COFINS_INDICE_ACBR=CST_COFINS_INDICE_ACBR'
+      'CODEMP=CODEMP'
+      'CODFORN=CODFORN'
+      'CODFORN_CNPJ=CODFORN_CNPJ'
+      'DTENT=DTENT'
+      'QTDE=QTDE'
+      'PUNIT=PUNIT'
+      'DESCONTO=DESCONTO'
+      'DESCONTO_VALOR=DESCONTO_VALOR'
+      'PFINAL=PFINAL'
+      'QTDEFINAL=QTDEFINAL'
+      'UNID_COD=UNID_COD'
+      'UNP_DESCRICAO=UNP_DESCRICAO'
+      'UNP_SIGLA=UNP_SIGLA'
+      'CFOP_COD=CFOP_COD'
+      'ALIQUOTA=ALIQUOTA'
+      'ALIQUOTA_CSOSN=ALIQUOTA_CSOSN'
+      'ALIQUOTA_PIS=ALIQUOTA_PIS'
+      'ALIQUOTA_COFINS=ALIQUOTA_COFINS'
+      'VALOR_IPI=VALOR_IPI'
+      'PERCENTUAL_REDUCAO_BC=PERCENTUAL_REDUCAO_BC'
+      'VALOR_REDUCAO_BC=VALOR_REDUCAO_BC'
+      'TOTAL_LIQUIDO=TOTAL_LIQUIDO'
+      'TOTAL_LIQUIDO1=TOTAL_LIQUIDO1'
+      'TOTAL_DESCONTO=TOTAL_DESCONTO'
+      'ESTOQUE=ESTOQUE'
+      'RESERVA=RESERVA'
+      'PRODUTO_NOVO=PRODUTO_NOVO'
+      'COR_VEICULO=COR_VEICULO'
+      'COR_VEICULO_DESCRICAO=COR_VEICULO_DESCRICAO'
+      'COMBUSTIVEL_VEICULO=COMBUSTIVEL_VEICULO'
+      'COMBUSTIVEL_VEICULO_DESCRICAO=COMBUSTIVEL_VEICULO_DESCRICAO'
+      'ANO_FABRICACAO_VEICULO=ANO_FABRICACAO_VEICULO'
+      'ANO_MODELO_VEICULO=ANO_MODELO_VEICULO'
+      'ANO_FAB_MODELO_VEICULO=ANO_FAB_MODELO_VEICULO'
+      'TIPO_VEICULO=TIPO_VEICULO'
+      'TIPO_VEICULO_DESCRICAO=TIPO_VEICULO_DESCRICAO'
+      'RENAVAM_VEICULO=RENAVAM_VEICULO'
+      'CHASSI_VEICULO=CHASSI_VEICULO'
+      'KILOMETRAGEM_VEICULO=KILOMETRAGEM_VEICULO'
+      'DISPONIVEL=DISPONIVEL')
+    DataSet = qryEntradaDadosProduto
+    BCDToCurrency = False
+    Left = 260
+    Top = 169
+  end
+  object qryEntradaDuplicatas: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    p.anolanc'
+      '  , p.numlanc'
+      '  , p.Parcela'
+      '  , p.Dtemiss'
+      '  , p.Dtvenc'
+      '  , p.valorpag'
+      '  , 0.0 as Valormulta'
+      '  , 0.0 as Percentdesconto'
+      'from TBCONTPAG p'
+      'where p.anocompra = :AnoCompra'
+      '  and p.numcompra = :NumCompra')
+    Left = 224
+    Top = 216
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'AnoCompra'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'NumCompra'
+        ParamType = ptUnknown
+      end>
+    object qryEntradaDuplicatasANOLANC: TSmallintField
+      FieldName = 'ANOLANC'
+      Origin = '"TBCONTPAG"."ANOLANC"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaDuplicatasNUMLANC: TIntegerField
+      FieldName = 'NUMLANC'
+      Origin = '"TBCONTPAG"."NUMLANC"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryEntradaDuplicatasPARCELA: TSmallintField
+      FieldName = 'PARCELA'
+      Origin = '"TBCONTPAG"."PARCELA"'
+    end
+    object qryEntradaDuplicatasDTEMISS: TDateField
+      FieldName = 'DTEMISS'
+      Origin = '"TBCONTPAG"."DTEMISS"'
+    end
+    object qryEntradaDuplicatasDTVENC: TDateField
+      FieldName = 'DTVENC'
+      Origin = '"TBCONTPAG"."DTVENC"'
+    end
+    object qryEntradaDuplicatasVALORPAG: TIBBCDField
+      FieldName = 'VALORPAG'
+      Origin = '"TBCONTPAG"."VALORPAG"'
+      Precision = 18
+      Size = 2
+    end
+    object qryEntradaDuplicatasVALORMULTA: TIBBCDField
+      FieldName = 'VALORMULTA'
+      ProviderFlags = []
+      Precision = 18
+      Size = 1
+    end
+    object qryEntradaDuplicatasPERCENTDESCONTO: TIBBCDField
+      FieldName = 'PERCENTDESCONTO'
+      ProviderFlags = []
+      Precision = 18
+      Size = 1
+    end
+  end
+  object frdEntradaDuplicata: TfrxDBDataset
+    UserName = 'frdEntradaDuplicata'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'ANOLANC=ANOLANC'
+      'NUMLANC=NUMLANC'
+      'PARCELA=PARCELA'
+      'DTEMISS=DTEMISS'
+      'DTVENC=DTVENC'
+      'VALORREC=VALORREC'
+      'VALORMULTA=VALORMULTA'
+      'PERCENTDESCONTO=PERCENTDESCONTO')
+    DataSet = qryEntradaDuplicatas
+    BCDToCurrency = False
+    Left = 260
+    Top = 217
   end
 end

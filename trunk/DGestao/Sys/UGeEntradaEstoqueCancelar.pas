@@ -81,6 +81,7 @@ type
     cdsEntradaCNPJ: TIBStringField;
     lblTotalNota: TLabel;
     dbTotalNota: TDBEdit;
+    lblInforme: TLabel;
     procedure btFecharClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
   private
@@ -96,7 +97,7 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses UDMBusiness, UDMNFe;
 
 {$R *.dfm}
 
@@ -142,10 +143,29 @@ begin
     dbMotivo.SetFocus;
   end
   else
+  if ( Length(Trim(dbMotivo.Lines.Text)) < 15 ) then
   begin
-    sMsg := 'Confirma o cancelamento da entrada?';
+    ShowWarning('Motivo de cancelamento da compra deve possuir 15 caracteres no mínimo.');
+    dbMotivo.SetFocus;
+  end
+  else
+  begin
+    if ( cdsEntradaSTATUS.AsInteger = STATUS_VND_NFE ) then
+      sMsg := 'Esta compra possui Nota Fiscal de Entrada Emitida e ao cancelar a compra a NF-e será cancelada.'#13#13'Confirma o cancelamento da compra?'
+    else
+      sMsg := 'Confirma o cancelamento da compra?';
 
     Cont := ShowConfirm(sMsg);
+
+    if ( Cont ) then
+      if ( cdsEntradaSTATUS.AsInteger = STATUS_CMP_NFE ) then
+      begin
+        lblInforme.Caption := 'Cancelando NF-e junto a SEFA. Aguarde . . . ';
+        Application.ProcessMessages;
+
+        Cont := DMNFe.CancelarNFeEntradaACBr( cdsEntradaCODEMP.AsString, cdsEntradaCODFORN.AsInteger,
+                cdsEntradaANO.AsInteger, cdsEntradaCODCONTROL.AsInteger, UpperCase(Trim(dbMotivo.Lines.Text)) );
+      end;
 
     if ( Cont ) then
       with cdsEntrada do

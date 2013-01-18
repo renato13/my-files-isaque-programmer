@@ -1,8 +1,9 @@
 inherited frmGeCaixa: TfrmGeCaixa
-  Left = 224
-  Top = 151
+  Left = 557
+  Top = 195
   Width = 966
   Height = 542
+  ActiveControl = dbCodigo
   Caption = 'Gerenciar Caixas'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -181,6 +182,7 @@ inherited frmGeCaixa: TfrmGeCaixa
   inherited pgcGuias: TPageControl
     Width = 950
     Height = 461
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -683,7 +685,7 @@ inherited frmGeCaixa: TfrmGeCaixa
         Top = 197
         Width = 942
         Height = 235
-        ActivePage = tbsMovimento
+        ActivePage = tbsConsolidado
         Align = alClient
         TabOrder = 2
         TabStop = False
@@ -1001,8 +1003,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object tblOperador: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBUSERS'
     Left = 720
     Top = 8
@@ -1015,8 +1015,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object tblContaCorrente: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBCONTA_CORRENTE'
     Left = 720
     Top = 40
@@ -1029,7 +1027,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object cdsCosolidado: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1158,8 +1155,6 @@ inherited frmGeCaixa: TfrmGeCaixa
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryMovimentoCalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -1422,8 +1417,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object qryCaixaSintetico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.Ano'
@@ -3609,8 +3602,6 @@ inherited frmGeCaixa: TfrmGeCaixa
   object qryCaixaAnalitico: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.Ano'
