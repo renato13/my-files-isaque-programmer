@@ -159,12 +159,4 @@ alter LOTE_ANO_NFE position 32;
 alter table TBEMPRESA
 alter LOTE_NUM_NFE position 33;
 
-
-
-
-/*------ SYSDBA 09/01/2013 10:26:42 --------*/
-
-UPDATE TBCLIENTE
-    SET DTCAD = CURRENT_DATE WHERE DTCAD IS NULL
-
-    
+  
