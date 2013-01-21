@@ -82,6 +82,8 @@ type
     cdsCompraVALORCOFINS: TIBBCDField;
     cdsCompraOUTROSCUSTOS: TIBBCDField;
     cdsCompraTOTALNF: TIBBCDField;
+    cdsCompraHREMISS: TTimeField;
+    cdsCompraIPI: TIBBCDField;
     cdsCompraVALOR_TOTAL_IPI: TIBBCDField;
     cdsCompraVALOR_TOTAL_BRUTO: TIBBCDField;
     cdsCompraVALOR_TOTAL_DESCONTO: TIBBCDField;
@@ -93,8 +95,6 @@ type
     cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFMTBCDField;
     cdsCompraVALOR_TOTAL_PIS: TIBBCDField;
     cdsCompraVALOR_TOTAL_COFINS: TIBBCDField;
-    cdsCompraHREMISS: TTimeField;
-    cdsCompraIPI: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
