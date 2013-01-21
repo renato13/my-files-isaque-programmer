@@ -2589,7 +2589,7 @@ begin
           end;
         end ;
 
-        qryDadosProduto.Next;
+        qryEntradaDadosProduto.Next;
       end;
 
       Total.ICMSTot.vBC     := qryEntradaCalculoImportoNFE_VALOR_BASE_ICMS.AsCurrency;
