@@ -91,8 +91,8 @@ type
     cdsCompraVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsCompraVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField;
     cdsCompraVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField;
-    cdsCompraVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFMTBCDField;
-    cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFMTBCDField;
+    cdsCompraVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField;
+    cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
     cdsCompraVALOR_TOTAL_PIS: TIBBCDField;
     cdsCompraVALOR_TOTAL_COFINS: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
