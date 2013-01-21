@@ -2241,9 +2241,9 @@ begin
           // NFe.Det[i].Prod.qTrib   :=   20;   2 caixas X 10 unidades por caixa = 20 unidades  = 20
           // NFe.Det[i].Prod.vUnTrib :=    5;   R$ 100,00 / 20 unidades = R$ 5,00 cada unidade  = 100,00 / 20 = 5,00
 
-          Prod.vFrete    := 0;                                        // I15 - Valor Total do Frete
-          Prod.vSeg      := 0;                                        // I16 - Valor Total do Seguro
-          Prod.vDesc     := qryDadosProdutoTOTAL_DESCONTO.AsCurrency; // I17 - Valor do Desconto
+          Prod.vFrete    := 0;                                               // I15 - Valor Total do Frete
+          Prod.vSeg      := 0;                                               // I16 - Valor Total do Seguro
+          Prod.vDesc     := qryEntradaDadosProdutoTOTAL_DESCONTO.AsCurrency; // I17 - Valor do Desconto
 
           // Informação Adicional do Produto
           
