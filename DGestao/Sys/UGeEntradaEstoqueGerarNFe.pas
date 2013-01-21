@@ -65,7 +65,6 @@ type
     cdsCompraDTENT: TDateField;
     cdsCompraDTFINALIZACAO_COMPRA: TDateTimeField;
     cdsCompraDTEMISS: TDateField;
-    cdsCompraNFSERIE: TIBStringField;
     cdsCompraNF: TIntegerField;
     cdsCompraSTATUS: TSmallintField;
     cdsCompraICMSBASE: TIBBCDField;
@@ -95,6 +94,7 @@ type
     cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
     cdsCompraVALOR_TOTAL_PIS: TIBBCDField;
     cdsCompraVALOR_TOTAL_COFINS: TIBBCDField;
+    cdsCompraNFSERIE: TIBStringField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);

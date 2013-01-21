@@ -39,7 +39,6 @@ type
     cdsEntradaCODEMP: TIBStringField;
     cdsEntradaCODFORN: TIntegerField;
     cdsEntradaNF: TIntegerField;
-    cdsEntradaNFSERIE: TIBStringField;
     cdsEntradaDTLANCAMENTO: TDateTimeField;
     cdsEntradaDTEMISS: TDateField;
     cdsEntradaDTENT: TDateField;
@@ -82,6 +81,7 @@ type
     lblTotalNota: TLabel;
     dbTotalNota: TDBEdit;
     lblInforme: TLabel;
+    cdsEntradaNFSERIE: TIBStringField;
     procedure btFecharClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
   private
