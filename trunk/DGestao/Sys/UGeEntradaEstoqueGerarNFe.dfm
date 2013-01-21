@@ -1020,16 +1020,15 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
       Origin = '"TBCOMPRAS"."HREMISS"'
       DisplayFormat = 'hh:mm:ss'
     end
-    object cdsCompraNFSERIE: TIBStringField
-      FieldName = 'NFSERIE'
-      Origin = '"TBCOMPRAS"."NFSERIE"'
-      FixedChar = True
-      Size = 1
-    end
     object cdsCompraNF: TIntegerField
       FieldName = 'NF'
       Origin = '"TBCOMPRAS"."NF"'
       Required = True
+    end
+    object cdsCompraNFSERIE: TIBStringField
+      FieldName = 'NFSERIE'
+      Origin = 'TBCOMPRAS.NFSERIE'
+      Size = 4
     end
     object cdsCompraSTATUS: TSmallintField
       FieldName = 'STATUS'

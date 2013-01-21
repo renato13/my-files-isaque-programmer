@@ -1,4 +1,6 @@
 inherited frmGeEntradaEstoqueCancelar: TfrmGeEntradaEstoqueCancelar
+  Left = 400
+  Top = 166
   Width = 617
   Height = 474
   ActiveControl = dbMotivo
@@ -488,6 +490,7 @@ inherited frmGeEntradaEstoqueCancelar: TfrmGeEntradaEstoqueCancelar
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -577,11 +580,9 @@ inherited frmGeEntradaEstoqueCancelar: TfrmGeEntradaEstoqueCancelar
       Required = True
     end
     object cdsEntradaNFSERIE: TIBStringField
-      Alignment = taCenter
       FieldName = 'NFSERIE'
       Origin = 'TBCOMPRAS.NFSERIE'
-      FixedChar = True
-      Size = 1
+      Size = 4
     end
     object cdsEntradaDTLANCAMENTO: TDateTimeField
       FieldName = 'DTLANCAMENTO'
