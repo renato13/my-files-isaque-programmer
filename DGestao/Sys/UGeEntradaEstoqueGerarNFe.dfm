@@ -1,6 +1,6 @@
 inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
-  Left = 565
-  Top = 245
+  Left = 376
+  Top = 173
   ActiveControl = dbBaseICMS
   BorderStyle = bsDialog
   BorderWidth = 4
@@ -856,6 +856,7 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1140,77 +1141,62 @@ inherited frmGeEntradaEstoqueGerarNFe: TfrmGeEntradaEstoqueGerarNFe
     end
     object cdsCompraVALOR_TOTAL_IPI: TIBBCDField
       FieldName = 'VALOR_TOTAL_IPI'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsCompraVALOR_TOTAL_BRUTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_BRUTO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsCompraVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsCompraVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsCompraVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_ENTRADA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsCompraVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_ENTRADA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsCompraVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_SAIDA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
-    object cdsCompraVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFMTBCDField
+    object cdsCompraVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 6
     end
-    object cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFMTBCDField
+    object cdsCompraVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 6
     end
     object cdsCompraVALOR_TOTAL_PIS: TIBBCDField
       FieldName = 'VALOR_TOTAL_PIS'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsCompraVALOR_TOTAL_COFINS: TIBBCDField
       FieldName = 'VALOR_TOTAL_COFINS'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
