@@ -993,7 +993,7 @@ begin
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar imprimir DANFE.' + #13#13 + 'ImprimirDANFEACBr() --> ' + e.Message);
+      ShowError('Erro ao tentar imprimir DANFE da Saída.' + #13#13 + 'ImprimirDANFEACBr() --> ' + e.Message);
       Result := False;
     end;
   end;
@@ -2766,7 +2766,49 @@ var
   FileNameXML : String;
 begin
 
-  Result := False;
+  try
+
+    AbrirEmitente( sCNPJEmitente );
+    AbrirDestinatarioFornecedor( CodFornecedor );
+    AbrirCompra( iAnoCompra, iNumCompra );
+
+    if ( IsPDF ) then
+      FileNameXML := ExtractFilePath( ParamStr(0) ) + DIRECTORY_CLIENT + qryEntradaCalculoImportoXML_NFE_FILENAME.AsString
+    else
+      FileNameXML := ExtractFilePath( ParamStr(0) ) + DIRECTORY_PRINT  + qryEntradaCalculoImportoXML_NFE_FILENAME.AsString;
+
+    ForceDirectories( ExtractFilePath(FileNameXML) );
+
+    qryEntradaCalculoImportoXML_NFE.SaveToFile( FileNameXML );
+
+    with ACBrNFe do
+    begin
+      NotasFiscais.Clear;
+      NotasFiscais.LoadFromFile( FileNameXML );
+
+      if NotasFiscais.Items[0].NFe.Ide.tpEmis = teDPEC then
+      begin
+        WebServices.ConsultaDPEC.NFeChave := NotasFiscais.Items[0].NFe.infNFe.ID;
+        WebServices.ConsultaDPEC.Executar;
+
+        DANFE.ProtocoloNFe := WebServices.ConsultaDPEC.nRegDPEC + ' ' + DateTimeToStr(WebServices.ConsultaDPEC.dhRegDPEC);
+      end;
+
+      if ( IsPDF ) then
+        NotasFiscais.ImprimirPDF
+      else
+        NotasFiscais.Imprimir;
+
+      Result := True;
+    end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar imprimir DANFE de Entrada.' + #13#13 + 'ImprimirDANFEEntradaACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
 
 end;
 

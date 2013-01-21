@@ -20,6 +20,7 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
     Top = 639
     Width = 1099
     inherited btbtnLista: TBitBtn
+      Caption = 'Imprimir'
       Visible = True
       OnClick = btbtnListaClick
     end
