@@ -2042,8 +2042,6 @@ procedure TDMNFe.GerarNFEEntradaACBr(const sCNPJEmitente : String; const iCodFor
   var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
 begin
 
-  Exit; // Provisório
-  
   try
 
     LerConfiguracao;
