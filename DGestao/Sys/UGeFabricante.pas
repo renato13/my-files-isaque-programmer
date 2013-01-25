@@ -67,4 +67,7 @@ begin
   UpdateGenerator;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeFabricante', TfrmGeFabricante);
+
 end.
