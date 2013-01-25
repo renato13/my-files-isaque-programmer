@@ -64,10 +64,11 @@ begin
   FileDescription.Caption := GetFileDescription;
   {$IFDEF DGE}
   Version.Caption     := 'Versão ' + VERSION_NUMBER; 
+  Copyright.Caption   := '© 2012|2013 - Masterdados Tecnologia da Informação' + #13 + 'Todos os direitos reservados.'
   {$ELSE}
   Version.Caption     := 'Versão ' + GetExeVersion;
-  {$ENDIF}
   Copyright.Caption   := GetCopyright;
+  {$ENDIF}
   Comments.Caption    := 'Licenciado a empresa ' + GetEmpresaNomeDefault + ' CPF/CNPJ.: ' + sCNPJ + ' em 01/02/2012.';
 end;
 

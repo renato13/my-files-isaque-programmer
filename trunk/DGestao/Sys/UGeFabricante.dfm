@@ -116,7 +116,6 @@ inherited frmGeFabricante: TfrmGeFabricante
       'from TBFABRICANTE f')
     GeneratorField.Field = 'COD'
     GeneratorField.Generator = 'GEN_FABRICANTE_ID'
-    Active = True
     object IbDtstTabelaCOD: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'COD'

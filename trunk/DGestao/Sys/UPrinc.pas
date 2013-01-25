@@ -178,19 +178,19 @@ uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa, UFuncoes,
-  UGeFabricante, UConstantesDGE;
+  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa,
+  UFuncoes, UConstantesDGE;
 
 {$R *.dfm}
 
 procedure TfrmPrinc.btnEmpresaClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeEmpresa');
+  FormFunction.ShowModalForm(Self, 'frmGeEmpresa');
 end;
 
 procedure TfrmPrinc.btnClienteClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeCliente');
+  FormFunction.ShowModalForm(Self, 'frmGeCliente');
 end;
 
 procedure TfrmPrinc.btnContaAReceberClick(Sender: TObject);
@@ -205,7 +205,7 @@ end;
 
 procedure TfrmPrinc.nmFornecedorClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeFornecedor');
+  FormFunction.ShowModalForm(Self, 'frmGeFornecedor');
 end;
 
 procedure TfrmPrinc.btnSairClick(Sender: TObject);
@@ -302,32 +302,32 @@ end;
 
 procedure TfrmPrinc.nmTiposdeLogradourosClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeTipoLogradouro');
+  FormFunction.ShowModalForm(Self, 'frmGeTipoLogradouro');
 end;
 
 procedure TfrmPrinc.nmEstadosClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeEstado');
+  FormFunction.ShowModalForm(Self, 'frmGeEstado');
 end;
 
 procedure TfrmPrinc.nmCidadesClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeCidade');
+  FormFunction.ShowModalForm(Self, 'frmGeCidade');
 end;
 
 procedure TfrmPrinc.nmDistritosClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeDistrito');
+  FormFunction.ShowModalForm(Self, 'frmGeDistrito');
 end;
 
 procedure TfrmPrinc.nmBairrosClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeBairro');
+  FormFunction.ShowModalForm(Self, 'frmGeBairro');
 end;
 
 procedure TfrmPrinc.nmLogradourosClick(Sender: TObject);
 begin
-  FormFunction.ShowForm(Self, 'frmGeLogradouro');
+  FormFunction.ShowModalForm(Self, 'frmGeLogradouro');
 end;
 
 procedure TfrmPrinc.nmGruposProdutoClick(Sender: TObject);
@@ -547,7 +547,7 @@ end;
 
 procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);
 begin
-  MostrarTabelaFabricantes(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeFabricante');
 end;
 
 procedure TfrmPrinc.nmUsuarioAlterarSenhaClick(Sender: TObject);
