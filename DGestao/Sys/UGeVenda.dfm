@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 585
-  Top = 117
+  Left = 230
+  Top = 45
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -1845,7 +1845,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 424
         Width = 1091
         Height = 190
-        ActivePage = tbsRecebimento
+        ActivePage = tbsITitulos
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -2494,6 +2494,12 @@ inherited frmGeVenda: TfrmGeVenda
               end
               item
                 Expanded = False
+                FieldName = 'STATUS'
+                Title.Caption = 'Status'
+                Visible = True
+              end
+              item
+                Expanded = False
                 FieldName = 'CODBANCO'
                 Title.Alignment = taCenter
                 Width = 60
@@ -3118,6 +3124,8 @@ inherited frmGeVenda: TfrmGeVenda
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 832
     Top = 72
@@ -3130,6 +3138,8 @@ inherited frmGeVenda: TfrmGeVenda
   object tblVendedor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBVENDEDOR'
     Left = 832
     Top = 104
@@ -3142,6 +3152,8 @@ inherited frmGeVenda: TfrmGeVenda
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'COD'
@@ -3188,6 +3200,8 @@ inherited frmGeVenda: TfrmGeVenda
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 832
@@ -3202,6 +3216,7 @@ inherited frmGeVenda: TfrmGeVenda
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnNewRecord = cdsTabelaItensNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -3549,6 +3564,8 @@ inherited frmGeVenda: TfrmGeVenda
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3607,6 +3624,8 @@ inherited frmGeVenda: TfrmGeVenda
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3624,6 +3643,8 @@ inherited frmGeVenda: TfrmGeVenda
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryTitulosCalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -3648,6 +3669,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , Case when r.Baixado = 1 then '#39'X'#39' else '#39'.'#39' end as Baixado_'
       '  , r.Dtrec'
       '  , r.forma_pagto'
+      '  , r.status'
       'from TBCONTREC r')
     ModifySQL.Strings = (
       '')
@@ -3788,6 +3810,11 @@ inherited frmGeVenda: TfrmGeVenda
       Size = 10
       Calculated = True
     end
+    object qryTitulosSTATUS: TIBStringField
+      FieldName = 'STATUS'
+      Origin = 'TBCONTREC.STATUS'
+      Size = 12
+    end
   end
   object dtsTitulos: TDataSource
     AutoEdit = False
@@ -3888,6 +3915,8 @@ inherited frmGeVenda: TfrmGeVenda
   object qryNFE: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SelectSQL.Strings = (
       'Select'
       '    n.ANOVENDA'
@@ -4038,6 +4067,8 @@ inherited frmGeVenda: TfrmGeVenda
   object qryTotalComprasAbertas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    g.Valor_limite'
@@ -4085,6 +4116,7 @@ inherited frmGeVenda: TfrmGeVenda
     Transaction = DMBusiness.ibtrnsctnBusiness
     BeforePost = cdsVendaFormaPagtoBeforePost
     OnNewRecord = cdsVendaFormaPagtoNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')

@@ -274,6 +274,7 @@ type
     cdsVendaFormaPagtoFormaPagto: TStringField;
     cdsVendaFormaPagtoCondicaoPagto: TStringField;
     qryTitulosFORMA_PAGTO: TSmallintField;
+    qryTitulosSTATUS: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
