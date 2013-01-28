@@ -1,6 +1,6 @@
 inherited frmGeContasAReceber: TfrmGeContasAReceber
-  Left = 244
-  Top = 121
+  Left = 673
+  Top = 229
   Width = 950
   Height = 600
   Caption = 'Controle de Contas A Receber'
