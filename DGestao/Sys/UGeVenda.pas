@@ -208,14 +208,12 @@ type
     qryNFEXML_FILE: TMemoField;
     qryNFELOTE_ANO: TSmallintField;
     qryNFELOTE_NUM: TIntegerField;
-    cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     btnConsultarProduto: TBitBtn;
     Bevel13: TBevel;
     dbTotalDesconto: TRxDBComboEdit;
     lblTotalDesconto: TLabel;
     e2Data: TDateTimePicker;
-    cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField;
     lblProdutoPromocao: TLabel;
     qryTotalComprasAbertas: TIBQuery;
@@ -275,6 +273,8 @@ type
     cdsVendaFormaPagtoCondicaoPagto: TStringField;
     qryTitulosFORMA_PAGTO: TSmallintField;
     qryTitulosSTATUS: TIBStringField;
+    cdsTabelaItensDESCONTO: TIBBCDField;
+    cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -929,7 +929,7 @@ begin
     end
     else
     begin
-
+(*
       // -- 29-01-2013 : Isaque
       // Processo para arredondar o valor de desconto para duas casas decimais
 
@@ -943,7 +943,7 @@ begin
         cdsTabelaItensTOTAL_DESCONTO.Value := cValorDesconto;
         cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
       end;
-
+*)
       cdsTabelaItens.Post;
 
       GetToTais(cDescontos, cTotalLiquido);
