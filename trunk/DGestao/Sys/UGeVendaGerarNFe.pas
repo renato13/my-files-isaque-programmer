@@ -86,7 +86,6 @@ type
     cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField;
     cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField;
     lblInforme: TLabel;
-    cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
     cdsVendaNFE_VALOR_BASE_ICMS: TIBBCDField;
     cdsVendaNFE_VALOR_ICMS: TIBBCDField;
     cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField;
@@ -96,6 +95,7 @@ type
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
     cdsVendaVALOR_TOTAL_PIS: TIBBCDField;
     cdsVendaVALOR_TOTAL_COFINS: TIBBCDField;
+    cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);

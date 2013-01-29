@@ -1020,7 +1020,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorLiq: TLabel
-          Left = 696
+          Left = 720
           Top = 64
           Width = 88
           Height = 13
@@ -1084,7 +1084,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorIPI: TLabel
-          Left = 824
+          Left = 848
           Top = 64
           Width = 69
           Height = 13
@@ -1288,7 +1288,7 @@ inherited frmGeVenda: TfrmGeVenda
           OnExit = ControlEditExit
         end
         object dbValorLiq: TDBEdit
-          Left = 696
+          Left = 720
           Top = 80
           Width = 121
           Height = 21
@@ -1433,7 +1433,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 8
         end
         object dbValorIPI: TDBEdit
-          Left = 824
+          Left = 848
           Top = 80
           Width = 97
           Height = 21
@@ -1747,7 +1747,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbTotalDesconto: TRxDBComboEdit
           Left = 584
           Top = 80
-          Width = 105
+          Width = 129
           Height = 21
           ButtonHint = 'Lan'#231'ar Valor Total do Desconto (Ctrl+D)'
           CharCase = ecUpperCase
@@ -3116,32 +3116,32 @@ inherited frmGeVenda: TfrmGeVenda
     Left = 1024
   end
   inherited ImgList: TImageList
-    Left = 896
-    Top = 72
+    Left = 1192
+    Top = 376
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     TableName = 'TBEMPRESA'
-    Left = 832
-    Top = 72
+    Left = 1128
+    Top = 376
   end
   object dtsEmpresa: TDataSource
     DataSet = tblEmpresa
-    Left = 864
-    Top = 72
+    Left = 1160
+    Top = 376
   end
   object tblVendedor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     TableName = 'TBVENDEDOR'
-    Left = 832
-    Top = 104
+    Left = 1128
+    Top = 408
   end
   object dtsVendedor: TDataSource
     DataSet = tblVendedor
-    Left = 864
-    Top = 104
+    Left = 1160
+    Top = 408
   end
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
@@ -3181,26 +3181,26 @@ inherited frmGeVenda: TfrmGeVenda
       end>
     StoreDefs = True
     TableName = 'TBFORMPAGTO'
-    Left = 832
-    Top = 136
+    Left = 1128
+    Top = 440
   end
   object dtsFormaPagto: TDataSource
     DataSet = tblFormaPagto
-    Left = 864
-    Top = 136
+    Left = 1160
+    Top = 440
   end
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
-    Left = 832
-    Top = 168
+    Left = 1128
+    Top = 472
   end
   object dtsCondicaoPagto: TDataSource
     DataSet = tblCondicaoPagto
-    Left = 864
-    Top = 168
+    Left = 1160
+    Top = 472
   end
   object cdsTabelaItens: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -3315,18 +3315,18 @@ inherited frmGeVenda: TfrmGeVenda
     object cdsTabelaItensDESCONTO: TIBBCDField
       DisplayLabel = '% Desconto'
       FieldName = 'DESCONTO'
-      Origin = 'TVENDASITENS.DESCONTO'
-      DisplayFormat = ',0.00'
+      Origin = '"TVENDASITENS"."DESCONTO"'
+      DisplayFormat = ',0.00#'
       Precision = 18
       Size = 3
     end
     object cdsTabelaItensDESCONTO_VALOR: TIBBCDField
       DisplayLabel = 'Valor Desconto (R$)'
       FieldName = 'DESCONTO_VALOR'
-      Origin = 'TVENDASITENS.DESCONTO_VALOR'
-      DisplayFormat = ',0.00'
+      Origin = '"TVENDASITENS"."DESCONTO_VALOR"'
+      DisplayFormat = ',0.00##'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object cdsTabelaItensPFINAL: TIBBCDField
       DisplayLabel = 'Valor L'#237'quido'
@@ -3605,8 +3605,8 @@ inherited frmGeVenda: TfrmGeVenda
       'where p.Codigo = :Codigo')
     ModifySQL.Strings = (
       '')
-    Left = 832
-    Top = 200
+    Left = 1128
+    Top = 504
   end
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -3621,8 +3621,8 @@ inherited frmGeVenda: TfrmGeVenda
       'where c.Cfop_cod = :Cfop_cod')
     ModifySQL.Strings = (
       '')
-    Left = 864
-    Top = 200
+    Left = 1160
+    Top = 504
   end
   object qryTitulos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness

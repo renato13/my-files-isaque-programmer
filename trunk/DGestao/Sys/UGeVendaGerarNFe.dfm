@@ -1177,8 +1177,9 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
     object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
+      ProviderFlags = []
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'
