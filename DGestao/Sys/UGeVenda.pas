@@ -359,7 +359,7 @@ implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto;
+  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -792,6 +792,20 @@ var
 begin
   if ( cdsTabelaItens.Active ) then
   begin
+
+    if ( GetSegmentoID(IbDtstTabelaCODEMP.AsString) = SEGMENTO_MERCADO_CARRO_ID ) then
+    begin
+      dbCST.ReadOnly := False;
+      dbCST.TabStop  := True;
+      dbCST.Color    := clWhite;
+    end
+    else
+    begin
+      dbCST.ReadOnly := True;
+      dbCST.TabStop  := False;
+      dbCST.Color    := clMoneyGreen;
+    end;
+
     GerarSequencial(Sequencial);
 
     cdsTabelaItens.Append;
@@ -870,7 +884,7 @@ procedure TfrmGeVenda.btnProdutoSalvarClick(Sender: TObject);
     begin
       Descontos    := Descontos    + cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
       TotalLiquido := TotalLiquido + cdsTabelaItensTOTAL_LIQUIDO.AsCurrency;
-      
+
       cdsTabelaItens.Next;
     end;
 
@@ -879,6 +893,7 @@ procedure TfrmGeVenda.btnProdutoSalvarClick(Sender: TObject);
 
 var
   cDescontos    ,
+  cValorDesconto,
   cTotalLiquido : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -914,6 +929,20 @@ begin
     end
     else
     begin
+
+      // -- 29-01-2013 : Isaque
+      // Processo para arredondar o valor de desconto para duas casas decimais
+
+      cValorDesconto := StrToCurrDef(FormatFloat('###########0.00', cdsTabelaItensTOTAL_DESCONTO.AsCurrency), 0);
+      if ( cValorDesconto > 0 ) then
+      begin
+        cdsTabelaItensDESCONTO_VALOR.AsCurrency := cValorDesconto / cdsTabelaItensQTDE.AsInteger;
+        cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
+        cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
+        cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
+        cdsTabelaItensTOTAL_DESCONTO.Value := cValorDesconto;
+        cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+      end;
 
       cdsTabelaItens.Post;
 
