@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 230
-  Top = 45
+  Left = 367
+  Top = 121
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -1421,8 +1421,7 @@ inherited frmGeVenda: TfrmGeVenda
           Top = 80
           Width = 33
           Height = 21
-          TabStop = False
-          Color = clMoneyGreen
+          Color = clWhite
           DataField = 'CST'
           DataSource = DtSrcTabelaItens
           Font.Charset = ANSI_CHARSET
@@ -1431,7 +1430,6 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          ReadOnly = True
           TabOrder = 8
         end
         object dbValorIPI: TDBEdit
