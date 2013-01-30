@@ -82,7 +82,6 @@ type
     IbDtstTabelaCODCLI: TIBStringField;
     IbDtstTabelaDTVENDA: TDateTimeField;
     IbDtstTabelaSTATUS: TSmallintField;
-    IbDtstTabelaDESCONTO: TIBBCDField;
     IbDtstTabelaTOTALVENDA: TIBBCDField;
     IbDtstTabelaOBS: TMemoField;
     IbDtstTabelaFORMAPAG: TIBStringField;
@@ -274,6 +273,7 @@ type
     cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
+    IbDtstTabelaDESCONTO: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);

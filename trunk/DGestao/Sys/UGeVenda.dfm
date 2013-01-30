@@ -594,7 +594,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblVendedor: TLabel [8]
-          Left = 768
+          Left = 776
           Top = 64
           Width = 50
           Height = 13
@@ -602,7 +602,7 @@ inherited frmGeVenda: TfrmGeVenda
           FocusControl = dbVendedor
         end
         object lblValorTotal: TLabel [9]
-          Left = 664
+          Left = 672
           Top = 64
           Width = 92
           Height = 13
@@ -828,9 +828,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 8
         end
         object dbVendedor: TDBLookupComboBox
-          Left = 768
+          Left = 776
           Top = 80
-          Width = 305
+          Width = 297
           Height = 21
           DataField = 'VENDEDOR_COD'
           DataSource = DtSrcTabela
@@ -847,7 +847,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 11
         end
         object dbValorTotal: TDBEdit
-          Left = 664
+          Left = 672
           Top = 80
           Width = 97
           Height = 21
@@ -867,7 +867,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbValorDesconto: TDBEdit
           Left = 568
           Top = 80
-          Width = 89
+          Width = 97
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -2741,10 +2741,10 @@ inherited frmGeVenda: TfrmGeVenda
     object IbDtstTabelaDESCONTO: TIBBCDField
       DisplayLabel = 'Desconto (R$)'
       FieldName = 'DESCONTO'
-      Origin = 'TBVENDAS.DESCONTO'
-      DisplayFormat = ',0.00'
+      Origin = '"TBVENDAS"."DESCONTO"'
+      DisplayFormat = ',0.00##'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object IbDtstTabelaTOTALVENDA: TIBBCDField
       DisplayLabel = 'Valor Total (R$)'
@@ -3237,7 +3237,9 @@ inherited frmGeVenda: TfrmGeVenda
       '  , u.Unp_sigla'
       '  , i.Qtde * i.Punit  as total_bruto'
       '  , i.Qtde * i.Desconto_valor as total_desconto'
-      '  , i.Qtde * i.Pfinal as total_liquido'
+      
+        '  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as total' +
+        '_liquido'
       '  , o.Cfop_descricao'
       '  , p.Cst'
       '  , p.Csosn'
@@ -3428,9 +3430,9 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Total L'#237'quido'
       FieldName = 'TOTAL_LIQUIDO'
       ProviderFlags = []
-      DisplayFormat = ',0.00'
+      DisplayFormat = ',0.00##'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object cdsTabelaItensCFOP_DESCRICAO: TIBStringField
       FieldName = 'CFOP_DESCRICAO'
