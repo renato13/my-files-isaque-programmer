@@ -62,7 +62,6 @@ type
     cdsVendaDTFINALIZACAO_VENDA: TDateField;
     cdsVendaDATAEMISSAO: TDateField;
     cdsVendaHORAEMISSAO: TTimeField;
-    cdsVendaDESCONTO: TIBBCDField;
     cdsVendaTOTALVENDA: TIBBCDField;
     cdsVendaSERIE: TIBStringField;
     cdsVendaNFE: TLargeintField;
@@ -96,6 +95,7 @@ type
     cdsVendaVALOR_TOTAL_PIS: TIBBCDField;
     cdsVendaVALOR_TOTAL_COFINS: TIBBCDField;
     cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField;
+    cdsVendaDESCONTO: TIBBCDField;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
