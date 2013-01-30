@@ -1042,7 +1042,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     object cdsVendaDESCONTO: TIBBCDField
       FieldName = 'DESCONTO'
       Origin = '"TBVENDAS"."DESCONTO"'
-      DisplayFormat = ',0.00##'
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end

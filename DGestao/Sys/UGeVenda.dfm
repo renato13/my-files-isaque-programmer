@@ -2742,7 +2742,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Desconto (R$)'
       FieldName = 'DESCONTO'
       Origin = '"TBVENDAS"."DESCONTO"'
-      DisplayFormat = ',0.00##'
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
@@ -3422,7 +3422,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Total Desc.'
       FieldName = 'TOTAL_DESCONTO'
       ProviderFlags = []
-      DisplayFormat = ',0.00##'
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
