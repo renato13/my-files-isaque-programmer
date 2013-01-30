@@ -147,7 +147,6 @@ type
     cdsTabelaItensESTOQUE: TIntegerField;
     cdsTabelaItensUNP_SIGLA: TIBStringField;
     cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
-    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     cdsTabelaItensCFOP_DESCRICAO: TIBStringField;
     cdsTabelaItensCST: TIBStringField;
     qryTitulos: TIBDataSet;
@@ -208,7 +207,6 @@ type
     qryNFEXML_FILE: TMemoField;
     qryNFELOTE_ANO: TSmallintField;
     qryNFELOTE_NUM: TIntegerField;
-    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     btnConsultarProduto: TBitBtn;
     Bevel13: TBevel;
     dbTotalDesconto: TRxDBComboEdit;
@@ -275,6 +273,8 @@ type
     qryTitulosSTATUS: TIBStringField;
     cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
+    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
+    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
