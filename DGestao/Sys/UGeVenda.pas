@@ -1040,11 +1040,11 @@ begin
 
       cPrecoVND := cdsTabelaItensPUNIT.AsCurrency;
 
-      cdsTabelaItensDESCONTO_VALOR.Value := cPrecoVND * cdsTabelaItensDESCONTO.AsCurrency / 100;
-      cdsTabelaItensPFINAL.Value         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.Value;
-      cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cPrecoVND;
-      cdsTabelaItensTOTAL_DESCONTO.Value := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+      cdsTabelaItensDESCONTO_VALOR.AsCurrency := cPrecoVND * cdsTabelaItensDESCONTO.AsCurrency / 100;
+      cdsTabelaItensPFINAL.AsCurrency         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.AsCurrency;
+      cdsTabelaItensTOTAL_BRUTO.AsCurrency    := cdsTabelaItensQTDE.AsInteger * cPrecoVND;
+      cdsTabelaItensTOTAL_DESCONTO.AsCurrency := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
+      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
     end;
 
   if ( Sender = dbValorLiq ) then
