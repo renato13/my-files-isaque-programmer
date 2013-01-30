@@ -3430,7 +3430,7 @@ inherited frmGeVenda: TfrmGeVenda
       DisplayLabel = 'Total L'#237'quido'
       FieldName = 'TOTAL_LIQUIDO'
       ProviderFlags = []
-      DisplayFormat = ',0.00##'
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
