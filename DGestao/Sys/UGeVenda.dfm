@@ -2622,7 +2622,6 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'TOTAL_DESCONTO'
-            Title.Caption = 'Total Desc.'
             Width = 85
             Visible = True
           end
@@ -2641,7 +2640,6 @@ inherited frmGeVenda: TfrmGeVenda
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
-            Title.Caption = 'Total L'#237'quido'
             Width = 85
             Visible = True
           end>
@@ -3419,14 +3417,17 @@ inherited frmGeVenda: TfrmGeVenda
       Size = 2
     end
     object cdsTabelaItensTOTAL_DESCONTO: TIBBCDField
-      DisplayLabel = 'Total Desc,'
+      DisplayLabel = 'Total Desc.'
       FieldName = 'TOTAL_DESCONTO'
-      DisplayFormat = ',0.00'
+      ProviderFlags = []
+      DisplayFormat = ',0.00##'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField
+      DisplayLabel = 'Total L'#237'quido'
       FieldName = 'TOTAL_LIQUIDO'
+      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
