@@ -561,9 +561,9 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
     end
     object cdsVendaDESCONTO: TIBBCDField
       FieldName = 'DESCONTO'
-      Origin = 'TBVENDAS.DESCONTO'
+      Origin = '"TBVENDAS"."DESCONTO"'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object cdsVendaTOTALVENDA: TIBBCDField
       FieldName = 'TOTALVENDA'

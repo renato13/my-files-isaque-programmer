@@ -42,7 +42,6 @@ type
     cdsVendaCODCLI: TIBStringField;
     cdsVendaDTVENDA: TDateTimeField;
     cdsVendaSTATUS: TSmallintField;
-    cdsVendaDESCONTO: TIBBCDField;
     cdsVendaTOTALVENDA: TIBBCDField;
     cdsVendaSERIE: TIBStringField;
     cdsVendaNFE: TLargeintField;
@@ -59,6 +58,7 @@ type
     cdsVendaNOME: TIBStringField;
     cdsVendaCANCEL_USUARIO: TIBStringField;
     lblInforme: TLabel;
+    cdsVendaDESCONTO: TIBBCDField;
     procedure btFecharClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
