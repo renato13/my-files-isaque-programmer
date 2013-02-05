@@ -24,6 +24,7 @@ object frmRelProdutos: TfrmRelProdutos
     Frame.DrawBottom = False
     Frame.DrawLeft = False
     Frame.DrawRight = False
+    BeforePrint = qckrpBeforePrint
     DataSet = IBQuery1
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -109,9 +110,9 @@ object frmRelProdutos: TfrmRelProdutos
         FontSize = 7
       end
       object QRSysData1: TQRSysData
-        Left = 632
+        Left = 667
         Top = 1
-        Width = 86
+        Width = 51
         Height = 12
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -120,9 +121,9 @@ object frmRelProdutos: TfrmRelProdutos
         Frame.DrawRight = False
         Size.Values = (
           31.750000000000000000
-          1672.166666666667000000
+          1764.770833333333000000
           2.645833333333333000
-          227.541666666666700000)
+          134.937500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -752,7 +753,7 @@ object frmRelProdutos: TfrmRelProdutos
       object QRSysData3: TQRSysData
         Left = 44
         Top = 3
-        Width = 6
+        Width = 62
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -763,7 +764,7 @@ object frmRelProdutos: TfrmRelProdutos
           44.979166666666670000
           116.416666666666700000
           7.937500000000000000
-          15.875000000000000000)
+          164.041666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -864,9 +865,9 @@ object frmRelProdutos: TfrmRelProdutos
         1899.708333333333000000)
       BandType = rbPageFooter
       object QRSysData2: TQRSysData
-        Left = 712
+        Left = 685
         Top = 1
-        Width = 6
+        Width = 33
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -875,9 +876,9 @@ object frmRelProdutos: TfrmRelProdutos
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          1883.833333333333000000
+          1812.395833333333000000
           2.645833333333333000
-          15.875000000000000000)
+          87.312500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
