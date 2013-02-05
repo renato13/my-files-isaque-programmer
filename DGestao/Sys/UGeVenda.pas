@@ -973,6 +973,12 @@ begin
   if ( cdsTabelaItens.IsEmpty ) then
     ShowWarning('Favor informar o(s) produto(s) da venda.')
   else
+  if ( btnProdutoSalvar.Enabled ) then
+  begin
+    ShowWarning('Favor salvar ou cancelar alteração em andamento no ítem da venda!');
+    btnProdutoSalvar.SetFocus;
+  end
+  else
   begin
     inherited;
 
@@ -1283,7 +1289,14 @@ begin
   else
   if ( GetTotalValorFormaPagto > IbDtstTabelaTOTALVENDA.AsCurrency ) then
   begin
-    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é maior que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
+    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é MAIOR que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
+  if ( GetTotalValorFormaPagto < IbDtstTabelaTOTALVENDA.AsCurrency ) then
+  begin
+    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é MENOR que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
     pgcMaisDados.ActivePage := tbsRecebimento;
     dbgFormaPagto.SetFocus;
   end
