@@ -491,6 +491,7 @@ begin
   // Configurar Legendas de acordo com o segmento
   nmProduto.Caption  := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
   btnProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
+  nmRelatorioProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);

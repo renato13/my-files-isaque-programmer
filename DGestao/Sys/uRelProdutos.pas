@@ -49,6 +49,8 @@ type
     IBQuery1TotCustoEstoq: TCurrencyField;
     QRDBText4: TQRDBText;
     procedure IBQuery1CalcFields(DataSet: TDataSet);
+    procedure qckrpBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
   private
     { Private declarations }
   public
@@ -60,7 +62,7 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses UDMBusiness, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -68,6 +70,19 @@ procedure TfrmRelProdutos.IBQuery1CalcFields(DataSet: TDataSet);
 begin
  IBQuery1TotPrecoVenda.Value := IBQuery1PRECO.Value * IBQuery1QTDE.Value;
  IBQuery1TotCustoEstoq.Value := IBQuery1CUSTOMEDIO.Value * IBQuery1QTDE.Value;
+end;
+
+procedure TfrmRelProdutos.qckrpBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  if ( GetSegmentoID(GetEmpresaIDDefault) = SEGMENTO_MERCADO_CARRO_ID ) then
+   begin
+     QRLabel2.Caption := 'RELATÓRIO DE VEÍCULOS';
+     qrlblCliMot.Caption := 'VEÍCULO';
+     QRLabel10.Caption := 'PLACA';
+     QRLabel5.Enabled := False;
+     QRDBText6.Enabled := FALSE;
+   end
 end;
 
 end.
