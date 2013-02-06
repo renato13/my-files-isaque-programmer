@@ -200,3 +200,16 @@ Token unknown - line 9, column 18.
 and.
 
 */
+
+
+
+/*------ SYSDBA 06/02/2013 01:23:14 --------*/
+
+COMMENT ON COLUMN TBVENDAS.STATUS IS
+'Status:
+1 - Em Atendimento
+2 - Aberta
+3 - Finalizada
+4 - NF-e emitida
+5 - Cancelada';
+
