@@ -182,3 +182,12 @@ Token unknown - line 15, column 46.
 as.
 
 */
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 9, column 74.
+i.
+
+*/

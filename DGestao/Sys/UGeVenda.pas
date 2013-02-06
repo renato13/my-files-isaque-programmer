@@ -11,8 +11,6 @@ uses
 
 type
   TfrmGeVenda = class(TfrmGrPadraoCadastro)
-    lblData: TLabel;
-    e1Data: TDateTimePicker;
     tblEmpresa: TIBTable;
     dtsEmpresa: TDataSource;
     lblEmpresa: TLabel;
@@ -210,7 +208,6 @@ type
     Bevel13: TBevel;
     dbTotalDesconto: TRxDBComboEdit;
     lblTotalDesconto: TLabel;
-    e2Data: TDateTimePicker;
     cdsTabelaItensPUNIT_PROMOCAO: TIBBCDField;
     lblProdutoPromocao: TLabel;
     qryTotalComprasAbertas: TIBQuery;
@@ -275,6 +272,9 @@ type
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     IbDtstTabelaDESCONTO: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
+    lblData: TLabel;
+    e1Data: TDateEdit;
+    e2Data: TDateEdit;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);

@@ -1,6 +1,7 @@
 inherited frmGeFabricante: TfrmGeFabricante
   Width = 767
   Height = 495
+  ActiveControl = dbCodigo
   Caption = 'Tabela de Fabricantes'
   OldCreateOrder = True
   PixelsPerInch = 96
@@ -20,6 +21,7 @@ inherited frmGeFabricante: TfrmGeFabricante
   inherited pgcGuias: TPageControl
     Width = 751
     Height = 414
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 319

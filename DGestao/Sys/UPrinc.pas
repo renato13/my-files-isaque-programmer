@@ -112,6 +112,7 @@ type
     nmUsuarioAlterarSenha: TMenuItem;
     btnEmpresa: TRxSpeedButton;
     Utilitrios1: TMenuItem;
+    ExportarNFeGeradas1: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -160,6 +161,7 @@ type
     procedure mnRelatorioFaturamentoVendasClick(Sender: TObject);
     procedure nmFabricanteProdutoClick(Sender: TObject);
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
+    procedure ExportarNFeGeradas1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -556,6 +558,11 @@ procedure TfrmPrinc.nmUsuarioAlterarSenhaClick(Sender: TObject);
 begin
   if ( FormFunction.ShowModalForm(Self, 'frmGrUsuarioAlterarSenha') ) then
     Self.Update;
+end;
+
+procedure TfrmPrinc.ExportarNFeGeradas1Click(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'frmGeExportarNFeGerada');
 end;
 
 end.
