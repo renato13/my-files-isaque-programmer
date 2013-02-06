@@ -55,6 +55,7 @@ begin
       or (Frm.ActiveControl is TLabeledEdit)
       or (Frm.ActiveControl is TRxLookupEdit)
       or (Frm.ActiveControl is TDateEdit)
+      or (Frm.ActiveControl is TDirectoryEdit)
       // DB Controls
       or (Frm.ActiveControl is TDBEdit)
       or (Frm.ActiveControl is TDBCheckBox)
