@@ -270,11 +270,11 @@ type
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     IbDtstTabelaDESCONTO: TIBBCDField;
-    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     lblData: TLabel;
     e1Data: TDateEdit;
     e2Data: TDateEdit;
     cdsTabelaItensPFINAL: TIBBCDField;
+    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);

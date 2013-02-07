@@ -9,45 +9,35 @@ File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeCaixa.pas',0,1,733,1
 File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,147,44,157,1,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
 Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
 Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
 Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 Count=10
 EditWindowCount=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -57,7 +47,17 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -86,7 +86,7 @@ FormOnTop=0
 
 [EditWindow0]
 ViewCount=10
-CurrentView=7
+CurrentView=3
 View0=0
 View1=1
 View2=2
@@ -114,9 +114,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -169,8 +169,8 @@ LeftCol=1
 
 [View7]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-CursorX=1
-CursorY=983
+CursorX=148
+CursorY=978
 TopLine=969
 LeftCol=1
 
@@ -258,7 +258,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Caption
+SelectedItem=Connected
 ExpandedItems=
 HiddenCategories=
 
@@ -317,26 +317,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=770
+Height=858
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=770
+ClientHeight=858
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
-Left=12
-Top=0
-Width=1636
+Left=-10
+Top=-713
+Width=443
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1636
+ClientWidth=443
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
