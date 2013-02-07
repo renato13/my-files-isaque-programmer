@@ -883,7 +883,7 @@ procedure TfrmGeVenda.btnProdutoSalvarClick(Sender: TObject);
     while not cdsTabelaItens.Eof do
     begin
       Descontos    := Descontos    + cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
-      TotalLiquido := TotalLiquido + cdsTabelaItensTOTAL_LIQUIDO.AsCurrency;
+      TotalLiquido := TotalLiquido + StrToCurr( FormatFloat('##########0.00', cdsTabelaItensTOTAL_LIQUIDO.AsCurrency) );
 
       cdsTabelaItens.Next;
     end;
@@ -1081,7 +1081,7 @@ begin
       cdsTabelaItensPFINAL.AsCurrency         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.AsCurrency;
       cdsTabelaItensTOTAL_BRUTO.AsCurrency    := cdsTabelaItensQTDE.AsInteger * cPrecoVND;
       cdsTabelaItensTOTAL_DESCONTO.AsCurrency := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensQTDE.AsInteger * StrToCurr( FormatFloat('##########0.00', cdsTabelaItensPFINAL.AsCurrency) );
     end;
 
   if ( Sender = dbValorLiq ) then
