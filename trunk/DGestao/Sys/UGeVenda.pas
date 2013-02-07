@@ -134,7 +134,6 @@ type
     cdsTabelaItensDTVENDA: TDateTimeField;
     cdsTabelaItensQTDE: TIntegerField;
     cdsTabelaItensPUNIT: TIBBCDField;
-    cdsTabelaItensPFINAL: TIBBCDField;
     cdsTabelaItensQTDEFINAL: TIntegerField;
     cdsTabelaItensUNID_COD: TSmallintField;
     cdsTabelaItensCFOP_COD: TIntegerField;
@@ -275,6 +274,7 @@ type
     lblData: TLabel;
     e1Data: TDateEdit;
     e2Data: TDateEdit;
+    cdsTabelaItensPFINAL: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -979,6 +979,37 @@ begin
     btnProdutoSalvar.SetFocus;
   end
   else
+
+  // Verificar dados da(s) Forma(s) de Pagamento(s)
+
+  if ( cdsVendaFormaPagto.RecordCount = 0 ) then
+  begin
+    ShowWarning('Favor informar a forma e/ou condição de pagamento');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
+  if ( GetTotalValorFormaPagto <= 0 ) then
+  begin
+    ShowWarning('Favor informar corretamente o valor de cada forma/condição de pagamento');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
+  if ( GetTotalValorFormaPagto > IbDtstTabelaTOTALVENDA.AsCurrency ) then
+  begin
+    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é MAIOR que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
+  if ( GetTotalValorFormaPagto < IbDtstTabelaTOTALVENDA.AsCurrency ) then
+  begin
+    ShowWarning('O Total A Pagar informado na forma/condição de pagamento é MENOR que o Valor Total da Venda.' + #13#13 + 'Favor corrigir os valores.');
+    pgcMaisDados.ActivePage := tbsRecebimento;
+    dbgFormaPagto.SetFocus;
+  end
+  else
   begin
     inherited;
 
@@ -1273,6 +1304,9 @@ begin
       btnProdutoEditar.SetFocus;
   end
   else
+
+  // Verificar dados da(s) Forma(s) de Pagamento(s)
+
   if ( cdsVendaFormaPagto.RecordCount = 0 ) then
   begin
     ShowWarning('Favor informar a forma e/ou condição de pagamento');

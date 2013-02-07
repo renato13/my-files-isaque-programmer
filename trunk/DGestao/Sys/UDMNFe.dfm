@@ -348,7 +348,8 @@ object DMNFe: TDMNFe
       '  , i.Punit_promocao'
       '  , i.Desconto'
       '  , i.Desconto_valor'
-      '  , (i.Punit - coalesce(i.Desconto_valor, 0)) as Pfinal'
+      '  , i.Pfinal'
+      '--  , (i.Punit - coalesce(i.Desconto_valor, 0)) as Pfinal'
       '  , i.Qtdefinal'
       '  , i.Unid_cod'
       '  , u.Unp_descricao'
@@ -366,9 +367,10 @@ object DMNFe: TDMNFe
         '  , coalesce(i.Pfinal, 0) * coalesce(i.Percentual_reducao_bc, 0.' +
         '0) / 100 as valor_reducao_bc'
       '  , i.Qtde * i.Punit as Total_bruto'
+      '  , i.Qtde * i.Pfinal  as total_liquido'
       
-        '  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as total' +
-        '_liquido'
+        '--  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as tot' +
+        'al_liquido'
       '  , i.Qtde * i.Desconto_valor as Total_desconto'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
@@ -560,9 +562,9 @@ object DMNFe: TDMNFe
     end
     object qryDadosProdutoPFINAL: TIBBCDField
       FieldName = 'PFINAL'
-      ProviderFlags = []
+      Origin = '"TVENDASITENS"."PFINAL"'
       Precision = 18
-      Size = 4
+      Size = 2
     end
     object qryDadosProdutoQTDEFINAL: TIntegerField
       FieldName = 'QTDEFINAL'
@@ -634,14 +636,14 @@ object DMNFe: TDMNFe
       Precision = 18
       Size = 2
     end
-    object qryDadosProdutoTOTAL_DESCONTO: TIBBCDField
-      FieldName = 'TOTAL_DESCONTO'
-      ProviderFlags = []
-      Precision = 18
-      Size = 4
-    end
     object qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField
       FieldName = 'TOTAL_LIQUIDO'
+      ProviderFlags = []
+      Precision = 18
+      Size = 2
+    end
+    object qryDadosProdutoTOTAL_DESCONTO: TIBBCDField
+      FieldName = 'TOTAL_DESCONTO'
       ProviderFlags = []
       Precision = 18
       Size = 4
