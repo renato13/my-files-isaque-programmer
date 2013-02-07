@@ -3283,9 +3283,10 @@ inherited frmGeVenda: TfrmGeVenda
       '  , u.Unp_sigla'
       '  , i.Qtde * i.Punit  as total_bruto'
       '  , i.Qtde * i.Desconto_valor as total_desconto'
+      '  , i.Qtde * i.PFinal  as total_liquido'
       
-        '  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as total' +
-        '_liquido'
+        '--  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as tot' +
+        'al_liquido'
       '  , o.Cfop_descricao'
       '  , p.Cst'
       '  , p.Csosn'
@@ -3478,7 +3479,7 @@ inherited frmGeVenda: TfrmGeVenda
       ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
-      Size = 4
+      Size = 2
     end
     object cdsTabelaItensCFOP_DESCRICAO: TIBStringField
       FieldName = 'CFOP_DESCRICAO'
