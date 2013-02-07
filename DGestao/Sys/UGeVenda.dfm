@@ -3377,7 +3377,7 @@ inherited frmGeVenda: TfrmGeVenda
     object cdsTabelaItensPFINAL: TIBBCDField
       DisplayLabel = 'Valor L'#237'quido'
       FieldName = 'PFINAL'
-      Origin = 'TVENDASITENS.PFINAL'
+      Origin = '"TVENDASITENS"."PFINAL"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
