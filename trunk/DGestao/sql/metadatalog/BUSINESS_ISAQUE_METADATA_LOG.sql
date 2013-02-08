@@ -233,3 +233,127 @@ where (RDB$FIELD_NAME = 'PFINAL') and
 COMMENT ON COLUMN TVENDASITENS.PFINAL IS
 '';
 
+
+
+/*------ 08/02/2013 14:15:51 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_vendasitens_total_venda for tvendasitens
+active after insert or update or delete position 10
+AS
+  declare variable anovenda Smallint;
+  declare variable numvenda Integer;
+  declare variable total_bruto Dmn_money;
+  declare variable total_desconto dmn_money_desconto_4;
+  declare variable total_liquido Dmn_money;
+begin
+  if ( (Inserting) or (Updating) ) then
+  begin
+    anovenda = new.Ano;
+    numvenda = new.Codcontrol;
+  end
+  else
+  begin
+    anovenda = old.Ano;
+    numvenda = old.Codcontrol;
+  end
+
+  Select
+      sum( coalesce(i.Qtde, 0) * coalesce(i.Punit, 0) )
+    --, sum( coalesce(i.Qtde, 0) * (coalesce(i.Punit, 0) - coalesce(i.Pfinal, 0)) )
+    , sum( coalesce(i.Qtde, 0) * coalesce(i.desconto_valor, 0) )
+    , sum( coalesce(i.Qtde, 0) * coalesce(i.pfinal, 0) )
+  from TVENDASITENS i
+  where i.Ano = :Anovenda
+    and i.Codcontrol = :Numvenda
+  into
+      Total_bruto
+    , Total_desconto
+    , total_liquido;
+
+  Total_bruto    = coalesce(:Total_bruto, 0);
+  Total_desconto = coalesce(:Total_desconto, 0);
+
+  Update TBVENDAS v Set
+      v.Desconto = :Total_desconto
+--    , v.Totalvenda = :Total_bruto - :Total_desconto
+    , v.Totalvenda = :Total_liquido
+  where v.Ano = :Anovenda
+    and v.Codcontrol = :Numvenda;
+end^
+
+/*------ 08/02/2013 14:15:51 --------*/
+
+SET TERM ; ^
+
+
+/*------ SYSDBA 08/02/2013 14:49:19 --------*/
+
+COMMENT ON COLUMN TBNFE_ENVIADA.DATAEMISSAO IS
+'Data Emissao.';
+
+
+
+
+/*------ SYSDBA 08/02/2013 14:49:30 --------*/
+
+COMMENT ON COLUMN TBNFE_ENVIADA.HORAEMISSAO IS
+'Hora Emissao.';
+
+
+
+
+/*------ SYSDBA 08/02/2013 14:50:42 --------*/
+
+COMMENT ON COLUMN TBNFE_ENVIADA.SERIE IS
+'Serie da NF-e.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.NUMERO IS
+'Numero da NF-e.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.CHAVE IS
+'Chave.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.PROTOCOLO IS
+'Protocolo.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.RECIBO IS
+'Numero Recibo.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.XML_FILENAME IS
+'Nome arquivo XML.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.XML_FILE IS
+'Arquivo XML.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.LOTE_ANO IS
+'Ano Lote.';
+
+COMMENT ON COLUMN TBNFE_ENVIADA.LOTE_NUM IS
+'Numero Lote.';
+
+
+
+
+/*------ SYSDBA 08/02/2013 14:51:22 --------*/
+
+COMMENT ON COLUMN TBVENDAS.VENDA_PRAZO IS
+'Venda A Prazo:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 08/02/2013 14:52:12 --------*/
+
+update RDB$RELATION_FIELDS set
+RDB$FIELD_SOURCE = 'DMN_VCHAR_50'
+where (RDB$FIELD_NAME = 'CANCEL_USUARIO') and
+(RDB$RELATION_NAME = 'TBVENDAS')
+;
+
+COMMENT ON COLUMN TBVENDAS.CANCEL_USUARIO IS
+'';
+
