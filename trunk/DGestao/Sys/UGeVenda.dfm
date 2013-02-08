@@ -600,7 +600,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblNFe: TLabel [5]
-          Left = 64
+          Left = 56
           Top = 64
           Width = 28
           Height = 13
@@ -614,7 +614,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblDataEmissao: TLabel [6]
-          Left = 168
+          Left = 160
           Top = 64
           Width = 79
           Height = 13
@@ -628,7 +628,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblSituacao: TLabel [7]
-          Left = 336
+          Left = 328
           Top = 64
           Width = 52
           Height = 13
@@ -678,7 +678,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblCFOPVenda: TLabel [11]
-          Left = 256
+          Left = 248
           Top = 64
           Width = 31
           Height = 13
@@ -820,7 +820,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbSerie: TDBEdit
           Left = 16
           Top = 80
-          Width = 41
+          Width = 33
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -836,7 +836,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 4
         end
         object dbNFe: TDBEdit
-          Left = 64
+          Left = 56
           Top = 80
           Width = 97
           Height = 21
@@ -854,7 +854,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 5
         end
         object dbDataEmissao: TDBEdit
-          Left = 168
+          Left = 160
           Top = 80
           Width = 81
           Height = 21
@@ -872,9 +872,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 6
         end
         object dbSituacao: TDBEdit
-          Left = 336
+          Left = 328
           Top = 80
-          Width = 137
+          Width = 145
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -945,7 +945,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 10
         end
         object dbCFOPVenda: TRxDBComboEdit
-          Left = 256
+          Left = 248
           Top = 80
           Width = 73
           Height = 21
@@ -1195,8 +1195,8 @@ inherited frmGeVenda: TfrmGeVenda
           FocusControl = dbTotalDesconto
         end
         object lblProdutoPromocao: TLabel
-          Left = 938
-          Top = 92
+          Left = 944
+          Top = 98
           Width = 142
           Height = 13
           Anchors = [akRight, akBottom]

@@ -974,6 +974,9 @@ procedure TfrmGeVenda.btbtnSalvarClick(Sender: TObject);
 var
   iNumero : Integer;
 begin
+  if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
+    cdsVendaFormaPagto.Post;
+    
   if ( cdsTabelaItens.IsEmpty ) then
     ShowWarning('Favor informar o(s) produto(s) da venda.')
   else
