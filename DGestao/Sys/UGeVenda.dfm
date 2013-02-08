@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 234
-  Top = 131
+  Left = 170
+  Top = 110
   Width = 1115
   Height = 724
   ActiveControl = nil
@@ -296,7 +296,6 @@ inherited frmGeVenda: TfrmGeVenda
   inherited pgcGuias: TPageControl
     Width = 1099
     Height = 643
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -333,6 +332,13 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
+            FieldName = 'TotalBruto'
+            Title.Caption = 'Total Venda (R$)'
+            Width = 118
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'DESCONTO'
             Width = 95
             Visible = True
@@ -345,12 +351,13 @@ inherited frmGeVenda: TfrmGeVenda
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
+            Title.Caption = 'Total L'#237'quido (R$)'
             Title.Font.Charset = ANSI_CHARSET
             Title.Font.Color = clBlue
             Title.Font.Height = -11
             Title.Font.Name = 'Tahoma'
             Title.Font.Style = [fsBold]
-            Width = 95
+            Width = 111
             Visible = True
           end
           item
@@ -378,12 +385,6 @@ inherited frmGeVenda: TfrmGeVenda
             Title.Font.Height = -11
             Title.Font.Name = 'Tahoma'
             Title.Font.Style = [fsBold]
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'FORMAPAG'
-            Width = 131
             Visible = True
           end>
       end
@@ -612,7 +613,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblDataEmissao: TLabel [6]
-          Left = 192
+          Left = 168
           Top = 64
           Width = 79
           Height = 13
@@ -626,7 +627,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblSituacao: TLabel [7]
-          Left = 376
+          Left = 336
           Top = 64
           Width = 52
           Height = 13
@@ -640,7 +641,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblVendedor: TLabel [8]
-          Left = 776
+          Left = 856
           Top = 64
           Width = 50
           Height = 13
@@ -648,11 +649,11 @@ inherited frmGeVenda: TfrmGeVenda
           FocusControl = dbVendedor
         end
         object lblValorTotal: TLabel [9]
-          Left = 672
+          Left = 720
           Top = 64
-          Width = 92
+          Width = 103
           Height = 13
-          Caption = 'Valor Total (R$):'
+          Caption = 'Total L'#237'quido (R$):'
           FocusControl = dbValorTotal
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
@@ -662,7 +663,7 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblValorDesconto: TLabel [10]
-          Left = 568
+          Left = 616
           Top = 64
           Width = 84
           Height = 13
@@ -676,12 +677,26 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         object lblCFOPVenda: TLabel [11]
-          Left = 280
+          Left = 256
           Top = 64
           Width = 31
           Height = 13
           Caption = 'CFOP:'
           FocusControl = dbCFOPVenda
+        end
+        object Label3: TLabel [12]
+          Left = 480
+          Top = 64
+          Width = 98
+          Height = 13
+          Caption = 'Total Venda (R$):'
+          FocusControl = dbValorTotal
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
         inherited dbCodigo: TDBEdit
           Width = 89
@@ -822,7 +837,7 @@ inherited frmGeVenda: TfrmGeVenda
         object dbNFe: TDBEdit
           Left = 64
           Top = 80
-          Width = 121
+          Width = 97
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -838,7 +853,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 5
         end
         object dbDataEmissao: TDBEdit
-          Left = 192
+          Left = 168
           Top = 80
           Width = 81
           Height = 21
@@ -856,9 +871,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 6
         end
         object dbSituacao: TDBEdit
-          Left = 376
+          Left = 336
           Top = 80
-          Width = 185
+          Width = 137
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -874,9 +889,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 8
         end
         object dbVendedor: TDBLookupComboBox
-          Left = 776
+          Left = 856
           Top = 80
-          Width = 297
+          Width = 217
           Height = 21
           DataField = 'VENDEDOR_COD'
           DataSource = DtSrcTabela
@@ -893,9 +908,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 11
         end
         object dbValorTotal: TDBEdit
-          Left = 672
+          Left = 720
           Top = 80
-          Width = 97
+          Width = 129
           Height = 21
           TabStop = False
           Color = clMoneyGreen
@@ -911,7 +926,7 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 10
         end
         object dbValorDesconto: TDBEdit
-          Left = 568
+          Left = 616
           Top = 80
           Width = 97
           Height = 21
@@ -929,9 +944,9 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 9
         end
         object dbCFOPVenda: TRxDBComboEdit
-          Left = 280
+          Left = 256
           Top = 80
-          Width = 89
+          Width = 73
           Height = 21
           ButtonHint = 'Pesquisar CFOP (Ctrl+P)'
           CharCase = ecUpperCase
@@ -1002,6 +1017,24 @@ inherited frmGeVenda: TfrmGeVenda
           TabOrder = 7
           OnButtonClick = dbCFOPVendaButtonClick
           OnExit = ControlEditExit
+        end
+        object DBEdit1: TDBEdit
+          Left = 480
+          Top = 80
+          Width = 129
+          Height = 21
+          TabStop = False
+          Color = clMoneyGreen
+          DataField = 'TotalBruto'
+          DataSource = DtSrcTabela
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          ReadOnly = True
+          TabOrder = 12
         end
       end
       object GrpBxDadosProduto: TGroupBox
@@ -1906,7 +1939,7 @@ inherited frmGeVenda: TfrmGeVenda
             object lblObservacao: TLabel
               Left = 0
               Top = 0
-              Width = 503
+              Width = 67
               Height = 13
               Align = alTop
               Caption = '&Observa'#231#245'es:'
@@ -2694,6 +2727,7 @@ inherited frmGeVenda: TfrmGeVenda
   end
   inherited IbDtstTabela: TIBDataSet
     AfterCancel = IbDtstTabelaAfterCancel
+    OnCalcFields = IbDtstTabelaCalcFields
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'
@@ -2994,6 +3028,13 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TBCLIENTE.BLOQUEADO_MOTIVO'
       BlobType = ftMemo
       Size = 8
+    end
+    object IbDtstTabelaTotalBruto: TCurrencyField
+      FieldKind = fkCalculated
+      FieldName = 'TotalBruto'
+      DisplayFormat = ',0.00'
+      currency = False
+      Calculated = True
     end
   end
   inherited DtSrcTabela: TDataSource
