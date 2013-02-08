@@ -276,8 +276,8 @@ type
     cdsTabelaItensPFINAL: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     IbDtstTabelaTotalBruto: TCurrencyField;
-    DBEdit1: TDBEdit;
-    Label3: TLabel;
+    dbValorTotalBruto: TDBEdit;
+    lblValorTotalBruto: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -2053,7 +2053,8 @@ end;
 procedure TfrmGeVenda.IbDtstTabelaCalcFields(DataSet: TDataSet);
 begin
   inherited;
- IbDtstTabelaTotalBruto.Value := IbDtstTabelaTOTALVENDA.Value + IbDtstTabelaDESCONTO.Value;
+//  IbDtstTabelaTotalBruto.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency + StrToCurr( FormatFloat('#########0.00', IbDtstTabelaDESCONTO.AsCurrency) );
+  IbDtstTabelaTotalBruto.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency + IbDtstTabelaDESCONTO.AsCurrency;
 end;
 
 end.
