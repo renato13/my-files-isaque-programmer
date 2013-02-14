@@ -333,9 +333,8 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
-            FieldName = 'TotalBruto'
+            FieldName = 'TOTALVENDA_BRUTA'
             Title.Caption = 'Total Venda (R$)'
-            Width = 118
             Visible = True
           end
           item
@@ -1026,7 +1025,7 @@ inherited frmGeVenda: TfrmGeVenda
           Height = 21
           TabStop = False
           Color = clMoneyGreen
-          DataField = 'TotalBruto'
+          DataField = 'TOTALVENDA_BRUTA'
           DataSource = DtSrcTabela
           Font.Charset = ANSI_CHARSET
           Font.Color = clBlack
@@ -2645,7 +2644,7 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'DESCRI'
-            Width = 315
+            Width = 250
             Visible = True
           end
           item
@@ -2701,14 +2700,20 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
-            FieldName = 'TOTAL_DESCONTO'
+            FieldName = 'PFINAL'
+            Title.Caption = 'Valor L'#237'q.'
             Width = 85
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'PFINAL'
-            Title.Caption = 'Valor L'#237'q.'
+            FieldName = 'TOTAL_BRUTO'
+            Width = 85
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TOTAL_DESCONTO'
             Width = 85
             Visible = True
           end
@@ -2728,7 +2733,6 @@ inherited frmGeVenda: TfrmGeVenda
   end
   inherited IbDtstTabela: TIBDataSet
     AfterCancel = IbDtstTabelaAfterCancel
-    OnCalcFields = IbDtstTabelaCalcFields
     OnNewRecord = IbDtstTabelaNewRecord
     SelectSQL.Strings = (
       'Select'
@@ -2738,6 +2742,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , v.Codcli'
       '  , v.Dtvenda'
       '  , v.Status'
+      '  , v.Totalvenda_bruta'
       '  , v.Desconto'
       '  , v.Totalvenda'
       '  , v.Dtfinalizacao_venda'
@@ -2818,6 +2823,14 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TBVENDAS.STATUS'
       Required = True
       OnGetText = IbDtstTabelaSTATUSGetText
+    end
+    object IbDtstTabelaTOTALVENDA_BRUTA: TIBBCDField
+      DisplayLabel = 'Total Bruto (R$)'
+      FieldName = 'TOTALVENDA_BRUTA'
+      Origin = '"TBVENDAS"."TOTALVENDA_BRUTA"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
     end
     object IbDtstTabelaDESCONTO: TIBBCDField
       DisplayLabel = 'Desconto (R$)'
@@ -3030,13 +3043,6 @@ inherited frmGeVenda: TfrmGeVenda
       BlobType = ftMemo
       Size = 8
     end
-    object IbDtstTabelaTotalBruto: TCurrencyField
-      FieldKind = fkCalculated
-      FieldName = 'TotalBruto'
-      DisplayFormat = ',0.00'
-      currency = False
-      Calculated = True
-    end
   end
   inherited DtSrcTabela: TDataSource
     Left = 1056
@@ -3050,6 +3056,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  CODCLI,'
       '  DTVENDA,'
       '  STATUS,'
+      '  TOTALVENDA_BRUTA,'
       '  DESCONTO,'
       '  TOTALVENDA,'
       '  DTFINALIZACAO_VENDA,'
@@ -3109,35 +3116,26 @@ inherited frmGeVenda: TfrmGeVenda
       'update TBVENDAS'
       'set'
       '  ANO = :ANO,'
-      '  CODCONTROL = :CODCONTROL,'
-      '  CODEMP = :CODEMP,'
-      '  CODCLI = :CODCLI,'
-      '  DTVENDA = :DTVENDA,'
-      '  STATUS = :STATUS,'
-      '  DESCONTO = :DESCONTO,'
-      '  TOTALVENDA = :TOTALVENDA,'
-      '  DTFINALIZACAO_VENDA = :DTFINALIZACAO_VENDA,'
-      '  OBS = :OBS,'
-      '  FORMAPAG = :FORMAPAG,'
-      '  FATDIAS = :FATDIAS,'
-      '  SERIE = :SERIE,'
-      '  NFE = :NFE,'
-      '  LOTE_NFE_ANO = :LOTE_NFE_ANO,'
-      '  LOTE_NFE_NUMERO = :LOTE_NFE_NUMERO,'
-      '  NFE_ENVIADA = :NFE_ENVIADA,'
-      '  DATAEMISSAO = :DATAEMISSAO,'
-      '  HORAEMISSAO = :HORAEMISSAO,'
       '  CANCEL_DATAHORA = :CANCEL_DATAHORA,'
       '  CANCEL_MOTIVO = :CANCEL_MOTIVO,'
       '  CFOP = :CFOP,'
-      '  VERIFICADOR_NFE = :VERIFICADOR_NFE,'
-      '  XML_NFE_FILENAME = :XML_NFE_FILENAME,'
-      '  XML_NFE = :XML_NFE,'
-      '  VENDEDOR_COD = :VENDEDOR_COD,'
-      '  USUARIO = :USUARIO,'
-      '  FORMAPAGTO_COD = :FORMAPAGTO_COD,'
+      '  CODCLI = :CODCLI,'
+      '  CODCONTROL = :CODCONTROL,'
+      '  CODEMP = :CODEMP,'
       '  CONDICAOPAGTO_COD = :CONDICAOPAGTO_COD,'
-      '  VENDA_PRAZO = :VENDA_PRAZO,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  DESCONTO = :DESCONTO,'
+      '  DTFINALIZACAO_VENDA = :DTFINALIZACAO_VENDA,'
+      '  DTVENDA = :DTVENDA,'
+      '  FATDIAS = :FATDIAS,'
+      '  FORMAPAG = :FORMAPAG,'
+      '  FORMAPAGTO_COD = :FORMAPAGTO_COD,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  LOTE_NFE_ANO = :LOTE_NFE_ANO,'
+      '  LOTE_NFE_NUMERO = :LOTE_NFE_NUMERO,'
+      '  NFE = :NFE,'
+      '  NFE_ENVIADA = :NFE_ENVIADA,'
+      '  OBS = :OBS,'
       '  PRAZO_01 = :PRAZO_01,'
       '  PRAZO_02 = :PRAZO_02,'
       '  PRAZO_03 = :PRAZO_03,'
@@ -3149,51 +3147,63 @@ inherited frmGeVenda: TfrmGeVenda
       '  PRAZO_09 = :PRAZO_09,'
       '  PRAZO_10 = :PRAZO_10,'
       '  PRAZO_11 = :PRAZO_11,'
-      '  PRAZO_12 = :PRAZO_12'
+      '  PRAZO_12 = :PRAZO_12,'
+      '  SERIE = :SERIE,'
+      '  STATUS = :STATUS,'
+      '  TOTALVENDA = :TOTALVENDA,'
+      '  TOTALVENDA_BRUTA = :TOTALVENDA_BRUTA,'
+      '  USUARIO = :USUARIO,'
+      '  VENDA_PRAZO = :VENDA_PRAZO,'
+      '  VENDEDOR_COD = :VENDEDOR_COD,'
+      '  VERIFICADOR_NFE = :VERIFICADOR_NFE,'
+      '  XML_NFE = :XML_NFE,'
+      '  XML_NFE_FILENAME = :XML_NFE_FILENAME'
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')
     InsertSQL.Strings = (
       'insert into TBVENDAS'
       
-        '  (ANO, CODCONTROL, CODEMP, CODCLI, DTVENDA, STATUS, DESCONTO, T' +
-        'OTALVENDA, '
+        '  (ANO, CANCEL_DATAHORA, CANCEL_MOTIVO, CFOP, CODCLI, CODCONTROL' +
+        ', CODEMP, '
       
-        '   DTFINALIZACAO_VENDA, OBS, FORMAPAG, FATDIAS, SERIE, NFE, LOTE' +
-        '_NFE_ANO, '
+        '   CONDICAOPAGTO_COD, DATAEMISSAO, DESCONTO, DTFINALIZACAO_VENDA' +
+        ', DTVENDA, '
       
-        '   LOTE_NFE_NUMERO, NFE_ENVIADA, DATAEMISSAO, HORAEMISSAO, CANCE' +
-        'L_DATAHORA, '
+        '   FATDIAS, FORMAPAG, FORMAPAGTO_COD, HORAEMISSAO, LOTE_NFE_ANO,' +
+        ' LOTE_NFE_NUMERO, '
       
-        '   CANCEL_MOTIVO, CFOP, VERIFICADOR_NFE, XML_NFE_FILENAME, XML_N' +
-        'FE, VENDEDOR_COD, '
+        '   NFE, NFE_ENVIADA, OBS, PRAZO_01, PRAZO_02, PRAZO_03, PRAZO_04' +
+        ', PRAZO_05, '
       
-        '   USUARIO, FORMAPAGTO_COD, CONDICAOPAGTO_COD, VENDA_PRAZO, PRAZ' +
-        'O_01, PRAZO_02, '
+        '   PRAZO_06, PRAZO_07, PRAZO_08, PRAZO_09, PRAZO_10, PRAZO_11, P' +
+        'RAZO_12, '
       
-        '   PRAZO_03, PRAZO_04, PRAZO_05, PRAZO_06, PRAZO_07, PRAZO_08, P' +
-        'RAZO_09, '
-      '   PRAZO_10, PRAZO_11, PRAZO_12)'
+        '   SERIE, STATUS, TOTALVENDA, TOTALVENDA_BRUTA, USUARIO, VENDA_P' +
+        'RAZO, VENDEDOR_COD, '
+      '   VERIFICADOR_NFE, XML_NFE, XML_NFE_FILENAME)'
       'values'
       
-        '  (:ANO, :CODCONTROL, :CODEMP, :CODCLI, :DTVENDA, :STATUS, :DESC' +
-        'ONTO, :TOTALVENDA, '
+        '  (:ANO, :CANCEL_DATAHORA, :CANCEL_MOTIVO, :CFOP, :CODCLI, :CODC' +
+        'ONTROL, '
       
-        '   :DTFINALIZACAO_VENDA, :OBS, :FORMAPAG, :FATDIAS, :SERIE, :NFE' +
-        ', :LOTE_NFE_ANO, '
+        '   :CODEMP, :CONDICAOPAGTO_COD, :DATAEMISSAO, :DESCONTO, :DTFINA' +
+        'LIZACAO_VENDA, '
       
-        '   :LOTE_NFE_NUMERO, :NFE_ENVIADA, :DATAEMISSAO, :HORAEMISSAO, :' +
-        'CANCEL_DATAHORA, '
+        '   :DTVENDA, :FATDIAS, :FORMAPAG, :FORMAPAGTO_COD, :HORAEMISSAO,' +
+        ' :LOTE_NFE_ANO, '
       
-        '   :CANCEL_MOTIVO, :CFOP, :VERIFICADOR_NFE, :XML_NFE_FILENAME, :' +
-        'XML_NFE, '
+        '   :LOTE_NFE_NUMERO, :NFE, :NFE_ENVIADA, :OBS, :PRAZO_01, :PRAZO' +
+        '_02, :PRAZO_03, '
       
-        '   :VENDEDOR_COD, :USUARIO, :FORMAPAGTO_COD, :CONDICAOPAGTO_COD,' +
-        ' :VENDA_PRAZO, '
+        '   :PRAZO_04, :PRAZO_05, :PRAZO_06, :PRAZO_07, :PRAZO_08, :PRAZO' +
+        '_09, :PRAZO_10, '
       
-        '   :PRAZO_01, :PRAZO_02, :PRAZO_03, :PRAZO_04, :PRAZO_05, :PRAZO' +
-        '_06, :PRAZO_07, '
-      '   :PRAZO_08, :PRAZO_09, :PRAZO_10, :PRAZO_11, :PRAZO_12)')
+        '   :PRAZO_11, :PRAZO_12, :SERIE, :STATUS, :TOTALVENDA, :TOTALVEN' +
+        'DA_BRUTA, '
+      
+        '   :USUARIO, :VENDA_PRAZO, :VENDEDOR_COD, :VERIFICADOR_NFE, :XML' +
+        '_NFE, :XML_NFE_FILENAME)')
     DeleteSQL.Strings = (
       'delete from TBVENDAS'
       'where'
@@ -3319,16 +3329,13 @@ inherited frmGeVenda: TfrmGeVenda
       '  , i.Aliquota_cofins'
       '  , i.Valor_ipi'
       '  , i.Percentual_reducao_BC'
+      '  , i.Total_bruto'
+      '  , i.Total_desconto'
+      '  , i.Total_liquido'
       '  , p.Descri'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
       '  , u.Unp_sigla'
-      '  , i.Qtde * i.Punit  as total_bruto'
-      '  , i.Qtde * i.Desconto_valor as total_desconto'
-      '  , i.Qtde * i.PFinal  as total_liquido'
-      
-        '--  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as tot' +
-        'al_liquido'
       '  , o.Cfop_descricao'
       '  , p.Cst'
       '  , p.Csosn'
@@ -3481,6 +3488,33 @@ inherited frmGeVenda: TfrmGeVenda
       Precision = 18
       Size = 2
     end
+    object cdsTabelaItensTOTAL_BRUTO: TIBBCDField
+      DisplayLabel = 'Total Bruto'
+      FieldName = 'TOTAL_BRUTO'
+      Origin = '"TVENDASITENS"."TOTAL_BRUTO"'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsTabelaItensTOTAL_DESCONTO: TIBBCDField
+      DisplayLabel = 'Total Desc.'
+      FieldName = 'TOTAL_DESCONTO'
+      Origin = '"TVENDASITENS"."TOTAL_DESCONTO"'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField
+      DisplayLabel = 'Total L'#237'quido'
+      FieldName = 'TOTAL_LIQUIDO'
+      Origin = '"TVENDASITENS"."TOTAL_LIQUIDO"'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsTabelaItensDESCRI: TIBStringField
       DisplayLabel = 'Nome do produto'
       FieldName = 'DESCRI'
@@ -3500,28 +3534,6 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'UNP_SIGLA'
       Origin = 'TBUNIDADEPROD.UNP_SIGLA'
       Size = 5
-    end
-    object cdsTabelaItensTOTAL_BRUTO: TIBBCDField
-      FieldName = 'TOTAL_BRUTO'
-      DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 2
-    end
-    object cdsTabelaItensTOTAL_DESCONTO: TIBBCDField
-      DisplayLabel = 'Total Desc.'
-      FieldName = 'TOTAL_DESCONTO'
-      ProviderFlags = []
-      DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 4
-    end
-    object cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField
-      DisplayLabel = 'Total L'#237'quido'
-      FieldName = 'TOTAL_LIQUIDO'
-      ProviderFlags = []
-      DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 2
     end
     object cdsTabelaItensCFOP_DESCRICAO: TIBStringField
       FieldName = 'CFOP_DESCRICAO'
@@ -3565,73 +3577,84 @@ inherited frmGeVenda: TfrmGeVenda
       '  ALIQUOTA_PIS,'
       '  ALIQUOTA_COFINS,'
       '  VALOR_IPI,'
-      '  PERCENTUAL_REDUCAO_BC'
+      '  PERCENTUAL_REDUCAO_BC,'
+      '  TOTAL_BRUTO,'
+      '  TOTAL_DESCONTO,'
+      '  TOTAL_LIQUIDO'
       'from TVENDASITENS '
       'where'
       '  ANO = :ANO and'
       '  CODCONTROL = :CODCONTROL and'
-      '  SEQ = :SEQ and'
-      '  CODPROD = :CODPROD')
+      '  CODPROD = :CODPROD and'
+      '  SEQ = :SEQ')
     ModifySQL.Strings = (
       'update TVENDASITENS'
       'set'
-      '  ANO = :ANO,'
-      '  CODCONTROL = :CODCONTROL,'
-      '  SEQ = :SEQ,'
-      '  CODPROD = :CODPROD,'
-      '  CODEMP = :CODEMP,'
-      '  CODCLI = :CODCLI,'
-      '  DTVENDA = :DTVENDA,'
-      '  QTDE = :QTDE,'
-      '  PUNIT = :PUNIT,'
-      '  PUNIT_PROMOCAO = :PUNIT_PROMOCAO,'
-      '  DESCONTO = :DESCONTO,'
-      '  DESCONTO_VALOR = :DESCONTO_VALOR,'
-      '  PFINAL = :PFINAL,'
-      '  QTDEFINAL = :QTDEFINAL,'
-      '  UNID_COD = :UNID_COD,'
-      '  CFOP_COD = :CFOP_COD,'
       '  ALIQUOTA = :ALIQUOTA,'
+      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
       '  ALIQUOTA_PIS = :ALIQUOTA_PIS,'
-      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
-      '  VALOR_IPI = :VALOR_IPI,'
-      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC'
+      '  ANO = :ANO,'
+      '  CFOP_COD = :CFOP_COD,'
+      '  CODCLI = :CODCLI,'
+      '  CODCONTROL = :CODCONTROL,'
+      '  CODEMP = :CODEMP,'
+      '  CODPROD = :CODPROD,'
+      '  DESCONTO = :DESCONTO,'
+      '  DESCONTO_VALOR = :DESCONTO_VALOR,'
+      '  DTVENDA = :DTVENDA,'
+      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC,'
+      '  PFINAL = :PFINAL,'
+      '  PUNIT = :PUNIT,'
+      '  PUNIT_PROMOCAO = :PUNIT_PROMOCAO,'
+      '  QTDE = :QTDE,'
+      '  QTDEFINAL = :QTDEFINAL,'
+      '  SEQ = :SEQ,'
+      '  TOTAL_BRUTO = :TOTAL_BRUTO,'
+      '  TOTAL_DESCONTO = :TOTAL_DESCONTO,'
+      '  TOTAL_LIQUIDO = :TOTAL_LIQUIDO,'
+      '  UNID_COD = :UNID_COD,'
+      '  VALOR_IPI = :VALOR_IPI'
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL and'
-      '  SEQ = :OLD_SEQ and'
-      '  CODPROD = :OLD_CODPROD')
+      '  CODPROD = :OLD_CODPROD and'
+      '  SEQ = :OLD_SEQ')
     InsertSQL.Strings = (
       'insert into TVENDASITENS'
       
-        '  (ANO, CODCONTROL, SEQ, CODPROD, CODEMP, CODCLI, DTVENDA, QTDE,' +
-        ' PUNIT, '
+        '  (ALIQUOTA, ALIQUOTA_COFINS, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ANO,' +
+        ' CFOP_COD, '
       
-        '   PUNIT_PROMOCAO, DESCONTO, DESCONTO_VALOR, PFINAL, QTDEFINAL, ' +
-        'UNID_COD, '
+        '   CODCLI, CODCONTROL, CODEMP, CODPROD, DESCONTO, DESCONTO_VALOR' +
+        ', DTVENDA, '
       
-        '   CFOP_COD, ALIQUOTA, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ALIQUOTA_CO' +
-        'FINS, VALOR_IPI, '
-      '   PERCENTUAL_REDUCAO_BC)'
+        '   PERCENTUAL_REDUCAO_BC, PFINAL, PUNIT, PUNIT_PROMOCAO, QTDE, Q' +
+        'TDEFINAL, '
+      
+        '   SEQ, TOTAL_BRUTO, TOTAL_DESCONTO, TOTAL_LIQUIDO, UNID_COD, VA' +
+        'LOR_IPI)'
       'values'
       
-        '  (:ANO, :CODCONTROL, :SEQ, :CODPROD, :CODEMP, :CODCLI, :DTVENDA' +
-        ', :QTDE, '
+        '  (:ALIQUOTA, :ALIQUOTA_COFINS, :ALIQUOTA_CSOSN, :ALIQUOTA_PIS, ' +
+        ':ANO, :CFOP_COD, '
       
-        '   :PUNIT, :PUNIT_PROMOCAO, :DESCONTO, :DESCONTO_VALOR, :PFINAL,' +
-        ' :QTDEFINAL, '
+        '   :CODCLI, :CODCONTROL, :CODEMP, :CODPROD, :DESCONTO, :DESCONTO' +
+        '_VALOR, '
       
-        '   :UNID_COD, :CFOP_COD, :ALIQUOTA, :ALIQUOTA_CSOSN, :ALIQUOTA_P' +
-        'IS, :ALIQUOTA_COFINS, '
-      '   :VALOR_IPI, :PERCENTUAL_REDUCAO_BC)')
+        '   :DTVENDA, :PERCENTUAL_REDUCAO_BC, :PFINAL, :PUNIT, :PUNIT_PRO' +
+        'MOCAO, '
+      
+        '   :QTDE, :QTDEFINAL, :SEQ, :TOTAL_BRUTO, :TOTAL_DESCONTO, :TOTA' +
+        'L_LIQUIDO, '
+      '   :UNID_COD, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TVENDASITENS'
       'where'
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL and'
-      '  SEQ = :OLD_SEQ and'
-      '  CODPROD = :OLD_CODPROD')
+      '  CODPROD = :OLD_CODPROD and'
+      '  SEQ = :OLD_SEQ')
     Left = 1024
     Top = 40
   end

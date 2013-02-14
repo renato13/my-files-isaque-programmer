@@ -46,8 +46,6 @@ object DMNFe: TDMNFe
   object qryDestinatario: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.Codigo'
@@ -247,8 +245,6 @@ object DMNFe: TDMNFe
   object qryDuplicatas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    r.Anolanc'
@@ -321,8 +317,6 @@ object DMNFe: TDMNFe
   object qryDadosProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    i.Ano'
@@ -355,7 +349,6 @@ object DMNFe: TDMNFe
       '  , i.Desconto'
       '  , i.Desconto_valor'
       '  , i.Pfinal'
-      '--  , (i.Punit - coalesce(i.Desconto_valor, 0)) as Pfinal'
       '  , i.Qtdefinal'
       '  , i.Unid_cod'
       '  , u.Unp_descricao'
@@ -372,12 +365,9 @@ object DMNFe: TDMNFe
       
         '  , coalesce(i.Pfinal, 0) * coalesce(i.Percentual_reducao_bc, 0.' +
         '0) / 100 as valor_reducao_bc'
-      '  , i.Qtde * i.Punit as Total_bruto'
-      '  , i.Qtde * i.Pfinal  as total_liquido'
-      
-        '--  , i.Qtde * (i.Punit - coalesce(i.Desconto_valor, 0))  as tot' +
-        'al_liquido'
-      '  , i.Qtde * i.Desconto_valor as Total_desconto'
+      '  , i.Total_bruto'
+      '  , i.Total_desconto'
+      '  , i.Total_liquido'
       '  , p.Qtde as Estoque'
       '  , p.Reserva'
       '  , p.Produto_novo'
@@ -638,21 +628,21 @@ object DMNFe: TDMNFe
     end
     object qryDadosProdutoTOTAL_BRUTO: TIBBCDField
       FieldName = 'TOTAL_BRUTO'
-      ProviderFlags = []
-      Precision = 18
-      Size = 2
-    end
-    object qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField
-      FieldName = 'TOTAL_LIQUIDO'
-      ProviderFlags = []
+      Origin = '"TVENDASITENS"."TOTAL_BRUTO"'
       Precision = 18
       Size = 2
     end
     object qryDadosProdutoTOTAL_DESCONTO: TIBBCDField
       FieldName = 'TOTAL_DESCONTO'
-      ProviderFlags = []
+      Origin = '"TVENDASITENS"."TOTAL_DESCONTO"'
       Precision = 18
-      Size = 4
+      Size = 2
+    end
+    object qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField
+      FieldName = 'TOTAL_LIQUIDO'
+      Origin = '"TVENDASITENS"."TOTAL_LIQUIDO"'
+      Precision = 18
+      Size = 2
     end
     object qryDadosProdutoESTOQUE: TIntegerField
       FieldName = 'ESTOQUE'
@@ -2107,7 +2097,6 @@ object DMNFe: TDMNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -2355,7 +2344,6 @@ object DMNFe: TDMNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -2367,11 +2355,9 @@ object DMNFe: TDMNFe
       '  , v.Codcli'
       '  , v.Dtvenda'
       '  , v.Status'
+      '  , v.totalvenda_bruta as TotalvendaBruta'
       '  , v.Desconto'
       '  , v.Totalvenda'
-      
-        '  , ( coalesce(v.Desconto, 0) + coalesce(v.Totalvenda, 0) ) as T' +
-        'otalvendaBruta'
       '  , v.Dtfinalizacao_venda'
       '  , v.Obs'
       '  , v.Serie'
@@ -2479,6 +2465,12 @@ object DMNFe: TDMNFe
       FieldName = 'STATUS'
       Origin = '"TBVENDAS"."STATUS"'
     end
+    object qryCalculoImportoTOTALVENDABRUTA: TIBBCDField
+      FieldName = 'TOTALVENDABRUTA'
+      Origin = '"TBVENDAS"."TOTALVENDA_BRUTA"'
+      Precision = 18
+      Size = 2
+    end
     object qryCalculoImportoDESCONTO: TIBBCDField
       FieldName = 'DESCONTO'
       Origin = '"TBVENDAS"."DESCONTO"'
@@ -2490,12 +2482,6 @@ object DMNFe: TDMNFe
       Origin = '"TBVENDAS"."TOTALVENDA"'
       Precision = 18
       Size = 2
-    end
-    object qryCalculoImportoTOTALVENDABRUTA: TIBBCDField
-      FieldName = 'TOTALVENDABRUTA'
-      ProviderFlags = []
-      Precision = 18
-      Size = 4
     end
     object qryCalculoImportoDTFINALIZACAO_VENDA: TDateField
       FieldName = 'DTFINALIZACAO_VENDA'
@@ -2708,7 +2694,6 @@ object DMNFe: TDMNFe
   end
   object IBSQL: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
-    ParamCheck = True
     Transaction = DMBusiness.ibtrnsctnBusiness
     Left = 144
     Top = 312
@@ -3461,8 +3446,6 @@ object DMNFe: TDMNFe
   object qryFormaPagtos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    v.formapagto_cod'
@@ -3630,8 +3613,6 @@ object DMNFe: TDMNFe
   object qryFornecedorDestinatario: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    f.codforn as Codigo'
@@ -3924,7 +3905,6 @@ object DMNFe: TDMNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -4251,8 +4231,6 @@ object DMNFe: TDMNFe
   object qryEntradaDadosProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    i.Ano'
@@ -4737,8 +4715,6 @@ object DMNFe: TDMNFe
   object qryEntradaDuplicatas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    p.anolanc'

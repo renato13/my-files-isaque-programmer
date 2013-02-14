@@ -328,9 +328,9 @@ type
     qryCalculoImportoNFE_VALOR_COFINS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_OUTROS: TIBBCDField;
     qryCalculoImportoNFE_VALOR_TOTAL_NOTA: TIBBCDField;
+    qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
     qryCalculoImportoDESCONTO: TIBBCDField;
     qryCalculoImportoTOTALVENDA: TIBBCDField;
-    qryCalculoImportoTOTALVENDABRUTA: TIBBCDField;
     qryDadosProdutoANO: TSmallintField;
     qryDadosProdutoCODCONTROL: TIntegerField;
     qryDadosProdutoSEQ: TSmallintField;
@@ -372,8 +372,8 @@ type
     qryDadosProdutoPERCENTUAL_REDUCAO_BC: TIBBCDField;
     qryDadosProdutoVALOR_REDUCAO_BC: TIBBCDField;
     qryDadosProdutoTOTAL_BRUTO: TIBBCDField;
-    qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField;
     qryDadosProdutoTOTAL_DESCONTO: TIBBCDField;
+    qryDadosProdutoTOTAL_LIQUIDO: TIBBCDField;
     qryDadosProdutoESTOQUE: TIntegerField;
     qryDadosProdutoRESERVA: TIntegerField;
     qryDadosProdutoPRODUTO_NOVO: TSmallintField;
