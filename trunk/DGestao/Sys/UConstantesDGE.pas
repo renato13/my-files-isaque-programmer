@@ -3,7 +3,7 @@ unit UConstantesDGE;
 interface
 
 const
-  VERSION_NUMBER = '1.0.3.1';
+  VERSION_NUMBER = '1.0.3.2';
 
   SEGMENTO_PADRAO_ID         = 0;
   SEGMENTO_VAREJO_ATACADO_ID = 1;
