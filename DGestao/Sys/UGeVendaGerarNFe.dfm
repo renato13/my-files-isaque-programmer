@@ -869,6 +869,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Dtfinalizacao_venda'
       '  , v.Dataemissao'
       '  , v.Horaemissao'
+      '  , v.Totalvenda_Bruta'
       '  , v.Desconto'
       '  , v.Totalvenda'
       '  , v.Serie'
@@ -888,18 +889,14 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Nfe_valor_cofins'
       '  , v.Nfe_valor_outros'
       '  , v.Nfe_valor_total_nota'
+      '  , sum( coalesce(i.Valor_ipi, 0) )         as valor_total_IPI'
+      '  , sum( coalesce(i.total_bruto, 0) )       as valor_total_bruto'
       
-        '  , sum( coalesce(i.Valor_ipi, 0) )                             ' +
-        'as valor_total_IPI'
+        '  , sum( coalesce(i.total_desconto, 0) )    as valor_total_desco' +
+        'nto'
       
-        '  , sum( coalesce(i.Qtde, 0) * i.Punit )                        ' +
-        'as valor_total_bruto'
-      
-        '  , sum( coalesce(i.Qtde, 0) * coalesce(i.Desconto_valor, 0) )  ' +
-        'as valor_total_desconto'
-      
-        '  , sum( coalesce(i.Qtde, 0) * i.Pfinal )                       ' +
-        'as valor_total_liquido'
+        '  , sum( coalesce(i.total_liquido, 0) )     as valor_total_liqui' +
+        'do'
       ''
       
         '  , sum( case when coalesce(p.Aliquota, 0) = 0 then 0 else coale' +
@@ -911,46 +908,30 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
         'ntrada'
       ''
       
-        '--  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coa' +
-        'lesce(i.Qtde, 0) * i.Pfinal end ) as valor_base_icms_normal_said' +
-        'a'
+        '  , sum( (case when coalesce(i.Aliquota, 0) = 0 then 0 else (cas' +
+        'e when coalesce(i.Percentual_reducao_bc, 0) = 0 then i.total_liq' +
+        'uido else (i.total_liquido * i.Percentual_reducao_bc / 100) end)' +
+        ' end) ) as valor_base_icms_normal_saida'
       
-        '--  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota,' +
-        ' 0) / 100 )                       as valor_total_icms_normal_sai' +
-        'da'
-      '--'
-      
-        '  , sum( case when coalesce(i.Aliquota, 0) = 0 then 0 else coale' +
-        'sce(i.Qtde, 0) * (case when coalesce(i.Percentual_reducao_bc, 0)' +
-        ' = 0 then i.Pfinal else (i.Pfinal * i.Percentual_reducao_bc / 10' +
-        '0) end) end ) as valor_base_icms_normal_saida'
-      
-        '  , sum( coalesce(i.Qtde, 0) * (case when coalesce(i.Percentual_' +
-        'reducao_bc, 0) = 0 then i.Pfinal else (i.Pfinal * i.Percentual_r' +
-        'educao_bc / 100) end) * coalesce(i.Aliquota, 0) / 100 )         ' +
-        '              as valor_total_icms_normal_saida'
+        '  , sum( (case when coalesce(i.Percentual_reducao_bc, 0) = 0 the' +
+        'n i.total_liquido else (i.total_liquido * i.Percentual_reducao_b' +
+        'c / 100) end) * coalesce(i.Aliquota, 0) / 100 )                 ' +
+        '        as valor_total_icms_normal_saida'
       ''
       
-        '--  , sum( coalesce(i.Qtde, 0) * i.Pfinal * coalesce(i.Aliquota,' +
-        ' 0) / 100 ) -'
+        '  , sum( (case when coalesce(i.Percentual_reducao_bc, 0) = 0 the' +
+        'n i.total_liquido else (i.total_liquido * i.Percentual_reducao_b' +
+        'c / 100) end) * coalesce(i.Aliquota, 0) / 100 ) -'
       
-        '--    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliqu' +
-        'ota, 0) / 100 ) as valor_total_icms_normal_devido'
-      '--'
-      
-        '  , sum( coalesce(i.Qtde, 0) * (case when coalesce(i.Percentual_' +
-        'reducao_bc, 0) = 0 then i.Pfinal else (i.Pfinal * i.Percentual_r' +
-        'educao_bc / 100) end) * coalesce(i.Aliquota, 0) / 100 ) -'
-      
-        '    sum( coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquot' +
-        'a, 0) / 100 ) as valor_total_icms_normal_devido'
+        '    sum( (coalesce(i.Qtde, 0) * p.Customedio * coalesce(p.Aliquo' +
+        'ta, 0) / 100) ) as valor_total_icms_normal_devido'
       ''
       
-        '  , sum( (coalesce(i.Qtde, 0) * i.Pfinal) * coalesce(i.Aliquota_' +
-        'pis, 0) / 100 )    as valor_total_PIS'
+        '  , sum( (coalesce(i.total_liquido, 0) * coalesce(i.Aliquota_pis' +
+        ', 0) / 100) )    as valor_total_PIS'
       
-        '  , sum( (coalesce(i.Qtde, 0) * i.Pfinal) * coalesce(i.Aliquota_' +
-        'cofins, 0) / 100 ) as valor_total_COFINS'
+        '  , sum( (coalesce(i.total_liquido, 0) * coalesce(i.Aliquota_cof' +
+        'ins, 0) / 100) ) as valor_total_COFINS'
       'from TBVENDAS v'
       
         '  inner join TVENDASITENS i on (i.Ano = v.Ano and i.Codcontrol =' +
@@ -969,6 +950,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       '  , v.Dtfinalizacao_venda'
       '  , v.Dataemissao'
       '  , v.Horaemissao'
+      '  , v.Totalvenda_Bruta'
       '  , v.Desconto'
       '  , v.Totalvenda'
       '  , v.Serie'
@@ -1039,6 +1021,13 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
       Origin = 'TBVENDAS.HORAEMISSAO'
       DisplayFormat = 'hh:mm:ss'
     end
+    object cdsVendaTOTALVENDA_BRUTA: TIBBCDField
+      FieldName = 'TOTALVENDA_BRUTA'
+      Origin = '"TBVENDAS"."TOTALVENDA_BRUTA"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object cdsVendaDESCONTO: TIBBCDField
       FieldName = 'DESCONTO'
       Origin = '"TBVENDAS"."DESCONTO"'
@@ -1069,151 +1058,176 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
     object cdsVendaNFE_VALOR_BASE_ICMS: TIBBCDField
       FieldName = 'NFE_VALOR_BASE_ICMS'
-      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS'
+      Origin = '"TBVENDAS"."NFE_VALOR_BASE_ICMS"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_ICMS: TIBBCDField
       FieldName = 'NFE_VALOR_ICMS'
-      Origin = 'TBVENDAS.NFE_VALOR_ICMS'
+      Origin = '"TBVENDAS"."NFE_VALOR_ICMS"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_BASE_ICMS_SUBST: TIBBCDField
       FieldName = 'NFE_VALOR_BASE_ICMS_SUBST'
-      Origin = 'TBVENDAS.NFE_VALOR_BASE_ICMS_SUBST'
+      Origin = '"TBVENDAS"."NFE_VALOR_BASE_ICMS_SUBST"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_ICMS_SUBST: TIBBCDField
       FieldName = 'NFE_VALOR_ICMS_SUBST'
-      Origin = 'TBVENDAS.NFE_VALOR_ICMS_SUBST'
+      Origin = '"TBVENDAS"."NFE_VALOR_ICMS_SUBST"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_TOTAL_PRODUTO: TIBBCDField
       FieldName = 'NFE_VALOR_TOTAL_PRODUTO'
-      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_PRODUTO'
+      Origin = '"TBVENDAS"."NFE_VALOR_TOTAL_PRODUTO"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_FRETE: TIBBCDField
       FieldName = 'NFE_VALOR_FRETE'
-      Origin = 'TBVENDAS.NFE_VALOR_FRETE'
+      Origin = '"TBVENDAS"."NFE_VALOR_FRETE"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_SEGURO: TIBBCDField
       FieldName = 'NFE_VALOR_SEGURO'
-      Origin = 'TBVENDAS.NFE_VALOR_SEGURO'
+      Origin = '"TBVENDAS"."NFE_VALOR_SEGURO"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_DESCONTO: TIBBCDField
       FieldName = 'NFE_VALOR_DESCONTO'
-      Origin = 'TBVENDAS.NFE_VALOR_DESCONTO'
+      Origin = '"TBVENDAS"."NFE_VALOR_DESCONTO"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_TOTAL_II: TIBBCDField
       FieldName = 'NFE_VALOR_TOTAL_II'
-      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_II'
+      Origin = '"TBVENDAS"."NFE_VALOR_TOTAL_II"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_TOTAL_IPI: TIBBCDField
       FieldName = 'NFE_VALOR_TOTAL_IPI'
-      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_IPI'
+      Origin = '"TBVENDAS"."NFE_VALOR_TOTAL_IPI"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_PIS: TIBBCDField
       FieldName = 'NFE_VALOR_PIS'
-      Origin = 'TBVENDAS.NFE_VALOR_PIS'
+      Origin = '"TBVENDAS"."NFE_VALOR_PIS"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_COFINS: TIBBCDField
       FieldName = 'NFE_VALOR_COFINS'
-      Origin = 'TBVENDAS.NFE_VALOR_COFINS'
+      Origin = '"TBVENDAS"."NFE_VALOR_COFINS"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_OUTROS: TIBBCDField
       FieldName = 'NFE_VALOR_OUTROS'
-      Origin = 'TBVENDAS.NFE_VALOR_OUTROS'
+      Origin = '"TBVENDAS"."NFE_VALOR_OUTROS"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaNFE_VALOR_TOTAL_NOTA: TIBBCDField
       FieldName = 'NFE_VALOR_TOTAL_NOTA'
-      Origin = 'TBVENDAS.NFE_VALOR_TOTAL_NOTA'
+      Origin = '"TBVENDAS"."NFE_VALOR_TOTAL_NOTA"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_IPI: TIBBCDField
       FieldName = 'VALOR_TOTAL_IPI'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_BRUTO'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
       ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
-      Size = 4
+      Size = 2
     end
     object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_ENTRADA'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_ENTRADA'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_SAIDA'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFMTBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 6
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFMTBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 6
     end
     object cdsVendaVALOR_TOTAL_PIS: TIBBCDField
       FieldName = 'VALOR_TOTAL_PIS'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_TOTAL_COFINS: TIBBCDField
       FieldName = 'VALOR_TOTAL_COFINS'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end

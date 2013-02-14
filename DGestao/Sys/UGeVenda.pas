@@ -142,7 +142,6 @@ type
     cdsTabelaItensDESCRI: TIBStringField;
     cdsTabelaItensESTOQUE: TIntegerField;
     cdsTabelaItensUNP_SIGLA: TIBStringField;
-    cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
     cdsTabelaItensCFOP_DESCRICAO: TIBStringField;
     cdsTabelaItensCST: TIBStringField;
     qryTitulos: TIBDataSet;
@@ -268,16 +267,17 @@ type
     qryTitulosSTATUS: TIBStringField;
     cdsTabelaItensDESCONTO: TIBBCDField;
     cdsTabelaItensDESCONTO_VALOR: TIBBCDField;
-    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     IbDtstTabelaDESCONTO: TIBBCDField;
     lblData: TLabel;
     e1Data: TDateEdit;
     e2Data: TDateEdit;
     cdsTabelaItensPFINAL: TIBBCDField;
-    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
-    IbDtstTabelaTotalBruto: TCurrencyField;
     dbValorTotalBruto: TDBEdit;
     lblValorTotalBruto: TLabel;
+    cdsTabelaItensTOTAL_BRUTO: TIBBCDField;
+    cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
+    cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
+    IbDtstTabelaTOTALVENDA_BRUTA: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -328,7 +328,6 @@ type
       DisplayText: Boolean);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure IbDtstTabelaCalcFields(DataSet: TDataSet);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -456,8 +455,9 @@ begin
   IbDtstTabelaCFOP.Value              := GetCfopIDDefault;
   IbDtstTabelaVENDA_PRAZO.Value := 0;
   IbDtstTabelaSTATUS.Value      := STATUS_VND_AND;
-  IbDtstTabelaDESCONTO.Value    := 0;
-  IbDtstTabelaTOTALVENDA.Value  := 0;
+  IbDtstTabelaTOTALVENDA_BRUTA.Value  := 0;
+  IbDtstTabelaDESCONTO.Value          := 0;
+  IbDtstTabelaTOTALVENDA.Value        := 0;
   IbDtstTabelaNFE_ENVIADA.Value := 0;
   IbDtstTabelaUSUARIO.Value     := GetUserApp;
 
@@ -874,30 +874,34 @@ end;
 
 procedure TfrmGeVenda.btnProdutoSalvarClick(Sender: TObject);
 
-  procedure GetToTais(var Descontos, TotalLiquido: Currency);
+  procedure GetToTais(var Total_Bruto, Total_Desconto, Total_Liquido: Currency);
   var
     Item : Integer;
   begin
     Item         := cdsTabelaItensSEQ.AsInteger;
-    Descontos    := 0.0;
-    TotalLiquido := 0.0;
+    Total_Bruto    := 0.0;
+    Total_desconto := 0.0;
+    Total_Liquido  := 0.0;
 
     cdsTabelaItens.First;
 
     while not cdsTabelaItens.Eof do
     begin
-      Descontos    := Descontos    + cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
-      TotalLiquido := TotalLiquido + StrToCurr( FormatFloat('##########0.00', cdsTabelaItensTOTAL_LIQUIDO.AsCurrency) );
+      Total_Bruto    := Total_Bruto    + cdsTabelaItensTOTAL_BRUTO.AsCurrency;
+      Total_desconto := Total_desconto + cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
 
       cdsTabelaItens.Next;
     end;
+
+    Total_Liquido  := Total_Bruto - Total_desconto;
 
     cdsTabelaItens.Locate('SEQ', Item, []);
   end;
 
 var
   cDescontos    ,
-  cValorDesconto,
+  cTotalBruto   ,
+  cTotalDesconto,
   cTotalLiquido : Currency;
 begin
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -933,27 +937,14 @@ begin
     end
     else
     begin
-(*
-      // -- 29-01-2013 : Isaque
-      // Processo para arredondar o valor de desconto para duas casas decimais
 
-      cValorDesconto := StrToCurrDef(FormatFloat('###########0.00', cdsTabelaItensTOTAL_DESCONTO.AsCurrency), 0);
-      if ( cValorDesconto > 0 ) then
-      begin
-        cdsTabelaItensDESCONTO_VALOR.AsCurrency := cValorDesconto / cdsTabelaItensQTDE.AsInteger;
-        cdsTabelaItensDESCONTO.AsCurrency  := cdsTabelaItensDESCONTO_VALOR.Value / cdsTabelaItensPUNIT.AsCurrency * 100;
-        cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
-        cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
-        cdsTabelaItensTOTAL_DESCONTO.Value := cValorDesconto;
-        cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
-      end;
-*)
       cdsTabelaItens.Post;
 
-      GetToTais(cDescontos, cTotalLiquido);
+      GetToTais(cTotalBruto, cTotalDesconto, cTotalLiquido);
 
-      IbDtstTabelaDESCONTO.AsCurrency   := cDescontos;
-      IbDtstTabelaTOTALVENDA.AsCurrency := cTotalLiquido;
+      IbDtstTabelaTOTALVENDA_BRUTA.AsCurrency := cTotalBruto;
+      IbDtstTabelaDESCONTO.AsCurrency         := cTotalDesconto;
+      IbDtstTabelaTOTALVENDA.AsCurrency       := cTotalLiquido;
 
       if ( cdsVendaFormaPagto.RecordCount <= 1 ) then
       begin
@@ -1022,6 +1013,7 @@ begin
 
     if ( not OcorreuErro ) then
     begin
+    
       // Salvar Itens
 
       if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
@@ -1030,7 +1022,7 @@ begin
       cdsTabelaItens.ApplyUpdates;
 
       // Salvar Formas de Pagamentos
-      
+
       if ( cdsVendaFormaPagto.State in [dsEdit, dsInsert] ) then
         cdsVendaFormaPagto.Post;
 
@@ -1048,6 +1040,19 @@ begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+      // Corrigir Total Forma Pagto
+      
+      if ( (cdsVendaFormaPagto.RecordCount = 1) and (cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency <> IbDtstTabelaTOTALVENDA.AsCurrency) ) then
+      begin
+        cdsVendaFormaPagto.Edit;
+        cdsVendaFormaPagtoVALOR_FPAGTO.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency;
+        cdsVendaFormaPagto.Post;
+        cdsVendaFormaPagto.ApplyUpdates;
+
+        CommitTransaction;
+      end;
+
     end;
 
     HabilitarDesabilitar_Btns;
@@ -1088,7 +1093,8 @@ begin
       cdsTabelaItensPFINAL.AsCurrency         := cPrecoVND - cdsTabelaItensDESCONTO_VALOR.AsCurrency;
       cdsTabelaItensTOTAL_BRUTO.AsCurrency    := cdsTabelaItensQTDE.AsInteger * cPrecoVND;
       cdsTabelaItensTOTAL_DESCONTO.AsCurrency := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensQTDE.AsInteger * StrToCurr( FormatFloat('##########0.00', cdsTabelaItensPFINAL.AsCurrency) );
+      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensTOTAL_BRUTO.AsCurrency - cdsTabelaItensTOTAL_DESCONTO.AsCurrency;;
+//      cdsTabelaItensTOTAL_LIQUIDO.AsCurrency  := cdsTabelaItensQTDE.AsInteger * StrToCurr( FormatFloat('##########0.00', cdsTabelaItensPFINAL.AsCurrency) );
     end;
 
   if ( Sender = dbValorLiq ) then
@@ -1659,7 +1665,7 @@ var
 begin
   if ( dbTotalDesconto.ReadOnly ) then
     Exit;
-    
+
   if ( cdsTabelaItens.State in [dsEdit, dsInsert] ) then
   begin
     sValor := InputBox('TOTAL DESCONTO (R$)', 'Favor informar o Valor Total de Desconto:', FormatFloat(',0.00', dbTotalDesconto.Field.AsCurrency));
@@ -1672,7 +1678,8 @@ begin
       cdsTabelaItensPFINAL.Value         := cdsTabelaItensPUNIT.AsCurrency - cdsTabelaItensDESCONTO_VALOR.Value;
       cdsTabelaItensTOTAL_BRUTO.Value    := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPUNIT.AsCurrency;
       cdsTabelaItensTOTAL_DESCONTO.Value := cValor; // cdsTabelaItensQTDE.AsInteger * cdsTabelaItensDESCONTO_VALOR.AsCurrency;
-      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * cdsTabelaItensPFINAL.AsCurrency;
+      cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensTOTAL_BRUTO.AsCurrency - cdsTabelaItensTOTAL_DESCONTO.AsCurrency;
+      //cdsTabelaItensTOTAL_LIQUIDO.Value  := cdsTabelaItensQTDE.AsInteger * StrToCurr( FormatFloat('##########0.00', cdsTabelaItensPFINAL.AsCurrency) );
     end;
   end;
 end;
@@ -2051,13 +2058,6 @@ begin
       dbgFormaPagto.SetFocus;
     end;
 *)    
-end;
-
-procedure TfrmGeVenda.IbDtstTabelaCalcFields(DataSet: TDataSet);
-begin
-  inherited;
-//  IbDtstTabelaTotalBruto.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency + StrToCurr( FormatFloat('#########0.00', IbDtstTabelaDESCONTO.AsCurrency) );
-  IbDtstTabelaTotalBruto.AsCurrency := IbDtstTabelaTOTALVENDA.AsCurrency + IbDtstTabelaDESCONTO.AsCurrency;
 end;
 
 end.
