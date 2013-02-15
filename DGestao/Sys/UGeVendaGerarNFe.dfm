@@ -856,6 +856,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1156,77 +1157,62 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     end
     object cdsVendaVALOR_TOTAL_IPI: TIBBCDField
       FieldName = 'VALOR_TOTAL_IPI'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_BRUTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_BRUTO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_DESCONTO: TIBBCDField
       FieldName = 'VALOR_TOTAL_DESCONTO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_LIQUIDO: TIBBCDField
       FieldName = 'VALOR_TOTAL_LIQUIDO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_BASE_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_ENTRADA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
     end
     object cdsVendaVALOR_TOTAL_ICMS_NORMAL_ENTRADA: TIBBCDField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_ENTRADA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_BASE_ICMS_NORMAL_SAIDA: TIBBCDField
       FieldName = 'VALOR_BASE_ICMS_NORMAL_SAIDA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFMTBCDField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_SAIDA: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_SAIDA'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 6
     end
-    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFMTBCDField
+    object cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField
       FieldName = 'VALOR_TOTAL_ICMS_NORMAL_DEVIDO'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 6
     end
     object cdsVendaVALOR_TOTAL_PIS: TIBBCDField
       FieldName = 'VALOR_TOTAL_PIS'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
     end
     object cdsVendaVALOR_TOTAL_COFINS: TIBBCDField
       FieldName = 'VALOR_TOTAL_COFINS'
-      ProviderFlags = []
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 4
