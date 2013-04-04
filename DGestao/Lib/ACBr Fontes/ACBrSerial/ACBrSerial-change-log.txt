@@ -97,6 +97,193 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+Data: 01/04/2013
+-- ACBrECFEscECF --
+[+] Criado mecanismo de memória temporária em disco, para manter o valor das
+    propriedades que não podem ser retornadas pelo protocolo como SubTotal,
+    TotalPago, TotalAPagar, etc.  Isso permite perssitir em arquivo os valores
+    de propriedades que seriam perdidos com o re-inicio do programa. (por: DSA)
+
+[-] Correção no retorno de GetTotalPago   (por: DSA)
+
+Data: 17/03/2013
+-- ACBrECF --
+[+] Adicionada funcionalidade de Impressão de Rodapé de Bar e Restaurantes
+    (por: Rafael Batiati)
+[-] Correção de Bug no método IdentificaPAF, que mesmo quando o MD5 era informado
+    vazio, adicionava o prefixo "MD-5:"  (por: DSA)
+[*] Ajuste nas sub-propriedades de InfoRodape, que não precisavam ser salvas no
+    DFM/LFM e ajuste valores Default   (por: DSA)
+
+-- ACBrECFBematech --
+[*] Ajuste no método GetDadosUltimaReducaoZ para consequir recuperar corretamente
+    os valores dos Registradores de Operações não Fiscais, mesmo quando os mesmos
+    não estão programados na sequencia correta, no ECF   (por: DSA)
+
+Data: 28/02/2013
+-- ACBrECF --
+[-] Correção de bug, onde o ACBrECF perdia as configurações de InfoRodape,
+    quando o modelo era modificado     (por: DSA)
+
+[-] Modificação da exibição da informação no rodapé para o programa Nota Legal,
+    de "DF". O Sufixo "NL" só deve ser exibido após o MD5, se houver
+    identificação do consumidor. (a pedido de homologador PAF-ECF)    (por: DSA)
+
+[*] Modificação da exibição da informação no rodapé para o programa Paraiba Legal,
+    O texto atual da lei, impede a impressão de todo texto em uma única linha,
+    pois ultrapassa 56 caracteres. O CPF do identificação do consumidor será
+    impresso na linha de baixo (a pedido de homologador PAF-ECF)    (por: DSA)
+
+[*] Ajustes em GetDadosUltimaReducaoZ em vários modelos para que o comando não
+    seja interrompido, caso a Data de Movimento retornada pelo ECF seja inválida
+    (por: DSA)
+
+Data: 04/02/2013
+-- ACBrECF --
+[-] Correção do rodape Cupom Mania estava pegando a data do computador (por: Rafael Dias)
+
+Data: 02/02/2013
+-- ACBrECFFiscNet --
+[-] Correção do método ArquivoMFD_DLL para os modelos Urano (por: Welkson e DSA)
+   http://www.projetoacbr.com.br/forum/index.php?/topic/
+   8864-menu-fiscal-usando-urano-patch-no-acbrecf/
+
+
+Data: 30/01/2013
+-- ACBrECFSwedaStx --
+[-] Acerto no ajuste de hora da Redução Z
+    por: Carlos Nascimento
+
+Data: 24/01/2013
+-- ACBrECF --
+[*] Corrigida a acentuação em métodos de relatórios de DAV_*   (por: DSA)
+
+Data: 21/01/2013
+-- ACBrECFSwedaSTX --
+[+] Adicionada leitura dos registradores: NumCFC, NumGNFC, NumCFD, NumNCN (por DSA)
+
+Data: 10/01/2013
+-- ACBrECFFiscNet --
+[-] Correção de erro em DescontoAcrescimoItemAnterior que ocorria em alguns modelos:
+    http://www.projetoacbr.com.br/forum/index.php?/topic/
+    1957-descontoacrescimoitemanterior-swedastx/?p=48234
+
+Data: 21/12/2012
+-- ACBrDevice --
+[*] Ajuste para permitir Hooks de comunicação com outras bibliotecas ou DLLs
+
+-- ACBrECFBematech --
+[*] EXPERIMENTAL. Inicio dos ajustes para funcionar com portas USB através da
+    Bemafi32.DLL, usando os NOVOS métodos Bematech_FI_EnviaComando,
+    Bematech_FI_LeituraRetorno
+
+Data: 20/12/2012
+-- ACBrECFDaruma --
+[-] Correção de bug introduzido em 29/11/2012, onde a leitura do COO fica
+    incorreta após o comando de Cancelamento (por: DSA)
+
+Data: 18/12/2012
+-- ACBrECFDaruma --
+[-] Acerto na geração de arquivos da NFP. (por: Regys Silveira)
+
+Data: 29/11/2012
+-- ACBrECFDaruma --
+[-] Acerto para retornar corretamente o número do CCF quando efetuar o 
+    cancelamento de cupom fiscal. (por: Regys Silveira)
+
+Data: 22/11/2012
+-- ACBrECFBematech --
+[-] Correção da Leitura de Totalizadores de Sangria e Suprimento em
+    LerTotaisComprovanteNaoFiscal  (por: DSA)
+[-] Correção da leitura de Totalizadores Não fiscais em DadosUltimaReducaoZ
+
+-- ACBrECFDaruma --
+[+] Adicionado retorno para os métodos: GetTotalAcrescimosOPNF,
+    GetTotalCancelamentosOPNF, GetTotalDescontosOPNF
+
+-- ACBrECFEpson --
+[-] Correção da leitura de Totalizadores de ISSQN em DadosUltimaReducaoZ
+
+-- ACBrECFFiscNet --
+[*] Refactoring, intruduzindo métodos Internos para: LeMoeda, LeInteiro, LeTexto
+[+] Adicionado retorno para os métodos: GetTotalAcrescimosOPNF,
+    GetTotalCancelamentosOPNF, GetTotalDescontosOPNF
+
+-- ACBrECFSwedaSTX --
+[-] Corrigida leitura de TotalOperacaoNaoFiscal em DadosUltimaReducaoZ
+
+Data: 20/11/2012
+-- ACBrECF --                                                      (por: DSA)
+[*] Refactoring em método: GetDadosReducaoZ e MontaDadosReducaoZ
+
+-- ACBrECFClass --                                                 (por: DSA)
+[*] Refactoring em método: GetDadosReducaoZ e MontaDadosReducaoZ
+[*] Classe TACBrECFDadosRZ modificada para conter o método MontaDadosReducaoZ
+[-] Método TACBrECFDadosRZ.MontaDadosReducaoZ, modificado para montar .INI apenas
+    com as variaveis que foram realmente informadas (eliminando problema de
+    registradores zerados)
+[+] Inserido método TACBrECFDadosRZ.CalculaValoresVirtuais para calcular valores
+    que não tenham sido retornado pelo ECF como: TotalOperacaoNaoFiscal, TotalICMS,
+    TotalISSQN, ValorVendaBruta, VendaLiquida
+
+-- ACBrECFBematech --                                              (por: DSA)
+[*] Refactoring em: GetDataHora, GetDataHoraSB e GetDataMovimento
+[*] Revisão e refactoring em GetDadosUltimaReducaoZ
+
+-- ACBrECFDaruma --                                                (por: DSA)
+[*] Revisão e refactoring em GetDadosUltimaReducaoZ
+
+-- ACBrECFEpson --                                                 (por: DSA)
+[*] Refactoring em: GetDataHora, GetDataHoraSB e GetDataMovimento
+[*] Revisão e refactoring em GetDadosUltimaReducaoZ, modificado para usar a
+    classe TACBrECFDadosRZ
+
+-- ACBrECFEpson --                                                 (por: DSA)
+[*] Revisão e refactoring em GetDadosUltimaReducaoZ, modificado para usar a
+    classe TACBrECFDadosRZ
+
+-- ACBrECFSwedaSTX --                                              (por: DSA)
+[*] Revisão e refactoring em GetDadosUltimaReducaoZ, modificado para usar a
+    classe TACBrECFDadosRZ
+[+] Implementado retorno para os métodos: GetTotalAcrescimosISSQN,
+    GetTotalCancelamentosISSQN, GetTotalDescontosISSQN, GetTotalIsencaoISSQN,
+    GetTotalNaoTributadoISSQN, GetTotalSubstituicaoTributariaISSQN,
+    GetTotalAcrescimosOPNF, GetTotalCancelamentosOPNF, GetTotalDescontosOPNF,
+    GetTotalTroco
+[-] LerTotaisAliquotas modificado para ler valores de aliquotas do ISSQN
+
+Data: 31/10/2012
+-- ACBrECFEpson --
+[-] Adicionada verificação do sucesso de Envio do Comando quando usando USB e a
+    DLL da Epson    (por: DSA)
+
+Data: 24/10/2012
+-- ACBrECF --
+[+] Adicionado novo modelo de ECF, ecfEscECF, que contempla o protocolo EscECF,
+    de acordo com o Convênio ICMS 09/09,  (experimental)    (por: DSA)
+
+Data: 22/10/2012
+-- ACBrECF --
+[+] Adicionada a impressão do Nota Legal (DF)
+    Ver propriedade InfoRodapeCupom.NotaLegal e suas subpropriedades.
+[+] Adicionada a expressão "NL" ao MD5 para o DF.
+[+] Adicionado a impressão do Paraíba Legal no rodapé do cupom fiscal
+    ver propriedade InfoRodapeCupom.ParaibaLegal
+    (por: Regys Silveira)  
+
+Data: 22/10/2012
+-- ACBrECFBematech --
+[*] Ajuste no método ArquivoMFD_DLL para nova versão da DLL 6.1.1.1  (por: DSA)
+
+-- ACBrECFSwedaSTX --
+[*] Adicionado suporte a página de código 1252 como default  (por: DSA)
+
+Data: 17/10/2012
+-- ACBrBal --
+[+] Adicionado o modelo de balança Megellan conforme contribuição do tópico.
+    http://www.djsystem.com.br/acbr/forum/viewtopic.php?f=10&t=7711
+    (por: Regys Silveira)    
+
 Data: 05/10/2012
 -- ACBrECFSwedaSTX --
 [-] Correção para emissão da ReducaoZ quando último cupom permaneceu aberto e

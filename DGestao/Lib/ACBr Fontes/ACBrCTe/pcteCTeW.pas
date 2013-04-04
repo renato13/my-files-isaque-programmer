@@ -63,7 +63,6 @@ type
   private
     FGerador: TGerador;
     FCTe: TCTe;
-    FSchema: TpcnSchema;
     FOpcoes: TGeradorOpcoes;
 
     procedure GerarInfCTe;     // Nivel 0
@@ -174,7 +173,6 @@ type
   published
     property Gerador: TGerador read FGerador write FGerador;
     property CTe: TCTe read FCTe write FCTe;
-    property schema: TpcnSchema read Fschema write Fschema;
     property Opcoes: TGeradorOpcoes read FOpcoes write FOpcoes;
   end;
 
@@ -269,20 +267,7 @@ begin
   Gerador.ArquivoFormatoTXT := '';
 
   Gerador.wGrupo(ENCODING_UTF8, '', False);
-(*
-{$IFDEF PL_103}
-  if CTe.procCTe.nProt <> ''
-   then Gerador.wGrupo('cteProc ' + V1_03 + ' ' + NAME_SPACE_CTE, '');
-  Gerador.wGrupo('CTe ' + NAME_SPACE_CTE);
-  Gerador.wGrupo('infCte ' + V1_03 + ' Id="' + CTe.infCTe.ID + '"');
-{$ENDIF}
-{$IFDEF PL_104}
-  if CTe.procCTe.nProt <> ''
-   then Gerador.wGrupo('cteProc ' + V1_04 + ' ' + NAME_SPACE_CTE, '');
-  Gerador.wGrupo('CTe ' + NAME_SPACE_CTE);
-  Gerador.wGrupo('infCte ' + V1_04 + ' Id="' + CTe.infCTe.ID + '"');
-{$ENDIF}
-*)
+
   if CTe.procCTe.nProt <> ''
    then Gerador.wGrupo('cteProc versao="' + CTeenviCTe + '" ' + NAME_SPACE_CTE, '');
   Gerador.wGrupo('CTe ' + NAME_SPACE_CTE);
@@ -311,14 +296,6 @@ begin
   if CTe.procCTe.nProt <> '' then
    begin
      xProtCTe :=
-(*
-{$IFDEF PL_103}
-           '<protCTe ' + V1_03 + '>' +
-{$ENDIF}
-{$IFDEF PL_104}
-           '<protCTe ' + V1_04 + '>' +
-{$ENDIF}
-*)
            '<protCTe versao="' + CTeenviCTe + '">' +
              '<infProt>'+
                '<tpAmb>'+TpAmbToStr(CTe.procCTe.tpAmb)+'</tpAmb>'+
@@ -692,7 +669,7 @@ begin
 
       if Trim(CTe.Rem.IE) = 'ISENTO'
        then Gerador.wCampo(tcStr, '#115', 'IE ', 00, 14, 1, CTe.Rem.IE, DSC_IE)
-       else Gerador.wCampo(tcStr, '#115', 'IE ', 00, 14, 0, SomenteNumeros(CTe.Rem.IE), DSC_IE);
+       else Gerador.wCampo(tcStr, '#115', 'IE ', 00, 14, 1, SomenteNumeros(CTe.Rem.IE), DSC_IE);
 
       if (FOpcoes.ValidarInscricoes)
        then if not ValidarIE(CTe.Rem.IE, CTe.Rem.EnderReme.UF) then
@@ -1072,6 +1049,7 @@ procedure TCTeW.GerarImp;
 begin
   Gerador.wGrupo('imp', '#239');
   (**)GerarICMS;
+  Gerador.wCampo(tcDe2, '#275', 'vTotImp    ', 01, 15, 0, CTe.Imp.vTotImp, DSC_VCOMP);
   Gerador.wCampo(tcStr, '#275', 'infAdFisco ', 01, 2000, 0, CTe.Imp.InfAdFisco, DSC_INFADFISCO);
   Gerador.wGrupo('/imp');
 end;
@@ -1266,11 +1244,11 @@ begin
 
 {$IFDEF PL_104}
     case StrToInt(TpModalToStr(CTe.Ide.modal)) of
-     01: Gerador.wGrupo('infModal ' + VM_Rodo_1_04, '#312');
-     02: Gerador.wGrupo('infModal ' + VM_Aereo_1_04, '#312');
-     03: Gerador.wGrupo('infModal ' + VM_Aqua_1_04, '#312');
-     04: Gerador.wGrupo('infModal ' + VM_Ferro_1_04, '#312');
-     05: Gerador.wGrupo('infModal ' + VM_Duto_1_04, '#312');
+     01: Gerador.wGrupo('infModal versaoModal="' + CTeModalRodo + '"', '#312');
+     02: Gerador.wGrupo('infModal versaoModal="' + CTeModalAereo + '"', '#312');
+     03: Gerador.wGrupo('infModal versaoModal="' + CTeModalAqua + '"', '#312');
+     04: Gerador.wGrupo('infModal versaoModal="' + CTeModalFerro + '"', '#312');
+     05: Gerador.wGrupo('infModal versaoModal="' + CTeModalDuto + '"', '#312');
     end;
 {$ENDIF}
     case StrToInt(TpModalToStr(CTe.Ide.modal)) of
@@ -1592,7 +1570,7 @@ begin
   begin
     Gerador.wGrupo('veic', '#20');
     Gerador.wCampo(tcStr, '#21', 'cInt    ', 01, 10, 0, CTe.Rodo.veic[i].cInt, '');
-    Gerador.wCampo(tcStr, '#22', 'RENAVAM ', 09, 09, 1, CTe.Rodo.veic[i].RENAVAM, '');
+    Gerador.wCampo(tcStr, '#22', 'RENAVAM ', 11, 11, 1, CTe.Rodo.veic[i].RENAVAM, '');
     Gerador.wCampo(tcStr, '#23', 'placa   ', 01, 07, 1, CTe.Rodo.veic[i].placa, '');
     Gerador.wCampo(tcInt, '#24', 'tara    ', 01, 06, 1, CTe.Rodo.veic[i].tara, '');
     Gerador.wCampo(tcInt, '#25', 'capKG   ', 01, 06, 1, CTe.Rodo.veic[i].capKG, '');
@@ -2260,6 +2238,7 @@ procedure TCTeW.GerarImpComp(i: Integer);
 begin
   Gerador.wGrupo('impComp', '#362');
   (**)GerarICMSComp(i);
+  Gerador.wCampo(tcDe2, '#398', 'vTotImp    ', 01, 15, 0, CTe.InfCTeComp[i].impComp.vTotImp, DSC_VCOMP);
   Gerador.wCampo(tcStr, '#398', 'infAdFisco ', 01, 1000, 0, CTe.InfCTeComp[i].impComp.InfAdFisco, DSC_INFADFISCO);
   Gerador.wGrupo('/impComp');
 end;

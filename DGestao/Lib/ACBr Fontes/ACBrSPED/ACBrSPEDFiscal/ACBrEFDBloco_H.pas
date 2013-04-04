@@ -137,6 +137,7 @@ type
     function GetItem(Index: Integer): TRegistroH010; /// GetItem
     procedure SetItem(Index: Integer; const Value: TRegistroH010); /// SetItem
   public
+    function LocalizaRegistro(pCOD_ITEM: String): boolean;
     function New(AOwner: TRegistroH005): TRegistroH010;
     property Items[Index: Integer]: TRegistroH010 read GetItem write SetItem;
   end;
@@ -183,6 +184,21 @@ implementation
 function TRegistroH010List.GetItem(Index: Integer): TRegistroH010;
 begin
   Result := TRegistroH010(Inherited Items[Index]);
+end;
+
+function TRegistroH010List.LocalizaRegistro(pCOD_ITEM: String): boolean;
+var
+intFor: integer;
+begin
+   Result := false;
+   for intFor := 0 to Self.Count - 1 do
+   begin
+      if Self.Items[intFor].COD_ITEM = pCOD_ITEM then
+      begin
+         Result := true;
+         Break;
+      end;
+   end;
 end;
 
 function TRegistroH010List.New(AOwner: TRegistroH005): TRegistroH010;

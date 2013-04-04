@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,6 +72,7 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
@@ -83,25 +84,37 @@ begin
  {----}
 end;
 
-function TProvedorGinfesV3.GetConfigCidade(ACodigo,
+function TProvedorGinfesV3.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
 begin
- ConfigCidade.VersaoSoap    := '1.2';
- case ACodigo of
+ ConfigCidade.VersaoSoap := '1.2';
+ case ACodCidade of
   3300456: ConfigCidade.CodigoSchemas := 10; // Belford Roxo/RJ
   else     ConfigCidade.CodigoSchemas := 01; // Demais cidades
  end;
- ConfigCidade.CodigoURLs    := 1;
+ case ACodCidade of
+  2304400: ConfigCidade.CodigoURLs := 2; // Fortaleza/CE
+  else     ConfigCidade.CodigoURLs := 1; // Demais cidades
+ end;
  ConfigCidade.Prefixo2      := 'ns2:';
  ConfigCidade.Prefixo3      := 'ns3:';
  ConfigCidade.Prefixo4      := 'ns4:';
  ConfigCidade.Identificador := 'Id';
 
- if AAmbiente = 1
-  then ConfigCidade.NameSpaceEnvelope := 'http://producao.ginfes.com.br'
-  else ConfigCidade.NameSpaceEnvelope := 'http://homologacao.ginfes.com.br';
+ case ACodCidade of
+  2304400: begin // Fortaleza/CE
+            if AAmbiente = 1
+             then ConfigCidade.NameSpaceEnvelope := 'http://producao.issfortaleza.com.br'
+             else ConfigCidade.NameSpaceEnvelope := 'http://homologacao.issfortaleza.com.br';
+           end;
+  else     begin // Demais cidades
+            if AAmbiente = 1
+             then ConfigCidade.NameSpaceEnvelope := 'http://producao.ginfes.com.br'
+             else ConfigCidade.NameSpaceEnvelope := 'http://homologacao.ginfes.com.br';
+           end;
+ end;
 
  ConfigCidade.AssinaRPS  := False;
  ConfigCidade.AssinaLote := True;
@@ -109,11 +122,10 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorGinfesV3.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorGinfesV3.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
- // Schemas 01 e 10
  ConfigSchema.VersaoCabecalho := '3';
  ConfigSchema.VersaoDados     := '3';
  ConfigSchema.VersaoXML       := '2';
@@ -125,34 +137,55 @@ begin
  ConfigSchema.ServicoConRps   := 'servico_consultar_nfse_rps_envio_v03.xsd';
  ConfigSchema.ServicoConNfse  := 'servico_consultar_nfse_envio_v03.xsd';
 
- if ACodigo = 1
-  then ConfigSchema.ServicoCancelar := 'servico_cancelar_nfse_envio_v02.xsd'
-  else ConfigSchema.ServicoCancelar := 'servico_cancelar_nfse_envio_v03.xsd'; // Schema 10 usado por Belford Roxo/RJ
+ case ACodCidade of
+  3300456: ConfigSchema.ServicoCancelar := 'servico_cancelar_nfse_envio_v03.xsd' // Schema usado por Belford Roxo/RJ
+  else ConfigSchema.ServicoCancelar := 'servico_cancelar_nfse_envio_v02.xsd';
+ end;
 
  ConfigSchema.DefTipos        := 'tipos_v03.xsd';
 
  Result := ConfigSchema;
 end;
 
-function TProvedorGinfesV3.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorGinfesV3.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
 begin
- ConfigURL.HomNomeCidade         := '';
- ConfigURL.HomRecepcaoLoteRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.HomConsultaLoteRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.HomConsultaNFSeRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.HomConsultaSitLoteRPS := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.HomConsultaNFSe       := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.HomCancelaNFSe        := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+ if ACodCidade = 2304400  // Fortaleza/CE
+  then begin
+   ConfigURL.HomNomeCidade         := '';
+   ConfigURL.HomRecepcaoLoteRPS    := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaLoteRPS    := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaNFSeRPS    := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaSitLoteRPS := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaNFSe       := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.HomCancelaNFSe        := 'https://homologacao.issfortaleza.com.br/ServiceGinfesImpl';
 
- ConfigURL.ProNomeCidade         := '';
- ConfigURL.ProRecepcaoLoteRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.ProConsultaLoteRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.ProConsultaNFSeRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.ProConsultaSitLoteRPS := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.ProConsultaNFSe       := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
- ConfigURL.ProCancelaNFSe        := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProNomeCidade         := '';
+   ConfigURL.ProRecepcaoLoteRPS    := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaLoteRPS    := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaNFSeRPS    := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaSitLoteRPS := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaNFSe       := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+   ConfigURL.ProCancelaNFSe        := 'https://producao.issfortaleza.com.br/ServiceGinfesImpl';
+  end
+  else begin  // Demais Cidades
+   ConfigURL.HomNomeCidade         := '';
+   ConfigURL.HomRecepcaoLoteRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaLoteRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaNFSeRPS    := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaSitLoteRPS := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.HomConsultaNFSe       := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.HomCancelaNFSe        := 'https://homologacao.ginfes.com.br/ServiceGinfesImpl';
+
+   ConfigURL.ProNomeCidade         := '';
+   ConfigURL.ProRecepcaoLoteRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaLoteRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaNFSeRPS    := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaSitLoteRPS := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProConsultaNFSe       := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+   ConfigURL.ProCancelaNFSe        := 'https://producao.ginfes.com.br/ServiceGinfesImpl';
+  end;
 
  Result := ConfigURL;
 end;
@@ -231,12 +264,12 @@ var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'LoteRps'+
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') + '>' +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') + '>' +
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -270,7 +303,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -301,7 +334,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -325,14 +358,14 @@ begin
 end;
 
 function TProvedorGinfesV3.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -349,6 +382,11 @@ begin
                '</' + Prefixo4 + 'InscricaoMunicipal>' +
               '</' + Prefixo3 + 'Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<' + Prefixo3 + 'PeriodoEmissao>' +
                                '<' + Prefixo3 + 'DataInicial>' +
@@ -363,7 +401,7 @@ begin
 end;
 
 function TProvedorGinfesV3.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
@@ -381,7 +419,7 @@ begin
              '</' + Prefixo3 + 'IdentificacaoRps>' +
              '<' + Prefixo3 + 'Prestador>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -401,7 +439,7 @@ begin
  Result := DadosMsg;
 end;
 
-function TProvedorGinfesV3.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorGinfesV3.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -432,7 +470,7 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeRecepcionarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:RecepcionarLoteRpsV3 xmlns:ns1="' + URLNS + '">' +
@@ -446,7 +484,7 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeConsultarSituacaoLoteRPS(
   URLNS: String; CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:ConsultarSituacaoLoteRpsV3 xmlns:ns1="' + URLNS + '">' +
@@ -460,7 +498,7 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeConsultarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:ConsultarLoteRpsV3 xmlns:ns1="' + URLNS + '">' +
@@ -474,7 +512,7 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeConsultarNFSeporRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:ConsultarNfsePorRpsV3 xmlns:ns1="' + URLNS + '">' +
@@ -488,7 +526,7 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeConsultarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:ConsultarNfseV3 xmlns:ns1="' + URLNS + '">' +
@@ -502,12 +540,12 @@ end;
 function TProvedorGinfesV3.GeraEnvelopeCancelarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
             '<s:Body>' +
              '<ns1:CancelarNfse xmlns:ns1="' + URLNS + '">' +
               '<arg0>' +
-               '&lt;?xml version="1.0" encoding="utf-8"?&gt;' +
+               '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
                StringReplace(StringReplace(DadosMsg, '<', '&lt;', [rfReplaceAll]), '>', '&gt;', [rfReplaceAll]) +
               '</arg0>' +
              '</ns1:CancelarNfse>' +
@@ -551,10 +589,48 @@ end;
 function TProvedorGinfesV3.GeraRetornoNFSe(Prefixo: String;
   RetNFSe: AnsiString; NomeCidade: String): AnsiString;
 begin
- Result := '<?xml version="1.0" encoding="utf-8"?>' +
+ Result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<CompNfse xmlns:ns4="http://www.ginfes.com.br/tipos_v03.xsd">' +
             RetNFSe +
            '</CompNfse>';
+end;
+
+function TProvedorGinfesV3.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ if AAmbiente = 1
+  then begin
+   case ACodMunicipio of
+    3143906: Result := 'http://muriae.ginfes.com.br/birt/frameset?__report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3503208: Result := 'http://araraquara.ginfes.com.br/birt/frameset?_report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3518800: Result := 'http://guarulhos.ginfes.com.br/birt/frameset?_report=nfs_ver4.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3543402: Result := 'http://ribeiraopreto.ginfes.com.br/birt/frameset?_report=nfs_ribeirao_preto.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3547809: Result := 'http://santoandre.ginfes.com.br/birt/frameset?_report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+   else Result := '';
+   end;
+  end
+  else begin
+   case ACodMunicipio of
+    2304400: Result := 'http://nfse.issfortaleza.com.br/report/consultarNota?__report=nfs_ver4&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe) + '&cnpjPrestador=null';
+    3143906: Result := 'http://muriae.ginfesh.com.br/birt/frameset?__report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3503208: Result := 'http://araraquara.ginfesh.com.br/birt/frameset?_report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3518800: Result := 'http://guarulhos.ginfesh.com.br/birt/frameset?_report=nfs_ver4.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3543402: Result := 'http://ribeiraopreto.ginfesh.com.br/birt/frameset?_report=nfs_ribeirao_preto.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+    3547809: Result := 'http://santoandre.ginfesh.com.br/birt/frameset?_report=nfs_novo.rptdesign&cdVerificacao=' +
+                       ACodVerificacao + '&numNota=' + IntToStr(ANumeroNFSe);
+   else Result := '';
+   end;
+  end;
 end;
 
 end.

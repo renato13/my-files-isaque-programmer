@@ -48,9 +48,11 @@ interface
 
 uses
   SysUtils, Math, Classes,
+{$IFNDEF Framework}
   {$IFDEF FPC}
     LResources,
   {$ENDIF}
+{$ENDIF}
   DateUtils, ACBrSped, ACBrTXTClass, ACBrEFDBlocos,
   ACBrEFDBloco_0_Class, ACBrEFDBloco_1_Class, ACBrEFDBloco_9_Class,
   ACBrEFDBloco_C_Class, ACBrEFDBloco_D_Class, ACBrEFDBloco_E_Class,
@@ -105,10 +107,10 @@ type
     function GetDT_FIN: TDateTime;
     function GetDT_INI: TDateTime;
     procedure InicializaBloco(Bloco: TACBrSPED);
-    procedure SetArquivo(const AValue: ansistring);
+    procedure SetArquivo(const Value: ansistring);
     procedure SetDelimitador(const Value: ansistring);
-    procedure SetLinhasBuffer(const AValue: Integer);
-    procedure SetPath(const AValue: ansistring);
+    procedure SetLinhasBuffer(const Value: Integer);
+    procedure SetPath(const Value: ansistring);
     procedure SetTrimString(const Value: boolean);
     procedure SetCurMascara(const Value: ansistring);
     procedure SetDT_FIN(const Value: TDateTime);
@@ -320,6 +322,9 @@ end;
 
 procedure TACBrSPEDFiscal.SetDelimitador(const Value: ansistring);
 begin
+  if Value = '' then
+     raise Exception.Create('Campo não pode ser vazio!');
+
   FDelimitador := Value;
 
   FBloco_0.Delimitador := Value;
@@ -332,14 +337,17 @@ begin
   FBloco_9.Delimitador := Value;
 end;
 
-procedure TACBrSPEDFiscal.SetLinhasBuffer(const AValue: Integer);
+procedure TACBrSPEDFiscal.SetLinhasBuffer(const Value: Integer);
 begin
-   FACBrTXT.LinhasBuffer := AValue ;
+   FACBrTXT.LinhasBuffer := Value ;
 end;
 
-procedure TACBrSPEDFiscal.SetPath(const AValue: ansistring);
+procedure TACBrSPEDFiscal.SetPath(const Value: ansistring);
 begin
-  FPath := PathWithDelim( AValue );
+  if Value = '' then
+     raise Exception.Create('Campo não pode ser vazio!');
+
+  FPath := PathWithDelim( Value );
 end;
 
 function TACBrSPEDFiscal.GetCurMascara: ansistring;
@@ -349,7 +357,10 @@ end;
 
 procedure TACBrSPEDFiscal.SetCurMascara(const Value: ansistring);
 begin
-  FCurMascara := Value;
+  if Value = '' then
+     raise Exception.Create('Campo não pode ser vazio! Para deixar sem mascara digite #');
+
+	 FCurMascara := Value;
 
   FBloco_0.CurMascara := Value;
   FBloco_1.CurMascara := Value;
@@ -445,15 +456,15 @@ begin
   FInicializado := True ;
 end;
 
-procedure TACBrSPEDFiscal.SetArquivo(const AValue: ansistring);
+procedure TACBrSPEDFiscal.SetArquivo(const Value: ansistring);
 var
   APath : AnsiString;
 begin
-  if FArquivo = AValue then
+  if FArquivo = Value then
      exit;
 
-  FArquivo := ExtractFileName( AValue );
-  APath    := ExtractFilePath( AValue );
+  FArquivo := ExtractFileName( Value );
+  APath    := ExtractFilePath( Value );
 
   if APath <> '' then
      Path := APath;
@@ -989,6 +1000,22 @@ begin
                QTD_REG_BLC := Bloco_1.Registro1370Count;
             end;
          end;
+         if Bloco_1.Registro1390Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1390';
+               QTD_REG_BLC := Bloco_1.Registro1390Count;
+            end;
+         end;
+         if Bloco_1.Registro1391Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1391';
+               QTD_REG_BLC := Bloco_1.Registro1391Count;
+            end;
+         end;
          if Bloco_1.Registro1400Count > 0 then
          begin
             with New do
@@ -1043,6 +1070,70 @@ begin
             begin
                REG_BLC := '1800';
                QTD_REG_BLC := Bloco_1.Registro1800Count;
+            end;
+         end;
+         if Bloco_1.Registro1900Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1900';
+               QTD_REG_BLC := Bloco_1.Registro1900Count;
+            end;
+         end;
+         if Bloco_1.Registro1910Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1910';
+               QTD_REG_BLC := Bloco_1.Registro1910Count;
+            end;
+         end;
+         if Bloco_1.Registro1920Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1920';
+               QTD_REG_BLC := Bloco_1.Registro1920Count;
+            end;
+         end;
+         if Bloco_1.Registro1921Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1921';
+               QTD_REG_BLC := Bloco_1.Registro1921Count;
+            end;
+         end;
+         if Bloco_1.Registro1922Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1922';
+               QTD_REG_BLC := Bloco_1.Registro1922Count;
+            end;
+         end;
+         if Bloco_1.Registro1923Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1923';
+               QTD_REG_BLC := Bloco_1.Registro1923Count;
+            end;
+         end;
+         if Bloco_1.Registro1925Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1925';
+               QTD_REG_BLC := Bloco_1.Registro1925Count;
+            end;
+         end;
+         if Bloco_1.Registro1926Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '1926';
+               QTD_REG_BLC := Bloco_1.Registro1926Count;
             end;
          end;
       end;
@@ -2173,11 +2264,12 @@ begin
   Bloco_9.WriteRegistro9999;
 end;
 
-
-{$ifdef FPC}
+{$IFNDEF Framework}
+{$IFDEF FPC}
 initialization
    {$I ACBrSpedFiscal.lrs}
-{$endif}
+{$ENDIF}
+{$ENDIF}
 
 end.
 

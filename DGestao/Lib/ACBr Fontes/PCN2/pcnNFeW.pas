@@ -483,41 +483,24 @@ procedure TNFeW.GerarDest;
 var
   UF: string;
 const
-  HOM_CNPJ      = '99999999000191';
   HOM_NOME_DEST = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL';
 begin
   UF := '';
   Gerador.wGrupo('dest', 'E01');
+  Gerador.wCampoCNPJCPF('E02', 'E03', nfe.Dest.CNPJCPF, nfe.Dest.enderDest.cPais);
   if nfe.Ide.tpAmb = taProducao then
-  begin
-    Gerador.wCampoCNPJCPF('E02', 'E03', nfe.Dest.CNPJCPF, nfe.Dest.enderDest.cPais);
-    Gerador.wCampo(tcStr, 'E04', 'xNome  ', 02, 60, 1, nfe.Dest.xNome, DSC_XNOME);
-  end
+    Gerador.wCampo(tcStr, 'E04', 'xNome  ', 02, 60, 1, nfe.Dest.xNome, DSC_XNOME)
   else
-  begin
-    // conforme nota técnica 2011/02
-    if nfe.Dest.enderDest.UF = 'EX' Then
-      Gerador.wCampoCNPJCPF('E02', 'E03', nfe.Dest.CNPJCPF, nfe.Dest.enderDest.cPais)
-    else
-      Gerador.wCampoCNPJCPF('E02', 'E03', HOM_CNPJ, nfe.Dest.enderDest.cPais);
-      
     Gerador.wCampo(tcStr, 'E04', 'xNome  ', 02, 60, 1, HOM_NOME_DEST, DSC_XNOME);
-  end;
+
   (**)GerarDestEnderDest(UF);
   Gerador.IDNivel := 'E01';
   // Inscrição Estadual
-  if nfe.Ide.tpAmb = taProducao then
-  begin
-    if nfe.Dest.IE = 'ISENTO' then
-      Gerador.wCampo(tcStr, 'E17', 'IE ', 00, 14, 1, nfe.Dest.IE, DSC_IE)
-    else
-      Gerador.wCampo(tcStr, 'E17', 'IE     ', 00, 14, 1, SomenteNumeros(nfe.Dest.IE), DSC_IE);
-  end
+  if nfe.Dest.IE = 'ISENTO' then
+    Gerador.wCampo(tcStr, 'E17', 'IE ', 00, 14, 1, nfe.Dest.IE, DSC_IE)
   else
-  begin
-    // conforme nota técnica 2011/02
-    Gerador.wCampo(tcStr, 'E17', 'IE ', 00, 14, 1, '', DSC_IE)
-  end;
+    Gerador.wCampo(tcStr, 'E17', 'IE     ', 00, 14, 1, SomenteNumeros(nfe.Dest.IE), DSC_IE);
+
 //  if (length(nfe.Dest.CNPJCPF) = 11) and (SomenteNumeros(nfe.Dest.IE) <> '') then
 //    Gerador.wAlerta('E17', 'IE', DSC_IE, ERR_MSG_INVALIDO); // Para MG produtor rural possui CPF e IE
   if (FOpcoes.ValidarInscricoes) and (nfe.Dest.IE <> '') and (nfe.Dest.IE <> 'ISENTO') then
@@ -1390,7 +1373,7 @@ begin
   begin
 
     if (nfe.Det[i].Imposto.COFINSST.vBC + nfe.Det[i].Imposto.COFINSST.pCOFINS > 0) and (nfe.Det[i].Imposto.COFINSST.qBCProd + nfe.Det[i].Imposto.COFINSST.vAliqProd > 0) then
-      Gerador.wAlerta('T01', 'COFINSST', DSC_PISOUTR, 'As TAG <vBC> e <pCOFINS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>');
+      Gerador.wAlerta('T01', 'COFINSST', DSC_COFINSST, 'As TAG <vBC> e <pCOFINS> não podem ser informadas em conjunto com as TAG <qBCProd> e <vAliqProd>');
 
     if (nfe.Det[i].Imposto.COFINSST.vBC + nfe.Det[i].Imposto.COFINSST.pCOFINS > 0) then
     begin
@@ -1420,7 +1403,7 @@ begin
     (nfe.Det[i].Imposto.ISSQN.cListServ > 0) then
   begin
     Gerador.wGrupo('ISSQN', 'U01');
-    Gerador.wCampo(tcDe2, 'U02', 'vBC        ', 01, 15, 1, nfe.Det[i].Imposto.ISSQN.vBC, DSC_VBC);
+    Gerador.wCampo(tcDe2, 'U02', 'vBC        ', 01, 15, 1, nfe.Det[i].Imposto.ISSQN.vBC, DSC_VBCISS);
     Gerador.wCampo(tcDe2, 'U03', 'vAliq      ', 01, 05, 1, nfe.Det[i].Imposto.ISSQN.vAliq, DSC_VAliq);
     Gerador.wCampo(tcDe2, 'U04', 'vISSQN     ', 01, 15, 1, nfe.Det[i].Imposto.ISSQN.vISSQN, DSC_VISSQN);
     Gerador.wCampo(tcInt, 'U05', 'cMunFG     ', 07, 07, 1, nfe.Det[i].Imposto.ISSQN.cMunFG, DSC_CMUNFG);

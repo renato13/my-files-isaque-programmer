@@ -392,6 +392,7 @@ begin
          vlVersao103: strCOD_VER := '004';
          vlVersao104: strCOD_VER := '005';
          vlVersao105: strCOD_VER := '006';
+         vlVersao106: strCOD_VER := '007';
        end;
 
        Check(funChecaCNPJ(CNPJ), '(0-0000) ENTIDADE: O CNPJ "%s" digitado é inválido!', [CNPJ]);
@@ -678,7 +679,7 @@ begin
                       LFill( strTIPO_ITEM ) +
                       LFill( COD_NCM ) +
                       LFill( EX_IPI ) +
-                      LFill( COD_GEN, 2 ) +
+                      LFill( COD_GEN ) +
                       LFill( COD_LST ) +
                       LFill( ALIQ_ICMS,0,2 );
           //-- Write

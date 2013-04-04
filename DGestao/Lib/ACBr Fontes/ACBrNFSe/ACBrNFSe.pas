@@ -40,13 +40,17 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Enviar(ALote: Integer; Imprimir:Boolean = True): Boolean;
-    function ConsutarSituacao(ACnpj, AInscricaoMunicipal, AProtocolo: String): Boolean;
-    function ConsutarLoteRps(ANumLote, AProtocolo: String): Boolean;
-    function ConsutarNFSeporRps(ANumero, ASerie, ATipo, ACnpj, AInscricaoMunicipal: String): Boolean;
-    function ConsutarNFSe(ACnpj, AInscricaoMunicipal: String; ADataInicial, ADataFinal: TDateTime): Boolean;
+    function Enviar(ALote: Integer; Imprimir:Boolean = True): Boolean; overload;
+    function Enviar(ALote: String; Imprimir:Boolean = True): Boolean; overload;
+    function ConsultarSituacao(ACnpj, AInscricaoMunicipal, AProtocolo: String): Boolean;
+    function ConsultarLoteRps(ANumLote, AProtocolo: String): Boolean;
+    function ConsultarNFSeporRps(ANumero, ASerie, ATipo, ACnpj, AInscricaoMunicipal: String): Boolean;
+    function ConsultarNFSe(ACnpj, AInscricaoMunicipal: String; ADataInicial, ADataFinal: TDateTime; NumeroNFSe: string = ''): Boolean;
     function CancelarNFSe(ACodigoCancelamento: String): Boolean;
     function Gerar(ARps: Integer): Boolean;
+    function LinkNFSe(ANumeroNFSe: Integer; ACodVerificacao: String): String;
+    function GerarLote(ALote: Integer): Boolean; overload;
+    function GerarLote(ALote: String): Boolean; overload;
 
     property WebServices: TWebServices   read FWebServices  write FWebServices;
     property NotasFiscais: TNotasFiscais read FNotasFiscais write FNotasFiscais;
@@ -152,6 +156,11 @@ begin
 end;
 
 function TACBrNFSe.Enviar(ALote: Integer; Imprimir: Boolean): Boolean;
+begin
+  Result := Enviar(IntToStr(ALote),Imprimir);
+end;
+
+function TACBrNFSe.Enviar(ALote: String; Imprimir: Boolean): Boolean;
 var
  i: Integer;
 begin
@@ -187,13 +196,13 @@ begin
   end;
 end;
 
-function TACBrNFSe.ConsutarSituacao(ACnpj, AInscricaoMunicipal,
+function TACBrNFSe.ConsultarSituacao(ACnpj, AInscricaoMunicipal,
   AProtocolo: String): Boolean;
 begin
  Result := WebServices.ConsultaSituacao(ACnpj, AInscricaoMunicipal, AProtocolo);
 end;
 
-function TACBrNFSe.ConsutarLoteRps(ANumLote, AProtocolo: String): Boolean;
+function TACBrNFSe.ConsultarLoteRps(ANumLote, AProtocolo: String): Boolean;
 var
  aPath: String;
  wAno, wMes, wDia: Word;
@@ -224,7 +233,7 @@ begin
  Result := WebServices.ConsultaLoteRps(AProtocolo);
 end;
 
-function TACBrNFSe.ConsutarNFSeporRps(ANumero, ASerie, ATipo, ACnpj,
+function TACBrNFSe.ConsultarNFSeporRps(ANumero, ASerie, ATipo, ACnpj,
   AInscricaoMunicipal: String): Boolean;
 begin
  if NotasFiscais.Count <= 0
@@ -235,13 +244,13 @@ begin
    exit;
   end;
 
- Result := WebServices.ConsutaNFSeporRps(ANumero, ASerie, ATipo, ACnpj, AInscricaoMunicipal);
+ Result := WebServices.ConsultaNFSeporRps(ANumero, ASerie, ATipo, ACnpj, AInscricaoMunicipal);
 end;
 
-function TACBrNFSe.ConsutarNFSe(ACnpj, AInscricaoMunicipal: String;
-  ADataInicial, ADataFinal: TDateTime): Boolean;
+function TACBrNFSe.ConsultarNFSe(ACnpj, AInscricaoMunicipal: String;
+  ADataInicial, ADataFinal: TDateTime; NumeroNFSe: string = ''): Boolean;
 begin
- Result := WebServices.ConsutaNFSe(ACnpj, AInscricaoMunicipal, ADataInicial, ADataFinal);
+ Result := WebServices.ConsultaNFSe(ACnpj, AInscricaoMunicipal, ADataInicial, ADataFinal, NumeroNFSe);
 end;
 
 function TACBrNFSe.CancelarNFSe(ACodigoCancelamento: String): Boolean;
@@ -267,8 +276,8 @@ begin
 end;
 
 function TACBrNFSe.Gerar(ARps: Integer): Boolean;
-var
- i: Integer;
+//var
+// i: Integer;
 begin
  if NotasFiscais.Count <= 0
   then begin
@@ -289,6 +298,43 @@ begin
  NotasFiscais.Assinar; // Assina os Rps
 
  Result := WebServices.Gera(ARps);
+end;
+
+function TACBrNFSe.LinkNFSe(ANumeroNFSe: Integer;
+  ACodVerificacao: String): String;
+begin
+ Result := WebServices.LinkNFSeGerada(ANumeroNFSe, ACodVerificacao);
+end;
+
+function TACBrNFSe.GerarLote(ALote: Integer): Boolean;
+begin
+  Result := GerarLote(IntToStr(ALote));
+end;
+
+function TACBrNFSe.GerarLote(ALote: String): Boolean;
+//var
+// i: Integer;
+begin
+ if NotasFiscais.Count <= 0
+  then begin
+   if Assigned(Self.OnGerarLog)
+    then Self.OnGerarLog('ERRO: Nenhum RPS adicionado ao Lote');
+   raise Exception.Create('ERRO: Nenhum RPS adicionado ao Lote');
+   exit;
+  end;
+
+ if NotasFiscais.Count > 50
+  then begin
+   if Assigned(Self.OnGerarLog)
+    then Self.OnGerarLog('ERRO: Conjunto de RPS transmitidos (máximo de 50) excedido. Quantidade atual: '+IntToStr(NotasFiscais.Count));
+   raise Exception.Create('ERRO: Conjunto de RPS transmitidos (máximo de 50) excedido. Quantidade atual: '+IntToStr(NotasFiscais.Count));
+   exit;
+  end;
+
+ NotasFiscais.Assinar; // Assina os Rps
+
+ Result := WebServices.GeraLote(ALote);
+
 end;
 
 end.

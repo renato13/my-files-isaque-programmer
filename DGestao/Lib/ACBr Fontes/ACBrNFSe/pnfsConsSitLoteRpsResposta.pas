@@ -4,8 +4,7 @@ interface
 
 uses
   SysUtils, Classes,
-  pcnAuxiliar, pcnConversao, pcnLeitor,
-  pnfsConversao, pnfsNFSe;
+  pcnAuxiliar, pcnConversao, pcnLeitor, pnfsConversao, pnfsNFSe, ACBrNFSeUtil;
 
 type
 
@@ -54,8 +53,6 @@ type
   private
     FLeitor: TLeitor;
     FInfSit: TInfSit;
-    FPrefixo3: String;
-    FPrefixo2: String;
   public
     constructor Create;
     destructor Destroy; override;
@@ -63,8 +60,6 @@ type
   published
     property Leitor: TLeitor  read FLeitor   write FLeitor;
     property InfSit: TInfSit  read FInfSit   write FInfSit;
-    property Prefixo2: String read FPrefixo2 write FPrefixo2;
-    property Prefixo3: String read FPrefixo3 write FPrefixo3;
   end;
 
 implementation
@@ -146,12 +141,16 @@ var
   i: Integer;
 begin
   result := False;
+  
   try
-    Leitor.Grupo := Leitor.Arquivo;
-    if leitor.rExtrai(1, prefixo3 + 'ConsultarSituacaoLoteRpsResposta') <> '' then
+    // Incluido por Ricardo Miranda em 14/03/2013
+    Leitor.Arquivo := NotaUtil.RetirarPrefixos(Leitor.Arquivo);
+    Leitor.Grupo   := Leitor.Arquivo;
+
+    if leitor.rExtrai(1, 'ConsultarSituacaoLoteRpsResposta') <> '' then
     begin
-      InfSit.FNumeroLote := Leitor.rCampo(tcStr, prefixo3 + 'NumeroLote');
-      InfSit.FSituacao   := Leitor.rCampo(tcStr, prefixo3 + 'Situacao');
+      InfSit.FNumeroLote := Leitor.rCampo(tcStr, 'NumeroLote');
+      InfSit.FSituacao   := Leitor.rCampo(tcStr, 'Situacao');
 
       // FSituacao: 1 = Não Recebido
       //            2 = Não Processado
@@ -162,12 +161,12 @@ begin
       if leitor.rExtrai(2, 'ListaMensagemRetorno') <> '' then
       begin
         i := 0;
-        while Leitor.rExtrai(3, prefixo2 + 'MensagemRetorno', '', i + 1) <> '' do
+        while Leitor.rExtrai(3, 'MensagemRetorno', '', i + 1) <> '' do
         begin
           InfSit.FMsgRetorno.Add;
-          InfSit.FMsgRetorno[i].FCodigo   := Leitor.rCampo(tcStr, prefixo2 + 'Codigo');
-          InfSit.FMsgRetorno[i].FMensagem := Leitor.rCampo(tcStr, prefixo2 + 'Mensagem');
-          InfSit.FMsgRetorno[i].FCorrecao := Leitor.rCampo(tcStr, prefixo2 + 'Correcao');
+          InfSit.FMsgRetorno[i].FCodigo   := Leitor.rCampo(tcStr, 'Codigo');
+          InfSit.FMsgRetorno[i].FMensagem := Leitor.rCampo(tcStr, 'Mensagem');
+          InfSit.FMsgRetorno[i].FCorrecao := Leitor.rCampo(tcStr, 'Correcao');
 
           inc(i);
         end;

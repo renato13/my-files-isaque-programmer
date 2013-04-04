@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, Classes, Forms,
   pcnAuxiliar, pcnConversao, pcnLeitor,
-  pnfsConversao, pnfsNFSe, ACBrUtil, ACBrNFSeUtil;
+  pnfsConversao, pnfsNFSe, ACBrUtil, ACBrNFSeUtil, ACBrDFeUtil;
 
 type
 
@@ -83,9 +83,6 @@ type
     FPathArquivoTabServicos: string;
     FLeitor: TLeitor;
     FListaNfse: TListaNfse;
-    FPrefixo2: String;
-    FPrefixo3: String;
-    FPrefixo4: String;
 //    function ObterNomeMunicipio(xUF: string; const cMun: integer): string;
 //    function ObterDescricaoServico(cCodigo: string): string;
   public
@@ -97,9 +94,6 @@ type
     property PathArquivoTabServicos: string read FPathArquivoTabServicos write FPathArquivoTabServicos;
     property Leitor: TLeitor                read FLeitor                 write FLeitor;
     property ListaNfse: TListaNfse          read FListaNfse              write FListaNfse;
-    property Prefixo2: String               read FPrefixo2               write FPrefixo2;
-    property Prefixo3: String               read FPrefixo3               write FPrefixo3;
-    property Prefixo4: String               read FPrefixo4               write FPrefixo4;
   end;
 
 implementation
@@ -235,85 +229,83 @@ var
   VersaoXML: String;
 begin
   result := False;
-  try
 
+  try
     Leitor.Arquivo := NotaUtil.RetirarPrefixos(Leitor.Arquivo);
     VersaoXML      := NotaUtil.VersaoXML(Leitor.Arquivo);
+    Leitor.Grupo   := Leitor.Arquivo;
 
     k        := 0; //length(Prefixo4);
-    Prefixo3 := '';
-    Prefixo4 := '';
 
-    Leitor.Grupo := Leitor.Arquivo;
-    if leitor.rExtrai(1, Prefixo3 + 'ConsultarLoteRpsResposta') <> '' then
+    if leitor.rExtrai(1, 'ConsultarLoteRpsResposta') <> '' then
     begin
 
       // Utilizado pelo provedor fintelISS
-      ListaNfse.FSituacao := Leitor.rCampo(tcStr, Prefixo4 + 'Situacao');
+      ListaNfse.FSituacao := Leitor.rCampo(tcStr, 'Situacao');
       if ListaNfse.FSituacao = ''
        then ListaNfse.FSituacao := '4';
 
       // Ler a Lista de NFSe
-      if leitor.rExtrai(2, Prefixo3 + 'ListaNfse') <> '' then
+      if leitor.rExtrai(2, 'ListaNfse') <> '' then
       begin
         i := 0;
         // Alterado por Rodrigo Cantelli
-        while (Leitor.rExtrai(3, Prefixo3 + 'CompNfse', '', i + 1) <> '') or
-              (Leitor.rExtrai(3, Prefixo3 + 'ComplNfse', '', i + 1) <> '') do
+        while (Leitor.rExtrai(3, 'CompNfse', '', i + 1) <> '') or
+              (Leitor.rExtrai(3, 'ComplNfse', '', i + 1) <> '') do
         begin
           ListaNfse.FCompNfse.Add;
 
           // Grupo da TAG <Nfse> *************************************************
-          if Leitor.rExtrai(4, Prefixo4 + 'Nfse') <> ''
+          if Leitor.rExtrai(4, 'Nfse') <> ''
            then begin
             ListaNfse.FCompNfse[i].FNfse.XML := '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>'+
                                                 Leitor.Grupo+
                                                 '</Nfse>';
             // Grupo da TAG <InfNfse> *****************************************************
-            if Leitor.rExtrai(5, Prefixo4 + 'InfNfse') <> ''
+            if Leitor.rExtrai(5, 'InfNfse') <> ''
              then begin
-              ListaNfse.FCompNfse[i].FNfse.InfID.ID          := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-              ListaNfse.FCompNfse[i].FNFSe.Numero            := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-              ListaNfse.FCompNfse[i].FNFSe.CodigoVerificacao := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoVerificacao');
-              ListaNfse.FCompNfse[i].FNFSe.DataEmissao       := Leitor.rCampo(tcDatHor, Prefixo4 + 'DataEmissao');
+              ListaNfse.FCompNfse[i].FNfse.InfID.ID          := Leitor.rCampo(tcStr, 'Numero');
+              ListaNfse.FCompNfse[i].FNFSe.Numero            := Leitor.rCampo(tcStr, 'Numero');
+              ListaNfse.FCompNfse[i].FNFSe.CodigoVerificacao := Leitor.rCampo(tcStr, 'CodigoVerificacao');
+              ListaNfse.FCompNfse[i].FNFSe.DataEmissao       := Leitor.rCampo(tcDatHor, 'DataEmissao');
 
               ListaNfse.FCompNfse[i].FNFSe.NaturezaOperacao         := StrToNaturezaOperacao(ok, Leitor.rCampo(tcStr, 'NaturezaOperacao'));
               ListaNfse.FCompNfse[i].FNFSe.RegimeEspecialTributacao := StrToRegimeEspecialTributacao(ok, Leitor.rCampo(tcStr, 'RegimeEspecialTributacao'));
               ListaNfse.FCompNfse[i].FNFSe.OptanteSimplesNacional   := StrToSimNao(ok, Leitor.rCampo(tcStr, 'OptanteSimplesNacional'));
               ListaNfse.FCompNfse[i].FNFSe.IncentivadorCultural     := StrToSimNao(ok, Leitor.rCampo(tcStr, 'IncentivadorCultural'));
 
-              ListaNfse.FCompNfse[i].FNFSe.Competencia       := Leitor.rCampo(tcStr, Prefixo4 + 'Competencia');
-              ListaNfse.FCompNfse[i].FNFSe.NfseSubstituida   := Leitor.rCampo(tcStr, Prefixo4 + 'NfseSubstituida');
-              ListaNfse.FCompNfse[i].FNFSe.OutrasInformacoes := Leitor.rCampo(tcStr, Prefixo4 + 'OutrasInformacoes');
-              ListaNfse.FCompNfse[i].FNFSe.ValorCredito      := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorCredito');
+              ListaNfse.FCompNfse[i].FNFSe.Competencia       := Leitor.rCampo(tcStr, 'Competencia');
+              ListaNfse.FCompNfse[i].FNFSe.NfseSubstituida   := Leitor.rCampo(tcStr, 'NfseSubstituida');
+              ListaNfse.FCompNfse[i].FNFSe.OutrasInformacoes := Leitor.rCampo(tcStr, 'OutrasInformacoes');
+              ListaNfse.FCompNfse[i].FNFSe.ValorCredito      := Leitor.rCampo(tcDe2, 'ValorCredito');
 
               // Grupo da TAG <IdentificacaoRps> ********************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'IdentificacaoRps') <> ''
+              if Leitor.rExtrai(6, 'IdentificacaoRps') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Numero := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Serie  := Leitor.rCampo(tcStr, Prefixo4 + 'Serie');
-                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Tipo   := StrToTipoRPS(ok, Leitor.rCampo(tcStr, Prefixo4 + 'Tipo'));
+                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Numero := Leitor.rCampo(tcStr, 'Numero');
+                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Serie  := Leitor.rCampo(tcStr, 'Serie');
+                ListaNfse.FCompNfse[i].FNFSe.IdentificacaoRps.Tipo   := StrToTipoRPS(ok, Leitor.rCampo(tcStr, 'Tipo'));
                end;
 
               // Grupo da TAG <RpsSubstituido> **********************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'RpsSubstituido') <> ''
+              if Leitor.rExtrai(6, 'RpsSubstituido') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Numero := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Serie  := Leitor.rCampo(tcStr, Prefixo4 + 'Serie');
-                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Tipo   := StrToTipoRPS(ok, Leitor.rCampo(tcStr, Prefixo4 + 'Tipo'));
+                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Numero := Leitor.rCampo(tcStr, 'Numero');
+                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Serie  := Leitor.rCampo(tcStr, 'Serie');
+                ListaNfse.FCompNfse[i].FNFSe.RpsSubstituido.Tipo   := StrToTipoRPS(ok, Leitor.rCampo(tcStr, 'Tipo'));
                end;
 
               // Grupo da TAG <Servico> *****************************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'Servico') <> ''
+              if Leitor.rExtrai(6, 'Servico') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.Servico.ItemListaServico          := NotaUtil.LimpaNumero(Leitor.rCampo(tcStr, Prefixo4 + 'ItemListaServico'));
-                ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoCnae                := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoCnae');
-                ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoTributacaoMunicipio := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoTributacaoMunicipio');
-                ListaNfse.FCompNfse[i].FNFSe.Servico.Discriminacao             := Leitor.rCampo(tcStr, Prefixo4 + 'Discriminacao');
+                ListaNfse.FCompNfse[i].FNFSe.Servico.ItemListaServico          := DFeUtil.LimpaNumero(Leitor.rCampo(tcStr, 'ItemListaServico'));
+                ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoCnae                := Leitor.rCampo(tcStr, 'CodigoCnae');
+                ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoTributacaoMunicipio := Leitor.rCampo(tcStr, 'CodigoTributacaoMunicipio');
+                ListaNfse.FCompNfse[i].FNFSe.Servico.Discriminacao             := Leitor.rCampo(tcStr, 'Discriminacao');
 
                 if VersaoXML='1'
-                 then ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoMunicipio := Leitor.rCampo(tcStr, Prefixo4 + 'MunicipioPrestacaoServico')
-                 else ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoMunicipio := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoMunicipio');
+                 then ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoMunicipio := Leitor.rCampo(tcStr, 'MunicipioPrestacaoServico')
+                 else ListaNfse.FCompNfse[i].FNFSe.Servico.CodigoMunicipio := Leitor.rCampo(tcStr, 'CodigoMunicipio');
 
                 Item := StrToInt(SomenteNumeros(ListaNfse.FCompNfse[i].FNfse.Servico.ItemListaServico));
                 if Item<100 then Item:=Item*100+1;
@@ -331,40 +323,40 @@ begin
                 ListaNfse.FCompNfse[i].FNFSe.Servico.xItemListaServico := CodigoToDesc(ListaNfse.FCompNfse[i].FNFSe.Servico.ItemListaServico);
 //                ListaNfse.FCompNfse[i].FNFSe.Servico.xItemListaServico := ObterDescricaoServico(ListaNfse.FCompNfse[i].FNFSe.Servico.ItemListaServico);
 
-                if Leitor.rExtrai(7, Prefixo4 + 'Valores') <> ''
+                if Leitor.rExtrai(7, 'Valores') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorServicos          := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorServicos');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorDeducoes          := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorDeducoes');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorPis               := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorPis');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorCofins            := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorCofins');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorInss              := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorInss');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIr                := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorIr');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorCsll              := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorCsll');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.IssRetido              := StrToSituacaoTributaria(ok, Leitor.rCampo(tcStr, Prefixo4 + 'IssRetido'));
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIss               := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorIss');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.OutrasRetencoes        := Leitor.rCampo(tcDe2, Prefixo4 + 'OutrasRetencoes');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.BaseCalculo            := Leitor.rCampo(tcDe2, Prefixo4 + 'BaseCalculo');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.Aliquota               := Leitor.rCampo(tcDe3, Prefixo4 + 'Aliquota');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorLiquidoNfse       := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorLiquidoNfse');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIssRetido         := Leitor.rCampo(tcDe2, Prefixo4 + 'ValorIssRetido');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.DescontoCondicionado   := Leitor.rCampo(tcDe2, Prefixo4 + 'DescontoCondicionado');
-                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.DescontoIncondicionado := Leitor.rCampo(tcDe2, Prefixo4 + 'DescontoIncondicionado');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorServicos          := Leitor.rCampo(tcDe2, 'ValorServicos');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorDeducoes          := Leitor.rCampo(tcDe2, 'ValorDeducoes');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorPis               := Leitor.rCampo(tcDe2, 'ValorPis');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorCofins            := Leitor.rCampo(tcDe2, 'ValorCofins');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorInss              := Leitor.rCampo(tcDe2, 'ValorInss');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIr                := Leitor.rCampo(tcDe2, 'ValorIr');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorCsll              := Leitor.rCampo(tcDe2, 'ValorCsll');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.IssRetido              := StrToSituacaoTributaria(ok, Leitor.rCampo(tcStr, 'IssRetido'));
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIss               := Leitor.rCampo(tcDe2, 'ValorIss');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.OutrasRetencoes        := Leitor.rCampo(tcDe2, 'OutrasRetencoes');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.BaseCalculo            := Leitor.rCampo(tcDe2, 'BaseCalculo');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.Aliquota               := Leitor.rCampo(tcDe3, 'Aliquota');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorLiquidoNfse       := Leitor.rCampo(tcDe2, 'ValorLiquidoNfse');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.ValorIssRetido         := Leitor.rCampo(tcDe2, 'ValorIssRetido');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.DescontoCondicionado   := Leitor.rCampo(tcDe2, 'DescontoCondicionado');
+                  ListaNfse.FCompNfse[i].FNFSe.Servico.Valores.DescontoIncondicionado := Leitor.rCampo(tcDe2, 'DescontoIncondicionado');
                  end;
                end;
 
               // Grupo da TAG <PrestadorServico> ********************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'PrestadorServico') <> ''
+              if Leitor.rExtrai(6, 'PrestadorServico') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.RazaoSocial  := Leitor.rCampo(tcStr, Prefixo4 + 'RazaoSocial');
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.NomeFantasia := Leitor.rCampo(tcStr, Prefixo4 + 'NomeFantasia');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.RazaoSocial  := Leitor.rCampo(tcStr, 'RazaoSocial');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.NomeFantasia := Leitor.rCampo(tcStr, 'NomeFantasia');
 
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco := Leitor.rCampo(tcStr, Prefixo4 + 'Endereco');
-                if Copy(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco, 1, 10 + k) = '<' + Prefixo4 + 'Endereco>'
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco := Leitor.rCampo(tcStr, 'Endereco');
+                if Copy(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco, 1, 10 + k) = '<' + 'Endereco>'
                  then ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco := Copy(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Endereco, 11, 125);
 
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Numero      := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Complemento := Leitor.rCampo(tcStr, Prefixo4 + 'Complemento');
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Bairro      := Leitor.rCampo(tcStr, Prefixo4 + 'Bairro');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Numero      := Leitor.rCampo(tcStr, 'Numero');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Complemento := Leitor.rCampo(tcStr, 'Complemento');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.Bairro      := Leitor.rCampo(tcStr, 'Bairro');
 
                 if VersaoXML='1'
                  then begin
@@ -376,7 +368,7 @@ begin
                   ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.UF              := Leitor.rCampo(tcStr, 'Uf');
                  end;
 
-                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.CEP := Leitor.rCampo(tcStr, Prefixo4 + 'Cep');
+                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.CEP := Leitor.rCampo(tcStr, 'Cep');
 
                 if length(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.CodigoMunicipio)<7
                  then ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.CodigoMunicipio :=
@@ -387,13 +379,13 @@ begin
 //                ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.xMunicipio := UpperCase(TiraAcentos(Utf8ToAnsi(ObterNomeMunicipio(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.UF,
 //                                                         StrToIntDef(ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Endereco.CodigoMunicipio, 0)))));
 
-                if Leitor.rExtrai(7, Prefixo4 + 'Contato') <> ''
+                if Leitor.rExtrai(7, 'Contato') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Contato.Telefone := Leitor.rCampo(tcStr, Prefixo4 + 'Telefone');
-                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Contato.Email    := Leitor.rCampo(tcStr, Prefixo4 + 'Email');
+                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Contato.Telefone := Leitor.rCampo(tcStr, 'Telefone');
+                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.Contato.Email    := Leitor.rCampo(tcStr, 'Email');
                  end;
 
-                if Leitor.rExtrai(7, Prefixo4 + 'IdentificacaoPrestador') <> ''
+                if Leitor.rExtrai(7, 'IdentificacaoPrestador') <> ''
                  then begin
                   if VersaoXML='1'
                    then begin
@@ -405,30 +397,30 @@ begin
                      end;
                    end
                    else ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.IdentificacaoPrestador.Cnpj := Leitor.rCampo(tcStr, 'Cnpj');
-                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.IdentificacaoPrestador.InscricaoMunicipal := Leitor.rCampo(tcStr, Prefixo4 + 'InscricaoMunicipal');
+                  ListaNfse.FCompNfse[i].FNFSe.PrestadorServico.IdentificacaoPrestador.InscricaoMunicipal := Leitor.rCampo(tcStr, 'InscricaoMunicipal');
                  end;
 
                end;
 
               // Grupo da TAG <Prestador> ***************************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'Prestador') <> ''
+              if Leitor.rExtrai(6, 'Prestador') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.Prestador.Cnpj               := Leitor.rCampo(tcStr, Prefixo4 + 'Cnpj');
-                ListaNfse.FCompNfse[i].FNFSe.Prestador.InscricaoMunicipal := Leitor.rCampo(tcStr, Prefixo4 + 'InscricaoMunicipal');
+                ListaNfse.FCompNfse[i].FNFSe.Prestador.Cnpj               := Leitor.rCampo(tcStr, 'Cnpj');
+                ListaNfse.FCompNfse[i].FNFSe.Prestador.InscricaoMunicipal := Leitor.rCampo(tcStr, 'InscricaoMunicipal');
                end;
 
               // Grupo da TAG <TomadorServico> **********************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'TomadorServico') <> ''
+              if Leitor.rExtrai(6, 'TomadorServico') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.RazaoSocial := Leitor.rCampo(tcStr, Prefixo4 + 'RazaoSocial');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.RazaoSocial := Leitor.rCampo(tcStr, 'RazaoSocial');
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Leitor.rCampo(tcStr, Prefixo4 + 'Endereco');
-                if Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 1, 10 + k) = '<' + Prefixo4 + 'Endereco>'
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Leitor.rCampo(tcStr, 'Endereco');
+                if Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 1, 10 + k) = '<' + 'Endereco>'
                  then ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 11, 125);
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Numero      := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Complemento := Leitor.rCampo(tcStr, Prefixo4 + 'Complemento');
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Bairro      := Leitor.rCampo(tcStr, Prefixo4 + 'Bairro');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Numero      := Leitor.rCampo(tcStr, 'Numero');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Complemento := Leitor.rCampo(tcStr, 'Complemento');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Bairro      := Leitor.rCampo(tcStr, 'Bairro');
 
                 if VersaoXML='1'
                  then begin
@@ -440,7 +432,7 @@ begin
                   ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.UF              := Leitor.rCampo(tcStr, 'Uf');
                  end;
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CEP := Leitor.rCampo(tcStr, Prefixo4 + 'Cep');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CEP := Leitor.rCampo(tcStr, 'Cep');
 
                 if length(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio)<7
                  then ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio :=
@@ -454,37 +446,37 @@ begin
 //                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.xMunicipio := UpperCase(TiraAcentos(Utf8ToAnsi(ObterNomeMunicipio(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.UF,
 //                                                         StrToIntDef(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio, 0)))));
 
-                if Leitor.rExtrai(7, Prefixo4 + 'Contato') <> ''
+                if Leitor.rExtrai(7, 'Contato') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Telefone := Leitor.rCampo(tcStr, Prefixo4 + 'Telefone');
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Email    := Leitor.rCampo(tcStr, Prefixo4 + 'Email');
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Telefone := Leitor.rCampo(tcStr, 'Telefone');
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Email    := Leitor.rCampo(tcStr, 'Email');
                  end;
 
-                if Leitor.rExtrai(7, Prefixo4 + 'IdentificacaoTomador') <> ''
+                if Leitor.rExtrai(7, 'IdentificacaoTomador') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.InscricaoMunicipal := Leitor.rCampo(tcStr, Prefixo4 + 'InscricaoMunicipal');
-                  if Leitor.rExtrai(8, Prefixo4 + 'CpfCnpj') <> ''
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.InscricaoMunicipal := Leitor.rCampo(tcStr, 'InscricaoMunicipal');
+                  if Leitor.rExtrai(8, 'CpfCnpj') <> ''
                    then begin
-                    if Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')<>''
-                     then ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')
-                     else ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cnpj');
+                    if Leitor.rCampo(tcStr, 'Cpf')<>''
+                     then ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, 'Cpf')
+                     else ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, 'Cnpj');
                    end;
                  end;
 
                end;
 
               // Grupo da TAG <Tomador> *****************************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'Tomador') <> ''
+              if Leitor.rExtrai(6, 'Tomador') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.RazaoSocial := Leitor.rCampo(tcStr, Prefixo4 + 'RazaoSocial');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.RazaoSocial := Leitor.rCampo(tcStr, 'RazaoSocial');
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Leitor.rCampo(tcStr, Prefixo4 + 'Endereco');
-                if Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 1, 10 + k) = '<' + Prefixo4 + 'Endereco>'
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Leitor.rCampo(tcStr, 'Endereco');
+                if Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 1, 10 + k) = '<' + 'Endereco>'
                  then ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco := Copy(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Endereco, 11, 125);
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Numero      := Leitor.rCampo(tcStr, Prefixo4 + 'Numero');
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Complemento := Leitor.rCampo(tcStr, Prefixo4 + 'Complemento');
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Bairro      := Leitor.rCampo(tcStr, Prefixo4 + 'Bairro');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Numero      := Leitor.rCampo(tcStr, 'Numero');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Complemento := Leitor.rCampo(tcStr, 'Complemento');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.Bairro      := Leitor.rCampo(tcStr, 'Bairro');
 
                 if VersaoXML='1'
                  then begin
@@ -496,7 +488,7 @@ begin
                   ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.UF              := Leitor.rCampo(tcStr, 'Uf');
                  end;
 
-                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CEP := Leitor.rCampo(tcStr, Prefixo4 + 'Cep');
+                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CEP := Leitor.rCampo(tcStr, 'Cep');
 
                 if length(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio)<7
                  then ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio :=
@@ -510,50 +502,50 @@ begin
 //                ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.xMunicipio := UpperCase(TiraAcentos(Utf8ToAnsi(ObterNomeMunicipio(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.UF,
 //                                                         StrToIntDef(ListaNfse.FCompNfse[i].FNFSe.Tomador.Endereco.CodigoMunicipio, 0)))));
 
-                if Leitor.rExtrai(7, Prefixo4 + 'Contato') <> ''
+                if Leitor.rExtrai(7, 'Contato') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Telefone := Leitor.rCampo(tcStr, Prefixo4 + 'Telefone');
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Email    := Leitor.rCampo(tcStr, Prefixo4 + 'Email');
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Telefone := Leitor.rCampo(tcStr, 'Telefone');
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.Contato.Email    := Leitor.rCampo(tcStr, 'Email');
                  end;
 
-                if Leitor.rExtrai(7, Prefixo4 + 'IdentificacaoTomador') <> ''
+                if Leitor.rExtrai(7, 'IdentificacaoTomador') <> ''
                  then begin
-                  ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.InscricaoMunicipal := Leitor.rCampo(tcStr, Prefixo4 + 'InscricaoMunicipal');
-                  if Leitor.rExtrai(8, Prefixo4 + 'CpfCnpj') <> ''
+                  ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.InscricaoMunicipal := Leitor.rCampo(tcStr, 'InscricaoMunicipal');
+                  if Leitor.rExtrai(8, 'CpfCnpj') <> ''
                    then begin
-                    if Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')<>''
-                     then ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')
-                     else ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cnpj');
+                    if Leitor.rCampo(tcStr, 'Cpf')<>''
+                     then ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, 'Cpf')
+                     else ListaNfse.FCompNfse[i].FNFSe.Tomador.IdentificacaoTomador.CpfCnpj := Leitor.rCampo(tcStr, 'Cnpj');
                    end;
                  end;
 
                end;
 
               // Grupo da TAG <IntermediarioServico> ****************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'IntermediarioServico') <> ''
+              if Leitor.rExtrai(6, 'IntermediarioServico') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.RazaoSocial        := Leitor.rCampo(tcStr, Prefixo4 + 'RazaoSocial');
-                ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.InscricaoMunicipal := Leitor.rCampo(tcStr, Prefixo4 + 'InscricaoMunicipal');
-                if Leitor.rExtrai(7, Prefixo4 + 'CpfCnpj') <> ''
+                ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.RazaoSocial        := Leitor.rCampo(tcStr, 'RazaoSocial');
+                ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.InscricaoMunicipal := Leitor.rCampo(tcStr, 'InscricaoMunicipal');
+                if Leitor.rExtrai(7, 'CpfCnpj') <> ''
                  then begin
-                  if Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')<>''
-                   then ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cpf')
-                   else ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.CpfCnpj := Leitor.rCampo(tcStr, Prefixo4 + 'Cnpj');
+                  if Leitor.rCampo(tcStr, 'Cpf')<>''
+                   then ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.CpfCnpj := Leitor.rCampo(tcStr, 'Cpf')
+                   else ListaNfse.FCompNfse[i].FNFSe.IntermediarioServico.CpfCnpj := Leitor.rCampo(tcStr, 'Cnpj');
                  end;
                end;
 
               // Grupo da TAG <OrgaoGerador> ************************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'OrgaoGerador') <> ''
+              if Leitor.rExtrai(6, 'OrgaoGerador') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.OrgaoGerador.CodigoMunicipio := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoMunicipio');
-                ListaNfse.FCompNfse[i].FNFSe.OrgaoGerador.Uf              := Leitor.rCampo(tcStr, Prefixo4 + 'Uf');
+                ListaNfse.FCompNfse[i].FNFSe.OrgaoGerador.CodigoMunicipio := Leitor.rCampo(tcStr, 'CodigoMunicipio');
+                ListaNfse.FCompNfse[i].FNFSe.OrgaoGerador.Uf              := Leitor.rCampo(tcStr, 'Uf');
                end;
 
               // Grupo da TAG <ConstrucaoCivil> *********************************************
-              if Leitor.rExtrai(6, Prefixo4 + 'ConstrucaoCivil') <> ''
+              if Leitor.rExtrai(6, 'ConstrucaoCivil') <> ''
                then begin
-                ListaNfse.FCompNfse[i].FNFSe.ConstrucaoCivil.CodigoObra := Leitor.rCampo(tcStr, Prefixo4 + 'CodigoObra');
-                ListaNfse.FCompNfse[i].FNFSe.ConstrucaoCivil.Art        := Leitor.rCampo(tcStr, Prefixo4 + 'Art');
+                ListaNfse.FCompNfse[i].FNFSe.ConstrucaoCivil.CodigoObra := Leitor.rCampo(tcStr, 'CodigoObra');
+                ListaNfse.FCompNfse[i].FNFSe.ConstrucaoCivil.Art        := Leitor.rCampo(tcStr, 'Art');
                end;
 
              end; // fim do InfNfse
@@ -583,15 +575,16 @@ begin
       end; // fim do ListaNfse - Nivel 2
 
       // Ler a Lista de Mensagens
-      if leitor.rExtrai(2, 'ListaMensagemRetorno') <> '' then
+      if (leitor.rExtrai(2, 'ListaMensagemRetorno') <> '') or
+         (leitor.rExtrai(2, 'ListaMensagemRetornoLote') <> '') then
       begin
         i := 0;
-        while Leitor.rExtrai(3, prefixo4 + 'MensagemRetorno', '', i + 1) <> '' do
+        while Leitor.rExtrai(3, 'MensagemRetorno', '', i + 1) <> '' do
         begin
           ListaNfse.FMsgRetorno.Add;
-          ListaNfse.FMsgRetorno[i].FCodigo   := Leitor.rCampo(tcStr, prefixo4 + 'Codigo');
-          ListaNfse.FMsgRetorno[i].FMensagem := Leitor.rCampo(tcStr, prefixo4 + 'Mensagem');
-          ListaNfse.FMsgRetorno[i].FCorrecao := Leitor.rCampo(tcStr, prefixo4 + 'Correcao');
+          ListaNfse.FMsgRetorno[i].FCodigo   := Leitor.rCampo(tcStr, 'Codigo');
+          ListaNfse.FMsgRetorno[i].FMensagem := Leitor.rCampo(tcStr, 'Mensagem');
+          ListaNfse.FMsgRetorno[i].FCorrecao := Leitor.rCampo(tcStr, 'Correcao');
 
           inc(i);
         end;

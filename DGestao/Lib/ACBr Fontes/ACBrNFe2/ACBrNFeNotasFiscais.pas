@@ -50,12 +50,8 @@ interface
 
 uses
   Classes, Sysutils, Dialogs, Forms,
-  ACBrNFeUtil, ACBrNFeConfiguracoes,
-  {$IFDEF FPC}
-     ACBrNFeDMLaz,
-  {$ELSE}
-     ACBrNFeDANFEClass,
-  {$ENDIF}
+  ACBrNFeUtil, ACBrNFeConfiguracoes, ACBrDFeUtil,
+  ACBrNFeDANFEClass,
   smtpsend, ssl_openssl, mimemess, mimepart, // units para enviar email
   pcnNFe, pcnNFeR, pcnNFeW, pcnConversao, pcnAuxiliar, pcnLeitor;
 
@@ -92,7 +88,8 @@ type
                                 PedeConfirma: Boolean = False;
                                 AguardarEnvio: Boolean = False;
                                 NomeRemetente: String = '';
-                                TLS : Boolean = True);
+                                TLS : Boolean = True;
+                                UsarThread: Boolean = True);
     property NFe: TNFe  read FNFe write FNFe;
     property XML: AnsiString  read GetNFeXML write FXML;
     property Confirmada: Boolean  read FConfirmada write FConfirmada;
@@ -135,7 +132,7 @@ type
   TSendMailThread = class(TThread)
   private
     FException : Exception;
-    FOwner: NotaFiscal;
+    //FOwner: NotaFiscal;
     procedure DoHandleException;
   public
     OcorreramErros: Boolean;
@@ -220,10 +217,10 @@ begin
         LocNFeW.schema := TsPL005c;
         LocNFeW.Opcoes.GerarTXTSimultaneamente := SalvaTXT;
         LocNFeW.GerarXml;
-        if NotaUtil.EstaVazio(CaminhoArquivo) then
+        if DFeUtil.EstaVazio(CaminhoArquivo) then
            CaminhoArquivo := PathWithDelim(TACBrNFe( TNotasFiscais( Collection ).ACBrNFe ).Configuracoes.Geral.PathSalvar)+copy(NFe.infNFe.ID, (length(NFe.infNFe.ID)-44)+1, 44)+'-NFe.xml';
 
-        if NotaUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo)) then
+        if DFeUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo)) then
            raise EACBrNFeException.Create('Caminho Inválido: ' + CaminhoArquivo);
 
         LocNFeW.Gerador.SalvarArquivo(CaminhoArquivo);
@@ -273,7 +270,8 @@ procedure NotaFiscal.EnviarEmail(const sSmtpHost,
                                       PedeConfirma: Boolean = False;
                                       AguardarEnvio: Boolean = False;
                                       NomeRemetente: String = '';
-                                      TLS : Boolean = True);
+                                      TLS : Boolean = True;
+                                      UsarThread: Boolean = True);
 var
  NomeArq : String;
  AnexosEmail:TStrings ;
@@ -320,7 +318,8 @@ begin
                 NomeRemetente,
                 TLS,
                 StreamNFe,
-                copy(NFe.infNFe.ID, (length(NFe.infNFe.ID)-44)+1, 44)+'-NFe.xml');
+                copy(NFe.infNFe.ID, (length(NFe.infNFe.ID)-44)+1, 44)+'-NFe.xml',
+                UsarThread);
  finally
     AnexosEmail.Free ;
     StreamNFe.Free ;
@@ -399,7 +398,7 @@ begin
         if FConfiguracoes.Geral.Salvar then
            FConfiguracoes.Geral.Save(StringReplace(Self.Items[i].NFe.infNFe.ID, 'NFe', '', [rfIgnoreCase])+'-nfe.xml', vAssinada);
 
-        if NotaUtil.NaoEstaVazio(Self.Items[i].NomeArq) then
+        if DFeUtil.NaoEstaVazio(Self.Items[i].NomeArq) then
            FConfiguracoes.Geral.Save(ExtractFileName(Self.Items[i].NomeArq), vAssinada, ExtractFilePath(Self.Items[i].NomeArq));
 
      finally
@@ -584,7 +583,7 @@ begin
  try
     for i:= 0 to TACBrNFe( FACBrNFe ).NotasFiscais.Count-1 do
      begin
-        if NotaUtil.EstaVazio(PathArquivo) then
+        if DFeUtil.EstaVazio(PathArquivo) then
            PathArquivo := TACBrNFe( FACBrNFe ).Configuracoes.Geral.PathSalvar
         else
            PathArquivo := ExtractFilePath(PathArquivo);
@@ -636,7 +635,7 @@ begin
           I:=I+1;
       end;
 
-      if NotaUtil.EstaVazio(PathArquivo) then
+      if DFeUtil.EstaVazio(PathArquivo) then
         PathArquivo := PathWithDelim(TACBrNFe( FACBrNFe ).Configuracoes.Geral.PathSalvar)+'NFe.TXT';
       loSTR.SaveToFile(PathArquivo);
       Result:=True;
@@ -650,9 +649,8 @@ end;
 
 procedure TSendMailThread.DoHandleException;
 begin
-  TACBrNFe(TNotasFiscais(FOwner.GetOwner).ACBrNFe).SetStatus( stIdle );
-
-  FOwner.Alertas := FException.Message;
+  //TACBrNFe(TNotasFiscais(FOwner.GetOwner).ACBrNFe).SetStatus( stIdle );
+  //FOwner.Alertas := FException.Message;
 
   if FException is Exception then
     Application.ShowException(FException)

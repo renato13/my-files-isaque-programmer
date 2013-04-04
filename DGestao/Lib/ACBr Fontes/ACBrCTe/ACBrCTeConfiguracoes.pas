@@ -133,6 +133,9 @@ type
     FAtualizarXMLCancelado: Boolean;
     FPathSalvar: String;
     FPathSchemas: String;
+  {$IFDEF ACBrCTeOpenSSL}
+    FIniFinXMLSECAutomatico: boolean;
+  {$ENDIF}
     procedure SetFormaEmissao(AValue: TpcnTipoEmissao);
     function GetPathSalvar: String;
   public
@@ -146,6 +149,9 @@ type
     property AtualizarXMLCancelado: Boolean read FAtualizarXMLCancelado write FAtualizarXMLCancelado default True ;
     property PathSalvar: String read GetPathSalvar write FPathSalvar;
     property PathSchemas: String read FPathSchemas write FPathSchemas;
+  {$IFDEF ACBrCTeOpenSSL}
+    property IniFinXMLSECAutomatico: Boolean read FIniFinXMLSECAutomatico write FIniFinXMLSECAutomatico;
+  {$ENDIF}
   end;
 
   TArquivosConf = class(TComponent)
@@ -158,12 +164,14 @@ type
     FPathCan  : String;
     FPathInu  : String;
     FPathDPEC : String;
+    FPathEvento : String;
   public
     constructor Create(AOwner: TComponent); override ;
     function GetPathCan: String;
     function GetPathDPEC: String;
     function GetPathInu: String;
     function GetPathCTe(Data : TDateTime = 0): String;
+    function GetPathEvento: String;
   published
     property Salvar     : Boolean read FSalvar  write FSalvar  default False ;
     property PastaMensal: Boolean read FMensal  write FMensal  default False ;
@@ -173,6 +181,7 @@ type
     property PathCan : String read FPathCan  write FPathCan;
     property PathInu : String read FPathInu  write FPathInu;
     property PathDPEC: String read FPathDPEC write FPathDPEC;
+    property PathEvento : String read FPathEvento write FPathEvento;
   end;
 
   TConfiguracoes = class(TComponent)
@@ -193,7 +202,7 @@ type
 
 implementation
 
-uses ACBrCteUtil,  Math, StrUtils, ACBrUtil, DateUtils;
+uses ACBrCteUtil,  Math, StrUtils, ACBrUtil, ACBrDFeUtil, DateUtils;
 
 { TConfiguracoes }
 
@@ -247,12 +256,15 @@ begin
   FAtualizarXMLCancelado := True;
   FPathSalvar            := '' ;
   FPathSchemas           := '' ;
+{$IFDEF ACBrCTeOpenSSL}
+  FIniFinXMLSECAutomatico:=True;
+{$ENDIF}
 end;
 
 function TGeralConf.GetPathSalvar: String;
 begin
-  if CTeUtil.EstaVazio(FPathSalvar) then
-    Result := CTeUtil.PathAplication
+  if DFeUtil.EstaVazio(FPathSalvar) then
+    Result := DFeUtil.PathAplication
   else
     Result := FPathSalvar;
 
@@ -267,14 +279,14 @@ begin
   vSalvar := TStringList.Create;
   try
     try
-      if CTeUtil.NaoEstaVazio(ExtractFilePath(AXMLName)) then
+      if DFeUtil.NaoEstaVazio(ExtractFilePath(AXMLName)) then
        begin
          aPath    := ExtractFilePath(AXMLName);
          AXMLName := StringReplace(AXMLName,aPath,'',[rfIgnoreCase]);
        end
       else
        begin
-         if CTeUtil.EstaVazio(aPath) then
+         if DFeUtil.EstaVazio(aPath) then
             aPath := PathSalvar
          else
             aPath := PathWithDelim(aPath);
@@ -374,7 +386,7 @@ var
   XML : String;
 begin
   CoInitialize(nil); // PERMITE O USO DE THREAD
-  if CTeUtil.EstaVazio( FNumeroSerie ) then
+  if DFeUtil.EstaVazio( FNumeroSerie ) then
     raise Exception.Create('Número de Série do Certificado Digital não especificado !');
 
   Result := nil;
@@ -387,7 +399,7 @@ begin
     Cert := IInterface(Certs.Item[i]) as ICertificate2;
     if Cert.SerialNumber = FNumeroSerie then
     begin
-      if CTeUtil.EstaVazio(NumCertCarregado) then
+      if DFeUtil.EstaVazio(NumCertCarregado) then
          NumCertCarregado := Cert.SerialNumber;
 
       PrivateKey := Cert.PrivateKey;
@@ -484,7 +496,7 @@ end;
 
 function TCertificadosConf.GetDataVenc: TDateTime;
 begin
- if CTeUtil.NaoEstaVazio(FNumeroSerie) then
+ if DFeUtil.NaoEstaVazio(FNumeroSerie) then
   begin
     if FDataVenc = 0 then
        GetCertificado;
@@ -507,7 +519,7 @@ var
   wDia, wMes, wAno : Word;
   Dir : String;
 begin
-  if CTeUtil.EstaVazio(FPathCan) then
+  if DFeUtil.EstaVazio(FPathCan) then
      Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else
      Dir := FPathCan;
@@ -536,7 +548,7 @@ var
   wDia, wMes, wAno : Word;
   Dir : String;
 begin
-  if CTeUtil.EstaVazio(FPathDPEC) then
+  if DFeUtil.EstaVazio(FPathDPEC) then
      Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else
      Dir := FPathDPEC;
@@ -565,7 +577,7 @@ var
   wDia, wMes, wAno : Word;
   Dir : String;
 begin
-  if CTeUtil.EstaVazio(FPathInu) then
+  if DFeUtil.EstaVazio(FPathInu) then
      Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else
      Dir := FPathInu;
@@ -594,7 +606,7 @@ var
   wDia, wMes, wAno : Word;
   Dir : String;
 begin
-  if CTeUtil.EstaVazio(FPathCTe) then
+  if DFeUtil.EstaVazio(FPathCTe) then
      Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else
      Dir := FPathCTe;
@@ -618,6 +630,35 @@ begin
      ForceDirectories(Dir);
 
   Result := Dir;
+end;
+
+function TArquivosConf.GetPathEvento: String;
+var
+  wDia, wMes, wAno : Word;
+  Dir : String;
+begin
+  if DFeUtil.EstaVazio(FPathEvento) then
+     Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
+  else
+     Dir := FPathEvento;
+
+  if FMensal then
+   begin
+     DecodeDate(Now, wAno, wMes, wDia);
+     if Pos(IntToStr(wAno) + IntToStrZero(wMes, 2), Dir) <= 0 then
+        Dir := PathWithDelim(Dir) + IntToStr(wAno) + IntToStrZero(wMes, 2);
+   end;
+
+  if FLiteral then
+   begin
+     if copy(Dir, length(Dir) - 2, 3) <> 'Evento' then
+        Dir := PathWithDelim(Dir) + 'Evento';
+   end;
+
+  if not DirectoryExists(Dir) then
+     ForceDirectories(Dir);
+
+  Result  := Dir;
 end;
 
 end.

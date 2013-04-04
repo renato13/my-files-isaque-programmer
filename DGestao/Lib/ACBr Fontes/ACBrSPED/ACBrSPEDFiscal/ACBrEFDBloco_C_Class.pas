@@ -955,7 +955,8 @@ begin
         with RegC001.RegistroC100.Items[intFor] do
         begin
 		
-          Check(not((COD_MOD = '55') and (Trim(CHV_NFE) = '')), '(C-C100) Nota: %s' +sLineBreak+
+          Check(not((COD_MOD = '55') and (COD_SIT <> sdDoctoNumInutilizada) and (Trim(CHV_NFE) = '')),
+                                                                '(C-C100) Nota: %s' +sLineBreak+
                                                                 '         Série: %s'+sLineBreak+
                                                                 '         Emitida no dia: %s'+sLineBreak+
                                                                 '         Modelo: %s'        +sLineBreak+
@@ -1566,85 +1567,45 @@ begin
      begin
         with RegC100.RegistroC170.Items[intFor] do
         begin
-{
-          case CST_IPI of
-           ipiEntradaRecuperacaoCredito: strCST_IPI := '00';
-           ipiEntradaTributradaZero:     strCST_IPI := '01';
-           ipiEntradaIsenta:             strCST_IPI := '02';
-           ipiEntradaNaoTributada:       strCST_IPI := '03';
-           ipiEntradaImune:              strCST_IPI := '04';
-           ipiEntradaComSuspensao:       strCST_IPI := '05';
-           ipiOutrasEntradas:            strCST_IPI := '49';
-           ipiSaidaTributada:            strCST_IPI := '50';
-           ipiSaidaTributadaZero:        strCST_IPI := '51';
-           ipiSaidaIsenta:               strCST_IPI := '52';
-           ipiSaidaNaoTributada:         strCST_IPI := '53';
-           ipiSaidaImune:                strCST_IPI := '54';
-           ipiSaidaComSuspensao:         strCST_IPI := '55';
-           ipiOutrasSaidas:              strCST_IPI := '99';
-          end;
-          case CST_PIS of
-           pisValorAliquotaNormal:       strCST_PIS := '01';
-           pisValorAliquotaDiferenciada: strCST_PIS := '02';
-           pisQtdeAliquotaUnidade:       strCST_PIS := '03';
-           pisMonofaticaAliquotaZero:    strCST_PIS := '04';
-           pisAliquotaZero:              strCST_PIS := '06';
-           pisIsentaContribuicao:        strCST_PIS := '07';
-           pisSemIncidenciaContribuicao: strCST_PIS := '08';
-           pisSuspensaoContribuicao:     strCST_PIS := '09';
-           pisOutrasOperacoes:           strCST_PIS := '99';
-          end;
-          case CST_COFINS of
-           cofinsValorAliquotaNormal:       strCST_COFINS := '01';
-           cofinsValorAliquotaDiferenciada: strCST_COFINS := '02';
-           cofinsQtdeAliquotaUnidade:       strCST_COFINS := '03';
-           cofinsMonofaticaAliquotaZero:    strCST_COFINS := '04';
-           cofinsAliquotaZero:              strCST_COFINS := '06';
-           cofinsIsentaContribuicao:        strCST_COFINS := '07';
-           cofinsSemIncidenciaContribuicao: strCST_COFINS := '08';
-           cofinsSuspensaoContribuicao:     strCST_COFINS := '09';
-           cofinsOutrasOperacoes:           strCST_COFINS := '99';
-          end;
-}
           strLinha :=  LFill('C170') +
                        LFill( NUM_ITEM ) +
                        LFill( COD_ITEM ) +
                        LFill( DESCR_COMPL ) +
-                       DFill( QTD, 5 ) +
+                       LFILL(QTD, 0, 4, False, '0', '#0.00000') +
                        LFill( UNID ) +
-                       LFill( VL_ITEM,0,2 ) +
-                       LFill( VL_DESC,0,2 ) +
+                       LFill( VL_ITEM, 0, 2 ) +
+                       LFill( VL_DESC, 0, 2 ) +
                        LFill( Integer(IND_MOV), 0 ) +
-                       LFill( CST_ICMS,3 ) +
-                       LFill( CFOP,4 ) +
+                       LFill( CST_ICMS, 3 ) +
+                       LFill( CFOP, 4 ) +
                        LFill( COD_NAT ) +
-                       LFill( VL_BC_ICMS,0,2 ) +
-                       LFill( ALIQ_ICMS,0,2 ) +
-                       LFill( VL_ICMS,0,2 ) +
-                       LFill( VL_BC_ICMS_ST,0,2 ) +
-                       LFill( ALIQ_ST,0,2 ) +
-                       LFill( VL_ICMS_ST,0,2 ) +
+                       LFill( VL_BC_ICMS, 0, 2 ) +
+                       LFill( ALIQ_ICMS,  0, 2 ) +
+                       LFill( VL_ICMS, 0, 2 ) +
+                       LFill( VL_BC_ICMS_ST, 0, 2 ) +
+                       LFill( ALIQ_ST, 0, 2 ) +
+                       LFill( VL_ICMS_ST, 0, 2 ) +
                        LFill( Integer(IND_APUR), 0 ) +
                        // LFill( strCST_IPI ) +
                        LFill( CST_IPI ) +
                        LFill( COD_ENQ ) +
-                       LFill( VL_BC_IPI,0,2 ) +
-                       LFill( ALIQ_IPI,0,2 ) +
-                       LFill( VL_IPI,0,2 ) +
+                       LFill( VL_BC_IPI, 0, 2 ) +
+                       LFill( ALIQ_IPI,  0, 2 ) +
+                       LFill( VL_IPI, 0, 2 ) +
                        // LFill( strCST_PIS ) +
                        LFill( CST_PIS ) +
-                       LFill( VL_BC_PIS,0,2 ) +
-                       LFill( ALIQ_PIS_PERC,0,2 ) +
-                       DFill( QUANT_BC_PIS,3 ) +
-                       DFill( ALIQ_PIS_R,4 ) +
-                       LFill( VL_PIS,0,2 ) +
+                       LFill( VL_BC_PIS, 0, 2 ) +
+                       LFill( ALIQ_PIS_PERC, 0, 4 ) +
+                       LFill( QUANT_BC_PIS,  0, 3 ) +
+                       LFill( ALIQ_PIS_R, 0, 4 ) +
+                       LFill( VL_PIS, 0, 2 ) +
                        // LFill( strCST_COFINS ) +
                        LFill( CST_COFINS ) +
-                       LFill( VL_BC_COFINS,0,2 ) +
-                       LFill( ALIQ_COFINS_PERC,0,2 ) +
-                       DFill( QUANT_BC_COFINS,3 ) +
-                       DFill( ALIQ_COFINS_R,4 ) +
-                       LFill( VL_COFINS,0,2 ) +
+                       LFill( VL_BC_COFINS, 0, 2 ) +
+                       LFill( ALIQ_COFINS_PERC, 0, 4 ) +
+                       LFill( QUANT_BC_COFINS,  0, 3 ) +
+                       LFill( ALIQ_COFINS_R, 0, 4 ) +
+                       LFill( VL_COFINS, 0, 2 ) +
                        LFill( COD_CTA );
           //-- Write
           if Assigned(FOnWriteRegistroC170) then

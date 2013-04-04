@@ -149,21 +149,22 @@ begin
       (*ER06 *)FxMotivo   := leitor.rCampo(tcStr, 'xMotivo');
       (*ER07 *)FcUF       := leitor.rCampo(tcInt, 'cUF');
       (*EP07a*)FchNFe     := leitor.rCampo(tcStr, 'chNFe');
-      if FcStat in  [100,101] then
-      begin
-        if ((Leitor.rExtrai(1, 'protNFe') <> '') or (Leitor.rExtrai(1, 'infProt') <> '')) then
+      case FcStat of 100,101,110,150,151,155,301,302:
         begin
-          protNFe.tpAmb    := StrToTpAmb(ok, Leitor.rCampo(tcStr, 'tpAmb'));
-          protNFe.verAplic := Leitor.rCampo(tcStr, 'verAplic');
-          protNFe.chNFe    := Leitor.rCampo(tcStr, 'chNFe');
-          protNFe.dhRecbto := Leitor.rCampo(tcDatHor, 'dhRecbto');
-          protNFe.nProt    := Leitor.rCampo(tcStr, 'nProt');
-          protNFe.digVal   := Leitor.rCampo(tcStr, 'digVal');
-          protNFe.cStat    := Leitor.rCampo(tcInt, 'cStat');
-          protNFe.xMotivo  := Leitor.rCampo(tcStr, 'xMotivo');
+          if ((Leitor.rExtrai(1, 'protNFe') <> '') or (Leitor.rExtrai(1, 'infProt') <> '')) then
+          begin
+            protNFe.tpAmb    := StrToTpAmb(ok, Leitor.rCampo(tcStr, 'tpAmb'));
+            protNFe.verAplic := Leitor.rCampo(tcStr, 'verAplic');
+            protNFe.chNFe    := Leitor.rCampo(tcStr, 'chNFe');
+            protNFe.dhRecbto := Leitor.rCampo(tcDatHor, 'dhRecbto');
+            protNFe.nProt    := Leitor.rCampo(tcStr, 'nProt');
+            protNFe.digVal   := Leitor.rCampo(tcStr, 'digVal');
+            protNFe.cStat    := Leitor.rCampo(tcInt, 'cStat');
+            protNFe.xMotivo  := Leitor.rCampo(tcStr, 'xMotivo');
+          end;
         end;
       end;
-      if FcStat = 101 then
+      if FcStat in [101,151,155] then
       begin
         if Leitor.rExtrai(1, 'infCanc') <> '' then
         begin

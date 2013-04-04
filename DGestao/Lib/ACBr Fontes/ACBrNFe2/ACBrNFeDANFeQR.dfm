@@ -1,7 +1,7 @@
 object fqrDANFeQR: TfqrDANFeQR
   Left = 194
   Top = 125
-  Width = 880
+  Width = 897
   Height = 742
   Caption = 'fqrDANFeQR'
   Color = clBtnFace
@@ -15,8 +15,8 @@ object fqrDANFeQR: TfqrDANFeQR
   PixelsPerInch = 96
   TextHeight = 13
   object QRNFe: TQuickRep
-    Left = 2
-    Top = 2
+    Left = 3
+    Top = 3
     Width = 794
     Height = 1123
     Frame.Color = clBlack

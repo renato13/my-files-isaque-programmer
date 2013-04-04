@@ -92,7 +92,8 @@ type
     constructor Create;
     destructor Destroy; override;
     function GerarXML: boolean;
-    function LerXML(CaminhoArquivo: string): boolean;
+    function LerXML(const CaminhoArquivo: string): boolean;
+    function LerXMLFromString(const AXML: String): boolean;
     function ObterNomeArquivo(tpEvento: TpcnTpEvento): string;
   published
     property Gerador: TGerador  read FGerador write FGerador;
@@ -175,7 +176,8 @@ begin
       Gerador.wCampo(tcStr,    'HP12', 'chNFe', 044, 044,      1, Evento.Items[i].InfEvento.chNFe, DSC_CHAVE);
       if not ValidarChave('NFe' + SomenteNumeros(Evento.Items[i].InfEvento.chNFe)) then
         Gerador.wAlerta('HP12', 'chNFe', '', 'Chave de NFe inválida');
-      Gerador.wCampo(tcStr,    'HP13', 'dhEvento', 001, 050,   1, FormatDateTime('yyyy-mm-dd"T"hh:nn:ss',Evento.Items[i].InfEvento.dhEvento)+'-03:00');
+        Gerador.wCampo(tcStr,    'HP13', 'dhEvento', 001, 050,   1, FormatDateTime('yyyy-mm-dd"T"hh:nn:ss',Evento.Items[i].InfEvento.dhEvento)+
+                                                                  GetUTC(CodigoParaUF(Evento.Items[i].InfEvento.cOrgao), Evento.Items[i].InfEvento.dhEvento));
       Gerador.wCampo(tcInt,    'HP14', 'tpEvento', 006, 006,   1, Evento.Items[i].InfEvento.TipoEvento);
       Gerador.wCampo(tcInt,    'HP15', 'nSeqEvento', 001, 002, 1, Evento.Items[i].InfEvento.nSeqEvento);
       Gerador.wCampo(tcStr,    'HP16', 'verEvento', 001, 004,  1, Evento.Items[i].InfEvento.versaoEvento);
@@ -212,17 +214,27 @@ begin
   FEvento.Assign(Value);
 end;
 
-function TEventoNFe.LerXML(CaminhoArquivo: string): boolean;
+function TEventoNFe.LerXML(const CaminhoArquivo: string): boolean;
 var
   ArqEvento    : TStringList;
-  RetEventoNFe : TRetEventoNFe;
 begin
   ArqEvento := TStringList.Create;
-  RetEventoNFe := TRetEventoNFe.Create;
   try
      ArqEvento.LoadFromFile(CaminhoArquivo);
-     RetEventoNFe.Leitor.Arquivo := ArqEvento.Text;
-     RetEventoNFe.LerXml;
+     Result := LerXMLFromString(ArqEvento.Text);
+  finally
+     ArqEvento.Free;
+  end;
+end;
+
+function TEventoNFe.LerXMLFromString(const AXML: String): boolean;
+var
+  RetEventoNFe : TRetEventoNFe;
+begin
+  RetEventoNFe := TRetEventoNFe.Create;
+  try
+     RetEventoNFe.Leitor.Arquivo := AXML;
+     Result := RetEventoNFe.LerXml;
      with FEvento.Add do
       begin
          infEvento.ID            := RetEventoNFe.InfEvento.id;
@@ -260,7 +272,6 @@ begin
          end;
       end;
   finally
-     ArqEvento.Free;
      RetEventoNFe.Free;
   end;
 end;

@@ -124,7 +124,7 @@ end;
 initialization
 
 {$IFDEF FPC}
-//   {$i ACBrNFSe_lcl.lrs}
+   {$i ACBrNFSe.lrs}
 {$ENDIF}
 
 end.

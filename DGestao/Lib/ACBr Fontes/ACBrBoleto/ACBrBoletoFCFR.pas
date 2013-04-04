@@ -48,11 +48,11 @@ unit ACBrBoletoFCFR;
 interface
 
 uses
-  SysUtils, Classes, DB, DBClient, ACBrBase, ACBrBoleto,
+  SysUtils, Classes, DB, DBClient, ACBrBase, ACBrBoleto, StrUtils,
   frxClass, frxDBSet, frxBarcode, frxExportHTML, frxExportPDF;
 
 const
-  CACBrBoletoFCFR_Versao = '0.0.9a';
+  CACBrBoletoFCFR_Versao = '0.0.12a';
 
 type
   EACBrBoletoFCFR = class(Exception);
@@ -71,6 +71,7 @@ type
     constructor Create(AOwner: TComponent); override;
 
     procedure Imprimir; override;
+    function PreparedReport: TfrxReport;
   published
     property FastReportFile: String read FFastReportFile write FFastReportFile;
   end;
@@ -98,7 +99,7 @@ implementation
 
 {$R *.dfm}
 
-uses ACBrUtil;
+uses ACBrUtil, ACBrBanestes;
 
 { TdmACBrBoletoFCFR }
 
@@ -130,7 +131,7 @@ begin
      FieldDefs.Add('Modalidade', ftString, 20);
      FieldDefs.Add('Convenio', ftString, 20);
      FieldDefs.Add('ResponEmissao', ftInteger);
-     FieldDefs.Add('CNPJCPF', ftString, 14);
+     FieldDefs.Add('CNPJCPF', ftString, 18);
      FieldDefs.Add('TipoInscricao', ftInteger);
      FieldDefs.Add('Logradouro', ftString, 100);
      FieldDefs.Add('NumeroRes', ftString, 10);
@@ -154,6 +155,7 @@ begin
      FieldDefs.Add('Vencimento', ftDateTime);
      FieldDefs.Add('DataDocumento', ftDateTime);
      FieldDefs.Add('NumeroDocumento', ftString, 20);
+     FieldDefs.Add('Parcela', ftInteger);
      FieldDefs.Add('EspecieDoc', ftString, 10);
      FieldDefs.Add('EspecieMod', ftString, 10);
      FieldDefs.Add('Aceite', ftInteger);
@@ -175,10 +177,12 @@ begin
      FieldDefs.Add('Instrucao1', ftString, 300);
      FieldDefs.Add('Instrucao2', ftString, 300);
      FieldDefs.Add('TextoLivre', ftMemo, 2000);
+     FieldDefs.Add('Asbace', ftString, 40);
      // Sacado
      FieldDefs.Add('Sacado_NomeSacado', ftString, 100);
      FieldDefs.Add('Sacado_CNPJCPF', ftString, 18);
      FieldDefs.Add('Sacado_Logradouro', ftString, 100);
+     FieldDefs.Add('Sacado_Complemento', ftString, 100);
      FieldDefs.Add('Sacado_Numero', ftString, 10);
      FieldDefs.Add('Sacado_Bairro', ftString, 100);
      FieldDefs.Add('Sacado_Cidade', ftString, 100);
@@ -198,10 +202,11 @@ begin
   fFastReportFile := '' ;
 end;
 
-procedure TACBrBoletoFCFR.Imprimir;
+function TACBrBoletoFCFR.PreparedReport: TfrxReport;
 var
-DmBoleto: TdmACBrBoletoFCFR;
+  DmBoleto: TdmACBrBoletoFCFR;
 begin
+  ACBrBoleto.ChecarDadosObrigatorios;
   inherited Imprimir; // Verifica se a lista de boletos está vazia
   //
   DmBoleto := TdmACBrBoletoFCFR.Create(Self);
@@ -211,31 +216,58 @@ begin
      cdsBanco.EmptyDataSet;
      cdsCedente.EmptyDataSet;
      cdsTitulo.EmptyDataSet;
+
      if PrepareReport(DmBoleto) then
-     begin
-        case Filtro of
-          fiNenhum:
-          begin
-             if MostrarPreview then
-                frxReport.ShowReport(False)
-             else
-                frxReport.Print;
-          end;
-          fiPDF:
-          begin
-             frxPDFExport.FileName := NomeArquivo;
-             frxReport.Export(DmBoleto.frxPDFExport);
-          end;
-          fiHTML:
-          begin
-             frxHTMLExport.FileName := NomeArquivo;
-             frxReport.Export(DmBoleto.frxHTMLExport);
-          end;
-        else
-          exit;
-        end;
-     end;
+       Result := frxReport
+     else
+       Result := nil;
   end;
+  finally
+    // DmBoleto.Free;
+  end;
+end;
+
+procedure TACBrBoletoFCFR.Imprimir;
+var
+  DmBoleto: TdmACBrBoletoFCFR;
+begin
+  inherited Imprimir; // Verifica se a lista de boletos está vazia
+
+  DmBoleto := TdmACBrBoletoFCFR.Create(Self);
+  try
+    with DmBoleto do
+    begin
+       cdsBanco.EmptyDataSet;
+       cdsCedente.EmptyDataSet;
+       cdsTitulo.EmptyDataSet;
+
+       if PrepareReport(DmBoleto) then
+       begin
+          frxReport.PrintOptions.ShowDialog := MostrarSetup;
+
+          case Filtro of
+            fiNenhum:
+            begin
+               if MostrarPreview then
+                  frxReport.ShowReport(False)
+               else
+                  frxReport.Print;
+            end;
+            fiPDF:
+            begin
+               frxPDFExport.FileName := NomeArquivo;
+               frxReport.Export(DmBoleto.frxPDFExport);
+            end;
+            fiHTML:
+            begin
+               frxHTMLExport.FileName := NomeArquivo;
+               frxReport.Export(DmBoleto.frxHTMLExport);
+            end;
+          else
+            exit;
+          end;
+       end;
+    end;
   finally
     DmBoleto.Free;
   end;
@@ -266,7 +298,6 @@ var
   iFor: Integer;
   sTipoDoc: String;
 begin
-   Result := False;
    with ACBrBoleto do
    begin
       // Banco
@@ -274,7 +305,8 @@ begin
       begin
          Append;
          FieldByName('Numero').AsString  := FormatFloat('000', Banco.Numero);
-         FieldByName('Digito').AsInteger := Banco.Digito;
+         FieldByName('Digito').AsString := IfThen(Banco.Digito >= 10, 'X',
+                                                  IntToStrZero(Banco.Digito, 1));
          FieldByName('Nome').AsString    := Banco.Nome;
          FieldByName('DirLogo').AsString := DirLogo;
          Post;
@@ -327,6 +359,7 @@ begin
             FieldByName('Vencimento').AsDateTime        := ListadeBoletos[iFor].Vencimento;
             FieldByName('DataDocumento').AsDateTime     := ListadeBoletos[iFor].DataDocumento;
             FieldByName('NumeroDocumento').AsString     := ListadeBoletos[iFor].NumeroDocumento;
+            FieldByName('Parcela').AsInteger            := ListadeBoletos[iFor].Parcela;
             FieldByName('EspecieMod').AsString          := ListadeBoletos[iFor].EspecieMod;
             FieldByName('EspecieDoc').AsString          := ListadeBoletos[iFor].EspecieDoc;
             FieldByName('Aceite').AsInteger             := Integer(ListadeBoletos[iFor].Aceite);
@@ -348,10 +381,14 @@ begin
             FieldByName('Instrucao1').AsString          := ListadeBoletos[iFor].Instrucao1;
             FieldByName('Instrucao2').AsString          := ListadeBoletos[iFor].Instrucao2;
             FieldByName('TextoLivre').AsString          := ListadeBoletos[iFor].TextoLivre;
+            if ACBrBoleto.Banco.Numero = 21 then
+              FieldByName('Asbace').AsString            := TACBrBanestes(Banco).CalcularCampoASBACE(ListadeBoletos[iFor]);
+
             // Sacado
             FieldByName('Sacado_NomeSacado').AsString   := ListadeBoletos[iFor].Sacado.NomeSacado;
             FieldByName('Sacado_CNPJCPF').AsString      := ListadeBoletos[iFor].Sacado.CNPJCPF;
             FieldByName('Sacado_Logradouro').AsString   := ListadeBoletos[iFor].Sacado.Logradouro;
+            FieldByName('Sacado_Complemento').AsString  := ListadeBoletos[iFor].Sacado.Complemento;
             FieldByName('Sacado_Numero').AsString       := ListadeBoletos[iFor].Sacado.Numero;
             FieldByName('Sacado_Bairro').AsString       := ListadeBoletos[iFor].Sacado.Bairro;
             FieldByName('Sacado_Cidade').AsString       := ListadeBoletos[iFor].Sacado.Cidade;
@@ -362,6 +399,7 @@ begin
          end;
       end;
    end;
+
    Result := True;
 end;
 

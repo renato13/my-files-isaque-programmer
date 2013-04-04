@@ -60,7 +60,8 @@ type
   TRegistro1350List = class;
   TRegistro1360List = class;
   TRegistro1370List = class;
-  TRegistro1390List = class;  
+  TRegistro1390List = class;
+  TRegistro1391List = class;  
   TRegistro1400List = class;
   TRegistro1500List = class;
   TRegistro1510List = class;
@@ -68,6 +69,14 @@ type
   TRegistro1700List = class;
   TRegistro1710List = class;
   TRegistro1800List = class;
+  TRegistro1900List = class;
+  TRegistro1910List = class;
+  TRegistro1920List = class;
+  TRegistro1921List = class;
+  TRegistro1922List = class;
+  TRegistro1923List = class;
+  TRegistro1925List = class;
+  TRegistro1926List = class;
 
   /// Registro 1001 - ABERTURA DO BLOCO 1
 
@@ -79,26 +88,30 @@ type
     FRegistro1300: TRegistro1300List;
     FRegistro1350: TRegistro1350List;
     FRegistro1390: TRegistro1390List;
+    FRegistro1391: TRegistro1391List;
     FRegistro1400: TRegistro1400List;
     FRegistro1500: TRegistro1500List;
     FRegistro1600: TRegistro1600List;
     FRegistro1700: TRegistro1700List;
     FRegistro1800: TRegistro1800List;
+    FRegistro1900: TRegistro1900List;
   public
     constructor Create; virtual; /// Create
     destructor Destroy; override; /// Destroy
 
-    property Registro1010: TRegistro1010List read FRegistro1010 write FRegistro1010;    
+    property Registro1010: TRegistro1010List read FRegistro1010 write FRegistro1010;
     property Registro1100: TRegistro1100List read FRegistro1100 write FRegistro1100;
     property Registro1200: TRegistro1200List read FRegistro1200 write FRegistro1200;
     property Registro1300: TRegistro1300List read FRegistro1300 write FRegistro1300;
     property Registro1350: TRegistro1350List read FRegistro1350 write FRegistro1350;
     property Registro1390: TRegistro1390List read FRegistro1390 write FRegistro1390;
+    property Registro1391: TRegistro1391List read FRegistro1391 write FRegistro1391;
     property Registro1400: TRegistro1400List read FRegistro1400 write FRegistro1400;
     property Registro1500: TRegistro1500List read FRegistro1500 write FRegistro1500;
     property Registro1600: TRegistro1600List read FRegistro1600 write FRegistro1600;
     property Registro1700: TRegistro1700List read FRegistro1700 write FRegistro1700;
     property Registro1800: TRegistro1800List read FRegistro1800 write FRegistro1800;
+    property Registro1900: TRegistro1900List read FRegistro1900 write FRegistro1900;
   end;
 
   /// Registro 1010 - Obrigatoriedade de registros do Bloco 1
@@ -542,10 +555,15 @@ type
   TRegistro1390 = class
   private
     fCOD_PROD: String;      /// Código do item (campo 02 do Registro 0200)
+
+    FRegistro1391: TRegistro1391List;  /// REGISTRO 1391: PRODUÇÃO DIÁRIA DA USINA
   public
     constructor Create(AOwner: TRegistro1001); virtual; /// Create
+    destructor Destroy; override; /// Destroy
 
     property COD_PROD: String read fCOD_PROD write fCOD_PROD;
+
+    property Registro1391: TRegistro1391List read FRegistro1391 write FRegistro1391;
   end;
 
   /// Registro 1390 - Lista
@@ -557,6 +575,58 @@ type
   public
     function New(AOwner: TRegistro1001): TRegistro1390;
     property Items[Index: Integer]: TRegistro1390 read GetItem write SetItem;
+  end;
+
+  /// REGISTRO 1391: PRODUÇÃO DIÁRIA DA USINA
+
+  TRegistro1391 = class
+  private
+    fDT_REGISTRO  : TDateTime;  /// Data de produção (DDMMAAAA)
+    fQTD_MOID     : Currency;   /// Quantidade de cana esmagada (toneladas)
+    fESTQ_INI     : Currency;   /// Estoque inicial (litros / Kg)
+    fQTD_PRODUZ   : Currency;   /// Quantidade produzida (litros / Kg)
+    fENT_ANID_HID : Currency;   /// Entrada de álcool anidro decorrente da transformação do álcool hidratado ou Entrada de álcool hidratado decorrente da transformação do álcool anidro (litros)
+    fOUTR_ENTR    : Currency;   /// Outras entradas (litros / Kg)
+    fPERDA        : Currency;   /// Evaporação (litros) ou Quebra de peso (Kg)
+    fCONS         : Currency;   /// Consumo (litros)
+    fSAI_ANI_HID  : Currency;   /// Saída para transformação (litros).
+    fSAIDAS       : Currency;   /// Saídas (litros / Kg)
+    fESTQ_FIN     : Currency;   /// Estoque final (litros / Kg)
+    fESTQ_INI_MEL : Currency;   /// Estoque inicial de mel residual (Kg)
+    fPROD_DIA_MEL : Currency;   /// Produção de mel residual (Kg) e entradas de mel (Kg)
+    fUTIL_MEL     : Currency;   /// Mel residual utilizado (Kg) e saídas de mel (Kg)
+    fPROD_ALC_MEL : Currency;   /// Produção de álcool (litros) ou açúcar (Kg) proveniente do mel residual.
+    fOBS          : String;     /// Observações
+  public                        
+    constructor Create(AOwner: TRegistro1390); virtual; /// Create
+
+    property DT_REGISTRO: TDateTime read fDT_REGISTRO write fDT_REGISTRO;
+    property QTD_MOID: Currency read fQTD_MOID write fQTD_MOID;
+    property ESTQ_INI: Currency read fESTQ_INI write fESTQ_INI;
+    property QTD_PRODUZ: Currency read fQTD_PRODUZ write fQTD_PRODUZ;
+    property ENT_ANID_HID: Currency read fENT_ANID_HID write fENT_ANID_HID;
+    property OUTR_ENTR: Currency read fOUTR_ENTR write fOUTR_ENTR;
+    property PERDA: Currency read fPERDA write fPERDA;
+    property CONS: Currency read fCONS write fCONS;
+    property SAI_ANI_HID: Currency read fSAI_ANI_HID write fSAI_ANI_HID;
+    property SAIDAS: Currency read fSAIDAS write fSAIDAS;
+    property ESTQ_FIN: Currency read fESTQ_FIN write fESTQ_FIN;
+    property ESTQ_INI_MEL: Currency read fESTQ_INI_MEL write fESTQ_INI_MEL;
+    property PROD_DIA_MEL: Currency read fPROD_DIA_MEL write fPROD_DIA_MEL;
+    property UTIL_MEL: Currency read fUTIL_MEL write fUTIL_MEL;
+    property PROD_ALC_MEL: Currency read fPROD_ALC_MEL write fPROD_ALC_MEL;
+    property OBS: String read fOBS write fOBS;
+  end;
+
+  /// Registro 1391 - Lista
+
+  TRegistro1391List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1391;
+    procedure SetItem(Index: Integer; const Value: TRegistro1391);
+  public
+    function New(AOwner: TRegistro1390): TRegistro1391;
+    property Items[Index: Integer]: TRegistro1391 read GetItem write SetItem;
   end;
 
 
@@ -848,6 +918,240 @@ type
   public
     function New(AOwner: TRegistro1001): TRegistro1800;
     property Items[Index: Integer]: TRegistro1800 read GetItem write SetItem;
+  end;
+
+  /// Registro 1900 - INDICADOR DE SUB-APURAÇÃO DO ICMS
+  TRegistro1900 = class
+  private
+    fIND_APUR_ICMS: string;
+    fDESCR_COMPL_OUT_APUR: string;
+    FRegistro1910: TRegistro1910List;
+  public
+    constructor Create(AOwner: TRegistro1001); virtual; /// Create
+    destructor Destroy; override; /// Destroy
+    property IND_APUR_ICMS: string read fIND_APUR_ICMS write fIND_APUR_ICMS;
+    property DESCR_COMPL_OUT_APUR: string read fDESCR_COMPL_OUT_APUR write fDESCR_COMPL_OUT_APUR;
+
+    property Registro1910: TRegistro1910List read FRegistro1910 write FRegistro1910;
+  end;
+
+  TRegistro1900List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1900;
+    procedure SetItem(Index: Integer; const Value: TRegistro1900);
+  public
+    function New(AOwner: TRegistro1001): TRegistro1900;
+    property Items[Index: Integer]: TRegistro1900 read GetItem write SetItem;
+  end;
+
+  /// Registro 1910 - PERÍODO DA SUB-APURAÇÃO DO ICMS
+  TRegistro1910 = class
+  private
+    fDT_FIN: TDateTime;
+    fDT_INI: TDateTime;
+    FRegistro1920: TRegistro1920List;
+  public
+    constructor Create(AOwner: TRegistro1900); virtual; /// Create
+    destructor Destroy; override; /// Destroy
+    property DT_INI: TDateTime read fDT_INI write fDT_INI;
+    property DT_FIN: TDateTime read fDT_FIN write fDT_FIN;
+
+    property Registro1920: TRegistro1920List read FRegistro1920 write FRegistro1920;
+  end;
+
+  TRegistro1910List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1910;
+    procedure SetItem(Index: Integer; const Value: TRegistro1910);
+  public
+    function New(AOwner: TRegistro1900): TRegistro1910;
+    property Items[Index: Integer]: TRegistro1910 read GetItem write SetItem;
+  end;
+
+  /// Registro 1920 - SUB-APURAÇÃO DO ICMS
+  TRegistro1920 = class
+  private
+    fVL_TOT_TRANSF_DEBITOS_OA: Currency;
+    fVL_TOT_AJ_DEBITOS_OA: Currency;
+    fVL_ESTORNOS_CRED_OA: Currency;
+    fVL_TOT_TRANSF_CREDITOS_OA: Currency;
+    fVL_TOT_AJ_CREDITOS_OA: Currency;
+    fVL_ESTORNOS_DEB_OA: Currency;
+    fVL_SLD_CREDOR_ANT_OA: Currency;
+    fVL_SLD_APURADO_OA: Currency;
+    fVL_TOT_DED: Currency;
+    fVL_ICMS_RECOLHER_OA: Currency;
+    fVL_SLD_CREDOR_TRANSP_OA: Currency;
+    fDEB_ESP_OA: Currency;
+    FRegistro1921: TRegistro1921List;
+    FRegistro1925: TRegistro1925List;
+    FRegistro1926: TRegistro1926List;
+  public
+    constructor Create(AOwner: TRegistro1910); virtual; /// Create
+    destructor Destroy; override; /// Destroy
+    property VL_TOT_TRANSF_DEBITOS_OA : Currency read fVL_TOT_TRANSF_DEBITOS_OA  write fVL_TOT_TRANSF_DEBITOS_OA;
+    property VL_TOT_AJ_DEBITOS_OA     : Currency read fVL_TOT_AJ_DEBITOS_OA      write fVL_TOT_AJ_DEBITOS_OA;
+    property VL_ESTORNOS_CRED_OA      : Currency read fVL_ESTORNOS_CRED_OA       write fVL_ESTORNOS_CRED_OA;
+    property VL_TOT_TRANSF_CREDITOS_OA: Currency read fVL_TOT_TRANSF_CREDITOS_OA write fVL_TOT_TRANSF_CREDITOS_OA;
+    property VL_TOT_AJ_CREDITOS_OA    : Currency read fVL_TOT_AJ_CREDITOS_OA     write fVL_TOT_AJ_CREDITOS_OA;
+    property VL_ESTORNOS_DEB_OA       : Currency read fVL_ESTORNOS_DEB_OA        write fVL_ESTORNOS_DEB_OA;
+    property VL_SLD_CREDOR_ANT_OA     : Currency read fVL_SLD_CREDOR_ANT_OA      write fVL_SLD_CREDOR_ANT_OA;
+    property VL_SLD_APURADO_OA        : Currency read fVL_SLD_APURADO_OA         write fVL_SLD_APURADO_OA;
+    property VL_TOT_DED               : Currency read fVL_TOT_DED                write fVL_TOT_DED;
+    property VL_ICMS_RECOLHER_OA      : Currency read fVL_ICMS_RECOLHER_OA       write fVL_ICMS_RECOLHER_OA;
+    property VL_SLD_CREDOR_TRANSP_OA  : Currency read fVL_SLD_CREDOR_TRANSP_OA   write fVL_SLD_CREDOR_TRANSP_OA;
+    property DEB_ESP_OA               : Currency read fDEB_ESP_OA                write fDEB_ESP_OA;
+
+    property Registro1921: TRegistro1921List read FRegistro1921 write FRegistro1921;
+    property Registro1925: TRegistro1925List read FRegistro1925 write FRegistro1925;
+    property Registro1926: TRegistro1926List read FRegistro1926 write FRegistro1926;
+  end;
+
+  TRegistro1920List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1920;
+    procedure SetItem(Index: Integer; const Value: TRegistro1920);
+  public
+    function New(AOwner: TRegistro1910): TRegistro1920;
+    property Items[Index: Integer]: TRegistro1920 read GetItem write SetItem;
+  end;
+
+  /// Registro 1921 - AJUSTE/BENEFÍCIO/INCENTIVO DA SUB-APURAÇÃO DO ICMS
+  TRegistro1921 = class
+  private
+    fCOD_AJ_APUR: String;
+    fDESCR_COMPL_AJ: String;
+    fVL_AJ_APUR: Currency;
+    FRegistro1922: TRegistro1922List;
+    FRegistro1923: TRegistro1923List;
+  public
+    constructor Create(AOwner: TRegistro1920); virtual; /// Create
+    destructor Destroy; override; /// Destroy
+    property COD_AJ_APUR    : String   read fCOD_AJ_APUR    write fCOD_AJ_APUR;
+    property DESCR_COMPL_AJ : String   read fDESCR_COMPL_AJ write fDESCR_COMPL_AJ;
+    property VL_AJ_APUR     : Currency read fVL_AJ_APUR     write fVL_AJ_APUR;
+
+    property Registro1922: TRegistro1922List read FRegistro1922 write FRegistro1922;
+    property Registro1923: TRegistro1923List read FRegistro1923 write FRegistro1923;
+  end;
+
+  TRegistro1921List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1921;
+    procedure SetItem(Index: Integer; const Value: TRegistro1921);
+  public
+    function New(AOwner: TRegistro1920): TRegistro1921;
+    property Items[Index: Integer]: TRegistro1921 read GetItem write SetItem;
+  end;
+
+  /// Registro 1922 - NFORMAÇÕES ADICIONAIS DOS AJUSTES DA SUB-APURAÇÃO DO ICMS
+  TRegistro1922 = class
+  private
+    fNUM_DA: String;
+    fNUM_PROC: String;
+    fIND_PROC: String;
+    fPROC: String;
+    fTXT_COMPL: String;
+  public
+    property NUM_DA    : String read fNUM_DA    write fNUM_DA;
+    property NUM_PROC  : String read fNUM_PROC  write fNUM_PROC;
+    property IND_PROC  : String read fIND_PROC  write fIND_PROC;
+    property PROC      : String read fPROC      write fPROC;
+    property TXT_COMPL : String read fTXT_COMPL write fTXT_COMPL;
+  end;
+
+  TRegistro1922List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1922;
+    procedure SetItem(Index: Integer; const Value: TRegistro1922);
+  public
+    function New: TRegistro1922;
+    property Items[Index: Integer]: TRegistro1922 read GetItem write SetItem;
+  end;
+
+  /// Registro 1923 - INFORMAÇÕES ADICIONAIS DOS AJUSTES DA SUB-APURAÇÃO DO ICMS
+  TRegistro1923 = class
+  private
+    fCOD_PART: String;
+    fCOD_MOD: String;
+    fSER: String;
+    fSUB: String;
+    fNUM_DOC: String;
+    fDT_DOC: TDateTime;
+    fCOD_ITEM: String;
+    fVL_AJ_ITEM: Currency;
+  public
+    property COD_PART   : String    read fCOD_PART   write fCOD_PART;
+    property COD_MOD    : String    read fCOD_MOD    write fCOD_MOD;
+    property SER        : String    read fSER        write fSER;
+    property SUB        : String    read fSUB        write fSUB;
+    property NUM_DOC    : String    read fNUM_DOC    write fNUM_DOC;
+    property DT_DOC     : TDateTime read fDT_DOC     write fDT_DOC;
+    property COD_ITEM   : String    read fCOD_ITEM   write fCOD_ITEM;
+    property VL_AJ_ITEM : Currency  read fVL_AJ_ITEM write fVL_AJ_ITEM;
+  end;
+
+  TRegistro1923List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1923;
+    procedure SetItem(Index: Integer; const Value: TRegistro1923);
+  public
+    function New: TRegistro1923;
+    property Items[Index: Integer]: TRegistro1923 read GetItem write SetItem;
+  end;
+
+  /// Registro 1925 - INFORMAÇÕES ADICIONAIS DA SUB-APURAÇÃO – VALORES DECLARATÓRIOS
+  TRegistro1925 = class
+  private
+    fCOD_INF_ADIC: String;
+    fVL_INF_ADIC: Currency;
+    fDESCR_COMPL_AJ: String;
+  public
+    property COD_INF_ADIC   : String    read fCOD_INF_ADIC   write fCOD_INF_ADIC;
+    property VL_INF_ADIC    : Currency  read fVL_INF_ADIC    write fVL_INF_ADIC;
+    property DESCR_COMPL_AJ : String    read fDESCR_COMPL_AJ write fDESCR_COMPL_AJ;
+  end;
+
+  TRegistro1925List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1925;
+    procedure SetItem(Index: Integer; const Value: TRegistro1925);
+  public
+    function New: TRegistro1925;
+    property Items[Index: Integer]: TRegistro1925 read GetItem write SetItem;
+  end;
+
+  /// Registro 1926 - OBRIGAÇÕES DO ICMS A RECOLHER – OPERAÇÕES REFERENTES À SUB-APURAÇÃO
+  TRegistro1926 = class
+  private
+    fCOD_OR: String;
+    fVL_OR: Currency;
+    fDT_VCTO: TDateTime;
+    fCOD_REC: String;
+    fNUM_PROC: String;
+    fIND_PROC: String;
+    fPROC: String;
+    fTXT_COMPL: String;
+    fMES_REF: String;
+  public
+    property COD_OR    : String    read fCOD_OR    write fCOD_OR;
+    property VL_OR     : Currency  read fVL_OR     write fVL_OR;
+    property DT_VCTO   : TDateTime read fDT_VCTO   write fDT_VCTO;
+    property COD_REC   : String    read fCOD_REC   write fCOD_REC;
+    property NUM_PROC  : String    read fNUM_PROC  write fNUM_PROC;
+    property IND_PROC  : String    read fIND_PROC  write fIND_PROC;
+    property PROC      : String    read fPROC      write fPROC;
+    property TXT_COMPL : String    read fTXT_COMPL write fTXT_COMPL;
+    property MES_REF   : String    read fMES_REF   write fMES_REF;
+  end;
+
+  TRegistro1926List = class(TObjectList)
+  private
+    function GetItem(Index: Integer): TRegistro1926;
+    procedure SetItem(Index: Integer; const Value: TRegistro1926);
+  public
+    function New: TRegistro1926;
+    property Items[Index: Integer]: TRegistro1926 read GetItem write SetItem;
   end;
 
   /// Registro 1990 - ENCERRAMENTO DO BLOCO 1
@@ -1296,6 +1600,7 @@ begin
    FRegistro1600 := TRegistro1600List.Create;
    FRegistro1700 := TRegistro1700List.Create;
    FRegistro1800 := TRegistro1800List.Create;
+   FRegistro1900 := TRegistro1900List.Create;
    //
    IND_MOV := imSemDados;
 end;
@@ -1313,6 +1618,7 @@ begin
    FRegistro1600.Free;
    FRegistro1700.Free;
    FRegistro1800.Free;
+   FRegistro1900.Free;
   inherited;
 end;
 
@@ -1408,6 +1714,19 @@ end;
 
 constructor TRegistro1390.Create(AOwner: TRegistro1001);
 begin
+  fRegistro1391 := TRegistro1391List.Create;
+end;
+
+destructor TRegistro1390.Destroy;
+begin
+  FRegistro1391.Free;
+  inherited;
+end;
+
+{ TRegistro1391 }
+
+constructor TRegistro1391.Create(AOwner: TRegistro1390);
+begin
 end;
 
 { TRegistro1400 }
@@ -1432,6 +1751,235 @@ end;
 
 constructor TRegistro1800.Create(AOwner: TRegistro1001);
 begin
+end;
+
+{ TRegistro1391List }
+
+function TRegistro1391List.GetItem(Index: Integer): TRegistro1391;
+begin
+  Result := TRegistro1391(Inherited Items[Index]);
+end;
+
+function TRegistro1391List.New(AOwner: TRegistro1390): TRegistro1391;
+begin
+  Result := TRegistro1391.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistro1391List.SetItem(Index: Integer;
+  const Value: TRegistro1391);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1900 }
+
+constructor TRegistro1900.Create(AOwner: TRegistro1001);
+begin
+  FRegistro1910 := TRegistro1910List.Create;  /// BLOCO 1 - Lista de Registro1910 (FILHO)
+end;
+
+destructor TRegistro1900.Destroy;
+begin
+  FRegistro1910.Free;
+  inherited;
+end;
+
+{ TRegistro1900List }
+
+function TRegistro1900List.GetItem(Index: Integer): TRegistro1900;
+begin
+  Result := TRegistro1900(Inherited Items[Index]);
+end;
+
+function TRegistro1900List.New(AOwner: TRegistro1001): TRegistro1900;
+begin
+  Result := TRegistro1900.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistro1900List.SetItem(Index: Integer;
+  const Value: TRegistro1900);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1910 }
+
+constructor TRegistro1910.Create(AOwner: TRegistro1900);
+begin
+  FRegistro1920 := TRegistro1920List.Create;
+end;
+
+destructor TRegistro1910.Destroy;
+begin
+  FRegistro1920.Free;
+  inherited;
+end;
+
+{ TRegistro1910List }
+
+function TRegistro1910List.GetItem(Index: Integer): TRegistro1910;
+begin
+  Result := TRegistro1910(Inherited Items[Index]);
+end;
+
+function TRegistro1910List.New(AOwner: TRegistro1900): TRegistro1910;
+begin
+  Result := TRegistro1910.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistro1910List.SetItem(Index: Integer;
+  const Value: TRegistro1910);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1920 }
+
+constructor TRegistro1920.Create(AOwner: TRegistro1910);
+begin
+  FRegistro1921 := TRegistro1921List.Create;
+  FRegistro1925 := TRegistro1925List.Create;
+  FRegistro1926 := TRegistro1926List.Create;
+end;
+
+destructor TRegistro1920.Destroy;
+begin
+  FRegistro1921.Free;
+  FRegistro1925.Free;
+  FRegistro1926.Free;
+  inherited;
+end;
+
+{ TRegistro1920List }
+
+function TRegistro1920List.GetItem(Index: Integer): TRegistro1920;
+begin
+  Result := TRegistro1920(Inherited Items[Index]);
+end;
+
+function TRegistro1920List.New(AOwner: TRegistro1910): TRegistro1920;
+begin
+  Result := TRegistro1920.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistro1920List.SetItem(Index: Integer;
+  const Value: TRegistro1920);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1921 }
+
+constructor TRegistro1921.Create(AOwner: TRegistro1920);
+begin
+  FRegistro1922 := TRegistro1922List.Create;
+  FRegistro1923 := TRegistro1923List.Create;
+end;
+
+destructor TRegistro1921.Destroy;
+begin
+  FRegistro1922.Free;
+  FRegistro1923.Free;
+  inherited;
+end;
+
+{ TRegistro1921List }
+
+function TRegistro1921List.GetItem(Index: Integer): TRegistro1921;
+begin
+  Result := TRegistro1921(Inherited Items[Index]);
+end;
+
+function TRegistro1921List.New(AOwner: TRegistro1920): TRegistro1921;
+begin
+  Result := TRegistro1921.Create(AOwner);
+  Add(Result);
+end;
+
+procedure TRegistro1921List.SetItem(Index: Integer;
+  const Value: TRegistro1921);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1922List }
+
+function TRegistro1922List.GetItem(Index: Integer): TRegistro1922;
+begin
+  Result := TRegistro1922(Inherited Items[Index]);
+end;
+
+function TRegistro1922List.New: TRegistro1922;
+begin
+  Result := TRegistro1922.Create;
+  Add(Result);
+end;
+
+procedure TRegistro1922List.SetItem(Index: Integer;
+  const Value: TRegistro1922);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1923List }
+
+function TRegistro1923List.GetItem(Index: Integer): TRegistro1923;
+begin
+  Result := TRegistro1923(Inherited Items[Index]);
+end;
+
+function TRegistro1923List.New: TRegistro1923;
+begin
+  Result := TRegistro1923.Create;
+  Add(Result);
+end;
+
+procedure TRegistro1923List.SetItem(Index: Integer;
+  const Value: TRegistro1923);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1925List }
+
+function TRegistro1925List.GetItem(Index: Integer): TRegistro1925;
+begin
+  Result := TRegistro1925(Inherited Items[Index]);
+end;
+
+function TRegistro1925List.New: TRegistro1925;
+begin
+  Result := TRegistro1925.Create;
+  Add(Result);
+end;
+
+procedure TRegistro1925List.SetItem(Index: Integer;
+  const Value: TRegistro1925);
+begin
+  Put(Index, Value);
+end;
+
+{ TRegistro1926List }
+
+function TRegistro1926List.GetItem(Index: Integer): TRegistro1926;
+begin
+  Result := TRegistro1926(Inherited Items[Index]);
+end;
+
+function TRegistro1926List.New: TRegistro1926;
+begin
+  Result := TRegistro1926.Create;
+  Add(Result);
+end;
+
+procedure TRegistro1926List.SetItem(Index: Integer;
+  const Value: TRegistro1926);
+begin
+  Put(Index, Value);
 end;
 
 end.

@@ -122,6 +122,8 @@
 |*    exibição dos itens foi copiado do DANFE em QuickReport)
 |* 24/02/2012: Peterson de Cerqueira Matos
 |*  - Correção da exibição dos itens quando o emitente é CRT = 2
+|* 22/03/2013: Peterson de Cerqueira Matos
+|*  - Impressão dos detalhamentos específicos e do desconto em percentual
 ******************************************************************************}
 
 
@@ -137,8 +139,16 @@ uses
   {$ELSE}
   Windows, Messages, Graphics, Controls, Forms, Dialogs, ExtCtrls, MaskUtils, StdCtrls,
   {$ENDIF}
-  RLReport, RLFilters, RLPDFFilter, XMLIntf, XMLDoc,
-  ACBrNFeDANFeRL, pcnConversao, RLBarcode, jpeg, DB, StrUtils;
+  RLReport, RLFilters, RLPDFFilter,
+  {$IFDEF BORLAND}
+  XMLIntf, XMLDoc,
+    {$IF CompilerVersion >= 22}
+      Vcl.Imaging.jpeg,
+    {$ELSE}
+      jpeg,
+    {$IFEND}
+  {$ENDIF}
+  ACBrNFeDANFeRL, pcnConversao, RLBarcode, DB, StrUtils;
 
 type
   TfrlDANFeRLRetrato = class(TfrlDANFeRL)
@@ -316,11 +326,11 @@ type
     RLLabel51: TRLLabel;
     rllDescontos: TRLLabel;
     RLLabel46: TRLLabel;
-    rllBaseICMST: TRLLabel;
+    rllBaseICMSST: TRLLabel;
     RLLabel52: TRLLabel;
     rllAcessorias: TRLLabel;
     RLLabel47: TRLLabel;
-    rllValorICMST: TRLLabel;
+    rllValorICMSST: TRLLabel;
     RLLabel53: TRLLabel;
     rllValorIPI: TRLLabel;
     RLLabel48: TRLLabel;
@@ -441,7 +451,6 @@ type
     rllCabFatura2: TRLLabel;
     rllCabFatura3: TRLLabel;
     RLDraw69: TRLDraw;
-    RLLabel101: TRLLabel;
     rllISSQNValorServicos: TRLLabel;
     rllISSQNBaseCalculo: TRLLabel;
     rllISSQNValorISSQN: TRLLabel;
@@ -483,7 +492,7 @@ type
     rllCabFatura10: TRLLabel;
     rllCabFatura11: TRLLabel;
     rllCabFatura12: TRLLabel;
-    RLLabel10: TRLLabel;
+    lblPercValorDesc: TRLLabel;
     RLLabel11: TRLLabel;
     RLDraw1: TRLDraw;
     txtValorDesconto: TRLDBText;
@@ -643,6 +652,8 @@ type
       var PrintIt: Boolean);
     procedure rlbItensBeforePrint(Sender: TObject; var PrintIt: Boolean);
     procedure rlbEmitenteAfterPrint(Sender: TObject);
+    procedure rlbCabecalhoItensBeforePrint(Sender: TObject;
+      var PrintIt: Boolean);
   private
     FRecebemoDe : string;
     procedure InitDados;
@@ -663,13 +674,14 @@ type
     function FormatarFone(AValue: String): String;
     procedure InsereLinhas(sTexto: String; iLimCaracteres: Integer; rMemo: TRLMemo);
     procedure ConfigureDataSource;
+    procedure GeraDetalhamentoEspecifico;
   public
 
   end;
 
 implementation
 
-uses ACBrNFeUtil, pcnNFe, Math;
+uses ACBrNFeUtil, ACBrDFeUtil, pcnNFe, Math;
 
 var iLimiteLinhas: Integer = 10;
 iLinhasUtilizadas: Integer = 0;
@@ -720,11 +732,11 @@ end;
 function TfrlDANFeRLRetrato.FormatarFone(AValue: String): String;
 begin
   Result := AValue;
-  if NotaUtil.NaoEstaVazio(AValue) then
+  if DFeUtil.NaoEstaVazio(AValue) then
   begin
-    if Length(NotaUtil.LimpaNumero(AValue)) > 10 then AValue := copy(NotaUtil.LimpaNumero(AValue),2,10); //Casos em que o DDD vem com ZERO antes somando 3 digitos
+    if Length(DFeUtil.LimpaNumero(AValue)) > 10 then AValue := copy(DFeUtil.LimpaNumero(AValue),2,10); //Casos em que o DDD vem com ZERO antes somando 3 digitos
 
-    AValue := NotaUtil.Poem_Zeros(NotaUtil.LimpaNumero(AValue), 10);
+    AValue := DFeUtil.Poem_Zeros(DFeUtil.LimpaNumero(AValue), 10);
     Result := '('+copy(AValue,1,2) + ') ' + copy(AValue,3,4) + '-' + copy(AValue,7,4);
   end;
 end;
@@ -859,7 +871,7 @@ begin
                            '  -  ' +
                            'DEST. / REM.: ' + FNFe.Dest.xNome + '  -  ' +
                            'VALOR TOTAL: R$ ' +
-                           NotaUtil.FormatFloat(FNFe.Total.ICMSTot.vNF,
+                           DFeUtil.FormatFloat(FNFe.Total.ICMSTot.vNF,
                            '###,###,###,##0.00');
         end; // if FResumoCanhoto_Texto <> ''
       rllResumo.Visible := True;
@@ -909,7 +921,8 @@ begin
     end;
 
   // Exibe a informação correta no label da chave de acesso
-  if FNFe.procNFe.cStat > 0 then
+
+   if FNFe.procNFe.cStat > 0 then
     begin
       if FNFe.procNFe.cStat = 100 then
         begin
@@ -918,16 +931,17 @@ begin
           rllDadosVariaveis3_Descricao.Caption := 'PROTOCOLO DE AUTORIZAÇÃO DE USO';
           rllDadosVariaveis3_Descricao.Visible := True;
         end;
-      if FNFe.procNFe.cStat = 101 then
+      // Adicionados o 151 e 155 ou a propriedade FNFeCancelada=True - Alterado por Jorge Henrique em 22/02/2013
+      if ((FNFe.procNFe.cStat in [101, 151, 155]) or (FNFeCancelada)) then
         begin
           rlbCodigoBarras.Visible := False;
           rllXmotivo.Caption := 'NF-e CANCELADA';
           rllXmotivo.Visible := True;
-          rllDadosVariaveis3_Descricao.Caption :=
-                                    'PROTOCOLO DE HOMOLOGAÇÃO DE CANCELAMENTO';
+          rllDadosVariaveis3_Descricao.Caption := 'PROTOCOLO DE HOMOLOGAÇÃO DE CANCELAMENTO';
           rllDadosVariaveis3_Descricao.Visible := True;
         end;
-      if FNFe.procNFe.cStat = 102 then
+      // cStat de denegacao correto eh o 110 e nao 102 - Alterado por Jorge Henrique em 22/02/2013
+      if FNFe.procNFe.cStat = 110 then
         begin
           rlbCodigoBarras.Visible := False;
           rllXmotivo.Caption := 'NF-e DENEGADA';
@@ -935,8 +949,9 @@ begin
           rllDadosVariaveis3_Descricao.Caption := 'PROTOCOLO DE DENEGAÇÃO DE USO';
           rllDadosVariaveis3_Descricao.Visible := True;
         end;
-      if (FNFe.procNFe.cStat <> 100) and (FNFe.procNFe.cStat <> 101) and
-                                               (FNFe.procNFe.cStat <> 103) then
+
+      // Aproveitei o codigo adicionado ao DanfeQR pelo Italo em 27/01/2012
+      if not FNFe.procNFe.cStat in [100, 101, 110, 151, 155] then
         begin
           rlbCodigoBarras.Visible := False;
           rllXmotivo.Caption := FNFe.procNFe.xMotivo;
@@ -944,9 +959,7 @@ begin
           rllDadosVariaveis3_Descricao.Visible := False;
           rllDadosVariaveis3.Visible := False;
         end;
-    end
-  else
-    begin
+    end else begin
       if (FNFe.Ide.tpEmis in [teNormal, teSCAN]) then
         begin
           rlbCodigoBarras.Visible := False;
@@ -1180,9 +1193,9 @@ begin
      else
         rllEntradaSaida.Caption := '1';
 
-    rllEmissao.Caption   := NotaUtil.FormatDate(DateToStr(dEmi));
+    rllEmissao.Caption   := DFeUtil.FormatDate(DateToStr(dEmi));
     rllSaida.Caption     := IfThen(DSaiEnt <> 0,
-                                      NotaUtil.FormatDate(DateToStr(dSaiEnt)));
+                                      DFeUtil.FormatDate(DateToStr(dSaiEnt)));
     rllHoraSaida.Caption := IfThen(hSaiEnt <> 0, FormatDateTime('hh:nn:ss', hSaiEnt));
 
     if FNFe.Ide.tpEmis in [teNormal, teSCAN] then
@@ -1200,8 +1213,13 @@ begin
             rllDadosVariaveis1c.Visible := False;
           end;
         rlbCodigoBarrasFS.Visible := False;
-        rllDadosVariaveis3.Caption := FNFe.procNFe.nProt + ' ' +
-                                          DateTimeToStr(FNFe.procNFe.dhRecbto);
+        // Alteracao aplicada para corrigir a impressao do protocolo da NFe
+        // quando emitindo DANFE candelado.
+        // Alterado por Jorge Henrique em 22/02/2013
+        if FProtocoloNFe <> '' then
+           rllDadosVariaveis3.Caption:= FProtocoloNFe
+        else
+          rllDadosVariaveis3.Caption := FNFe.procNFe.nProt + ' ' +DateTimeToStr(FNFe.procNFe.dhRecbto);
         rllAvisoContingencia.Visible := False;
         rlbAvisoContingencia.Visible := False;
       end
@@ -1268,7 +1286,7 @@ begin
       rllRecebemosDe.Caption := Format (FRecebemoDe, [ XNome ]);
       rllInscricaoEstadual.Caption := IE;
       rllInscrEstSubst.caption := IEST;
-      rllCNPJ.Caption := NotaUtil.FormatarCNPJ(CNPJCPF );
+      rllCNPJ.Caption := DFeUtil.FormatarCNPJ(CNPJCPF );
       rlmEmitente.Lines.Text   := XNome;
       with EnderEmit do
         begin
@@ -1325,10 +1343,10 @@ begin
   with FNFe.Dest do
     begin
       if Length(CNPJCPF) = 14 then
-        rllDestCNPJ.Caption := NotaUtil.FormatarCNPJ(CNPJCPF)
+        rllDestCNPJ.Caption := DFeUtil.FormatarCNPJ(CNPJCPF)
       else
         if Length(CNPJCPF) = 11 then
-          rllDestCNPJ.Caption := NotaUtil.FormatarCPF(CNPJCPF)
+          rllDestCNPJ.Caption := DFeUtil.FormatarCPF(CNPJCPF)
         else
           rllDestCNPJ.Caption := CNPJCPF;
 
@@ -1359,9 +1377,9 @@ begin
       with FNFe.Entrega do
         begin
           if Trim (CNPJCPF) <>  '' then
-            sCNPJ := NotaUtil.FormatarCNPJ(CNPJCPF)
+            sCNPJ := DFeUtil.FormatarCNPJ(CNPJCPF)
           else
-            sCNPJ := NotaUtil.FormatarCPF(CNPJCPF);
+            sCNPJ := DFeUtil.FormatarCPF(CNPJCPF);
 
           if xCpl > '' then
             sEndereco := XLgr + IfThen (Nro = '0', '', ', ' + Nro) + ' - ' + xCpl
@@ -1383,9 +1401,9 @@ begin
       with FNFe.Retirada do
         begin
           if Trim (CNPJCPF) <>  '' then
-            sCNPJ := NotaUtil.FormatarCNPJ(CNPJCPF)
+            sCNPJ := DFeUtil.FormatarCNPJ(CNPJCPF)
           else
-            sCNPJ := NotaUtil.FormatarCPF(CNPJCPF);
+            sCNPJ := DFeUtil.FormatarCPF(CNPJCPF);
 
           if xCpl > '' then
             sEndereco := XLgr + IfThen (Nro = '0', '', ', ' + Nro) + ' - ' + xCpl
@@ -1402,17 +1420,17 @@ procedure TfrlDANFeRLRetrato.Imposto;
 begin
   with FNFe.Total.ICMSTot do
   begin
-    rllBaseICMS.Caption      := NotaUtil.FormatFloat(VBC, '###,###,###,##0.00');
-    rllValorICMS.Caption     := NotaUtil.FormatFloat(VICMS, '###,###,###,##0.00');
-    rllBaseICMST.Caption     := NotaUtil.FormatFloat(VBCST, '###,###,###,##0.00');
-    rllValorICMST.Caption    := NotaUtil.FormatFloat(VST, '###,###,###,##0.00');
-    rllTotalProdutos.Caption := NotaUtil.FormatFloat(VProd, '###,###,###,##0.00');
-    rllValorFrete.Caption    := NotaUtil.FormatFloat(VFrete, '###,###,###,##0.00');
-    rllValorSeguro.Caption   := NotaUtil.FormatFloat(VSeg, '###,###,###,##0.00');
-    rllDescontos.Caption     := NotaUtil.FormatFloat(VDesc, '###,###,###,##0.00');
-    rllAcessorias.Caption    := NotaUtil.FormatFloat(VOutro, '###,###,###,##0.00');
-    rllValorIPI.Caption      := NotaUtil.FormatFloat(VIPI, '###,###,###,##0.00');
-    rllTotalNF.Caption       := NotaUtil.FormatFloat(VNF, '###,###,###,##0.00');
+    rllBaseICMS.Caption      := DFeUtil.FormatFloat(VBC, '###,###,###,##0.00');
+    rllValorICMS.Caption     := DFeUtil.FormatFloat(VICMS, '###,###,###,##0.00');
+    rllBaseICMSST.Caption     := DFeUtil.FormatFloat(VBCST, '###,###,###,##0.00');
+    rllValorICMSST.Caption    := DFeUtil.FormatFloat(VST, '###,###,###,##0.00');
+    rllTotalProdutos.Caption := DFeUtil.FormatFloat(VProd, '###,###,###,##0.00');
+    rllValorFrete.Caption    := DFeUtil.FormatFloat(VFrete, '###,###,###,##0.00');
+    rllValorSeguro.Caption   := DFeUtil.FormatFloat(VSeg, '###,###,###,##0.00');
+    rllDescontos.Caption     := DFeUtil.FormatFloat(VDesc, '###,###,###,##0.00');
+    rllAcessorias.Caption    := DFeUtil.FormatFloat(VOutro, '###,###,###,##0.00');
+    rllValorIPI.Caption      := DFeUtil.FormatFloat(VIPI, '###,###,###,##0.00');
+    rllTotalNF.Caption       := DFeUtil.FormatFloat(VNF, '###,###,###,##0.00');
   end;
 end;
 
@@ -1422,23 +1440,19 @@ begin
     begin
       case modFrete of
         mfContaEmitente: rllTransModFrete.Caption := '0 - EMITENTE';
-        mfContaDestinatario: rllTransModFrete.Caption := '1 - DESTINATÁRIO';
+        mfContaDestinatario: rllTransModFrete.Caption := '1 - DEST/REM';
         mfContaTerceiros: rllTransModFrete.Caption := '2 - TERCEIROS';
         mfSemFrete: rllTransModFrete.Caption := '9 - SEM FRETE';
       end;
-
-      rllTransCodigoANTT.Caption := '';
-      rllTransPlaca.Caption := '';
-      rllTransUFPlaca.Caption := '';
 
       with Transporta do
         begin
           if Trim (CNPJCPF) <> '' then
             begin
               if length(Trim (CNPJCPF)) <= 11 then
-                rllTransCNPJ.Caption := NotaUtil.FormatarCPF(CNPJCPF)
+                rllTransCNPJ.Caption := DFeUtil.FormatarCPF(CNPJCPF)
               else
-                rllTransCNPJ.Caption := NotaUtil.FormatarCNPJ(CNPJCPF);
+                rllTransCNPJ.Caption := DFeUtil.FormatarCNPJ(CNPJCPF);
             end
           else
             rllTransCNPJ.Caption := '';
@@ -1453,6 +1467,7 @@ begin
 
   with FNFe.Transp.VeicTransp do
   begin
+    rllTransCodigoANTT.Caption := RNTC;
     rllTransPlaca.Caption   :=  Placa;
     rllTransUFPlaca.Caption :=  UF;
   end;
@@ -1467,10 +1482,10 @@ begin
         rllTransMarca.Caption      :=  Marca;
         rllTransNumeracao.Caption  :=  NVol ;
         if pesoL > 0 then
-          rllTransPesoLiq.Caption    :=  NotaUtil.FormatFloat(PesoL,
+          rllTransPesoLiq.Caption    :=  DFeUtil.FormatFloat(PesoL,
                                                         '###,###,###,##0.000');
         if pesoB > 0 then
-          rllTransPesoBruto.Caption  :=  NotaUtil.FormatFloat(PesoB,
+          rllTransPesoBruto.Caption  :=  DFeUtil.FormatFloat(PesoB,
                                                         '###,###,###,##0.000');
       end;
    end
@@ -1657,10 +1672,12 @@ begin
 end;
 
 procedure TfrlDANFeRLRetrato.Itens;
-var nItem : Integer ;
-sCST, sBCICMS, sALIQICMS, sVALORICMS, sALIQIPI, sVALORIPI  : String ;
+var nItem, i : Integer ;
+sCST, sBCICMS, sBCICMSST, sALIQICMS, sVALORICMS, sVALORICMSST, sALIQIPI,
+sVALORIPI, vAux: String;
+sDetalhamentoEspecifico: WideString;
+dPercDesc: Double;
 begin
-
   for nItem := 0 to (FNFe.Det.Count - 1) do
     begin
       with FNFe.Det.Items[nItem] do
@@ -1673,17 +1690,340 @@ begin
                   sVALORIPI  := '0,00' ;
 
                   cdsItens.Append ;
-                  cdsItens.FieldByName('CODIGO').AsString    := CProd;
-                  cdsItens.FieldByName('DESCRICAO').AsString := XProd;
-                  cdsItens.FieldByName('NCM').AsString       := NCM;
-                  cdsItens.FieldByName('CFOP').AsString      := CFOP;
-                  cdsItens.FieldByName('QTDE').AsString      := FormatFloat(format( sDisplayFormat ,[FCasasDecimaisqCom,0]),qCom);
-                  cdsItens.FieldByName('VALOR').AsString     := FormatFloat(format( sDisplayFormat ,[FCasasDecimaisvUnCom,0]),vUnCom);
+                  cdsItens.FieldByName('CODIGO').AsString := CProd;
+                  cdsItens.FieldByName('EAN').AsString := cEAN;
+                  if FImprimirDetalhamentoEspecifico = True then
+                    begin
+                      sDetalhamentoEspecifico := #13#10;
+                      if Prod.veicProd.chassi > '' then // XML de veículo novo
+                        begin
+                          if dv_tpOp in FDetVeiculos then
+                            begin
+                              case Prod.veicProd.tpOP of
+                                toVendaConcessionaria: vAux := '1-VENDA CONCESSIONÁRIA';
+                                toFaturamentoDireto:   vAux := '2-FAT. DIRETO CONS. FINAL';
+                                toVendaDireta:         vAux := '3-VENDA DIRETA';
+                                toOutros:              vAux := '0-OUTROS';
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'TIPO DA OPERAÇÃO: ' + vAux + #13#10;
+                            end;
 
-                  cdsItens.FieldByName('UNIDADE').AsString   := UCom;
-                  cdsItens.FieldByName('TOTAL').AsString     :=
+                          if dv_Chassi in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CHASSI: ' + Prod.veicProd.chassi + #13#10;
+
+                          if dv_cCor in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CÓDIGO DA COR: ' + Prod.veicProd.cCor + #13#10;
+
+                          if dv_xCor in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'NOME DA COR: ' + Prod.veicProd.xCor + #13#10;
+
+                          if dv_pot in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'POTÊNCIA DO MOTOR: ' + Prod.veicProd.pot + #13#10;
+
+                          if dv_cilin in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CILINDRADAS: ' + Prod.veicProd.Cilin + #13#10;
+
+                          if dv_pesoL in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'PESO LÍQUIDO: ' + Prod.veicProd.pesoL + #13#10;
+
+                          if dv_pesoB in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'PESO BRUTO: ' + Prod.veicProd.pesoB + #13#10;
+
+                          if dv_nSerie in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'NÚMERO DE SÉRIE: ' + Prod.veicProd.nSerie + #13#10;
+
+                          if dv_tpComb in FDetVeiculos then
+                            begin
+                              case StrToInt(Prod.veicProd.tpComb) of
+                                 1: vAux := '01-ÁLCOOL';
+                                 2: vAux := '02-GASOLINA';
+                                 3: vAux := '03-DIESEL';
+                                 4: vAux := '04-GASOGÊNIO';
+                                 5: vAux := '05-GÁS METANO';
+                                 6: vAux := '06-ELETRICO/F INTERNA';
+                                 7: vAux := '07-ELETRICO/F EXTERNA';
+                                 8: vAux := '08-GASOLINA/GNC';
+                                 9: vAux := '09-ÁLCOOL/GNC';
+                                10: vAux := '10-DIESEL / GNC';
+                                11: vAux := '11-VIDE CAMPO OBSERVAÇÃO';
+                                12: vAux := '12-ÁLCOOL/GNV';
+                                13: vAux := '13-GASOLINA/GNV';
+                                14: vAux := '14-DIESEL/GNV';
+                                15: vAux := '15-GÁS NATURAL VEICULAR';
+                                16: vAux := '16-ÁLCOOL/GASOLINA';
+                                17: vAux := '17-GASOLINA/ÁLCOOL/GNV';
+                                18: vAux := '18-GASOLINA/ELÉTRICO'
+                              else
+                                vAux := Prod.veicProd.tpComb;
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'COMBUSTÍVEL: ' + vAux + #13#10;
+                            end;
+
+                          if dv_nMotor in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'NÚMERO DO MOTOR: ' + Prod.veicProd.nMotor + #13#10;
+
+                          if dv_CMT in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CAP. MÁX. TRAÇÃO: ' + Prod.veicProd.CMT + #13#10;
+
+                          if dv_dist in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'DISTÂNCIA ENTRE EIXOS: ' + Prod.veicProd.dist + #13#10;
+
+                          if dv_anoMod in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'ANO DO MODELO: ' + IntToStr(Prod.veicProd.anoMod) + #13#10;
+
+                          if dv_anoFab in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'ANO DE FABRICAÇÃO: ' + IntToStr(Prod.veicProd.anoFab) + #13#10;
+
+                          if dv_tpPint in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'TIPO DE PINTURA: ' + Prod.veicProd.tpPint + #13#10;
+
+                          if dv_tpVeic in FDetVeiculos then
+                            begin
+                              case Prod.veicProd.tpVeic of
+                                1:  vAux := '01-BICICLETA';
+                                2:  vAux := '02-CICLOMOTOR';
+                                3:  vAux := '03-MOTONETA';
+                                4:  vAux := '04-MOTOCICLETA';
+                                5:  vAux := '05-TRICICLO';
+                                6:  vAux := '06-AUTOMÓVEL';
+                                7:  vAux := '07-MICROONIBUS';
+                                8:  vAux := '08-ONIBUS';
+                                9:  vAux := '09-BONDE';
+                                10: vAux := '10-REBOQUE';
+                                11: vAux := '11-SEMI-REBOQUE';
+                                12: vAux := '12-CHARRETE';
+                                13: vAux := '13-CAMIONETA';
+                                14: vAux := '14-CAMINHÃO';
+                                15: vAux := '15-CARROÇA';
+                                16: vAux := '16-CARRO DE MÃO';
+                                17: vAux := '17-CAMINHÃO TRATOR';
+                                18: vAux := '18-TRATOR DE RODAS';
+                                19: vAux := '19-TRATOR DE ESTEIRAS';
+                                20: vAux := '20-TRATOR MISTO';
+                                21: vAux := '21-QUADRICICLO';
+                                22: vAux := '22-CHASSI/PLATAFORMA';
+                                23: vAux := '23-CAMINHONETE';
+                                24: vAux := '24-SIDE-CAR';
+                                25: vAux := '25-UTILITÁRIO';
+                                26: vAux := '26-MOTOR-CASA'
+                              else
+                                vAux := IntToStr(Prod.veicProd.tpVeic);
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'TIPO DE VEÍCULO: ' + vAux + #13#10;
+                            end;
+
+                          if dv_espVeic in FDetVeiculos then
+                            begin
+                              case Prod.veicProd.espVeic of
+                                1: vAux := '01-PASSAGEIRO';
+                                2: vAux := '02-CARGA';
+                                3: vAux := '03-MISTO';
+                                4: vAux := '04-CORRIDA';
+                                5: vAux := '05-TRAÇÃO';
+                                6: vAux := '06-ESPECIAL';
+                                7: vAux := '07-COLEÇÃO'
+                              else
+                                vAux := IntToStr(Prod.veicProd.espVeic);
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'ESPÉCIE DO VEÍCULO: ' + vAux + #13#10;
+                            end;
+
+                          if dv_VIN in FDetVeiculos then
+                            begin
+                              if Prod.veicProd.VIN = 'R' then
+                                vAux := 'R-REMARCADO'
+                              else
+                                if Prod.veicProd.VIN = 'N' then
+                                  vAux := 'N-NORMAL'
+                                else
+                                  vAux := Prod.veicProd.VIN;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'VIN (CHASSI): ' + vAux + #13#10;
+                            end;
+
+                          if dv_condVeic in FDetVeiculos then
+                            begin
+                              case Prod.veicProd.condVeic of
+                                cvAcabado:     vAux := '1-ACABADO';
+                                cvInacabado:   vAux := '2-INACABADO';
+                                cvSemiAcabado: vAux := '3-SEMI-ACABADO';
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CONDIÇÃO DO VEÍCULO: ' + vAux + #13#10;
+                            end;
+
+                          if dv_cMod in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CÓDIGO MARCA MODELO: ' + Prod.veicProd.cMod + #13#10;
+
+                          if dv_cCorDENATRAN in FDetVeiculos then
+                            begin
+                              case StrToInt(Prod.veicProd.cCorDENATRAN) of
+                                1:  vAux := '01-AMARELO';
+                                2:  vAux := '02-AZUL';
+                                3:  vAux := '03-BEGE';
+                                4:  vAux := '04-BRANCA';
+                                5:  vAux := '05-CINZA';
+                                6:  vAux := '06-DOURADA';
+                                7:  vAux := '07-GRENÁ';
+                                8:  vAux := '08-LARANJA';
+                                9:  vAux := '09-MARROM';
+                                10: vAux := '10-PRATA';
+                                11: vAux := '11-PRETA';
+                                12: vAux := '12-ROSA';
+                                13: vAux := '13-ROXA';
+                                14: vAux := '14-VERDE';
+                                15: vAux := '15-VERMELHA';
+                                16: vAux := '16-FANTASIA'
+                              else
+                                vAux := Prod.veicProd.cCorDENATRAN;
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CÓDIGO COR DENATRAN: ' + vAux + #13#10;
+                            end;
+
+                          if dv_lota in FDetVeiculos then
+                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CAPACIDADE MÁXIMA DE LOTAÇÃO: ' + IntToStr(Prod.veicProd.lota) + #13#10;
+
+                          if dv_tpRest in FDetVeiculos then
+                            begin
+                              case Prod.veicProd.tpRest of
+                                0: vAux := '0-NÃO HÁ';
+                                1: vAux := '1-ALIENAÇÃO FIDUCIÁRIA';
+                                2: vAux := '2-RESERVA DE DOMICÍLIO';
+                                3: vAux := '3-RESERVA DE DOMÍNIO';
+                                4: vAux := '4-PENHOR DE VEÍCULOS';
+                                9: vAux := '9-OUTRAS'
+                              else
+                                vAux := IntToStr(Prod.veicProd.tpRest);
+                              end;
+                              sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'RESTRIÇÃO: ' + vAux;
+                            end;
+
+                          cdsItens.FieldByName('DESCRICAO').AsString := xProd + sDetalhamentoEspecifico;
+                        end // // if Prod.veicProd.chassi > ''
+                      else
+                        begin
+                          if Prod.med.Count > 0 then
+                            begin
+                              for i := 0 to Prod.med.Count - 1 do
+                                begin
+                                  if dm_nLote in FDetMedicamentos then
+                                    sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'NÚMERO DO LOTE: ' + Prod.med.Items[i].nLote + #13#10;
+
+                                  if dm_qLote in FDetMedicamentos then
+                                    sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'QUANTIDADE DO LOTE: ' + FormatFloat('###,##0.000', Prod.med.Items[i].qLote) + #13#10;
+
+                                  if dm_dFab in FDetMedicamentos then
+                                    sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'DATA DE FABRICAÇÃO: ' + DateToStr(Prod.med.Items[i].dFab) + #13#10;
+
+                                  if dm_dVal in FDetMedicamentos then
+                                    sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'DATA DE VALIDADE: ' + DateToStr(Prod.med.Items[i].dVal) + #13#10;
+
+                                  if dm_vPMC in FDetMedicamentos then
+                                    sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'PREÇO MÁX. CONSUMIDOR: R$ ' + FormatFloat('###,##0.00', Prod.med.Items[i].vPMC) + #13#10;
+
+                                  if (sDetalhamentoEspecifico > '') and (sDetalhamentoEspecifico <> #13#10) then
+                                    begin
+                                      if i = Prod.med.Count - 1 then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico
+                                      else
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + #13#10;
+                                    end;
+
+                                end;  // for i := 0 to Prod.med.Count - 1
+
+                              cdsItens.FieldByName('DESCRICAO').AsString := xProd + sDetalhamentoEspecifico;
+                            end // if Prod.med.Count > 0
+                          else
+                            begin
+                              if Prod.arma.Count > 0 then
+                                begin
+                                  for i := 0 to Prod.arma.Count - 1 do
+                                    begin
+                                      if da_tpArma in FDetArmamentos then
+                                        begin
+                                          case Prod.arma.Items[i].tpArma of
+                                            taUsoPermitido: vAux := '0-USO PERMITIDO';
+                                            taUsoRestrito:  vAux := '1-USO RESTRITO';
+                                          end;
+                                          sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'TIPO DE ARMA: ' + vAux + #13#10;
+                                        end;
+
+                                      if da_nSerie in FDetArmamentos then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'No. SÉRIE: ARMA' + Prod.arma.Items[i].nSerie + #13#10;
+
+                                      if da_nCano in FDetArmamentos then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'No. SÉRIE CANO: ' + Prod.arma.Items[i].nCano + #13#10;
+
+                                      if da_descr in FDetArmamentos then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'DESCRIÇÃO ARMA: ' + Prod.arma.Items[i].descr + #13#10;
+
+                                      if (sDetalhamentoEspecifico > '') and (sDetalhamentoEspecifico <> #13#10) then
+                                        begin
+                                          if i = Prod.arma.Count - 1 then
+                                            sDetalhamentoEspecifico := sDetalhamentoEspecifico
+                                          else
+                                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + #13#10;
+                                        end;
+
+                                    end;  // for i := 0 to Prod.arma.Count - 1
+
+                                  cdsItens.FieldByName('DESCRICAO').AsString := xProd + sDetalhamentoEspecifico;
+                                end  // if Prod.arma.Count > 0
+                              else
+                                begin
+                                  if Prod.comb.cProdANP > 0 then
+                                    begin
+                                      if dc_cProdANP in FDetCombustiveis then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'CÓD. PRODUTO ANP: ' + IntToStr(Prod.comb.cProdANP) + #13#10;
+
+                                      if dc_CODIF in FDetCombustiveis then
+                                        if Prod.comb.CODIF > '' then
+                                          sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'AUTORIZAÇÃO/CODIF: ' + Prod.comb.CODIF + #13#10;
+
+                                      if dc_qTemp in FDetCombustiveis then
+                                        if Prod.comb.qTemp > 0 then
+                                          sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'QTD. FATURADA TEMP. AMBIENTE: ' + FormatFloat('###,##0.0000', Prod.comb.qTemp) + #13#10;
+
+                                      if dc_UFCons in FDetCombustiveis then
+                                        sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'UF DE CONSUMO: ' + Prod.comb.UFcons + #13#10;
+
+                                      if Prod.comb.CIDE.qBCProd > 0 then
+                                        begin
+                                          if dc_qBCProd in FDetCombustiveis then
+                                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'BASE DE CÁLCULO CIDE: ' + FormatFloat('###,##0.0000', Prod.comb.CIDE.qBCProd) + #13#10;
+
+                                          if dc_vAliqProd in FDetCombustiveis then
+                                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'ALÍQUOTA CIDE: ' + FormatFloat('###,##0.0000', Prod.comb.CIDE.vAliqProd) + #13#10;
+
+                                          if dc_vCIDE in FDetCombustiveis then
+                                            sDetalhamentoEspecifico := sDetalhamentoEspecifico + 'VALOR CIDE: ' + FormatFloat('###,##0.00', Prod.comb.CIDE.vCIDE);
+                                        end;  // if Prod.comb.CIDE.qBCProd > 0
+
+                                      cdsItens.FieldByName('DESCRICAO').AsString := xProd + sDetalhamentoEspecifico;
+                                    end  // if Prod.comb.cProdANP > 0
+                                  else
+                                    cdsItens.FieldByName('DESCRICAO').AsString := XProd;
+                                end; // else if Prod.arma.Count > 0
+                            end // else if Prod.med.Count > 0
+                        end; // else if Prod.veicProd.chassi > ''
+                    end // if FImprimirDetalhamentoEspecifico = True
+                  else
+                    cdsItens.FieldByName('DESCRICAO').AsString := XProd;
+
+                  cdsItens.FieldByName('NCM').AsString := NCM;
+                  cdsItens.FieldByName('CFOP').AsString := CFOP;
+                  cdsItens.FieldByName('QTDE').AsString := FormatFloat(format(sDisplayFormat ,[FCasasDecimaisqCom,0]),qCom);
+                  cdsItens.FieldByName('VALOR').AsString := FormatFloat(format(sDisplayFormat ,[FCasasDecimaisvUnCom,0]),vUnCom);
+                  cdsItens.FieldByName('UNIDADE').AsString := UCom;
+                  cdsItens.FieldByName('TOTAL').AsString :=
                                       FormatFloat('###,###,###,##0.00', vProd);
-                  cdsItens.FieldByName('VALORDESC').AsString :=
+
+                  if FImprimirDescPorc = True then
+                    begin
+                      dPercDesc := (vDesc * 100) / vProd;
+                      cdsItens.FieldByName('VALORDESC').AsString :=
+                                      FormatFloat('###,###,###,##0.00', dPercDesc);
+                    end
+                  else
+                    cdsItens.FieldByName('VALORDESC').AsString :=
                                       FormatFloat('###,###,###,##0.00', vDesc);
 
                   if FNFe.Emit.CRT in [crtRegimeNormal, crtSimplesExcessoReceita] then
@@ -1692,67 +2032,21 @@ begin
                         sCST := OrigToStr(orig) + CSTICMSToStr(CST)
                       else
                         sCST := '';
-                      sBCICMS    := '0,00';
-                      sALIQICMS  := '0,00';
-                      sVALORICMS := '0,00';
 
-                      if (CST = cst00) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                        end
-                      else if (CST = cst10) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                        end
-                      else if (CST = cst20) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                        end
-                      else if (CST = cst30) then
-                        begin
-                          {sBCICMS    := FormatFloat('###,###,###,##0.00', VBCST);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMSST);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMSST);}
-                          {cst30 nao pode sair base de icms}
-                        end
-                      else if (CST = cst40) or (CST = cst41) or (CST = cst50) then
-                        begin
-                          // Campos vazios
-                        end
-                      else if (CST = cst51) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                        end
-                      else if (CST = cst60) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBCST);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMSST);
-                        end
-                      else if (CST = cst70) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                        end
-                      else if (CST = cst90) then
-                        begin
-                          sBCICMS    := FormatFloat('###,###,###,##0.00', VBC);
-                          sALIQICMS  := FormatFloat('###,###,###,##0.00', PICMS);
-                          sVALORICMS := FormatFloat('###,###,###,##0.00', VICMS);
-                       end;
+                      sBCICMS      := FormatFloat('###,###,###,##0.00', VBC);
+                      sALIQICMS    := FormatFloat('###,###,###,##0.00', PICMS);
+                      sVALORICMS   := FormatFloat('###,###,###,##0.00', VICMS);
+                      sALIQICMS    := FormatFloat('###,###,###,##0.00', pICMS);
+                      sBCICMSST    := FormatFloat('###,###,###,##0.00', vBCST);
+                      sVALORICMSST := FormatFloat('###,###,###,##0.00', vICMSST);
 
-                      cdsItens.FieldByName('CST').AsString := sCST;
-                      cdsItens.FieldByName('BICMS').AsString := sBCICMS;
-                      cdsItens.FieldByName('ALIQICMS').AsString := sALIQICMS;
-                      cdsItens.FieldByName('VALORICMS').AsString := sVALORICMS;
+                      cdsItens.FieldByName('CST').AsString         := sCST;
+                      cdsItens.FieldByName('BICMS').AsString       := sBCICMS;
+                      cdsItens.FieldByName('ALIQICMS').AsString    := sALIQICMS;
+                      cdsItens.FieldByName('VALORICMS').AsString   := sVALORICMS;
+                      cdsItens.FieldByName('BICMSST').AsString     := sBCICMSST;
+                      cdsItens.FieldByName('VALORICMSST').AsString := sVALORICMSST;
+
                       lblCST.Caption := 'CST';
                       lblCST.Font.Size := 5;
                       lblCST.Top := 18;
@@ -1777,18 +2071,28 @@ begin
                       sALIQICMS  := '0,00';
                       sVALORICMS := '0,00';
 
-                      case CSOSN of
+                 {     case CSOSN of
                         csosn900:
                           begin
                             sBCICMS    := FormatFloat('#,##0.00', VBC);
                             sALIQICMS  := FormatFloat('#,##0.00', PICMS);
                             sVALORICMS := FormatFloat('#,##0.00', VICMS);
                          end;
-                      end;
+                      end;    }
 
+                      sBCICMS      := FormatFloat('###,###,###,##0.00', VBC);
+                      sALIQICMS    := FormatFloat('###,###,###,##0.00', PICMS);
+                      sVALORICMS   := FormatFloat('###,###,###,##0.00', VICMS);
+                      sALIQICMS    := FormatFloat('###,###,###,##0.00', pICMS);
+                      sBCICMSST    := FormatFloat('###,###,###,##0.00', vBCST);
+                      sVALORICMSST := FormatFloat('###,###,###,##0.00', vICMSST);
+
+                      cdsItens.FieldByName('CST').AsString         := sCST;
                       cdsItens.FieldByName('BICMS').AsString       := sBCICMS;
                       cdsItens.FieldByName('ALIQICMS').AsString    := sALIQICMS;
                       cdsItens.FieldByName('VALORICMS').AsString   := sVALORICMS;
+                      cdsItens.FieldByName('BICMSST').AsString     := sBCICMSST;
+                      cdsItens.FieldByName('VALORICMSST').AsString := sVALORICMSST;
                       //===========  Final do trecho copiado do Danfe em Quick Report ===============
 
                       lblCST.Caption := 'CSOSN';
@@ -1828,13 +2132,13 @@ begin
           rlbISSQN.Visible := True;
           rllISSQNInscricao.Caption := FNFe.Emit.IM;
           rllISSQNValorServicos.Caption :=
-                                NotaUtil.FormatFloat(FNFe.Total.ISSQNtot.vServ,
+                                DFeUtil.FormatFloat(FNFe.Total.ISSQNtot.vServ,
                                 '###,###,##0.00');
           rllISSQNBaseCalculo.Caption :=
-                                  NotaUtil.FormatFloat(FNFe.Total.ISSQNtot.vBC,
+                                  DFeUtil.FormatFloat(FNFe.Total.ISSQNtot.vBC,
                                   '###,###,##0.00');
           rllISSQNValorISSQN.Caption :=
-                                  NotaUtil.FormatFloat(FNFe.Total.ISSQNtot.vISS,
+                                  DFeUtil.FormatFloat(FNFe.Total.ISSQNtot.vISS,
                                   '###,###,##0.00');
         end
       else
@@ -1899,9 +2203,9 @@ begin
                TRLLabel (FindComponent ('rllFatNum'   + intToStr (x + 1))).Caption :=
                                                                               NDup;
                TRLLabel (FindComponent ('rllFatData'  + intToStr (x + 1))).Caption :=
-                                              NotaUtil.FormatDate(DateToStr(DVenc));
+                                              DFeUtil.FormatDate(DateToStr(DVenc));
                TRLLabel (FindComponent ('rllFatValor' + intToStr (x + 1))).Caption :=
-                                                        NotaUtil.FormatFloat(VDup);
+                                                        DFeUtil.FormatFloat(VDup);
              end;
         end; // if FNFe.Cobr.Dup.Count = 0
     end;  // ipPrazo
@@ -1998,16 +2302,10 @@ begin
   else
     begin
       if iItemAtual = FProdutosPorPagina then
-        begin
-          if RLNFe.PageNumber = 2 then
-            rlbItens.PageBreaking := pbAfterPrint
-          else
-            rlbItens.PageBreaking := pbBeforePrint;
-        end
+        rlbItens.PageBreaking := pbBeforePrint
       else
         rlbItens.PageBreaking := pbNone;
     end; // if FProdutosPorPagina = 0
-
 end;
 
 procedure TfrlDANFeRLRetrato.rlbEmitenteAfterPrint(Sender: TObject);
@@ -2033,6 +2331,20 @@ begin
   self.txtAliqICMS.DataSource := DataSource1;
   self.txtAliqIPI.DataSource := DataSource1;
   self.txtValorDesconto.DataSource := DataSource1;
+end;
+
+procedure TfrlDANFeRLRetrato.GeraDetalhamentoEspecifico;
+begin
+
+end;
+
+procedure TfrlDANFeRLRetrato.rlbCabecalhoItensBeforePrint(Sender: TObject;
+  var PrintIt: Boolean);
+begin
+  if FImprimirDescPorc = True then
+    lblPercValorDesc.Caption := 'PERC.(%)'
+  else
+    lblPercValorDesc.Caption := 'VALOR';
 end;
 
 end.

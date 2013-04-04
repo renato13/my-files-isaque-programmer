@@ -65,18 +65,27 @@ type
     FdmDanfe: TdmACBrNFeFR;
     FFastFile: String;
     FEspessuraBorda: Integer;
+    FFastFileEvento: String;
+    FShowDialog: Boolean;
     function GetPreparedReport: TfrxReport;
+    function GetPreparedReportEvento: TfrxReport;
     function PrepareReport(NFE: TNFe = nil): Boolean;
+    function PrepareReportEvento: Boolean;
    public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure ImprimirDANFE(NFE: TNFe = nil); override;
     procedure ImprimirDANFEPDF(NFE: TNFe = nil); override;
+    procedure ImprimirEVENTO(NFE: TNFe = nil); override;
+    procedure ImprimirEVENTOPDF(NFE: TNFe = nil); override;
   published
     property FastFile: String read FFastFile write FFastFile;
+    property FastFileEvento: String read FFastFileEvento write FFastFileEvento;
     property dmDanfe: TdmACBrNFeFR read FdmDanfe write FdmDanfe;
     property EspessuraBorda: Integer read FEspessuraBorda write FEspessuraBorda;
     property PreparedReport: TfrxReport read GetPreparedReport;
+    property PreparedReportEvento: TfrxReport read GetPreparedReportEvento;
+    property ShowDialog: Boolean read FShowDialog write FShowDialog default false; // Isaque Pinheiro
   end;
 
 implementation
@@ -108,6 +117,110 @@ begin
     else
       Result := nil;
   end;
+end;
+
+function TACBrNFeDANFEFR.GetPreparedReportEvento: TfrxReport;
+begin
+  if Trim(FFastFileEvento) = '' then
+    Result := nil
+  else
+  begin
+    if PrepareReportEvento then
+      Result := dmDanfe.frxReport
+    else
+      Result := nil;
+  end;
+end;
+
+function TACBrNFeDANFEFR.PrepareReport(NFE: TNFe): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+
+  if Trim(FastFile) <> '' then
+  begin
+    if FileExists(FastFile) then
+      dmDanfe.frxReport.LoadFromFile(FastFile)
+    else
+      raise EACBrNFeDANFEFR.CreateFmt('Caminho do arquivo de impressão do DANFE "%s" inválido.', [FastFile]);
+  end
+  else
+    raise EACBrNFeDANFEFR.Create('Caminho do arquivo de impressão do DANFE não assinalado.');
+
+  dmDanfe.frxReport.PrintOptions.Copies := FNumCopias;
+  dmDanfe.frxReport.PrintOptions.ShowDialog := FShowDialog;
+  dmDanfe.frxReport.ShowProgress := FMostrarStatus;
+
+  // Incluído por Luciano Enzweiler em 23/01/2013
+  // Define a impressora
+  if Length(Impressora) > 0 then
+    dmDanfe.frxReport.PrintOptions.Printer := FImpressora;
+
+  // preparar relatorio
+  if Assigned(NFE) then
+  begin
+    dmDanfe.NFe := NFE;
+    dmDanfe.CarregaDadosNFe;
+
+    Result := dmDanfe.frxReport.PrepareReport;
+  end
+  else
+  begin
+    if Assigned(ACBrNFe) then
+    begin
+      for i := 0 to TACBrNFe(ACBrNFe).NotasFiscais.Count - 1 do
+      begin
+        dmDanfe.NFe := TACBrNFe(ACBrNFe).NotasFiscais.Items[i].NFe;
+        dmDanfe.CarregaDadosNFe;
+
+        if (i > 0) then
+          Result := dmDanfe.frxReport.PrepareReport(False)
+        else
+          Result := dmDanfe.frxReport.PrepareReport;
+      end;
+    end
+    else
+      raise EACBrNFeDANFEFR.Create('Propriedade ACBrNFe não assinalada.');
+  end;
+end;
+
+function TACBrNFeDANFEFR.PrepareReportEvento: Boolean;
+begin
+  if Trim(FastFileEvento) <> '' then
+  begin
+    if FileExists(FastFileEvento) then
+      dmDanfe.frxReport.LoadFromFile(FastFileEvento)
+    else
+      raise EACBrNFeDANFEFR.CreateFmt('Caminho do arquivo de impressão do EVENTO "%s" inválido.', [FastFileEvento]);
+  end
+  else
+    raise EACBrNFeDANFEFR.Create('Caminho do arquivo de impressão do EVENTO não assinalado.');
+
+  dmDanfe.frxReport.PrintOptions.Copies := NumCopias;
+
+  // preparar relatorio
+  if Assigned(ACBrNFe) then
+  begin
+    if assigned(TACBrNFe(ACBrNFe).EventoNFe) then
+    begin
+      dmDanfe.Evento := TACBrNFe(ACBrNFe).EventoNFe;
+      dmDanfe.CarregaDadosEventos;
+    end
+    else
+      raise EACBrNFeDANFEFR.Create('Evento não foi assinalado.');
+
+    if TACBrNFe(ACBrNFe).NotasFiscais.Count > 0 then
+    begin
+      dmDanfe.frxReport.Variables['PossuiNFe'] := QuotedStr('S');
+      dmDanfe.NFe := TACBrNFe(ACBrNFe).NotasFiscais.Items[0].NFe;
+      dmDanfe.CarregaDadosNFe;
+    end;
+
+    Result := dmDanfe.frxReport.PrepareReport;
+  end
+  else
+    raise EACBrNFeDANFEFR.Create('Propriedade ACBrNFe não assinalada.');
 end;
 
 procedure TACBrNFeDANFEFR.ImprimirDANFE(NFE: TNFe);
@@ -145,46 +258,44 @@ begin
   end;
 end;
 
-function TACBrNFeDANFEFR.PrepareReport(NFE: TNFe): Boolean;
-var
-  i: Integer;
+procedure TACBrNFeDANFEFR.ImprimirEVENTO(NFE: TNFe);
 begin
-  Result := False;
-
-  if Trim(FastFile) <> '' then
+  if PrepareReportEvento then
   begin
-    if FileExists(FastFile) then
-      dmDanfe.frxReport.LoadFromFile(FastFile)
+    if MostrarPreview then
+      dmDanfe.frxReport.ShowPreparedReport
     else
-      raise EACBrNFeDANFEFR.CreateFmt('Caminho do arquivo de impressão do DANFE "%s" inválido.', [FastFile]);
-  end
-  else
-    raise EACBrNFeDANFEFR.Create('Caminho do arquivo de impressão do DANFE não assinalado.');
+      dmDanfe.frxReport.Print;
+  end;
+end;
 
-  if Assigned(NFE) then
+procedure TACBrNFeDANFEFR.ImprimirEVENTOPDF(NFE: TNFe);
+const
+  TITULO_PDF = 'Eventos Nota Fiscal Eletrônica';
+var
+  NomeArq: String;
+begin
+  if PrepareReportEvento then
   begin
-    dmDanfe.NFe := NFE;
-    dmDanfe.CarregaDados;
+    dmDanfe.frxPDFExport.Author     := Sistema;
+    dmDanfe.frxPDFExport.Creator    := Sistema;
+    dmDanfe.frxPDFExport.Producer   := Sistema;
+    dmDanfe.frxPDFExport.Title      := TITULO_PDF;
+    dmDanfe.frxPDFExport.Subject    := TITULO_PDF;
+    dmDanfe.frxPDFExport.Keywords   := TITULO_PDF;
+    dmDanfe.frxPDFExport.ShowDialog := False;
 
-    Result := dmDanfe.frxReport.PrepareReport;
-  end
-  else
-  begin
-    if Assigned(ACBrNFe) then
-    begin
-      for i := 0 to TACBrNFe(ACBrNFe).NotasFiscais.Count - 1 do
-      begin
-        dmDanfe.NFe := TACBrNFe(ACBrNFe).NotasFiscais.Items[i].NFe;
-        dmDanfe.CarregaDados;
+    {
+    NomeArq := TACBrNFe(ACBrNFe).EventoNFe.Evento[0].InfEvento.chNFe;
+    NomeArq := NomeArq + '-' + TACBrNFe(ACBrNFe).EventoNFe.Evento[0].InfEvento.TipoEvento;
+    NomeArq := NomeArq + '-' + IntToStr(TACBrNFe(ACBrNFe).EventoNFe.Evento[0].InfEvento.nSeqEvento);
+    }
 
-        if (i > 0) then
-          Result := dmDanfe.frxReport.PrepareReport(False)
-        else
-          Result := dmDanfe.frxReport.PrepareReport;
-      end;
-    end
-    else
-      raise EACBrNFeDANFEFR.Create('Propriedade ACBrNFe não assinalada.');
+    NomeArq := TACBrNFe(ACBrNFe).EventoNFe.Evento[0].InfEvento.TipoEvento;
+    NomeArq := NomeArq + TACBrNFe(ACBrNFe).EventoNFe.Evento[0].InfEvento.chNFe;
+
+    dmDanfe.frxPDFExport.FileName := PathWithDelim(Self.PathPDF) + NomeArq + 'evento.pdf';
+    dmDanfe.frxReport.Export(dmDanfe.frxPDFExport);
   end;
 end;
 

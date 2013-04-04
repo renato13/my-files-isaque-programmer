@@ -192,7 +192,7 @@ end;
 
 initialization
 {$IFDEF FPC}
-//   {$i acbrCTepcn_lcl.lrs}
+   {$i ACBrCTe.lrs}
 {$ENDIF}
 
 end.

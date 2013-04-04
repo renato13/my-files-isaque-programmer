@@ -1,15 +1,13 @@
 inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
-  Left = 202
-  Top = 108
+  Left = 218
+  Top = 116
   Width = 820
   Height = 655
-  VertScrollBar.Position = 167
   Caption = 'frlDANFeRLRetrato'
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited RLNFe: TRLReport
-    Top = -167
     Background.Arrange = baDistributed
     Background.Height = 96
     Background.Width = 175
@@ -112,6 +110,7 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
       Background.Width = 175
       BandType = btColumnHeader
       PageBreaking = pbBeforePrint
+      BeforePrint = rlbCabecalhoItensBeforePrint
       object rlsRectProdutos: TRLDraw
         Left = 0
         Top = 12
@@ -591,7 +590,7 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
           'C'#211'DIGO DO PROD. / SERV.')
         ParentFont = False
       end
-      object RLLabel10: TRLLabel
+      object lblPercValorDesc: TRLLabel
         Tag = 10
         Left = 509
         Top = 14
@@ -4860,7 +4859,7 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
         HoldStyle = hsRelatively
         ParentFont = False
       end
-      object rllBaseICMST: TRLLabel
+      object rllBaseICMSST: TRLLabel
         Left = 291
         Top = 25
         Width = 132
@@ -4878,9 +4877,9 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
         Tag = 10
         Left = 325
         Top = 45
-        Width = 90
+        Width = 85
         Height = 7
-        Caption = 'OUTRAS DESP. ACCESS.'
+        Caption = 'OUTRAS DESP. ACESS.'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -7
@@ -4918,7 +4917,7 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
         HoldStyle = hsRelatively
         ParentFont = False
       end
-      object rllValorICMST: TRLLabel
+      object rllValorICMSST: TRLLabel
         Left = 435
         Top = 25
         Width = 134
@@ -6023,12 +6022,6 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
         Font.Style = []
         ParentFont = False
       end
-      object RLLabel101: TRLLabel
-        Left = 680
-        Top = 16
-        Width = 72
-        Height = 16
-      end
       object LinhaFimItens: TRLDraw
         Left = 0
         Top = 12
@@ -6395,11 +6388,11 @@ inherited frlDANFeRLRetrato: TfrlDANFeRLRetrato
         Tag = 1
         Left = 4
         Top = 4
-        Width = 307
+        Width = 350
         Height = 7
         Caption = 
-          'RECEBEMOS DE %s OS PRODUTOS CONSTANTES DA NOTA FISCAL INDICADO A' +
-          'O LADO'
+          'RECEBEMOS DE %s OS PRODUTOS / SERVI'#199'OS CONSTANTES DA NOTA FISCAL' +
+          ' INDICADO AO LADO'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -7

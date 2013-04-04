@@ -96,6 +96,16 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+26/03/2013
+-- ACBrCargaBal --
+[+] Adiconado o suporte a geração de nutricionais na carga de balança
+    por: Carlos Nascimento
+
+04/11/2012
+-- ACBrCMC7 --
+[-] Acerto para retornar corretamente o numero da conta do banco HSBC
+    por: regys silveira
+
 14/04/2012
 -- ACBrCMC7 --
 [+] Adicionada rotinas de verificação dos dígitos C1, C2 e C3 (por CrasH)

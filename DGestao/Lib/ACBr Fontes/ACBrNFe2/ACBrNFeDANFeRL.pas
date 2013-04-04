@@ -92,6 +92,8 @@
 |*    estiver no Delphi. Obrigatória a utilização da versão 3.70B ou superior
 |*    do Fortes Report. Download disponível em
 |*    http://sourceforge.net/projects/fortesreport/files/
+|* 22/03/2013: Peterson de Cerqueira Matos
+|*  - Impressão dos detalhamentos específicos e do desconto em percentual
 ******************************************************************************}
 {$I ACBr.inc}
 unit ACBrNFeDANFeRL;
@@ -106,11 +108,25 @@ uses
   Windows, Messages, Graphics, Controls, Forms, Dialogs, ExtCtrls,
   {$ENDIF}
   RLReport, pcnNFe, pcnConversao, ACBrNFe, RLFilters, MaskUtils, RLPrinters,
-  RLPDFFilter, DB, {$IFDEF BORLAND} DBClient{$ELSE} DBClient{$ENDIF},RLConsts;
+  RLPDFFilter, DB, {$IFDEF BORLAND} DBClient{$ELSE} BufDataset{$ENDIF}, RLConsts;
     
 type
   TPosCanhoto = (pcCabecalho, pcRodape);
   TFonteDANFE = (fdTimesNewRoman, fdCourierNew, fdArial);
+  TDetVeiculo = (dv_tpOp, dv_chassi, dv_cCor, dv_xCor, dv_pot, dv_cilin,
+                 dv_pesoL, dv_pesoB, dv_nSerie, dv_tpComb, dv_nMotor, dv_CMT,
+                 dv_dist, dv_anoMod, dv_anoFab, dv_tpPint, dv_tpVeic,
+                 dv_espVeic, dv_VIN, dv_condVeic, dv_cMod, dv_cCorDENATRAN,
+                 dv_lota, dv_tpRest);
+  TDetMedicamento = (dm_nLote, dm_qLote, dm_dFab, dm_dVal, dm_vPMC);
+  TDetArmamento = (da_tpArma, da_nSerie, da_nCano, da_descr);
+  TDetCombustivel = (dc_cProdANP, dc_CODIF, dc_qTemp, dc_UFCons, dc_CIDE,
+                     dc_qBCProd, dc_vAliqProd, dc_vCIDE);
+  TDetVeiculos = set of TDetVeiculo;
+  TDetMedicamentos = set of TDetMedicamento;
+  TDetArmamentos = set of TDetArmamento;
+  TDetCombustiveis = set of TDetCombustivel;
+
 type
   TfrlDANFeRL = class(TForm)
     RLNFe: TRLReport;
@@ -119,6 +135,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
+
     { Private declarations }
   protected
     FACBrNFe: TACBrNFe;
@@ -150,7 +167,15 @@ type
     FExibirEAN: Boolean;
     FProtocoloNFe : String;
     FResumoCanhoto_Texto: String;
-    cdsItens: TClientDataSet;
+    FNFeCancelada: Boolean; // Incluido em 22/02/2013 por Jorge Henrique
+    FImprimirDetalhamentoEspecifico: Boolean;
+    FImprimirDescPorc: Boolean;
+    FDetVeiculos: TDetVeiculos;
+    FDetMedicamentos: TDetMedicamentos;
+    FDetArmamentos: TDetArmamentos;
+    FDetCombustiveis: TDetCombustiveis;
+
+    cdsItens:  {$IFDEF BORLAND} TClientDataSet {$ELSE} TBufDataset{$ENDIF};
     procedure ConfigDataSet;
   public
     { Public declarations }
@@ -176,7 +201,14 @@ type
                     ATamanhoFonte_RazaoSocial: Integer = 8;
                     AExibirEAN: Boolean = False;
                     AProtocoloNFe: String = '';
-                    AResumoCanhoto_Texto: String = '');
+                    AResumoCanhoto_Texto: String = '';
+                    ANFECancelada: Boolean = False; // Incluido em 22/02/2013 por Jorge Henrique
+                    AImprimirDetalhamentoEspecifico: Boolean = True;
+                    AImprimirDescPorc: Boolean = False;
+                    ADetVeiculos: TDetVeiculos = [];
+                    ADetMedicamentos: TDetMedicamentos = [];
+                    ADetArmamentos: TDetArmamentos = [];
+                    ADetCombustiveis: TDetCombustiveis = []);
 
     class procedure SavePDF(ANFe: TNFe; ALogo: String = '';
                     AMarcaDagua: String = ''; ALarguraCodProd: Integer = 54;
@@ -198,7 +230,15 @@ type
                     ATamanhoFonte_RazaoSocial: Integer = 8;
                     AExibirEAN: Boolean = False;
                     AProtocoloNFe: String = '';
-                    AResumoCanhoto_Texto: String = '');
+                    AResumoCanhoto_Texto: String = '';
+                    ANFECancelada: Boolean = False; // Incluido em 22/02/2013 por Jorge Henrique
+                    AImprimirDetalhamentoEspecifico: Boolean = True;
+                    AImprimirDescPorc: Boolean = False;
+                    ADetVeiculos: TDetVeiculos = [];
+                    ADetMedicamentos: TDetMedicamentos = [];
+                    ADetArmamentos: TDetArmamentos = [];
+                    ADetCombustiveis: TDetCombustiveis = []);
+
   end;
 
    const
@@ -212,7 +252,7 @@ implementation
 procedure TfrlDANFeRL.ConfigDataSet;
 begin
  if not Assigned( cdsItens ) then
- cdsItens:=  {$IFDEF BORLAND}  TClientDataSet.create(nil)  {$ELSE}  TClientDataSet.create(nil) {$ENDIF};
+ cdsItens:=  {$IFDEF BORLAND}  TClientDataSet.create(nil)  {$ELSE}  TBufDataset.create(nil) {$ENDIF};
 
   if cdsItens.Active then
  begin
@@ -233,8 +273,14 @@ begin
   TClientDataSet(cdsItens).Aggregates.Clear;
   TClientDataSet(cdsItens).AggFields.Clear;
   end;
+ {$ELSE}
+ if cdsItens is TBufDataset then
+  begin
+  TBufDataset(cdsItens).IndexDefs.Clear;
+  TBufDataset(cdsItens).IndexFieldNames:='';
+  TBufDataset(cdsItens).IndexName:='';
+  end;
  {$ENDIF}
-
 
  with cdsItens do
   if FieldCount = 0 then
@@ -243,7 +289,7 @@ begin
     Fields.Clear;
     FieldDefs.Add('CODIGO',ftString,60);
     FieldDefs.Add('EAN',ftString,14);
-    FieldDefs.Add('DESCRICAO',ftString,120);
+    FieldDefs.Add('DESCRICAO',ftWideString,2000);
     FieldDefs.Add('NCM',ftString,8);
     FieldDefs.Add('CFOP',ftString,4);
     FieldDefs.Add('UNIDADE',ftString,6);
@@ -256,14 +302,18 @@ begin
     FieldDefs.Add('BICMS',ftString,18);
     FieldDefs.Add('ALIQICMS',ftString,6);
     FieldDefs.Add('VALORICMS',ftString,18);
+    FieldDefs.Add('BICMSST',ftString,18);
+    FieldDefs.Add('VALORICMSST',ftString,18);
     FieldDefs.Add('ALIQIPI',ftString,6);
     FieldDefs.Add('VALORIPI',ftString,18);
 
    {$IFDEF BORLAND}
     if cdsItens is TClientDataSet then
     TClientDataSet(cdsItens).CreateDataSet;
+   {$ELSE}
+    if cdsItens is TBufDataset then
+    TBufDataset(cdsItens).CreateDataSet;
    {$ENDIF}
-
    end;
 
  {$IFDEF BORLAND}
@@ -281,7 +331,7 @@ begin
  {$ENDIF}
 
  DataSource1.dataset := cdsItens;
- 
+
 end;
 
 class procedure TfrlDANFeRL.Imprimir(ANFe: TNFe; ALogo: String = '';
@@ -306,7 +356,14 @@ class procedure TfrlDANFeRL.Imprimir(ANFe: TNFe; ALogo: String = '';
                 ATamanhoFonte_RazaoSocial: Integer = 8;
                 AExibirEAN: Boolean = False;
                 AProtocoloNFe: String = '';
-                AResumoCanhoto_Texto: String = '');
+                AResumoCanhoto_Texto: String = '';
+                ANFECancelada: Boolean = False; // Incluido em 22/02/2013 por Jorge Henrique
+                AImprimirDetalhamentoEspecifico: Boolean = True;
+                AImprimirDescPorc: Boolean = False;
+                ADetVeiculos: TDetVeiculos = [];
+                ADetMedicamentos: TDetMedicamentos = [];
+                ADetArmamentos: TDetArmamentos = [];
+                ADetCombustiveis: TDetCombustiveis = []);
 
 begin
   with Create ( nil ) do
@@ -339,6 +396,13 @@ begin
       FExibirEAN := AExibirEAN;
       FProtocoloNFe := AProtocoloNFe;
       FResumoCanhoto_Texto := AResumoCanhoto_Texto;
+      FNFeCancelada := ANFeCancelada; // Incluido em 22/02/2013 por Jorge Henrique
+      FImprimirDetalhamentoEspecifico := AImprimirDetalhamentoEspecifico;
+      FImprimirDescPorc := AImprimirDescPorc;
+      FDetVeiculos := ADetVeiculos;
+      FDetMedicamentos := ADetMedicamentos;
+      FDetArmamentos := ADetArmamentos;
+      FDetCombustiveis := ADetCombustiveis;
 
       if FImpressora > '' then
         RLPrinter.PrinterName := FImpressora;
@@ -378,7 +442,15 @@ class procedure TfrlDANFeRL.SavePDF(ANFe: TNFe; ALogo: String = '';
                     ATamanhoFonte_RazaoSocial: Integer = 8;
                     AExibirEAN: Boolean = False;
                     AProtocoloNFe: String = '';
-                    AResumoCanhoto_Texto: String = '');
+                    AResumoCanhoto_Texto: String = '';
+                    ANFECancelada: Boolean = False; // Incluido em 22/02/2013 por Jorge Henrique
+                    AImprimirDetalhamentoEspecifico: Boolean = True;
+                    AImprimirDescPorc: Boolean = False;
+                    ADetVeiculos: TDetVeiculos = [];
+                    ADetMedicamentos: TDetMedicamentos = [];
+                    ADetArmamentos: TDetArmamentos = [];
+                    ADetCombustiveis: TDetCombustiveis = []);
+
 begin
   with Create ( nil ) do
     try
@@ -408,6 +480,13 @@ begin
       FExibirEAN := AExibirEAN;
       FProtocoloNFe := AProtocoloNFe;
       FResumoCanhoto_Texto := AResumoCanhoto_Texto;
+      FNFeCancelada := ANFeCancelada; // Incluido em 22/02/2013 por Jorge Henrique
+      FImprimirDetalhamentoEspecifico := AImprimirDetalhamentoEspecifico;
+      FImprimirDescPorc := AImprimirDescPorc;
+      FDetVeiculos := ADetVeiculos;
+      FDetMedicamentos := ADetMedicamentos;
+      FDetArmamentos := ADetArmamentos;
+      FDetCombustiveis := ADetCombustiveis;
 
       with RLPDFFilter1.DocumentInfo do
         begin
@@ -435,5 +514,8 @@ procedure TfrlDANFeRL.FormCreate(Sender: TObject);
 begin
   ConfigDataSet;
 end;
+
+{initialization
+RLConsts.SetVersion(3,71,'B');}
 
 end.

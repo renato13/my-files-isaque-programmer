@@ -53,7 +53,7 @@ uses
   ACBrEPCBloco_F_Class, ACBrEPCBloco_M_Class, ACBrEPCBloco_P_Class;
 
 const
-  CACBrSpedPisCofins_Versao = '1.00a';
+  CACBrSpedPisCofins_Versao = '1.02';
 
 type
   { TACBrSPEDPisCofins }
@@ -106,6 +106,7 @@ type
     procedure SetOnError(const Value: TErrorEvent); /// Método SetError
 
     procedure LimpaRegistros;
+    procedure IniciaDados;
   protected
     /// BLOCO 0
     procedure WriteRegistro0000;
@@ -210,14 +211,17 @@ begin
   FInicializado := False;
 
   FBloco_0 := TBloco_0.Create;
-  FBloco_1 := TBloco_1.Create;
-  FBloco_9 := TBloco_9.Create;
   FBloco_A := TBloco_A.Create;
   FBloco_C := TBloco_C.Create;
   FBloco_D := TBloco_D.Create;
   FBloco_F := TBloco_F.Create;
   FBloco_M := TBloco_M.Create;
   FBloco_P := TBloco_P.Create;
+  FBloco_1 := TBloco_1.Create;
+  FBloco_9 := TBloco_9.Create;
+
+  // Define valores iniciais as propriedades no create e após limpar os registros.
+  IniciaDados;
 
   /// Objeto passado por referência para que possamos usa-lo para fazer pesquisa
   /// em seus registros.
@@ -263,6 +267,9 @@ begin
   FBloco_F.LimpaRegistros;
   FBloco_M.LimpaRegistros;
   FBloco_P.LimpaRegistros;
+
+  // Define valores iniciais as propriedades no create e após limpar os registros.
+  IniciaDados;
 end;
 
 function TACBrSPEDPisCofins.GetAbout: ansistring;
@@ -361,6 +368,19 @@ begin
    Bloco.LinhasBuffer := FACBrTXT.LinhasBuffer;
    Bloco.Gravado      := False ;
    Bloco.Conteudo.Clear;
+end;
+
+procedure TACBrSPEDPisCofins.IniciaDados;
+begin
+  // FBloco_0 terá que ter dados
+  FBloco_A.RegistroA001.IND_MOV := imSemDados;
+  FBloco_C.RegistroC001.IND_MOV := imSemDados;
+  FBloco_D.RegistroD001.IND_MOV := imSemDados;
+  FBloco_F.RegistroF001.IND_MOV := imSemDados;
+  FBloco_M.RegistroM001.IND_MOV := imSemDados;
+  FBloco_P.RegistroP001.IND_MOV := imSemDados;
+  FBloco_1.Registro1001.IND_MOV := imSemDados;
+  // FBloco_9 terá que ter dados
 end;
 
 procedure TACBrSPEDPisCofins.IniciaGeracao;
@@ -504,13 +524,13 @@ begin
     IniciaGeracao;
 
     WriteBloco_0;
-    WriteBloco_A( True );
-    WriteBloco_C( True );    // True = Fecha o Bloco
-    WriteBloco_D;
-    WriteBloco_F;
-    WriteBloco_M;
-    WriteBloco_P;
-    WriteBloco_1;
+    if FBloco_A.RegistroA001.IND_MOV = imComDados then WriteBloco_A( True );
+    if FBloco_C.RegistroC001.IND_MOV = imComDados then WriteBloco_C( True );    // True = Fecha o Bloco
+    if FBloco_D.RegistroD001.IND_MOV = imComDados then WriteBloco_D;
+    if FBloco_F.RegistroF001.IND_MOV = imComDados then WriteBloco_F;
+    if FBloco_M.RegistroM001.IND_MOV = imComDados then WriteBloco_M;
+    if FBloco_P.RegistroP001.IND_MOV = imComDados then WriteBloco_P;
+    if FBloco_1.Registro1001.IND_MOV = imComDados then WriteBloco_1;
     WriteBloco_9;
   finally
     /// Limpa de todos os Blocos as listas de todos os registros.
@@ -719,6 +739,14 @@ begin
             begin
                REG_BLC := '0111';
                QTD_REG_BLC := Bloco_0.Registro0111Count;
+            end;
+         end;
+         if Bloco_0.Registro0120Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := '0120';
+               QTD_REG_BLC := Bloco_0.Registro0120Count;
             end;
          end;
          if Bloco_0.Registro0140Count > 0 then
@@ -1732,7 +1760,6 @@ begin
                QTD_REG_BLC := Bloco_F.RegistroF211Count;
             end;
          end;
-         
          (*Edilon Alves de Oliveira*)
          if Bloco_F.RegistroF500Count > 0 then
          begin
@@ -1740,6 +1767,14 @@ begin
             begin
                REG_BLC := 'F500';
                QTD_REG_BLC := Bloco_F.RegistroF500Count;
+            end;
+         end;
+         if Bloco_F.RegistroF510Count > 0 then
+         begin
+            with New do
+            begin
+               REG_BLC := 'F510';
+               QTD_REG_BLC := Bloco_F.RegistroF510Count;
             end;
          end;
          (*Adilson Rodrigues - foi incluso este código para totalizar o registro f525 no blobo 9*)
@@ -2021,7 +2056,6 @@ end;
 
 procedure TACBrSPEDPisCofins.WriteRegistroP001;
 begin
-
    Bloco_P.WriteRegistroP001;
    //
    with Bloco_9.Registro9900 do

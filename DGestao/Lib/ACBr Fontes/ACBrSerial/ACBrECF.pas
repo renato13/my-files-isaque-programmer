@@ -45,7 +45,9 @@ uses ACBrBase, ACBrDevice, ACBrECFClass, ACBrPAFClass, ACBrRFD, ACBrAAC, ACBrEAD
         {$IFDEF VisualCLX}, QControls, QForms, QDialogs, QGraphics, QStdCtrls{$ENDIF}
         {$IFDEF VCL}, Controls, Forms, Dialogs, Graphics, StdCtrls {$ENDIF}
      {$ENDIF} ;
-
+{$IFDEF FRAMEWORK}
+{$UNDEF CONSOLE}
+{$ENDIF}
 const
    CACBrECF_Versao = '1.0.0' ;
 
@@ -60,7 +62,7 @@ type
 TACBrECFModelo = (ecfNenhum, ecfNaoFiscal, ecfBematech, ecfSweda, ecfDaruma,
                   ecfSchalter, ecfMecaf, ecfYanco, ecfDataRegis, ecfUrano,
                   ecfICash, ecfQuattro, ecfFiscNET, ecfEpson, ecfNCR,
-                  ecfSwedaSTX );
+                  ecfSwedaSTX, ecfEscECF );
                   
 TACBrECFEventoOnError = procedure( var Tratado : Boolean) of object ;
 TACBrECFOnAbreCupom = procedure(const CPF_CNPJ, Nome, Endereco : String ) of object ;
@@ -113,10 +115,12 @@ TACBrECF = class( TACBrComponent )
     fsSubTotalPagto :Double;
     fsIndiceGerencial : Integer ;
     {$IFNDEF CONSOLE}
+      {$IFNDEF FRAMEWORK}
       fsFormMsgColor : TColor ;
       fsFormMsgFont  : TFont ;
-      fsMemoOperacao : String ;
       fsMemoBobina: TMemo ;
+      {$ENDIF}
+      fsMemoOperacao : String ;
       fsMemoParams: TStrings;
       fsOnBobinaAdicionaLinhas: TACBrECFBobinaAdicionaLinhas;
       fsMemoColunas: Integer ;
@@ -131,7 +135,7 @@ TACBrECF = class( TACBrComponent )
     fsRFD : TACBrRFD ;
     fsAAC : TACBrAAC ;
     fsEADInterno : TACBrEAD ;
-    fsEAD : TACBrEAD ;       /// Classe usada para AssinarArquivo com assinatura EAD.
+    fsEAD : TACBrEAD ;       { Classe usada para AssinarArquivo com assinatura EAD. }
 
     fOnAntesAbreCupom : TACBrECFOnAbreCupom;
     fOnDepoisAbreCupom  : TACBrECFOnAbreCupom;
@@ -283,8 +287,10 @@ TACBrECF = class( TACBrComponent )
     function GetMaxLinhasBuffer: Integer;
     procedure SetMaxLinhasBuffer(const AValue: Integer);
     {$IFNDEF CONSOLE}
+      {$IFNDEF FRAMEWORK}
       procedure SetFormMsgFonte(const AValue: TFont);
       procedure SetMemoBobina(const AValue: TMemo);
+      {$ENDIF}
       procedure SetMemoParams(const AValue: TStrings);
       procedure MemoAdicionaLinha( Linhas : String ) ;
 
@@ -312,6 +318,7 @@ TACBrECF = class( TACBrComponent )
     function GetNumCFCClass: String;
     function GetNumGNFCClass: String;
     function GetNumCFDClass: String;
+    function GetNumCRZClass: String ;
     function GetNumNCNClass: String;
     function GetNumCCDCClass: String;
     function GetArredondaPorQtd: Boolean;
@@ -344,7 +351,6 @@ TACBrECF = class( TACBrComponent )
     function GetDataMovimentoClass: TDateTime;
     function GetGrandeTotalClass: Double;
     function GetNumCOOInicialClass: String;
-    function GetNumCRZClass: String ;
     function GetVendaBrutaClass: Double;
     function GetTotalAcrescimosClass: Double;
     function GetTotalCancelamentosClass: Double;
@@ -377,6 +383,11 @@ TACBrECF = class( TACBrComponent )
     function GetInfoRodapeCupom: TACBrECFRodape;
     procedure SetInfoRodapeCupom(const Value: TACBrECFRodape);
     function GetRespostasComandoClass: TACBrInformacoes;
+    function GetRodape: String;
+    function GetRodapeRestaurante: String;
+    function GetRodapeUF: String;
+    function GetOnChequeEstado: TACBrECFOnChequeEstado;
+    procedure SetOnChequeEstado(const Value: TACBrECFOnChequeEstado);
   protected
     fpUltimoEstadoObtido: TACBrECFEstado;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
@@ -836,8 +847,10 @@ TACBrECF = class( TACBrComponent )
                  write SetPaginaDeCodigoClass;
 
     {$IFNDEF CONSOLE}
+    {$IFNDEF FRAMEWORK}
        property FormMsgFonte : TFont read  fsFormMsgFont  write SetFormMsgFonte ;
        property FormMsgColor: TColor read  fsFormMsgColor write fsFormMsgColor ;
+    {$ENDIF}
     {$ENDIF}
 
      property OnMsgAguarde : TACBrECFMsgAguarde   read  GetOnMsgAguarde
@@ -850,6 +863,8 @@ TACBrECF = class( TACBrComponent )
                                                   write SetOnMsgRetentar ;
      property OnErrorSemPapel : TNotifyEvent read GetOnErrorSemPapel
                                             write SetOnErrorSemPapel ;
+     property OnChequeEstado: TACBrECFOnChequeEstado read GetOnChequeEstado
+                                                     write SetOnChequeEstado;
 
     property OnAntesAbreCupom : TACBrECFOnAbreCupom
        read FOnAntesAbreCupom write FOnAntesAbreCupom;
@@ -986,7 +1001,9 @@ TACBrECF = class( TACBrComponent )
         write SetDecimaisQtd default 3 ;
 
     {$IFNDEF CONSOLE}
+    {$IFNDEF FRAMEWORK}
        property MemoBobina : TMemo    read fsMemoBobina write SetMemoBobina ;
+     {$ENDIF}
        property MemoParams : TStrings read fsMemoParams write SetMemoParams ;
        property OnBobinaAdicionaLinhas : TACBrECFBobinaAdicionaLinhas
           read  fsOnBobinaAdicionaLinhas write fsOnBobinaAdicionaLinhas ;
@@ -1006,7 +1023,7 @@ implementation
 Uses ACBrUtil, ACBrECFBematech, ACBrECFNaoFiscal, ACBrECFDaruma, ACBrECFSchalter,
      ACBrECFMecaf, ACBrECFSweda, ACBrECFDataRegis, ACBrECFUrano, ACBrECFYanco,
      ACBrECFICash, ACBrECFQuattro, ACBrECFFiscNET, ACBrECFEpson, ACBrECFNCR,
-     ACBrECFSwedaSTX, {ACBrECFSCU, }
+     ACBrECFSwedaSTX, ACBrECFEscECF,
     {$IFDEF COMPILER6_UP} StrUtils {$ELSE}ACBrD5 ,Windows {$ENDIF}, Math,
     IniFiles ;
 
@@ -1046,10 +1063,13 @@ begin
   fsDevice.Porta := 'COM1';
 
   {$IFNDEF CONSOLE}
+  {$IFNDEF FRAMEWORK}
     fsFormMsgFont  := TFont.create ;
     fsFormMsgColor :=  {$IFDEF VisualCLX} clNormalHighlight {$ELSE}
                                           clHighlight      {$ENDIF};
+
     fsMemoBobina := nil ;
+    {$ENDIF}
 
     fsMemoItens     := 0 ;
     {$IFDEF MSWINDOWS}
@@ -1121,7 +1141,9 @@ begin
   FreeAndNil( fsDevice ) ;
 
   {$IFNDEF CONSOLE}
+  {$IFNDEF FRAMEWORK}
     fsFormMsgFont.Free ;
+  {$ENDIF}
     fsMemoParams.Free ;
   {$ENDIF}
 
@@ -1156,6 +1178,14 @@ var wRetentar : Boolean ;   { Variaveis de Trabalho, usadas para transportar }
     wDescricaoGrande : Boolean ;
     wIntervaloAposComando : Integer ;
     wIgnorarTagsFormatacao: Boolean;
+    wInfoRodapeCupomMania: Boolean;
+    wInfoRodapeMinasLegal: Boolean;
+    wInfoRodapeParaibaLegal: Boolean;
+    wInfoRodapeMD5: String;
+    wInfoRodapeNotaLegalDFImprimir: Boolean;
+    wInfoRodapeNotaLegalDFProgramaDeCredito: Boolean;
+    wInfoRodapeRestauranteImprimir: Boolean;
+
 begin
   if fsModelo = AValue then exit ;
 
@@ -1188,6 +1218,14 @@ begin
   wOnAguardandoRespostaChange := OnAguardandoRespostaChange ;
   wIgnorarTagsFormatacao:= IgnorarTagsFormatacao;
 
+  wInfoRodapeCupomMania   := InfoRodapeCupom.CupomMania ;
+  wInfoRodapeMinasLegal   := InfoRodapeCupom.MinasLegal ;
+  wInfoRodapeParaibaLegal := InfoRodapeCupom.ParaibaLegal ;
+  wInfoRodapeMD5          := InfoRodapeCupom.MD5;
+  wInfoRodapeNotaLegalDFImprimir := InfoRodapeCupom.NotaLegalDF.Imprimir;
+  wInfoRodapeNotaLegalDFProgramaDeCredito := InfoRodapeCupom.NotaLegalDF.ProgramaDeCredito;
+  wInfoRodapeRestauranteImprimir := InfoRodapeCupom.Restaurante.Imprimir;
+
   FreeAndNil( fsECF ) ;
 
   { Instanciando uma nova classe de acordo com fsModelo }
@@ -1207,6 +1245,7 @@ begin
     ecfEpson     : fsECF := TACBrECFEpson.create( Self ) ;
     ecfNCR       : fsECF := TACBrECFNCR.create( Self ) ;
     ecfSwedaSTX  : fsECF := TACBrECFSwedaSTX.Create( self );
+    ecfEscECF    : fsECF := TACBrECFEscECF.Create( self );
   else
      fsECF := TACBrECFClass.create( Self ) ;
   end;
@@ -1237,6 +1276,14 @@ begin
   OnAguardandoRespostaChange := wOnAguardandoRespostaChange ;
   DescricaoGrande      := wDescricaoGrande ;
   IgnorarTagsFormatacao:= wIgnorarTagsFormatacao;
+
+  InfoRodapeCupom.CupomMania           := wInfoRodapeCupomMania;
+  InfoRodapeCupom.MinasLegal           := wInfoRodapeMinasLegal;
+  InfoRodapeCupom.ParaibaLegal         := wInfoRodapeParaibaLegal;
+  InfoRodapeCupom.MD5                  := wInfoRodapeMD5;
+  InfoRodapeCupom.NotaLegalDF.Imprimir := wInfoRodapeNotaLegalDFImprimir;
+  InfoRodapeCupom.NotaLegalDF.ProgramaDeCredito := wInfoRodapeNotaLegalDFProgramaDeCredito;
+  InfoRodapeCupom.Restaurante.Imprimir := wInfoRodapeRestauranteImprimir;
 
   fsModelo := AValue;
 end;
@@ -1632,10 +1679,12 @@ begin
 end;
 
 {$IFNDEF CONSOLE}
+{$IFNDEF FRAMEWORK}
   procedure TACBrECF.SetFormMsgFonte(const AValue: TFont);
   begin
     fsFormMsgFont.Assign( AValue ) ;
   end;
+{$ENDIF}
 {$ENDIF}
 
 function TACBrECF.GetOnMsgAguarde: TACBrECFMsgAguarde;
@@ -1673,9 +1722,19 @@ begin
   fsECF.OnAguardandoRespostaChange := AValue ;
 end;
 
+procedure TACBrECF.SetOnChequeEstado(const Value: TACBrECFOnChequeEstado);
+begin
+  fsECF.OnChequeEstado := Value
+end;
+
 function TACBrECF.GetOnAguardandoRespostaChange: TNotifyEvent;
 begin
   Result := fsECF.OnAguardandoRespostaChange ;
+end;
+
+function TACBrECF.GetOnChequeEstado: TACBrECFOnChequeEstado;
+begin
+  Result := fsECF.OnChequeEstado;
 end;
 
 function TACBrECF.TestarDialog: Boolean;
@@ -1704,7 +1763,11 @@ begin
 
      Msg := ACBrStr(Msg);
      {$IFNDEF CONSOLE}
+     {$IFNDEF FRAMEWORK}
        MessageDlg(Msg, mtInformation ,[mbOk],0) ;
+     {$ELSE}
+       writeln( Msg ) ;
+     {$ENDIF}
      {$ELSE}
        writeln( Msg ) ;
      {$ENDIF}
@@ -1763,19 +1826,22 @@ end;
 
 function TACBrECF.GetDataHoraClass: TDateTime;
 begin
-  ComandoLOG := 'DataHora' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'DataHora' ;
   Result := fsECF.DataHora ;
 end;
 
 function TACBrECF.GetNumCupomClass: String;
 begin
-  ComandoLOG := 'NumCupom' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'NumCupom' ;
   Result := fsECF.NumCupom ;
 end;
 
 function TACBrECF.GetNumECFClass: String;
 begin
-  ComandoLOG := 'NumECF' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'NumECF' ;
   Result := fsECF.NumECF ;
 end;
 
@@ -1841,13 +1907,15 @@ end;
 
 function TACBrECF.GetNumLojaClass: String;
 begin
-  ComandoLOG := 'NumLoja' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'NumLoja' ;
   Result := fsECF.NumLoja ;
 end;
 
 function TACBrECF.GetNumSerieClass: String;
 begin
-  ComandoLOG := 'NumSerie' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'NumSerie' ;
   Result := fsECF.NumSerie ;
 end;
 
@@ -1937,8 +2005,7 @@ end;
 
 function TACBrECF.MontaDadosReducaoZ: AnsiString;
 begin
-  ComandoLOG := 'MontaDadosReducaoZ' ;
-  Result := fsECF.MontaDadosReducaoZ;
+  Result := fsECF.DadosReducaoZClass.MontaDadosReducaoZ;
 end;
 
 function TACBrECF.GetIdentificaConsumidorRodapeClass: Boolean;
@@ -1949,13 +2016,15 @@ end;
 
 function TACBrECF.GetCNPJClass: String;
 begin
-  ComandoLOG := 'CNPJ' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'CNPJ' ;
   Result := Trim(fsECF.CNPJ) ;
 end;
 
 function TACBrECF.GetIEClass: String;
 begin
-  ComandoLOG := 'IE' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'IE' ;
   Result := Trim(fsECF.IE) ;
 end;
 
@@ -1973,7 +2042,8 @@ end;
 
 function TACBrECF.GetUsuarioAtualClass: String;
 begin
-  ComandoLOG := 'UsuarioAtual' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'UsuarioAtual' ;
   Result := fsECF.UsuarioAtual ;
 end;
 
@@ -1997,14 +2067,16 @@ end;
 
 function TACBrECF.GetDataMovimentoClass: TDateTime;
 begin
-  ComandoLOG := 'DataMovimento' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'DataMovimento' ;
   Result := fsECF.DataMovimento ;
 end;
 
 function TACBrECF.GetGrandeTotalClass: Double;
 begin
   IgnorarErroSemPapel := True;
-  ComandoLOG := 'GrandeTotal' ;
+  if ComandoLOG = '' then
+     ComandoLOG := 'GrandeTotal' ;
   Result := RoundTo( fsECF.GrandeTotal, -2) ;
 end;
 
@@ -2135,153 +2207,8 @@ begin
 end;
 
 function TACBrECF.GetDadosReducaoZ: AnsiString;
-Var
-  I    : Integer ;
-  Aliq : TACBrECFAliquota ;
-  FPG  : TACBrECFFormaPagamento ;
-  CNF  : TACBrECFComprovanteNaoFiscal ;
-  RG   : TACBrECFRelatorioGerencial ;
 begin
-  { Alimenta a class com os dados atuais do ECF }
-  with fsECF.DadosReducaoZClass do
-  begin
-     // Zerar variaveis
-     Clear ;
-
-     { REDUÇÃO Z }
-     try DataDoMovimento  := Self.DataMovimento; except end ;
-     try DataDaImpressora := Self.DataHora;      except end ;
-     try NumeroDeSerie    := Self.NumSerie;      except end ;
-     try NumeroDeSerieMFD := Self.NumSerieMFD;   except end ;
-     try NumeroDoECF      := Self.NumECF;        except end ;
-     try NumeroDaLoja     := Self.NumLoja;       except end ;
-     try NumeroCOOInicial := Self.NumCOOInicial; except end ;
-
-     { CONTADORES }
-     try COO  := StrToIntDef(Self.NumCOO,0);  except end ;
-     try GNF  := StrToIntDef(Self.NumGNF,0);  except end ;
-     try CRO  := StrToIntDef(Self.NumCRO,0);  except end ;
-     try CRZ  := StrToIntDef(Self.NumCRZ,0);  except end ;
-     try CCF  := StrToIntDef(Self.NumCCF,0);  except end ;
-     try CDC  := StrToIntDef(Self.NumCDC,0);  except end ;
-     try CFC  := StrToIntDef(Self.NumCFC,0);  except end ;
-     try GRG  := StrToIntDef(Self.NumGRG,0);  except end ;
-     try GNFC := StrToIntDef(Self.NumGNFC,0); except end ;
-     try CFD  := StrToIntDef(Self.NumCFD,0);  except end ;
-     try NCN  := StrToIntDef(Self.NumNCN,0);  except end ;
-     try CCDC := StrToIntDef(Self.NumCCDC,0); except end ;
-
-     { TOTALIZADORES }
-     try ValorGrandeTotal  := Self.GrandeTotal;             except end ;
-     try ValorVendaBruta   := Self.VendaBruta;              except end ;
-     try CancelamentoICMS  := Self.TotalCancelamentos;      except end ;
-     try DescontoICMS      := Self.TotalDescontos;          except end ;
-     try CancelamentoISSQN := Self.TotalCancelamentosISSQN; except end ;
-     try DescontoISSQN     := Self.TotalDescontosISSQN;     except end ;
-     try AcrescimoICMS     := Self.TotalAcrescimos;         except end ;
-     try AcrescimoISSQN    := Self.TotalAcrescimosISSQN;    except end ;
-     try CancelamentoOPNF  := Self.TotalCancelamentosOPNF;  except end ;
-     try DescontoOPNF      := Self.TotalDescontosOPNF;      except end ;
-     try AcrescimoOPNF     := Self.TotalAcrescimosOPNF;     except end ;
-//   try TotalISSQN        := Self.TotalNaoTributadoISSQN; //Total ISSQN e Total Não tributado são coisas diferentes... ??? except end ;
-
-     { Copiando objetos de ICMS e ISS}
-     try
-        CarregaAliquotas;
-        LerTotaisAliquota;
-
-        TotalISSQN := 0;
-        TotalICMS  := 0;
-
-        for I := 0 to Self.Aliquotas.Count - 1 do
-        begin
-           Aliq := TACBrECFAliquota.Create ;
-           Aliq.Assign( Self.Aliquotas[I] );
-
-           TodasAliquotas.Add( Aliq );
-
-           if Self.Aliquotas[I].Tipo = 'S' then
-           begin
-              ISSQN.Add(Aliq);
-              try TotalISSQN := TotalISSQN + Aliq.Total; except end;
-           end
-           else
-           begin
-              ICMS.Add(Aliq);
-              try TotalICMS  := TotalICMS + Aliq.Total; except end;
-           end;
-        end;
-     except
-     end;
-
-     { ICMS }
-     try SubstituicaoTributariaICMS  := Self.TotalSubstituicaoTributaria; except end ;
-     try IsentoICMS                  := Self.TotalIsencao;                except end ;
-     try NaoTributadoICMS            := Self.TotalNaoTributado;           except end ;
-
-     { ISSQN }
-     try SubstituicaoTributariaISSQN := Self.TotalSubstituicaoTributariaISSQN; except end ;
-     try IsentoISSQN                 := Self.TotalIsencaoISSQN;                except end ;
-     try NaoTributadoISSQN           := Self.TotalNaoTributadoISSQN;           except end ;
-
-     VendaLiquida := VendaBruta -
-                     CancelamentoICMS -
-                     DescontoICMS -
-                     TotalISSQN -
-                     CancelamentoISSQN -
-                     DescontoISSQN;
-
-     { TOTALIZADORES NÃO FISCAIS }
-     try
-        CarregaComprovantesNaoFiscais ;
-        LerTotaisComprovanteNaoFiscal ;
-
-        For I := 0 to Self.ComprovantesNaoFiscais.Count-1 do
-        begin
-           CNF := TACBrECFComprovanteNaoFiscal.Create ;
-           CNF.Assign( Self.ComprovantesNaoFiscais[I] );
-
-           TotalizadoresNaoFiscais.Add( CNF ) ;
-        end ;
-
-        TotalOperacaoNaoFiscal := Self.TotalNaoFiscal;
-     except
-     end ;
-
-     { RELATÓRIO GERENCIAL }
-     try
-        CarregaRelatoriosGerenciais ;
-
-        For I := 0 to Self.RelatoriosGerenciais.Count-1 do
-        begin
-           RG := TACBrECFRelatorioGerencial.Create ;
-           RG.Assign( Self.RelatoriosGerenciais[I] );
-
-           RelatorioGerencial.Add( RG ) ;
-        end ;
-     except
-     end ;
-
-     { MEIOS DE PAGAMENTO }
-     try
-        CarregaFormasPagamento ;
-        LerTotaisFormaPagamento ;
-
-        For I := 0 to Self.FormasPagamento.Count-1 do
-        begin
-           FPG := TACBrECFFormaPagamento.Create ;
-           FPG.Assign( Self.FormasPagamento[I] );
-
-           MeiosDePagamento.Add( FPG ) ;
-        end ;
-
-        TotalTroco := Self.TotalTroco;
-     except
-     end ;
-  end;
-
-  ///// Montando o INI com as informações /////
-  Result := MontaDadosReducaoZ;
+  Result := fsECF.DadosReducaoZ;
 end;
 
 function TACBrECF.GetDadosReducaoZClass: TACBrECFDadosRZ;
@@ -2647,6 +2574,9 @@ begin
    end ;
   {$ENDIF}
 
+  if Assigned( FOnDepoisVendeItem ) then
+     FOnDepoisVendeItem( Codigo, Descricao, AliquotaICMS, Qtd, ValorUnitario, ValorDescontoAcrescimo, Unidade, TipoDescontoAcrescimo, DescontoAcrescimo);
+
   if RFDAtivo then
   begin
      case AliquotaICMS[1] of
@@ -2676,10 +2606,6 @@ begin
                       ValorDescontoAcrescimo, AliquotaICMS ) ;
 
   end ;
-
-  if Assigned( FOnDepoisVendeItem ) then
-     FOnDepoisVendeItem( Codigo, Descricao, AliquotaICMS, Qtd, ValorUnitario, ValorDescontoAcrescimo, Unidade, TipoDescontoAcrescimo, DescontoAcrescimo);
-
 end;
 
 procedure TACBrECF.DescontoAcrescimoItemAnterior( ValorDescontoAcrescimo: Double;
@@ -2983,51 +2909,7 @@ begin
   Observacao := StringReplace(Observacao,'|',#10,[rfReplaceAll]) ;
 
   { montar o rodape quando as informações de rodapé forem passadas }
-  RodapePafECF := EmptyStr;
-
-  // atende ao requisito do Paf-ECF
-  if Trim(InfoRodapeCupom.MD5) <> EmptyStr then
-    RodapePafECF := 'MD-5:' + Trim(InfoRodapeCupom.MD5);
-
-  // atende ao requisito do paf-ECF V item 2
-  if Trim(InfoRodapeCupom.PreVenda) <> EmptyStr then
-    RodapePafECF := RodapePafECF + 'PV' + Trim(InfoRodapeCupom.PreVenda);
-
-  // atende ao requisito do paf-ECF VI item 5
-  if Trim(InfoRodapeCupom.Dav) <> EmptyStr then
-    RodapePafECF := RodapePafECF + 'DAV' + Trim(InfoRodapeCupom.Dav);
-
-  // atende ao requisito do paf-ECF XLI item 1
-  if Trim(InfoRodapeCupom.DavOs) <> EmptyStr then
-    RodapePafECF := RodapePafECF + 'DAV-OS' + Trim(InfoRodapeCupom.DavOs);
-
-  // atende ao requisito VII-A 2-A (Cupom Mania [RJ])
-  if InfoRodapeCupom.CupomMania then
-  begin
-    RodapePafECF := RodapePafECF + #10 + 'CUPOM MANIA, CONCORRA A PRÊMIOS';
-    RodapePafECF := RodapePafECF + #10 + 'ENVIE SMS P/ 6789: ' +
-      Copy(OnlyNumber(fsECF.IE), 1, 8) +    // 8 primeiros digitos da Inscr.Estadual
-      FormatDateTime('ddmmyy', Date) +      // data atual
-      Format('%6.6d', [StrToInt(NumCOO)]) + // numero do coo do cupom
-      Format('%3.3d', [StrToInt(NumECF)]);  // numero do ecf
-
-    RodapePafECF := RodapePafECF + #10 + 'PROCON – R da Ajuda 5 – RJ – (21) 151';
-    RodapePafECF := RodapePafECF + #10 + 'ALERJ – R 1º de Março s/n – RJ – (21) 25881418';
-  end;
-
-  // atende ao requisito VII-A 2 (Minas Legal [MG])
-  // (Retificação http://www.fazenda.gov.br/confaz/confaz/atos/atos_cotepe/2011/AC039_11%20retifica%C3%A7%C3%A3o.htm)
-  if InfoRodapeCupom.MinasLegal then
-  begin
-    RodapePafECF := RodapePafECF + #10 + Format(
-      'MINAS LEGAL: %s %s %s', [
-      OnlyNumber(Self.CNPJ),
-      FormatDateTime('ddmmyyyy', Self.DataHora),
-      IntToStr(TruncFix(Self.Subtotal * 100))
-    ]);
-  end;
-
-  RodapePafECF := Trim(RodapePafECF);
+  RodapePafECF := Trim(GetRodape);
   if RodapePafECF <> EmptyStr then
     Observacao := RodapePafECF + #10 + Observacao;
 
@@ -3071,6 +2953,149 @@ begin
   InfoRodapeCupom.Clear;
 end;
 
+function TACBrECF.GetRodape: String;
+begin
+  Result := EmptyStr;
+
+  // atende ao requisito do Paf-ECF
+  if Trim(InfoRodapeCupom.MD5) <> EmptyStr then
+  begin
+    Result := 'MD-5:' + Trim(InfoRodapeCupom.MD5);
+
+    { "NL" adicionado conforme requisito VIII-B item 6, somente para o DF e
+      se existir consumidor atribuido }
+    if InfoRodapeCupom.NotaLegalDF.Imprimir and
+       (Consumidor.Enviado and (Consumidor.Documento <> '') ) then
+      Result := Result + '"NL"'
+  end;
+
+  // atende ao requisito do paf-ECF V item 2
+  if Trim(InfoRodapeCupom.PreVenda) <> EmptyStr then
+    Result := Result + 'PV' + Trim(InfoRodapeCupom.PreVenda);
+
+  // atende ao requisito do paf-ECF VI item 5
+  if Trim(InfoRodapeCupom.Dav) <> EmptyStr then
+    Result := Result + 'DAV' + Trim(InfoRodapeCupom.Dav);
+
+  // atende ao requisito do paf-ECF XLI item 1
+  if Trim(InfoRodapeCupom.DavOs) <> EmptyStr then
+    Result := Result + 'DAV-OS' + Trim(InfoRodapeCupom.DavOs);
+
+  Result := Trim(Result) + sLineBreak + Trim(GetRodapeRestaurante);
+  Result := Trim(Result) + sLineBreak + Trim(GetRodapeUF);
+  Result := Trim(Result);
+end;
+
+function TACBrECF.GetRodapeRestaurante: String;
+Var
+  Rodape : String ;
+begin
+  Rodape := EmptyStr;
+
+   // atende ao requisito do paf-ECF XXXVIII do Bloco III (Bares, Restaurantes e Similares)
+  If InfoRodapeCupom.Restaurante.Imprimir then
+  begin
+
+    {
+    no Cupom Fiscal a que se refere o item 8A deste requisito,
+    tratando-se de ECF que imprima o campo "informações suplementares",
+    imprimir neste campo, a partir do primeiro caracter, a seguinte informação:
+    a) ECF: nnn - Conferência de Mesa - CER nº xxxxxx - COO nº yyyyyy,
+       onde “nnn” é o número seqüencial do ECF atribuído pelo usuário onde foi emitido o Conferência de Mesa,
+       “xxxxxx” é o número do Contador Específico de Relatório Gerencial (CER)
+       e “yyyyyy” é o número do Contador de Ordem de Operação (COO) do Relatório Gerencial - Conferência de Mesa,
+       quando for o caso de impressão da Conferência de Mesa.
+    b) Consumo da Mesa xxx – SEM EMISSÃO DE CONFERÊNCIA DE MESA, onde xxx é o número da “Mesa Aberta”.
+    }
+      if (InfoRodapeCupom.Restaurante.COO > 0) then
+      begin
+
+        Rodape := Rodape + #10 + 'ECF:'
+        + Format('%3.3d', [InfoRodapeCupom.Restaurante.ECF])
+        + ' - Conf. de Mesa';
+
+          if InfoRodapeCupom.Restaurante.CER > 0 then
+          begin
+            Rodape := Rodape + ' - CER:' +
+            Format('%4.4d', [InfoRodapeCupom.Restaurante.CER]);
+          end;
+
+        Rodape := Rodape + ' – COO:' +
+        Format('%6.6d', [InfoRodapeCupom.Restaurante.COO]);
+
+      end
+      else
+      begin
+
+        Rodape := Rodape + #10 + 'Mesa '
+        + InfoRodapeCupom.Restaurante.Mesa
+        + ' – SEM EMISSÃO DE CONFERÊNCIA DE MESA'
+
+      end;
+  end;
+
+  Result := ACBrStr( Rodape );
+end;
+
+function TACBrECF.GetRodapeUF: String;
+Var
+  Rodape : String ;
+begin
+  Rodape := EmptyStr;
+
+  if InfoRodapeCupom.CupomMania then
+  begin
+    Rodape := Rodape + #10 + 'CUPOM MANIA, CONCORRA A PRÊMIOS';
+    Rodape := Rodape + #10 + 'ENVIE SMS P/ 6789: ' +
+      Copy(OnlyNumber(fsECF.IE), 1, 8) +    // 8 primeiros digitos da Inscr.Estadual
+      FormatDateTime('ddmmyy', Self.DataHora) +      // data atual
+      Format('%6.6d', [StrToInt(NumCOO)]) + // numero do coo do cupom
+      Format('%3.3d', [StrToInt(NumECF)]);  // numero do ecf
+
+    Rodape := Rodape + #10 + 'PROCON – R da Ajuda 5 – RJ – (21) 151';
+    Rodape := Rodape + #10 + 'ALERJ – R 1º de Março s/n – RJ – (21) 25881418';
+  end
+  else if InfoRodapeCupom.MinasLegal then
+  begin
+    Rodape := Rodape + #10 + Format(
+      'MINAS LEGAL: %s %s %s', [
+      OnlyNumber(Self.CNPJ),
+      FormatDateTime('ddmmyyyy', Self.DataHora),
+      IntToStr(TruncFix(Self.Subtotal * 100))
+    ]);
+  end
+  else if InfoRodapeCupom.ParaibaLegal then
+  begin
+    Rodape := Rodape + #10 +
+      'PARAÍBA LEGAL – RECEITA CIDADÃ' + #10 +
+      Format(
+        'TORPEDO PREMIADO: %s %s %s', [
+        OnlyNumber(Self.CNPJ),
+        FormatDateTime('ddmmyyyy', Self.DataHora),
+        IntToStr(TruncFix(Self.Subtotal * 100))
+      ])+ #10 +
+      OnlyNumber(Consumidor.Documento) ;
+  end
+  else if InfoRodapeCupom.NotaLegalDF.Imprimir then
+  begin
+    if InfoRodapeCupom.NotaLegalDF.ProgramaDeCredito then
+    begin
+      Rodape := Rodape + #10 +
+        'ESTABELECIMENTO INCLUÍDO NO PROGRAMA DE'#10 +
+        'CONCESSÃO DE CRÉDITOS - LEI Nº 4.159/08.';
+    end;
+
+    Rodape := Rodape + #10 + '<n>NOTA LEGAL:</n>';
+
+    if InfoRodapeCupom.NotaLegalDF.ValorICMS > 0.00 then
+      Rodape := Rodape + ' ICMS = ' + FormatFloat(',#0.00', InfoRodapeCupom.NotaLegalDF.ValorICMS);
+
+    if InfoRodapeCupom.NotaLegalDF.ValorISS > 0.00 then
+      Rodape := Rodape + ' ISS = ' + FormatFloat(',#0.00', InfoRodapeCupom.NotaLegalDF.ValorISS);
+  end;
+
+  Result := ACBrStr( Rodape );
+end;
 
 procedure TACBrECF.Sangria(Valor: Double; Obs: AnsiString;
    DescricaoCNF: String; DescricaoFPG: String; IndiceBMP: Integer ) ;
@@ -4845,8 +4870,12 @@ begin
         TimeOut := ATimeOut ;
 
      {$IFNDEF CONSOLE}
+     {$IFNDEF FRAMEWORK}
        fsECF.FormMsgControla := False ;
        fsECF.FormMsgDoProcedure( DoAcharPorta, ord('C') ) ;
+     {$ELSE}
+       DoAcharPorta ;
+     {$ENDIF}
      {$ELSE}
        DoAcharPorta ;
      {$ENDIF}
@@ -4860,7 +4889,9 @@ begin
      Result := (Porta <> '') ;
   finally
      {$IFNDEF CONSOLE}
+     {$IFNDEF FRAMEWORK}
        fsECF.FormMsgControla := True ;
+     {$ENDIF}
      {$ENDIF}
      fsProcurandoPorta := false ;
      TimeOut := wTimeOut ;
@@ -4892,9 +4923,11 @@ procedure TACBrECF.DoAcharPorta ;
                   ' Pressione <C> para cancelar' ;
 
         {$IFNDEF CONSOLE}
+        {$IFNDEF FRAMEWORK}
           fsECF.FormMsgPinta( Msg ) ;
           if not (fsECF.FormMsgEstado = fmsProcessando) then
              exit ;
+        {$ENDIF}
         {$ENDIF}
 
         Ativar ;      { Se não Ativar gera uma Exceção }
@@ -4917,7 +4950,7 @@ begin
 
         I := 0 ;
         while (I < SL.Count) and (not Achou)
-          {$IFNDEF CONSOLE} and (fsECF.FormMsgEstado = fmsProcessando) {$ENDIF} do
+          {$IFNDEF CONSOLE}{$IFNDEF FRAMEWORK} and (fsECF.FormMsgEstado = fmsProcessando) {$ENDIF}{$ENDIF} do
         begin
            Porta := SL[I] ;
            Achou := AtivarECF ;
@@ -4934,15 +4967,18 @@ begin
   begin
      sleep(200) ;
      {$IFNDEF CONSOLE}
+     {$IFNDEF FRAMEWORK}
        if fsECF.FormMsgEstado = fmsAbortado then
           Porta := 'abortado'
        else
+     {$ENDIF}
      {$ENDIF}
           Porta := '' ;
   end ;
 end;
 
 {$IFNDEF CONSOLE}
+{$IFNDEF FRAMEWORK}
  procedure TACBrECF.SetMemoBobina(const AValue: TMemo);
  begin
    if AValue <> fsMemoBobina then
@@ -4956,6 +4992,7 @@ end;
          AValue.FreeNotification(self);
    end ;
  end;
+{$ENDIF}
 
  procedure TACBrECF.SetMemoParams(const AValue: TStrings);
  begin
@@ -4964,7 +5001,7 @@ end;
 
  procedure TACBrECF.MemoAdicionaCabecalho;
  begin
-   MemoLeParams ;
+   MemoLeParams;
    MemoAdicionaLinha( fsMemoCabecalho ) ;
    fsMemoItens     := 0 ;  { Zera contador de Itens }
    fsSubTotalPagto := 0;   {Zera o total pago verificador da bobina}
@@ -4978,7 +5015,7 @@ end;
 
  function TACBrECF.MemoAssigned: Boolean;
  begin
-   Result := Assigned( fsMemoBobina ) or Assigned( fsOnBobinaAdicionaLinhas ) ;
+   Result := {$IFNDEF FRAMEWORK}Assigned( fsMemoBobina ) or {$ENDIF}Assigned( fsOnBobinaAdicionaLinhas ) ;
  end;
 
  procedure TACBrECF.MemoSubtotaliza(DescontoAcrescimo: Double );
@@ -5208,11 +5245,13 @@ end;
       SL.Free ;
    end ;
 
+   {$IFNDEF FRAMEWORK}
    if Assigned( fsMemoBobina ) then
-      fsMemoBobina.Lines.Add( NewLinhas ) ;
+      fsMemoBobina.Lines.Add( ACBrStr(NewLinhas) ) ;
+   {$ENDIF}
 
    if Assigned( fsOnBobinaAdicionaLinhas ) then
-      fsOnBobinaAdicionaLinhas( NewLinhas, fsMemoOperacao ) ;
+      fsOnBobinaAdicionaLinhas( ACBrStr(NewLinhas), fsMemoOperacao ) ;
  end;
 
 function TACBrECF.MemoTraduzCode(Linha: String): String;
@@ -5252,6 +5291,7 @@ begin
 
   Result := Linha ;
 end;
+
 {$ENDIF}
 
 procedure TACBrECF.Notification(AComponent: TComponent; Operation: TOperation);
@@ -5259,10 +5299,12 @@ begin
   inherited Notification(AComponent, Operation);
 
   {$IFNDEF CONSOLE}
+  {$IFNDEF FRAMEWORK}
    if (Operation = opRemove) and (fsMemoBobina <> nil) and (AComponent is TMemo) then
    begin
       fsMemoBobina := nil ;
    end ;
+  {$ENDIF}
   {$ENDIF}
 
   if (Operation = opRemove) and (AComponent is TACBrRFD) and (fsRFD <> nil) then
@@ -5295,8 +5337,8 @@ begin
      raise EACBrAAC_NumSerieNaoEncontrado.Create( ACBrStr( Format(
            cACBrAACNumSerieNaoEncontardoException, [ fsNumSerieCache ] )) )
   else if Erro = -2 then
-     raise EACBrAAC_ValorGTInvalido.Create( ACBrStr( Format(
-           cACBrAACValorGTInvalidoException , [ValorGT_ECF, ValorGT_AAC] )) );
+     raise EACBrAAC_ValorGTInvalido.Create( ACBrStr(
+           cACBrAACValorGTInvalidoException ) );
 end ;
 
 procedure TACBrECF.DoAtualizarValorGT ;
@@ -5460,21 +5502,40 @@ var
 begin
   ComandoLOG := 'IdentificaPAF('+NomeVersao+' , '+MD5+')';
 
-  // Verificando se usuário já informou o pre-fixo "MD5", "MD5:" ou "MD-5"
-  MD5Texto := UpperCase(MD5);
-  P        := 1 ;
-  if LeftStr(MD5Texto,5) = 'MD-5:' then
-     P := 6
-  else if LeftStr(MD5Texto,4) = 'MD5:' then
-     P := 5
-  else if LeftStr(MD5Texto,3) = 'MD5' then
-     P := 4 ;
+  if Trim(MD5) = '' then
+    MD5Texto := ''
+  else
+  begin
+    // Verificando se usuário já informou o pre-fixo "MD5", "MD5:" ou "MD-5"
+    MD5Texto := UpperCase(MD5);
+    P        := 1 ;
+    if LeftStr(MD5Texto,5) = 'MD-5:' then
+       P := 6
+    else if LeftStr(MD5Texto,4) = 'MD5:' then
+       P := 5
+    else if LeftStr(MD5Texto,3) = 'MD5' then
+       P := 4 ;
 
-  // acertar para que saia o texto "MD-5" antes do numero
-  MD5Texto := 'MD-5:' + copy(MD5, P, Length(MD5) );
+    // acertar para que saia o texto "MD-5" antes do numero
+    MD5Texto := 'MD-5:' + copy(MD5, P, Length(MD5) );
+  end ;
 
   try
-     fsECF.IdentificaPAF(NomeVersao, MD5Texto);
+     { Nota Legal, impede o uso de IdentificaPAF, pois o sufixo "NL" no MD5
+       deve ser adicionado apenas se o Consumidor for identificado, o que
+       ocorre após a abertura do Cupom.
+       conforme requisito VIII-B item 6, somente para o DF }
+
+     if not InfoRodapeCupom.NotaLegalDF.Imprimir  then
+       fsECF.IdentificaPAF(NomeVersao, MD5Texto)
+     else
+     begin
+       try
+          fsECF.IdentificaPAF('','');  // Remove programação da memoria do ECF
+       except
+       end;
+       InfoRodapeCupom.MD5 := MD5;
+     end;
   except
      // Se não conseguiu programar os dados PAF-ECF,
      // usa o InfoRodapeCupom para imprimir o MD5
@@ -5566,7 +5627,7 @@ end;
 procedure TACBrECF.PafMF_GerarCAT52(const DataInicial, DataFinal: TDateTime;
   const DirArquivos: String);
 begin
-  fsECF.PafMF_GerarCAT52(DataInicial, DataFinal, DirArquivos);
+  fsECF.PafMF_GerarCAT52(DataInicial, DataFinal, IncludeTrailingPathDelimiter(DirArquivos));
 end;
 
 procedure TACBrECF.PafMF_LMFC_Cotepe1704(const DataInicial, DataFinal: TDateTime;
@@ -5974,7 +6035,6 @@ begin
     Relatorio.Add('Nome Comerc.: ' + IdentificacaoPaf.Paf.Nome);
     Relatorio.Add('Versao......: ' + IdentificacaoPaf.Paf.Versao);
 //    Relatorio.Add('Laudo.......: ' + IdentificacaoPaf.NumeroLaudo);
-    Relatorio.Add('ER-PAF-ECF..: ' + IdentificacaoPaf.VersaoER);
     Relatorio.Add('Princ. Exec.: ' + IdentificacaoPaf.Paf.PrincipalExe.Nome);
     Relatorio.Add('MD5.........: ' + IdentificacaoPaf.Paf.PrincipalExe.MD5);
 
@@ -5992,6 +6052,11 @@ begin
     Relatorio.Add('</linha_simples>');
     Relatorio.Add(ExtractFileName(IdentificacaoPaf.ArquivoListaAutenticados.Nome));
     Relatorio.Add('MD5: ' + IdentificacaoPaf.ArquivoListaAutenticados.MD5);
+
+    Relatorio.Add('');
+    Relatorio.Add('<n>VERSAO ER-PAF-ECF</n>');
+    Relatorio.Add('</linha_simples>');
+    Relatorio.Add('ER-PAF-ECF..: ' + IdentificacaoPaf.VersaoER);
 
     Relatorio.Add('');
     Relatorio.Add('<n>ECFS AUTORIZADOS</n>');
@@ -6191,6 +6256,8 @@ begin
     Relatorio.Add('<n>Req. VIII-A</n>');
     Relatorio.Add(padL('ITEM 2 : MINAS LEGAL', TamColSimNao, '.') + GetDescrFlag( AInfoPafECF.MinasLegal ));
     Relatorio.Add(padL('ITEM 2A: CUPOM MANIA', TamColSimNao, '.') + GetDescrFlag( AInfoPafECF.CupomMania ));
+    Relatorio.Add(padL('ITEM 2B: NOTA LEGAL', TamColSimNao, '.') + GetDescrFlag( AInfoPafECF.NotaLegalDF ));
+    Relatorio.Add(padL('ITEM 2C: PARAIBA LEGAL', TamColSimNao, '.') + GetDescrFlag( AInfoPafECF.ParaibaLegal ));
 
     Relatorio.Add('<n>REQUISITO XIV</n>');
     Relatorio.Add(padL('ITEM 4: TROCO EM CARTÃO', TamColSimNao, '.') + GetDescrFlag( AInfoPafECF.TrocoEmCartao ));
@@ -6273,8 +6340,8 @@ begin
     TextoRel.Add('CODIGO DESCRICAO QTD UN VL.UNIT VL.DESC VL.TOTAL');
     TextoRel.Add('</linha_simples>');
 
-    AbreRelatorioGerencial(AIndice);
-    LinhaRelatorioGerencial(TextoRel.Text);
+    AbreRelatorioGerencial( AIndice );
+    LinhaRelatorioGerencial( ACBrStr(TextoRel.Text) );
   finally
     TextoRel.Free;
   end;
@@ -6324,7 +6391,7 @@ begin
     if AVlrAcrescimo > 0 then
       TextoRel.Add(Format('acréscimo item %3.3d: %.2f', [FDAVItemCount, AVlrAcrescimo]));
 
-    LinhaRelatorioGerencial(TextoRel.Text);
+    LinhaRelatorioGerencial( ACBrStr(TextoRel.Text) );
   finally
     TextoRel.Free;
   end;
@@ -6363,7 +6430,7 @@ begin
     TextoRel.Add('');
     TextoRel.Add('');
 
-    LinhaRelatorioGerencial(TextoRel.Text);
+    LinhaRelatorioGerencial( ACBrStr(TextoRel.Text) );
   finally
     TextoRel.Free;
   end;
@@ -6374,5 +6441,8 @@ begin
   FDAVTotal     := 0.00;
 end;
 
+{$IFDEF FRAMEWORK}
+{$DEFINE CONSOLE}
+{$ENDIF}
 end.
 
