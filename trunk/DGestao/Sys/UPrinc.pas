@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ComCtrls, BarMenus, RXCtrls, ExtCtrls, jpeg, // , SpeedBar
-  EUserAcs, StdCtrls, Buttons, rxSpeedbar;
+  EUserAcs, StdCtrls, Buttons, rxSpeedbar, EAppProt;
 
 type
   TfrmPrinc = class(TForm)
@@ -113,6 +113,9 @@ type
     btnEmpresa: TRxSpeedButton;
     Utilitrios1: TMenuItem;
     ExportarNFeGeradas1: TMenuItem;
+    Estoque1: TMenuItem;
+    DemandaAnual1: TMenuItem;
+    ProdutosemEstoque1: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -162,6 +165,8 @@ type
     procedure nmFabricanteProdutoClick(Sender: TObject);
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
     procedure ExportarNFeGeradas1Click(Sender: TObject);
+    procedure ProdutosemEstoque1Click(Sender: TObject);
+    procedure DemandaAnual1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -181,7 +186,7 @@ uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa,
-  UFuncoes, UConstantesDGE;
+  UFuncoes, UConstantesDGE, UfrmRelEstoque;
 
 {$R *.dfm}
 
@@ -270,10 +275,10 @@ end;
 procedure TfrmPrinc.nmRelatorioProdutoClick(Sender: TObject);
 begin
   Application.CreateForm(TfrmRelProdutos, frmRelProdutos);
-  frmRelProdutos.IBQuery1.Open;
+  frmRelProdutos.IBQuery2.Open;
   frmRelProdutos.ibqryEmpresa.Open;
-  frmRelProdutos.qckrp.preview;
-  frmRelProdutos.IBQuery1.Close;
+  frmRelProdutos.QuickRep1.preview;
+  frmRelProdutos.IBQuery2.Close;
   frmRelProdutos.ibqryEmpresa.Close;
   frmRelProdutos.Destroy;
 end;
@@ -494,6 +499,12 @@ begin
   nmProduto.Caption  := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
   btnProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
   nmRelatorioProduto.Caption := Copy(StrDescricaoProduto, 1, Length(StrDescricaoProduto) - 1);
+
+  
+ // ap.Active := False;
+ // ap.IdApplication := 99832505;
+ //  ap.Active := true;
+
 end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
@@ -563,6 +574,32 @@ end;
 procedure TfrmPrinc.ExportarNFeGeradas1Click(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'frmGeExportarNFeGerada');
+end;
+
+procedure TfrmPrinc.ProdutosemEstoque1Click(Sender: TObject);
+begin
+Application.CreateForm(TfrmRelProdutos, frmRelProdutos);
+  frmRelProdutos.IBQuery1.Open;
+  frmRelProdutos.ibqryEmpresa.Open;
+  frmRelProdutos.qckrp.preview;
+  frmRelProdutos.IBQuery1.Close;
+  frmRelProdutos.ibqryEmpresa.Close;
+  frmRelProdutos.Destroy;
+end;
+
+procedure TfrmPrinc.DemandaAnual1Click(Sender: TObject);
+begin
+  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
+  with frmRelEstoque do
+  begin
+   ibqryDemanda.Open;
+   ibqryEmpresa.Open;
+   qckrp.Preview;
+   ibqryDemanda.close;
+   ibqryEmpresa.Close;
+   Destroy;
+  end;
+
 end;
 
 end.

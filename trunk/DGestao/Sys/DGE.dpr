@@ -77,7 +77,8 @@ uses
   UGrUsuarioAlterarSenha in 'lib\UGrUsuarioAlterarSenha.pas' {frmGrUsuarioAlterarSenha},
   UGeVendaFormaPagto in 'UGeVendaFormaPagto.pas' {frmGeVendaFormaPagto},
   UGeEntradaEstoqueGerarNFe in 'UGeEntradaEstoqueGerarNFe.pas' {frmGeEntradaEstoqueGerarNFe},
-  UGeExportarNFeGerada in 'UGeExportarNFeGerada.pas' {frmGeExportarNFeGerada};
+  UGeExportarNFeGerada in 'UGeExportarNFeGerada.pas' {frmGeExportarNFeGerada},
+  UfrmRelEstoque in '..\..\..\..\..\..\Program Files\Common Files\Borland Shared\Images\Buttons\UfrmRelEstoque.pas' {frmRelEstoque};
 
 {$R *.res}
 

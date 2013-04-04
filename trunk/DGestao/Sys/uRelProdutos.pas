@@ -48,9 +48,44 @@ type
     QRDBText7: TQRDBText;
     IBQuery1TotCustoEstoq: TCurrencyField;
     QRDBText4: TQRDBText;
-    procedure IBQuery1CalcFields(DataSet: TDataSet);
+    QuickRep1: TQuickRep;
+    QRBand1: TQRBand;
+    QRLabel3: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel7: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRBand2: TQRBand;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRBand4: TQRBand;
+    QRLabel17: TQRLabel;
+    QRSysData5: TQRSysData;
+    QRBand5: TQRBand;
+    QRSysData6: TQRSysData;
+    IBQuery2: TIBQuery;
+    IBStringField1: TIBStringField;
+    IBStringField2: TIBStringField;
+    IBStringField3: TIBStringField;
+    IBStringField4: TIBStringField;
+    IBBCDField1: TIBBCDField;
+    IBBCDField2: TIBBCDField;
+    IntegerField1: TIntegerField;
+    IBQuery1FABRIC: TIBStringField;
+    QRLabel18: TQRLabel;
+    QRDBText19: TQRDBText;
+    QRLabel15: TQRLabel;
+    QRDBText15: TQRDBText;
+    IBQuery2FABRIC: TIBStringField;
     procedure qckrpBeforePrint(Sender: TCustomQuickRep;
       var PrintReport: Boolean);
+    procedure IBQuery1CalcFields(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -66,12 +101,6 @@ uses UDMBusiness, UConstantesDGE;
 
 {$R *.dfm}
 
-procedure TfrmRelProdutos.IBQuery1CalcFields(DataSet: TDataSet);
-begin
- IBQuery1TotPrecoVenda.Value := IBQuery1PRECO.Value * IBQuery1QTDE.Value;
- IBQuery1TotCustoEstoq.Value := IBQuery1CUSTOMEDIO.Value * IBQuery1QTDE.Value;
-end;
-
 procedure TfrmRelProdutos.qckrpBeforePrint(Sender: TCustomQuickRep;
   var PrintReport: Boolean);
 begin
@@ -83,6 +112,12 @@ begin
      QRLabel5.Enabled := False;
      QRDBText6.Enabled := FALSE;
    end
+end;
+
+procedure TfrmRelProdutos.IBQuery1CalcFields(DataSet: TDataSet);
+begin
+ IBQuery1TotPrecoVenda.Value := IBQuery1PRECO.Value * IBQuery1QTDE.Value;
+ IBQuery1TotCustoEstoq.Value := IBQuery1CUSTOMEDIO.Value * IBQuery1QTDE.Value;
 end;
 
 end.

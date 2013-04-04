@@ -1,6 +1,6 @@
 object frmPrinc: TfrmPrinc
-  Left = 277
-  Top = 144
+  Left = 241
+  Top = 126
   Width = 916
   Height = 499
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
@@ -7294,6 +7294,17 @@ object frmPrinc: TfrmPrinc
       object nmRelatorioProduto: TMenuItem
         Caption = 'Produtos'
         OnClick = nmRelatorioProdutoClick
+      end
+      object Estoque1: TMenuItem
+        Caption = 'Estoque'
+        object DemandaAnual1: TMenuItem
+          Caption = 'Demanda 2012'
+          OnClick = DemandaAnual1Click
+        end
+        object ProdutosemEstoque1: TMenuItem
+          Caption = 'Produtos'
+          OnClick = ProdutosemEstoque1Click
+        end
       end
       object mnRelatorioFaturamento: TMenuItem
         Caption = 'Faturamento'
