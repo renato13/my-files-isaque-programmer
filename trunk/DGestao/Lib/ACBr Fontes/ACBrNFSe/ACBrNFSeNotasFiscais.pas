@@ -84,7 +84,7 @@ type
 
     procedure GerarRPS;
     procedure Assinar;
-    function AssinarLoteRps(nLote:Integer; vLote: WideString): WideString;
+    function AssinarLoteRps(nLote:String; vLote: WideString): WideString;
     procedure Valida;
     procedure Imprimir;
     procedure ImprimirPDF;
@@ -108,7 +108,7 @@ type
   TSendMailThread = class(TThread)
   private
     FException : Exception;
-    FOwner: NotaFiscal;
+    // FOwner: NotaFiscal;
     procedure DoHandleException;
   public
     OcorreramErros: Boolean;
@@ -128,7 +128,7 @@ type
 implementation
 
 uses
- ACBrNFSe, ACBrUtil, pcnGerador;
+ ACBrNFSe, ACBrUtil, ACBrDFeUtil, pcnGerador;
 
 { NotaFiscal }
 
@@ -139,6 +139,7 @@ begin
  FNFSe        := TNFSe.Create;
  FXML_RPS     := '';
  FXML_RPS_Ass := '';
+ FNomeArq     := '';
 end;
 
 destructor NotaFiscal.Destroy;
@@ -157,7 +158,7 @@ var
  m          : TMimemess;
  p          : TMimepart;
  StreamNFSe : TStringStream;
- NomeArq    : String;
+ NomeArqPDF : String;
  i          : Integer;
 begin
  m := TMimemess.create;
@@ -176,9 +177,16 @@ begin
     if TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).DANFSE <> nil
      then begin
       TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).DANFSE.ImprimirDANFSEPDF(NFSe);
-      NomeArq := StringReplace(NFSe.Numero, 'NFSe', '', [rfIgnoreCase]);
-      NomeArq := PathWithDelim(TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).DANFSE.PathPDF) + NomeArq + '.pdf';
-      m.AddPartBinaryFromFile(NomeArq, p);
+      // Alterado por Italo em 04/12/2012
+      NomeArqPDF := Trim(NomeArq);
+      if NomeArqPDF <> ''
+       then begin
+         NomeArqPDF := StringReplace(NFSe.Numero, 'NFSe', '', [rfIgnoreCase]);
+         NomeArqPDF := PathWithDelim(TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).DANFSE.PathPDF) + NomeArqPDF + '.pdf';
+       end
+       else NomeArqPDF := StringReplace(NomeArqPDF, '-nfse.xml', '.pdf', [rfIgnoreCase]);
+
+      m.AddPartBinaryFromFile(NomeArqPDF, p);
      end;
    end;
 
@@ -210,7 +218,7 @@ begin
   ThreadSMTP.smtp.Password   := sSmtpPasswd;
   ThreadSMTP.smtp.TargetHost := sSmtpHost;
 
-  if not NotaUtil.EstaVazio( sSmtpPort )
+  if not DFeUtil.EstaVazio( sSmtpPort )
    then ThreadSMTP.smtp.TargetPort := sSmtpPort; // Usa default
 
   ThreadSMTP.smtp.FullSSL := SSL;
@@ -286,11 +294,11 @@ begin
    LocNFSeW.ServicoEnviar := TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).Configuracoes.WebServices.ServicoEnviar;
    LocNFSeW.GerarXml;
 
-   if NotaUtil.EstaVazio(CaminhoArquivo)
+   if DFeUtil.EstaVazio(CaminhoArquivo)
     then CaminhoArquivo := NotaUtil.PathWithDelim(TACBrNFSe( TNotasFiscais( Collection ).ACBrNFSe ).Configuracoes.Arquivos.GetPathRPS) +
                             Self.NFSe.InfID.ID + '-Rps.xml';
 
-   if NotaUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo))
+   if DFeUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo))
     then raise Exception.Create('Caminho Inválido: ' + CaminhoArquivo);
 
    LocNFSeW.Gerador.SalvarArquivo(CaminhoArquivo);
@@ -367,7 +375,7 @@ begin
     Self.Items[i].Alertas := LocNFSeW.Gerador.ListaDeAlertas.Text;
     Self.Items[i].XML_Rps := LocNFSeW.Gerador.ArquivoFormatoXML;
 
-    if FConfiguracoes.Geral.Salvar
+    if FConfiguracoes.WebServices.Salvar
      then FConfiguracoes.Geral.Save(NotaUtil.PathWithDelim(FConfiguracoes.Arquivos.GetPathRPS) + Self.Items[i].NFSe.InfID.ID+'-Rps2.xml', LocNFSeW.Gerador.ArquivoFormatoXML);
 
     if self.Configuracoes.Certificados.AssinaRPS
@@ -376,7 +384,10 @@ begin
         if not(NotaUtil.Assinar(LocNFSeW.Gerador.ArquivoFormatoXML,
                                 FConfiguracoes.Certificados.Certificado,
                                 FConfiguracoes.Certificados.Senha,
-                                vAssinada, FMsg))
+                                vAssinada, FMsg, False,
+                                FConfiguracoes.WebServices.Prefixo3,
+                                FConfiguracoes.WebServices.Prefixo4,
+                                FConfiguracoes.WebServices.Provedor))
          then raise Exception.Create('Falha ao assinar Nota Fiscal de Serviço Eletrônica '+
                                      Self.Items[i].NFSe.IdentificacaoRps.Numero + FMsg);
       {$ELSE}
@@ -407,10 +418,11 @@ begin
 
     Leitor.Free;
 
-    if FConfiguracoes.Geral.Salvar
-     then FConfiguracoes.Geral.Save(NotaUtil.PathWithDelim(FConfiguracoes.Arquivos.GetPathRPS) + Self.Items[i].NFSe.InfID.ID+'-Rps.xml', vAssinada);
+//    if FConfiguracoes.Geral.Salvar
+//     then
+    FConfiguracoes.Geral.Save(NotaUtil.PathWithDelim(FConfiguracoes.Arquivos.GetPathRPS) + Self.Items[i].NFSe.InfID.ID+'-Rps.xml', vAssinada);
 
-    if NotaUtil.NaoEstaVazio(Self.Items[i].NomeArq)
+    if DFeUtil.NaoEstaVazio(Self.Items[i].NomeArq)
      then FConfiguracoes.Geral.Save(ExtractFileName(Self.Items[i].NomeArq), vAssinada, ExtractFilePath(Self.Items[i].NomeArq));
 
    finally
@@ -419,7 +431,7 @@ begin
   end;
 end;
 
-function TNotasFiscais.AssinarLoteRps(nLote:Integer; vLote: WideString): WideString;
+function TNotasFiscais.AssinarLoteRps(nLote:String; vLote: WideString): WideString;
 var
  vAssinada : AnsiString;
 // Leitor    : TLeitor;
@@ -432,8 +444,11 @@ begin
       if not(NotaUtil.Assinar(vLote,
                               FConfiguracoes.Certificados.Certificado,
                               FConfiguracoes.Certificados.Senha,
-                              vAssinada, FMsg, True))
-       then raise Exception.Create('Falha ao assinar o Lote de RPS, '+ IntToStr(nLote) + FMsg);
+                              vAssinada, FMsg, True,
+                              FConfiguracoes.WebServices.Prefixo3,
+                              FConfiguracoes.WebServices.Prefixo4,
+                              FConfiguracoes.WebServices.Provedor))
+       then raise Exception.Create('Falha ao assinar o Lote de RPS, '+ nLote + FMsg);
     {$ELSE}
       // Alterado por Italo em 24/07/2012
       if not(NotaUtil.Assinar(vLote,
@@ -443,7 +458,7 @@ begin
                               FConfiguracoes.WebServices.Prefixo4,
                               FConfiguracoes.WebServices.Provedor))
        then raise Exception.Create('Falha ao assinar o Lote de RPS, '+
-                                     IntToStr(nLote) + FMsg);
+                                     nLote + FMsg);
     {$ENDIF}
 
     vAssinada := StringReplace( vAssinada, '<'+ENCODING_UTF8_STD+'>', '', [rfReplaceAll] ) ;
@@ -687,7 +702,7 @@ begin
  try
   for i := 0 to TACBrNFSe( FACBrNFSe ).NotasFiscais.Count-1 do
    begin
-    if NotaUtil.EstaVazio(PathArquivo)
+    if DFeUtil.EstaVazio(PathArquivo)
      then PathArquivo := TACBrNFSe( FACBrNFSe ).Configuracoes.Geral.PathSalvar
      else PathArquivo := ExtractFilePath(PathArquivo);
 
@@ -732,7 +747,7 @@ end;
 
 constructor TSendMailThread.Create(AOwner: NotaFiscal);
 begin
- FOwner      := AOwner;
+ // FOwner      := AOwner;
  smtp        := TSMTPSend.Create;
  slmsg_Lines := TStringList.Create;
  sCC         := TStringList.Create;
@@ -755,9 +770,9 @@ end;
 
 procedure TSendMailThread.DoHandleException;
 begin
- TACBrNFSe(TNotasFiscais(FOwner.GetOwner).ACBrNFSe).SetStatus( stNFSeIdle );
+ // TACBrNFSe(TNotasFiscais(FOwner.GetOwner).ACBrNFSe).SetStatus( stNFSeIdle );
 
- FOwner.Alertas := FException.Message;
+ // FOwner.Alertas := FException.Message;
 
  if FException is Exception
   then Application.ShowException(FException)

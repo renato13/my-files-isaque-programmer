@@ -1,7 +1,7 @@
 {******************************************************************************}
 { Projeto: Componente ACBrNFe                                                  }
 {  Biblioteca multiplataforma de componentes Delphi para emissão de Nota Fiscal}
-{ eletrônica - NFe - http://www.nfe.fazenda.gov.br                          }
+{ eletrônica - NFe - http://www.nfe.fazenda.gov.br                             }
 {                                                                              }
 { Direitos Autorais Reservados (c) 2008 Wemerson Souto                         }
 {                                       Daniel Simoes de Almeida               }
@@ -72,10 +72,11 @@ uses
 type
   TfqrDANFeQR = class(TForm)
     QRNFe: TQuickRep;
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   protected
-    //BarCode : TBarCode128c ;
+    //BarCode : TBarCode128c;
     FACBrNFe            : TACBrNFe;
     FNFe                : TNFe;
     FLogo               : String;
@@ -98,9 +99,11 @@ type
     FCasasDecimaisvUnCom: Integer;
     FImpressora         : String;
     FResumoCanhoto_Texto: String;
+    FNFeCancelada       : Boolean; //Incluido por Luis Fernando em  22/01/2013
+    FLocalImpCanhoto    : Integer; //Incluido por Luis Fernando em  22/01/2013
 
     procedure qrlSemValorFiscalPrint(sender: TObject; var Value: String);
-    procedure SetBarCodeImage ( ACode : String ; QRImage : TQRImage ) ;
+    procedure SetBarCodeImage ( ACode : String; QRImage : TQRImage );
   public
     { Public declarations }
     HrTotalPages : integer; //hrsoft 4/8/2010
@@ -112,7 +115,7 @@ type
                              ANumCopias          : Integer   = 1;
                              ASistema            : String    = '';
                              ASite               : String    = '';
-                             AUsuario            : String    = '' ;
+                             AUsuario            : String    = '';
                              APreview            : Boolean   = True;
                              AMargemSuperior     : Double    = 0.8;
                              AMargemInferior     : Double    = 0.8;
@@ -122,7 +125,9 @@ type
                              ACasasDecimaisvUncCom: Integer  = 4;
                              AImpressora         : String    = '';
                              AResumoCanhoto_Texto: String    = '';
-                             AExpandirLogoMarca  : Boolean   = False); // Incluido por Italo em 18/06/2012
+                             AExpandirLogoMarca  : Boolean   = False; // Incluido por Italo em 18/06/2012
+                             ANFeCancelada       : Boolean   = False; //Incluido por Luis Fernando em  22/01/2013
+                             ALocalImpCanhoto    : Integer   = 0); //Incluido por Luis Fernando em  22/01/2013
 
     class procedure SavePDF(AFile: String;
                             ANFe                : TNFe;
@@ -141,14 +146,19 @@ type
                             ACasasDecimaisqCom  : Integer   = 4;
                             ACasasDecimaisvUncCom: Integer  = 4;
                             AResumoCanhoto_Texto: String    = '';
-                            AExpandirLogoMarca  : Boolean   = False); // Incluido por Italo em 18/06/2012
+                            AExpandirLogoMarca  : Boolean   = False; // Incluido por Italo em 18/06/2012
+                            ANFeCancelada       : Boolean   = False; //Incluido por Luis Fernando em  22/01/2013
+                            ALocalImpCanhoto    : Integer   = 0); //Incluido por Luis Fernando em  22/01/2013
 
   end;
 
 implementation
 
-uses MaskUtils ;
-var Printer: TPrinter;
+uses
+ MaskUtils;
+
+var
+ Printer: TPrinter;
 
 {$R *.dfm}
 
@@ -160,7 +170,7 @@ class procedure TfqrDANFeQR.Imprimir(ANFe               : TNFe;
                                     ANumCopias          : Integer   = 1;
                                     ASistema            : String    = '';
                                     ASite               : String    = '';
-                                    AUsuario            : String    = '' ;
+                                    AUsuario            : String    = '';
                                     APreview            : Boolean   = True;
                                     AMargemSuperior     : Double    = 0.8;
                                     AMargemInferior     : Double    = 0.8;
@@ -170,7 +180,9 @@ class procedure TfqrDANFeQR.Imprimir(ANFe               : TNFe;
                                     ACasasDecimaisvUncCom: Integer  = 4;
                                     AImpressora         : String    = '';
                                     AResumoCanhoto_Texto: String    = '';
-                                    AExpandirLogoMarca  : Boolean   = False); // Incluido por Italo em 18/06/2012
+                                    AExpandirLogoMarca  : Boolean   = False; // Incluido por Italo em 18/06/2012
+                                    ANFeCancelada       : Boolean   = False; //Incluido por Luis Fernando em  22/01/2013
+                                    ALocalImpCanhoto    : Integer   = 0); //Incluido por Luis Fernando em  22/01/2013
 begin
   with Create ( nil ) do
      try
@@ -192,6 +204,8 @@ begin
         FImpressora         := AImpressora;
         FResumoCanhoto_Texto:= AResumoCanhoto_Texto;
         FExpandirLogoMarca  := AExpandirLogoMarca;  // Incluido por Italo em 18/06/2012
+        FNFeCancelada       := ANFeCancelada;//Incluido por Luis Fernando em  22/01/2013
+        FLocalImpCanhoto    := ALocalImpCanhoto;//Incluido por Luis Fernando em  22/01/2013
 
         Printer := TPrinter.Create;
 
@@ -215,16 +229,19 @@ begin
            QRNFe.Preview;
          end
          else begin
-           AfterPreview := True ;
+           AfterPreview := True;
            QRNFe.PrinterSettings.Copies := FNumCopias; // Incluido por Italo em 15/10/2010
            QRNFe.Prepare;
            HrTotalPages := QRNFe.QRPrinter.PageCount; //hrsoft 4/8/2010
-           QRNFe.Print ;
+           QRNFe.Print;
          end;
 
      finally
-        Free ;
-     end ;
+        // Incluido por Rodrigo Fernandes em 11/03/2013
+        // Liberando o objeto Printer da memoria
+        Printer.Free;
+        Free;
+     end;
 end;
 
 class procedure TfqrDANFeQR.SavePDF(AFile               : String;
@@ -244,7 +261,9 @@ class procedure TfqrDANFeQR.SavePDF(AFile               : String;
                                     ACasasDecimaisqCom  : Integer   = 4;
                                     ACasasDecimaisvUncCom: Integer  = 4;
                                     AResumoCanhoto_Texto: String    = '';
-                                    AExpandirLogoMarca  : Boolean   = False); // Incluido por Italo em 18/06/2012
+                                    AExpandirLogoMarca  : Boolean   = False; // Incluido por Italo em 18/06/2012
+                                    ANFeCancelada       : Boolean   = False; //Incluido por Luis Fernando em  22/01/2013
+                                    ALocalImpCanhoto    : Integer   = 0); //Incluido por Luis Fernando em  22/01/2013
 {$IFDEF QReport_PDF}
 var
   qf : TQRPDFDocumentFilter;
@@ -271,6 +290,8 @@ begin
         FCasasDecimaisvUnCom := ACasasDecimaisvUncCom;
         FResumoCanhoto_Texto:= AResumoCanhoto_Texto;
         FExpandirLogoMarca  := AExpandirLogoMarca; // Incluido por Italo em 18/06/2012
+        FNFeCancelada       := ANFeCancelada;//Incluido por Luis Fernando em  22/01/2013
+        FLocalImpCanhoto    := ALocalImpCanhoto;//Incluido por Luis Fernando em  22/01/2013
 
         for i := 0 to ComponentCount -1 do
           begin
@@ -280,9 +301,9 @@ begin
                 TQRShape(Components[i]).Pen.Width := 1;
               end;
           end;
-        AfterPreview := True ;
+        AfterPreview := True;
         QRNFe.Prepare;
-        qf := TQRPDFDocumentFilter.Create(AFile) ;
+        qf := TQRPDFDocumentFilter.Create(AFile);
         qf.CompressionOn := False;
         QRNFe.QRPrinter.ExportToFilter( qf );
         qf.Free;
@@ -297,18 +318,25 @@ procedure TfqrDANFeQR.qrlSemValorFiscalPrint(sender: TObject;
 begin
   inherited;
   if FSemValorFiscal then
-     Value := '' ;
+     Value := '';
 end;
 
 procedure TfqrDANFeQR.SetBarCodeImage(ACode: String; QRImage: TQRImage);
 var
- b : TBarCode128c ;
+ b : TBarCode128c;
 begin
    b := TBarCode128c.Create;
-//      Width  := QRImage.Width ;
-   b.Code := ACode ;
+//      Width  := QRImage.Width;
+   b.Code := ACode;
    b.PaintCodeToCanvas( ACode, QRImage.Canvas, QRImage.ClientRect );
-   b.free ;
+   b.free;
+end;
+
+// Incluido por Rodrigo Fernandes em 11/03/2013
+procedure TfqrDANFeQR.FormDestroy(Sender: TObject);
+begin
+  QRNFe.QRPrinter.Free;
+  QRNFe.Free;
 end;
 
 end.

@@ -45,13 +45,15 @@ unit ACBrTEFDVeSPague;
 interface
 
 uses
-  Classes, SysUtils, ACBrTEFDClass, ACBrConsts,
+  Classes, SysUtils, ACBrTEFDClass, ACBrConsts
+  {$IFNDEF CONSOLE}
   {$IFDEF VisualCLX}
-     QControls, QForms, QDialogs,
+     ,QControls, QForms, QDialogs
   {$ELSE}
-     Controls, Forms, Dialogs,
+     ,Controls, Forms, Dialogs
   {$ENDIF}
-  blcksock ;
+  {$ENDIF}
+  ,blcksock ;
 
 
 Const
@@ -1109,7 +1111,8 @@ begin
       ReqVS.AddParamString( 'transacao_opcao', TransacaoOpcao ) ;
 
    //---Adicionando o parametro CIELO PREMIA--------------
-   ReqVS.AddParamDouble( 'transacao_valor_ajuste',  00) ;
+   ReqVS.AddParamDouble( 'transacao_valor_ajuste',  01) ;
+
    //-----------------------------------------------------
 
    if ListaParams <> '' then
@@ -1652,7 +1655,7 @@ begin
      begin
         if AutoFinalizarCupom then
         begin
-           FinalizarCupom;
+           FinalizarCupom( False );  { False não desbloqueia o MouseTeclado }
            ImprimirTransacoesPendentes;
         end;
      end ;

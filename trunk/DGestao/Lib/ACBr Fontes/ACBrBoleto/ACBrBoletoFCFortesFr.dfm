@@ -1,9 +1,8 @@
 object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
-  Left = 309
-  Top = 167
-  Width = 1066
-  Height = 784
-  VertScrollBar.Position = 103
+  Left = 105
+  Top = 80
+  Width = 1084
+  Height = 768
   Caption = 'ACBRBoletoFCFortesFr'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,13 +10,15 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  OldCreateOrder = True
+  OldCreateOrder = False
+  Scaled = False
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object LayoutBoleto: TRLReport
-    Left = 72
-    Top = -295
+    Left = -3
+    Top = 3
     Width = 794
     Height = 1123
     Margins.LeftMargin = 4.000000000000000000
@@ -708,7 +709,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       Left = 15
       Top = 222
       Width = 768
-      Height = 430
+      Height = 401
       BeforePrint = RLBand1BeforePrint
       object RLDraw21: TRLDraw
         Left = 117
@@ -1458,10 +1459,10 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         ParentFont = False
       end
       object txtNomeSacado2: TRLLabel
-        Left = 110
+        Left = 108
         Top = 289
         Width = 456
-        Height = 14
+        Height = 22
         AutoSize = False
         Caption = 'Nome do Sacado'
         Font.Charset = ANSI_CHARSET
@@ -1473,7 +1474,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       end
       object txtEnderecoSacado2: TRLLabel
         Left = 110
-        Top = 301
+        Top = 306
         Width = 455
         Height = 14
         AutoSize = False
@@ -1487,7 +1488,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       end
       object txtCidadeSacado2: TRLLabel
         Left = 110
-        Top = 317
+        Top = 319
         Width = 455
         Height = 12
         AutoSize = False
@@ -1584,20 +1585,6 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         Font.Style = []
         ParentFont = False
       end
-      object RLLabel93: TRLLabel
-        Left = 393
-        Top = 137
-        Width = 5
-        Height = 10
-        Caption = 'x'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -8
-        Font.Name = 'Arial'
-        Font.Style = []
-        ParentFont = False
-        Transparent = False
-      end
       object RLLabel98: TRLLabel
         Left = 0
         Top = 393
@@ -1626,7 +1613,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       end
       object txtSacadorAvalista2: TRLLabel
         Left = 108
-        Top = 329
+        Top = 330
         Width = 458
         Height = 14
         AutoSize = False
@@ -1747,7 +1734,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
     end
     object RLBand2: TRLBand
       Left = 15
-      Top = 652
+      Top = 623
       Width = 768
       Height = 452
       RealBounds.UsedUnit = buMilimeters
@@ -1871,7 +1858,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         DrawKind = dkLine
       end
       object txtLinhaDigitavel: TRLLabel
-        Left = 280
+        Left = 270
         Top = 34
         Width = 488
         Height = 19
@@ -1885,7 +1872,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         ParentFont = False
       end
       object RLDraw82: TRLDraw
-        Left = 271
+        Left = 261
         Top = 17
         Width = 11
         Height = 41
@@ -1895,7 +1882,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       object txtNumeroBanco3: TRLLabel
         Left = 187
         Top = 24
-        Width = 90
+        Width = 78
         Height = 29
         Alignment = taCenter
         AutoSize = False
@@ -2596,20 +2583,6 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         Font.Style = []
         ParentFont = False
       end
-      object RLLabel170: TRLLabel
-        Left = 397
-        Top = 151
-        Width = 5
-        Height = 10
-        Caption = 'x'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -8
-        Font.Name = 'Arial'
-        Font.Style = []
-        ParentFont = False
-        Transparent = False
-      end
       object RLLabel175: TRLLabel
         Left = 4
         Top = 330
@@ -2782,8 +2755,8 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
     end
   end
   object BoletoCarne: TRLReport
-    Left = 920
-    Top = -95
+    Left = 793
+    Top = 3
     Width = 794
     Height = 1123
     Font.Charset = DEFAULT_CHARSET
@@ -2803,7 +2776,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       Left = 30
       Top = 19
       Width = 745
-      Height = 360
+      Height = 365
       BeforePrint = RLBand3BeforePrint
       object RLDraw30: TRLDraw
         Left = 150
@@ -3590,9 +3563,9 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         Transparent = False
       end
       object ImgLoja: TRLImage
-        Left = -9
-        Top = 30
-        Width = 143
+        Left = 5
+        Top = 0
+        Width = 140
         Height = 41
         Center = True
         Scaled = True
@@ -3600,7 +3573,7 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
       object txtTotPar: TRLLabel
         Left = 29
         Top = 55
-        Width = 13
+        Width = 20
         Height = 14
         Caption = '/X'
         Font.Charset = DEFAULT_CHARSET
@@ -3897,19 +3870,6 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object txtNomeSacadoCarne: TRLLabel
-        Left = 0
-        Top = 269
-        Width = 144
-        Height = 16
-        AutoSize = False
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
-        Font.Name = 'Arial'
-        Font.Style = []
-        ParentFont = False
-      end
       object txtCodCedenteCarne2: TRLLabel
         Left = 572
         Top = 80
@@ -3981,6 +3941,19 @@ object ACBRBoletoFCFortesFr: TACBRBoletoFCFortesFr
         Font.Height = -24
         Font.Name = 'Arial'
         Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object txtNomeSacadoCarne: TRLMemo
+        Left = 5
+        Top = 265
+        Width = 137
+        Height = 18
+        Behavior = [beSiteExpander]
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
         ParentFont = False
       end
     end

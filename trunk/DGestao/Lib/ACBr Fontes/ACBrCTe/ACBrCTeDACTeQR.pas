@@ -68,6 +68,7 @@ type
 
   TfrmDACTeQR = class(TForm)
     QRCTe: TQuickRep;
+    procedure FormDestroy(Sender: TObject);
   private
 
   protected
@@ -220,6 +221,9 @@ begin
            QRCTe.Print;
          end;
      finally
+        // Incluido por Rodrigo Fernandes em 11/03/2013
+        // Liberando o objeto Printer da memoria
+        Printer.Free;
         Free;
      end;
 end;
@@ -306,6 +310,13 @@ begin
   b.Code := ACode;
   b.PaintCodeToCanvas(ACode, QRImage.Canvas, QRImage.ClientRect);
   b.free;
+end;
+
+// Incluido por Rodrigo Fernandes em 11/03/2013
+procedure TfrmDACTeQR.FormDestroy(Sender: TObject);
+begin
+  QRCTe.QRPrinter.Free;
+  QRCTe.Free;
 end;
 
 end.

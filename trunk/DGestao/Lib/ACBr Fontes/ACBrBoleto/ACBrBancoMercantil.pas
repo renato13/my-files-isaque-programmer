@@ -55,14 +55,14 @@ type
     function MontarCodigoBarras(const ACBrTitulo : TACBrTitulo): String; override;
     function MontarCampoNossoNumero(const ACBrTitulo :TACBrTitulo): String; override;
     function MontarCampoCodigoCedente(const ACBrTitulo: TACBrTitulo): String; override;
-    function GerarRegistroHeader400(NumeroRemessa : Integer): String; override;
-    function GerarRegistroTransacao400(ACBrTitulo : TACBrTitulo): String; override;
-    function GerarRegistroTrailler400(ARemessa:TStringList): String;  override;
+    procedure GerarRegistroHeader400(NumeroRemessa : Integer; aRemessa: TStringList); override;
+    procedure GerarRegistroTransacao400(ACBrTitulo : TACBrTitulo; aRemessa: TStringList); override;
+    procedure GerarRegistroTrailler400(ARemessa:TStringList);  override;
   end;
 
 implementation
 
-uses ACBrUtil, StrUtils, ACBrValidador;
+uses ACBrUtil, StrUtils;
 
 { TACBrBancoMercantil }
 
@@ -73,27 +73,38 @@ begin
    fpNome   := 'Banco Mercantil';
    fpNumero:= 389;
    fpTamanhoMaximoNossoNum := 6;
+   fpTamanhoCarteira:= 2;
 end;
 
 function TACBrBancoMercantil.FormataNossoNumero(const ACBrTitulo :TACBrTitulo): String;
 var
   ANossoNumero: string;
+  aModalidade: String;
 begin
-    ANossoNumero := padL(ACBrTitulo.ACBrBoleto.Cedente.Agencia,4,'0') + //4
-                    '22'                                              + //6
-                    ACBrTitulo.Carteira                               + //8
-                    padL(ACBrTitulo.NossoNumero, 6, '0')              + //14
-                    CalcularDigitoVerificador(ACBrTitulo);              //15
+   aModalidade:= IfThen(Length(trim(ACBrTitulo.ACBrBoleto.Cedente.Modalidade)) = 2,
+                        ACBrTitulo.ACBrBoleto.Cedente.Modalidade,'22');
 
-    Result := ANossoNumero;
+   ANossoNumero := padL(ACBrTitulo.ACBrBoleto.Cedente.Agencia,4,'0') + //4
+                   aModalidade                                       + //6
+                   ACBrTitulo.Carteira                               + //8
+                   padL(ACBrTitulo.NossoNumero, 6, '0')              + //14
+                   CalcularDigitoVerificador(ACBrTitulo);              //15
+
+   Result := ANossoNumero;
 end;
 
 function TACBrBancoMercantil.CalcularDigitoVerificador(const ACBrTitulo: TACBrTitulo ): String;
+var
+  aModalidade: String;
 begin
    Modulo.CalculoPadrao;
    Modulo.MultiplicadorAtual   := 2;
+
+   aModalidade:= IfThen(Length(trim(ACBrTitulo.ACBrBoleto.Cedente.Modalidade)) = 2,
+                        ACBrTitulo.ACBrBoleto.Cedente.Modalidade,'22');
+
    Modulo.Documento := ACBrTitulo.ACBrBoleto.Cedente.Agencia +
-                       '22' +
+                       aModalidade +
                        ACBrTitulo.Carteira +
                        padL(ACBrTitulo.NossoNumero, 6, '0');
 
@@ -104,8 +115,7 @@ end;
 
 function TACBrBancoMercantil.MontarCodigoBarras ( const ACBrTitulo: TACBrTitulo) : String;
 var
-  FatorVencimento, DigitoCodBarras:String;
-  CpObrigatorio , CpLivre:String;
+  FatorVencimento, DigitoCodBarras, CpObrigatorio , CpLivre:String;
 begin
 
    with ACBrTitulo.ACBrBoleto do
@@ -144,48 +154,46 @@ end;
 function TACBrBancoMercantil.MontarCampoCodigoCedente (
    const ACBrTitulo: TACBrTitulo ) : String;
 begin
-   Result := ACBrTitulo.ACBrBoleto.Cedente.Agencia+'-'+
-             ACBrTitulo.ACBrBoleto.Cedente.AgenciaDigito+'/'+
-             ACBrTitulo.ACBrBoleto.Cedente.Conta+'-'+
-             ACBrTitulo.ACBrBoleto.Cedente.ContaDigito;
+   Result := ACBrTitulo.ACBrBoleto.Cedente.Agencia       + '-' +
+             ACBrTitulo.ACBrBoleto.Cedente.AgenciaDigito + '/' +
+             ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente;
 end;
 
-function TACBrBancoMercantil.GerarRegistroHeader400(NumeroRemessa : Integer): String;
+procedure TACBrBancoMercantil.GerarRegistroHeader400(NumeroRemessa : Integer; aRemessa:TStringList);
+var
+  wLinha: String;
 begin
    with ACBrBanco.ACBrBoleto.Cedente do
    begin
-      Result:= '0'                                                          + // ID do Registro
-               '1'                                                          + // ID do Arquivo( 1 - Remessa)
-               'REMESSA'                                                    + // Literal de Remessa
-               '01'                                                         + // Código do Tipo de Serviço
-               padL( 'COBRANCA', 15 )                                       + // Descrição do tipo de serviço
-               padL( Agencia, 4)                                            + // agencia origem
-			         padR( OnlyNumber(CNPJCPF),15,'0')          + // CNPJ/CPF CEDENTE
-			         ' '                                        + // BRANCO
-			         padL( Nome, 30)                            + // Nome da Empresa
-			         '389'                                      + // ID BANCO
-			         'BANCO MERCANTIL'                          + // nome banco
-			         FormatDateTime('ddmmyy',Now)               + // data geração
-               Space(281)                                                   + // espaços branco
-			         '01600   '                                 + // densidade da gravação
-			         IntToStrZero(NumeroRemessa,5)              + // nr. sequencial remessa
-			         IntToStrZero(1,6);                           // Nr. Sequencial de Remessa
+      wLinha:= '0'                                        + // ID do Registro
+               '1'                                        + // ID do Arquivo( 1 - Remessa)
+               'REMESSA'                                  + // Literal de Remessa
+               '01'                                       + // Código do Tipo de Serviço
+               padL( 'COBRANCA', 15 )                     + // Descrição do tipo de serviço
+               padL( OnlyNumber(Agencia), 4)              + // agencia origem
+	       padR( OnlyNumber(CNPJCPF),15,'0')          + // CNPJ/CPF CEDENTE
+	       ' '                                        + // BRANCO
+	       padL( Nome, 30)                            + // Nome da Empresa
+	       '389'                                      + // ID BANCO
+	       'BANCO MERCANTIL'                          + // nome banco
+	       FormatDateTime('ddmmyy',Now)               + // data geração
+               Space(281)                                 + // espaços branco
+	       '01600   '                                 + // densidade da gravação
+	       IntToStrZero(NumeroRemessa,5)              + // nr. sequencial remessa
+	       IntToStrZero(1,6);                           // Nr. Sequencial de Remessa
 
-      Result:= UpperCase(Result);
+      aRemessa.Text:= aRemessa.Text + UpperCase(wLinha);
    end;
 end;
 
-function TACBrBancoMercantil.GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo): String;
+procedure TACBrBancoMercantil.GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo; aRemessa: TStringList);
 var
-  DigitoNossoNumero, Ocorrencia, Protesto: String;
-  TipoSacado, ATipoAceite: String;
-  TipoBoleto: Char;
+  Ocorrencia,wLinha       :String;
+  TipoSacado, ATipoAceite :String;
 begin
 
    with ACBrTitulo do
    begin
-      DigitoNossoNumero := CalcularDigitoVerificador(ACBrTitulo);
-
       {Pegando Código da Ocorrencia}
       case OcorrenciaOriginal.Tipo of
          toRemessaBaixar                         : Ocorrencia := '02'; {Pedido de Baixa}
@@ -200,21 +208,6 @@ begin
       else
          Ocorrencia := '01';                                          {Remessa}
       end;
-
-      {Pegando Tipo de Boleto}
-      case ACBrBoleto.Cedente.ResponEmissao of
-         tbCliEmite : TipoBoleto := '2';
-      else
-         TipoBoleto := '1';
-      end;
-
-      {Pegando campo Intruções}
-      if (DataProtesto > 0) and (DataProtesto > Vencimento) then
-         Protesto := '06' + IntToStrZero(DaysBetween(DataProtesto,Vencimento),2)
-      else if Ocorrencia = '31' then
-         Protesto := '9999'
-      else
-         Protesto := padR(trim(Instrucao1),2,'0') + padR(trim(Instrucao2),2,'0');
 
       {Pegando Tipo de Sacado}
       case Sacado.Pessoa of
@@ -232,57 +225,60 @@ begin
 
       with ACBrBoleto do
       begin
-        Result:= '1'                                              +  // ID Registro
-          IfThen( PercentualMulta > 0, '092', '000')              +  // Indica se exite Multa ou não
-				  IntToStrZero( round( PercentualMulta * 100 ), 13)       +  // Percentual de Multa formatado com 2 casas decimais
-				  FormatDateTime( 'ddmmyy', Vencimento + 1)               +  // data Multa
-				  Space(5)                                                +
-				  padR( Cedente.CodigoCedente, 9, '0')                    +  // numero do contrato ???
-				  padR( SeuNumero,25,'0')                                 +  // Numero de Controle do Participante
-          FormataNossoNumero(ACBrTitulo)                          +
-          Space(5)                                                +
-          padR( OnlyNumber(Cedente.CNPJCPF), 15 , '0')                        +
-          IntToStrZero( Round( ValorDocumento * 100 ), 10)        +  // qtde de moeda
-          '1'                                                     +  // Codigo Operação 1- Cobrança Simples
-          Ocorrencia                                              +
-          padL( NumeroDocumento,  10)                             + // numero titulo atribuido pelo cliente
-          FormatDateTime( 'ddmmyy', Vencimento)                   +
-          IntToStrZero(Round( ValorDocumento * 100 ),13)          +  // valor nominal do titulo
-          '389'                                                   +  // banco conbrador
-          '00000'                                                 +  // agencia cobradora
-          '01'                                                    +  // codigo da especie, duplicata mercantil
-          ATipoAceite                                             +  // N
-          FormatDateTime( 'ddmmyy', DataDocumento )               +  // Data de Emissão
-          padL(Instrucao1,2,'0')                                  +  // instruçoes de cobrança
-          padL(Instrucao2,2,'0')                                  +  // instruçoes de cobrança
-          IntToStrZero(round(ValorMoraJuros * 100),13)            + // juros mora 11.2
-          FormatDateTime( 'ddmmyy', DataDesconto)                 + // data limite desconto
-          IntToStrZero(round(ValorDesconto * 100) ,13)            + // valor desconto
-          StringOfChar( '0', 13)                                  + // iof - caso seguro
-          StringOfChar( '0', 13)                                  + // valor abatimento ?????
-          TipoSacado                                              +
-          padR( OnlyNumber(Sacado.CNPJCPF),14,'0')                +
-          padL( Sacado.NomeSacado, 40, ' ')                       +
-          padL( Sacado.Logradouro + Sacado.Numero , 40)           +
-          padL( Sacado.Bairro ,12)                                +
-          padL( Sacado.CEP, 8 , '0' )                             +
-          padL( Sacado.Cidade ,15)                                +
-          padL( Sacado.UF, 2)                                     +
-          padL( Sacado.Avalista, 30)                              + // Avalista
-          Space(12)                                               +
-          '1'                                                     + // codigo moeda
-          IntToStrZero( ListadeBoletos.IndexOf(ACBrTitulo)+2, 6 );
+         wLinha:= '1'                                                     +  // ID Registro
+                  IfThen( PercentualMulta > 0, '092', '000')              +  // Indica se exite Multa ou não
+	          IntToStrZero( round( PercentualMulta * 100 ), 13)       +  // Percentual de Multa formatado com 2 casas decimais
+		  FormatDateTime( 'ddmmyy', Vencimento + 1)               +  // data Multa
+		  Space(5)                                                +
+		  padR( Cedente.CodigoCedente, 9, '0')                    +  // numero do contrato ???
+		  padR( SeuNumero,25,'0')                                 +  // Numero de Controle do Participante
+                  FormataNossoNumero(ACBrTitulo)                          +
+                  Space(5)                                                +
+                  padR( OnlyNumber(Cedente.CNPJCPF), 15 , '0')            +
+                  IntToStrZero( Round( ValorDocumento * 100 ), 10)        +  // qtde de moeda
+                  '1'                                                     +  // Codigo Operação 1- Cobrança Simples
+                  Ocorrencia                                              +
+                  padL( NumeroDocumento,  10)                             + // numero titulo atribuido pelo cliente
+                  FormatDateTime( 'ddmmyy', Vencimento)                   +
+                  IntToStrZero(Round( ValorDocumento * 100 ),13)          +  // valor nominal do titulo
+                  '389'                                                   +  // banco conbrador
+                  '00000'                                                 +  // agencia cobradora
+                  '01'                                                    +  // codigo da especie, duplicata mercantil
+                  ATipoAceite                                             +  // N
+                  FormatDateTime( 'ddmmyy', DataDocumento )               +  // Data de Emissão
+                  padL(Instrucao1,2,'0')                                  +  // instruçoes de cobrança
+                  padL(Instrucao2,2,'0')                                  +  // instruçoes de cobrança
+                  IntToStrZero(round(ValorMoraJuros * 100),13)            + // juros mora 11.2
+                  FormatDateTime( 'ddmmyy', DataDesconto)                 + // data limite desconto
+                  IntToStrZero(round(ValorDesconto * 100) ,13)            + // valor desconto
+                  StringOfChar( '0', 13)                                  + // iof - caso seguro
+                  StringOfChar( '0', 13)                                  + // valor abatimento ?????
+                  TipoSacado                                              +
+                  padR( OnlyNumber(Sacado.CNPJCPF),14,'0')                +
+                  padL( Sacado.NomeSacado, 40, ' ')                       +
+                  padL( Sacado.Logradouro + Sacado.Numero , 40)           +
+                  padL( Sacado.Bairro ,12)                                +
+                  padL( Sacado.CEP, 8 , '0' )                             +
+                  padL( Sacado.Cidade ,15)                                +
+                  padL( Sacado.UF, 2)                                     +
+                  padL( Sacado.Avalista, 30)                              + // Avalista
+                  Space(12)                                               +
+                  '1'                                                     + // codigo moeda
+                  IntToStrZero(aRemessa.Count + 1, 6 );
 
-         Result:= UpperCase(Result);
+         aRemessa.Text:= aRemessa.Text + UpperCase(wLinha);
       end;
    end;
 end;
 
-function TACBrBancoMercantil.GerarRegistroTrailler400( ARemessa:TStringList ): String;
+procedure TACBrBancoMercantil.GerarRegistroTrailler400( ARemessa:TStringList );
+var
+  wLinha: String;
 begin
-   Result:= '9' + Space(393)                     + // ID Registro
+   wLinha:= '9' + Space(393)                     + // ID Registro
             IntToStrZero( ARemessa.Count + 1, 6);  // Contador de Registros
-   Result:= UpperCase(Result);
+
+   ARemessa.Text:= ARemessa.Text + UpperCase(wLinha);
 end;
 
 

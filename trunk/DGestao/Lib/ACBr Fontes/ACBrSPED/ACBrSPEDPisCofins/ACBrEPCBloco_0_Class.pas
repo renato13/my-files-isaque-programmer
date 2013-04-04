@@ -59,6 +59,7 @@ type
     FRegistro0100Count: Integer;
     FRegistro0110Count: Integer;
     FRegistro0111Count: Integer;
+    FRegistro0120Count: Integer;   //Adicionado por Fábio Gabriel - 29/11/2012
     FRegistro0140Count: Integer;
     FRegistro0145Count: Integer;
     FRegistro0150Count: Integer;
@@ -75,6 +76,7 @@ type
     procedure WriteRegistro0100(Reg0001: TRegistro0001);
     procedure WriteRegistro0110(Reg0001: TRegistro0001);
     procedure WriteRegistro0111(Reg0110: TRegistro0110);
+    procedure WriteRegistro0120(Reg0001: TRegistro0001);  //Adicionado por Fábio Gabriel - 29/11/2012
     procedure WriteRegistro0140(Reg0001: TRegistro0001);
     procedure WriteRegistro0145(Reg0140: TRegistro0140);
     procedure WriteRegistro0150(Reg0140: TRegistro0140);
@@ -100,6 +102,7 @@ type
     function Registro0100New: TRegistro0100;
     function Registro0110New: TRegistro0110;
     function Registro0111New: TRegistro0111;
+    function Registro0120New: TRegistro0120;  //Adicionado por Fábio Gabriel - 29/11/2012
     function Registro0140New: TRegistro0140;
     function Registro0145New: TRegistro0145;
     function Registro0150New: TRegistro0150;
@@ -124,6 +127,7 @@ type
     property Registro0100Count: Integer read FRegistro0100Count write FRegistro0100Count;
     property Registro0110Count: Integer read FRegistro0110Count write FRegistro0110Count;
     property Registro0111Count: Integer read FRegistro0111Count write FRegistro0111Count;
+    property Registro0120Count: Integer read FRegistro0120Count write FRegistro0120Count;  //Adicionado por Fábio Gabriel - 29/11/2012
     property Registro0140Count: Integer read FRegistro0140Count write FRegistro0140Count;
     property Registro0145Count: Integer read FRegistro0145Count write FRegistro0145Count;
     property Registro0150Count: Integer read FRegistro0150Count write FRegistro0150Count;
@@ -140,7 +144,7 @@ type
 
 implementation
 
-uses ACBrSpedUtils;
+uses ACBrSpedUtils, StrUtils;
 
 { TBloco_0 }
 
@@ -165,6 +169,7 @@ begin
   FRegistro0100Count := 0;
   FRegistro0110Count := 0;
   FRegistro0111Count := 0;
+  FRegistro0120Count := 0;  //Adicionado por Fábio Gabriel - 29/11/2012
   FRegistro0140Count := 0;
   FRegistro0145Count := 0;
   FRegistro0150Count := 0;
@@ -210,7 +215,7 @@ end;
 
 function TBloco_0.Registro0100New: TRegistro0100;
 begin
-   Result := FRegistro0001.Registro0100.New;
+   Result := FRegistro0001.Registro0100.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0110New: TRegistro0110;
@@ -223,47 +228,69 @@ begin
    Result := FRegistro0001.Registro0110.Registro0111;
 end;
 
+// Adicionado por Fábio Gabriel - 29/11/2012
+function TBloco_0.Registro0120New: TRegistro0120;
+begin
+   Result := FRegistro0001.Registro0120.New(FRegistro0001);
+end;
+
 function TBloco_0.Registro0140New: TRegistro0140;
 begin
-   Result := FRegistro0001.Registro0140.New;
+   Result := FRegistro0001.Registro0140.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0150New: TRegistro0150;
 var
+U0140: TRegistro0140;
 U0140Count: Integer;
 begin
    U0140Count := FRegistro0001.Registro0140.Count -1;
+   if U0140Count = -1 then
+      raise Exception.Create('O registro 0150 deve ser filho do registro 0140, e não existe nenhum 0140 pai!');
    //
-   Result := FRegistro0001.Registro0140.Items[U0140Count].Registro0150.New;
+   U0140  := FRegistro0001.Registro0140.Items[U0140Count];
+   Result := U0140.Registro0150.New(U0140);
 end;
 
 function TBloco_0.Registro0190New: TRegistro0190;
 var
+U0140: TRegistro0140;
 U0140Count: Integer;
 begin
    U0140Count := FRegistro0001.Registro0140.Count -1;
+   if U0140Count = -1 then
+      raise Exception.Create('O registro 0190 deve ser filho do registro 0140, e não existe nenhum 0140 pai!');
    //
-   Result := FRegistro0001.Registro0140.Items[U0140Count].Registro0190.New;
+   U0140  := FRegistro0001.Registro0140.Items[U0140Count];
+   Result := U0140.Registro0190.New(U0140);
 end;
 
 function TBloco_0.Registro0200New: TRegistro0200;
 var
+U0140: TRegistro0140;
 U0140Count: Integer;
 begin
    U0140Count := FRegistro0001.Registro0140.Count -1;
+   if U0140Count = -1 then
+      raise Exception.Create('O registro 0200 deve ser filho do registro 0140, e não existe nenhum 0140 pai!');
    //
-   Result := FRegistro0001.Registro0140.Items[U0140Count].Registro0200.New;
+   U0140  := FRegistro0001.Registro0140.Items[U0140Count];
+   Result := U0140.Registro0200.New(U0140);
 end;
 
 function TBloco_0.Registro0205New: TRegistro0205;
 var
+U0200: TRegistro0200;
 U0140Count: integer;
 U0200Count: integer;
 begin
    U0140Count := FRegistro0001.Registro0140.Count -1;
    U0200Count := FRegistro0001.Registro0140.Items[U0140Count].Registro0200.Count -1;
+   if U0200Count = -1 then
+      raise Exception.Create('O registro 0205 deve ser filho do registro 0200, e não existe nenhum 0200 pai!');
    //
-   Result := FRegistro0001.Registro0140.Items[U0140Count].Registro0200.Items[U0200Count].Registro0205.New;
+   U0200  := FRegistro0001.Registro0140.Items[U0140Count].Registro0200.Items[U0200Count];
+   Result := U0200.Registro0205.New(U0200);
 end;
 
 function TBloco_0.Registro0206New: TRegistro0206;
@@ -289,28 +316,43 @@ begin
 end;
 
 function TBloco_0.Registro0400New: TRegistro0400;
+var
+U0140: TRegistro0140;
+U0140Count: Integer;
 begin
-   Result := FRegistro0001.Registro0140.Items[FRegistro0001.Registro0140.Count -1].Registro0400.New;
+   U0140Count := FRegistro0001.Registro0140.Count -1;
+   if U0140Count = -1 then
+      raise Exception.Create('O registro 0150 deve ser filho do registro 0140, e não existe nenhum 0140 pai!');
+   //
+   U0140  := FRegistro0001.Registro0140.Items[U0140Count];
+   Result := U0140.Registro0400.New(U0140);
 end;
 
 function TBloco_0.Registro0450New: TRegistro0450;
+var
+U0140: TRegistro0140;
+U0140Count: Integer;
 begin
-   Result := FRegistro0001.Registro0140.Items[FRegistro0001.Registro0140.Count -1].Registro0450.New;
+   U0140Count := FRegistro0001.Registro0140.Count -1;
+   if U0140Count = -1 then
+      raise Exception.Create('O registro 0150 deve ser filho do registro 0140, e não existe nenhum 0140 pai!');
+   //
+   U0140  := FRegistro0001.Registro0140.Items[U0140Count];
+   Result := U0140.Registro0450.New(U0140);
 end;
 
 function TBloco_0.Registro0500New: TRegistro0500;
 begin
-   Result := FRegistro0001.Registro0500.New;
+   Result := FRegistro0001.Registro0500.New(FRegistro0001);
 end;
 
 function TBloco_0.Registro0600New: TRegistro0600;
 begin
-   Result := FRegistro0001.Registro0600.New;
+   Result := FRegistro0001.Registro0600.New(FRegistro0001);
 end;
 
 procedure TBloco_0.WriteRegistro0000;
 var
-strCOD_VER: AnsiString;
 strTIPO_ESCRIT: AnsiString;
 strIND_SIT_ESP: AnsiString;
 strIND_NAT_PJ: AnsiString;
@@ -321,12 +363,6 @@ begin
   begin
      with Registro0000 do
      begin
-       case COD_VER of
-         vlVersao100: strCOD_VER := '001'; // Código 001 - Versão 100 ADE Cofis nº 31/2010 de 01/01/2011
-         vlVersao101: strCOD_VER := '002'; // Código 002 - Versão 101 ADE Cofis nº 34/2010 de 01/01/2011
-         vlVersao200: strCOD_VER := '002'; // Código 002 - Versão 200 ADE Cofis nº 20/2012
-         vlVersao201: strCOD_VER := '003'; // Código 003 - Versão 201 ADE Cofis nº 20/2012 de 14/03/2012
-       end;
        case TIPO_ESCRIT of
          tpEscrOriginal: strTIPO_ESCRIT := '0';
          tpEscrRetificadora: strTIPO_ESCRIT := '1';
@@ -363,7 +399,7 @@ begin
        Check(funChecaMUN(COD_MUN), '(0-0000) ENTIDADE: O código do município "%s" digitado é inválido!', [IntToStr(COD_MUN)]);
        ///
        Add( LFill( '0000' ) +
-            LFill( strCOD_VER ) +
+            LFill( CodVerToStr(COD_VER) ) +
             LFill( strTIPO_ESCRIT ) +
             LFill( strIND_SIT_ESP ) +
             LFill( strNUM_REC_ANTERIOR) +
@@ -373,7 +409,7 @@ begin
             LFill( CNPJ ) +
             LFill( UF ) +
             LFill( COD_MUN, 7 ) +
-            LFill( SUFRAMA, 9 ) +
+            LFill( SUFRAMA, 9, True ) +
             LFill( strIND_NAT_PJ ) +
             LFill( strIND_ATIV ) );
        ///
@@ -395,6 +431,7 @@ begin
         begin
           WriteRegistro0100(FRegistro0001) ;
           WriteRegistro0110(FRegistro0001) ;
+          WriteRegistro0120(FRegistro0001) ;   //Implementado por Fábio Gabriel
           WriteRegistro0140(FRegistro0001) ;
           WriteRegistro0500(FRegistro0001) ;
           WriteRegistro0600(FRegistro0001) ;
@@ -551,6 +588,28 @@ begin
   end;
 end;
 
+// Adicionado por Fábio Gabriel - 29/11/2012
+procedure TBloco_0.WriteRegistro0120(Reg0001: TRegistro0001) ;
+var
+intFor: Integer;
+begin
+  if Assigned(Reg0001.Registro0120) then
+  begin
+     for intFor := 0 to Reg0001.Registro0120.Count - 1 do
+     begin
+        with Reg0001.Registro0120.Items[intFor] do
+        begin
+           Add( LFill('0120') +
+                LFill( MES_DISPENSA, 6 ) +  //Implementado //Formato MMAAAA
+                LFill( INF_COMP ) ) ;       //Implementado
+        end;
+        Registro0990.QTD_LIN_0 := Registro0990.QTD_LIN_0 + 1;
+     end;
+     /// Variavél para armazenar a quantidade de registro do tipo.
+     FRegistro0120Count := FRegistro0120Count + Reg0001.Registro0120.Count;
+  end;
+end;
+
 procedure TBloco_0.WriteRegistro0140(Reg0001: TRegistro0001) ;
 var
 intFor: Integer;
@@ -561,7 +620,6 @@ begin
      begin
         with Reg0001.Registro0140.Items[intFor] do
         begin
-           ///
            Add( LFill('0140') +
                 LFill( COD_EST ) +
                 LFill( NOME ) +

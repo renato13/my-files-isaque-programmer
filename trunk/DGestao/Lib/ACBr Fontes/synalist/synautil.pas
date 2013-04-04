@@ -1,9 +1,9 @@
 {==============================================================================|
-| Project : Ararat Synapse                                       | 004.015.001 |
+| Project : Ararat Synapse                                       | 004.015.005 |
 |==============================================================================|
 | Content: support procedures and functions                                    |
 |==============================================================================|
-| Copyright (c)1999-2012, Lukas Gebauer                                        |
+| Copyright (c)1999-2013, Lukas Gebauer                                        |
 | All rights reserved.                                                         |
 |                                                                              |
 | Redistribution and use in source and binary forms, with or without           |
@@ -33,13 +33,15 @@
 | DAMAGE.                                                                      |
 |==============================================================================|
 | The Initial Developer of the Original Code is Lukas Gebauer (Czech Republic).|
-| Portions created by Lukas Gebauer are Copyright (c) 1999-2012.               |
+| Portions created by Lukas Gebauer are Copyright (c) 1999-2013.               |
 | Portions created by Hernan Sanchez are Copyright (c) 2000.                   |
 | Portions created by Petr Fejfar are Copyright (c)2011-2012.                  |
 | All Rights Reserved.                                                         |
 |==============================================================================|
 | Contributor(s):                                                              |
 |   Hernan Sanchez (hernan.sanchez@iname.com)                                  |
+|   Tomas Hajny (OS2 support)                                                  |
+|   Radek Cervinka (POSIX support)                                             |
 |==============================================================================|
 | History: see HISTORY.HTM from distribution package                           |
 |          (Found at URL: http://www.ararat.cz/synapse/)                       |
@@ -47,19 +49,11 @@
 
 {:@abstract(Support procedures and functions)}
 
-{$IFDEF FPC}
-  {$MODE DELPHI}
-{$ENDIF}
+{$I ACBr_jedi.inc} // load common compiler defines
+
 {$Q-}
 {$R-}
 {$H+}
-
-//old Delphi does not have MSWINDOWS define.
-{$IFDEF WIN32}
-  {$IFNDEF MSWINDOWS}
-    {$DEFINE MSWINDOWS}
-  {$ENDIF}
-{$ENDIF}
 
 {$IFDEF UNICODE}
   {$WARN IMPLICIT_STRING_CAST OFF}
@@ -74,11 +68,19 @@ interface
 uses
 {$IFDEF MSWINDOWS}
   Windows,
-{$ELSE}
+{$ELSE MSWINDOWS}
   {$IFDEF FPC}
+    {$IFDEF OS2}
+    Dos, TZUtil,
+    {$ELSE OS2}
     UnixUtil, Unix, BaseUnix,
-  {$ELSE}
-    Libc,
+    {$ENDIF OS2}
+  {$ELSE FPC}
+    {$IFDEF POSIX}
+      Posix.Base, Posix.Time, Posix.SysTypes, Posix.SysTime, Posix.Stdio,
+    {$ELSE}
+      Libc,
+    {$ENDIF}
   {$ENDIF}
 {$ENDIF}
 {$IFDEF CIL}
@@ -90,6 +92,17 @@ uses
 type
   int64 = integer;
 {$ENDIF}
+{$IFDEF POSIX}
+type
+  TTimeVal = Posix.SysTime.timeval;
+  Ttimezone = record
+               tz_minuteswest: Integer ;     // minutes west of Greenwich
+               tz_dsttime: integer ;         // type of DST correction
+           end;
+
+  PTimeZone = ^Ttimezone;
+{$ENDIF}
+
 
 {:Return your timezone bias from UTC time in minutes.}
 function TimeZoneBias: integer;
@@ -401,12 +414,23 @@ function TimeZoneBias: integer;
 {$IFNDEF MSWINDOWS}
 {$IFNDEF FPC}
 var
+{$IFDEF POSIX}
+  t: Posix.SysTypes.time_t;
+  UT: Posix.time.tm;
+{$ELSE}
   t: TTime_T;
   UT: TUnixTime;
+{$ENDIF}
 begin
-  __time(@T);
-  localtime_r(@T, UT);
-  Result := ut.__tm_gmtoff div 60;
+  {$IFDEF POSIX}
+    __time(T);
+    localtime_r(T, UT);
+    Result := UT.tm_gmtoff div 60;
+  {$ELSE}
+    __time(@T);
+    localtime_r(@T, UT);
+    Result := ut.__tm_gmtoff div 60;
+  {$ENDIF}
 {$ELSE}
 begin
   Result := TZSeconds div 60;
@@ -606,21 +630,11 @@ end;
 function GetTimeFromStr(Value: string): TDateTime;
 var
   x: integer;
-  {$IFDEF VER240}
-    fs: TFormatSettings;
-  {$ENDIF}
 begin
   x := rpos(':', Value);
   if (x > 0) and ((Length(Value) - x) > 2) then
     Value := Copy(Value, 1, x + 2);
-
-  {$IFDEF VER240}
-    fs := TFormatSettings.Create('');
-    Value := ReplaceString(Value, ':', fs.TimeSeparator);
-  {$ELSE}
-    Value := ReplaceString(Value, ':', TimeSeparator);
-  {$ENDIF}
-
+  Value := ReplaceString(Value, ':', {$IFDEF COMPILER15_UP}FormatSettings.{$ENDIF}TimeSeparator);
   Result := -1;
   try
     Result := StrToTime(Value);
@@ -781,21 +795,31 @@ begin
   st.Millisecond := stw.wMilliseconds;
   result := SystemTimeToDateTime(st);
 {$ENDIF}
-{$ELSE}
+{$ELSE MSWINDOWS}
 {$IFNDEF FPC}
 var
   TV: TTimeVal;
 begin
   gettimeofday(TV, nil);
   Result := UnixDateDelta + (TV.tv_sec + TV.tv_usec / 1000000) / 86400;
-{$ELSE}
+{$ELSE FPC}
+ {$IFDEF UNIX}
 var
   TV: TimeVal;
 begin
   fpgettimeofday(@TV, nil);
   Result := UnixDateDelta + (TV.tv_sec + TV.tv_usec / 1000000) / 86400;
-{$ENDIF}
-{$ENDIF}
+ {$ELSE UNIX}
+  {$IFDEF OS2}
+var
+  ST: TSystemTime;
+begin
+  GetLocalTime (ST);
+  Result := SystemTimeToDateTime (ST);
+  {$ENDIF OS2}
+ {$ENDIF UNIX}
+{$ENDIF FPC}
+{$ENDIF MSWINDOWS}
 end;
 
 {==============================================================================}
@@ -823,7 +847,7 @@ begin
   stw.wMilliseconds := st.Millisecond;
   Result := SetSystemTime(stw);
 {$ENDIF}
-{$ELSE}
+{$ELSE MSWINDOWS}
 {$IFNDEF FPC}
 var
   TV: TTimeVal;
@@ -838,8 +862,13 @@ begin
   d := (newdt - UnixDateDelta) * 86400;
   TV.tv_sec := trunc(d);
   TV.tv_usec := trunc(frac(d) * 1000000);
+  {$IFNDEF POSIX}
   Result := settimeofday(TV, TZ) <> -1;
-{$ELSE}
+  {$ELSE}
+  Result := False; // in POSIX settimeofday is not defined? http://www.kernel.org/doc/man-pages/online/pages/man2/gettimeofday.2.html
+  {$ENDIF}
+{$ELSE FPC}
+ {$IFDEF UNIX}
 var
   TV: TimeVal;
   d: double;
@@ -848,8 +877,18 @@ begin
   TV.tv_sec := trunc(d);
   TV.tv_usec := trunc(frac(d) * 1000000);
   Result := fpsettimeofday(@TV, nil) <> -1;
-{$ENDIF}
-{$ENDIF}
+ {$ELSE UNIX}
+  {$IFDEF OS2}
+var
+  ST: TSystemTime;
+begin
+  DateTimeToSystemTime (NewDT, ST);
+  SetTime (ST.Hour, ST.Minute, ST.Second, ST.Millisecond div 10);
+  Result := true;
+  {$ENDIF OS2}
+ {$ENDIF UNIX}
+{$ENDIF FPC}
+{$ENDIF MSWINDOWS}
 end;
 
 {==============================================================================}
@@ -1777,6 +1816,12 @@ begin
 end;
 
 {==============================================================================}
+
+{$IFDEF POSIX}
+function tempnam(const Path: PAnsiChar; const Prefix: PAnsiChar): PAnsiChar; cdecl;
+  external libc name _PU + 'tempnam';
+{$ENDIF}
+
 function GetTempFile(const Dir, prefix: AnsiString): AnsiString;
 {$IFNDEF FPC}
 {$IFDEF MSWINDOWS}
@@ -2070,19 +2115,10 @@ end;
 {==============================================================================}
 var
   n: integer;
-  {$IFDEF VER240}
-    fs: TFormatSettings;
-  {$ENDIF}
 begin
   for n :=  1 to 12 do
   begin
-    {$IFDEF VER240}
-      fs := TFormatSettings.Create('');
-      CustomMonthNames[n] := fs.ShortMonthNames[n];
-      MyMonthNames[0, n]  := fs.ShortMonthNames[n];
-    {$ELSE}
-      CustomMonthNames[n] := ShortMonthNames[n];
-      MyMonthNames[0, n]  := ShortMonthNames[n];
-    {$ENDIF}
+    CustomMonthNames[n] := {$IFDEF COMPILER15_UP}FormatSettings.{$ENDIF}ShortMonthNames[n];
+    MyMonthNames[0, n] := {$IFDEF COMPILER15_UP}FormatSettings.{$ENDIF}ShortMonthNames[n];
   end;
 end.

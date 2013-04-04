@@ -47,6 +47,44 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+04/03/2013
+----------
+[-] Acerto no envio de e-mail normal, não estava anexando o XML
+    por regys.silveira
+
+29/01/12
+--------
+[-] Acertos feitos pelo usuário Luis Fernando para o DANFE quickreport.
+    http://www.projetoacbr.com.br/forum/index.php?/topic/8706-altera%C3%A7%C3%B5es-no-danfe-qreport-retrato-para-nf-e/
+    - Local impressão Canhoto.
+    - Mensagem obrigatória quando emitido em contingencia.
+    - Estouro da linha dos itens.
+    - Local Endereço Entrega.
+    - Mensagem livre no lugar do software que distribui.
+
+05/12/12 
+---------------
+[+] Acerto na na expansão do logotipo para o DANFE.FR3
+    conforme tópico: http://www.projetoacbr.com.br/forum/index.php?/topic/8668-logomarca-expandido-danfefr/
+
+05/12/12 (Regys Silveira, Itamar Bermond) 
+---------------
+[+] Inclusão da impressão e geração de PDF de Eventos com FastReport.  
+
+22/11/2012
+-- ACBrDFeUtil 
+[+] Unificação de funções de mesma funcionalidade das units:
+    ACBrNFeUtil, ACBrNFEsUtil, ACBrCTeUtil
+    (por Isaque Pinheiro)
+
+Alterações   08/11/12 (João Henrique)
+---------------
+[+] Inclusão da propriedade MostrarSetup (padrão FALSE) no componente Danfe Rave Code Base.     
+
+Alterações   31/10/12 (Regys Silveira)
+---------------
+[*] Ajuste para poder escolher entre enviar email com thread ou sem thread
+    o padrão continua sendo utilizando a Thread.
 
 Alterações   10/10/12 (João Henrique)
 ---------------

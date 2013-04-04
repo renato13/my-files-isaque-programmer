@@ -635,12 +635,25 @@ begin
      begin
         with RegD001.RegistroD100.Items[intFor] do
         begin
-          case IND_FRT of
-            tfPorContaTerceiros:    strIND_FRT := '0';
-            tfPorContaEmitente:     strIND_FRT := '1';
-            tfPorContaDestinatario: strIND_FRT := '2';
-            tfSemCobrancaFrete:     strIND_FRT := '9';
-            tfNenhum:               strIND_FRT := '';
+          if DT_INI < EncodeDate(2011,07,01) then
+          begin
+             case IND_FRT of
+               tfPorContaTerceiros:    strIND_FRT := '0';
+               tfPorContaEmitente:     strIND_FRT := '1';
+               tfPorContaDestinatario: strIND_FRT := '2';
+               tfSemCobrancaFrete:     strIND_FRT := '9';
+               tfNenhum:               strIND_FRT := '';
+             end
+          end
+          else
+          begin
+             case IND_FRT of
+               tfPorContaTerceiros:    strIND_FRT := '2';
+               tfPorContaEmitente:     strIND_FRT := '0';
+               tfPorContaDestinatario: strIND_FRT := '1';
+               tfSemCobrancaFrete:     strIND_FRT := '9';
+               tfNenhum:               strIND_FRT := '';
+             end;
           end;
           case COD_SIT of
             sdRegular:               strCOD_SIT := '00';
@@ -1611,7 +1624,25 @@ begin
           end;
 
           strLinha := LFill('D510') +
-                      LFill( intIND_REC, 0 );
+                      lFill( NUM_ITEM ) +
+                      lFill( COD_ITEM ) +
+                      lFill( COD_CLASS ) +
+                      lFill( QTD, 0, 3) +
+                      lFill( UNID ) +
+                      lFill( VL_ITEM, 0, 2) +
+                      lFill( VL_DESC, 0, 2) +
+                      lFill( CST_ICMS, 3 ) +
+                      lFill( CFOP, 4 ) +
+                      lFill( VL_BC_ICMS, 0, 2) +
+                      lFill( ALIQ_ICMS, 0, 2) +
+                      lFill( VL_ICMS, 0, 2) +
+                      lFill( VL_BC_ICMS_UF, 0, 2) +
+                      lFill( VL_ICMS_UF, 0, 2) +
+                      lFill( intIND_REC, 0 ) +
+                      lFill( COD_PART ) +
+                      lFill( VL_PIS, 0, 2) +
+                      lFill( VL_COFINS, 0, 2) +
+                      lFill( COD_CTA );
           //-- Write
           if Assigned(FOnWriteRegistroD510) then
              FOnWriteRegistroD510(strLinha);
@@ -1655,7 +1686,12 @@ begin
           end;
 
           Add( LFill( 'D530' ) +
-               LFill( intIND_SERV, 0 ) ) ;
+               LFill( intIND_SERV, 0 ) +
+               LFill( DT_INI_SERV ) +
+               LFill( DT_FIN_SERV ) +
+               LFill( PER_FISCAL ) +
+               LFill( COD_AREA ) +
+               LFill( TERMINAL ) ) ;
         end;
         RegistroD990.QTD_LIN_D := RegistroD990.QTD_LIN_D + 1;
      end;
@@ -1681,8 +1717,8 @@ begin
                LFill( VL_OPR,0,2 ) +
                LFill( VL_BC_ICMS,0,2 ) +
                LFill( VL_ICMS,0,2 ) +
-               LFill( VL_BC_ICMS_ST,0,2 ) +
-               LFill( VL_ICMS_ST,0,2 ) +
+               LFill( VL_BC_ICMS_UF,0,2 ) +
+               LFill( VL_ICMS_UF,0,2 ) +
                LFill( VL_RED_BC,0,2 ) +
                LFill( COD_OBS  ) ) ;
         end;

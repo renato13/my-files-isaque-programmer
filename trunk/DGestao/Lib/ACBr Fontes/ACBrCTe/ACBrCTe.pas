@@ -55,8 +55,11 @@ uses
   {$ELSE}
      Dialogs,
   {$ENDIF}
-  pcteCTe, pcnConversao, ACBrCTeConhecimentos, ACBrCTeConfiguracoes,
-  ACBrCTeWebServices, ACBrCTeUtil, ACBrCTeDACTeClass;
+  Forms,
+  smtpsend, ssl_openssl, mimemess, mimepart, // units para enviar email
+  pcteCTe, pcnConversao, pcteEnvEventoCTe, pcteRetEnvEventoCTe,
+  ACBrUtil, ACBrDFeUtil, ACBrCTeUtil, ACBrCTeConhecimentos, ACBrCTeConfiguracoes,
+  ACBrCTeWebServices, ACBrCTeDACTeClass;
 
 {$IFDEF PL_103}
 const
@@ -73,19 +76,30 @@ type
   EACBrCTeException = class(Exception);
 
   { Evento para gerar log das mensagens do Componente }
-  TACBrCTeLog = procedure(const Mensagem : String) of object ;
+  TACBrCTeLog = procedure(const Mensagem : String) of object;
 
   TACBrCTe = class(TComponent)
   private
     fsAbout: TACBrCTeAboutInfo;
     FDACTe : TACBrCTeDACTeClass;
     FConhecimentos: TConhecimentos;
+    FEventoCTe: TEventoCTe;
     FWebServices: TWebServices;
     FConfiguracoes: TConfiguracoes;
     FStatus : TStatusACBrCTe;
     FOnStatusChange: TNotifyEvent;
     FOnGerarLog : TACBrCTeLog;
   	procedure SetDACTe(const Value: TACBrCTeDACTeClass);
+    procedure EnviaEmailThread(const sSmtpHost, sSmtpPort, sSmtpUser,
+      sSmtpPasswd, sFrom, sTo, sAssunto: String; sMensagem: TStrings;
+      SSL: Boolean; sCC, Anexos: TStrings; PedeConfirma, AguardarEnvio: Boolean;
+      NomeRemetente: String; TLS: Boolean; StreamCTe: TStringStream;
+      NomeArq: String);
+    procedure EnviarEmailNormal(const sSmtpHost, sSmtpPort, sSmtpUser,
+      sSmtpPasswd, sFrom, sTo, sAssunto: String; sMensagem: TStrings;
+      SSL: Boolean; sCC, Anexos: TStrings; PedeConfirma, AguardarEnvio: Boolean;
+      NomeRemetente: String; TLS: Boolean; StreamCTe: TStringStream;
+      NomeArq: String);
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
@@ -94,25 +108,45 @@ type
     function Enviar(ALote: Integer; Imprimir:Boolean = True): Boolean;
     function Cancelamento(AJustificativa:WideString): Boolean;
     function Consultar: Boolean;
+    function EnviarEventoCTe(idLote : Integer): Boolean;
     property WebServices: TWebServices read FWebServices write FWebServices;
     property Conhecimentos: TConhecimentos read FConhecimentos write FConhecimentos;
+    property EventoCTe: TEventoCTe read FEventoCTe write FEventoCTe;
     property Status: TStatusACBrCTe read FStatus;
     procedure SetStatus( const stNewStatus : TStatusACBrCTe );
+    procedure EnviaEmail(const sSmtpHost,
+                                  sSmtpPort,
+                                  sSmtpUser,
+                                  sSmtpPasswd,
+                                  sFrom,
+                                  sTo,
+                                  sAssunto: String;
+                                  sMensagem : TStrings;
+                                  SSL : Boolean;
+                                  sCC: TStrings = nil;
+                                  Anexos:TStrings=nil;
+                                  PedeConfirma: Boolean = False;
+                                  AguardarEnvio: Boolean = False;
+                                  NomeRemetente: String = '';
+                                  TLS : Boolean = True;
+                                  StreamCTe : TStringStream = nil;
+                                  NomeArq : String = '';
+                                  UsarThread: Boolean = True);
   published
     property Configuracoes: TConfiguracoes read FConfiguracoes write FConfiguracoes;
     property OnStatusChange: TNotifyEvent read FOnStatusChange write FOnStatusChange;
-  	property DACTe: TACBrCTeDACTeClass read FDACTe write SetDACTe ;
+  	property DACTe: TACBrCTeDACTeClass read FDACTe write SetDACTe;
     property AboutACBrCTe : TACBrCTeAboutInfo read fsAbout write fsAbout
-                          stored false ;
-    property OnGerarLog : TACBrCTeLog read FOnGerarLog write FOnGerarLog ;
+                          stored false;
+    property OnGerarLog : TACBrCTeLog read FOnGerarLog write FOnGerarLog;
   end;
 
-procedure ACBrAboutDialog ;
+procedure ACBrAboutDialog;
 
 implementation
 
-procedure ACBrAboutDialog ;
-var Msg : String ;
+procedure ACBrAboutDialog;
+var Msg : String;
 begin
     Msg := 'Componente ACBrCTe'+#10+
            'Versão: '+ACBRCTe_VERSAO+#10+#10+
@@ -121,7 +155,7 @@ begin
            'Projeto Cooperar - PCN'+#10+#10+
            'http://www.projetocooperar.org/pcn/';
 
-     MessageDlg(Msg ,mtInformation ,[mbOk],0) ;
+     MessageDlg(Msg ,mtInformation ,[mbOk],0);
 end;
 
 { TACBrCTe }
@@ -131,31 +165,35 @@ begin
   inherited Create(AOwner);
 
   FConfiguracoes     := TConfiguracoes.Create( self );
-  FConfiguracoes.Name:= 'Configuracoes' ;
+  FConfiguracoes.Name:= 'Configuracoes';
   {$IFDEF COMPILER6_UP}
    FConfiguracoes.SetSubComponent( true );{ para gravar no DFM/XFM }
   {$ENDIF}
 
   FConhecimentos      := TConhecimentos.Create(Self,Conhecimento);
   FConhecimentos.Configuracoes := FConfiguracoes;
+  FEventoCTe         := TEventoCTe.Create;
   FWebServices       := TWebServices.Create(Self);
 
   if FConfiguracoes.WebServices.Tentativas <= 0 then
      FConfiguracoes.WebServices.Tentativas := 5;
-  {$IFDEF ACBrCTeOpenSSL}
-     CteUtil.InitXmlSec ;
-  {$ENDIF}
-  FOnGerarLog := nil ;
+{$IFDEF ACBrCTeOpenSSL}
+  if FConfiguracoes.Geral.IniFinXMLSECAutomatico then
+   CteUtil.InitXmlSec;
+{$ENDIF}
+  FOnGerarLog := nil;
 end;
 
 destructor TACBrCTe.Destroy;
 begin
   FConfiguracoes.Free;
   FConhecimentos.Free;
+  FEventoCTe.Free;
   FWebServices.Free;
-  {$IFDEF ACBrCTeOpenSSL}
-     CteUtil.ShutDownXmlSec ;
-  {$ENDIF}
+{$IFDEF ACBrCTeOpenSSL}
+  if FConfiguracoes.Geral.IniFinXMLSECAutomatico then
+   CteUtil.ShutDownXmlSec;
+{$ENDIF}
   inherited;
 end;
 
@@ -164,30 +202,30 @@ begin
   inherited Notification(AComponent, Operation);
 
   if (Operation = opRemove) and (FDACTe <> nil) and (AComponent is TACBrCTeDACTeClass) then
-     FDACTe := nil ;
+     FDACTe := nil;
 end;
 
 procedure TACBrCTe.SetDACTe(const Value: TACBrCTeDACTeClass);
- Var OldValue: TACBrCTeDACTeClass ;
+ Var OldValue: TACBrCTeDACTeClass;
 begin
   if Value <> FDACTe then
   begin
      if Assigned(FDACTe) then
         FDACTe.RemoveFreeNotification(Self);
 
-     OldValue  := FDACTe ;   // Usa outra variavel para evitar Loop Infinito
+     OldValue  := FDACTe;   // Usa outra variavel para evitar Loop Infinito
      FDACTe    := Value;    // na remoção da associação dos componentes
 
      if Assigned(OldValue) then
         if Assigned(OldValue.ACBrCTe) then
-           OldValue.ACBrCTe := nil ;
+           OldValue.ACBrCTe := nil;
 
      if Value <> nil then
      begin
         Value.FreeNotification(self);
-        Value.ACBrCTe := self ;
-     end ;
-  end ;
+        Value.ACBrCTe := self;
+     end;
+  end;
 end;
 
 procedure TACBrCTe.SetStatus( const stNewStatus : TStatusACBrCTe );
@@ -279,6 +317,264 @@ begin
      end;
   end;
 
+end;
+
+procedure TACBrCTe.EnviaEmailThread(const sSmtpHost, sSmtpPort, sSmtpUser,
+  sSmtpPasswd, sFrom, sTo, sAssunto: String; sMensagem: TStrings;
+  SSL: Boolean; sCC, Anexos: TStrings; PedeConfirma,
+  AguardarEnvio: Boolean; NomeRemetente: String; TLS: Boolean;
+  StreamCTe: TStringStream; NomeArq: String);
+var
+ ThreadSMTP : TSendMailThread;
+ m:TMimemess;
+ p: TMimepart;
+ i: Integer;
+begin
+ m:=TMimemess.create;
+
+ ThreadSMTP := TSendMailThread.Create;  // Não Libera, pois usa FreeOnTerminate := True;
+ try
+    p := m.AddPartMultipart('mixed', nil);
+    if sMensagem <> nil then
+       m.AddPartText(sMensagem, p);
+
+    if StreamCTe <> nil then
+      m.AddPartBinary(StreamCTe,NomeArq, p);
+
+    if assigned(Anexos) then
+      for i := 0 to Anexos.Count - 1 do
+      begin
+        m.AddPartBinaryFromFile(Anexos[i], p);
+      end;
+
+    m.header.tolist.add(sTo);
+
+    if Trim(NomeRemetente) <> '' then
+      m.header.From := Format('%s<%s>', [NomeRemetente, sFrom])
+    else
+      m.header.From := sFrom;
+
+    m.header.subject:= sAssunto;
+    m.Header.ReplyTo := sFrom;
+    if PedeConfirma then
+       m.Header.CustomHeaders.Add('Disposition-Notification-To: '+sFrom);
+    m.EncodeMessage;
+
+    ThreadSMTP.sFrom := sFrom;
+    ThreadSMTP.sTo   := sTo;
+    if sCC <> nil then
+       ThreadSMTP.sCC.AddStrings(sCC);
+    ThreadSMTP.slmsg_Lines.AddStrings(m.Lines);
+
+    ThreadSMTP.smtp.UserName := sSmtpUser;
+    ThreadSMTP.smtp.Password := sSmtpPasswd;
+
+    ThreadSMTP.smtp.TargetHost := sSmtpHost;
+    if not DFeUtil.EstaVazio( sSmtpPort ) then     // Usa default
+       ThreadSMTP.smtp.TargetPort := sSmtpPort;
+
+    ThreadSMTP.smtp.FullSSL := SSL;
+    ThreadSMTP.smtp.AutoTLS := TLS;
+
+    SetStatus( stCTeEmail );
+    ThreadSMTP.Resume; // inicia a thread
+    if AguardarEnvio then
+    begin
+      repeat
+        Sleep(1000);
+        Application.ProcessMessages;
+      until ThreadSMTP.Terminado;
+    end;
+    SetStatus( stCTeIdle );
+ finally
+    m.free;
+ end;
+end;
+
+procedure TACBrCTe.EnviarEmailNormal(const sSmtpHost, sSmtpPort, sSmtpUser,
+  sSmtpPasswd, sFrom, sTo, sAssunto: String; sMensagem: TStrings;
+  SSL: Boolean; sCC, Anexos: TStrings; PedeConfirma,
+  AguardarEnvio: Boolean; NomeRemetente: String; TLS: Boolean;
+  StreamCTe: TStringStream; NomeArq: String);
+var
+  smtp: TSMTPSend;
+  msg_lines: TStringList;
+  m:TMimemess;
+  p: TMimepart;
+  I : Integer;
+  CorpoEmail: TStringList;
+begin
+  SetStatus( stCTeEmail );
+
+  msg_lines := TStringList.Create;
+  CorpoEmail := TStringList.Create;
+  smtp := TSMTPSend.Create;
+  m:=TMimemess.create;
+  try
+     p := m.AddPartMultipart('mixed', nil);
+     if sMensagem <> nil then
+     begin
+        CorpoEmail.Text := sMensagem.Text;
+        m.AddPartText(CorpoEmail, p);
+     end;
+
+    if StreamCTe <> nil then
+      m.AddPartBinary(StreamCTe, NomeArq, p);
+
+     if assigned(Anexos) then
+     for i := 0 to Anexos.Count - 1 do
+     begin
+        m.AddPartBinaryFromFile(Anexos[i], p);
+     end;
+
+     m.header.tolist.add(sTo);
+     m.header.From := sFrom;
+     m.header.subject := sAssunto;
+     m.EncodeMessage;
+     msg_lines.Add(m.Lines.Text);
+
+     smtp.UserName := sSmtpUser;
+     smtp.Password := sSmtpPasswd;
+
+     smtp.TargetHost := sSmtpHost;
+     smtp.TargetPort := sSmtpPort;
+
+     smtp.FullSSL := SSL;
+     smtp.AutoTLS := SSL;
+
+     if not smtp.Login then
+       raise Exception.Create('SMTP ERROR: Login: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+
+     if not smtp.MailFrom(sFrom, Length(sFrom)) then
+       raise Exception.Create('SMTP ERROR: MailFrom: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+
+     if not smtp.MailTo(sTo) then
+       raise Exception.Create('SMTP ERROR: MailTo: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+
+     if sCC <> nil then
+     begin
+       for I := 0 to sCC.Count - 1 do
+       begin
+         if not smtp.MailTo(sCC.Strings[i]) then
+           raise Exception.Create('SMTP ERROR: MailTo: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+       end;
+     end;
+
+     if not smtp.MailData(msg_lines) then
+       raise Exception.Create('SMTP ERROR: MailData: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+
+     if not smtp.Logout then
+       raise Exception.Create('SMTP ERROR: Logout: ' + smtp.EnhCodeString+sLineBreak+smtp.FullResult.Text);
+  finally
+     msg_lines.Free;
+     CorpoEmail.Free;
+     smtp.Free;
+     m.free;
+     SetStatus( stCTeIdle );
+  end;
+end;
+
+procedure TACBrCTe.EnviaEmail(const sSmtpHost, sSmtpPort, sSmtpUser,
+  sSmtpPasswd, sFrom, sTo, sAssunto: String; sMensagem: TStrings;
+  SSL: Boolean; sCC, Anexos: TStrings; PedeConfirma,
+  AguardarEnvio: Boolean; NomeRemetente: String; TLS: Boolean;
+  StreamCTe: TStringStream; NomeArq: String; UsarThread: Boolean);
+begin
+  if UsarThread then
+  begin
+    EnviaEmailThread(
+      sSmtpHost,
+      sSmtpPort,
+      sSmtpUser,
+      sSmtpPasswd,
+      sFrom,
+      sTo,
+      sAssunto,
+      sMensagem,
+      SSL,
+      sCC,
+      Anexos,
+      PedeConfirma,
+      AguardarEnvio,
+      NomeRemetente,
+      TLS,
+      StreamCTe,
+      NomeArq
+    );
+  end
+  else
+  begin
+    EnviarEmailNormal(
+      sSmtpHost,
+      sSmtpPort,
+      sSmtpUser,
+      sSmtpPasswd,
+      sFrom,
+      sTo,
+      sAssunto,
+      sMensagem,
+      SSL,
+      sCC,
+      Anexos,
+      PedeConfirma,
+      AguardarEnvio,
+      NomeRemetente,
+      TLS,
+      StreamCTe,
+      NomeArq
+    );
+  end;
+end;
+
+function TACBrCTe.EnviarEventoCTe(idLote: Integer): Boolean;
+var
+  i: integer;
+begin
+  if EventoCTe.Evento.Count <= 0 then
+   begin
+      if Assigned(Self.OnGerarLog) then
+         Self.OnGerarLog('ERRO: Nenhum Evento adicionado ao Lote');
+      raise EACBrCTeException.Create('ERRO: Nenhum Evento adicionado ao Lote');
+     exit;
+   end;
+
+  if EventoCTe.Evento.Count > 1 then
+   begin
+      if Assigned(Self.OnGerarLog) then
+         Self.OnGerarLog('ERRO: Conjunto de Eventos transmitidos (máximo de 1) excedido. Quantidade atual: '+IntToStr(EventoCTe.Evento.Count));
+      raise EACBrCTeException.Create('ERRO: Conjunto de Eventos transmitidos (máximo de 1) excedido. Quantidade atual: '+IntToStr(EventoCTe.Evento.Count));
+     exit;
+   end;
+
+  WebServices.EnvEvento.idLote := idLote;
+
+  {Atribuir nSeqEvento, CNPJ, Chave e/ou Protocolo quando não especificar}
+  for i:= 0 to EventoCTe.Evento.Count -1 do
+  begin
+    try
+      if EventoCTe.Evento.Items[i].InfEvento.nSeqEvento = 0 then
+        EventoCTe.Evento.Items[i].infEvento.nSeqEvento := 1;
+      if trim(EventoCTe.Evento.Items[i].InfEvento.CNPJ) = '' then
+        EventoCTe.Evento.Items[i].InfEvento.CNPJ := self.Conhecimentos.Items[i].CTe.Emit.CNPJ;
+      if trim(EventoCTe.Evento.Items[i].InfEvento.chCTe) = '' then
+        EventoCTe.Evento.Items[i].InfEvento.chCTe := copy(self.Conhecimentos.Items[i].CTe.infCTe.ID, (length(self.Conhecimentos.Items[i].CTe.infCTe.ID)-44)+1, 44);
+      if trim(EventoCTe.Evento.Items[i].infEvento.detEvento.nProt) = '' then
+      begin
+        if EventoCTe.Evento.Items[i].infEvento.tpEvento = teCancelamento then
+          EventoCTe.Evento.Items[i].infEvento.detEvento.nProt := self.Conhecimentos.Items[i].CTe.procCTe.nProt;
+      end;
+    except
+    end;
+  end;
+  {**}
+
+  Result := WebServices.EnvEvento.Executar;
+  if not Result then
+  begin
+    if Assigned(Self.OnGerarLog) then
+      Self.OnGerarLog(WebServices.EnvEvento.Msg);
+    raise EACBrCTeException.Create(WebServices.EnvEvento.Msg);
+  end;
 end;
 
 end.

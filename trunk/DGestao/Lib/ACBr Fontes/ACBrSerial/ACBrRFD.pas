@@ -1857,7 +1857,7 @@ begin
      try
         wDiaMov := StoD( Ini.ReadString('ECF','DiaMov', '') ) ;
      except
-        {$IFDEF DELPHI8_UP}
+        {$IFDEF DELPHI10_UP}
          FileAge(ArqINI, wDiaMov) ;
         {$ELSE}
          wDiaMov := FileDateToDateTime( FileAge(ArqINI) ) ;
@@ -2142,6 +2142,9 @@ begin
         SL.Add('BEF=MP-3000 TH FI') ;
         SL.Add('BEG=MP-6000 TH FI') ;
         SL.Add('BEH=MP-6100 TH FI') ;
+        SL.Add('BEI=MP-7000 TH FI') ;
+        SL.Add('BEJ=MP-4000 TH FI') ;
+
         SL.Add('BT1=BETHA 2E') ;
         SL.Add('CH1=CHRONOS-250 1E') ;
         SL.Add('CH2=CHRONOS-270 2E') ;

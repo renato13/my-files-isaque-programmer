@@ -58,18 +58,23 @@ type
     function MontarCodigoBarras(const ACBrTitulo : TACBrTitulo): String; override;
     function MontarCampoCodigoCedente(const ACBrTitulo: TACBrTitulo): String; override;
     function MontarCampoNossoNumero(const ACBrTitulo :TACBrTitulo): String; override;
-    function GerarRegistroHeader400(NumeroRemessa : Integer): String; override;
-    function GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo): String; override;
-    function GerarRegistroTrailler400( ARemessa: TStringList  ): String; override;
+    procedure GerarRegistroHeader400(NumeroRemessa : Integer; aRemessa: TStringList); override;
+    procedure GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo; aRemessa: TStringList); override;
+    procedure GerarRegistroTrailler400( ARemessa: TStringList  ); override;
     function GerarRegistroHeader240(NumeroRemessa : Integer): String; override;
     function GerarRegistroTransacao240(ACBrTitulo : TACBrTitulo): String; override;
     function GerarRegistroTrailler240(ARemessa : TStringList): String;  override;
     Procedure LerRetorno400(ARetorno:TStringList); override;
+    function TipoOcorrenciaToDescricao(const TipoOcorrencia: TACBrTipoOcorrencia) : String; override;
+    function CodOcorrenciaToTipo(const CodOcorrencia:Integer): TACBrTipoOcorrencia; override;
+    function TipoOCorrenciaToCod(const TipoOcorrencia: TACBrTipoOcorrencia):String; override;
+    function CodMotivoRejeicaoToDescricao(const TipoOcorrencia:TACBrTipoOcorrencia; CodMotivo:Integer): String; override;
+
    end;
 
 implementation
 
-uses ACBrUtil, StrUtils, Variants,ACBrValidador;
+uses ACBrUtil, StrUtils, Variants,ACBrValidador,math;
 
 constructor TACBrBancoob.create(AOwner: TACBrBanco);
 begin
@@ -79,6 +84,7 @@ begin
    fpNumero:= 756;
    fpTamanhoMaximoNossoNum := 7;
    fpTamanhoCarteira := 1;
+   fpTamanhoConta   := 7;
 end;
 
 function TACBrBancoob.CalcularDigitoVerificador(const ACBrTitulo: TACBrTitulo ): String;
@@ -98,9 +104,8 @@ begin
 
    base := 0;
    for i := 1 to Length(Num) do
-   begin
      base := base + ( StrToInt(copy(Num,i,1)) * StrToInt(copy(indice,i,1)) );
-   end;
+
    digito := 11-((  base )-( trunc(base/11) * 11));
    //(Se o Resto for igual a 0 ou 1 então o DV é igual a 0)
    if (digito > 9) then
@@ -167,22 +172,22 @@ begin
        raise Exception.Create( ACBrStr('Carteira Inválida.'+sLineBreak) ) ;
 
     {Montando Campo Livre}
-    CampoLivre    := padR(ACBrTitulo.ACBrBoleto.Cedente.Modalidade, 2, '0') +
-                     padR(ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente, 7, '0') +
+    CampoLivre    := padR(trim(ACBrTitulo.ACBrBoleto.Cedente.Modalidade), 2, '0') +
+                     padR(trim(ACBrTitulo.ACBrBoleto.Cedente.CodigoCedente), 7, '0') +
                      padR(Copy(ANossoNumero,1,8), 8, '0') +  //7 Sequenciais + 1 do digito
-                     '001';
+                     IntToStrZero(Max(1,ACBrTitulo.Parcela),3);
 
 
     {Codigo de Barras}
     with ACBrTitulo.ACBrBoleto do
     begin
-	  CodigoBarras := IntToStrZero(Banco.Numero, 3) +
-                      '9' +
-                      FatorVencimento +
-                      IntToStrZero(Round(ACBrTitulo.ValorDocumento * 100), 10) +
-                      padR(ACarteira, 1, '0') +
-                      padR(Cedente.Agencia,4,'0') +
-                      CampoLivre;
+       CodigoBarras := IntToStrZero(Banco.Numero, 3) +
+                       '9' +
+                       FatorVencimento +
+                       IntToStrZero(Round(ACBrTitulo.ValorDocumento * 100), 10) +
+                       padR(ACarteira, 1, '0') +
+                       padR(OnlyNumber(Cedente.Agencia),4,'0') +
+                       CampoLivre;
     end;
 
     DigitoCodBarras := CalcularDigitoCodigoBarras(CodigoBarras);
@@ -201,17 +206,19 @@ begin
     Result := ACBrTitulo.NossoNumero + '-' + CalcularDigitoVerificador(ACBrTitulo);
 end;
 
-function TACBrBancoob.GerarRegistroHeader400(NumeroRemessa : Integer): String;
+procedure TACBrBancoob.GerarRegistroHeader400(NumeroRemessa : Integer; aRemessa:TStringList);
+var
+  wLinha: String;
 begin
    with ACBrBanco.ACBrBoleto.Cedente do
    begin
-      Result:= '0'                                        + // ID do Registro
+      wLinha:= '0'                                        + // ID do Registro
                '1'                                        + // ID do Arquivo( 1 - Remessa)
                'REMESSA'                                  + // Literal de Remessa
                '01'                                       + // Código do Tipo de Serviço
                padL( 'COBRANÇA', 8 )                      + // Descrição do tipo de serviço
                Space(7)                                   + // Brancos
-               padR( Agencia, 4 )                         + // Prefixo da Cooperativa
+               padR( OnlyNumber(Agencia), 4 )             + // Prefixo da Cooperativa
                padR( AgenciaDigito, 1 )                   + // Dígito Verificador do Prefixo
                padR( trim(CodigoCedente), 9,'0' )         + // Código do Cliente/Cedente
                Space(6)                                   + // Brancos
@@ -222,26 +229,19 @@ begin
                Space(287)                                 + // Brancos
                IntToStrZero(1,6);                           // Contador de Registros
 
-      Result:= UpperCase(Result);
+      aRemessa.Text:= aRemessa.Text + UpperCase(wLinha);
    end;
 end;
 
-function TACBrBancoob.GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo): String;
+procedure TACBrBancoob.GerarRegistroTransacao400(ACBrTitulo :TACBrTitulo; aRemessa: TStringList);
 var
-  DigitoNossoNumero,
-  Ocorrencia,aEspecie,
-  Protesto,
-  TipoSacado: String;
-  ATipoAceite:String;
-  MensagemCedente: String;
-  ACarteira      : String;
+  DigitoNossoNumero, Ocorrencia,aEspecie :String;
+  TipoSacado, ATipoAceite,MensagemCedente:String;
+  TipoCedente, wLinha :String;
   I: Integer;
-  TipoCedente: String;
 begin
 
-    if (Length(ACBrTitulo.Carteira) > 0 )then
-       ACarteira := '1'
-    else
+    if (Length(ACBrTitulo.Carteira) < 1 )then
        raise Exception.Create( ACBrStr('Carteira Inválida.'+sLineBreak) ) ;
 
    with ACBrTitulo do
@@ -285,14 +285,6 @@ begin
       else
          aEspecie := EspecieDoc;
 
-      {Pegando campo Intruções}
-      if (DataProtesto > 0) and (DataProtesto > Vencimento) then
-          Protesto := '06' + IntToStrZero(DaysBetween(DataProtesto,Vencimento),2)
-      else if Ocorrencia = '31' then
-         Protesto := '9999'
-      else
-         Protesto := Instrucao1+Instrucao2;
-
       {Pegando Tipo de Sacado}
       case Sacado.Pessoa of
          pFisica   : TipoSacado := '01';
@@ -309,73 +301,78 @@ begin
 
       with ACBrBoleto do
       begin
+         MensagemCedente:= '';
          for I:= 0 to Mensagem.count-1 do
-             MensagemCedente:= Mensagem[i];
+             MensagemCedente:= MensagemCedente + trim(Mensagem[i]);
 
-         if length(MensagemCedente) > 60 then
-            MensagemCedente:= copy(MensagemCedente,1,60);
-          Result:= '1'                                            +  // ID Registro
-          TipoCedente                                             +  // Identificação do Tipo de Inscrição do Sacado 01 - CPF 02 - CNPJ
-          padR(onlyNumber(Cedente.CNPJCPF),14,'0')                +  // Número de Inscrição do Cedente
-          padR(Cedente.Agencia, 4, '0')                           +  // Agência
-          padR( Cedente.AgenciaDigito, 1, '0')                    +  // Agência digito
-          padR( RightStr(Cedente.Conta,8)+Cedente.ContaDigito, 9, '0')        +  // Conta Corrente c/ Dígito
-          padR( '0', 6, '0')                                      +  // Número do Convênio de Cobrança do Cedente fixo zeros: "000000"
-          Space(25)                                               +  // Brancos
-          padR( NossoNumero + DigitoNossoNumero, 12, '0')         +  // Nosso Número + //nosso numero com digito
-          '01'                                                    +  // Número da Parcela: "01" se parcela única
-          '00'                                                    +  // Grupo de Valor: "00"
-          Space(3)                                                +  // Brancos
-          Space(1)                                                +  // Indicativo de Mensagem ou Sacador/Avalista:
-          Space(3)                                                +  // Brancos
-          IntToStrZero( 0, 3)                                     +  // Variação da Carteira: "000"
-          IntToStrZero( 0, 1)                                     +  // Conta Caução: "0"
-          IntToStrZero( 0, 5)                                     +  // Código de responsabilidade: "00000"
-          IntToStrZero( 0, 1)                                     +  // DV do código de responsabilidade: "0"
-          IntToStrZero( 0, 6)                                     +  // Numero do borderô: “000000”
-          Space(5)                                                +  // Brancos
-          padR( Cedente.Modalidade, 2, '0')                       +  // Carteira/Modalidade
-          Ocorrencia                                              +  // Ocorrencia (remessa)
-          padL( NumeroDocumento,  10)                             +  // Número do Documento
-          FormatDateTime( 'ddmmyy', Vencimento)                   +  // Data de Vencimento do Título
-          IntToStrZero( Round( ValorDocumento * 100 ), 13)        +  // Valor do Título
-          IntToStrZero( Banco.Numero, 3)                          +  // Número Banco: "756"
-          padR( Cedente.Agencia, 4, '0')                          +  // Prefixo da Agência Cobradora: “0000”
-          Space(1)                                                +  // Dígito Verificador do Prefixo da Agência Cobradora: Brancos
-          padL(aEspecie,2)                                        +  // Espécie do Título
-          ATipoAceite                                             +  // Identificação
-          FormatDateTime( 'ddmmyy', DataDocumento )               +  // 32 Data de Emissão
-          IntToStrZero( 0, 2)                                     +  // 33 Primeira instrução (SEQ 34) = 00 e segunda (SEQ 35) = 00, não imprime nada.
-          IntToStrZero( 1, 2)                                     +  // 34 Primeira instrução (SEQ 34) = 00 e segunda (SEQ 35) = 00, não imprime nada.
-          IntToStrZero( 0, 6)                                     +  // Taxa de mora mês
-          IntToStrZero( 0, 6)                                     +  // Taxa de multa
-          Space(1)                                                +  // Brancos
-          IntToStrZero( 0, 6)                                     +  // Preencher com zeros quando não for concedido nenhum desconto.
-          IntToStrZero( 0, 13)                                    +  // Preencher com zeros quando não for concedido nenhum desconto.
-          IntToStrZero( 9 , 1)                                    +  // MOEDA 9 BRASIL
-          IntToStrZero( 0, 12)                                    +  // Valor IOF / Quantidade Monetária: "0000000000000"
-          IntToStrZero( 0, 13)                                    +  // Valor Abatimento
-          TipoSacado                                              +  // Tipo de Inscrição do Sacado: 01 - CPF 02 - CNPJ
-          padR(onlyNumber(Sacado.CNPJCPF),14,'0')                 +  // Número de Inscrição do Sacado
-          padL( Sacado.NomeSacado, 40, ' ')                       +  // Nome do Sacado
-          padL( Sacado.Logradouro +' '+ Sacado.Numero,37,' ')     +  // Endereço Completo
-          padL( Sacado.Bairro,15,' ')                             +  // Endereço Bairro
-          padL( Sacado.CEP,8,' ')                                 +  // Endereço CEP
-          padL( Sacado.Cidade,15,' ')                             +  // Endereço cidade
-          padL( Sacado.UF,2,' ')                                  +  // Endereço uf
-          padL( trim(Mensagem.Text) ,40,' ')                      +  // Observações/Mensagem ou Sacador/Avalista:
-          IntToStrZero( 0, 2)                                     +  // Número de Dias Para Protesto
-          Space(1)                                                +  // Brancos
-          IntToStrZero( ListadeBoletos.IndexOf(ACBrTitulo)+2, 6 );   // Contador de Registros;
-          Result:= UpperCase(Result);
-        end;
-     end;
+         if length(MensagemCedente) > 40 then
+            MensagemCedente:= copy(MensagemCedente,1,40);
+
+         wLinha:= '1'                                                     +  // ID Registro
+                  TipoCedente                                             +  // Identificação do Tipo de Inscrição do Sacado 01 - CPF 02 - CNPJ
+                  padR(onlyNumber(Cedente.CNPJCPF),14,'0')                +  // Número de Inscrição do Cedente
+                  padR(OnlyNumber(Cedente.Agencia), 4, '0')               +  // Agência
+                  padR( Cedente.AgenciaDigito, 1, '0')                    +  // Agência digito
+                  padR( OnlyNumber(Cedente.Conta)                         +  // Conta Corrente
+                  Cedente.ContaDigito, 9, '0')                            +  // Dígito Conta Corrente
+                  padR( '0', 6, '0')                                      +  // Número do Convênio de Cobrança do Cedente fixo zeros: "000000"
+                  Space(25)                                               +  // Brancos
+                  padR( NossoNumero + DigitoNossoNumero, 12, '0')         +  // Nosso Número + //nosso numero com digito
+                  '01'                                                    +  // Número da Parcela: "01" se parcela única
+                  '00'                                                    +  // Grupo de Valor: "00"
+                  Space(3)                                                +  // Brancos
+                  Space(1)                                                +  // Indicativo de Mensagem ou Sacador/Avalista:
+                  Space(3)                                                +  // Brancos
+                  IntToStrZero( 0, 3)                                     +  // Variação da Carteira: "000"
+                  IntToStrZero( 0, 1)                                     +  // Conta Caução: "0"
+                  IntToStrZero( 0, 5)                                     +  // Código de responsabilidade: "00000"
+                  IntToStrZero( 0, 1)                                     +  // DV do código de responsabilidade: "0"
+                  IntToStrZero( 0, 6)                                     +  // Numero do borderô: “000000”
+                  Space(5)                                                +  // Brancos
+                  padR( trim(Cedente.Modalidade), 2, '0')                 +  // Carteira/Modalidade
+                  Ocorrencia                                              +  // Ocorrencia (remessa)
+                  padL( NumeroDocumento,  10)                             +  // Número do Documento
+                  FormatDateTime( 'ddmmyy', Vencimento)                   +  // Data de Vencimento do Título
+                  IntToStrZero( Round( ValorDocumento * 100 ), 13)        +  // Valor do Título
+                  IntToStrZero( Banco.Numero, 3)                          +  // Número Banco: "756"
+                  padR(OnlyNumber(Cedente.Agencia), 4, '0')               +  // Prefixo da Agência Cobradora: “0000”
+                  padR( Cedente.AgenciaDigito, 1, ' ')                    +  // Dígito Verificador do Prefixo da Agência Cobradora: Brancos
+                  padL(aEspecie,2)                                        +  // Espécie do Título
+                  ATipoAceite                                             +  // Identificação
+                  FormatDateTime( 'ddmmyy', DataDocumento )               +  // 32 Data de Emissão
+                  IntToStrZero( 0, 2)                                     +  // 33 Primeira instrução (SEQ 34) = 00 e segunda (SEQ 35) = 00, não imprime nada.
+                  IntToStrZero( 1, 2)                                     +  // 34 Primeira instrução (SEQ 34) = 00 e segunda (SEQ 35) = 00, não imprime nada.
+                  IntToStrZero( 0, 6)                                     +  // Taxa de mora mês
+                  IntToStrZero( 0, 6)                                     +  // Taxa de multa
+                  Space(1)                                                +  // Brancos
+                  IntToStrZero( 0, 6)                                     +  // Preencher com zeros quando não for concedido nenhum desconto.
+                  IntToStrZero( 0, 13)                                    +  // Preencher com zeros quando não for concedido nenhum desconto.
+                  IntToStrZero( 9 , 1)                                    +  // MOEDA 9 BRASIL
+                  IntToStrZero( 0, 12)                                    +  // Valor IOF / Quantidade Monetária: "0000000000000"
+                  IntToStrZero( 0, 13)                                    +  // Valor Abatimento
+                  TipoSacado                                              +  // Tipo de Inscrição do Sacado: 01 - CPF 02 - CNPJ
+                  padR(onlyNumber(Sacado.CNPJCPF),14,'0')                 +  // Número de Inscrição do Sacado
+                  padL( Sacado.NomeSacado, 40, ' ')                       +  // Nome do Sacado
+                  padL( Sacado.Logradouro +' '+ Sacado.Numero,37,' ')     +  // Endereço Completo
+                  padL( Sacado.Bairro,15,' ')                             +  // Endereço Bairro
+                  padL( Sacado.CEP,8,' ')                                 +  // Endereço CEP
+                  padL( Sacado.Cidade,15,' ')                             +  // Endereço cidade
+                  padL( Sacado.UF,2,' ')                                  +  // Endereço uf
+                  padL( trim(MensagemCedente) ,40,' ')                    +  // Observações/Mensagem ou Sacador/Avalista:
+                  IntToStrZero( 0, 2)                                     +  // Número de Dias Para Protesto
+                  Space(1)                                                +  // Brancos
+                  IntToStrZero( aRemessa.Count + 1, 6 );                     // Contador de Registros;
+
+         aRemessa.Text:= aRemessa.Text + UpperCase(wLinha);
+      end;
+   end;
 end;
 
-function TACBrBancoob.GerarRegistroTrailler400(
-  ARemessa: TStringList ): String;
+procedure TACBrBancoob.GerarRegistroTrailler400( ARemessa: TStringList );
+var
+  wLinha: String;
 begin
-   Result:= '9'                                  + // ID Registro
+   wLinha:= '9'                                  + // ID Registro
             Space(193)                           + // Brancos
             Space(40)                            + // Mensagem responsabilidade Cedente
             Space(40)                            + // Mensagem responsabilidade Cedente
@@ -384,7 +381,7 @@ begin
             Space(40)                            +
             IntToStrZero( ARemessa.Count + 1, 6);  // Contador de Registros
 
-   Result:= UpperCase(Result);
+   ARemessa.Text:= ARemessa.Text + UpperCase(wLinha);
 end;
 
 
@@ -490,12 +487,12 @@ begin
                '0'                                      + //8 - Tipo de registro - Registro header de arquivo
                space(9)                                 + //9 a 17 Uso exclusivo FEBRABAN/CNAB
                ATipoInscricao                           + //18 - Tipo de inscrição do cedente
-               padR(OnlyNumber(CNPJCPF), 14, '0')                   + //19 a 32 -Número de inscrição do cedente
+               padR(OnlyNumber(CNPJCPF), 14, '0')       + //19 a 32 -Número de inscrição do cedente
                space(20)                                + // 33 a 52 - Brancos
                '0'                                      + // 53 - Zeros
-               padR(Agencia, 4, '0')                    + //54 a 57 - Código da agência do cedente
+               padR(OnlyNumber(Agencia), 4, '0')        + //54 a 57 - Código da agência do cedente
                padL(AgenciaDigito, 1, '0')              + //58 - Digito agência do cedente
-               padR(Conta, 12, '0')                     + // 59 a 70 - Número da conta do cedente
+               padR(OnlyNumber(Conta), 12, '0')         + // 59 a 70 - Número da conta do cedente
                padL(ContaDigito, 1, '0')                + //71 - Digito conta do cedente
                ' '                                      + // 72 - Dígito verificador Ag/Conta (Brancos)
                padL(Nome, 30, ' ')                      + // 73 a 102 - Nome do cedente
@@ -524,9 +521,9 @@ begin
                padR(OnlyNumber(CNPJCPF), 15, '0')      + //19 a 33 -Número de inscrição do cedente
                space(20)                               + //34 a 53 - Brancos
                '0'                                     + // 54 - Zeros
-               padR(Agencia, 4, '0')                   + //55 a 58 - Código da agência do cedente
+               padR(OnlyNumber(Agencia), 4, '0')       + //55 a 58 - Código da agência do cedente
                padR(AgenciaDigito, 1, '0')             + //59 - Digito da agencia do cedente
-               padR(Conta, 12, '0')                    + //60 - 71  Número da conta do cedente
+               padR(OnlyNumber(Conta), 12, '0')        + //60 - 71  Número da conta do cedente
                padR(ContaDigito, 1, '0')               + //72 - Digito da conta
                ' '                                     + //73
                padL(Nome, 30, ' ')                     + //74 a 103 - Nome do cedente
@@ -555,10 +552,7 @@ begin
         toRemessaAlterarVencimento         : ATipoOcorrencia := '06';
         toRemessaConcederDesconto          : ATipoOcorrencia := '07';
         toRemessaCancelarDesconto          : ATipoOcorrencia := '08';
-      //  toRemessaSustarProtesto            : ATipoOcorrencia := '18';
         toRemessaCancelarInstrucaoProtesto : ATipoOcorrencia := '10';
-    //  toRemessaAlterarNomeEnderecoSacado : ATipoOcorrencia := '12';
-    //  toRemessaDispensarJuros            : ATipoOcorrencia := '31';
       else
        ATipoOcorrencia := '01';
       end;
@@ -596,31 +590,28 @@ begin
        ADataDesconto := padR('', 8, '0');
       Result:= IntToStrZero(ACBrBanco.Numero, 3)                          + //1 a 3 - Código do banco
                '0001'                                                     + //4 a 7 - Lote de serviço
-               '3'                                                         +
-               IntToStrZero((i)+ 1 ,5)+ //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
-
-            //   IntToStrZero((ACBrBoleto.ListadeBoletos.IndexOf(ACBrTitulo))+ 1 ,5)+ //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
+               '3'                                                        +
+               IntToStrZero((i)+ 1 ,5)                                    + //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
                'P'                                                        + //14 - Código do segmento do registro detalhe
                ' '                                                        + //15 - Uso exclusivo FEBRABAN/CNAB: Branco
                ATipoOcorrencia                                            + //16 a 17 - Código de movimento
                '0'                                                        + // 18
-               ACBrBoleto.Cedente.Agencia                                 + //19 a 22 - Agência mantenedora da conta
+               padR(OnlyNumber(ACBrBoleto.Cedente.Agencia),4,'0')         + //19 a 22 - Agência mantenedora da conta
                padR(ACBrBoleto.Cedente.AgenciaDigito, 1, '0')             + //23 Digito agencia
-               padR(ACBrBoleto.Cedente.Conta, 12, '0')                    + //24 a 35 - Número da Conta Corrente
+               padR(OnlyNumber(ACBrBoleto.Cedente.Conta), 12, '0')        + //24 a 35 - Número da Conta Corrente
                padR(ACBrBoleto.Cedente.ContaDigito , 1, '0')              + //36 - Dígito da Conta Corrente
                ' ';                                                        //37 - DV Agência/COnta Brancos
                if (ACBrBoleto.Cedente.ResponEmissao = tbCliEmite) then
-                 begin
-                   Result := Result+padR(NossoNum, 10, '0')+ // 38 a 57 - Carteira
-                                    padR('01', 02, '0')+
-                                    padR('02', 02, '0')+
-                                    '4'+
-                                    Space(5);
-                 end
+                begin
+                  Result := Result+padR(NossoNum, 10, '0')+ // 38 a 57 - Carteira
+                            padR('01', 02, '0')+
+                            padR('02', 02, '0')+
+                            '4'+
+                            Space(5);
+                end
                else
-                 begin
-                   Result := Result+Space(20);
-                 end;
+                  Result := Result+Space(20);
+
                Result := Result+Carteira                                  +//58 a 58 carteira
                          '0'                                              +//59 Forma de cadastramento no banco
                          ' '                                              +//60 Brancos
@@ -638,7 +629,6 @@ begin
                          ADataMoraJuros                                             + //119 a 126 - Data a partir da qual serão cobrados juros
                          IfThen(ValorMoraJuros > 0, IntToStrZero( round(ValorMoraJuros * 100), 15),
                          padR('', 15, '0'))                                        + //127 a 141 - Valor de juros de mora por dia
-//                       ValorMoraJuros                                             + //127 a 141 - Valor de Mora por dia de atraso
                          '0'                                                        + // 142 - Zeros
                          ADataDesconto                                             + // 143 a 150 - Data limite para desconto
                          IfThen(ValorDesconto > 0, IntToStrZero( round(ValorDesconto * 100), 15),
@@ -665,8 +655,7 @@ begin
                IntToStrZero(ACBrBanco.Numero, 3)                          + //Código do banco
                '0001'                                                     + //Número do lote
                '3'                                                        + //Tipo do registro: Registro detalhe
-               IntToStrZero((i)+ 1 ,5)+ //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
-  //             IntToStrZero((ACBrBoleto.ListadeBoletos.IndexOf(ACBrTitulo)*2)+ 1 ,5)+ //Número seqüencial do registro no lote - Cada registro possui dois segmentos
+               IntToStrZero((i)+ 1 ,5)                                    + //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
                'Q'                                                        + //Código do segmento do registro detalhe
                ' '                                                        + //Uso exclusivo FEBRABAN/CNAB: Branco
                '01'                                                       + // 16 a 17
@@ -692,9 +681,7 @@ begin
                IntToStrZero(ACBrBanco.Numero, 3)                          + //Código do banco
                '0001'                                                     + //Número do lote
                '3'                                                        + //Tipo do registro: Registro detalhe
-               IntToStrZero((i)+ 1 ,5)+ //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
-
-       //        IntToStrZero((ACBrBoleto.ListadeBoletos.IndexOf(ACBrTitulo)*3)+ 1 ,5)+ //Número seqüencial do registro no lote - Cada registro possui dois segmentos
+               IntToStrZero((i)+ 1 ,5)                                    + //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
                'R'                                                        + //Código do segmento do registro detalhe
                ' '                                                        + //Uso exclusivo FEBRABAN/CNAB: Branco
                '01'                                                       + // 16 a 17
@@ -727,8 +714,6 @@ begin
                '0001'                                                     + //Número do lote
                '3'                                                        + //Tipo do registro: Registro detalhe
                IntToStrZero((i)+ 1 ,5)+ //9 a 13 - Número seqüencial do registro no lote - Cada registro possui dois segmentos
-
-      //         IntToStrZero((ACBrBoleto.ListadeBoletos.IndexOf(ACBrTitulo)*4)+ 1 ,5) + //Número seqüencial do registro no lote - Cada registro possui dois segmentos
                'S'                                                        + //Código do segmento do registro detalhe
                ' '                                                        + //Uso exclusivo FEBRABAN/CNAB: Branco
                '01'                                                       + // 16 a 17
@@ -765,7 +750,166 @@ begin
            IntToStrZero(ARemessa.Count, 6)                            + //Quantidade de registros do arquivo, inclusive este registro que está sendo criado agora}
            padR('', 6, '0')                                           + //Complemento
            space(205);
-//      Result := Result + #13#10;
+
+end;
+
+function TACBrBancoob.CodMotivoRejeicaoToDescricao(
+  const TipoOcorrencia: TACBrTipoOcorrencia; CodMotivo: Integer): String;
+begin
+  case TipoOcorrencia of
+
+      //Tabela 1
+      toRetornoRegistroRecusado, toRetornoEntradaRejeitadaCarne:
+      case CodMotivo  of
+         00: Result:='Outros Motivos';
+      else
+         Result := IntToStrZero(CodMotivo,2) +' - Outros Motivos';
+      end;
+
+
+      toRetornoLiquidado:
+      case CodMotivo of
+         01: Result := 'POR SALDO';
+         02: Result := 'POR CONTA';
+         03: Result := 'NO PROPRIO BANCO';
+         04: Result := 'COMPENSAÇÃO ELETRONICA';
+         05: Result := 'COMPENSAÇÃO CONVENCIONAL';
+         06: Result := 'POR MEIO ELETRÔNICO';
+         07: Result := 'DEPOIS DE FERIADO LOCAL';
+         08: Result := 'EM CARTÓRIO';
+
+      else
+         Result := IntToStrZero(CodMotivo,2) +' - Outros Motivos';
+      end;
+
+      toRetornoBaixado:
+      case CodMotivo of
+         09: Result := 'COMANDADA BANCO';
+         10: Result := 'COMANDADA CLIENTE ARQUIVO';
+         11: Result := 'COMANDADA CLIENTE ONLINE';
+         12: Result := 'DECURSO PRAZO CLIENTE';
+         13: Result := 'DECURSO PRAZO BANCO';
+         14: Result := 'PROTESTADO';
+         15: Result := 'TITULO EXCLUIDO';
+      else
+         Result := IntToStrZero(CodMotivo,2) +' - Outros Motivos';
+      end;
+
+  end;
+
+end;
+
+function TACBrBancoob.CodOcorrenciaToTipo(
+  const CodOcorrencia: Integer): TACBrTipoOcorrencia;
+begin
+  case CodOcorrencia of
+      02: Result := toRetornoRegistroConfirmado;
+      03: Result := toRetornoRegistroRecusado;
+      05: Result := toRetornoLiquidadoEmCartorio;
+      06: Result := toRetornoLiquidado;
+      07: Result := toRetornoRecebimentoInstrucaoConcederDesconto;
+      08: Result := toRetornoRecebimentoInstrucaoCancelarDesconto;
+      09: Result := toRetornoBaixaSimples;
+      11: Result := toRetornoTituloEmSer;
+      12: Result := toRetornoAbatimentoConcedido;
+      13: Result := toRetornoAbatimentoCancelado;
+      14: Result := toRetornoVencimentoAlterado;
+      17: Result := toRetornoLiquidadoAposBaixaOuNaoRegistro;
+      19: Result := toRetornoRecebimentoInstrucaoProtestar;
+      20: Result := toRetornoRecebimentoInstrucaoSustarProtesto;
+      21: Result := toRetornoRecebimentoInstrucaoProtestar;
+      23: Result := toRetornoEncaminhadoACartorio;
+      24: Result := toRetornoInstrucaoProtestoRejeitadaSustadaOuPendente;
+      25: Result := toRetornoBaixaPorProtesto;
+      26: Result := toRetornoInstrucaoRejeitada;
+      27: Result := toRetornoDadosAlterados;
+      28: Result := toRetornoDebitoTarifas;
+      30: Result := toRetornoAlteracaoDadosRejeitados;
+      40: Result := toRetornoRecebimentoInstrucaoAlterarTipoCobranca;
+      42: Result := toRetornoRecebimentoInstrucaoAlterarTipoCobranca;
+      43: Result := toRetornoRecebimentoInstrucaoAlterarTipoCobranca;
+      51: Result := toRetornoTarifaMensalRefEntradasBancosCorrespCarteira;
+      52: Result := toRetornoTarifaMensalBaixasCarteira;
+      53: Result := toRetornoTarifaMensalBaixasBancosCorrespCarteira;
+      98: Result := toRetornoProtestado;
+      99: Result := toRetornoRegistroRecusado;
+
+   else
+      Result := toRetornoOutrasOcorrencias;
+   end;
+
+end;
+
+function TACBrBancoob.TipoOCorrenciaToCod(
+  const TipoOcorrencia: TACBrTipoOcorrencia): String;
+begin
+  case TipoOcorrencia of
+      toRetornoRegistroConfirmado                           : Result :='02';
+      toRetornoRegistroRecusado                             : Result :='03';
+      toRetornoTransferenciaCarteira                        : Result :='04';
+      toRetornoLiquidadoSemRegistro                         : Result :='05';
+      toRetornoLiquidado                                    : Result :='06';
+      toRetornoBaixaSimples                                 : Result :='09';
+      toRetornoTituloEmSer                                  : Result :='11';
+      toRetornoAbatimentoConcedido                          : Result :='12';
+      toRetornoAbatimentoCancelado                          : Result :='13';
+      toRetornoVencimentoAlterado                           : Result :='14';
+      toRetornoLiquidadoEmCartorio                          : Result :='15';
+      toRetornoRecebimentoInstrucaoProtestar                : Result :='19';
+      toRetornoDebitoEmConta                                : Result :='20';
+      toRetornoNomeSacadoAlterado                           : Result :='21';
+      toRetornoEnderecoSacadoAlterado                       : Result :='22';
+      toRetornoEncaminhadoACartorio                         : Result :='23';
+      toRetornoInstrucaoProtestoRejeitadaSustadaOuPendente  : Result :='24';
+      toRetornoRecebimentoInstrucaoDispensarJuros           : Result :='25';
+      toRetornoInstrucaoRejeitada                           : Result :='26';
+      toRetornoDadosAlterados                               : Result :='27';
+      toRetornoManutencaoTituloVencido                      : Result :='28';
+      toRetornoAlteracaoDadosRejeitados                     : Result :='30';
+      toRetornoDespesasProtesto                             : Result :='96';
+      toRetornoDespesasSustacaoProtesto                     : Result :='97';
+      toRetornoDebitoCustasAntecipadas                      : Result :='98';
+   else
+      Result:= '02';
+   end;
+
+end;
+
+function TACBrBancoob.TipoOcorrenciaToDescricao(
+  const TipoOcorrencia: TACBrTipoOcorrencia): String;
+var
+   CodOcorrencia: Integer;
+begin
+   CodOcorrencia := StrToIntDef(TipoOCorrenciaToCod(TipoOcorrencia),0);
+
+   case CodOcorrencia of
+      02: Result:='02-CONFIRMAÇÃO ENTRADA TÍTULO' ;
+      03: Result:='03-COMANDO RECUSADO' ;
+      04: Result:='04-TRANSFERENCIA DE CARTEIRA - ENTRADA' ;
+      05: Result:='05-LIQUIDAÇÃO SEM REGISTRO';
+      06: Result:='06-LIQUIDAÇÃO NORMAL' ;
+      09: Result:='09-BAIXA DE TÍTULO' ;
+      10: Result:='10-BAIXA SOLICITADA';
+      11: Result:='11-TÍTULOS EM SER' ;
+      12: Result:='12-ABATIMENTO CONCEDIDO' ;
+      13: Result:='13-ABATIMENTO CANCELADO' ;
+      14: Result:='14-ALTERAÇÃO DE VENCIMENTO' ;
+      15: Result:='15-LIQUIDAÇÃO EM CARTÓRIO' ;
+      19: Result:='19-CONFIRMAÇÃO INSTRUÇÃO PROTESTO' ;
+      20: Result:='20-DÉBITO EM CONTA' ;
+      21: Result:='21-ALTERAÇÃO DE NOME DO SACADO' ;
+      22: Result:='22-ALTERAÇÃO DE ENDEREÇO SACADO' ;
+      23: Result:='23-ENCAMINHADO A PROTESTO' ;
+      24: Result:='24-SUSTAR PROTESTO' ;
+      25: Result:='25-DISPENSAR JUROS' ;
+      26: Result:='26-INSTRUÇÃO REJEITADA' ;
+      27: Result:='27-CONFIRMAÇÃO ALTERAÇÃO DADOS' ;
+      28: Result:='28-MANUTENÇÃO TÍTULO VENCIDO' ;
+      30: Result:='30-ALTERAÇÃO DADOS REJEITADA' ;
+      96: Result:='96-DESPESAS DE PROTESTO' ;
+      97: Result:='97-DESPESAS DE SUSTAÇÃO DE PROTESTO' ;
+      98: Result:='98-DESPESAS DE CUSTAS ANTECIPADAS' ;
+   end;
 
 end;
 

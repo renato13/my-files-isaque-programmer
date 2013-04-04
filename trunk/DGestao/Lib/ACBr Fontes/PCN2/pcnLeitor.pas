@@ -199,6 +199,12 @@ begin
                   else
                     result:=0;
                   end;
+    tcDatCFe  : begin
+                  if length(ConteudoTag)>0 then
+                    result := EncodeDate(StrToInt(copy(ConteudoTag, 01, 4)), StrToInt(copy(ConteudoTag, 05, 2)), StrToInt(copy(ConteudoTag, 07, 2)))
+                  else
+                    result:=0;
+                  end;
     tcDatHor  : begin
                     if length(ConteudoTag)>0 then
                       result := EncodeDate(StrToInt(copy(ConteudoTag, 01, 4)), StrToInt(copy(ConteudoTag, 06, 2)), StrToInt(copy(ConteudoTag, 09, 2))) +
@@ -209,6 +215,12 @@ begin
     tcHor     : begin
                     if length(ConteudoTag)>0 then
                     result := EncodeTime(StrToInt(copy(ConteudoTag, 1, 2)), StrToInt(copy(ConteudoTag, 4, 2)), StrToInt(copy(ConteudoTag, 7, 2)), 0)
+                    else
+                    result:=0;
+                  end;
+    tcHorCFe  : begin
+                    if length(ConteudoTag)>0 then
+                    result := EncodeTime(StrToInt(copy(ConteudoTag, 1, 2)), StrToInt(copy(ConteudoTag, 3, 2)), StrToInt(copy(ConteudoTag, 5, 2)), 0)
                     else
                     result:=0;
                   end;

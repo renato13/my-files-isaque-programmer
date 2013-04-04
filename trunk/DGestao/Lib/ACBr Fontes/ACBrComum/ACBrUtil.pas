@@ -97,10 +97,11 @@
 unit ACBrUtil;
 
 interface
+
 Uses SysUtils, Math, Classes, ACBrConsts
     {$IFDEF COMPILER6_UP} ,StrUtils, DateUtils {$ELSE} ,ACBrD5, FileCtrl {$ENDIF}
     {$IFDEF FPC}
-      ,dynlibs
+      ,dynlibs, LazUTF8
       {$IFDEF USE_LConvEncoding} ,LConvEncoding {$ENDIF}
       {$IFDEF USE_LCLIntf} ,LCLIntf {$ENDIF}
     {$ENDIF}
@@ -114,8 +115,16 @@ Uses SysUtils, Math, Classes, ACBrConsts
       {$endif}
     {$endif} ;
 
+const
+{$IFDEF CPU64}
+  CINPOUTDLL = 'inpout64.dll';
+{$ELSE}
+  CINPOUTDLL = 'inpout32.dll';
+{$ENDIF}
+
 function ParseText( Texto : AnsiString; Decode : Boolean = True;
    IsUTF8: Boolean = True) : AnsiString;
+function LerTagXML( const AXML, ATag: String; IgnoreCase: Boolean = True) : String;
 function DecodeToSys( Texto : AnsiString; TextoIsUTF8: Boolean ) : String ;
 function SeparaDados( Texto : AnsiString; Chave : String; MantemChave : Boolean = False ) : AnsiString;
 
@@ -173,6 +182,7 @@ function PosEx(const SubStr, S: AnsiString; Offset: Cardinal = 1): Integer;
     AFalse: string = ''): string; overload;
 {$endif}
 
+function IfEmptyThen( const AValue, DefaultValue: String; DoTrim: Boolean = True) : String;
 function PosAt(const SubStr, S: AnsiString; Ocorrencia : Cardinal = 1): Integer;
 function PosLast(const SubStr, S: AnsiString): Integer;
 function CountStr(const AString, SubStr : AnsiString ) : Integer ;
@@ -243,7 +253,8 @@ function UnLoadLibrary(LibName: AnsiString ): Boolean ;
 function FlushToDisk( sFile: string): boolean;
 function FlushFileToDisk( sFile: string): boolean;
 
-Procedure DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False) ;
+Procedure DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False;
+   LogOff: Boolean = False) ;
 Procedure WriteToTXT( const ArqTXT, AString : AnsiString;
    const AppendIfExists : Boolean = True; AddLineBreak : Boolean = True );
 
@@ -283,7 +294,11 @@ begin
  {$IFDEF USE_LConvEncoding}
    Result := CP1252ToUTF8( AString ) ;
  {$ELSE}
-   Result := AnsiToUtf8( AString ) ;
+   {$IFDEF FPC}
+     Result := SysToUTF8( AString ) ;
+   {$ELSE}
+     Result := AnsiToUtf8( AString ) ;
+   {$ENDIF}
  {$ENDIF}
 {$ELSE}
   Result := AString
@@ -796,6 +811,26 @@ begin
   end;
 end;
 {$endif}
+
+{-----------------------------------------------------------------------------
+  Verifica se "AValue" é vazio, se for retorna "DefaultValue". "DoTrim", se
+  verdadeiro (default) faz Trim em "AValue" antes da comparação
+ ---------------------------------------------------------------------------- }
+function IfEmptyThen(const AValue, DefaultValue: String; DoTrim: Boolean
+  ): String;
+Var
+  AStr : String;
+begin
+  if DoTrim then
+     AStr := Trim(AValue)
+  else
+     AStr := AValue;
+
+  if AStr = EmptyStr then
+     Result := DefaultValue
+  else
+     Result := AValue;
+end;
 
 {-----------------------------------------------------------------------------
   Acha a e-nesima "Ocorrencia" de "SubStr" em "S"
@@ -1479,12 +1514,6 @@ begin
 {$IFDEF MSWINDOWS}
   if Assigned( xInp32 ) then
      Result := xInp32(PortAddr)
-  else
-    asm
-        mov dx,PortAddr ;
-        in al,dx
-        mov Result,al
-     end;
 {$ELSE}
   FDevice := '/dev/port' ;
   Buffer  := @Result ;
@@ -1528,12 +1557,6 @@ begin
 {$IFDEF MSWINDOWS}
   if Assigned( xOut32 ) then
      xOut32(PortAddr, Databyte)
-  else
-     asm
-        mov al, Databyte
-        mov dx,PortAddr
-        out dx,al
-     end;
 {$ELSE}
   Buffer := @Databyte ;
   FDevice := '/dev/port' ;
@@ -1977,7 +2000,8 @@ end ;
  - Se "Reboot" for true Reinicializa
  *** Versão Windows extraida do www.forumweb.com.br/forum  por: Rafael Luiz ***
  ---------------------------------------------------------------------------- }
-Procedure DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False) ;
+Procedure DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False;
+   LogOff: Boolean = False) ;
 
 {$IFDEF MSWINDOWS}
    function WindowsNT: Boolean;
@@ -2023,6 +2047,8 @@ Procedure DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False) ;
 
       if Reboot then
          RebootParam := EWX_REBOOT
+      else if LogOff then
+         RebootParam := EWX_LOGOFF
       else
          RebootParam := EWX_SHUTDOWN  ;
 
@@ -2054,8 +2080,9 @@ var
   FS : TFileStream ;
   LineBreak : AnsiString ;
 begin
-  FS := TFileStream.Create( String( ArqTXT ), IfThen( AppendIfExists and FileExists(String(ArqTXT)),
-     fmOpenReadWrite, fmCreate) or fmShareDenyWrite );
+  FS := TFileStream.Create( String( ArqTXT ),
+               IfThen( AppendIfExists and FileExists(String(ArqTXT)),
+                       Integer(fmOpenReadWrite), Integer(fmCreate)) or fmShareDenyWrite );
   try
      FS.Seek(0, soFromEnd);  // vai para EOF
      FS.Write(Pointer(AString)^,Length(AString));
@@ -2305,20 +2332,22 @@ end;
 
 function DecodeToSys(Texto: AnsiString; TextoIsUTF8: Boolean): String;
 begin
+  Result := '';
+
   {$IFDEF UNICODE}
-   if not TextoIsUTF8 then
-      Result := ACBrStr( Texto )
-   else
-      {$IFNDEF FPC}
-       Result := UTF8Decode( Texto );
-      {$ENDIF}
+    if not TextoIsUTF8 then
+       Result := ACBrStr( Texto )
+    else
+       {$IFNDEF FPC}
+        Result := UTF8Decode( Texto )
+       {$ENDIF} ;
   {$ELSE}
-   if TextoIsUTF8 then
-      Result := Utf8ToAnsi( Texto ) ;
+    if TextoIsUTF8 then
+       Result := Utf8ToAnsi( Texto ) ;
   {$ENDIF}
 
   if Result = '' then
-     Result := Texto;
+     Result := String(Texto);
 end;
 
 function SeparaDados( Texto : AnsiString; Chave : String; MantemChave : Boolean = False ) : AnsiString;
@@ -2416,17 +2445,45 @@ begin
   Result := Texto;
 end;
 
+function LerTagXML(const AXML, ATag: String; IgnoreCase: Boolean): String;
+Var
+  PI, PF : Integer ;
+  UXML, UTAG: String;
+begin
+  Result := '';
+  if IgnoreCase then
+  begin
+    UXML := UpperCase(AXML) ;
+    UTAG := UpperCase(ATag) ;
+  end
+  else
+  begin
+    UXML := AXML ;
+    UTAG := ATag ;
+  end;
+
+  PI := pos('<'+UTAG+'>', UXML ) ;
+  if PI = 0 then exit ;
+
+  PI := PI + Length(UTAG) + 2;
+  PF := PosEx('</'+UTAG+'>', UXML, PI) ;
+  if PF = 0 then
+     PF := Length(AXML);
+
+  Result := copy(AXML, PI, PF-PI)
+end ;
+
 
 //*****************************************************************************************
 
 
 initialization
 {$IFDEF MSWINDOWS}
-  if not FunctionDetect('inpout32.dll','Inp32',@xInp32) then
-     xInp32 := NIL ;
+  if not FunctionDetect(CINPOUTDLL,'Inp32',@xInp32) then
+    xInp32 := NIL ;
 
-  if not FunctionDetect('inpout32.dll','Out32',@xOut32) then
-     xOut32 := NIL ;
+  if not FunctionDetect(CINPOUTDLL,'Out32',@xOut32) then
+    xOut32 := NIL ;
 
   if not FunctionDetect('USER32.DLL', 'BlockInput', @xBlockInput) then
   	 xBlockInput := NIL ;

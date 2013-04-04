@@ -37,6 +37,24 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+01/04/2013
+-- ACBrCEP --
+[*] Reformatação de Fontes na classe do provedor ByJG (por: DSA)
+
+23/03/2013
+-- ACBrCEP --
+[+] Adicionado suporte ao provedor ByJG (por: Rafael Dias)
+
+28/01/2013
+-- ACBrNFPws --
+[+] Adicionado componente para Enviar arquivos e Consultar status para o Nota
+    Fiscal Paulista (NFP)                         (por: DSA)
+[+] Adicionado Demo em Lazarus para o ACBrNFPws   (por: DSA)
+
+26/04/2012
+-- ACBrCEP --
+[+] Adicionado suporte ao provedor KingHost  (por: Sidnei alves)
+    http://www.djsystem.com.br/acbr/forum/viewtopic.php?f=14&t=8378
 
 13/09/2012
 -- ACBrSocket --

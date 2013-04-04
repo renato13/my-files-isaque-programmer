@@ -161,6 +161,7 @@ type
     FProConsultaNFSe: String;
     FProCancelaNFSe: String;
     FProGerarNFSe: String;
+    FConsultaLoteAposEnvio: Boolean;
 
     procedure SetAmbiente(AValue: TpcnTipoAmbiente);
     procedure SetTentativas(const Value: Integer);
@@ -169,7 +170,7 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure SetConfigMunicipio(aPath: String = '');
   published
-    property Salvar: Boolean               read FSalvar     write FSalvar     default False ;
+    property Salvar: Boolean               read FSalvar     write FSalvar     default False;
     property Visualizar: Boolean           read FVisualizar write FVisualizar default False;
     property Ambiente: TpcnTipoAmbiente    read FAmbiente   write SetAmbiente default taHomologacao;
     property AmbienteCodigo: Integer       read FAmbienteCodigo;
@@ -196,6 +197,7 @@ type
     property NameSpace: String read FNameSpace;
     property SenhaWeb: AnsiString read FSenhaWeb write FSenhaWeb;
     property UserWeb: String read FUserWeb write FUserWeb;
+    property ConsultaLoteAposEnvio: Boolean read FConsultaLoteAposEnvio write FConsultaLoteAposEnvio;
 
     // Schemas
     property VersaoCabecalho: String read FVersaoCabecalho;
@@ -238,10 +240,10 @@ type
     FPathSchemas: String;
     function GetPathSalvar: String;
   public
-    constructor Create(AOwner: TComponent); override ;
+    constructor Create(AOwner: TComponent); override;
     function Save(AXMLName: String; AXMLFile: WideString; aPath: String = ''): Boolean;
   published
-    property Salvar: Boolean read FSalvar write FSalvar default False ;
+    property Salvar: Boolean read FSalvar write FSalvar default False;
     property PathSalvar: String read GetPathSalvar write FPathSalvar;
     property PathSchemas: String read FPathSchemas write FPathSchemas;
   end;
@@ -257,16 +259,16 @@ type
     FPathRPS: String;
     FPathGer: String;
   public
-    constructor Create(AOwner: TComponent); override ;
+    constructor Create(AOwner: TComponent); override;
     function GetPathCan: String;
     function GetPathGer: String;
     function GetPathRPS: String;
     function GetPathNFSe(Data : TDateTime = 0): String;
   published
-    property Salvar     : Boolean read FSalvar  write FSalvar  default False ;
-    property PastaMensal: Boolean read FMensal  write FMensal  default False ;
-    property AdicionarLiteral: Boolean read FLiteral write FLiteral default False ;
-    property EmissaoPathNFSe: Boolean read FEmissaoPathNFSe write FEmissaoPathNFSe default False ;
+    property Salvar     : Boolean read FSalvar  write FSalvar  default False;
+    property PastaMensal: Boolean read FMensal  write FMensal  default False;
+    property AdicionarLiteral: Boolean read FLiteral write FLiteral default False;
+    property EmissaoPathNFSe: Boolean read FEmissaoPathNFSe write FEmissaoPathNFSe default False;
     property PathNFSe : String read FPathNFSe  write FPathNFSe;
     property PathCan : String read FPathCan  write FPathCan;
     property PathRPS : String read FPathRPS  write FPathRPS;
@@ -283,10 +285,10 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
-    property Geral: TGeralConf read FGeral ;
-    property WebServices: TWebServicesConf read FWebServices ;
-    property Certificados: TCertificadosConf read FCertificados ;
-    property Arquivos: TArquivosConf read FArquivos ;
+    property Geral: TGeralConf read FGeral;
+    property WebServices: TWebServicesConf read FWebServices;
+    property Certificados: TCertificadosConf read FCertificados;
+    property Arquivos: TArquivosConf read FArquivos;
   end;
 
  TProvedorClass = Class
@@ -295,9 +297,9 @@ type
   public
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; Virtual; Abstract;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; Virtual; Abstract;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; Virtual; Abstract;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; Virtual; Abstract;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; Virtual; Abstract;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; Virtual; Abstract;
    function GetURI(URI: String): String; Virtual; Abstract;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; Virtual; Abstract;
    // Sugestão de Rodrigo Catelli
@@ -318,14 +320,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; Virtual; Abstract;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; Virtual; Abstract;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; Virtual; Abstract;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; Virtual; Abstract;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; Virtual; Abstract;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -345,19 +347,23 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; Virtual; Abstract;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; Virtual; Abstract;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; Virtual; Abstract;
 
   end;
 
 implementation
 
 uses
- IniFiles, DateUtils, Math, StrUtils, ACBrUtil, ACBrNFSe, ACBrNFSeUtil,
+ IniFiles, DateUtils, Math, StrUtils, ACBrUtil, ACBrNFSe, ACBrNFSeUtil, ACBrDFeUtil,
  ACBrProvedorGinfesV3, ACBrProvedorPublica, ACBrProvedorRJ,
  ACBrProvedorTiplan, ACBrProvedorISSNet, ACBrProvedorWebISS,
  ACBrProvedorProdemge, ACBrProvedorISSIntel, ACBrProvedorGovBR,
  ACBrProvedorRecife, ACBrProvedorSimplISS, ACBrProvedorThema,
  ACBrProvedorEquiplano, ACBrProvedorfintelISS, ACBrProvedorDigifred,
- ACBrProvedorBetha, ACBrProvedorBetim, ACBrProvedorSaatri;
+ ACBrProvedorBetha, ACBrProvedorBetim, ACBrProvedorSaatri,
+ ACBrProvedorAbaco, ACBrProvedorGoiania, ACBrProvedorIssCuritiba,
+ ACBrProvedorBHISS, ACBrProvedorNatal, ACBrProvedorISSDigital,
+ ACBrProvedorISSe;
 
 { TConfiguracoes }
 
@@ -417,11 +423,11 @@ end;
 
 function TGeralConf.GetPathSalvar: String;
 begin
- if NotaUtil.EstaVazio(FPathSalvar)
-  then Result := NotaUtil.PathAplication
+ if DFeUtil.EstaVazio(FPathSalvar)
+  then Result := DFeUtil.PathAplication
   else Result := FPathSalvar;
 
- Result := NotaUtil.PathWithDelim( Trim(Result) ) ;
+ Result := NotaUtil.PathWithDelim( Trim(Result) );
 end;
 
 function TGeralConf.Save(AXMLName: String; AXMLFile: WideString; aPath: String = ''): Boolean;
@@ -432,13 +438,13 @@ begin
  vSalvar := TStringList.Create;
  try
   try
-   if NotaUtil.NaoEstaVazio(ExtractFilePath(AXMLName))
+   if DFeUtil.NaoEstaVazio(ExtractFilePath(AXMLName))
     then begin
      aPath := ExtractFilePath(AXMLName);
      AXMLName := StringReplace(AXMLName,aPath,'',[rfIgnoreCase]);
     end
     else begin
-     if NotaUtil.EstaVazio(aPath)
+     if DFeUtil.EstaVazio(aPath)
       then aPath := PathSalvar
       else aPath := PathWithDelim(aPath);
     end;
@@ -478,6 +484,7 @@ begin
  FVersaoSoap    := '';
  FIdentificador := 'Id';
  FNameSpace     := '';
+ FConsultaLoteAposEnvio := True;
 end;
 
 procedure TWebServicesConf.SetAmbiente(AValue: TpcnTipoAmbiente);
@@ -505,7 +512,7 @@ var
  hCryptProvider : HCRYPTPROV;
  XML            : String;
 begin
- if NotaUtil.EstaVazio( FNumeroSerie )
+ if DFeUtil.EstaVazio( FNumeroSerie )
   then raise Exception.Create('Número de Série do Certificado Digital não especificado !');
 
  Result := nil;
@@ -518,7 +525,7 @@ begin
    Cert := IInterface(Certs.Item[i]) as ICertificate2;
    if Cert.SerialNumber = FNumeroSerie
     then begin
-     if NotaUtil.EstaVazio(NumCertCarregado)
+     if DFeUtil.EstaVazio(NumCertCarregado)
       then NumCertCarregado := Cert.SerialNumber;
 
      if CertStoreMem = nil
@@ -629,7 +636,7 @@ end;
 
 function TCertificadosConf.GetDataVenc: TDateTime;
 begin
- if NotaUtil.NaoEstaVazio(FNumeroSerie)
+ if DFeUtil.NaoEstaVazio(FNumeroSerie)
   then begin
    if FDataVenc = 0
     then GetCertificado;
@@ -655,31 +662,42 @@ begin
  FProvedorClass.Free;
 
  case FProvedor of
-  proGINFES:    FProvedorClass := TProvedorGinfesV3.Create;
-  proPublica:   FProvedorClass := TProvedorPublica.Create;
-  proRJ:        FProvedorClass := TProvedorRJ.Create;
-  proTiplan:    FProvedorClass := TProvedorTiplan.Create;
-  proISSNet:    FProvedorClass := TProvedorISSNet.Create;
-  proWebISS:    FProvedorClass := TProvedorWebISS.Create;
-  proProdemge:  FProvedorClass := TProvedorProdemge.Create;
-  proISSIntel:  FProvedorClass := TProvedorISSIntel.Create;
-  proGovBR:     FProvedorClass := TProvedorGovBR.Create;
-  proRecife:    FProvedorClass := TProvedorRecife.Create;
-  proSimplISS:  FProvedorClass := TProvedorSimplISS.Create;
-  proThema:     FProvedorClass := TProvedorThema.Create;
-  proEquiplano: FProvedorClass := TProvedorEquiplano.Create;
-  profintelISS: FProvedorClass := TProvedorfintelISS.Create;
-  proDigifred:  FProvedorClass := TProvedorDigifred.Create;
-  proBetha:     FProvedorClass := TProvedorBetha.Create;
-  proBetim:     FProvedorClass := TProvedorBetim.Create;
-  proSaatri:    FProvedorClass := TProvedorSaatri.Create;
+  proGINFES:      FProvedorClass := TProvedorGinfesV3.Create;
+  proPublica:     FProvedorClass := TProvedorPublica.Create;
+  proRJ:          FProvedorClass := TProvedorRJ.Create;
+  proTiplan:      FProvedorClass := TProvedorTiplan.Create;
+  proISSNet:      FProvedorClass := TProvedorISSNet.Create;
+  proWebISS:      FProvedorClass := TProvedorWebISS.Create;
+  proProdemge:    FProvedorClass := TProvedorProdemge.Create;
+  proISSIntel:    FProvedorClass := TProvedorISSIntel.Create;
+  proGovBR:       FProvedorClass := TProvedorGovBR.Create;
+  proRecife:      FProvedorClass := TProvedorRecife.Create;
+  proSimplISS:    FProvedorClass := TProvedorSimplISS.Create;
+  proThema:       FProvedorClass := TProvedorThema.Create;
+  proEquiplano:   FProvedorClass := TProvedorEquiplano.Create;
+  profintelISS:   FProvedorClass := TProvedorfintelISS.Create;
+  proDigifred:    FProvedorClass := TProvedorDigifred.Create;
+  proBetha:       FProvedorClass := TProvedorBetha.Create;
+  proBetim:       FProvedorClass := TProvedorBetim.Create;
+  proSaatri:      FProvedorClass := TProvedorSaatri.Create;
+  proAbaco:       FProvedorClass := TProvedorAbaco.Create;
+  proGoiania:     FProvedorClass := TProvedorGoiania.Create;
+  proIssCuritiba: FProvedorClass := TProvedorIssCuritiba.Create;
+  proBHISS:       FProvedorClass := TProvedorBHISS.Create;
+  proNatal:       FProvedorClass := TProvedorNatal.Create;
+  proISSDigital:  FProvedorClass := TProvedorISSDigital.Create;
+  proISSe:        FProvedorClass := TProvedorISSe.Create;
  end;
 
  ConfigCidade   := FProvedorClass.GetConfigCidade(FCodigoMunicipio, FAmbienteCodigo);
 
  FVersaoSoap    := ConfigCidade.VersaoSoap;
- FCodigoSchemas := ConfigCidade.CodigoSchemas;
- FCodigoURLs    := ConfigCidade.CodigoURLs;
+
+ FCodigoSchemas := FCodigoMunicipio;
+ FCodigoURLs    := FCodigoMunicipio;
+
+// FCodigoSchemas := ConfigCidade.CodigoSchemas;
+// FCodigoURLs    := ConfigCidade.CodigoURLs;
  FPrefixo2      := ConfigCidade.Prefixo2;
  FPrefixo3      := ConfigCidade.Prefixo3;
  FPrefixo4      := ConfigCidade.Prefixo4;
@@ -689,7 +707,7 @@ begin
  TConfiguracoes( Self.Owner ).Certificados.FAssinaRPS  := ConfigCidade.AssinaRPS;
  TConfiguracoes( Self.Owner ).Certificados.FAssinaLote := ConfigCidade.AssinaLote;
 
- ConfigSchema := FProvedorClass.GetConfigSchema(FCodigoSchemas);
+ ConfigSchema := FProvedorClass.GetConfigSchema(FCodigoMunicipio {FCodigoSchemas});
 
  FVersaoCabecalho := ConfigSchema.VersaoCabecalho;
  FVersaoDados     := ConfigSchema.VersaoDados;
@@ -705,7 +723,7 @@ begin
  FServicoGerar    := ConfigSchema.ServicoGerar;
  FDefTipos        := ConfigSchema.DefTipos;
 
- ConfigURL := FProvedorClass.GetConfigURL(FCodigoURLs);
+ ConfigURL := FProvedorClass.GetConfigURL(FCodigoMunicipio {FCodigoURLs});
 
  FHomNomeCidade         := ConfigURL.HomNomeCidade;
  FHomRecepcaoLoteRPS    := ConfigURL.HomRecepcaoLoteRPS;
@@ -753,7 +771,7 @@ var
  wDia, wMes, wAno : Word;
  Dir : String;
 begin
- if NotaUtil.EstaVazio(FPathCan)
+ if DFeUtil.EstaVazio(FPathCan)
   then Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else Dir := FPathCan;
 
@@ -781,7 +799,7 @@ var
  wDia, wMes, wAno : Word;
  Dir : String;
 begin
- if NotaUtil.EstaVazio(FPathNFSe)
+ if DFeUtil.EstaVazio(FPathNFSe)
   then Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else Dir := FPathNFSe;
 
@@ -811,7 +829,7 @@ var
  wDia, wMes, wAno : Word;
  Dir : String;
 begin
- if NotaUtil.EstaVazio(FPathRPS)
+ if DFeUtil.EstaVazio(FPathRPS)
   then Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else Dir := FPathRPS;
 
@@ -839,7 +857,7 @@ var
  wDia, wMes, wAno : Word;
  Dir : String;
 begin
- if NotaUtil.EstaVazio(FPathGer)
+ if DFeUtil.EstaVazio(FPathGer)
   then Dir := TConfiguracoes( Self.Owner ).Geral.PathSalvar
   else Dir := FPathGer;
 

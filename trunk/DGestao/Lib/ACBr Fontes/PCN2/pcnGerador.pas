@@ -144,21 +144,20 @@ const
   ENCODING_UTF8_STD = '?xml version="1.0" encoding="UTF-8" standalone="no"?';
   NAME_SPACE = 'xmlns="http://www.portalfiscal.inf.br/nfe"';
   NAME_SPACE_CTE = 'xmlns="http://www.portalfiscal.inf.br/cte"';
-
- // Incluido por Italo em 01/08/2012
+  NAME_SPACE_CFE = 'xmlns="http://www.fazenda.sp.gov.br/sat"';
   NAME_SPACE_MDFE = 'xmlns="http://www.portalfiscal.inf.br/mdfe"';
 
+  V0_02 = 'versao="0.02"';
   V1_00 = 'versao="1.00"';
   V1_01 = 'versao="1.01"';
   V1_02 = 'versao="1.02"';
   V1_03 = 'versao="1.03"';
-  V1_04 = 'versao="1.04"'; // Incluido por Italo em 03/08/2011
+  V1_04 = 'versao="1.04"';
   V1_07 = 'versao="1.07"';
   V1_10 = 'versao="1.10"';
   V2_00 = 'versao="2.00"';
   V2_01 = 'versao="2.01"';
 
- // Incluido por Italo em 03/08/2011
   VM_Rodo_1_04  = 'versaoModal="1.04"';
   VM_Aereo_1_04 = 'versaoModal="1.04"';
   VM_Aqua_1_04  = 'versaoModal="1.04"';
@@ -314,7 +313,7 @@ const
   DSC_UFDESEMB = 'Sigla da UF onde ocorreu o Desembaraço Aduaneiro';
   DSC_UFEMBARQ = 'Sigla da UF onde ocorrerá o embarque dos produtos';
   DSC_UTRIB = 'Unidade Tributável';
-  DSC_VALIQ = 'Alíuota';
+  DSC_VALIQ = 'Alíquota';
   DSC_VALIQPROD = 'Valor da alíquota (em reais)';
   DSC_VBC = 'Valor da BC do ICMS';
   DSC_VBCICMS = 'BC do ICMS';
@@ -348,6 +347,7 @@ const
   DSC_VIOF = 'Valor do Imposto sobre operações Financeiras';
   DSC_vIPI = 'Valor do Imposto sobre Produtos Industrializados';
   DSC_VIRRF = 'Valor do Imposto de Renda Retido na Fonte';
+  DSC_VBCISS = 'Valor da Base de Cálculo do ISSQN';
   DSC_VISS = 'Valor do Imposto sobre Serviço';
   DSC_VISSQN = 'Valor do Imposto sobre Serviço de Qualquer Natureza';
   DSC_VLIQ = 'Valor Líquido da Fatura';
@@ -417,13 +417,11 @@ const
   DSC_VFOR = 'Valor dos Fornecimentos';
   DSC_VTOTDED = 'Valor Total da Dedução';
   DSC_VLIQFOR = 'Valor Líquido dos Fornecimentos';
-  // Incluido por Italo em 17/07/2012
   DSC_INDNFE = 'Indicador de NF-e consultada';
   DSC_INDEMI = 'Indicador do Emissor da NF-e';
   DSC_ULTNSU = 'Último NSU recebido pela Empresa';
 
   // CTE //
-
   DSC_CHCTE    = 'Chave do CTe';
   DSC_TPCTe    = 'Tipo do Conhecimento';
   DSC_REFCTE   = 'Chave de acesso do CT-e referenciado';
@@ -469,6 +467,33 @@ const
   DSC_TPMED    = 'Tipo da Medida';
   DSC_QTD      = 'Quantidade';
   DSC_DRET     = 'Detalhes da Retirada';
+
+  //CFe - Cupom Fiscal Eletrônico - SAT
+  DSC_VDESCSUBTOT = 'Valor de Desconto sobre Subtotal';
+  DSC_VACRESSUBTOT = 'Valor de Acréscimo sobre Subtotal';
+  DSC_VPISST = 'Valor do PIS ST';
+  DSC_VCOFINSST = 'Valor do COFINS ST';
+  DSC_VCFE = 'Valor Total do CF-e';
+  DSC_VDEDUCISS = 'Valor das deduções para ISSQN';
+  DSC_CSERVTRIBMUN = 'Codigo de tributação pelo ISSQN do municipio';
+  DSC_CNATOP = 'Natureza da Operação de ISSQN';
+  DSC_INDINCFISC = 'Indicador de Incentivo Fiscal do ISSQN';
+  DSC_COFINSST = 'Grupo de COFINS Substituição Tributária';
+  DSC_REGTRIB = 'Código de Regime Tributário';
+  DSC_REGISSQN = 'Regime Especial de Tributação do ISSQN';
+  DSC_RATISSQN = 'Indicador de rateio do Desconto sobre subtotal entre itens sujeitos à tributação pelo ISSQN.';
+  DSC_NCFE = 'Número do Cupom Fiscal Eletronico';
+  DSC_HEMI = 'Hora de emissão';
+  DSC_SIGNAC = 'Assinatura do Aplicativo Comercial';
+  DSC_QRCODE = 'Assinatura Digital para uso em QRCODE';
+  DSC_MP = 'Grupo de informações sobre Pagamento do CFe';
+  DSC_CMP = 'Código do Meio de Pagamento';
+  DSC_VMP = 'Valor do Meio de Pagamento';
+  DSC_CADMC = 'Credenciadora de cartão de débito ou crédito';
+  DSC_VTROCO = 'Valor do troco';
+  DSC_VITEM = 'Valor líquido do Item';
+  DSC_VRATDESC = 'Rateio do desconto sobre subtotal';
+  DSC_VRATACR = 'Rateio do acréscimo sobre subtotal';
 
 implementation
 
@@ -653,15 +678,22 @@ begin
     tcStr   : begin
                 ConteudoProcessado := trim(valor);
                 EstaVazio := ConteudoProcessado = '';
+
               end;
-    tcDat   : begin
+    tcDat,
+    tcDatCFe: begin
                 DecodeDate(valor, wAno, wMes, wDia);
                 ConteudoProcessado := FormatFloat('0000', wAno) + '-' + FormatFloat('00', wMes) + '-' + FormatFloat('00', wDia);
+                if Tipo = tcDatCFe then
+                  ConteudoProcessado := SomenteNumeros(ConteudoProcessado);
                 EstaVazio := ((wAno = 1899) and (wMes = 12) and (wDia = 30));
               end;
-    tcHor   : begin
+    tcHor,
+    tcHorCFe: begin
                 DecodeTime(valor, wHor, wMin, wSeg, wMse);
                 ConteudoProcessado := FormatFloat('00', wHor) + ':' + FormatFloat('00', wMin) + ':' + FormatFloat('00', wSeg);
+                if Tipo = tcHorCFe then
+                   ConteudoProcessado := SomenteNumeros(ConteudoProcessado);
                 EstaVazio := (wHor = 0) and (wMin = 0) and (wSeg = 0);
               end;
     tcDatHor : begin
@@ -700,7 +732,8 @@ begin
                   // Caso não seja um valor fracionário; retira os decimais.
                   if FOpcoes.FSuprimirDecimais then
                     if int(Valor) = Valor then
-                        ConteudoProcessado := IntToStr(Round(valor));
+                     ConteudoProcessado := IntToStr(Round(Integer(valor)));
+
               end;
       tcEsp : begin
                   // Tipo String - somente numeros

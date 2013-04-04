@@ -134,7 +134,6 @@ var
   i : Integer;
   ProtLido : Boolean; //Protocolo lido do arquivo
 begin
-  Result := False;
   ProtLido := False;
   // Alterado por Italo em 28/09/2012
 
@@ -202,7 +201,9 @@ begin
         XMLinfProt.LoadFromFile(FPathRetConsSitNFe);
 
         wCstat:=RetornarConteudoEntre(XMLinfProt.text, '<cStat>', '</cStat>');
-        if trim(wCstat) = '101' then //esta cancelada
+        if ((trim(wCstat) = '101') or
+            (trim(wCstat) = '151') or
+            (trim(wCstat) = '155')) then //esta cancelada
            XMLinfProt2.Text:=RetornarConteudoEntre(XMLinfProt.text, '<infCanc', '</infCanc>')
         else
            XMLinfProt2.Text:=RetornarConteudoEntre(XMLinfProt.text, '<infProt', '</infProt>');

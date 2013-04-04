@@ -38,6 +38,61 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+Data: 01/04/2013
+-- ACBrBase --
+[+] Adicionado os métodos TACBrInformacoes.SaveToFile( AFileName: String) e
+    TACBrInformacoes.LoadFromFile( AFileName: String)   (por: DSA)
+
+Data: 27/03/2013
+-- ACBrUtil --
+[*] Ajustes para compilação em 64 bits (por: DSA)
+
+Data: 17/03/2013
+-- ACBr.inc --
+[*] Ajuste para compilar corretamente nas últimas versões do Lazarus e
+    FPC 2.7.1, que por padrão trazem a diretiva "CONSOLE" ligada   (por: DSA)
+
+Data: 28/02/2013
+-- ACBrAAC --
+[*] Melhoria na gravação dos Logs   (por: DSA)
+
+-- ACBrConsts --
+[*] Remoção da exibição dos Valores do Grande Total na Mensagem de erro de
+    divergência do G.T. (a pedido de homologador PAF-ECF)     (por: DSA)
+
+Data: 14/02/2013
+-- ACBrUtil --
+[+] Função DesligarMaquina modificada para permitir efetuar apenas o LogOff
+    DesligarMaquina(Reboot: Boolean = False; Forcar: Boolean = False;
+                    LogOff: Boolean = False) ;                        (por: DSA)
+
+Data: 01/02/2013
+-- ACBrAAC --
+[-] Correção para gravar a propriedade paraiba legal
+    (Regys Silveira)
+
+Data: 28/01/2013
+-- ACBrUtil --
+[+] Adicionada função para ler conteudo de Tags de XML   (por: DSA)
+    function LerTagXML( const AXML, ATag: String; IgnoreCase: Boolean = True) : String;
+[-] Corrigido bug em DecodeToSys, quando operando com Parâmetros utf-8
+
+Data: 20/12/2012
+-- ACBrUtil --
+[*] Modificação em ACBrStr, para usar o método: SysToUTF8 quando for Lazarus/FPC
+
+22/11/2012
+-- ACBrDFeUtil
+[+] Unificação de funções de mesma funcionalidade das units:
+    ACBrNFeUtil, ACBrNFEsUtil, ACBrCTeUtil
+    (por Isaque Pinheiro)
+
+22/10/2012
+-- ACBrPafClass --
+[+] Adicionado a impressão do Nota Legal e do Paríba Legal no relatório de 
+    configurações do Paf-ECF. 
+    (por: Regys Silveira)
+
 13/09/2012
 -- ACBrUtil --
 [-] Corrigido Bug de perda de acentos em sistemas com Unicode na

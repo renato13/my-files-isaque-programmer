@@ -104,7 +104,8 @@ type
                              vlVersao102,  // Código 003 - Versão 102 Ato COTEPE 01/01/2010
                              vlVersao103,  // Código 004 - Versão 103 Ato COTEPE 01/01/2011
                              vlVersao104,  // Código 005 - Versão 104 Ato COTEPE 01/01/2012
-                             vlVersao105   // Código 006 - Versão 105 Ato COTEPE 01/07/2012
+                             vlVersao105,  // Código 006 - Versão 105 Ato COTEPE 01/07/2012
+                             vlVersao106   // Código 007
                              );
   /// Código da finalidade do arquivo - TRegistro0000
   TACBrCodFinalidade      = (raOriginal,     // 0 - Remessa do arquivo original
@@ -399,9 +400,64 @@ type
   public
     property IND_MOV: TACBrIndicadorMovimento read FIND_MOV write FIND_MOV;
   end;
+  // Fuções do ACBrEPCBlocos.
+  Function StrToCodVer(AValue: string): TACBrVersaoLeiaute;
+  Function CodVerToStr(AValue: TACBrVersaoLeiaute): string;
 
 implementation
 
 { TOpenBlocos }
+
+function StrToCodVer(AValue: string): TACBrVersaoLeiaute;
+begin
+   if AValue = '001' then
+      Result := vlVersao100
+   else
+   if AValue = '002' then
+      Result := vlVersao101
+   else
+   if AValue = '003' then
+      Result := vlVersao102
+   else
+   if AValue = '004' then
+      Result := vlVersao103
+   else
+   if AValue = '005' then
+      Result := vlVersao104
+   else
+   if AValue = '006' then
+      Result := vlVersao105
+   else
+   if AValue = '007' then
+      Result := vlVersao106
+      ;
+end;
+
+function CodVerToStr(AValue: TACBrVersaoLeiaute): string;
+begin
+   if AValue = vlVersao100 then
+      Result := '001'
+   else
+   if AValue = vlVersao101 then
+      Result := '002'
+   else
+   if AValue = vlVersao102 then
+      Result := '003'
+   else
+   if AValue = vlVersao103 then
+      Result := '004'
+   else
+   if AValue = vlVersao104 then
+      Result := '005'
+   else
+   if AValue = vlVersao105 then
+      Result := '006'
+   else
+   if AValue = vlVersao106 then
+      Result := '007'
+      ;
+
+end;
+
 
 end.

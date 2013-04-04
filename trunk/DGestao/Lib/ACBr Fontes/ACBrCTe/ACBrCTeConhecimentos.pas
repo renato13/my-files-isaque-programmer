@@ -50,11 +50,7 @@ interface
 uses
   Classes, Sysutils, Dialogs, Forms,
   ACBrCTeUtil, ACBrCTeConfiguracoes,
-  {$IFDEF FPC}
-     ACBrCTeDMLaz,
-  {$ELSE}
-     ACBrCTeDACTEClass,
-  {$ENDIF}
+  ACBrCTeDACTEClass,
   smtpsend, ssl_openssl, mimemess, mimepart, // units para enviar email
   pcteCTe, pcteCTeR, pcteCTeW, pcnConversao, pcnAuxiliar, pcnLeitor;
 
@@ -91,7 +87,8 @@ type
                                 PedeConfirma: Boolean = False;
                                 AguardarEnvio: Boolean = False;
                                 NomeRemetente: String = '';
-                                TLS : Boolean = True);
+                                TLS : Boolean = True;
+                                UsarThread: Boolean = True);
     property CTe: TCTe  read FCTe write FCTe;
     property XML: AnsiString  read GetCTeXML write FXML;
     property Confirmada: Boolean  read FConfirmada write FConfirmada;
@@ -122,8 +119,11 @@ type
     property Configuracoes: TConfiguracoes read FConfiguracoes  write FConfiguracoes;
 
     function GetNamePath: string; override ;
-    function LoadFromFile(CaminhoArquivo: string): boolean;
-    function LoadFromStream(Stream: TStringStream): boolean;
+    // Incluido o Parametro AGerarCTe que determina se após carregar os dados do CTe
+    // para o componente, será gerado ou não novamente o XML do CTe.
+    function LoadFromFile(CaminhoArquivo: string; AGerarCTe: Boolean = True): boolean;
+    function LoadFromStream(Stream: TStringStream; AGerarCTe: Boolean = True): boolean;
+    function LoadFromString(AString: String; AGerarCTe: Boolean = True): boolean;
     function SaveToFile(PathArquivo: string = ''): boolean;
 
     property ACBrCTe : TComponent read FACBrCTe ;
@@ -132,7 +132,7 @@ type
   TSendMailThread = class(TThread)
   private
     FException : Exception;
-    FOwner: Conhecimento;
+    // FOwner: Conhecimento;
     procedure DoHandleException;
   public
     OcorreramErros: Boolean;
@@ -142,8 +142,8 @@ type
     sTo : String;
     sCC : TStrings;
     slmsg_Lines : TStrings;
-    constructor Create(AOwner: Conhecimento);
-    destructor Destroy ; override ;
+    constructor Create;
+    destructor Destroy; override;
   protected
     procedure Execute; override;
     procedure HandleException;
@@ -152,7 +152,7 @@ type
 
 implementation
 
-uses ACBrCTe, ACBrUtil, pcnGerador;
+uses ACBrCTe, ACBrUtil, ACBrDFeUtil, pcnGerador;
 
 { Conhecimento }
 
@@ -201,11 +201,10 @@ begin
      Result  := True;
      LocCTeW := TCTeW.Create(CTe);
      try
-        LocCTeW.schema := TsPL005c;
         LocCTeW.GerarXml;
-        if CTeUtil.EstaVazio(CaminhoArquivo) then
+        if DFeUtil.EstaVazio(CaminhoArquivo) then
            CaminhoArquivo := PathWithDelim(TACBrCTe( TConhecimentos( Collection ).ACBrCTe ).Configuracoes.Geral.PathSalvar)+copy(CTe.inFCTe.ID, (length(CTe.inFCTe.ID)-44)+1, 44)+'-cte.xml';
-        if CTeUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo)) then
+        if DFeUtil.EstaVazio(CaminhoArquivo) or not DirectoryExists(ExtractFilePath(CaminhoArquivo)) then
            raise Exception.Create('Caminho Inválido: ' + CaminhoArquivo);
         LocCTeW.Gerador.SalvarArquivo(CaminhoArquivo);
         NomeArq := CaminhoArquivo;
@@ -226,7 +225,6 @@ begin
      Result  := True;
      LocCTeW := TCTeW.Create(CTe);
      try
-        LocCTeW.schema := TsPL005c;
         LocCTeW.GerarXml;
         Stream.WriteString(LocCTeW.Gerador.ArquivoFormatoXML);
      finally
@@ -252,15 +250,69 @@ procedure Conhecimento.EnviarEmail(const sSmtpHost,
                                       PedeConfirma: Boolean = False;
                                       AguardarEnvio: Boolean = False;
                                       NomeRemetente: String = '';
-                                      TLS : Boolean = True);
+                                      TLS : Boolean = True;
+                                      UsarThread: Boolean = True);
 var
+ NomeArq : String;
+ AnexosEmail:TStrings ;
+ StreamCTe : TStringStream;
+(*
  ThreadSMTP : TSendMailThread;
  m          : TMimemess;
  p          : TMimepart;
  StreamCTe  : TStringStream;
  NomeArq    : String;
  i          : Integer;
+*)
 begin
+ AnexosEmail := TStringList.Create;
+ StreamCTe  := TStringStream.Create('');
+ try
+    AnexosEmail.Clear;
+    if Anexos <> nil then
+      AnexosEmail.Text := Anexos.Text;
+    if NomeArq <> '' then
+     begin
+       SaveToFile(NomeArq);
+       AnexosEmail.Add(NomeArq);
+     end
+    else
+     begin
+       SaveToStream(StreamCTe) ;
+     end;
+    if (EnviaPDF) then
+    begin
+       if TACBrCTe( TConhecimentos( Collection ).ACBrCTe ).DACTE <> nil then
+       begin
+          TACBrCTe( TConhecimentos( Collection ).ACBrCTe ).DACTE.ImprimirDACTEPDF(CTe);
+          NomeArq :=  StringReplace(CTe.infCTe.ID,'CTe', '', [rfIgnoreCase]);
+          NomeArq := PathWithDelim(TACBrCTe( TConhecimentos( Collection ).ACBrCTe ).DACTE.PathPDF)+NomeArq+'.pdf';
+          AnexosEmail.Add(NomeArq);
+       end;
+    end;
+    TACBrCTe( TConhecimentos( Collection ).ACBrCTe ).EnviaEmail(sSmtpHost,
+                sSmtpPort,
+                sSmtpUser,
+                sSmtpPasswd,
+                sFrom,
+                sTo,
+                sAssunto,
+                sMensagem,
+                SSL,
+                sCC,
+                AnexosEmail,
+                PedeConfirma,
+                AguardarEnvio,
+                NomeRemetente,
+                TLS,
+                StreamCTe,
+                copy(CTe.infCTe.ID, (length(CTe.infCTe.ID)-44)+1, 44)+'-CTe.xml',
+                UsarThread);
+ finally
+    AnexosEmail.Free ;
+    StreamCTe.Free ;
+ end;
+(*
  m:=TMimemess.create;
  ThreadSMTP := TSendMailThread.Create(Self);  // Não Libera, pois usa FreeOnTerminate := True ;
  StreamCTe  := TStringStream.Create('');
@@ -330,6 +382,7 @@ begin
     m.free;
     StreamCTe.Free ;
  end;
+*)
 end;
 
 function Conhecimento.GetCTeXML: AnsiString;
@@ -338,7 +391,6 @@ var
 begin
  LocCTeW := TCTeW.Create(Self.CTe);
  try
-    LocCTeW.schema := TsPL005c;
     LocCTeW.GerarXml;
     Result := LocCTeW.Gerador.ArquivoFormatoXML;
  finally
@@ -379,7 +431,6 @@ begin
    begin
      LocCTeW := TCTeW.Create(Self.Items[i].CTe);
      try
-        LocCTeW.schema := TsPL005c;
         LocCTeW.GerarXml;
         Self.Items[i].Alertas := LocCTeW.Gerador.ListaDeAlertas.Text;
 {$IFDEF ACBrCTeOpenSSL}
@@ -406,7 +457,7 @@ begin
         if FConfiguracoes.Geral.Salvar then
            FConfiguracoes.Geral.Save(StringReplace(Self.Items[i].CTe.infCTe.ID, 'CTe', '', [rfIgnoreCase])+'-cte.xml', vAssinada);
 
-        if CTeUtil.NaoEstaVazio(Self.Items[i].NomeArq) then
+        if DFeUtil.NaoEstaVazio(Self.Items[i].NomeArq) then
            FConfiguracoes.Geral.Save(ExtractFileName(Self.Items[i].NomeArq), vAssinada, ExtractFilePath(Self.Items[i].NomeArq));
      finally
         LocCTeW.Free;
@@ -424,12 +475,6 @@ begin
   begin
     LocCTeW := TCTeW.Create(Self.Items[i].CTe);
     try
- {$IFDEF PL_103}
-       LocCTeW.schema := TsPL_CTe_103;
- {$ENDIF}
- {$IFDEF PL_104}
-       LocCTeW.schema := TsPL_CTe_104;
- {$ENDIF}
        LocCTeW.GerarXml;
        Self.Items[i].XML     := LocCTeW.Gerador.ArquivoFormatoXML;
        Self.Items[i].Alertas := LocCTeW.Gerador.ListaDeAlertas.Text;
@@ -512,7 +557,7 @@ begin
   end;
 end;
 
-function TConhecimentos.LoadFromFile(CaminhoArquivo: string): boolean;
+function TConhecimentos.LoadFromFile(CaminhoArquivo: string; AGerarCTe: Boolean = True): boolean;
 var
  LocCTeR : TCTeR;
  ArquivoXML: TStringList;
@@ -540,7 +585,7 @@ begin
           LocCTeR.LerXml;
           Items[Self.Count-1].XML := LocCTeR.Leitor.Arquivo;
           Items[Self.Count-1].NomeArq := CaminhoArquivo;
-          GerarCTe;
+          if AGerarCTe then GerarCTe;
        finally
           LocCTeR.Free;
        end;
@@ -552,7 +597,7 @@ begin
  end;
 end;
 
-function TConhecimentos.LoadFromStream(Stream: TStringStream): boolean;
+function TConhecimentos.LoadFromStream(Stream: TStringStream; AGerarCTe: Boolean = True): boolean;
 var
  LocCTeR : TCTeR;
 begin
@@ -563,7 +608,7 @@ begin
        LocCTeR.Leitor.CarregarArquivo(Stream);
        LocCTeR.LerXml;
        Items[Self.Count-1].XML := LocCTeR.Leitor.Arquivo;
-       GerarCTe;
+       if AGerarCTe then GerarCTe;
     finally
        LocCTeR.Free
     end;
@@ -581,7 +626,7 @@ begin
  try
     for i:= 0 to TACBrCTe( FACBrCTe ).Conhecimentos.Count-1 do
      begin
-        if CTeUtil.EstaVazio(PathArquivo) then
+        if DFeUtil.EstaVazio(PathArquivo) then
            PathArquivo := TACBrCTe( FACBrCTe ).Configuracoes.Geral.PathSalvar
         else
            PathArquivo := ExtractFilePath(PathArquivo);
@@ -593,13 +638,30 @@ begin
  end;
 end;
 
+function TConhecimentos.LoadFromString(AString: String; AGerarCTe: Boolean = True): boolean;
+var
+  XMLCTe: TStringStream;
+begin
+  try
+    XMLCTe := TStringStream.Create('');
+    try
+      XMLCTe.WriteString(AString);
+      Result := LoadFromStream(XMLCTe, AGerarCTe);
+    finally
+      XMLCTe.Free;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
 { TSendMailThread }
 
 procedure TSendMailThread.DoHandleException;
 begin
-  TACBrCTe(TConhecimentos(FOwner.GetOwner).ACBrCTe).SetStatus( stCTeIdle );
+  // TACBrCTe(TConhecimentos(FOwner.GetOwner).ACBrCTe).SetStatus( stCTeIdle );
 
-  FOwner.Alertas := FException.Message;
+  // FOwner.Alertas := FException.Message;
 
   if FException is Exception then
     Application.ShowException(FException)
@@ -607,9 +669,8 @@ begin
     SysUtils.ShowException(FException, nil);
 end;
 
-constructor TSendMailThread.Create(AOwner: Conhecimento);
+constructor TSendMailThread.Create;
 begin
-  FOwner      := AOwner;
   smtp        := TSMTPSend.Create;
   slmsg_Lines := TStringList.Create;
   sCC         := TStringList.Create;

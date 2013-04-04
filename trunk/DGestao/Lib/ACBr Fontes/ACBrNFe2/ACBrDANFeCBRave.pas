@@ -53,7 +53,7 @@ uses Graphics, Forms, Windows, SysUtils, Classes,
      {$IFNDEF COMPILER16} JPEG, {$ELSE} Vcl.Imaging.jpeg, {$ENDIF}
      RpDefine, RpBase, RpSystem, RpBars, RpMemo,
      RpRenderText, RpRenderRTF, RpRenderHTML, RpRender, RpRenderPDF,
-     ACBrNFe, ACBrNFeUtil, pcnConversao, pcnNFe;
+     ACBrNFe, ACBrNFeUtil, ACBrDFeUtil, pcnConversao, pcnNFe;
 
 const aHeigthPadrao:Double=5.7;
       FontSizeIdentDoc_DANFE:Integer=12;
@@ -104,6 +104,7 @@ type
      FExpandirLogoMarca: boolean;
      FMostrarStatus: Boolean;
      FNFeCancelada: Boolean;
+     FMostrarSetup: boolean;
   public
      FCurrentPage, FPageNum, FNFIndex, FNumNFe:Integer;
      FChaveNFe, FNumeroNF, FSerie: String;
@@ -149,6 +150,7 @@ type
      property FormularioContinuo:boolean read FFormularioContinuo write FFormularioContinuo;
      property ExpandirLogoMarca:boolean read FExpandirLogoMarca write FExpandirLogoMarca default false;
      property MostrarStatus:boolean read FMostrarStatus write FMostrarStatus default true;
+     property MostrarSetup:boolean read FMostrarSetup write FMostrarSetup default true;
      property NFeCancelada:boolean read FNFeCancelada write FNFeCancelada default false;
   end;
 
@@ -171,6 +173,8 @@ type
      FFormularioContinuo: boolean;
      FExpandirLogoMarca: boolean;
      FMostrarStatus: Boolean;
+     FMostrarPreview: boolean;
+     FMostrarSetup: boolean;
   public
      FCurrentPage, FPageNum, FNFIndex, FNumNFe:Integer;
      FChaveNFe, FNumeroNF, FSerie: String;
@@ -200,6 +204,8 @@ type
      property FormularioContinuo:boolean read FFormularioContinuo write FFormularioContinuo;
      property ExpandirLogoMarca:boolean read FExpandirLogoMarca write FExpandirLogoMarca default false;
      property MostrarStatus:boolean read FMostrarStatus write FMostrarStatus default true;
+     property MostrarSetup:boolean read FMostrarSetup write FMostrarSetup default true;
+     property MostrarPreview: boolean read FMostrarPreview write FMostrarPreview default false;
   end;
 
 
@@ -214,6 +220,7 @@ procedure ImprimirDANFeRave(aACBrNFe:TACBrNFe;
                             aOrientacaoPapel:TOrientation;
                             aOpcaoDeSaida:TTipoSaida=tsPreview;
                             aMostrarStatus:boolean=true;
+                            aMostrarSetup:boolean=true;
                             aNumeroDeCopias:Integer=1;
                             aNomeImpressora:string='';
                             aArquivoSaida:String='';
@@ -250,6 +257,7 @@ procedure ImprimirEventoRave(aACBrNFe:TACBrNFe;
                             aOrientacaoPapel:TOrientation;
                             aOpcaoDeSaida:TTipoSaida=tsPreview;
                             aMostrarStatus:boolean=true;
+                            aMostrarSetup:boolean=true;
                             aNumeroDeCopias:Integer=1;
                             aNomeImpressora:string='';
                             aArquivoSaida:String='';
@@ -281,6 +289,7 @@ procedure ImprimirDANFeRave(aACBrNFe:TACBrNFe;
                             aOrientacaoPapel:TOrientation;
                             aOpcaoDeSaida:TTipoSaida=tsPreview;
                             aMostrarStatus:boolean=true;
+                            aMostrarSetup:boolean=true;
                             aNumeroDeCopias:Integer=1;
                             aNomeImpressora:string='';
                             aArquivoSaida:String='';
@@ -330,7 +339,7 @@ begin
      DANFeRave.FontNameUsed := 'Courier New'
   else
      DANFeRave.FontNameUsed := 'Times New Roman';
-  DANFeRave.FontSizeIdentDoc_Outros := NotaUtil.SeSenao(Pos('Courier',DANFeRave.FontNameUsed)>0,9,10);
+  DANFeRave.FontSizeIdentDoc_Outros := DFeUtil.SeSenao(Pos('Courier',DANFeRave.FontNameUsed)>0,9,10);
 
   rvPDF:=TRvRenderPDF.Create(DANFeRave);
   rvPDF.OnDecodeImage:=DANFeRave.RaveDecodeImage;
@@ -405,7 +414,9 @@ begin
     //DANFeRave.SystemPrinter.Collate := True;
     DANFeRave.SystemPrinter.UnitsFactor:=25.4;
     DANFeRave.SystemPrinter.Orientation:=aOrientacaoPapel;
-    DANFeRave.SystemSetups:=[ssAllowCopies,ssAllowCollate,ssAllowDuplex,ssAllowDestPreview,ssAllowDestPrinter,ssAllowDestFile,ssAllowPrinterSetup,ssAllowPreviewSetup];
+    DANFeRave.SystemSetups:=[ssAllowSetup,ssAllowCopies,ssAllowCollate,ssAllowDuplex,ssAllowDestPreview,ssAllowDestPrinter,ssAllowDestFile,ssAllowPrinterSetup,ssAllowPreviewSetup];
+    if not aMostrarSetup then
+       DANFeRave.SystemSetups:=DANFeRave.SystemSetups - [ssAllowSetup];
     case aOpcaoDeSaida of
        tsPrint: DANFeRave.DefaultDest:=rdPrinter;
        tsPreview: DANFeRave.DefaultDest:=rdPreview;
@@ -441,6 +452,7 @@ procedure ImprimirEventoRave(aACBrNFe:TACBrNFe;
                             aOrientacaoPapel:TOrientation;
                             aOpcaoDeSaida:TTipoSaida=tsPreview;
                             aMostrarStatus:boolean=true;
+                            aMostrarSetup:boolean=true;
                             aNumeroDeCopias:Integer=1;
                             aNomeImpressora:string='';
                             aArquivoSaida:String='';
@@ -467,18 +479,18 @@ begin
      EventoRave.FontNameUsed := 'Courier New'
   else
      EventoRave.FontNameUsed := 'Times New Roman';
-  EventoRave.FontSizeIdentDoc_Outros := NotaUtil.SeSenao(Pos('Courier',EventoRave.FontNameUsed)>0,9,10);
+  EventoRave.FontSizeIdentDoc_Outros := DFeUtil.SeSenao(Pos('Courier',EventoRave.FontNameUsed)>0,9,10);
 
-  rvPDF:=TRvRenderPDF.Create(DANFeRave);
-  rvPDF.OnDecodeImage:=DANFeRave.RaveDecodeImage;
-  rvTXT:=TRvRenderText.Create(DANFeRave);
-  rvHTML:=TRvRenderHTML.Create(DANFeRave);
+  rvPDF:=TRvRenderPDF.Create(EventoRave);
+  rvPDF.OnDecodeImage:=EventoRave.RaveDecodeImage;
+  rvTXT:=TRvRenderText.Create(EventoRave);
+  rvHTML:=TRvRenderHTML.Create(EventoRave);
   {$IFNDEF VER150}
-  rvHTML.OnDecodeImage:=DANFeRave.RaveDecodeImage;
+  rvHTML.OnDecodeImage:=EventoRave.RaveDecodeImage;
   {$ENDIF}
-  rvRTF:=TRvRenderRTF.Create(DANFeRave);
+  rvRTF:=TRvRenderRTF.Create(EventoRave);
   {$IFNDEF VER150}
-  rvRTF.OnDecodeImage:=DANFeRave.RaveDecodeImage;
+  rvRTF.OnDecodeImage:=EventoRave.RaveDecodeImage;
   {$ENDIF}
   try
     rvPDF.EmbedFonts:=False;
@@ -528,7 +540,9 @@ begin
     //EventoRave.SystemPrinter.Collate := True;
     EventoRave.SystemPrinter.UnitsFactor:=25.4;
     EventoRave.SystemPrinter.Orientation:=aOrientacaoPapel;
-    EventoRave.SystemSetups:=[ssAllowCopies,ssAllowCollate,ssAllowDuplex,ssAllowDestPreview,ssAllowDestPrinter,ssAllowDestFile,ssAllowPrinterSetup,ssAllowPreviewSetup];
+    EventoRave.SystemSetups:=[ssAllowSetup,ssAllowCopies,ssAllowCollate,ssAllowDuplex,ssAllowDestPreview,ssAllowDestPrinter,ssAllowDestFile,ssAllowPrinterSetup,ssAllowPreviewSetup];
+    if not aMostrarSetup then
+       EventoRave.SystemSetups:=EventoRave.SystemSetups - [ssAllowSetup];
     case aOpcaoDeSaida of
        tsPrint: EventoRave.DefaultDest:=rdPrinter;
        tsPreview: EventoRave.DefaultDest:=rdPreview;
@@ -612,7 +626,7 @@ begin
          printAlingment:=pjLeft;
        end;
        ClearAllTabs;
-       SetTab(XX+1,printAlingment,aWith-2,0,0,NotaUtil.SeSenao(Zebrado,15,0));
+       SetTab(XX+1,printAlingment,aWith-2,0,0,DFeUtil.SeSenao(Zebrado,15,0));
        aText:=Trim(aText);
        PrintTab(aText);
        Bold:=False;
@@ -772,7 +786,7 @@ begin
          printAlingment:=pjLeft;
        end;
        ClearAllTabs;
-       SetTab(XX+1,printAlingment,aWith-2,0,0,NotaUtil.SeSenao(Zebrado,15,0));
+       SetTab(XX+1,printAlingment,aWith-2,0,0,DFeUtil.SeSenao(Zebrado,15,0));
        aText:=Trim(aText);
        PrintTab(aText);
        Bold:=False;
@@ -856,11 +870,27 @@ end;
 
 procedure TEventoRave.RavePrint(Sender: TObject);
 begin
-  with BaseReport  do begin
-    FNFIndex:=0;
-    FCurrentPage:=0;
-    ImprimirEventoRetrato(Self);
-  end;
+  with BaseReport do
+    begin
+      FNFIndex := 0;
+      FCurrentPage := 0;
+
+     // **********************************************
+     // Incluído por Peterson em 06/03/2012 para que
+     // cada item de 'FACBrNFe.EventoNFe.Evento.Items[]'
+     // seja em impresso em uma nova página
+      while FNFIndex < FACBrNFe.EventoNFe.Evento.Count do
+        begin
+          FPageNum := 0;
+
+          if (FNFIndex > 0) then
+            NewPage;
+
+          ImprimirEventoRetrato(Self);
+          Inc(FNFIndex);
+        end;
+     // ***** Final da inclusão ******
+    end;
 end;
 
 procedure TEventoRave.SetFontText;

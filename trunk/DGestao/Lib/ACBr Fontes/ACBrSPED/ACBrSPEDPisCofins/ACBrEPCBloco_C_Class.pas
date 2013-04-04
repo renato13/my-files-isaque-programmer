@@ -724,11 +724,11 @@ end;
 procedure TBloco_C.WriteRegistroC100(RegC010: TRegistroC010);
   var
     intFor         : integer;
-    strIND_OPER    : AnsiString;
+//    strIND_OPER    : AnsiString;
     strIND_EMIT    : AnsiString;
-    strCOD_SIT     : AnsiString;
+//    strCOD_SIT     : AnsiString;
     strIND_PGTO    : AnsiString;
-    strIND_FRT     : AnsiString;
+//    strIND_FRT     : AnsiString;
     booNFCancelada : Boolean;
 begin
   if Assigned(RegC010.RegistroC100) then
@@ -737,34 +737,51 @@ begin
      begin
         with RegC010.RegistroC100.Items[intFor] do
         begin
-          case IND_OPER of
-            tpEntradaAquisicao : strIND_OPER := '0';
-            tpSaidaPrestacao   : strIND_OPER := '1';
-          end;
+//          case IND_OPER of
+//            tpEntradaAquisicao : strIND_OPER := '0';
+//            tpSaidaPrestacao   : strIND_OPER := '1';
+//          end;
           case IND_EMIT of
             edEmissaoPropria  : strIND_EMIT := '0';
             edTerceiros       : strIND_EMIT := '1';
           end;
-          case COD_SIT of
-            sdRegular             : strCOD_SIT := '00';
-            sdExtempRegular       : strCOD_SIT := '01';
-            sdCancelado           : strCOD_SIT := '02';
-            sdCanceladoExtemp     : strCOD_SIT := '03';
-            sdDoctoDenegado       : strCOD_SIT := '04';
-            sdDoctoNumInutilizada : strCOD_SIT := '05';
-            sdFiscalCompl         : strCOD_SIT := '06';
-            sdExtempCompl         : strCOD_SIT := '07';
-            sdRegimeEspecNEsp     : strCOD_SIT := '08';
-          end;
 
-          /// Tratamento NFs canceladas 02/03, denegada 04 ou inutilizada 05 - Jean Barreiros 25Nov2009
-          if Pos(strCOD_SIT,'02, 03, 04, 05') > 0 then
+//          case COD_SIT of
+//            sdRegular             : strCOD_SIT := '00';
+//            sdExtempRegular       : strCOD_SIT := '01';
+//            sdCancelado           : strCOD_SIT := '02';
+//            sdCanceladoExtemp     : strCOD_SIT := '03';
+//            sdDoctoDenegado       : strCOD_SIT := '04';
+//            sdDoctoNumInutilizada : strCOD_SIT := '05';
+//            sdFiscalCompl         : strCOD_SIT := '06';
+//            sdExtempCompl         : strCOD_SIT := '07';
+//            sdRegimeEspecNEsp     : strCOD_SIT := '08';
+//          end;
+
+          // Substitui o código acima comentado.
+//          strCOD_SIT := CodSitToStr(COD_SIT);
+
+          // Para cada registro C100, obrigatoriamente deve ser  apresentado, pelo menos, um registro C170,
+          // exceto em relação aos documentos fiscais referentes à nota fiscal cancelada (código “02” ou “03”),
+          // Nota Fiscal Eletrônica (NF-e) denegada (código “04”) ou numeração inutilizada (código “05”),
+          // os quais não devem ser escriturados os registrosfilhos de C100.
+          //
+          // preencher somente os campos :
+          // indicador do emitente,
+          // código da situação,
+          // indicador de operação,
+          // código do modelo,
+          // série do documento ,
+          // número do documento
+          // chave do documento eletrônico.
+          if COD_SIT in [sdfCancelado{02}, sdfExtCancelado{03}, sdfDenegado{04}, sdfInutilizado{05}] then
           begin
+            booNFCancelada := true;
+
             DT_DOC         := 0;
             DT_E_S         := 0;
             IND_FRT        := tfNenhum;
             IND_PGTO       := tpNenhum;
-            booNFCancelada := true;
             // Incluido por Filipe Sortica 30/07/2012
             COD_PART       := '';
             DT_DOC         := 0;
@@ -785,12 +802,11 @@ begin
             VL_COFINS      := 0;
             VL_PIS_ST      := 0;
             VL_COFINS_ST   := 0;
-            if (strCOD_SIT = '05') then
-              CHV_NFE := '';
+            if COD_SIT in [sdfInutilizado{05}] then
+               CHV_NFE := '';
           end
           else
             booNFCancelada := false;
-          //
 
           case IND_PGTO of
             tpVista : strIND_PGTO := '0';
@@ -805,20 +821,20 @@ begin
             tpNenhum : strIND_PGTO := '';
           end;
 
-          case IND_FRT of
-            tfPorContaEmitente:     strIND_FRT := '0';
-            tfPorContaDestinatario: strIND_FRT := '1';
-            tfPorContaTerceiros:    strIND_FRT := '2';
-            tfSemCobrancaFrete:     strIND_FRT := '9';
-            tfNenhum:               strIND_FRT := '';
-          end;
+//          case IND_FRT of
+//            tfPorContaEmitente:     strIND_FRT := '0';
+//            tfPorContaDestinatario: strIND_FRT := '1';
+//            tfPorContaTerceiros:    strIND_FRT := '2';
+//            tfSemCobrancaFrete:     strIND_FRT := '9';
+//            tfNenhum:               strIND_FRT := '';
+//          end;
 
           Add( LFill('C100')                               +
-               LFill( strIND_OPER )                        +
+               LFill( IndTipoOperToStr(IND_OPER) )         +
                LFill( strIND_EMIT )                        +
                LFill( COD_PART )                           +
                LFill( COD_MOD )                            +
-               LFill( strCOD_SIT )                         +
+               LFill( CodSitToStr(COD_SIT) )               +
                LFill( SER )                                +
                LFill( NUM_DOC )                            +
                LFill( CHV_NFE )                            +
@@ -829,7 +845,7 @@ begin
                LFill( VL_DESC,0,2, booNFCancelada  )       +
                LFill( VL_ABAT_NT,0,2, booNFCancelada  )    +
                LFill( VL_MERC,0,2, booNFCancelada )        +
-               LFill( strIND_FRT )                         +
+               LFill( IndFrtToStr(IND_FRT) )               +
                LFill( VL_FRT,0,2, booNFCancelada  )        +
                LFill( VL_SEG,0,2, booNFCancelada  )        +
                LFill( VL_OUT_DA,0,2, booNFCancelada  )     +
@@ -945,10 +961,10 @@ var
   intFor        : integer;
   strIND_MOV    : string;
   strIND_APUR   : string;
-  strCST_ICMS   : string;
-  strCST_PIS    : String;
-  strCST_IPI    : String;
-  strCST_COFINS : String;
+//  strCST_ICMS   : string;
+//  strCST_PIS    : String;
+//  strCST_IPI    : String;
+//  strCST_COFINS : String;
 begin
   if Assigned( RegC100.RegistroC170 ) then
   begin
@@ -966,6 +982,8 @@ begin
             iaMensal    : strIND_APUR := '0';
             iaDecendial : strIND_APUR := '1';
           end;
+
+{ Substituido pela função CstIcmsToStr()
           case CST_ICMS of
             sticmsTributadaIntegralmente                              : strCST_ICMS :=  '000' ;
             sticmsTributadaComCobracaPorST                            : strCST_ICMS :=  '010' ;
@@ -1011,7 +1029,9 @@ begin
             sticmsSimplesNacionalCobradoAnteriormentePorST            : strCST_ICMS :=  '500' ;
             sticmsSimplesNacionalOutros                               : strCST_ICMS :=  '900' ;
           end;
+}
 
+{       Código substituido pela função "CstPisToStr"
           case CST_PIS of
             stpisValorAliquotaNormal                           : strCST_PIS := '01';
             stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1047,7 +1067,8 @@ begin
             stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
             stpisOutrasOperacoes                               : strCST_PIS := '99';
           end;
-
+}
+{
           case CST_IPI of
             stipiEntradaRecuperacaoCredito  : strCST_IPI :='00';
             stipiEntradaTributradaZero      : strCST_IPI :='01';
@@ -1064,7 +1085,8 @@ begin
             stipiSaidaComSuspensao          : strCST_IPI :='55';
             stipiOutrasSaidas               : strCST_IPI :='99';
           end;
-
+}
+{       Código substituido pela função "CstCofinsToStr"
           case CST_COFINS of
             stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
             stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -1100,7 +1122,7 @@ begin
             stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
             stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
           end;
-
+}
           Add(
               {01} LFill('C170')                 +
               {02} LFill( NUM_ITEM )             +
@@ -1111,7 +1133,7 @@ begin
               {07} LFill( VL_ITEM,0,2 )          +
               {08} LFill( VL_DESC,0,2 )          +
               {09} LFill( strIND_MOV )           +
-              {10} LFill( strCST_ICMS)           +
+              {10} LFill( CstIcmsToStr(CST_ICMS) ) +
               {11} LFill( CFOP,4 )               +
               {12} LFill( COD_NAT )              +
               {13} LFill( VL_BC_ICMS,0,2 )       +
@@ -1121,18 +1143,18 @@ begin
               {17} LFill( ALIQ_ST,0,2 )          +
               {18} LFill( VL_ICMS_ST,0,2 )       +
               {19} LFill( strIND_APUR )          +
-              {20} LFill( strCST_IPI )           +
+              {20} LFill( CstIpiToStr(CST_IPI) ) +
               {21} LFill( COD_ENQ )              +
               {22} LFill( VL_BC_IPI,0,2 )        +
               {23} LFill( ALIQ_IPI,0,2 )         +
               {24} LFill( VL_IPI,0,2 )           +
-              {25} LFill( strCST_PIS )           +
+              {25} LFill( CstPisToStr(CST_PIS) ) +
               {26} DFill( VL_BC_PIS,     2, True ) +
               {27} DFill( ALIQ_PIS_PERC, 4, True ) +
               {28} DFill( QUANT_BC_PIS,  3, True ) +
               {29} DFill( ALIQ_PIS_R,    4, True ) +
               {30} LFill( VL_PIS,0,2 )           +
-              {31} LFill( strCST_COFINS )        +
+              {31} LFill( CstCofinsToStr(CST_COFINS) ) +
               {32} DFill( VL_BC_COFINS,     2, True ) +
               {33} DFill( ALIQ_COFINS_PERC, 4, True ) +
               {34} DFill( QUANT_BC_COFINS,  3, True ) +
@@ -1181,7 +1203,7 @@ end;
 procedure TBloco_C.WriteRegistroC181(RegC180: TRegistroC180);
 var
   intFor     : integer;
-  strCST_PIS : string;
+//  strCST_PIS : string;
 begin
   if Assigned(RegC180.RegistroC181) then
   begin
@@ -1189,7 +1211,7 @@ begin
     begin
       with RegC180.RegistroC181.Items[intFor] do
       begin
-
+{       Código substituido pela função "CstPisToStr"
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1225,9 +1247,9 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         Add( LFill('C181')             +
-             LFill(strCST_PIS)         +
+             LFill(CstPisToStr(CST_PIS)) +
              LFill(CFOP)               +
              LFill(VL_ITEM,0,2)        +
              LFill(VL_DESC,0,2)        +
@@ -1249,7 +1271,7 @@ end;
 procedure TBloco_C.WriteRegistroC185(RegC180: TRegistroC180);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC180.RegistroC185) then
   begin
@@ -1257,7 +1279,7 @@ begin
     begin
       with RegC180.RegistroC185.Items[intFor] do
       begin
-
+{       Código substituido pela função "CstCofinsToStr"
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -1293,9 +1315,9 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         Add( LFill('C185')                     +
-             LFill(strCST_COFINS)              +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(CFOP)                       +
              LFill(VL_ITEM,0,2)                +
              LFill(VL_DESC,0,2)                +
@@ -1379,7 +1401,7 @@ end;
 procedure TBloco_C.WriteRegistroC191(RegC190: TRegistroC190);
   var
     intFor     : integer;
-    strCST_PIS : string;
+//    strCST_PIS : string;
 begin
   if Assigned(RegC190.RegistroC191) then
   begin
@@ -1387,6 +1409,7 @@ begin
     begin
       with RegC190.RegistroC191.Items[intFor] do
       begin
+{       Código substituido pela função "CstPisToStr"
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1422,10 +1445,10 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         Add( LFill('C191')             +
              LFill(CNPJ_CPF_PART)      +
-             LFill(strCST_PIS)         +
+             LFill(CstPisToStr(CST_PIS)) +
              LFill(CFOP,4)             +
              LFill(VL_ITEM,0,2)        +
              LFill(VL_DESC,0,2)        +
@@ -1447,7 +1470,7 @@ end;
 procedure TBloco_C.WriteRegistroC195(RegC190: TRegistroC190);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC190.RegistroC195) then
   begin
@@ -1455,6 +1478,7 @@ begin
     begin
       with RegC190.RegistroC195.Items[intFor] do
       begin
+{       Código substituido pela função "CstCofinsToStr"
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -1490,10 +1514,10 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         Add( LFill('C195')                +
              LFill(CNPJ_CPF_PART)         +
-             LFill(strCST_COFINS)         +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(CFOP,4)                +
              LFill(VL_ITEM,0,2)           +
              LFill(VL_DESC,0,2)           +
@@ -1587,8 +1611,8 @@ begin
              LFill(COD_MOD,2)              +
              LFill(DT_DOC_INI, 'ddmmyyyy') +
              LFill(DT_DOC_FIN, 'ddmmyyyy') +
-             LFill(NUM_DOC_INI,6)          +
-             LFill(NUM_DOC_FIN,6)          +
+             LFill(NUM_DOC_INI, 6, True)   +
+             LFill(NUM_DOC_FIN, 6, True)   +
              LFill(VL_DOC,0,2)             +
              LFill(VL_DOC_CANC,0,2)) ;
       end;
@@ -1606,7 +1630,7 @@ end;
 procedure TBloco_C.WriteRegistroC381(RegC380: TRegistroC380);
   var
     intFor     : integer;
-    strCST_PIS : string;
+//    strCST_PIS : string;
 begin
   if Assigned(RegC380.RegistroC381) then
   begin
@@ -1614,6 +1638,7 @@ begin
     begin
       with RegC380.RegistroC381.Items[intFor] do
       begin
+{       Código substituido pela função "CstPisToStr"
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1649,9 +1674,9 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         Add( LFill('C381')                  +
-             LFill(strCST_PIS)              +
+             LFill(CstPisToStr(CST_PIS))    +
              LFill(COD_ITEM)                +
              LFill(VL_ITEM,0,2)             +
              LFill(VL_BC_PIS,0,2, True)     +
@@ -1672,7 +1697,7 @@ end;
 procedure TBloco_C.WriteRegistroC385(RegC380: TRegistroC380);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC380.RegistroC385) then
   begin
@@ -1680,6 +1705,7 @@ begin
     begin
       with RegC380.RegistroC385.Items[intFor] do
       begin
+{       Código substituido pela função "CstCofinsToStr"
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -1715,9 +1741,9 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         Add( LFill('C385')                     +
-             LFill(strCST_COFINS)              +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(COD_ITEM)                   +
              LFill(VL_ITEM,0,2)                +
              LFill(VL_BC_COFINS,0,2, True)     +
@@ -1767,8 +1793,8 @@ end;
 procedure TBloco_C.WriteRegistroC396(RegC395: TRegistroC395);
   var
     intFor         : integer;
-    strCST_PIS     : string;
-    strCST_COFINS  : string;
+//    strCST_PIS     : string;
+//    strCST_COFINS  : string;
     strNAT_BC_CRED : AnsiString;
 
 begin
@@ -1778,6 +1804,7 @@ begin
     begin
       with RegC395.RegistroC396.Items[intFor] do
       begin
+{       Código substituido pela função "CstPisToStr"
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1813,7 +1840,8 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
+{       Código substituido pela função "CstCofinsToStr"
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -1849,7 +1877,7 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         case NAT_BC_CRED of
           bccAqBensRevenda                 : strNAT_BC_CRED := '01';
           bccAqBensUtiComoInsumo           : strNAT_BC_CRED := '02';
@@ -1876,11 +1904,11 @@ begin
              LFill(VL_ITEM,0,2)      +
              LFill(VL_DESC,0,2)      +
              LFill(strNAT_BC_CRED)   +
-             LFill(strCST_PIS)       +
+             LFill(CstPisToStr(CST_PIS)) +
              LFill(VL_BC_PIS,0,2)    +
              DFill(ALIQ_PIS, 4)      +
              LFill(VL_PIS,0,2)       +
-             LFill(strCST_COFINS)    +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(VL_BC_COFINS,0,2) +
              DFill(ALIQ_COFINS, 4)   +
              LFill(VL_COFINS,0,2)    +
@@ -1955,7 +1983,7 @@ end;
 procedure TBloco_C.WriteRegistroC481(RegC405: TRegistroC405);
   var
     intFor     : integer;
-    strCST_PIS : string;
+//    strCST_PIS : string;
 begin
   if Assigned(RegC405.RegistroC481) then
   begin
@@ -1963,6 +1991,8 @@ begin
     begin
       with RegC405.RegistroC481.Items[intFor] do
       begin
+
+{       Código substituido pela função "CstPisToStr"
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -1998,9 +2028,9 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         Add( LFill('C481')             +
-             LFill(strCST_PIS)         +
+             LFill(CstPisToStr(CST_PIS))  +
              LFill(VL_ITEM,0,2)        +
              DFill(VL_BC_PIS,      2, True) +
              DFill(ALIQ_PIS,       4, True) +
@@ -2021,7 +2051,7 @@ end;
 procedure TBloco_C.WriteRegistroC485(RegC405: TRegistroC405);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC405.RegistroC485) then
   begin
@@ -2029,6 +2059,7 @@ begin
     begin
       with RegC405.RegistroC485.Items[intFor] do
       begin
+{       Código substituido pela função "CstPisToStr"
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -2064,9 +2095,9 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         Add( LFill('C485')                     +
-             LFill(strCST_COFINS)              +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(VL_ITEM,0,2)                +
              DFill(VL_BC_COFINS,      2, True) +
              DFill(ALIQ_COFINS,       4, True) +
@@ -2145,7 +2176,7 @@ end;
 procedure TBloco_C.WriteRegistroC491(RegC490: TRegistroC490);
   var
     intFor     : integer;
-    strCST_PIS : string;
+//    strCST_PIS : string;
 begin
   if Assigned(RegC490.RegistroC491) then
   begin
@@ -2153,6 +2184,7 @@ begin
     begin
       with RegC490.RegistroC491.Items[intFor] do
       begin
+{
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -2188,10 +2220,10 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         Add( LFill('C491')             +
              LFill(COD_ITEM)           +
-             LFill(strCST_PIS)         +
+             LFill(CstPisToStr(CST_PIS)) +
              LFill(CFOP,4)             +
              LFill(VL_ITEM,0,2)        +
              DFill(VL_BC_PIS,      2, True) +
@@ -2212,7 +2244,7 @@ end;
 procedure TBloco_C.WriteRegistroC495(RegC490: TRegistroC490);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC490.RegistroC495) then
   begin
@@ -2220,6 +2252,7 @@ begin
     begin
       with RegC490.RegistroC495.Items[intFor] do
       begin
+{
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -2255,10 +2288,11 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
+}
 
         Add( LFill('C495')                +
              LFill(COD_ITEM)              +
-             LFill(strCST_COFINS)         +
+             LFill(CstCofinsToStr(CST_COFINS) ) +
              LFill(CFOP,4)                +
              LFill(VL_ITEM,0,2)           +
              DFill(VL_BC_COFINS,      2, True) +
@@ -2309,7 +2343,7 @@ end;
 procedure TBloco_C.WriteRegistroC500(RegC010: TRegistroC010);
   var
     intFor              : integer;
-    strCOD_SIT          : AnsiString;
+//    strCOD_SIT          : AnsiString;
 begin
   if Assigned( RegC010.RegistroC500 ) then
   begin
@@ -2317,6 +2351,7 @@ begin
      begin
         with RegC010.RegistroC500.Items[intFor] do
         begin
+{
            case COD_SIT of
              sdRegular             : strCOD_SIT := '00';
              sdExtempRegular       : strCOD_SIT := '01';
@@ -2328,11 +2363,11 @@ begin
              sdExtempCompl         : strCOD_SIT := '07';
              sdRegimeEspecNEsp     : strCOD_SIT := '08';
            end;
-
+}
            Add( LFill('C500')               +
                 LFill( COD_PART )           +
                 LFill( COD_MOD,2 )          +
-                LFill( strCOD_SIT )         +
+                LFill( CodSitToStr(COD_SIT) )  +
                 LFill( SER )                +
                 LFill( SUB, 3 )                +
                 LFill( NUM_DOC,9 )          +
@@ -2361,7 +2396,7 @@ end;
 procedure TBloco_C.WriteRegistroC501(RegC500: TRegistroC500);
   var
     intFor         : integer;
-    strCST_PIS     : string;
+//    strCST_PIS     : string;
     strNAT_BC_CRED : AnsiString;
 
 begin
@@ -2371,6 +2406,7 @@ begin
     begin
       with RegC500.RegistroC501.Items[intFor] do
       begin
+{
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -2406,7 +2442,7 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
-
+}
         case NAT_BC_CRED of
           bccAqBensRevenda                 : strNAT_BC_CRED := '01';
           bccAqBensUtiComoInsumo           : strNAT_BC_CRED := '02';
@@ -2429,7 +2465,7 @@ begin
         end;
 
         Add( LFill('C501')        +
-             LFill(strCST_PIS)    +
+             LFill(CstPisToStr(CST_PIS) ) +
              LFill(VL_ITEM,0,2)   +
              LFill(strNAT_BC_CRED)+
              LFill(VL_BC_PIS,0,2) +
@@ -2448,7 +2484,7 @@ end;
 procedure TBloco_C.WriteRegistroC505(RegC500: TRegistroC500);
   var
     intFor         : integer;
-    strCST_COFINS  : string;
+//    strCST_COFINS  : string;
     strNAT_BC_CRED : AnsiString;
 begin
   if Assigned(RegC500.RegistroC505) then
@@ -2457,6 +2493,7 @@ begin
     begin
       with RegC500.RegistroC505.Items[intFor] do
       begin
+{
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -2492,7 +2529,7 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         case NAT_BC_CRED of
           bccAqBensRevenda                 : strNAT_BC_CRED := '01';
           bccAqBensUtiComoInsumo           : strNAT_BC_CRED := '02';
@@ -2515,7 +2552,7 @@ begin
         end;
 
         Add( LFill('C505')           +
-             LFill(strCST_COFINS)    +
+             LFill(CstCofinsToStr(CST_COFINS) ) +
              LFill(VL_ITEM,0,2)      +
              LFill(strNAT_BC_CRED)   +
              LFill(VL_BC_COFINS,0,2) +
@@ -2611,7 +2648,7 @@ end;
 procedure TBloco_C.WriteRegistroC601(RegC600: TRegistroC600);
   var
     intFor     : integer;
-    strCST_PIS : string;
+//    strCST_PIS : string;
 begin
   if Assigned(RegC600.RegistroC601) then
   begin
@@ -2619,6 +2656,7 @@ begin
     begin
       with RegC600.RegistroC601.Items[intFor] do
       begin
+{
         case CST_PIS of
           stpisValorAliquotaNormal                           : strCST_PIS := '01';
           stpisValorAliquotaDiferenciada                     : strCST_PIS := '02';
@@ -2654,9 +2692,10 @@ begin
           stpisOutrasOperacoesEntrada                        : strCST_PIS := '98';
           stpisOutrasOperacoes                               : strCST_PIS := '99';
         end;
+}
 
         Add( LFill('C601')        +
-             LFill(strCST_PIS)    +
+             LFill(CstPisToStr(CST_PIS)) +
              LFill(VL_ITEM,0,2)   +
              LFill(VL_BC_PIS,0,2) +
              DFill(ALIQ_PIS, 4)   +
@@ -2674,7 +2713,7 @@ end;
 procedure TBloco_C.WriteRegistroC605(RegC600: TRegistroC600);
   var
     intFor        : integer;
-    strCST_COFINS : string;
+//    strCST_COFINS : string;
 begin
   if Assigned(RegC600.RegistroC605) then
   begin
@@ -2682,7 +2721,7 @@ begin
     begin
       with RegC600.RegistroC605.Items[intFor] do
       begin
-
+{
         case CST_COFINS of
           stcofinsValorAliquotaNormal                           : strCST_COFINS := '01';
           stcofinsValorAliquotaDiferenciada                     : strCST_COFINS := '02';
@@ -2718,9 +2757,9 @@ begin
           stcofinsOutrasOperacoesEntrada                        : strCST_COFINS := '98';
           stcofinsOutrasOperacoes                               : strCST_COFINS := '99';
         end;
-
+}
         Add( LFill('C605')           +
-             LFill(strCST_COFINS)    +
+             LFill(CstCofinsToStr(CST_COFINS)) +
              LFill(VL_ITEM,0,2)      +
              LFill(VL_BC_COFINS,0,2) +
              DFill(ALIQ_COFINS, 4)   +

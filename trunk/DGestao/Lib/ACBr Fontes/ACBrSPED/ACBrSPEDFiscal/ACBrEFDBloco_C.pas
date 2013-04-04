@@ -36,6 +36,8 @@
 |*
 |* 10/04/2009: Isaque Pinheiro
 |*  - Criação e distribuição da Primeira Versao
+|* 31/8/2011: Adolfo Jeffeson Fernandes Lopes
+|*  - RegistroC400List.LocalizaRegistro - Número de série de fabricação do ECF
 *******************************************************************************}
 
 unit ACBrEFDBloco_C;
@@ -1413,6 +1415,7 @@ type
     procedure SetItem(Index: Integer; const Value: TRegistroC400); /// SetItem
   public
     function New: TRegistroC400;
+    function LocalizaRegistro(pECF_FAB: string): boolean; {:Número de série de fabricação do ECF :AJ-31/8/2011 13:57:12:}
     property Items[Index: Integer]: TRegistroC400 read GetItem write SetItem;
   end;
 
@@ -2987,6 +2990,22 @@ end;
 procedure TRegistroC400List.SetItem(Index: Integer; const Value: TRegistroC400);
 begin
   Put(Index, Value);
+end;
+
+function TRegistroC400List.LocalizaRegistro(pECF_FAB: string): boolean;
+{:Número de série de fabricação do ECF :AJ-31/8/2011 13:57:12:}
+var
+  intFor: integer;
+begin
+  Result := false;
+  for intFor := 0 to Self.Count - 1 do
+  begin
+    if Self.Items[intFor].ECF_FAB = pECF_FAB then
+    begin
+      Result := true;
+      Break;
+    end;
+  end;
 end;
 
 { TRegistroC405List }

@@ -315,9 +315,10 @@ TACBrECFBematech = class( TACBrECFClass )
     fsACK, fsST1, fsST2, fsST3: Integer ; { Status da Bematech }
     { Tamanho da Resposta Esperada ao comando. Necessário, pois a Bematech nao
       usa um Sufixo padrão no fim da resposta da Impressora. }
-    fs25MFD     : Boolean ;  // True se for MP25 ou Superior (MFD)
-    fsPAF       : String ;
-    fsBytesResp : Integer ;
+    fs25MFD      : Boolean ;  // True se for MP25 ou Superior (MFD)
+    fsEnviaPorDLL: Boolean ;  // True se a DLL suporta envio e recebimento de dados (USB)
+    fsPAF        : String ;
+    fsBytesResp  : Integer ;
     fsFalhasFimImpressao : Integer ;
     fsNumVersao : String ;
     fsNumECF    : String ;
@@ -349,20 +350,31 @@ TACBrECFBematech = class( TACBrECFClass )
     xBematech_FI_DownloadMFD: function(cNomeArquivoMFD, cTipoDownload,
       cDadoInicial, cDadoFinal, cUsuario: AnsiString): Integer; stdcall;
 
+    xBematech_FI_EnviaComando: function(cComando: AnsiString;
+      iTamanhoComando: Integer): Integer; stdcall;
+    xBematech_FI_LeituraRetorno: function(cRetorno: AnsiString;
+      iTamanhoRetorno: Integer): Integer; stdcall;
+
     {$IFDEF MSWINDOWS}
-    procedure LoadDLLFunctions;
-    procedure AbrePortaSerialDLL(const Porta, Path : String ) ;
+     procedure LoadDLLFunctions;
+     procedure AbrePortaSerialDLL(const aPath: String='');
+     procedure FechaPortaSerialDLL(const OldAtivo : Boolean) ;
+     function AnalisarRetornoDll(const ARetorno: Integer): String;
+
+     procedure EnviaStringDLL(const cmd: AnsiString) ;
+     procedure LeStringDLL(const NumBytes, ATimeOut: Integer; var Retorno: AnsiString);
     {$ENDIF}
 
     function GetTotalizadoresParciais : String ;
     procedure CRZToCOO(const ACRZIni, ACRZFim: Integer; var ACOOIni,
       ACOOFim: Integer);
+    procedure FinalidadeToTipoPrefixo( AFinalidade : TACBrECFFinalizaArqMFD;
+       var Tipo: Integer; var Prefixo: AnsiString) ;
 
  protected
     property TotalizadoresParciais : String read GetTotalizadoresParciais ;
 
     Function PreparaCmd( cmd : AnsiString ) : AnsiString ;
-    function AnalisarRetornoDll(const ARetorno: Integer): String;
 
     function GetDataHora: TDateTime; override ;
     function GetNumCupom: String; override ;
@@ -405,12 +417,12 @@ TACBrECFBematech = class( TACBrECFClass )
     function GetNumNCN: String; override ;
     function GetNumCCDC: String; override ;
     function GetVendaBruta: Double; override ;
+    function GetTotalTroco: Double; override ;
     function GetNumReducoesZRestantes: String; override ;
 
     function GetTotalAcrescimos: Double; override ;
     function GetTotalCancelamentos: Double; override ;
     function GetTotalDescontos: Double; override ;
-    function GetTotalTroco: Double; override ;
     function GetTotalSubstituicaoTributaria: Double; override ;
     function GetTotalNaoTributado: Double; override ;
     function GetTotalIsencao: Double; override ;
@@ -434,12 +446,12 @@ TACBrECFBematech = class( TACBrECFClass )
     Function VerificaFimLeitura(var Retorno: AnsiString;
        var TempoLimite: TDateTime) : Boolean ; override ;
     function VerificaFimImpressao(var TempoLimite: TDateTime) : Boolean ; override ;
-
  public
     Constructor create( AOwner : TComponent  )  ;
     Destructor Destroy  ; override ;
 
     procedure Ativar ; override ;
+    procedure Desativar ; override ;
 
     Property ACK   : Integer read fsACK ;
     Property ST1   : Integer read fsST1 ;
@@ -567,7 +579,7 @@ TACBrECFBematech = class( TACBrECFClass )
 
 implementation
 Uses
-   SysUtils, IniFiles, ACBrConsts,
+   SysUtils, IniFiles, ACBrConsts, ACBrECF,
    {$IFDEF COMPILER6_UP} DateUtils, StrUtils, {$ELSE} ACBrD5,{$ENDIF}
    Math ;
 
@@ -618,11 +630,28 @@ procedure TACBrECFBematech.Ativar;
 var
   wRetentar : Boolean ;
 begin
-  if not fpDevice.IsSerialPort  then
-     raise EACBrECFErro.Create( ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
-                            'Porta Serial:  (COM1, COM2, COM3, ...)'));
+  fsEnviaPorDLL := False;
 
-  fpDevice.HandShake := hsRTS_CTS ;
+  {$IFDEF MSWINDOWS}
+   if fpDevice.IsDLLPort then
+   begin
+     fsEnviaPorDLL := True;
+
+     // Lendo métodos da DLL, Se falhar a carga dos novos métodos, dispara exception
+     LoadDLLFunctions ;
+
+     // Programando Hooks de leitua e envio //
+     fpDevice.HookEnviaString := EnviaStringDLL;
+     fpDevice.HookLeString    := LeStringDLL;
+
+     AbrePortaSerialDLL;
+   end
+   else
+  {$ENDIF}
+     if not fpDevice.IsSerialPort  then
+        raise EACBrECFERRO.Create(ACBrStr('A impressora: '+fpModeloStr+' requer'+sLineBreak+
+                                'Porta Serial:  (COM1, COM2, COM3, ...)'));
+
   inherited Ativar ; { Abre porta serial }
 
   fsNumVersao := '' ;
@@ -635,10 +664,10 @@ begin
   fsArredonda := ' ';
   fsTotalizadoresParciais := '' ;
   fsNumCOOInicial := '' ;
-  fsNFCodCNF := '' ;
-  fsNFCodFPG := '' ;
-  fsNFValor  := 0 ;
-  fs25MFD    := false ;
+  fsNFCodCNF  := '' ;
+  fsNFCodFPG  := '' ;
+  fsNFValor   := 0 ;
+  fs25MFD     := false ;
 
   try
      { Testando a comunicaçao com a porta }
@@ -671,6 +700,20 @@ begin
      Desativar ;
      raise ;
   end ;
+end;
+
+procedure TACBrECFBematech.Desativar;
+begin
+  {$ifdef windows}
+  if fsEnviaPorDLL and Ativo then
+     try
+        FechaPortaSerialDLL(False);
+     except
+        {Exceção muda pois Porta pode já estar fechada}
+     end ;
+   {$endif}
+
+  inherited Desativar ;
 end;
 
 
@@ -706,7 +749,8 @@ begin
      while (fsACK <> 6) do     { Se ACK = 6 Comando foi reconhecido }
      begin
         fsACK := 0 ;
-        fpDevice.Serial.Purge ;                   { Limpa a Porta }
+        if not fsEnviaPorDLL then
+           fpDevice.Serial.Purge ;                   { Limpa a Porta }
 
         if not TransmiteComando( cmd ) then
            continue ;
@@ -714,7 +758,7 @@ begin
         try
            { espera ACK chegar na Porta por 4s }
            try
-              fsACK := fpDevice.Serial.RecvByte( 4000 ) ;
+              fsACK := fpDevice.LeByte( 4000 ) ;
            except
            end ;
 
@@ -732,7 +776,8 @@ begin
         except
            on E : EACBrECFSemResposta do
             begin
-              fpDevice.Serial.Purge ;
+              if not fsEnviaPorDLL then
+                 fpDevice.Serial.Purge ;
 
               Inc( FalhasACK ) ;
               GravaLog('Bematech EnviaComando_ECF: ACK = '+IntToStr(ACK)+' Falha: '+IntToStr(FalhasACK) ) ;
@@ -904,11 +949,12 @@ begin
      try
 //      GravaLog('Bematech VerificaFimImpressao: Pedindo o Status') ;
 
-        fpDevice.Serial.Purge ;              // Limpa buffer de Entrada e Saida //
-        fpDevice.EnviaString( Cmd );   // Envia comando //}
+        if not fsEnviaPorDLL then
+           fpDevice.Serial.Purge ;           // Limpa buffer de Entrada e Saida //
+        fpDevice.EnviaString( Cmd );         // Envia comando //
 
         // espera ACK chegar na Porta por 1,5s //
-        wACK := fpDevice.Serial.RecvByte( 1500 ) ;
+        wACK := fpDevice.LeByte( 1500 ) ;
 
         if wACK = 6 then   // ECF Respondeu corretamente, portanto está trabalhando //
          begin
@@ -917,7 +963,7 @@ begin
            fsFalhasFimImpressao := 0 ;
 
            // Aguarda ST1 e ST2 por mais 2 segundos //
-           RetCmd := fpDevice.Serial.RecvBufferStr(2,2000) ;
+           RetCmd := fpDevice.LeString( 2000, 2 ) ;
            Result := (Length( RetCmd ) >= 2) ;
          end
         else
@@ -970,22 +1016,17 @@ end ;
 
 
 function TACBrECFBematech.GetDataHora: TDateTime;
-Var RetCmd : AnsiString ;
-    OldShortDateFormat : String ;
+Var
+  RetCmd : AnsiString ;
 begin
   RetCmd := RetornaInfoECF( '23' ) ;
-  OldShortDateFormat := ShortDateFormat ;
-  try
-     ShortDateFormat := 'dd/mm/yy' ;
-     result := StrToDate(copy(RetCmd, 1,2) + DateSeparator +
-                         copy(RetCmd, 3,2) + DateSeparator +
-                         copy(RetCmd, 5,2)) ;
-  finally
-     ShortDateFormat := OldShortDateFormat ;
-  end ;
-  result := RecodeHour(  result,StrToInt(copy(RetCmd, 7,2))) ;
-  result := RecodeMinute(result,StrToInt(copy(RetCmd, 9,2))) ;
-  result := RecodeSecond(result,StrToInt(copy(RetCmd,11,2))) ;
+  Result := StringToDateTime( copy(RetCmd, 1,2) + DateSeparator +
+                              copy(RetCmd, 3,2) + DateSeparator +
+                              copy(RetCmd, 5,2) + ' ' +
+                              copy(RetCmd, 7,2) + TimeSeparator +
+                              copy(RetCmd, 9,2) + TimeSeparator +
+                              copy(RetCmd,11,2),
+                              'dd/mm/yy hh:nn:ss' ) ;
 end;
 
 function TACBrECFBematech.GetNumCupom: String;
@@ -1987,14 +2028,14 @@ begin
      CNF.Indice    := 'SA' ;
      CNF.Descricao := 'Sangria' ;
      CNF.Total     := StrToFloatDef( BcdToAsc( copy(TotalizadoresParciais,ifThen(fs25MFD,393,197),7) ),0) / 100 ;
-     CNF.Contador  := StrToIntDef( BcdToAsc( copy(RetCmd,57,2) ),0) ;
+     CNF.Contador  := StrToIntDef( copy(RetCmd,113,4),0) ;
      fpComprovantesNaoFiscais.Insert(0, CNF ) ;
 
      CNF := TACBrECFComprovanteNaoFiscal.create ;
      CNF.Indice    := 'SU' ;
      CNF.Descricao := 'Suprimento' ;
      CNF.Total     := StrToFloatDef( BcdToAsc( copy(TotalizadoresParciais,ifThen(fs25MFD,400,204),7) ),0) / 100 ;
-     CNF.Contador  := StrToIntDef( BcdToAsc( copy(RetCmd,59,2) ),0) ;
+     CNF.Contador  := StrToIntDef( copy(RetCmd,117,4),0) ;
      fpComprovantesNaoFiscais.Insert(1, CNF ) ;
   except
     { Se falhou ao carregar, deve "nilzar" as variaveis para que as rotinas
@@ -2383,8 +2424,7 @@ function TACBrECFBematech.GetDataHoraSB: TDateTime;
 Leitura da Memória Fiscal, só para não retornar erro coloquei esta
 informação abaixo, temos que criar uma rotina que leia a LMF serial
 para retornar os valores corretos}
-Var Linha, LinhaVer : AnsiString ;
-    OldShortDateFormat : String ;
+Var Linha, LinhaVer, DtHrStr : AnsiString ;
     Linhas : TStringList;
     I, CRZ :Integer;
     AchouBlocoSB : Boolean ;
@@ -2430,21 +2470,12 @@ begin
       begin
         // 01.00.01                    25/06/2009 21:07:40
         I := pos('/', LinhaVer ) ;
+        DtHrStr := copy(LinhaVer, I-2, 10 ) ;
+        I := pos(':', LinhaVer ) ;
+        DtHrStr := DtHrStr + ' ' + copy(LinhaVer, I-2, 8 ) ;
 
-        OldShortDateFormat := ShortDateFormat ;
-        try
-          ShortDateFormat := 'dd/mm/yyyy' ;
-          Result := StrToDate( StringReplace( copy(LinhaVer, I-2, 10 ),
-                                           '/', DateSeparator, [rfReplaceAll] ) ) ;
-
-          I := pos(':', LinhaVer ) ;
-          Result := RecodeHour(  result,StrToInt(copy(LinhaVer, I-2,2))) ;
-          Result := RecodeMinute(result,StrToInt(copy(LinhaVer, I+1,2))) ;
-          Result := RecodeSecond(result,StrToInt(copy(LinhaVer, I+4,2))) ;
-        finally
-          ShortDateFormat := OldShortDateFormat ;
-        end ;
-      end
+        Result := StringToDateTime( DtHrStr, 'dd/mm/yyyy hh:nn:ss' ) ;
+      end;
     finally
       Linhas.Free ;
     end ;
@@ -2465,25 +2496,17 @@ begin
 end;
 
 function TACBrECFBematech.GetDataMovimento: TDateTime;
-Var RetCmd : AnsiString ;
-    OldShortDateFormat : String ;
+Var
+  RetCmd : AnsiString ;
 begin
    RetCmd := RetornaInfoECF( '27' ) ;
 
    if RetCmd = '000000' then
       Result := DataHora
    else
-    begin
-      OldShortDateFormat := ShortDateFormat ;
-      try
-         ShortDateFormat := 'dd/mm/yy' ;
-         result := StrToDate(copy(RetCmd, 1,2) + DateSeparator +
-                             copy(RetCmd, 3,2) + DateSeparator +
-                             copy(RetCmd, 5,2)) ;
-      finally
-         ShortDateFormat := OldShortDateFormat ;
-      end ;
-    end ;
+      Result := StringToDateTime( copy(RetCmd, 1,2) + DateSeparator +
+                                  copy(RetCmd, 3,2) + DateSeparator +
+                                  copy(RetCmd, 5,2), 'dd/mm/yy' );
 end;
 
 function TACBrECFBematech.GetGrandeTotal: Double;
@@ -2815,349 +2838,163 @@ end;
 
 function TACBrECFBematech.GetDadosUltimaReducaoZ: AnsiString;
 Var
-  RetCmd, S, SS, SSS  : AnsiString ;
-  I, k : Integer ;
-  VBruta, TOPNF, V : Double ;
+  RetCmd, S, SS : AnsiString ;
+  I, P : Integer ;
+  ECFCRZ, ECFCRO : String;
+  AliqZ: TACBrECFAliquota;
+  CNFZ: TACBrECFComprovanteNaoFiscal;
+  RGZ : TACBrECFRelatorioGerencial;
 begin
+  // Zerar variaveis e inicializa Dados do ECF //
+  InitDadosUltimaReducaoZ;
+
+  if not Assigned( fpAliquotas ) then
+    CarregaAliquotas ;
+
+  if not Assigned( fpComprovantesNaoFiscais ) then
+    CarregaComprovantesNaoFiscais ;
 
   if fpMFD then
   begin
-    try
-       BytesResp := 621 ;
-       RetCmd    := BcdToAsc(EnviaComando( #88, 5 )) ;
-    except
-       Result := '' ;
-       exit ;
-    end ;
+
+    // Dados dos Relatorios Gerenciais //
+    if not Assigned( fpRelatoriosGerenciais ) then
+      CarregaRelatoriosGerenciais ;
+
+    BytesResp := 621 ;
+    RetCmd    := BcdToAsc(EnviaComando( #88, 5 )) ;
 
     {ESC 88 Tamanho de Retorno: 621 bytes (BCD), com a seguinte estrutura:
-    Descrição             Bytes         (Digitos BCD)                   0
-    RZautomática se zero indica que a RZ foi emitida por comando 1 (2)  2
-    CRO Contador de Reinício de Operação 2 (4)                          6
-    CRZ Contador de Redução Z 2 (4)                                     10
-    COO Contador de Ordem de Operação 3 (6)                             16
-    GNF Contador Geral de Operações Não Fiscais 3 (6)                   22
-    CCF Contador de Cupom Fiscal 3 (6)                                  28
-    GRG Contador Geral de Relatório Gerencial 3 (6)                     34
-    CFD Contador de Fita Detalhe Emitida 3 (6)                          40
-    NFC Contador de Operação Não Fiscal Cancelada 2 (4)                 44
-    CFC Contador de Cupom Fiscal Cancelado 2 (4)                        48
-    CON[30] Contadores Específicos de Operações não Fiscais 30x2 (30x4) 168
-    CER[30] Contadores Específicos de Relatórios Gerenciais 30x2 (30x4) 288
-    CDC Contador de Comprovantes de Débito ou Crédito 2 (4)             292
-    NCN Contador de Débito ou Crédito não Emitidos 2 (4)                296
-    CCDC Contador de Débito ou Crédito Cancelados 2 (4)                 300
-    GT Totalizador Geral 9 (18)                                         318
-    TP[16] Totalizadores Parciais Tributados 16x7 (16x14)               542
-    I I Totalizador de Isenção de ICMS 7 (14)                           556
-    NN Totalizador de Não Incidência de ICMS 7 (14)                     570
-    FF Totalizador de Substituição Tributária de ICMS 7 (14)            584
-    SI Totalizador de Isenção de ISSQN 7 (14)                           598
-    SN Totalizador de Não Incidência de ISSQN 7 (14)                    612
-    SF Totalizador de Substituição Tributária de ISSQN 7 (14)           626
-    Totalizador de Desconto em ICMS 7 (14)                              640
-    Totalizador de Desconto em ISSQN 7 (14)                             654
-    Totalizador de Acrécimo em ICMS 7 (14)                              668
-    Totalizador de Acrécimo em ISSQN 7 (14)                             682
-    Totalizador de Cancelamentos em ICMS 7 (14)                         696
-    Totalizador de Cancelamentos em ISSQN 7 (14)                        710
-    TPNS Totalizadores Parciais Não sujeitos ao ICMS 28x7 (28x14)       1102
-    Sangria Totalizador de Sangria 7 (14)                               1116
-    Suprimento Totalizador de Suprimento 7 (14)                         1130
-    Totalizador de Cancelamentos de Não Fiscais 7 (14)                  1144
-    Totalizador de Descontos de Não Fiscais 7 (14)                      1158
-    Totalizador de Acrécimos de Não Fiscais 7 (14)                      1172
-    Alíquotas Tributadas 16x2 (16x4)                                    1236
+    Descrição             Bytes         (Digitos BCD)
+    RZautomática se zero indica que a RZ foi emitida por comando 1 (2)  1   ,  2
+    CRO Contador de Reinício de Operação 2 (4)                          3   ,  6
+    CRZ Contador de Redução Z 2 (4)                                     7   , 10
+    COO Contador de Ordem de Operação 3 (6)                             11  , 16
+    GNF Contador Geral de Operações Não Fiscais 3 (6)                   17  , 22
+    CCF Contador de Cupom Fiscal 3 (6)                                  23  , 28
+    GRG Contador Geral de Relatório Gerencial 3 (6)                     29  , 34
+    CFD Contador de Fita Detalhe Emitida 3 (6)                          35  , 40
+    NFC Contador de Operação Não Fiscal Cancelada 2 (4)                 41  , 44
+    CFC Contador de Cupom Fiscal Cancelado 2 (4)                        45  , 48
+    CON[30] Contadores Específicos de Operações não Fiscais 30x2 (30x4) 49  ,168
+    CER[30] Contadores Específicos de Relatórios Gerenciais 30x2 (30x4) 169 ,288
+    CDC Contador de Comprovantes de Débito ou Crédito 2 (4)             289 ,292
+    NCN Contador de Débito ou Crédito não Emitidos 2 (4)                293 ,296
+    CCDC Contador de Débito ou Crédito Cancelados 2 (4)                 297 ,300
+    GT Totalizador Geral 9 (18)                                         301 ,318
+    TP[16] Totalizadores Parciais Tributados 16x7 (16x14)               319 ,542
+    I I Totalizador de Isenção de ICMS 7 (14)                           543 ,556
+    NN Totalizador de Não Incidência de ICMS 7 (14)                     557 ,570
+    FF Totalizador de Substituição Tributária de ICMS 7 (14)            571 ,584
+    SI Totalizador de Isenção de ISSQN 7 (14)                           585 ,598
+    SN Totalizador de Não Incidência de ISSQN 7 (14)                    599 ,612
+    SF Totalizador de Substituição Tributária de ISSQN 7 (14)           613 ,626
+    Totalizador de Desconto em ICMS 7 (14)                              627 ,640
+    Totalizador de Desconto em ISSQN 7 (14)                             641 ,654
+    Totalizador de Acrécimo em ICMS 7 (14)                              655 ,668
+    Totalizador de Acrécimo em ISSQN 7 (14)                             669 ,682
+    Totalizador de Cancelamentos em ICMS 7 (14)                         683 ,696
+    Totalizador de Cancelamentos em ISSQN 7 (14)                        697 ,710
+    TPNS Totalizadores Parciais Não sujeitos ao ICMS 28x7 (28x14)       711 ,1102
+    Sangria Totalizador de Sangria 7 (14)                               1103,1116
+    Suprimento Totalizador de Suprimento 7 (14)                         1117,1130
+    Totalizador de Cancelamentos de Não Fiscais 7 (14)                  1131,1144
+    Totalizador de Descontos de Não Fiscais 7 (14)                      1145,1158
+    Totalizador de Acrécimos de Não Fiscais 7 (14)                      1159,1172
+    Alíquotas Tributadas 16x2 (16x4)                                    1173,1236
+    Data do Movimento 3     (6)                                         1237,1242}
 
-    Data do Movimento 3     (6)                                         1242}
+    { Alimenta a class com os dados atuais do ECF }
+    with fpDadosReducaoZClass do
+    begin
+      DataDoMovimento := StringToDateTimeDef( copy(RetCmd,1237,2) + DateSeparator +
+                                           copy(RetCmd,1239,2) + DateSeparator +
+                                              copy(RetCmd,1241,2), 0, 'dd/mm/yy' );
 
-    Result := '[ECF]'+sLineBreak ;
-    try
-       Result := Result + 'DataMovimento = ' +
-                 copy(RetCmd,1237,2)+DateSeparator+
-                 copy(RetCmd,1239,2)+DateSeparator+
-                 copy(RetCmd,1241,2)+sLineBreak ;
-    except
+      CRO  := StrToIntDef( copy(RetCmd,  3,4), 0) ;
+      CRZ  := StrToIntDef( copy(RetCmd,  7,4), 0) ;
+      COO  := StrToIntDef( copy(RetCmd, 11,6), 0) ;
+      GNF  := StrToIntDef( copy(RetCmd, 17,6), 0) ;
+      CCF  := StrToIntDef( copy(RetCmd, 23,6), 0) ;
+      GRG  := StrToIntDef( copy(RetCmd, 29,6), 0) ;
+      CFD  := StrToIntDef( copy(RetCmd, 35,6), 0) ;
+      GNFC := StrToIntDef( copy(RetCmd, 41,4), 0) ;
+      CFC  := StrToIntDef( copy(RetCmd, 45,4), 0) ;
+      GNF  := StrToIntDef( copy(RetCmd, 17,6), 0) ;
+      CDC  := StrToIntDef( copy(RetCmd,289,4), 0) ;
+      NCN  := StrToIntDef( copy(RetCmd,293,4), 0) ;
+      CCDC := StrToIntDef( copy(RetCmd,297,4), 0) ;
+
+      ValorGrandeTotal := RoundTo( StrToFloatDef( copy(RetCmd,301,18),0) / 100, -2) ;
+      IsentoICMS := RoundTo( StrToFloatDef( copy(RetCmd,543,14),0) / 100, -2) ;
+      NaoTributadoICMS := RoundTo( StrToFloatDef( copy(RetCmd,557,14),0) / 100, -2) ;
+      SubstituicaoTributariaICMS := RoundTo( StrToFloatDef( copy(RetCmd,571,14),0) / 100, -2) ;
+      IsentoISSQN := RoundTo( StrToFloatDef( copy(RetCmd,585,14),0) / 100, -2) ;
+      NaoTributadoISSQN := RoundTo( StrToFloatDef( copy(RetCmd,599,14),0) / 100, -2) ;
+      SubstituicaoTributariaISSQN := RoundTo( StrToFloatDef( copy(RetCmd,613,14),0) / 100, -2) ;
+      DescontoICMS := RoundTo( StrToFloatDef( copy(RetCmd,627,14),0) / 100, -2)  ;
+      DescontoISSQN := RoundTo( StrToFloatDef( copy(RetCmd,641,14),0) / 100, -2)  ;
+      AcrescimoICMS  := RoundTo( StrToFloatDef( copy(RetCmd,655,14),0) / 100, -2) ;
+      AcrescimoISSQN := RoundTo( StrToFloatDef( copy(RetCmd,669,14),0) / 100, -2);
+      CancelamentoICMS := RoundTo( StrToFloatDef( copy(RetCmd,683,14),0) / 100, -2)  ;
+      CancelamentoISSQN := RoundTo( StrToFloatDef( copy(RetCmd,697,14),0) / 100, -2)  ;
+      DescontoOPNF := RoundTo( StrToFloatDef( copy(RetCmd,1131,14),0) / 100, -2)  ;
+      AcrescimoOPNF := RoundTo( StrToFloatDef( copy(RetCmd,1145,14),0) / 100, -2)  ;
+      CancelamentoOPNF := RoundTo( StrToFloatDef( copy(RetCmd,1159,14),0) / 100, -2) ;
+
+      // Dados das Aliquotas //
+      S := copy(RetCmd,319,224) ; // TP[16] * 14 Totalizadores Parciais Tributados
+      For I := 0 to fpAliquotas.Count-1 do
+      begin
+        AliqZ := TACBrECFAliquota.Create ;
+        AliqZ.Assign( fpAliquotas[I] );
+        AliqZ.Total := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2);
+
+        AdicionaAliquota( AliqZ );
+      end ;
+
+      // Dados dos Comprovantes não Fiscais //
+      S :=  copy(RetCmd,1103,28) +  // Sangria(14) + Suprimento(14)
+            copy(RetCmd,739,364) ;  // Não ICMS  (392)  28 * 14 (2 primeiros vem vazios ??)
+      SS := copy(RetCmd,161,8)   +  // Contadores: Sangria(4) + Suprimento(4)
+            copy(RetCmd,57,104);    // Não ICMS(112) 28 * 4  (2 primeiros vem vazios ??)
+
+      for I := 0 to fpComprovantesNaoFiscais.Count - 1 do
+      begin
+        CNFZ := TACBrECFComprovanteNaoFiscal.Create ;
+        CNFZ.Assign( fpComprovantesNaoFiscais[I] );
+        P := StrToIntDef(CNFZ.Indice,I+1)-1;
+        CNFZ.Total    := RoundTo( StrToFloatDef( copy(S,(P*14)+1,14),0) / 100, -2) ;
+        CNFZ.Contador := StrToIntDef( copy(SS,(P*4)+1,4), 0);
+
+        TotalizadoresNaoFiscais.Add( CNFZ ) ;
+      end;
+
+      S := copy(RetCmd,169,120) ; // 30 * 4
+      For I := 0 to fpRelatoriosGerenciais.Count-1 do
+      begin
+        RGZ := TACBrECFRelatorioGerencial.Create ;
+        RGZ.Assign( fpRelatoriosGerenciais[I] );
+        RGZ.Contador := StrToIntDef(copy(S,(I*4)+1,4), 0) ;
+
+        RelatorioGerencial.Add( RGZ ) ;
+      end ;
+
+      CalculaValoresVirtuais;
+      Result := MontaDadosReducaoZ;
     end ;
-
-
-    try
-       Result := Result + 'NumSerie = ' + NumSerie + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumSerieMFD = ' + NumSerieMFD + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumECF = ' + NumECF + sLineBreak ;
-       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'RZAut = ' + copy(RetCmd,1,2) + sLineBreak ; //Indica se a RZ foi automática (01) ou manual (00)
-    except
-    end ;
-
-
-    try
-       Result := Result + 'NumCOO = ' + copy(RetCmd,11,6) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCRZ = ' + copy(RetCmd,7,4) + sLineBreak ;
-       //Result := Result + 'NumCRZ = ' + NumCRZ + sLineBreak ; //comentado para se utilizar o retorno da impressora.
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCRO = ' + copy(RetCmd,3,4) + sLineBreak ;
-       //Result := Result + 'NumCRO = ' + NumCRO + sLineBreak ; //comentado para se utilizar o retorno da impressora.
-    except
-    end ;
-
-    try
-       Result := Result + 'NumGNF = ' + copy(RetCmd,17,6) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCCF = ' + copy(RetCmd,23,6) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCFD = ' + copy(RetCmd,35,6) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCDC = ' + copy(RetCmd,289,4) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumGRG = ' + copy(RetCmd,29,6) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumNFC = ' + copy(RetCmd,41,4) + sLineBreak ;  //NumNFC é nomeado conforme o Manual da Bematech
-       Result := Result + 'NumGNFC = ' + copy(RetCmd,41,4) + sLineBreak ; //NumGNFC foi adicionado para manter padrão com o método MontaDadosReducaoZ usado para Carregar os dados para DadosReducaoZ
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCFC = ' + copy(RetCmd,45,4) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumNCN = ' + copy(RetCmd,293,4) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'NumCCDC = ' + copy(RetCmd,297,4) + sLineBreak ;
-    except
-    end ;
-
-    VBruta := 0 ;
-    TOPNF  := 0 ;
-
-    try
-       Result := Result + sLineBreak + '[Aliquotas]'+sLineBreak ;
-
-       if not Assigned( fpAliquotas ) then
-          CarregaAliquotas ;
-
-       S := copy(RetCmd,319,224) ; // TP[16] Totalizadores Parciais Tributados
-       SS := copy(RetCmd,1173,64) ; // Alíquotas Tributadas
-       For I := 0 to Aliquotas.Count-1 do
-       begin
-          V := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2) ;
-          Result := Result + padL(Aliquotas[I].Indice,2) +
-                             Aliquotas[I].Tipo +
-                             //IntToStrZero(Trunc(Aliquotas[I].Aliquota*100),4) + ' = '+ //comentado para se utilizar o retorno da impressora.
-                             copy(SS,(I*4)+1,4) + ' = '+    //idêntico ao código acima, mas usando o retorno da impressora
-                             FloatToStr( V ) + sLineBreak ;
-          VBruta := VBruta + V ;
-       end ;
-    except
-    end ;
-
-    try
-       Result := Result + sLineBreak + '[OutrasICMS]'+sLineBreak ;
-       V := RoundTo( StrToFloatDef( copy(RetCmd,571,14),0) / 100, -2) ;
-       Result := Result + 'TotalSubstituicaoTributaria = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,557,14),0) / 100, -2) ;
-       Result := Result + 'TotalNaoTributado = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,543,14),0) / 100, -2) ;
-       Result := Result + 'TotalIsencao = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,613,14),0) / 100, -2) ;
-       Result := Result + 'TotalSubstituicaoTributariaISSQN = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,599,14),0) / 100, -2) ;
-       Result := Result + 'TotalNaoTributadoISSQN = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,585,14),0) / 100, -2) ;
-       Result := Result + 'TotalIsencaoISSQN = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + sLineBreak + '[NaoFiscais]'+sLineBreak ;
-
-       if not Assigned( fpComprovantesNaoFiscais ) then
-          CarregaComprovantesNaoFiscais ;
-
-       S := copy(RetCmd,1103,14) + copy(RetCmd,1117,14) + copy(RetCmd,711,392) ;//Sangria + Suprimento + Não ICMS  (14+14+392)
-       //SS := copy(RetCmd,49,120); // O Retorno natural poe Sangria e Suprimento no final, mas o retorno da função ComprovantesNaoFiscais coloca Sangria e Suprimento no início...
-       SS := copy(RetCmd,161,8) + copy(RetCmd,49,112); //Passando sangria e Suprimento para o início
-       SSS := '[ContadoresOPNF]' + sLineBreak ;
-       For I := 0 to min(ComprovantesNaoFiscais.Count-1,30) do
-       begin
-          //Fora Sangria e Suprimento, pegar o resto de acordo com o índice, pois
-          //pode acontecer de o primeiro Totalizador Não Fiscal ser o de índice 03. :S
-          if (I > 1) and (I <> StrToInt(ComprovantesNaoFiscais[I].Indice))  then
-             K := StrToInt(ComprovantesNaoFiscais[I].Indice) + 1
-          else
-             K := I;
-
-          V := RoundTo( StrToFloatDef( copy(S,(K*14)+1,14),0) / 100, -2) ;
-
-          Result := Result + padL(ComprovantesNaoFiscais[I].Indice,2) + '_' +
-                             ComprovantesNaoFiscais[I].Descricao +' = '+
-                             FloatToStr(V) + sLineBreak ;
-          SSS := SSS + 'CON_' + ComprovantesNaoFiscais[I].Descricao +' = '+
-                              copy(SS,(K*4)+1,4)+ sLineBreak ;
-
-          TOPNF := TOPNF + V ;
-       end ;
-    except
-    end ;
-    Result := Result + sLineBreak + SSS + sLineBreak ;
-
-    Result := Result + sLineBreak + '[Totalizadores]'+sLineBreak;
-
-    try
-       Result := Result + 'GrandeTotal = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,301,18),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,627,14),0) / 100, -2)  ;
-       Result := Result + 'TotalDescontos = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,683,14),0) / 100, -2)  ;
-       Result := Result + 'TotalCancelamentos = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalAcrescimos = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,655,14),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,641,14),0) / 100, -2)  ;
-       Result := Result + 'TotalDescontosISSQN = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,697,14),0) / 100, -2)  ;
-       Result := Result + 'TotalCancelamentosISSQN = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalAcrescimosISSQN = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,669,14),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalNaoFiscal = ' + FloatToStr(TOPNF) + sLineBreak ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,1131,14),0) / 100, -2)  ;
-       Result := Result + 'TotalDescontosOPNF = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalCancelamentosOPNF = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,1159,14),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,1145,14),0) / 100, -2)  ;
-       Result := Result + 'TotalAcrescimosOPNF = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + 'VendaBruta = ' + FloatToStr(VBruta) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + sLineBreak + '[RelatoriosGerenciais]'+sLineBreak;
-
-       if not Assigned( fpRelatoriosGerenciais ) then
-          CarregaRelatoriosGerenciais ;
-
-       S := copy(RetCmd,169,120) ; // 30 * 4
-
-       For I := 0 to min(RelatoriosGerenciais.Count-1,30) do
-       begin
-          Result := Result + padL(RelatoriosGerenciais[I].Indice,2) + '_' +
-                             RelatoriosGerenciais[I].Descricao +' = '+
-                             copy(S,(I*4)+1,4) + sLineBreak ;
-       end ;
-    except
-    end ;
-
 
   end
   else //Não é impressora MFD
   begin
-    try
-       BytesResp := 308 ;
-       RetCmd    := BcdToAsc(EnviaComando( #62 + #55, 5 )) ;
-    except
-       Result := '' ;
-       exit ;
-    end ;
+    with TACBrECF(fpOwner) do
+    begin
+      ECFCRZ := NumCRZ;
+      ECFCRO := NumCRO;
+    end;
+
+    BytesResp := 308 ;
+    RetCmd    := BcdToAsc(EnviaComando( #62 + #55, 5 )) ;
 
   { ESC 62 55 - Tamanho de Retorno 616 dígitos BCD (308 bytes),
                 com a seguinte estrutura.
@@ -3183,143 +3020,50 @@ begin
   ....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+....2....+....3....+....4....+....5....+....6....+....7....+....8....+....9....+....0....+....1....+.
   }
 
-    Result := '[ECF]'+sLineBreak ;
-    try
-       Result := Result + 'DataMovimento = ' +
-                 copy(RetCmd,583,2)+DateSeparator+
-                 copy(RetCmd,585,2)+DateSeparator+
-                 copy(RetCmd,587,2)+sLineBreak ;
-    except
-    end ;
+    { Alimenta a class com os dados atuais do ECF }
+    with fpDadosReducaoZClass do
+    begin
+      DataDoMovimento := StringToDateTime( copy(RetCmd,583,2) + DateSeparator +
+                                           copy(RetCmd,585,2) + DateSeparator +
+                                           copy(RetCmd,587,2), 'dd/mm/yy' );
 
-    try
-       Result := Result + 'NumSerie = ' + NumSerie + sLineBreak ;
-    except
-    end ;
+      CRO  := StrToIntDef( ECFCRO, 0) ;
+      CRZ  := StrToIntDef( ECFCRZ, 0) ;
+      COO  := StrToIntDef( copy(RetCmd,569,6), 0) ;
 
-    try
-       Result := Result + 'NumSerieMFD = ' + NumSerieMFD + sLineBreak ;
-    except
-    end ;
+      SubstituicaoTributariaICMS := RoundTo( StrToFloatDef( copy(RetCmd,365,14),0) / 100, -2) ;
+      NaoTributadoICMS := RoundTo( StrToFloatDef( copy(RetCmd,351,14),0) / 100, -2) ;
+      IsentoICMS := RoundTo( StrToFloatDef( copy(RetCmd,337,14),0) / 100, -2) ;
+      DescontoICMS := RoundTo( StrToFloatDef( copy(RetCmd,35,14),0) / 100, -2) ;
+      CancelamentoICMS := RoundTo( StrToFloatDef( copy(RetCmd,21,14),0) / 100, -2) ;
+      AcrescimoICMS := RoundTo( StrToFloatDef( copy(RetCmd,589,14),0) / 100, -2) ;
+      ValorGrandeTotal := RoundTo( StrToFloatDef( copy(RetCmd,3,18),0) / 100, -2);
 
-    try
-       Result := Result + 'NumECF = ' + NumECF + sLineBreak ;
-       Result := Result + 'NumLoja = ' + NumLoja + sLineBreak ;
-    except
-    end ;
+      // Dados das Aliquotas //
+      S := copy(RetCmd,113,224);   // 16 * 14
+      For I := 0 to fpAliquotas.Count-1 do
+      begin
+        AliqZ := TACBrECFAliquota.Create ;
+        AliqZ.Assign( fpAliquotas[I] );
+        AliqZ.Total := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2) ;
 
-    try
-       Result := Result + 'NumCOO = ' + copy(RetCmd,569,6) + sLineBreak ;
-    except
-    end ;
+        AdicionaAliquota( AliqZ );
+      end ;
 
-    try
-       Result := Result + 'NumCRZ = ' + NumCRZ + sLineBreak ;
-    except
-    end ;
+      S := copy(RetCmd,379,154) ;//Começa na posição 379 para pegar os dados da Sangria e Suprimento, deveria então ter tamanho (14+14+126)
+      for I := 0 to fpComprovantesNaoFiscais.Count - 1 do
+      begin
+        CNFZ := TACBrECFComprovanteNaoFiscal.Create ;
+        CNFZ.Assign( fpComprovantesNaoFiscais[I] );
+        CNFZ.Total := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2) ;
 
-    try
-       Result := Result + 'NumCRO = ' + NumCRO + sLineBreak ;
-    except
-    end ;
+        TotalizadoresNaoFiscais.Add( CNFZ ) ;
+      end;
 
-    VBruta := 0 ;
-    TOPNF  := 0 ;
-
-    try
-       Result := Result + sLineBreak + '[Aliquotas]'+sLineBreak ;
-
-       if not Assigned( fpAliquotas ) then
-          CarregaAliquotas ;
-
-       S := copy(RetCmd,113,224) ;
-       For I := 0 to Aliquotas.Count-1 do
-       begin
-          V := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2) ;
-          Result := Result + padL(Aliquotas[I].Indice,2) +
-                             Aliquotas[I].Tipo +
-                             IntToStrZero(Trunc(Aliquotas[I].Aliquota*100),4) + ' = '+
-                             FloatToStr( V ) + sLineBreak ;
-          VBruta := VBruta + V ;
-       end ;
-    except
-    end ;
-
-    try
-       Result := Result + sLineBreak + '[OutrasICMS]'+sLineBreak ;
-       V := RoundTo( StrToFloatDef( copy(RetCmd,365,14),0) / 100, -2) ;
-       Result := Result + 'TotalSubstituicaoTributaria = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,351,14),0) / 100, -2) ;
-       Result := Result + 'TotalNaoTributado = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-
-       V := RoundTo( StrToFloatDef( copy(RetCmd,337,14),0) / 100, -2) ;
-       Result := Result + 'TotalIsencao = ' + FloatToStr(V) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + sLineBreak + '[NaoFiscais]'+sLineBreak ;
-
-       if not Assigned( fpComprovantesNaoFiscais ) then
-          CarregaComprovantesNaoFiscais ;
-
-       S := copy(RetCmd,379,154) ;//Começa na posição 379 para pegar os dados da Sangria e Suprimento, deveria então ter tamanho (14+14+126)
-
-       For I := 0 to min(ComprovantesNaoFiscais.Count-1,11) do
-       begin
-          V := RoundTo( StrToFloatDef( copy(S,(I*14)+1,14),0) / 100, -2) ;
-          Result := Result + padL(ComprovantesNaoFiscais[I].Indice,2) + '_' +
-                             ComprovantesNaoFiscais[I].Descricao +' = '+
-                             FloatToStr(V) + sLineBreak ;
-          TOPNF := TOPNF + V ;
-       end ;
-    except
-    end ;
-
-    Result := Result + sLineBreak + '[Totalizadores]'+sLineBreak;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,35,14),0) / 100, -2)  ;
-       Result := Result + 'TotalDescontos = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       V := RoundTo( StrToFloatDef( copy(RetCmd,21,14),0) / 100, -2)  ;
-       Result := Result + 'TotalCancelamentos = ' + FloatToStr( V ) + sLineBreak ;
-       VBruta := VBruta + V ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalAcrescimos = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,589,14),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'TotalNaoFiscal = ' + FloatToStr(TOPNF) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'VendaBruta = ' + FloatToStr(VBruta) + sLineBreak ;
-    except
-    end ;
-
-    try
-       Result := Result + 'GrandeTotal = ' + FloatToStr(
-           RoundTo( StrToFloatDef( copy(RetCmd,3,18),0) / 100, -2) )  + sLineBreak ;
-    except
-    end ;
-
+      CalculaValoresVirtuais;
+      Result := MontaDadosReducaoZ;
+    end;
   end;
-  Result := Result + sLineBreak + RetCmd;
 end;
 
 procedure TACBrECFBematech.CortaPapel(const CorteParcial: Boolean);
@@ -3496,40 +3240,60 @@ procedure TACBrECFBematech.LoadDLLFunctions;
    end ;
  end ;
 begin
+   if fsEnviaPorDLL and Ativo then exit; // Já fez a leitura
+
    BematechFunctionDetect( 'Bematech_FI_AbrePortaSerial',@xBematech_FI_AbrePortaSerial );
    BematechFunctionDetect( 'Bematech_FI_FechaPortaSerial',@xBematech_FI_FechaPortaSerial );
    BematechFunctionDetect( 'Bematech_FI_ArquivoMFD',@xBematech_FI_ArquivoMFD );
    BematechFunctionDetect( 'Bematech_FI_EspelhoMFD',@xBematech_FI_EspelhoMFD );
    BematechFunctionDetect( 'Bematech_FI_GeraRegistrosCAT52MFD',@xBematech_FI_GeraRegistrosCAT52MFD );
    BematechFunctionDetect( 'Bematech_FI_DownloadMFD',@xBematech_FI_DownloadMFD );
+
+   if fpDevice.IsDLLPort then
+   begin
+     BematechFunctionDetect( 'Bematech_FI_EnviaComando',@xBematech_FI_EnviaComando );
+     BematechFunctionDetect( 'Bematech_FI_LeituraRetorno',@xBematech_FI_LeituraRetorno );
+   end;
 end;
 
-procedure TACBrECFBematech.AbrePortaSerialDLL(const Porta, Path : String ) ;
+procedure TACBrECFBematech.AbrePortaSerialDLL(const aPath: String);
 Var
   Resp : Integer ;
-  IniFile : String ;
+  aPorta, IniFile : String ;
 
-  procedure ConfiguraBemaFI32ini(const Porta, Path : String ) ;
+  procedure ConfiguraBemaFI32ini(const aPorta, aPath : String ) ;
   var
     Ini : TIniFile ;
   begin
+    GravaLog( '   Verificando arquivo: '+IniFile+', Porta:'+aPorta+', Path:'+aPath );
+
     Ini := TIniFile.Create( IniFile );
     try
-       Ini.WriteString('Sistema','Porta',Porta ) ;
-       Ini.WriteString('Sistema','Path',Path ) ;
+       Ini.WriteString('Sistema','Porta',aPorta ) ;
+       if aPath <> '' then
+          Ini.WriteString('Sistema','Path',aPath ) ;
     finally
        Ini.Free ;
     end ;
   end;
 
 begin
-  Ativo := False;
-  Sleep( 300 ) ;
+  aPorta := fpDevice.Porta;
+
+  if not fsEnviaPorDLL then
+  begin
+     GravaLog( '   Desativando ACBrECF' );
+     Ativo := False ;
+     Sleep( 300 ) ;
+  end;
 
   IniFile := ExtractFilePath( ParamStr(0) )+'BemaFi32.INI' ;
   if FileExists( IniFile ) then
-     ConfiguraBemaFI32ini(Porta, Path);
+     ConfiguraBemaFI32ini(aPorta, aPath);
 
+  if fsEnviaPorDLL and Ativo then exit;
+
+  GravaLog( '   xBematech_FI_AbrePortaSerial' );
   Resp := xBematech_FI_AbrePortaSerial();
 {
   1: OK.
@@ -3538,22 +3302,41 @@ begin
 }
   if Resp = -4 then
   begin
-     ConfiguraBemaFI32ini( Porta, Path ) ;
+     GravaLog( '      Erro = -4' );
+     ConfiguraBemaFI32ini( aPorta, aPath ) ;
+     GravaLog( '   xBematech_FI_AbrePortaSerial' );
      Resp := xBematech_FI_AbrePortaSerial();
   end ;
 
   if Resp = -5 then
   begin
-     ConfiguraBemaFI32ini( 'Default', Path ) ;
+     GravaLog( '      Erro = -5' );
+     ConfiguraBemaFI32ini( 'Default', aPath ) ;
+     GravaLog( '   xBematech_FI_AbrePortaSerial' );
      Resp := xBematech_FI_AbrePortaSerial();
   end ;
 
   if Resp <> 1 then
      raise EACBrECFErro.Create( ACBrStr('Erro em Bematech_FI_AbrePortaSerial'+sLineBreak+
-                             AnalisarRetornoDll(Resp) ));
+                                AnalisarRetornoDll(Resp) ));
 end ;
 
-{$ENDIF}
+procedure TACBrECFBematech.FechaPortaSerialDLL(const OldAtivo: Boolean);
+Var
+  Resp: Integer;
+begin
+  if fsEnviaPorDLL and OldAtivo then exit;
+
+  GravaLog( '   xBematech_FI_FechaPortaSerial' ) ;
+  Resp := xBematech_FI_FechaPortaSerial ;
+  if Resp <> 1 then
+     raise EACBrECFErro.Create( ACBrStr( 'Erro ao executar xBematech_FI_FechaPortaSerial.'+sLineBreak+
+                                AnalisarRetornoDll(Resp) )) ;
+
+  GravaLog( '   Ativar ACBr: '+ifthen(OldAtivo,'SIM','NAO') ) ;
+  if OldAtivo then
+     Ativo := OldAtivo;
+end;
 
 function TACBrECFBematech.AnalisarRetornoDll(const ARetorno: Integer): String;
 begin
@@ -3583,6 +3366,39 @@ begin
 
   Result := 'Cod.: '+IntToStr(ARetorno) + ifthen(Result='','',' - ') + Result;
 end;
+
+procedure TACBrECFBematech.EnviaStringDLL(const cmd: AnsiString);
+var
+   LenCMD, Resp: Integer;
+begin
+  LenCMD := Length(cmd);
+  GravaLog( '   xBematech_FI_EnviaComando -> '+IntToStr(LenCMD)+' bytes' );
+  Resp := xBematech_FI_EnviaComando( cmd, Length(cmd) );
+  if Resp <> 1 then
+     raise EACBrECFTimeOut.Create( ACBrStr( 'Erro ao executar Bematech_FI_EnviaComando.'+sLineBreak+
+                                AnalisarRetornoDll(Resp) )) ;
+end;
+
+procedure TACBrECFBematech.LeStringDLL(const NumBytes, ATimeOut: Integer;
+   var Retorno: AnsiString);
+Var
+  Resp: Integer;
+  Ret : AnsiString;
+begin
+  //ATimeOut não é usado
+  Ret  := StringOfChar( #0, NumBytes + 1 );
+
+  GravaLog( '   xBematech_FI_LeituraRetorno, '+IntToStr(NumBytes)+' bytes' );
+  Resp := xBematech_FI_LeituraRetorno( Ret, NumBytes );
+  Retorno := IfThen(Resp = 1, LeftStr(Ret,NumBytes), '') ;
+
+  GravaLog( '      Resp:'+IntToStr(Resp)+ ' Retorno:'+Retorno, True );
+  if Resp <> 1 then
+     raise EACBrECFTimeOut.Create( ACBrStr( 'Erro ao executar Bematech_FI_LeituraRetorno.'+sLineBreak+
+                                   AnalisarRetornoDll(Resp) )) ;
+end;
+
+{$ENDIF}
 
 procedure TACBrECFBematech.EspelhoMFD_DLL(DataInicial,
   DataFinal: TDateTime; NomeArquivo: AnsiString;
@@ -3632,7 +3448,7 @@ begin
   OldAtivo := Ativo ;
   try
      DeleteFile(NomeArquivo);
-     AbrePortaSerialDLL( fpDevice.Porta, ExtractFilePath( NomeArquivo ) ) ;
+     AbrePortaSerialDLL( ExtractFilePath( NomeArquivo ) ) ;
 
      Resp := xBematech_FI_EspelhoMFD( NomeArquivo, DiaIni, DiaFim, 'D',
                                       Prop, cChavePublica, cChavePrivada );
@@ -3645,8 +3461,7 @@ begin
         raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
-     xBematech_FI_FechaPortaSerial();
-     Ativo := OldAtivo ;
+     FechaPortaSerialDLL( OldAtivo );
   end;
  {$ENDIF}
 end;
@@ -3695,7 +3510,7 @@ begin
   OldAtivo := Ativo ;
   try
      DeleteFile(NomeArquivo);
-     AbrePortaSerialDLL( fpDevice.Porta, ExtractFilePath( NomeArquivo ) ) ;
+     AbrePortaSerialDLL( ExtractFilePath( NomeArquivo ) ) ;
 
      Resp := xBematech_FI_EspelhoMFD( NomeArquivo, CooIni, CooFim, 'C',
                                       Prop, cChavePublica, cChavePrivada );
@@ -3708,14 +3523,13 @@ begin
         raise EACBrECFErro.Create( ACBrStr( 'Erro na execução de Bematech_FI_EspelhoMFD.'+sLineBreak+
                                 'Arquivo: "'+NomeArquivo + '" não gerado' )) ;
   finally
-     xBematech_FI_FechaPortaSerial();
-     Ativo := OldAtivo ;
+     FechaPortaSerialDLL( OldAtivo );
   end;
  {$ENDIF}
 end;
 
-procedure TACBrECFBematech.PafMF_GerarCAT52(const DataInicial,
-  DataFinal: TDateTime; const DirArquivos: string);
+procedure TACBrECFBematech.PafMF_GerarCAT52(const DataInicial: TDateTime;
+   const DataFinal: TDateTime; const DirArquivos: string);
 var
   Resp: Integer;
   FilePath, DiaIni, DiaFim, NumUsu: AnsiString;
@@ -3743,7 +3557,7 @@ begin
     // gerar arquivos de um arquivo MFD, então baixamos a MFD para o periodo
     // e rodamos um loop com a data gerando o arquivo para cada dia dentro
     // do período
-    AbrePortaSerialDLL( fpDevice.Porta, FilePath ) ;
+    AbrePortaSerialDLL( FilePath ) ;
 
     // fazer primeiro o download da MFD para o período
     Resp := xBematech_FI_DownloadMFD( FileMFD, '1', DiaIni, DiaFim, NumUsu );
@@ -3777,8 +3591,7 @@ begin
     until DataArquivo > DataFinal;
 
   finally
-    xBematech_FI_FechaPortaSerial();
-    Ativo := OldAtivo ;
+    FechaPortaSerialDLL( OldAtivo );
   end;
  {$ENDIF}
 end;
@@ -3789,22 +3602,16 @@ procedure TACBrECFBematech.ArquivoMFD_DLL(DataInicial, DataFinal: TDateTime;
 Var
   Arquivos : TStringList ;
   Resp, Tipo : Integer ;
-  DiaIni, DiaFim, Prop, FileMask, FilePath : AnsiString ;
+  DiaIni, DiaFim, Prop, Prefixo, FileMask, FilePath : AnsiString ;
   OldAtivo : Boolean ;
   {$IFDEF LINUX} Cmd, ArqTmp : String ; {$ENDIF}
 begin
   Prop     := IntToStr( StrToIntDef( UsuarioAtual, 1) ) ;
   FilePath := ExtractFilePath( NomeArquivo );
+  Tipo     := 2;
+  Prefixo  := 'TDM';
 
-  case Finalidade of
-    finMF:  Tipo := 0;
-    finMFD: Tipo := 1;
-    finTDM: Tipo := 2;
-    finRZ:  Tipo := 3;
-    finRFD: Tipo := 4;
-  else
-    Tipo := 2;
-  end;
+  FinalidadeToTipoPrefixo( Finalidade, Tipo, Prefixo );
 
  {$IFDEF LINUX}
   ArqTmp := FilePath +'ACBr.mfd';
@@ -3840,14 +3647,16 @@ begin
 
   DiaIni   := FormatDateTime('dd"/"mm"/"yyyy', DataInicial) ;
   DiaFim   := FormatDateTime('dd"/"mm"/"yyyy', DataFinal) ;
-  FileMask := FilePath + LeftStr(Trim(NumSerie),15) + '*_'+
-              OnlyNumber(DiaIni)+'_'+OnlyNumber(DiaFim)+'.TXT';
+  FileMask := FilePath + Prefixo + Trim(NumSerie) + '_' +
+              FormatDateTime('yyyymmdd',Now ) + '_*.TXT';
 
   Arquivos := TStringList.Create;
   OldAtivo := Ativo ;
   try
-     DeleteFile(NomeArquivo);
-     AbrePortaSerialDLL( fpDevice.Porta, FilePath ) ;
+     DeleteFile( NomeArquivo );
+     DeleteFiles( FileMask );
+
+     AbrePortaSerialDLL( FilePath ) ;
 
      Resp := xBematech_FI_ArquivoMFD( '', DiaIni, DiaFim, 'D', Prop, Tipo,
                                       cChavePublica, cChavePrivada, 1 ) ;
@@ -3865,8 +3674,7 @@ begin
      RenameFile( Arquivos[0], NomeArquivo );
   finally
      Arquivos.Free;
-     xBematech_FI_FechaPortaSerial();
-     Ativo := OldAtivo ;
+     FechaPortaSerialDLL( OldAtivo );
   end;
  {$ENDIF}
 end;
@@ -3877,24 +3685,18 @@ procedure TACBrECFBematech.ArquivoMFD_DLL( ContInicial, ContFinal : Integer;
 Var
   Arquivos : TStringList ;
   Resp, Tipo : Integer ;
-  Prop, COOIni, COOFim, FileMask, FilePath : AnsiString ;
+  Prop, COOIni, COOFim, Prefixo, FileMask, FilePath : AnsiString ;
   OldAtivo : Boolean ;
   {$IFDEF LINUX} Cmd, ArqTmp : String ; {$ENDIF}
 begin
   FilePath := ExtractFilePath( NomeArquivo );
+  Tipo     := 2;
+  Prefixo  := 'TDM';
 
   if TipoContador = tpcCRZ then
     CRZToCOO(ContInicial, ContFinal, ContInicial, ContFinal) ;
 
-  case Finalidade of
-    finMF:  Tipo := 0;
-    finMFD: Tipo := 1;
-    finTDM: Tipo := 2;
-    finRZ:  Tipo := 3;
-    finRFD: Tipo := 4;
-  else
-    Tipo := 2;
-  end;
+  FinalidadeToTipoPrefixo( Finalidade, Tipo, Prefixo );
 
   Prop   := IntToStr( StrToIntDef( UsuarioAtual, 1) ) ;
   COOIni := IntToStrZero( ContInicial, 6 ) ;
@@ -3929,14 +3731,16 @@ begin
  {$ELSE}
   LoadDLLFunctions;
 
-  FileMask := FilePath + LeftStr(Trim(NumSerie),15) + '*_'+
-              COOIni+'_'+COOFim+'.TXT';
+  FileMask := FilePath + Prefixo + Trim(NumSerie) + '_' +
+              FormatDateTime('yyyymmdd',Now ) + '_*.TXT';
 
   Arquivos := TStringList.Create;
   OldAtivo := Ativo ;
   try
-     DeleteFile(NomeArquivo);
-     AbrePortaSerialDLL( fpDevice.Porta, FilePath ) ;
+     DeleteFile( NomeArquivo );
+     DeleteFiles( FileMask );
+
+     AbrePortaSerialDLL( FilePath ) ;
 
      Resp := xBematech_FI_ArquivoMFD( '', COOIni, COOFim, 'C', Prop, Tipo,
                                       cChavePublica, cChavePrivada, 1 ) ;
@@ -3954,8 +3758,7 @@ begin
   finally
      Arquivos.Free;
      //DeleteFile( ArqTmp ) ;
-     xBematech_FI_FechaPortaSerial();
-     Ativo := OldAtivo ;
+     FechaPortaSerialDLL( OldAtivo );
   end;
  {$ENDIF}
 end;
@@ -4017,6 +3820,36 @@ begin
              'CRZ Final: '+IntToStr(ACRZFim)+' - COO: '+IntToStr(ACOOFim) );
   finally
     Retorno.Free;
+  end;
+end;
+
+procedure TACBrECFBematech.FinalidadeToTipoPrefixo(
+   AFinalidade: TACBrECFFinalizaArqMFD; var Tipo: Integer; var Prefixo: AnsiString);
+begin
+  Tipo    := 2;
+  Prefixo := 'TDM';
+
+  case AFinalidade of
+    finMF:
+      begin
+        Prefixo := 'MF' ;
+        Tipo    := 0;
+      end;
+    finMFD:
+      begin
+        Prefixo := 'MFD' ;
+        Tipo    := 1;
+      end;
+    finRZ:
+      begin
+        Prefixo := 'RZ' ;
+        Tipo    := 3;
+      end;
+    finRFD:
+      begin
+        Prefixo := 'RFD' ;
+        Tipo    := 4;
+      end;
   end;
 end;
 

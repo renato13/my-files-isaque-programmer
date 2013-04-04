@@ -183,6 +183,8 @@ function ACBrValidadorValidarIE(const AIE, AUF: AnsiString): String ;
 function ACBrValidadorValidarSuframa( const Documento : AnsiString ) : String ;
 function ACBrValidadorValidarGTIN( const Documento : AnsiString ) : String ;
 
+Function FormatarFone( const AString : String; DDDPadrao: String = '' ): String;
+
 
 function ACBrValidadorValidarDocumento( const TipoDocto : TACBrValTipoDocto;
   const Documento : AnsiString; const Complemento : AnsiString = '') : String ;
@@ -215,6 +217,54 @@ end;
 function ACBrValidadorValidarGTIN( const Documento : AnsiString ) : String ;
 begin
   Result := ACBrValidadorValidarDocumento( docGTIN, Documento );
+end;
+
+function FormatarFone(const AString : String; DDDPadrao: String = '') : String ;
+var
+  AChar : Char;
+  L, I : Integer ;
+  Mascara, FoneNum : String ;
+begin
+  Result    := '';
+  FoneNum   := OnlyNumber( Trim(AString) );
+  L         := Length( FoneNum );
+  if L = 0 then
+    exit ;
+
+  Mascara   := '(##) ####-####' ;
+  DDDPadrao := OnlyNumber( Trim(DDDPadrao) );
+
+  if (DDDPadrao <> '') and
+     ( (L = 8) or (L = 9) ) and
+     (copy( FoneNum, 1, Length(DDDPadrao)) <> DDDPadrao) then  // Numero sem o DDD
+  begin
+    FoneNum := DDDPadrao + FoneNum;
+    L       := Length( FoneNum );
+  end ;
+
+  if  (L < 6) or (L = 9) or (L >= 11) then
+    //9 :   9 dígitos no numero, e sem DDD
+    //11:   2 digitos no DDD e 9 digitos no Fone
+    Mascara := '(##) #########' ;
+
+  I := Length(Mascara);
+  while (I > 0) do
+  begin
+    if (Mascara[ I ] = '#') and (L > 0) then
+    begin
+      AChar := FoneNum[ L ] ;
+      Dec( L );
+    end
+    else
+    begin
+      AChar := Mascara[ I ] ;
+      if AChar = '#' then
+        AChar := ' ';
+    end ;
+
+    Result := AChar + Result;
+    Dec( I ) ;
+  end ;
 end;
 
 function ACBrValidadorValidarCNPJouCPF(const Documento : AnsiString) : String ;

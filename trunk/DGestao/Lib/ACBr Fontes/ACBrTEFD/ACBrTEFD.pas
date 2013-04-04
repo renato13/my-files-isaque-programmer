@@ -48,11 +48,12 @@ uses
   Classes, SysUtils, ACBrTEFDClass, ACBrTEFDAuttar,
   ACBrTEFDDial, ACBrTEFDDisc, ACBrTEFDHiper, ACBrTEFDCliSiTef, ACBrTEFDGpu,
   ACBrTEFDVeSPague, ACBrTEFDBanese, ACBrTEFDGoodCard, ACBrTEFDFoxWin,
-  ACBrTEFDCliDTEF, ACBrTEFDPetroCard, ACBrTEFDCrediShop, ACBrTEFDTicketCar
-  {$IFDEF FPC}
-    ,LResources
-  {$ENDIF}
+  ACBrTEFDCliDTEF, ACBrTEFDPetroCard, ACBrTEFDCrediShop, ACBrTEFDTicketCar,
+  ACBrTEFDConvCard
   {$IFNDEF CONSOLE}
+    {$IFDEF FPC}
+      ,LResources
+    {$ENDIF}
     {$IFDEF MSWINDOWS}
       ,Windows, Messages
     {$ENDIF}
@@ -61,7 +62,7 @@ uses
     {$ELSE}
       ,Forms, Controls
     {$ENDIF}
- {$ENDIF} ;
+  {$ENDIF};
 
 type
 
@@ -138,6 +139,7 @@ type
      fTefPetrocard : TACBrTEFDPetroCard ;
      fTefCrediShop : TACBrTEFDCrediShop ;
      fTefTicketCar : TACBrTEFDTicketCar ;
+     fTefConvCard  : TACBrTEFDConvCard ;     
 
      fEsperaSTS    : Integer;
      fTEFList      : TACBrTEFDClassList ;
@@ -234,7 +236,7 @@ type
      procedure NCN(const Rede, NSU, Finalizacao : String;
         const Valor : Double = 0; const DocumentoVinculado : String = '');
 
-     procedure FinalizarCupom;
+     procedure FinalizarCupom( DesbloquearMouseTecladoNoTermino: Boolean = True);
      procedure CancelarTransacoesPendentes;
      procedure ConfirmarTransacoesPendentes;
      procedure ImprimirTransacoesPendentes;
@@ -287,6 +289,7 @@ type
      property TEFPetrocard : TACBrTEFDPetroCard  read fTefPetrocard ;
      property TEFCrediShop : TACBrTEFDCrediShop  read fTefCrediShop ;
      property TEFTicketCar : TACBrTEFDTicketCar  read fTefTicketCar ;
+     property TEFConvCard : TACBrTEFDConvCard read fTefConvCard ;     
 
      property OnAguardaResp : TACBrTEFDAguardaRespEvent read fOnAguardaResp
         write fOnAguardaResp ;
@@ -520,6 +523,13 @@ begin
    fTefTicketCar.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
   {$ENDIF}
 
+  { Criando Classe CONV CARD }
+  fTefConvCard := TACBrTEFDConvCard.Create(self);
+  fTEFList.Add(fTefConvCard);     // Adicionando "fTefConvCard" na Lista Objetos de Classes de TEF
+  {$IFDEF COMPILER6_UP}
+   fTefConvCard.SetSubComponent(True);   // Ajustando como SubComponente para aparecer no ObjectInspector
+  {$ENDIF}  
+
   GPAtual := gpTefDial;
 end;
 
@@ -635,6 +645,7 @@ begin
     gpPetroCard : fTefClass := fTefPetrocard ;
     gpCrediShop : fTefClass := fTefCrediShop ;
     gpTicketCar : fTefClass := fTefTicketCar ;
+    gpConvCard  : fTefClass := fTefConvCard ;    
   end;
 
   fGPAtual := AValue;
@@ -811,7 +822,7 @@ begin
   if Est <> 'L' then
   begin
      case Est of
-       'V', 'P', 'N' : FinalizarCupom;
+       'V', 'P', 'N' : FinalizarCupom( False );  { False não desbloqueia o MouseTeclado }
        'R', 'G'      : ComandarECF( opeFechaGerencial );
        'C'           : ComandarECF( opeFechaVinculado );
      end;
@@ -926,7 +937,9 @@ begin
                           while SecondsBetween(now,TempoInicio) < 5 do
                           begin
                              Sleep(EsperaSTS) ;
+                             {$IFNDEF CONSOLE}
                              Application.ProcessMessages;
+                             {$ENDIF}
                           end;
 
                           DoExibeMsg( opmRemoverMsgOperador, '' ) ;
@@ -1051,8 +1064,10 @@ begin
                              { Verifica se Mensagem Ficou pelo menos por 5 segundos }
                              while SecondsBetween(now,TempoInicio) < 5 do
                              begin
-                                Sleep(EsperaSTS) ;
+                                Sleep(EsperaSTS);
+                                {$IFNDEF CONSOLE}
                                 Application.ProcessMessages;
+                                {$ENDIF}
                              end;
 
                              DoExibeMsg( opmRemoverMsgOperador, '' ) ;
@@ -1280,7 +1295,7 @@ begin
   end;
 end;
 
-procedure TACBrTEFD.FinalizarCupom;
+procedure TACBrTEFD.FinalizarCupom(DesbloquearMouseTecladoNoTermino: Boolean);
 Var
   I, J, Ordem : Integer;
   Est, EstNaoFiscal  : AnsiChar;
@@ -1288,7 +1303,8 @@ Var
   GrupoFPG    : TACBrTEFDArrayGrupoRespostasPendentes ;
 begin
   ImpressaoOk := False ;
-  fTefClass.GravaLog( 'FinalizarCupom ') ;
+  fTefClass.GravaLog( 'FinalizarCupom'+IfThen(DesbloquearMouseTecladoNoTermino,
+                      ', DesbloquearMouseTecladoNoTermino','') ) ;
 
   try
      while not ImpressaoOk do
@@ -1407,7 +1423,8 @@ begin
               ImpressaoOk := True ;
 
            finally
-              BloquearMouseTeclado( False );
+              if DesbloquearMouseTecladoNoTermino then
+                 BloquearMouseTeclado( False );
            end;
 
         except
@@ -1779,9 +1796,11 @@ begin
 
   if not Tratado then
   begin
+   {$IFNDEF Framework}
    {$IFDEF MSWINDOWS}
      if Assigned( xBlockInput ) then
         xBlockInput( Bloqueia ) ;
+   {$ENDIF}
    {$ENDIF}
   end;
 end;
@@ -1789,15 +1808,18 @@ end;
  procedure TACBrTEFD.LimparTeclado;
  Var
    Tratado : Boolean ;
-{$IFDEF MSWINDOWS}
+   {$IFNDEF CONSOLE}
+     {$IFDEF MSWINDOWS}
      Msg: TMsg;
-{$ENDIF}
+     {$ENDIF}
+   {$ENDIF}
  begin
    Tratado := False ;
 
    if Assigned( fOnLimpaTeclado ) then
       fOnLimpaTeclado( Tratado ) ;
 
+   {$IFNDEF CONSOLE}
    {$IFDEF MSWINDOWS}
     if not Tratado then
     begin
@@ -1807,7 +1829,8 @@ end;
       except
       end
     end;
-   {$ENDIF} ;
+   {$ENDIF}
+   {$ENDIF};
  end;
 
  procedure TACBrTEFD.RestaurarFocoAplicacao ;
@@ -1818,6 +1841,7 @@ end;
    if Assigned( fOnRestauraFocoAplicacao ) then
       fOnRestauraFocoAplicacao( Tratado ) ;
 
+   {$IFNDEF CONSOLE}
    if not Tratado then
    begin
       Application.BringToFront ;
@@ -1833,12 +1857,14 @@ end;
        end;
       {$ENDIF}
    end;
+  {$ENDIF}
  end;
 
-
 {$ifdef FPC}
+{$IFNDEF CONSOLE}
 initialization
    {$I ACBrTEFD.lrs}
+{$endif}
 {$endif}
 
 end.

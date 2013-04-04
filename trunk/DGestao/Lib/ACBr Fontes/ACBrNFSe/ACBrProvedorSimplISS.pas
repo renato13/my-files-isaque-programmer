@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
-  { TACBrProvedorGinfes }
+  { TACBrProvedorSimplISS }
 
  TProvedorSimplISS = class(TProvedorClass)
   protected
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,25 +72,30 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
 
-{ TProvedorGinfes }
+{ TProvedorSimplISS }
 
 constructor TProvedorSimplISS.Create;
 begin
  {----}
 end;
 
-function TProvedorSimplISS.GetConfigCidade(ACodigo,
+function TProvedorSimplISS.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
 begin
  ConfigCidade.VersaoSoap    := '1.1';
  ConfigCidade.CodigoSchemas := 6;
- ConfigCidade.CodigoURLs    := 14;
+ case ACodCidade of
+  3148103: ConfigCidade.CodigoURLs := 1; // Patrocinio/MG
+  3503307: ConfigCidade.CodigoURLs := 2; // Araras/SP
+  3541406: ConfigCidade.CodigoURLs := 3; // Presidente Prudente/SP
+ end;
  ConfigCidade.Prefixo2      := '';
  ConfigCidade.Prefixo3      := '';
  ConfigCidade.Prefixo4      := '';
@@ -106,7 +111,7 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorSimplISS.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorSimplISS.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
@@ -126,25 +131,86 @@ begin
  Result := ConfigSchema;
 end;
 
-function TProvedorSimplISS.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorSimplISS.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
 begin
- ConfigURL.HomNomeCidade         := '';
- ConfigURL.HomRecepcaoLoteRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.HomConsultaLoteRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.HomConsultaNFSeRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.HomConsultaSitLoteRPS := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.HomConsultaNFSe       := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.HomCancelaNFSe        := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+ if ACodCidade = 3503307
+  then begin
+   ConfigURL.HomNomeCidade         := '';
+   ConfigURL.HomRecepcaoLoteRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+   ConfigURL.HomConsultaLoteRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+   ConfigURL.HomConsultaNFSeRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+   ConfigURL.HomConsultaSitLoteRPS := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+   ConfigURL.HomConsultaNFSe       := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+   ConfigURL.HomCancelaNFSe        := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+  end
+  else begin
+   ConfigURL.HomNomeCidade         := '';
+   ConfigURL.HomRecepcaoLoteRPS    := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+   ConfigURL.HomConsultaLoteRPS    := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+   ConfigURL.HomConsultaNFSeRPS    := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+   ConfigURL.HomConsultaSitLoteRPS := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+   ConfigURL.HomConsultaNFSe       := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+   ConfigURL.HomCancelaNFSe        := 'http://187.45.245.217/ws_nfse/nfseservice.svc';
+  end;
 
- ConfigURL.ProNomeCidade         := '';
- ConfigURL.ProRecepcaoLoteRPS    := 'http://200.144.16.82:8080/ws_Homologacao/nfseservice.svc';
- ConfigURL.ProConsultaLoteRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.ProConsultaNFSeRPS    := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.ProConsultaSitLoteRPS := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.ProConsultaNFSe       := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
- ConfigURL.ProCancelaNFSe        := 'http://200.144.16.82:8080/ws_homologacao/nfseservice.svc';
+ case ACodCidade of
+  3148103: begin
+            ConfigURL.ProNomeCidade := 'patrocinio';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+  3503307: begin
+            ConfigURL.ProNomeCidade := 'araras';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://200.144.16.82:8080/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+  3541406: begin
+            ConfigURL.ProNomeCidade := 'presidente_prudente';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+  3549102: begin
+            ConfigURL.ProNomeCidade := 'sao_joao_boa_vista';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+  3549706: begin
+            ConfigURL.ProNomeCidade := 'sao_jose_rio_pardo';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://187.45.245.217/ws_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+  3556404: begin
+            ConfigURL.ProNomeCidade := 'vargem_grande_sul';
+            ConfigURL.ProRecepcaoLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaLoteRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSeRPS    := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaSitLoteRPS := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProConsultaNFSe       := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+            ConfigURL.ProCancelaNFSe        := 'http://187.45.245.217/ws_nfse_' + ConfigURL.ProNomeCidade + '/nfseservice.svc';
+           end;
+ end;
 
  Result := ConfigURL;
 end;
@@ -186,7 +252,7 @@ begin
    acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio>' +
                              '<' + Prefixo3 + 'Pedido ' + NameSpaceDad +
                               '<' + Prefixo4 + 'InfPedidoCancelamento' +
-                                 NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+                                 DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
    acGerar:       Result := '';
  end;
 end;
@@ -230,13 +296,13 @@ var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'LoteRps'+
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' +
                                  NumeroLote + '"', '') + NameSpaceDad +
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -270,7 +336,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador ' + NameSpaceDad +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -301,7 +367,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador ' + NameSpaceDad +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -325,12 +391,12 @@ begin
 end;
 
 function TProvedorSimplISS.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
- DadosMsg := '<' + Prefixo3 + 'IdentificacaoRps>' +
+ DadosMsg := '<' + Prefixo3 + 'IdentificacaoRps ' + NameSpaceDad +
               '<' + Prefixo4 + 'Numero>' +
                 NumeroRps +
               '</' + Prefixo4 + 'Numero>' +
@@ -341,9 +407,9 @@ begin
                 TipoRps +
               '</' + Prefixo4 + 'Tipo>' +
              '</' + Prefixo3 + 'IdentificacaoRps>' +
-             '<' + Prefixo3 + 'Prestador>' +
+             '<' + Prefixo3 + 'Prestador ' + NameSpaceDad +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -364,14 +430,14 @@ begin
 end;
 
 function TProvedorSimplISS.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -388,6 +454,11 @@ begin
                '</' + Prefixo4 + 'InscricaoMunicipal>' +
               '</' + Prefixo3 + 'Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<' + Prefixo3 + 'PeriodoEmissao>' +
                                '<' + Prefixo3 + 'DataInicial>' +
@@ -401,7 +472,7 @@ begin
  Result := TagI + DadosMsg + TagF;
 end;
 
-function TProvedorSimplISS.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorSimplISS.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -446,10 +517,11 @@ end;
 function TProvedorSimplISS.GeraEnvelopeRecepcionarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">' +
-            '<s:Body xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
+                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
+            '<s:Body>' +
              '<RecepcionarLoteRps xmlns="' + URLNS + '">' +
                 DadosMsg +
               '<pParam>' +
@@ -463,7 +535,7 @@ end;
 function TProvedorSimplISS.GeraEnvelopeConsultarSituacaoLoteRPS(
   URLNS: String; CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -481,7 +553,7 @@ end;
 function TProvedorSimplISS.GeraEnvelopeConsultarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -499,7 +571,7 @@ end;
 function TProvedorSimplISS.GeraEnvelopeConsultarNFSeporRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -517,7 +589,7 @@ end;
 function TProvedorSimplISS.GeraEnvelopeConsultarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -535,7 +607,7 @@ end;
 function TProvedorSimplISS.GeraEnvelopeCancelarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -631,10 +703,16 @@ end;
 function TProvedorSimplISS.GeraRetornoNFSe(Prefixo: String;
   RetNFSe: AnsiString; NomeCidade: String): AnsiString;
 begin
- Result := '<?xml version="1.0" encoding="utf-8"?>' +
+ Result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<' + Prefixo + 'CompNfse xmlns="http://www.sistema.com.br/Nfse/arquivos/nfse_3.xsd">' +
              RetNfse +
            '</' + Prefixo + 'CompNfse>';
+end;
+
+function TProvedorSimplISS.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ Result := '';
 end;
 
 end.

@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
-  { TACBrProvedorGinfes }
+  { TACBrProvedorISSIntel }
 
  TProvedorISSIntel = class(TProvedorClass)
   protected
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,42 +72,49 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
 
-{ TProvedorGinfes }
+{ TProvedorISSIntel }
 
 constructor TProvedorISSIntel.Create;
 begin
  {----}
 end;
 
-function TProvedorISSIntel.GetConfigCidade(ACodigo,
+function TProvedorISSIntel.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
 begin
- ConfigCidade.VersaoSoap    := '1.2';
+ ConfigCidade.VersaoSoap    := '1.1';
  ConfigCidade.CodigoSchemas := 1;
  ConfigCidade.Prefixo2      := '';
  ConfigCidade.Prefixo3      := '';
  ConfigCidade.Prefixo4      := '';
  ConfigCidade.Identificador := 'Id';
 
- case ACodigo of
+ case ACodCidade of
+  2925303: begin // Porto Seguro/BA
+            ConfigCidade.CodigoURLs := 1;
+            if AAmbiente = 1
+             then ConfigCidade.NameSpaceEnvelope := 'https://portoseguro-ba.issintel.com.br/webservices/abrasf/api'
+             else ConfigCidade.NameSpaceEnvelope := 'https://portoseguro-ba.treino-issintel.com.br/webservices/abrasf/api';
+           end;
   3131307: begin // Ipatinga/MG
-            ConfigCidade.CodigoURLs    := 1;
+            ConfigCidade.CodigoURLs := 1;
             if AAmbiente = 1
-             then ConfigCidade.NameSpaceEnvelope := 'https://ipatinga-mg.issintel.com.br/webservices/abrasf/api'
-             else ConfigCidade.NameSpaceEnvelope := 'https://ipatinga-mg.treino-issintel.com.br/webservices/abrasf/api';
+             then ConfigCidade.NameSpaceEnvelope := 'https://ipatinga-mg.issintel.com.br:442/webservices/abrasf/api'
+             else ConfigCidade.NameSpaceEnvelope := 'https://ipatinga-mg.treino-issintel.com.br:442/webservices/abrasf/api';
            end;
-  5107602: begin // Rondonopolis/MT
-            ConfigCidade.CodigoURLs    := 2;
-            if AAmbiente = 1
-             then ConfigCidade.NameSpaceEnvelope := 'https://rondonopolis-mt.issintel.com.br/webservices/abrasf/api'
-             else ConfigCidade.NameSpaceEnvelope := 'https://rondonopolis-mt.treino-issintel.com.br/webservices/abrasf/api';
-           end;
+//  3157807: begin // Santa Luzia/MG
+//            ConfigCidade.CodigoURLs := 2;
+//            if AAmbiente = 1
+//             then ConfigCidade.NameSpaceEnvelope := 'https://santaluzia-mg.issintel.com.br/webservices/abrasf/api'
+//             else ConfigCidade.NameSpaceEnvelope := 'https://santaluzia-mg.treino-issintel.com.br/webservices/abrasf/api';
+//           end;
  end;
  ConfigCidade.AssinaRPS  := False;
  ConfigCidade.AssinaLote := True;
@@ -115,7 +122,7 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorISSIntel.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorISSIntel.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
@@ -123,6 +130,7 @@ begin
  ConfigSchema.VersaoDados     := '1.00';
  ConfigSchema.VersaoXML       := '2';
  ConfigSchema.NameSpaceXML    := 'http://www.abrasf.org.br/';
+// ConfigSchema.NameSpaceXML    := 'http://www.abrasf.org.br/ABRASF/arquivos/';
  ConfigSchema.Cabecalho       := 'nfse.xsd';
  ConfigSchema.ServicoEnviar   := 'nfse.xsd';
  ConfigSchema.ServicoConSit   := 'nfse.xsd';
@@ -135,34 +143,43 @@ begin
  Result := ConfigSchema;
 end;
 
-function TProvedorISSIntel.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorISSIntel.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
+ Porta: String;
 begin
- case ACodigo of
-  1: begin
-      ConfigURL.HomNomeCidade         := 'ipatinga-mg';
-      ConfigURL.ProNomeCidade         := 'ipatinga-mg';
-     end;
-  2: begin
-      ConfigURL.HomNomeCidade         := 'rondonopolis-mt';
-      ConfigURL.ProNomeCidade         := 'rondonopolis-mt';
-     end;
+ case ACodCidade of
+  2925303: begin
+            ConfigURL.HomNomeCidade := 'portoseguro-ba';
+            ConfigURL.ProNomeCidade := 'portoseguro-ba';
+
+            Porta := '';
+           end;
+  3131307: begin
+            ConfigURL.HomNomeCidade := 'ipatinga-mg';
+            ConfigURL.ProNomeCidade := 'ipatinga-mg';
+
+            Porta := ':442';
+           end;
+//  3157807: begin
+//            ConfigURL.HomNomeCidade := 'santaluzia-mg';
+//            ConfigURL.ProNomeCidade := 'santaluzia-mg';
+//           end;
  end;
 
- ConfigURL.HomRecepcaoLoteRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
- ConfigURL.HomConsultaLoteRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
- ConfigURL.HomConsultaNFSeRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
- ConfigURL.HomConsultaSitLoteRPS := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
- ConfigURL.HomConsultaNFSe       := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
- ConfigURL.HomCancelaNFSe        := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br/webservices/abrasf/api';
+ ConfigURL.HomRecepcaoLoteRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.HomConsultaLoteRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.HomConsultaNFSeRPS    := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.HomConsultaSitLoteRPS := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.HomConsultaNFSe       := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.HomCancelaNFSe        := 'https://' + ConfigURL.HomNomeCidade + '.treino-issintel.com.br' + Porta + '/webservices/abrasf/api';
 
- ConfigURL.ProRecepcaoLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
- ConfigURL.ProConsultaLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
- ConfigURL.ProConsultaNFSeRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
- ConfigURL.ProConsultaSitLoteRPS := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
- ConfigURL.ProConsultaNFSe       := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
- ConfigURL.ProCancelaNFSe        := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br/webservices/abrasf/api';
+ ConfigURL.ProRecepcaoLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.ProConsultaLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.ProConsultaNFSeRPS    := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.ProConsultaSitLoteRPS := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.ProConsultaNFSe       := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
+ ConfigURL.ProCancelaNFSe        := 'https://' + ConfigURL.ProNomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api';
 
  Result := ConfigURL;
 end;
@@ -180,7 +197,7 @@ begin
    acConsLote:    Result := False;
    acConsNFSeRps: Result := False;
    acConsNFSe:    Result := False;
-   acCancelar:    Result := False;
+   acCancelar:    Result := True;
    acGerar:       Result := False;
    else           Result := False;
  end;
@@ -188,12 +205,14 @@ end;
 
 function TProvedorISSIntel.GetValidarLote: Boolean;
 begin
- Result := True;
+ // Alterado por Italo em 14/03/2013
+ Result := False;
 end;
 
 function TProvedorISSIntel.Gera_TagI(Acao: TnfseAcao; Prefixo3, Prefixo4,
   NameSpaceDad, Identificador, URI: String): AnsiString;
 begin
+{
  case Acao of
    acRecepcionar: Result := '<' + Prefixo3 + 'EnviarLoteRpsEnvio' + NameSpaceDad;
    acConsSit:     Result := '<' + Prefixo3 + 'ConsultarSituacaoLoteRpsEnvio' + NameSpaceDad;
@@ -203,7 +222,19 @@ begin
    acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio' + NameSpaceDad +
                              '<' + Prefixo3 + 'Pedido>' +
                               '<' + Prefixo4 + 'InfPedidoCancelamento' +
-                                 NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+                                 DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+   acGerar:       Result := '';
+ end;
+}
+ case Acao of
+   acRecepcionar: Result := '<' + Prefixo3 + 'EnviarLoteRpsEnvio>';
+   acConsSit:     Result := '<' + Prefixo3 + 'ConsultarSituacaoLoteRpsEnvio>';
+   acConsLote:    Result := '<' + Prefixo3 + 'ConsultarLoteRpsEnvio>';
+   acConsNFSeRps: Result := '<' + Prefixo3 + 'ConsultarNfseRpsEnvio>';
+   acConsNFSe:    Result := '<' + Prefixo3 + 'ConsultarNfseEnvio>';
+   acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio>' +
+                             '<' + Prefixo3 + 'Pedido>' +
+                              '<' + Prefixo4 + 'InfPedidoCancelamento>';
    acGerar:       Result := '';
  end;
 end;
@@ -242,13 +273,13 @@ var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'LoteRps'+
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') + '>' +
                ' versao="' + VersaoDados + '">' +
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -282,7 +313,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -313,7 +344,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -337,7 +368,7 @@ begin
 end;
 
 function TProvedorISSIntel.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
@@ -355,7 +386,7 @@ begin
              '</' + Prefixo3 + 'IdentificacaoRps>' +
              '<' + Prefixo3 + 'Prestador>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -376,14 +407,14 @@ begin
 end;
 
 function TProvedorISSIntel.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -400,6 +431,11 @@ begin
                '</' + Prefixo4 + 'InscricaoMunicipal>' +
               '</' + Prefixo3 + 'Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<' + Prefixo3 + 'PeriodoEmissao>' +
                                '<' + Prefixo3 + 'DataInicial>' +
@@ -413,7 +449,7 @@ begin
  Result := TagI + DadosMsg + TagF;
 end;
 
-function TProvedorISSIntel.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorISSIntel.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -445,7 +481,8 @@ begin
               '</' + Prefixo4 + 'CodigoCancelamento>' +
              '</' + Prefixo4 + 'InfPedidoCancelamento>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorISSIntel.Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4,
@@ -458,97 +495,85 @@ end;
 function TProvedorISSIntel.GeraEnvelopeRecepcionarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<S:Body>' +
-             '<urn:RecepcionarLoteRps>' +
-               DadosMsg +
-             '</urn:RecepcionarLoteRps>' +
-            '</S:Body>' +
-           '</S:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:RecepcionarLoteRps>' +
+                DadosMsg +
+              '</urn:RecepcionarLoteRps>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeConsultarSituacaoLoteRPS(
   URLNS: String; CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<s:Body>' +
-             '<urn:ConsultarSituacaoLoteRps>' +
-               DadosMsg +
-             '</urn:ConsultarSituacaoLoteRps>' +
-             '</s:Body>' +
-           '</s:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:ConsultarSituacaoLoteRps>' +
+                DadosMsg +
+              '</urn:ConsultarSituacaoLoteRps>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeConsultarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<s:Body>' +
-             '<urn:ConsultarLoteRps>' +
-               DadosMsg +
-             '</urn:ConsultarLoteRps>' +
-            '</s:Body>' +
-           '</s:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:ConsultarLoteRps>' +
+                DadosMsg +
+              '</urn:ConsultarLoteRps>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeConsultarNFSeporRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<s:Body>' +
-             '<urn:ConsultarNfsePorRps>' +
-               DadosMsg +
-             '</urn:ConsultarNfsePorRps>' +
-            '</s:Body>' +
-           '</s:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:ConsultarNfsePorRps>' +
+                DadosMsg +
+              '</urn:ConsultarNfsePorRps>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeConsultarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<s:Body>' +
-             '<urn:ConsultarNfse>' +
-               DadosMsg +
-             '</urn:ConsultarNfse>' +
-            '</s:Body>' +
-           '</s:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:ConsultarNfse>' +
+                DadosMsg +
+              '</urn:ConsultarNfse>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeCancelarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
-           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" ' +
-                       'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-                       'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-                       'xmlns:urn="' + URLNS + '">' +
-            '<s:Body>' +
-             '<urn:CancelarNfse>' +
-               DadosMsg +
-             '</urn:CancelarNfse>' +
-            '</s:Body>' +
-           '</s:Envelope>';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:seriorsIssIntel">' +
+            '<soapenv:Header/>' +
+             '<soapenv:Body>' +
+              '<urn:CancelarNfse>' +
+                DadosMsg +
+              '</urn:CancelarNfse>' +
+             '</soapenv:Body>' +
+            '</soapenv:Envelope>';
 end;
 
 function TProvedorISSIntel.GeraEnvelopeGerarNFSe(URLNS: String; CabMsg,
@@ -559,20 +584,27 @@ begin
 end;
 
 function TProvedorISSIntel.GetSoapAction(Acao: TnfseAcao; NomeCidade: String): String;
+var
+ Porta: String;
 begin
+ if NomeCidade = 'ipatinga-mg'
+  then Porta := ':442'
+  else Porta := '';
+
  case Acao of
-   acRecepcionar: Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/RecepcionarLoteRps';
-   acConsSit:     Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/ConsultarSituacaoLoteRps';
-   acConsLote:    Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/ConsultarLoteRps';
-   acConsNFSeRps: Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/ConsultarNfsePorRps';
-   acConsNFSe:    Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/ConsultarNfse';
-   acCancelar:    Result := 'https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api/CancelarNfse';
+   acRecepcionar: Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/RecepcionarLoteRps';
+   acConsSit:     Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/ConsultarSituacaoLoteRps';
+   acConsLote:    Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/ConsultarLoteRps';
+   acConsNFSeRps: Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/ConsultarNfsePorRps';
+   acConsNFSe:    Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/ConsultarNfse';
+   acCancelar:    Result := 'https://' + NomeCidade + '.issintel.com.br' + Porta + '/webservices/abrasf/api/CancelarNfse';
    acGerar:       Result := '';
  end;
 end;
 
 function TProvedorISSIntel.GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString;
 begin
+{
  case Acao of
    acRecepcionar: Result := SeparaDados( RetornoWS, 'Body' );
    acConsSit:     Result := SeparaDados( RetornoWS, 'Body' );
@@ -582,15 +614,31 @@ begin
    acCancelar:    Result := SeparaDados( RetornoWS, 'Body' );
    acGerar:       Result := '';
  end;
+}
+ case Acao of
+   acRecepcionar: Result := SeparaDados( RetornoWS, 'env:Body' );
+   acConsSit:     Result := SeparaDados( RetornoWS, 'env:Body' );
+   acConsLote:    Result := SeparaDados( RetornoWS, 'env:Body' );
+   acConsNFSeRps: Result := SeparaDados( RetornoWS, 'env:Body' );
+   acConsNFSe:    Result := SeparaDados( RetornoWS, 'env:Body' );
+   acCancelar:    Result := SeparaDados( RetornoWS, 'env:Body' );
+   acGerar:       Result := '';
+ end;
 end;
 
 function TProvedorISSIntel.GeraRetornoNFSe(Prefixo: String;
   RetNFSe: AnsiString; NomeCidade: String): AnsiString;
 begin
- Result := '<?xml version="1.0" encoding="utf-8"?>' +
+ Result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<' + Prefixo + 'CompNfse xmlns="https://' + NomeCidade + '.issintel.com.br/webservices/abrasf/api">' +
              RetNfse +
            '</' + Prefixo + 'CompNfse>';
+end;
+
+function TProvedorISSIntel.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ Result := '';
 end;
 
 end.

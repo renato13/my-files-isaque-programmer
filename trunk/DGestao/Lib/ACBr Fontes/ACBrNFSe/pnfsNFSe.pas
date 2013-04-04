@@ -119,6 +119,14 @@ type
     FDescricao : String;
     FQuantidade : Integer;
     FValorUnitario : currency;
+    FAliquota: currency;
+    FValorIss: currency;
+    FBaseCalculo: currency;
+    FValorDeducoes: currency;
+    FValorServicos: currency;
+    FDescontoCondicionado: currency;
+    FDescontoIncondicionado: currency;
+    FDiscriminacao: string;
   public
     constructor Create; reintroduce;
     destructor Destroy; override;
@@ -126,6 +134,14 @@ type
     property Descricao: string read FDescricao write FDescricao;
     property Quantidade: Integer read FQuantidade write FQuantidade;
     property ValorUnitario: currency read FValorUnitario write FValorUnitario;
+    property ValorServicos: currency read FValorServicos write FValorServicos;
+    property ValorDeducoes: currency read FValorDeducoes write FValorDeducoes;
+    property ValorIss: currency read FValorIss write FValorIss;
+    property Aliquota: currency read FAliquota write FAliquota;
+    property BaseCalculo: currency read FBaseCalculo write FBaseCalculo;
+    property DescontoCondicionado: currency read FDescontoCondicionado write FDescontoCondicionado;
+    property DescontoIncondicionado: currency read FDescontoIncondicionado write FDescontoIncondicionado;
+    property Discriminacao: string read FDiscriminacao write FDiscriminacao;
   end;
 
  TDadosServico = class(TPersistent)
@@ -143,6 +159,7 @@ type
     FxItemListaServico: ansistring;
     FItemServico: TItemServicoCollection;
     FResponsavelRetencao: TnfseResponsavelRetencao;
+    FDescricao: string;
 
     procedure SetItemServico(Value: TItemServicoCollection);
   public
@@ -162,15 +179,23 @@ type
     property xItemListaServico: ansistring read FxItemListaServico write FxItemListaServico;
     property ItemServico: TItemServicoCollection read FItemServico write SetItemServico;
     property ResponsavelRetencao: TnfseResponsavelRetencao read FResponsavelRetencao write FResponsavelRetencao;
+    property Descricao: string read FDescricao write FDescricao;
   end;
 
  TIdentificacaoPrestador = class(TPersistent)
   private
     FCnpj: string;
     FInscricaoMunicipal: string;
+    FSenha: string;
+    FFraseSecreta: string;
+    FcUF: integer;
   published
     property Cnpj: string read FCnpj write FCnpj;
     property InscricaoMunicipal: string read FInscricaoMunicipal write FInscricaoMunicipal;
+    // As propriedades abaixo são Utilizadas pelo provedor ISSDigital
+    property Senha: string read FSenha write FSenha;
+    property FraseSecreta: string read FFraseSecreta write FFraseSecreta;
+    property cUF: integer read FcUF write FcUF;
   end;
 
  TEndereco = class(TPersistent)
@@ -280,6 +305,7 @@ type
  TNFSe = class(TPersistent)
   private
     // RPS e NFSe
+    FNomeArq: String;
     FInfID: TInfID;
     FIdentificacaoRps: TIdentificacaoRps;
     FDataEmissao: TDateTime;
@@ -288,6 +314,7 @@ type
     FRegimeEspecialTributacao: TnfseRegimeEspecialTributacao;
     FOptanteSimplesNacional: TnfseSimNao;
     FIncentivadorCultural: TnfseSimNao;
+    FProducao: TnfseSimNao;
     FStatus: TnfseStatusRps;
     FRpsSubstituido: TIdentificacaoRps;
     FServico: TDadosServico;
@@ -320,6 +347,7 @@ type
     destructor Destroy; override;
   published
     // RPS e NFSe
+    property NomeArq: String read FNomeArq write FNomeArq;
     property InfID: TInfID read FInfID write FInfID;
     property IdentificacaoRps: TIdentificacaoRps read FIdentificacaoRps write FIdentificacaoRps;
     property DataEmissao: TDateTime read FDataEmissao write FDataEmissao;
@@ -328,6 +356,7 @@ type
     property RegimeEspecialTributacao: TnfseRegimeEspecialTributacao read FRegimeEspecialTributacao write FRegimeEspecialTributacao;
     property OptanteSimplesNacional: TnfseSimNao read FOptanteSimplesNacional write FOptanteSimplesNacional;
     property IncentivadorCultural: TnfseSimNao read FIncentivadorCultural write FIncentivadorCultural;
+    property Producao: TnfseSimNao read FProducao write FProducao;
     property Status: TnfseStatusRps read FStatus write FStatus;
     property RpsSubstituido: TIdentificacaoRps read FRpsSubstituido write FRpsSubstituido;
     property Servico: TDadosServico read FServico write FServico;
@@ -457,7 +486,8 @@ begin
   end;
 
  FItemServico := TItemServicoCollection.Create(Self);
-
+ FDescricao   := '';
+ 
 end;
 
 destructor TDadosServico.Destroy;
@@ -525,6 +555,7 @@ constructor TNFSe.Create;
 begin
  inherited create;
  // RPS e NFSe
+ FNomeArq                      := '';
  FInfID                        := TInfID.Create;
  FIdentificacaoRps             := TIdentificacaoRps.Create;
  FIdentificacaoRps.FTipo       := trRPS;

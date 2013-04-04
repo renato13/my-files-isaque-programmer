@@ -44,7 +44,7 @@ echo "****************************************"
 echo.
 
 :TCP
-%1\tools\lazres.exe ACBrTCP.lrs TACBrTCPServer.bmp TACBrCEP.bmp TACBrIBGE.bmp TACBrCNIEE.bmp TACBrSuframa.bmp TACBrDownload.bmp
+%1\tools\lazres.exe ACBrTCP.lrs TACBrTCPServer.bmp TACBrCEP.bmp TACBrIBGE.bmp TACBrNFPws.bmp TACBrCNIEE.bmp TACBrSuframa.bmp TACBrDownload.bmp
 move ACBrTCP.lrs ..\ACBrTCP
 echo.
 echo "****************************************"
@@ -90,12 +90,56 @@ echo "*    ACBrBoletoFCFortes.lrs  gerado    *"
 echo "****************************************"
 echo.
 
-:NFe
-%1\tools\lazres.exe ACBrNFe.lrs TACBrNFe.bmp TACBrDANFeQR.bmp TACBrDANFeRave.bmp TACBrDANFeRaveCB.bmp TACBrDANFeRL.bmp
-move ACBrNFe.lrs ..\ACBrNFe
+:NFe2
+%1\tools\lazres.exe ACBrNFe.lrs TACBrNFe.bmp 
+move ACBrNFe.lrs ..\ACBrNFe2
+
+%1\tools\lazres.exe ACBrNFeDANFeRL.lrs TACBrNFeDANFeRL.bmp 
+move ACBrNFeDANFeRL.lrs ..\ACBrNFe2
+
 echo.
 echo "****************************************"
 echo "* Arquivo    ACBrNFe.lrs     gerado    *"
+echo "****************************************"
+echo.
+
+:NFSe
+%1\tools\lazres.exe ACBrNFSe.lrs TACBrNFSe.bmp 
+move ACBrNFSe.lrs ..\ACBrNFSe
+
+echo.
+echo "****************************************"
+echo "* Arquivo    ACBrNFSe.lrs     gerado    *"
+echo "****************************************"
+echo.
+
+:CTe
+%1\tools\lazres.exe ACBrCTe.lrs TACBrCTe.bmp 
+move ACBrCTe.lrs ..\ACBrCTe
+
+echo.
+echo "****************************************"
+echo "* Arquivo    ACBrCTe.lrs     gerado    *"
+echo "****************************************"
+echo.
+
+:MDFe
+%1\tools\lazres.exe ACBrMDFe.lrs TACBrMDFe.bmp 
+move ACBrMDFe.lrs ..\ACBrMDFe
+
+echo.
+echo "****************************************"
+echo "* Arquivo    ACBrMDFe.lrs     gerado    *"
+echo "****************************************"
+echo.
+
+:LFD
+%1\tools\lazres.exe ACBrLFD.lrs TACBrLFD.bmp 
+move ACBrLFD.lrs ..\ACBrLFD
+
+echo.
+echo "****************************************"
+echo "* Arquivo    ACBrLFD.lrs     gerado    *"
 echo "****************************************"
 echo.
 

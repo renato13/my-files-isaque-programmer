@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
-  { TACBrProvedorGinfes }
+  { TACBrProvedorDigifred }
 
  TProvedorDigifred = class(TProvedorClass)
   protected
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,18 +72,19 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
 
-{ TProvedorGinfes }
+{ TProvedorDigifred }
 
 constructor TProvedorDigifred.Create;
 begin
  {----}
 end;
 
-function TProvedorDigifred.GetConfigCidade(ACodigo,
+function TProvedorDigifred.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
@@ -106,7 +107,7 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorDigifred.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorDigifred.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
@@ -126,7 +127,7 @@ begin
  Result := ConfigSchema;
 end;
 
-function TProvedorDigifred.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorDigifred.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
 begin
@@ -137,6 +138,7 @@ begin
  ConfigURL.HomConsultaSitLoteRPS := 'https://sim.digifred.net.br/frederico_homolog/nfse/ws/principal';
  ConfigURL.HomConsultaNFSe       := 'https://sim.digifred.net.br/frederico_homolog/nfse/ws/principal';
  ConfigURL.HomCancelaNFSe        := 'https://sim.digifred.net.br/frederico_homolog/nfse/ws/principal';
+ ConfigURL.HomGerarNFSe          := 'https://sim.digifred.net.br/frederico_homolog/nfse/ws/principal';
 
  ConfigURL.ProNomeCidade         := '';
  ConfigURL.ProRecepcaoLoteRPS    := 'https://sim.digifred.net.br/frederico/nfse/ws/principal';
@@ -145,6 +147,7 @@ begin
  ConfigURL.ProConsultaSitLoteRPS := 'https://sim.digifred.net.br/frederico/nfse/ws/principal';
  ConfigURL.ProConsultaNFSe       := 'https://sim.digifred.net.br/frederico/nfse/ws/principal';
  ConfigURL.ProCancelaNFSe        := 'https://sim.digifred.net.br/frederico/nfse/ws/principal';
+ ConfigURL.ProGerarNFSe          := 'https://sim.digifred.net.br/frederico/nfse/ws/principal';
 
  Result := ConfigURL;
 end;
@@ -163,7 +166,7 @@ begin
    acConsNFSeRps: Result := True;
    acConsNFSe:    Result := True;
    acCancelar:    Result := True;
-   acGerar:       Result := False;
+   acGerar:       Result := True;
    else           Result := False;
  end;
 end;
@@ -185,8 +188,8 @@ begin
    acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio' + NameSpaceDad +
                              '<' + Prefixo3 + 'Pedido>' +
                               '<' + Prefixo4 + 'InfPedidoCancelamento' +
-                                 NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
-   acGerar:       Result := '';
+                                 DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+   acGerar:       Result := '<' + Prefixo3 + 'GerarNfseEnvio' + NameSpaceDad;
  end;
 end;
 
@@ -213,7 +216,7 @@ begin
    acConsNFSe:    Result := '</' + Prefixo3 + 'ConsultarNfseEnvio>';
    acCancelar:    Result := '</' + Prefixo3 + 'Pedido>' +
                             '</' + Prefixo3 + 'CancelarNfseEnvio>';
-   acGerar:       Result := '';
+   acGerar:       Result := '</' + Prefixo3 + 'GerarNfseEnvio>';
  end;
 end;
 
@@ -224,13 +227,13 @@ var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'LoteRps'+
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') +
                ' versao="' + VersaoDados + '">' +
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -253,7 +256,8 @@ begin
               '</' + Prefixo4 + 'ListaRps>' +
              '</' + Prefixo3 + 'LoteRps>';
 
-  Result := TagI + DadosMsg + TagF;
+//  Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorDigifred.Gera_DadosMsgConsSitLote(Prefixo3, Prefixo4,
@@ -264,7 +268,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -284,7 +288,8 @@ begin
                 Protocolo +
               '</' + Prefixo3 + 'Protocolo>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorDigifred.Gera_DadosMsgConsLote(Prefixo3, Prefixo4,
@@ -295,7 +300,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -315,18 +320,19 @@ begin
                 Protocolo +
               '</' + Prefixo3 + 'Protocolo>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorDigifred.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -343,6 +349,11 @@ begin
                '</' + Prefixo4 + 'InscricaoMunicipal>' +
               '</' + Prefixo3 + 'Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<' + Prefixo3 + 'PeriodoEmissao>' +
                                '<' + Prefixo3 + 'DataInicial>' +
@@ -353,11 +364,12 @@ begin
                                '</' + Prefixo3 + 'DataFinal>' +
                               '</' + Prefixo3 + 'PeriodoEmissao>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorDigifred.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
@@ -375,7 +387,7 @@ begin
              '</' + Prefixo3 + 'IdentificacaoRps>' +
              '<' + Prefixo3 + 'Prestador>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -392,10 +404,11 @@ begin
               '</' + Prefixo4 + 'InscricaoMunicipal>' +
              '</' + Prefixo3 + 'Prestador>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
-function TProvedorDigifred.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorDigifred.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -427,31 +440,34 @@ begin
               '</' + Prefixo4 + 'CodigoCancelamento>' +
              '</' + Prefixo4 + 'InfPedidoCancelamento>';
 
- Result := TagI + DadosMsg + TagF;
+// Result := TagI + DadosMsg + TagF;
+ Result := DadosMsg;
 end;
 
 function TProvedorDigifred.Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4,
   Identificador, NameSpaceDad, VersaoDados, VersaoXML, NumeroLote, CNPJ,
   IM, QtdeNotas: String; Notas, TagI, TagF: AnsiString): AnsiString;
+var
+ DadosMsg: AnsiString;
 begin
- Result := '';
+ Result := Notas;
 end;
 
 function TProvedorDigifred.GeraEnvelopeRecepcionarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
             '<s:Body>' +
              '<ns2:RecepcionarLoteRpsRequest xmlns:ns2="' + URLNS + '">' +
               '<nfseCabecMsg>' +
-                '&lt;?xml version="1.0" encoding="utf-8"?&gt;' +
+                '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
                 StringReplace(StringReplace(CabMsg, '<', '&lt;', [rfReplaceAll]), '>', '&gt;', [rfReplaceAll]) +
               '</nfseCabecMsg>' +
               '<nfseDadosMsg>' +
-                '&lt;?xml version="1.0" encoding="utf-8"?&gt;' +
+                '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
                  StringReplace(StringReplace(DadosMsg, '<', '&lt;', [rfReplaceAll]), '>', '&gt;', [rfReplaceAll]) +
               '</nfseDadosMsg>' +
              '</ns2:RecepcionarLoteRpsRequest>' +
@@ -462,7 +478,7 @@ end;
 function TProvedorDigifred.GeraEnvelopeConsultarSituacaoLoteRPS(
   URLNS: String; CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -482,7 +498,7 @@ end;
 function TProvedorDigifred.GeraEnvelopeConsultarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -502,7 +518,7 @@ end;
 function TProvedorDigifred.GeraEnvelopeConsultarNFSeporRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -522,7 +538,7 @@ end;
 function TProvedorDigifred.GeraEnvelopeConsultarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -542,7 +558,7 @@ end;
 function TProvedorDigifred.GeraEnvelopeCancelarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
                       ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
@@ -562,7 +578,23 @@ end;
 function TProvedorDigifred.GeraEnvelopeGerarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- Result := '';
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
+           '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"' +
+                      ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+                      ' xmlns:xsd="http://www.w3.org/2001/XMLSchema">' +
+            '<s:Body>' +
+             '<ns2:RecepcionarLoteRpsRequest xmlns:ns2="' + URLNS + '">' +
+              '<nfseCabecMsg>' +
+                '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
+                StringReplace(StringReplace(CabMsg, '<', '&lt;', [rfReplaceAll]), '>', '&gt;', [rfReplaceAll]) +
+              '</nfseCabecMsg>' +
+              '<nfseDadosMsg>' +
+                '&lt;?xml version="1.0" encoding="UTF-8"?&gt;' +
+                 StringReplace(StringReplace(DadosMsg, '<', '&lt;', [rfReplaceAll]), '>', '&gt;', [rfReplaceAll]) +
+              '</nfseDadosMsg>' +
+             '</ns2:RecepcionarLoteRpsRequest>' +
+            '</s:Body>' +
+           '</s:Envelope>';
  raise Exception.Create( 'Opção não implementada para este provedor.' );
 end;
 
@@ -575,7 +607,7 @@ begin
    acConsNFSeRps: Result := 'http://nfse.abrasf.org.br/ConsultarNfsePorRps';
    acConsNFSe:    Result := 'http://nfse.abrasf.org.br/ConsultarNfseServicoPrestado';
    acCancelar:    Result := 'http://nfse.abrasf.org.br/CancelarNfse';
-   acGerar:       Result := '';
+   acGerar:       Result := 'http://nfse.abrasf.org.br/GerarNfse';
  end;
 end;
 
@@ -588,17 +620,23 @@ begin
    acConsNFSeRps: Result := SeparaDados( RetornoWS, 'outputXML' );
    acConsNFSe:    Result := SeparaDados( RetornoWS, 'outputXML' );
    acCancelar:    Result := SeparaDados( RetornoWS, 'outputXML' );
-   acGerar:       Result := '';
+   acGerar:       Result := SeparaDados( RetornoWS, 'outputXML' );
  end;
 end;
 
 function TProvedorDigifred.GeraRetornoNFSe(Prefixo: String;
   RetNFSe: AnsiString; NomeCidade: String): AnsiString;
 begin
- Result := '<?xml version="1.0" encoding="utf-8"?>' +
+ Result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<' + Prefixo + 'CompNfse xmlns="http://www.abrasf.org.br/nfse">' +
              RetNfse +
            '</' + Prefixo + 'CompNfse>';
+end;
+
+function TProvedorDigifred.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ Result := '';
 end;
 
 end.

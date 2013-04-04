@@ -172,17 +172,10 @@ begin
     Result := FcOrgao
   else
   begin
-    case fTpEvento of
-      teCCe,teCancelamento:
-      begin
-        Result := StrToInt(copy(FChave,1,2));
-        {Estados que utilizam a SVAN: ES, MA, PA, PI, RN => Devem utilizar 90}
-        if Result in [32,21,15,22,24] then
-          Result := 90;
-      end
-      else
-        Result := 91;
-    end;
+     Result := StrToInt(copy(FChave,1,2));
+     {Estados que utilizam a SVAN: ES, MA, PA, PI, RN => Devem utilizar 91}
+     if Result in [32,21,15,22,24] then
+       Result := 91;
   end;
 end;
 

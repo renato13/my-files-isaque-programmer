@@ -1102,12 +1102,14 @@ type
   private
     FICMS       : TICMS;
     FInfAdFisco : String;
+    FvTotImp: Currency;
   public
     constructor Create(AOwner: TCTe);
     destructor Destroy; override;
   published
     property ICMS: TICMS read FICMS write FICMS;
     property infAdFisco : String read FInfAdFisco write FInfAdFisco;
+    property vTotImp: Currency read FvTotImp write FvTotImp;
   end;
 
   TICMS = class(TPersistent)
@@ -2616,12 +2618,14 @@ type
   private
     FICMSComp   : TICMSComp;
     FInfAdFisco : String;
+    FvTotImp: Currency;
   public
     constructor Create(AOwner: TinfCTeCompCollectionItem);
     destructor Destroy; override;
   published
     property ICMSComp: TICMSComp read FICMSComp write FICMSComp;
     property InfAdFisco : String read FInfAdFisco write FInfAdFisco;
+    property vTotImp: Currency read FvTotImp write FvTotImp;
   end;
 
   TICMSComp = class(TPersistent)

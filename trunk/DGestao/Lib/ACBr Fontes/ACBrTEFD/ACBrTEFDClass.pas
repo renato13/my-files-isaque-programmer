@@ -54,8 +54,12 @@ uses
     {$ENDIF}
   {$ENDIF} ;
 
+{$IFDEF CONSOLE}
+type TModalResult = (mrNone = 0, mrYes = 6, mrNo = 7, mrOK = 1, mrCancel = 2, mrAbort = 3, mrRetry = 4, mrIgnore = 5, mrAll = 8, mrNoToAll = 9, mrYesToAll = 10);
+{$ENDIF}
+
 const
-   CACBrTEFD_Versao      = '4.2.1' ;
+   CACBrTEFD_Versao      = '4.3.4' ;
    CACBrTEFD_EsperaSTS   = 7 ;
    CACBrTEFD_EsperaSleep = 250 ;
    CACBrTEFD_NumVias     = 2 ;
@@ -65,6 +69,8 @@ const
                                    'Deseja imprimir novamente ?' ;
    CACBrTEFD_Erro_NaoAtivo = 'O gerenciador padrão %s não está ativo !' ;
    CACBrTEFD_Erro_SemRequisicao = 'Nenhuma Requisição Iniciada' ;
+   CACBrTEFD_Erro_OutraFormaPagamento = 'Gostaria de continuar a transação com '+
+                                   'outra(s) forma(s) de pagamento ?';
 
 type
 
@@ -72,7 +78,8 @@ type
     filha de  TACBrTEFDClass }
   TACBrTEFDTipo = ( gpNenhum, gpTefDial, gpTefDisc, gpHiperTef, gpCliSiTef,
                     gpTefGpu, gpVeSPague, gpBanese, gpTefAuttar, gpGoodCard,
-                    gpFoxWin, gpCliDTEF, gpPetrocard, gpCrediShop, gpTicketCar ) ;
+                    gpFoxWin, gpCliDTEF, gpPetrocard, gpCrediShop, gpTicketCar,
+                    gpConvCard ) ;
 
   TACBrTEFDReqEstado = ( reqNenhum,             // Nennhuma Requisição em andamento
                          reqIniciando,          // Iniciando uma nova Requisicao
@@ -579,6 +586,7 @@ type
      Procedure LerRespostaRequisicao ; virtual;
      procedure FinalizarResposta( ApagarArqResp : Boolean ) ; virtual;
 
+     Function CriarResposta( Tipo: TACBrTEFDTipo ): TACBrTEFDResp;
      Function CopiarResposta : String ; virtual;
 
      procedure ProcessarResposta ; virtual;
@@ -589,7 +597,6 @@ type
 
      procedure ImprimirRelatorio ; virtual;
      procedure ConfirmarESolicitarImpressaoTransacoesPendentes ; virtual ;
-
 
      Procedure VerificarTransacaoPagamento(Valor : Double); virtual;
      Function TransacaoEPagamento( AHeader: String ): Boolean;
@@ -2069,6 +2076,16 @@ begin
    Resp.Clear;
 end;
 
+function TACBrTEFDClass.CriarResposta(Tipo : TACBrTEFDTipo) : TACBrTEFDResp ;
+begin
+  Case Tipo of
+    gpCliSiTef : Result := TACBrTEFDRespCliSiTef.Create;
+    gpVeSPague : Result := TACBrTEFDRespVeSPague.Create;
+  else
+    Result := TACBrTEFDRespTXT.Create;
+  end ;
+end ;
+
 procedure TACBrTEFDClass.CancelarTransacoesPendentesClass;
 Var
   ArquivosVerficar    : TStringList ;
@@ -2152,13 +2169,7 @@ begin
         if not JaCancelado then
          begin
            { Criando cópia da Resposta Atual }
-           Case Tipo of
-             gpCliSiTef : RespostaCancela := TACBrTEFDRespCliSiTef.Create;
-             gpVeSPague : RespostaCancela := TACBrTEFDRespVeSPague.Create;
-           else
-             RespostaCancela := TACBrTEFDRespTXT.Create;
-           end ;
-
+           RespostaCancela := CriarResposta( Tipo );
            RespostaCancela.Assign( Resp );
 
            { Enviando NCN ou CNC }
@@ -2253,7 +2264,7 @@ begin
   GravaLog( Name +' ImprimirRelatorio: '+Req.Header );
 
   if fpSalvarArquivoBackup then
-    CopiarResposta ;
+     CopiarResposta ;
 
   ImpressaoOk  := False ;
   RemoverMsg   := False ;
@@ -2341,8 +2352,10 @@ begin
                     begin
                        while SecondsBetween(now,TempoInicio) < 5 do
                        begin
-                          Sleep(EsperaSleep) ;
+                          Sleep(EsperaSleep);
+                          {$IFNDEF CONSOLE}
                           Application.ProcessMessages;
+                          {$ENDIF}
                        end;
                     end;
 
@@ -2352,7 +2365,8 @@ begin
               end;
 
            except
-              on EACBrTEFDECF do ImpressaoOk := False ;
+              on EACBrTEFDECF do
+                 ImpressaoOk := False ;
               else
                  raise ;
            end;
@@ -2392,11 +2406,13 @@ Var
   ArquivosVerficar : TStringList ;
   ArqMask, NSUs    : AnsiString;
   ExibeMsg         : Boolean ;
+  RespostaConfirmada : TACBrTEFDResp ;
 begin
   ArquivosVerficar := TStringList.Create;
 
   try
      ArquivosVerficar.Clear;
+     TACBrTEFD(Owner).RespostasPendentes.Clear;
 
      { Achando Arquivos de Backup deste GP }
      ArqMask  := TACBrTEFD(Owner).PathBackup + PathDelim + 'ACBr_' + Self.Name + '_*.tef' ;
@@ -2418,6 +2434,11 @@ begin
         try
            CNF;   {Confirma}
 
+           { Criando cópia da Resposta Atual }
+           RespostaConfirmada := CriarResposta( Resp.TipoGP );
+           RespostaConfirmada.Assign( Resp );
+           TACBrTEFD(Owner).RespostasPendentes.Add( RespostaConfirmada );
+
            if Trim(Resp.NSU) <> '' then
               NSUs := NSUs + Resp.NSU + sLineBreak;
 
@@ -2425,6 +2446,18 @@ begin
            ArquivosVerficar.Delete( 0 );
         except
         end;
+     end;
+
+     // Chamando evento de confirmação das Respostas //
+     with TACBrTEFD(Owner) do
+     begin
+       try
+          if Assigned( OnDepoisConfirmarTransacoes ) and
+             (RespostasPendentes.Count > 0) then
+             OnDepoisConfirmarTransacoes( RespostasPendentes );
+       finally
+          RespostasPendentes.Clear;
+       end;
      end;
 
      if ExibeMsg then
@@ -2487,8 +2520,7 @@ begin
                                { Ja tem RespostasPendentes ? }
        if UltimaTransacao and ( RespostasPendentes.Count > 0 ) then
        begin
-          if DoExibeMsg( opmYesNo, 'Gostaria de continuar a transação com outra(s) ' +
-                                   'forma(s) de pagamento ?' ) <> mrYes then
+          if DoExibeMsg( opmYesNo, CACBrTEFD_Erro_OutraFormaPagamento ) <> mrYes then
           begin
              ComandarECF( opeCancelaCupom );
              CancelarTransacoesPendentes;
@@ -2569,7 +2601,7 @@ begin
 
      if AutoFinalizarCupom and (RespostasPendentes.SaldoRestante <= 0) then
      begin
-        FinalizarCupom;
+        FinalizarCupom( False );  { False não desbloqueia o MouseTeclado }
         ImprimirTransacoesPendentes;
      end ;
   end;
@@ -2611,15 +2643,23 @@ begin
      begin
        if (Valor > RespostasPendentes.SaldoRestante + TrocoMaximo ) then
           raise Exception.Create( ACBrStr( 'Operação TEF permite '+
-                                           'Troco Máximo de '+FormatCurr('0,00',TrocoMaximo) ) );
+                                           'Troco Máximo de R$ '+FormatCurr('0.00',TrocoMaximo) ) );
      end ;
 
-    if MultiplosCartoes and (NumeroMaximoCartoes > 0) and   // Tem multiplos Cartoes ?
-       (Valor <> RespostasPendentes.SaldoRestante) and      // Valor é diferente do Saldo Restante a Pagar ?
-       ((NumeroMaximoCartoes - RespostasPendentes.Count) <= 1) then  // Está no último cartão ?
+    if MultiplosCartoes and (NumeroMaximoCartoes > 0) and      // Tem multiplos Cartoes ?
+       (RespostasPendentes.Count >= NumeroMaximoCartoes) then  // Já informou todos cartões ?
        raise Exception.Create( ACBrStr( 'Multiplos Cartões Limitado a '+
-             IntToStr(NumeroMaximoCartoes)+' operações.'+sLineBreak+
-             'Esta Operação TEF deve ser igual ao Saldo a Pagar' ) );
+             IntToStr(NumeroMaximoCartoes)+' operações.' ) );
+
+    if Self is TACBrTEFDClassTXT then   // Limita Saldo Restante se for derivado de TEF discado
+    begin
+      if MultiplosCartoes and (NumeroMaximoCartoes > 0) and   // Tem multiplos Cartoes ?
+         (Valor <> RespostasPendentes.SaldoRestante) and      // Valor é diferente do Saldo Restante a Pagar ?
+         ((NumeroMaximoCartoes - RespostasPendentes.Count) <= 1) then  // Está no último cartão ?
+         raise Exception.Create( ACBrStr( 'Multiplos Cartões Limitado a '+
+               IntToStr(NumeroMaximoCartoes)+' operações.'+sLineBreak+
+               'Esta Operação TEF deve ser igual ao Saldo a Pagar' ) );
+    end ;
   end;
 end;
 

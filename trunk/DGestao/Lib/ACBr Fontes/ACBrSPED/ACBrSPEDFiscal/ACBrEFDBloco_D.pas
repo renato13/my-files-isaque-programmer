@@ -1219,9 +1219,45 @@ type
 
   TRegistroD510 = class
   private
-    FIND_REC: TACBrIndTipoReceita;
+    FNUM_ITEM: String;                  //Número sequencial do item no documento fiscal
+    FCOD_ITEM: String;                  //Código do item (campo 02 do Registro 0200)
+    FCOD_CLASS: String;                 //Código de classificação do item do serviço de comunicação ou de telecomunicação, conforme a Tabela 4.4.1
+    FQTD: Currency;                     //Quantidade do item
+    FUNID: String;                      //Unidade do item (Campo 02 do registro 0190)
+    FVL_ITEM: Currency;                 //Valor do item
+    FVL_DESC: Currency;                 //Valor total do desconto
+    FCST_ICMS: String;                  //Código da Situação Tributária, conforme a Tabela indicada no item 4.3.1
+    FCFOP: String;                      //Código Fiscal de Operação e Prestação
+    FVL_BC_ICMS: Currency;              //Valor da base de cálculo do ICMS
+    FALIQ_ICMS: Currency;               //Alíquota do ICMS
+    FVL_ICMS: Currency;                 //Valor do ICMS creditado/debitado
+    FVL_BC_ICMS_UF : Currency;          //Valor da base de cálculo do ICMS de outras UFs
+    FVL_ICMS_UF: Currency;              //Valor do ICMS de outras UFs
+    FIND_REC: TACBrIndTipoReceita;      //Indicador do tipo de receita
+    FCOD_PART: String;                  //Código do participante
+    FVL_PIS: Currency;                  //Valor do PIS
+    FVL_COFINS: Currency;               //Valor da COFINS
+    FCOD_CTA: String;                   //Código da conta analítica contábil debitada/creditada
   public
+    property NUM_ITEM: String read FNUM_ITEM write FNUM_ITEM;
+    property COD_ITEM: String read FCOD_ITEM write FCOD_ITEM;
+    property COD_CLASS: String read FCOD_CLASS write FCOD_CLASS;
+    property QTD: Currency read FQTD write FQTD;
+    property UNID: String read FUNID write FUNID;
+    property VL_ITEM: Currency read FVL_ITEM write FVL_ITEM;
+    property VL_DESC: Currency read FVL_DESC write FVL_DESC;
+    property CST_ICMS: String read FCST_ICMS write FCST_ICMS;
+    property CFOP: String read FCFOP write FCFOP;
+    property VL_BC_ICMS: Currency read FVL_BC_ICMS write FVL_BC_ICMS;
+    property ALIQ_ICMS: Currency read FALIQ_ICMS write FALIQ_ICMS;
+    property VL_ICMS: Currency read FVL_ICMS write FVL_ICMS;
+    property VL_BC_ICMS_UF: Currency read FVL_BC_ICMS_UF write FVL_BC_ICMS_UF;
+    property VL_ICMS_UF: Currency read FVL_ICMS_UF write FVL_ICMS_UF;
     property IND_REC: TACBrIndTipoReceita read FIND_REC write FIND_REC;
+    property COD_PART: String read FCOD_PART write FCOD_PART;
+    property VL_PIS: Currency read FVL_PIS write FVL_PIS;
+    property VL_COFINS: Currency read FVL_COFINS write FVL_COFINS;
+    property COD_CTA: String read FCOD_CTA write FCOD_CTA;
   end;
 
   TRegistroD510List = class(TObjectList)
@@ -1237,9 +1273,20 @@ type
 
   TRegistroD530 = class
   private
-    FIND_SERV: TACBrServicoPrestado;
+    FIND_SERV: TACBrServicoPrestado;      //Indicador do tipo de serviço prestado
+    FDT_INI_SERV: TDateTime;              //Data em que se iniciou a prestação do serviço
+    FDT_FIN_SERV: TDateTime;              //Data em que se encerrou a prestação do serviço
+    FPER_FISCAL: String;                  //Período fiscal da prestação do serviço (MMAAAA)
+    FCOD_AREA: String;                    //Código de área do terminal faturado
+    FTERMINAL: String;                    //Identificação do terminal faturado
   public
     property IND_SERV: TACBrServicoPrestado read FIND_SERV write FIND_SERV;
+    property DT_INI_SERV: TDateTime read FDT_INI_SERV write FDT_INI_SERV;
+    property DT_FIN_SERV: TDateTime read FDT_FIN_SERV write FDT_FIN_SERV;
+    property PER_FISCAL: String read FPER_FISCAL write FPER_FISCAL;
+    property COD_AREA: String read FCOD_AREA write FCOD_AREA;
+    property TERMINAL: String read FTERMINAL write FTERMINAL;
+
   end;
 
   TRegistroD530List = class(TObjectList)
@@ -1272,8 +1319,8 @@ type
     property VL_OPR: currency read fVL_OPR write fVL_OPR;
     property VL_BC_ICMS: currency read fVL_BC_ICMS write fVL_BC_ICMS;
     property VL_ICMS: currency read fVL_ICMS write fVL_ICMS;
-    property VL_BC_ICMS_ST: currency read fVL_BC_ICMS_ST write fVL_BC_ICMS_ST;
-    property VL_ICMS_ST: currency read fVL_ICMS_ST write fVL_ICMS_ST;
+    property VL_BC_ICMS_UF: currency read fVL_BC_ICMS_ST write fVL_BC_ICMS_ST;
+    property VL_ICMS_UF: currency read fVL_ICMS_ST write fVL_ICMS_ST;
     property VL_RED_BC: currency read fVL_RED_BC write fVL_RED_BC;
     property COD_OBS: String read fCOD_OBS write fCOD_OBS;
   end;

@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
-  { TACBrProvedorGinfes }
+  { TACBrProvedorBetha }
 
  TProvedorBetha = class(TProvedorClass)
   protected
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,18 +72,19 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
 
-{ TProvedorGinfes }
+{ TProvedorBetha }
 
 constructor TProvedorBetha.Create;
 begin
  {----}
 end;
 
-function TProvedorBetha.GetConfigCidade(ACodigo,
+function TProvedorBetha.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
@@ -108,7 +109,7 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorBetha.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorBetha.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
@@ -130,7 +131,7 @@ begin
  Result := ConfigSchema;
 end;
 
-function TProvedorBetha.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorBetha.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
 begin
@@ -193,7 +194,7 @@ begin
    acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio' + NameSpaceDad +
                              '<Pedido>' +
                               '<' + Prefixo4 + 'InfPedidoCancelamento' +
-                                 NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+                                 DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
    acGerar:       Result := '';
  end;
 end;
@@ -236,13 +237,13 @@ begin
  // Alterado por Rodrigo Cantelli
 
  DadosMsg := '<LoteRps' +
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') + '>' +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') + '>' +
 
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -278,7 +279,7 @@ begin
 
  DadosMsg := '<Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -311,7 +312,7 @@ begin
 
  DadosMsg := '<Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -335,8 +336,8 @@ begin
 end;
 
 function TProvedorBetha.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
@@ -344,7 +345,7 @@ begin
 
  DadosMsg := '<Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -361,6 +362,11 @@ begin
               '</' + Prefixo4 + 'InscricaoMunicipal>' +
              '</Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<PeriodoEmissao>' +
                                '<DataInicial>' +
@@ -375,7 +381,7 @@ begin
 end;
 
 function TProvedorBetha.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
@@ -395,7 +401,7 @@ begin
              '</IdentificacaoRps>' +
              '<Prestador>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -415,7 +421,7 @@ begin
  Result := TagI + DadosMsg + TagF;
 end;
 
-function TProvedorBetha.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorBetha.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -581,6 +587,12 @@ begin
            '<ComplNfse xmlns="http://www.betha.com.br/e-nota-contribuinte-ws">' +
              RetNfse +
            '</ComplNfse>';
+end;
+
+function TProvedorBetha.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ Result := '';
 end;
 
 end.

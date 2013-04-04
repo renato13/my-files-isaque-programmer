@@ -7,11 +7,11 @@ interface
 uses
   Classes, SysUtils,
   pnfsConversao, pcnAuxiliar,
-  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil,
+  ACBrNFSeConfiguracoes, ACBrNFSeUtil, ACBrUtil, ACBrDFeUtil,
   {$IFDEF COMPILER6_UP} DateUtils {$ELSE} ACBrD5, FileCtrl {$ENDIF};
 
 type
-  { TACBrProvedorGinfes }
+  { TACBrProvedorSaatri }
 
  TProvedorSaatri = class(TProvedorClass)
   protected
@@ -22,9 +22,9 @@ type
    { public }
    Constructor Create;
 
-   function GetConfigCidade(ACodigo, AAmbiente: Integer): TConfigCidade; OverRide;
-   function GetConfigSchema(ACodigo: Integer): TConfigSchema; OverRide;
-   function GetConfigURL(ACodigo: Integer): TConfigURL; OverRide;
+   function GetConfigCidade(ACodCidade, AAmbiente: Integer): TConfigCidade; OverRide;
+   function GetConfigSchema(ACodCidade: Integer): TConfigSchema; OverRide;
+   function GetConfigURL(ACodCidade: Integer): TConfigURL; OverRide;
    function GetURI(URI: String): String; OverRide;
    function GetAssinarXML(Acao: TnfseAcao): Boolean; OverRide;
    // Sugestão de Rodrigo Cantelli
@@ -45,14 +45,14 @@ type
    function Gera_DadosMsgConsLote(Prefixo3, Prefixo4, NameSpaceDad,
                                   VersaoXML, Protocolo, CNPJ, IM: String;
                                   TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                      NumeroRps, SerieRps, TipoRps, CNPJ, IM: String;
                                      TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, VersaoXML,
+   function Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4, NameSpaceDad, VersaoXML,
                                   CNPJ, IM: String;
                                   DataInicial, DataFinal: TDateTime;
-                                  TagI, TagF: AnsiString): AnsiString; OverRide;
-   function Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe, CNPJ, IM,
+                                  TagI, TagF: AnsiString; NumeroNFSe: string = ''): AnsiString; OverRide;
+   function Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe, CNPJ, IM,
                                       CodMunicipio, CodCancelamento: String;
                                       TagI, TagF: AnsiString): AnsiString; OverRide;
    function Gera_DadosMsgGerarNFSe(Prefixo3, Prefixo4, Identificador,
@@ -72,26 +72,27 @@ type
    function GetRetornoWS(Acao: TnfseAcao; RetornoWS: AnsiString): AnsiString; OverRide;
 
    function GeraRetornoNFSe(Prefixo: String; RetNFSe: AnsiString; NomeCidade: String): AnsiString; OverRide;
+   function GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer; ACodVerificacao: String; AAmbiente: Integer): String; OverRide;
   end;
 
 implementation
 
-{ TProvedorGinfes }
+{ TProvedorSaatri }
 
 constructor TProvedorSaatri.Create;
 begin
  {----}
 end;
 
-function TProvedorSaatri.GetConfigCidade(ACodigo,
+function TProvedorSaatri.GetConfigCidade(ACodCidade,
   AAmbiente: Integer): TConfigCidade;
 var
  ConfigCidade: TConfigCidade;
 begin
  ConfigCidade.VersaoSoap    := '1.1';
  ConfigCidade.CodigoSchemas := 1;
- case ACodigo of
-  1400100:ConfigCidade.CodigoURLs := 1; // Boa Vista/RR
+ case ACodCidade of
+  1400100: ConfigCidade.CodigoURLs := 1; // Boa Vista/RR
  end;
  ConfigCidade.CodigoURLs    := 1;
  ConfigCidade.Prefixo2      := '';
@@ -109,7 +110,7 @@ begin
  Result := ConfigCidade;
 end;
 
-function TProvedorSaatri.GetConfigSchema(ACodigo: Integer): TConfigSchema;
+function TProvedorSaatri.GetConfigSchema(ACodCidade: Integer): TConfigSchema;
 var
  ConfigSchema: TConfigSchema;
 begin
@@ -130,31 +131,38 @@ begin
  Result := ConfigSchema;
 end;
 
-function TProvedorSaatri.GetConfigURL(ACodigo: Integer): TConfigURL;
+function TProvedorSaatri.GetConfigURL(ACodCidade: Integer): TConfigURL;
 var
  ConfigURL: TConfigURL;
 begin
- case ACodigo of
-  01: begin
-       ConfigURL.HomNomeCidade         := '';
-       ConfigURL.HomRecepcaoLoteRPS    := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomConsultaLoteRPS    := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomConsultaNFSeRPS    := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomConsultaSitLoteRPS := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomConsultaNFSe       := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomCancelaNFSe        := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.HomGerarNFSe          := 'https://homologa-boavista.saatri.com.br/servicos/nfse.svc';
+ case ACodCidade of
+  1400100: begin
+            ConfigURL.HomNomeCidade         := 'boavista';
 
-       ConfigURL.ProNomeCidade         := '';
-       ConfigURL.ProRecepcaoLoteRPS    := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProConsultaLoteRPS    := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProConsultaNFSeRPS    := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProConsultaSitLoteRPS := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProConsultaNFSe       := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProCancelaNFSe        := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-       ConfigURL.ProGerarNFSe          := 'https://boavista.saatri.com.br/servicos/nfse.svc';
-      end;
+            ConfigURL.ProNomeCidade         := 'boavista';
+           end;
+  2903201: begin
+            ConfigURL.HomNomeCidade         := 'barreiras';
+
+            ConfigURL.ProNomeCidade         := 'barreiras';
+           end;
  end;
+
+ ConfigURL.HomRecepcaoLoteRPS    := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomConsultaLoteRPS    := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomConsultaNFSeRPS    := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomConsultaSitLoteRPS := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomConsultaNFSe       := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomCancelaNFSe        := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.HomGerarNFSe          := 'https://homologa-' + ConfigURL.HomNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+
+ ConfigURL.ProRecepcaoLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProConsultaLoteRPS    := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProConsultaNFSeRPS    := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProConsultaSitLoteRPS := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProConsultaNFSe       := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProCancelaNFSe        := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
+ ConfigURL.ProGerarNFSe          := 'https://' + ConfigURL.ProNomeCidade + '.saatri.com.br/servicos/nfse.svc';
 
  Result := ConfigURL;
 end;
@@ -200,7 +208,7 @@ begin
    acCancelar:    Result := '<' + Prefixo3 + 'CancelarNfseEnvio' + xmlns + NameSpaceDad +
                              '<' + Prefixo3 + 'Pedido>' +
                               '<' + Prefixo4 + 'InfPedidoCancelamento' +
-                                 NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
+                                 DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + URI + '"', '') + '>';
    acGerar:       Result := '<' + Prefixo3 + 'GerarNfseEnvio' + xmlns + NameSpaceDad;
  end;
 end;
@@ -254,14 +262,14 @@ var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'LoteRps'+
-               NotaUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') +
+               DFeUtil.SeSenao(Identificador <> '', ' ' + Identificador + '="' + NumeroLote + '"', '') +
                ' versao="' + VersaoDados + '"' + '>' +
 
               '<' + Prefixo4 + 'NumeroLote>' +
                 NumeroLote +
               '</' + Prefixo4 + 'NumeroLote>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -295,7 +303,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -326,7 +334,7 @@ var
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -350,7 +358,7 @@ begin
 end;
 
 function TProvedorSaatri.Gera_DadosMsgConsNFSeRPS(Prefixo3, Prefixo4,
-  VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
+  NameSpaceDad, VersaoXML, NumeroRps, SerieRps, TipoRps, CNPJ, IM: String; TagI,
   TagF: AnsiString): AnsiString;
 var
  DadosMsg: AnsiString;
@@ -368,7 +376,7 @@ begin
              '</' + Prefixo3 + 'IdentificacaoRps>' +
              '<' + Prefixo3 + 'Prestador>' +
 
-              NotaUtil.SeSenao(VersaoXML = '1',
+              DFeUtil.SeSenao(VersaoXML = '1',
 
                 '<' + Prefixo4 + 'CpfCnpj>' +
                 '<' + Prefixo4 + 'Cnpj>' +
@@ -389,14 +397,14 @@ begin
 end;
 
 function TProvedorSaatri.Gera_DadosMsgConsNFSe(Prefixo3, Prefixo4,
-  VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
-  TagF: AnsiString): AnsiString;
+  NameSpaceDad, VersaoXML, CNPJ, IM: String; DataInicial, DataFinal: TDateTime; TagI,
+  TagF: AnsiString; NumeroNFSe: string = ''): AnsiString;
 var
  DadosMsg: AnsiString;
 begin
  DadosMsg := '<' + Prefixo3 + 'Prestador>' +
 
-               NotaUtil.SeSenao(VersaoXML = '1',
+               DFeUtil.SeSenao(VersaoXML = '1',
 
                  '<' + Prefixo4 + 'CpfCnpj>' +
                  '<' + Prefixo4 + 'Cnpj>' +
@@ -413,6 +421,11 @@ begin
                '</' + Prefixo4 + 'InscricaoMunicipal>' +
               '</' + Prefixo3 + 'Prestador>';
 
+ if NumeroNFSe <> ''
+  then DadosMsg := DadosMsg + '<' + Prefixo3 + 'NumeroNfse>' +
+                               NumeroNFSe +
+                              '</' + Prefixo3 + 'NumeroNfse>';
+
  if (DataInicial>0) and (DataFinal>0)
   then DadosMsg := DadosMsg + '<' + Prefixo3 + 'PeriodoEmissao>' +
                                '<' + Prefixo3 + 'DataInicial>' +
@@ -426,7 +439,7 @@ begin
  Result := TagI + DadosMsg + TagF;
 end;
 
-function TProvedorSaatri.Gera_DadosMsgCancelarNFSe(Prefixo4, NumeroNFSe,
+function TProvedorSaatri.Gera_DadosMsgCancelarNFSe(Prefixo4, NameSpaceDad, NumeroNFSe,
   CNPJ, IM, CodMunicipio, CodCancelamento: String; TagI,
   TagF: AnsiString): AnsiString;
 var
@@ -439,7 +452,7 @@ begin
 
               '<' + Prefixo4 + 'CpfCnpj>' +
 
-               NotaUtil.SeSenao(length(Cnpj)<14,
+               DFeUtil.SeSenao(length(Cnpj)<14,
 
                '<' + Prefixo4 + 'Cpf>' +
                  Cnpj +
@@ -483,7 +496,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeRecepcionarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -512,7 +525,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeConsultarLoteRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -534,7 +547,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeConsultarNFSeporRPS(URLNS: String;
   CabMsg, DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -556,7 +569,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeConsultarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -578,7 +591,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeCancelarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -600,7 +613,7 @@ end;
 function TProvedorSaatri.GeraEnvelopeGerarNFSe(URLNS: String; CabMsg,
   DadosMsg, DadosSenha: AnsiString): AnsiString;
 begin
- result := '<?xml version="1.0" encoding="utf-8"?>' +
+ result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"' +
                       ' xmlns:nfse="http://nfse.abrasf.org.br">' +
             '<S:Header>' +
@@ -648,10 +661,26 @@ end;
 function TProvedorSaatri.GeraRetornoNFSe(Prefixo: String;
   RetNFSe: AnsiString; NomeCidade: String): AnsiString;
 begin
- Result := '<?xml version="1.0" encoding="utf-8"?>' +
+ Result := '<?xml version="1.0" encoding="UTF-8"?>' +
            '<' + Prefixo + 'CompNfse xmlns="http://www.abrasf.org.br/nfse.xsd">' +
              RetNfse +
            '</' + Prefixo + 'CompNfse>';
+end;
+
+function TProvedorSaatri.GetLinkNFSe(ACodMunicipio, ANumeroNFSe: Integer;
+  ACodVerificacao: String; AAmbiente: Integer): String;
+begin
+ if AAmbiente = 1
+  then begin
+   case ACodMunicipio of
+    1400100: Result := 'https://boavista.saatri.com.br/VisualizarNotaFiscal?numero=' +
+                       IntToStr(ANumeroNFSe) + '&codigoVerificacao=' + ACodVerificacao;
+    2903201: Result := 'https://barreiras.saatri.com.br/Relatorio/VisualizarNotaFiscal?numero=' +
+                       IntToStr(ANumeroNFSe) + '&codigoVerificacao=' + ACodVerificacao;
+   else Result := '';
+   end;
+  end
+  else Result := ''; 
 end;
 
 end.

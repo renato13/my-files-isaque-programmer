@@ -77,8 +77,13 @@ type
     procedure LoadFromFile ;
     procedure Reset ;
     function Add( const AString : AnsiString; AddDelimiter : Boolean = True ) : Integer;
-    function RFill(Value: String; Size: Integer = 0; Caracter: Char = ' '): String; overload;
-    function LFill(Value: String; Size: Integer = 0; Caracter: Char = '0'): String; overload;
+    function RFill(Value: String;
+                   Size: Integer = 0;
+                   Caracter: Char = ' '): String; overload;
+    function LFill(Value: String;
+                   Size: Integer = 0;
+                   Nulo: Boolean = false;
+                   Caracter: Char = '0'): String; overload;
     function DFill(Value: Double;
                    Decimal: Integer = 2;
                    Nulo: Boolean = false): String;
@@ -202,7 +207,9 @@ begin
   Check(Condicao, Format(Msg, Fmt));
 end;
 
-function TACBrTXTClass.RFill(Value: String; Size: Integer = 0; Caracter: Char = ' '): String;
+function TACBrTXTClass.RFill(Value: String;
+                             Size: Integer = 0;
+                             Caracter: Char = ' '): String;
 begin
   /// Se a propriedade TrimString = true, Result retorna sem espaços em branco
   /// iniciais e finais.
@@ -220,8 +227,16 @@ begin
      Result := FDelimitador + Result;
 end;
 
-function TACBrTXTClass.LFill(Value: String; Size: Integer = 0; Caracter: Char = '0'): String;
+function TACBrTXTClass.LFill(Value: String;
+                             Size: Integer = 0;
+                             Nulo: Boolean = false;
+                             Caracter: Char = '0'): String;
 begin
+  if (Nulo) and (Length(Value) = 0) then
+  begin
+     Result := FDelimitador;
+     Exit;
+  end;
   /// Se a propriedade TrimString = true, Result retorna sem espaços em branco
   /// iniciais e finais.
   if FTrimString then
@@ -262,7 +277,7 @@ begin
      intP := intP * 10;
   end;
 
-  if strCurMascara <> '' then
+  if strCurMascara <> '#' then
      Result := FDelimitador + FormatCurr(strCurMascara, Value)
   else
      Result := LFill(Trunc(Value * intP), Size, Nulo, Caracter);
@@ -289,7 +304,7 @@ begin
      Result := FDelimitador;
      Exit;
   end;
-  Result := LFill(IntToStr(Value), Size, Caracter);
+  Result := LFill(IntToStr(Value), Size, False, Caracter);
 end;
 
 function TACBrTXTClass.LFill(Value: TDateTime; Mask: String = 'ddmmyyyy'): String;

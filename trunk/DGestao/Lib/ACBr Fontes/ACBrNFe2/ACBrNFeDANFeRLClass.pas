@@ -86,6 +86,10 @@
 |*    estiver no Delphi. Obrigatória a utilização da versão 3.70B ou superior
 |*    do Fortes Report. Download disponível em
 |*    http://sourceforge.net/projects/fortesreport/files/
+|* 14/03/2013: Peterson de Cerqueira Matos
+|*  - Início da impressão dos eventos em Fortes Report
+|* 22/03/2013: Peterson de Cerqueira Matos
+|*  - Impressão dos detalhamentos específicos e do desconto em percentual
 ******************************************************************************}
 {$I ACBr.inc}
 unit ACBrNFeDANFeRLClass;
@@ -98,8 +102,10 @@ uses SysUtils, Classes,
   {$ELSE}
   Forms, Dialogs,
   {$ENDIF}
-  ACBrNFeDANFEClass, ACBrNFeDANFeRL,RLConsts, ACBrNFeDANFeRLRetrato,
-  ACBrNFeDANFeRLPaisagem, pcnNFe, pcnConversao, StrUtils;
+  ACBrNFeDANFEClass, RLConsts,
+  ACBrNFeDANFeRL, ACBrNFeDANFeRLRetrato, ACBrNFeDANFeRLPaisagem,
+  ACBrNFeDANFeEventoRL, ACBrNFeDANFeEventoRLRetrato,
+  pcnNFe, pcnConversao, StrUtils;
 
 type
   TACBrNFeDANFeRL = class( TACBrNFeDANFEClass )
@@ -110,13 +116,18 @@ type
     FFonteDANFE: TFonteDANFE;
     FTamanhoFonte_RazaoSocial: Integer;
     FExibirEAN: Boolean;
+    FDetVeiculos: TDetVeiculos;
+    FDetMedicamentos: TDetMedicamentos;
+    FDetArmamentos: TDetArmamentos;
+    FDetCombustiveis: TDetCombustiveis;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure ImprimirDANFE(NFE : TNFe = nil); override ;
     procedure ImprimirDANFEPDF(NFE : TNFe = nil); override ;
+    procedure ImprimirEVENTO(NFE : TNFe = nil); override ;
+    procedure ImprimirEVENTOPDF(NFE : TNFe = nil); override ;
     procedure SetExibirEAN(Value: Boolean); virtual;
-    procedure SetTipoDANFE(Value: TpcnTipoImpressao); virtual;
   published
     property MarcadAgua : String read FMarcadagua write FMarcadagua ;
     property LarguraCodProd: Integer read FLarguraCodProd write FLarguraCodProd;
@@ -127,7 +138,14 @@ type
     property TamanhoFonte_RazaoSocial: Integer read FTamanhoFonte_RazaoSocial
                                               write FTamanhoFonte_RazaoSocial;
     property ExibirEAN: Boolean read FExibirEAN write SetExibirEAN;
-    property TipoDANFE: TpcnTipoImpressao read FTipoDANFE write SetTipoDANFE;
+    property DetVeiculos: TDetVeiculos read FDetVeiculos write FDetVeiculos default
+                          [dv_chassi, dv_xCor, dv_nSerie, dv_tpComb, dv_nMotor, dv_anoMod, dv_anoFab];
+    property DetMedicamentos: TDetMedicamentos read FDetMedicamentos write FDetMedicamentos default
+                              [dm_nLote, dm_qLote, dm_dFab, dm_dVal, dm_vPMC];
+    property DetArmamentos: TDetArmamentos read FDetArmamentos write FDetArmamentos default
+                            [da_tpArma, da_nSerie, da_nCano, da_descr];
+    property DetCombustiveis: TDetCombustiveis read FDetCombustiveis write FDetCombustiveis default
+                            [dc_cProdANP, dc_CODIF, dc_qTemp, dc_UFCons, dc_CIDE, dc_qBCProd, dc_vAliqProd, dc_vCIDE];
   end;
 
 implementation
@@ -137,6 +155,7 @@ uses ACBrNFe, ACBrNFeUtil, ACBrUtil;
 var
   i : Integer;
   frlDANFeRL: TfrlDANFeRL;
+  frlDANFeEventoRL: TfrlDANFeEventoRL;
 
 constructor TACBrNFeDANFeRL.Create(AOwner: TComponent);
 begin
@@ -152,6 +171,11 @@ begin
   FProdutosPorPagina := 0;
   FTamanhoFonte_RazaoSocial := 8;
   FExibirEAN := False;
+  FTipoDANFE := tiRetrato;  
+  FDetVeiculos := [dv_chassi, dv_xCor, dv_nSerie, dv_tpComb, dv_nMotor, dv_anoMod, dv_anoFab];
+  FDetMedicamentos := [dm_nLote, dm_qLote, dm_dFab, dm_dVal, dm_vPMC];
+  FDetArmamentos := [da_tpArma, da_nSerie, da_nCano, da_descr];
+  FDetCombustiveis := [dc_cProdANP, dc_CODIF, dc_qTemp, dc_UFCons, dc_CIDE, dc_qBCProd, dc_vAliqProd, dc_vCIDE];
 end;
 
 destructor TACBrNFeDANFeRL.Destroy;
@@ -161,7 +185,7 @@ end;
 
 procedure TACBrNFeDANFeRL.ImprimirDANFE(NFE : TNFe = nil);
 begin
-  case TipoDANFE of
+  case FTipoDANFE of
     tiRetrato:   frlDANFeRL := TfrlDANFeRLRetrato.Create(Self);
     tiPaisagem:  frlDANFeRL := TfrlDANFeRLPaisagem.Create(Self);
   end;
@@ -177,7 +201,9 @@ begin
           MargemInferior, MargemEsquerda, MargemDireita, CasasDecimais._qCom,
           CasasDecimais._vUnCom, ProdutosPorPagina, Impressora,
           TamanhoFonte_RazaoSocial, ExibirEAN, ProtocoloNFe,
-          ExibirResumoCanhoto_Texto);
+          ExibirResumoCanhoto_Texto, NFeCancelada,
+          ImprimirDetalhamentoEspecifico, ImprimirDescPorc,
+          DetVeiculos, DetMedicamentos, DetArmamentos, DetCombustiveis);
         end;
     end
   else
@@ -189,7 +215,9 @@ begin
       MargemInferior, MargemEsquerda, MargemDireita, CasasDecimais._qCom,
       CasasDecimais._vUnCom, ProdutosPorPagina, Impressora,
       TamanhoFonte_RazaoSocial, ExibirEAN, ProtocoloNFe,
-      ExibirResumoCanhoto_Texto);
+      ExibirResumoCanhoto_Texto, NFeCancelada,
+      ImprimirDetalhamentoEspecifico, ImprimirDescPorc,
+      DetVeiculos, DetMedicamentos, DetArmamentos, DetCombustiveis);
     end;
 
   frlDANFeRL.Free;
@@ -198,7 +226,7 @@ end;
 procedure TACBrNFeDANFeRL.ImprimirDANFEPDF(NFE : TNFe = nil);
 var sFile: String;
 begin
-  case TipoDANFE of
+  case FTipoDANFE of
     tiRetrato:   frlDANFeRL := TfrlDANFeRLRetrato.Create(Self);
     tiPaisagem:  frlDANFeRL := TfrlDANFeRLPaisagem.Create(Self);
   end;
@@ -216,7 +244,9 @@ begin
           ExpandirLogoMarca, FonteDANFE, MargemSuperior,
           MargemInferior, MargemEsquerda, MargemDireita, CasasDecimais._qCom,
           CasasDecimais._vUnCom, ProdutosPorPagina, TamanhoFonte_RazaoSocial,
-          ExibirEAN, ProtocoloNFe, ExibirResumoCanhoto_Texto);
+          ExibirEAN, ProtocoloNFe, ExibirResumoCanhoto_Texto, NFeCancelada,
+          ImprimirDetalhamentoEspecifico, ImprimirDescPorc,
+          DetVeiculos, DetMedicamentos, DetArmamentos, DetCombustiveis);
         end;
     end
   else
@@ -228,9 +258,11 @@ begin
       MargemSuperior, MargemInferior, MargemEsquerda, MargemDireita,
       CasasDecimais._qCom, CasasDecimais._vUnCom, ProdutosPorPagina,
       TamanhoFonte_RazaoSocial, ExibirEAN, ProtocoloNFe,
-      ExibirResumoCanhoto_Texto);
+      ExibirResumoCanhoto_Texto, NFeCancelada,
+      ImprimirDetalhamentoEspecifico, ImprimirDescPorc,
+      DetVeiculos, DetMedicamentos, DetArmamentos, DetCombustiveis);
     end;
-   
+
 
   frlDANFeRL.Free;
 end;
@@ -243,14 +275,38 @@ begin
     FExibirEAN := Value;
 end;
 
-procedure TACBrNFeDANFeRL.SetTipoDANFE(Value: TpcnTipoImpressao);
+procedure TACBrNFeDANFeRL.ImprimirEVENTO(NFE: TNFe);
 begin
-  if Value = tiRetrato then
-    begin
-      FExibirEAN := False;
-    end;
+  case FTipoDANFE of
+    tiRetrato, tiPaisagem:
+              frlDANFeEventoRL := TfrlDANFeEventoRLRetrato.Create(Self);
+  end;
 
-  FTipoDANFE := Value;
+  for i := 0 to (TACBrNFe(ACBrNFe).EventoNFe.Evento.Count - 1) do
+    begin
+      frlDANFeEventoRL.Imprimir(TACBrNFe(ACBrNFe).EventoNFe,
+      FLogo, FMarcadagua, FNumCopias, FSistema, FUsuario, FMostrarPreview,
+      FFonteDANFE, FMargemSuperior, FMargemInferior, FMargemEsquerda,
+      FMargemDireita, FImpressora, i);
+    end;
+end;
+
+procedure TACBrNFeDANFeRL.ImprimirEVENTOPDF(NFE: TNFe);
+var sFile: String;
+begin
+  case FTipoDANFE of
+    tiRetrato, tiPaisagem:
+              frlDANFeEventoRL := TfrlDANFeEventoRLRetrato.Create(Self);
+  end;
+
+  for i := 0 to (TACBrNFe(ACBrNFe).EventoNFe.Evento.Count - 1) do
+    begin
+      sFile := TACBrNFe(ACBrNFe).DANFE.PathPDF +
+      Copy(TACBrNFe(ACBrNFe).EventoNFe.Evento.Items[i].InfEvento.id, 3, 52) + '.pdf';
+      frlDANFeEventoRL.SavePDF(TACBrNFe(ACBrNFe).EventoNFe,
+      FLogo, FMarcadagua, sFile, FSistema, FUsuario, FFonteDANFE,
+      FMargemSuperior, FMargemInferior, FMargemEsquerda, FMargemDireita, i);
+    end;
 end;
 
 end.
