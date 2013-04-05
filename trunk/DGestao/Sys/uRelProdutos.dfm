@@ -960,8 +960,8 @@ object frmRelProdutos: TfrmRelProdutos
     end
   end
   object QuickRep1: TQuickRep
-    Left = 783
-    Top = 88
+    Left = 535
+    Top = 48
     Width = 476
     Height = 674
     Frame.Color = clBlack
