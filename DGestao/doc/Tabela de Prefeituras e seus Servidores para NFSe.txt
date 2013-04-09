@@ -1,7 +1,6 @@
 Segue uma pequena lista das Prefeituras e seus Provedores:
 Obs: Veja também o layout de sua cidade, como o nosso amigo Italo Jr disse, porque mesmo assim pode mudar.
 
-
 5100250 Alta Floresta/MT (ISS.NET)
 3501608 Americana/SP (TIPLAN)
 5201108 Anápolis/GO (ISS.NET)
