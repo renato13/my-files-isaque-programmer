@@ -13,6 +13,7 @@ object frmRelProdutos: TfrmRelProdutos
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
@@ -1646,8 +1647,6 @@ object frmRelProdutos: TfrmRelProdutos
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = IBQuery1CalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +
@@ -1714,8 +1713,6 @@ object frmRelProdutos: TfrmRelProdutos
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -1724,8 +1721,6 @@ object frmRelProdutos: TfrmRelProdutos
   object IBQuery2: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +

@@ -89,6 +89,7 @@ type
     QRDBText26: TQRDBText;
     QRDBText27: TQRDBText;
     QRDBText28: TQRDBText;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -103,5 +104,14 @@ implementation
 uses UDMBusiness;
 
 {$R *.dfm}
+
+procedure TfrmRelEstoque.FormCreate(Sender: TObject);
+begin
+  ibqryDemanda.Open;
+  ibqryEmpresa.Open;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmRelEstoque', TfrmRelEstoque);
 
 end.

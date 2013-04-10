@@ -46,8 +46,10 @@ inherited frmGeUnidade: TfrmGeUnidade
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 81
+        Width = 727
       end
       inherited GrpBxDadosNominais: TGroupBox
+        Width = 727
         Height = 81
         object lblNome: TLabel [1]
           Left = 88

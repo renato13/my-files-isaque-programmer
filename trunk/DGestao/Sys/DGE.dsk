@@ -1,44 +1,40 @@
 [Closed Files]
-File_0=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnEnvEventoNFe.pas',0,1,212,87,261,0,0
-File_1=SourceModule,'C:\PROGRA~2\Borland\Delphi7\source\RTL\sys\system.pas',0,1,824,1,853,0,0
-File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas',0,1,210,97,216,1,0
-File_3=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,113,14,125,0,0
-File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeExportarNFeGerada.pas',0,1,133,110,133,1,0
-File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\USobre.pas',0,1,22,84,27,1,0
-File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoque.pas',0,1,1,64,29,1,0
-File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoqueGerarNFe.pas',0,1,46,72,51,1,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeEntradaEstoqueCancelar.pas',0,1,1,58,18,1,0
-File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeContasAReceber.pas',0,1,153,106,156,1,0
+File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,57,95,62,1,0
+File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,103,88,106,1,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFabricante.pas',0,1,40,117,48,0,0
+File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeUnidade.pas',0,1,83,76,88,0,0
+File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeBancos.pas',0,1,130,97,136,0,0
+File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFormaPagto.pas',0,1,1,103,5,0,0
+File_6=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnEnvEventoNFe.pas',0,1,212,87,261,0,0
+File_7=SourceModule,'C:\PROGRA~2\Borland\Delphi7\source\RTL\sys\system.pas',0,1,824,1,853,0,0
+File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas',0,1,210,97,216,1,0
+File_9=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,113,14,125,0,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
-Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module8=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
-Count=9
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
+Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
+Count=10
 EditWindowCount=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -49,6 +45,16 @@ FormState=1
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -81,8 +87,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=9
-CurrentView=5
+ViewCount=10
+CurrentView=7
 View0=0
 View1=1
 View2=2
@@ -92,6 +98,7 @@ View5=5
 View6=6
 View7=7
 View8=8
+View9=9
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -157,22 +164,29 @@ LeftCol=1
 
 [View6]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-CursorX=5
-CursorY=603
-TopLine=563
+CursorX=64
+CursorY=7
+TopLine=1
 LeftCol=1
 
 [View7]
+Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas
+CursorX=64
+CursorY=79
+TopLine=1
+LeftCol=1
+
+[View8]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
 CursorX=148
 CursorY=1005
 TopLine=991
 LeftCol=1
 
-[View8]
+[View9]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
-CursorX=32
-CursorY=144
+CursorX=86
+CursorY=121
 TopLine=110
 LeftCol=1
 
@@ -193,8 +207,8 @@ Left=0
 Top=0
 Width=1920
 Height=122
-MaxLeft=-1
-MaxTop=-1
+MaxLeft=-8
+MaxTop=-8
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -246,7 +260,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Name
+SelectedItem=
 ExpandedItems=
 HiddenCategories=
 

@@ -2,7 +2,7 @@ unit FuncoesFormulario;
 
 interface
 
-uses Classes, Forms, Controls;{, ConexaoDB, Basico, BasicoTela,  Windows, Messages, SysUtils, Variants,
+uses Classes, Forms, Controls, QRCtrls, QuickRpt;{, ConexaoDB, Basico, BasicoTela,  Windows, Messages, SysUtils, Variants,
 Graphics, Dialogs, StdCtrls;
 }
 
@@ -14,12 +14,14 @@ type
     class function EstaAberto(sForm: String): Boolean;
     class function ShowModalForm(const AOnwer : TComponent; NomeForm: String): Boolean;
     class procedure ShowForm(const AOnwer : TComponent; NomeForm: String);
+    class procedure ShowFormReport(const AOnwer : TComponent; NomeForm: String); overload;
+    class procedure ShowFormReport(const AOnwer : TComponent; NomeForm, NomeQuickRep: String); overload;
     class procedure RegisterForm(const aFormName: string; aFormClass: TComponentClass);
     class procedure FecharTodosForm;
 end;
 
 var
-FForm: TForm;
+  FForm: TForm;
 
 implementation
 
@@ -65,6 +67,47 @@ begin
   if TFormularios.EstaAberto(NomeForm) then
     FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
   FForm.Show;
+end;
+
+class procedure TFormularios.ShowFormReport(const AOnwer : TComponent; NomeForm: String);
+var
+  I : Integer;
+  qckrp : TComponent;
+begin
+  try
+    if TFormularios.EstaAberto(NomeForm) then
+      FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
+
+    qckrp := nil;
+    for I := 0 to FForm.ComponentCount - 1 do
+      if FForm.Components[I] is TQuickRep then
+      begin
+        qckrp := FForm.Components[I];
+        Break;
+      end;
+
+    if ( qckrp <> nil ) then
+      TQuickRep(qckrp).PreviewModal;
+  finally
+    FForm.Free;
+  end;
+end;
+
+class procedure TFormularios.ShowFormReport(const AOnwer : TComponent; NomeForm, NomeQuickRep: String);
+var
+  qckrp : TComponent;
+begin
+  try
+    if TFormularios.EstaAberto(NomeForm) then
+      FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
+
+    qckrp := FForm.FindComponent(NomeQuickRep);
+
+    if Assigned(qckrp) then
+      TQuickRep(qckrp).PreviewModal;
+  finally
+    FForm.Free;
+  end;
 end;
 
 class function TFormularios.ShowModalForm(const AOnwer: TComponent;

@@ -113,4 +113,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeUnidade', TfrmGeUnidade);
+
 end.

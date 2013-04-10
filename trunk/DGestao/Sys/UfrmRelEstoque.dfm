@@ -12,6 +12,7 @@ object frmRelEstoque: TfrmRelEstoque
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
@@ -2458,8 +2459,6 @@ object frmRelEstoque: TfrmRelEstoque
   object ibqryDemanda: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select p.cod as codpro, p.descri as produto, p.qtde as estoque,'
       
@@ -2579,8 +2578,6 @@ object frmRelEstoque: TfrmRelEstoque
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 88

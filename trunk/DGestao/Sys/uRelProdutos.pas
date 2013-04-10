@@ -86,6 +86,7 @@ type
     procedure qckrpBeforePrint(Sender: TCustomQuickRep;
       var PrintReport: Boolean);
     procedure IBQuery1CalcFields(DataSet: TDataSet);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -116,8 +117,18 @@ end;
 
 procedure TfrmRelProdutos.IBQuery1CalcFields(DataSet: TDataSet);
 begin
- IBQuery1TotPrecoVenda.Value := IBQuery1PRECO.Value * IBQuery1QTDE.Value;
- IBQuery1TotCustoEstoq.Value := IBQuery1CUSTOMEDIO.Value * IBQuery1QTDE.Value;
+  IBQuery1TotPrecoVenda.Value := IBQuery1PRECO.Value * IBQuery1QTDE.Value;
+  IBQuery1TotCustoEstoq.Value := IBQuery1CUSTOMEDIO.Value * IBQuery1QTDE.Value;
 end;
+
+procedure TfrmRelProdutos.FormCreate(Sender: TObject);
+begin
+  frmRelProdutos.IBQuery1.Open;
+  frmRelProdutos.IBQuery2.Open;
+  frmRelProdutos.ibqryEmpresa.Open;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmRelProdutos', TfrmRelProdutos);
 
 end.
