@@ -186,7 +186,7 @@ uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa,
-  UFuncoes, UConstantesDGE, UfrmRelEstoque;
+  UFuncoes, UConstantesDGE; //, UfrmRelEstoque;
 
 {$R *.dfm}
 
@@ -589,6 +589,7 @@ end;
 
 procedure TfrmPrinc.DemandaAnual1Click(Sender: TObject);
 begin
+  (*
   Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
   with frmRelEstoque do
   begin
@@ -599,7 +600,7 @@ begin
    ibqryEmpresa.Close;
    Destroy;
   end;
-
+  *)
 end;
 
 end.
