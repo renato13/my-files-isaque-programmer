@@ -273,7 +273,7 @@ end;
 
 procedure TfrmPrinc.nmRelatorioProdutoClick(Sender: TObject);
 begin
-  FormFunction.ShowFormReport(Self, 'frmRelEstoque', 'QuickRep1');
+  FormFunction.ShowFormReport(Self, 'frmRelProdutos', 'QuickRep1');
 end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
@@ -571,7 +571,7 @@ end;
 
 procedure TfrmPrinc.ProdutosemEstoque1Click(Sender: TObject);
 begin
-  FormFunction.ShowFormReport(Self, 'frmRelEstoque', 'qckrp');
+  FormFunction.ShowFormReport(Self, 'frmRelProdutos', 'qckrp');
 end;
 
 procedure TfrmPrinc.DemandaAnual1Click(Sender: TObject);
