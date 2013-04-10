@@ -970,8 +970,8 @@ begin
 
       // Numero do Lote de Envio
       iNumeroLote := StrToInt(FormatDateTime('yymmddhhmm', GetDateTimeDB));
-      if not NotasFiscais.LoadFromString( FileNameXML ) then
-        raise Exception.Create('Não foi possível carregar o XML da Nota Fiscal Eletrônica correspondente!');
+      if not NotasFiscais.LoadFromFile( FileNameXML ) then
+        raise Exception.Create('Não foi possível carregar o XML da Nota Fiscal Eletrônica correspondente!' + #13 + FileNameXML);
 
       // Criar o Cancelamento
       EventoNFe.Evento.Clear;
