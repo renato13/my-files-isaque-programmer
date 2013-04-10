@@ -1,45 +1,45 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,57,95,62,1,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,103,88,106,1,0
-File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFabricante.pas',0,1,40,117,48,0,0
-File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeUnidade.pas',0,1,83,76,88,0,0
-File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeBancos.pas',0,1,130,97,136,0,0
-File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFormaPagto.pas',0,1,1,103,5,0,0
-File_6=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnEnvEventoNFe.pas',0,1,212,87,261,0,0
-File_7=SourceModule,'C:\PROGRA~2\Borland\Delphi7\source\RTL\sys\system.pas',0,1,824,1,853,0,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaGerarNFe.pas',0,1,210,97,216,1,0
-File_9=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,113,14,125,0,0
+File_0=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnNFeR.pas',0,1,119,1,121,0,0
+File_1=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFeConfiguracoes.pas',0,1,404,47,453,0,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,57,95,62,1,0
+File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,103,88,106,1,0
+File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFabricante.pas',0,1,40,117,48,0,0
+File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeUnidade.pas',0,1,83,76,88,0,0
+File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeBancos.pas',0,1,130,97,136,0,0
+File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFormaPagto.pas',0,1,1,103,5,0,0
+File_8=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnEnvEventoNFe.pas',0,1,212,87,261,0,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module1=C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFeNotasFiscais.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
 Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas
-Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
-Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
-Count=10
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas
+Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UFuncoesRede.pas
+Module9=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module10=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
+Count=11
 EditWindowCount=1
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+[C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFeNotasFiscais.pas]
 ModuleType=SourceModule
-FormState=1
+FormState=0
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -49,7 +49,12 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -87,8 +92,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=10
-CurrentView=6
+ViewCount=11
+CurrentView=5
 View0=0
 View1=1
 View2=2
@@ -99,6 +104,7 @@ View6=6
 View7=7
 View8=8
 View9=9
+View10=10
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -116,9 +122,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -158,35 +164,42 @@ LeftCol=1
 [View5]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
 CursorX=7
-CursorY=1002
-TopLine=987
+CursorY=974
+TopLine=956
 LeftCol=1
 
 [View6]
+Module=C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFeNotasFiscais.pas
+CursorX=1
+CursorY=500
+TopLine=480
+LeftCol=1
+
+[View7]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
 CursorX=52
 CursorY=276
 TopLine=243
 LeftCol=1
 
-[View7]
+[View8]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.pas
 CursorX=64
 CursorY=79
 TopLine=1
 LeftCol=1
 
-[View8]
+[View9]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
 CursorX=148
 CursorY=1005
 TopLine=991
 LeftCol=1
 
-[View9]
+[View10]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaCancelar.pas
-CursorX=86
-CursorY=121
+CursorX=34
+CursorY=144
 TopLine=110
 LeftCol=1
 
@@ -194,7 +207,8 @@ LeftCol=1
 Count=0
 
 [Breakpoints]
-Count=0
+Count=1
+Breakpoint0='E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas',950,'',0,1,'',1,0,0,'',1,'','',''
 
 [AddressBreakpoints]
 Count=0
@@ -207,8 +221,8 @@ Left=0
 Top=0
 Width=1920
 Height=122
-MaxLeft=-1
-MaxTop=-1
+MaxLeft=-8
+MaxTop=-8
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -260,7 +274,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=OnCreate
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=
 
@@ -319,26 +333,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=858
+Height=770
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=858
+ClientHeight=770
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=-10
-Top=-713
-Width=443
+Left=12
+Top=0
+Width=1636
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1636
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
