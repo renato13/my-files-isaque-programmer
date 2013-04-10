@@ -114,8 +114,8 @@ IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=1
 MinorVer=0
-Release=3
-Build=2
+Release=2
+Build=5
 Debug=0
 PreRelease=0
 Special=0
@@ -126,3 +126,16 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Masterdados Tecnologia da Informação
 FileDescription=Sistema Integrado de Gestão Empresarial
+FileVersion=1.0.2.5
+InternalName=DGE
+LegalCopyright=Copyright 2012 © Dorivaldo M. Vieira Jr, Inc.
+LegalTrademarks=
+OriginalFilename=DGE.EXE
+ProductName=DGE - Sistema de Gestão Empresarial
+ProductVersion=1.0.2.0
+Comments=
+System Analisty=Isaque Marinho Ribeiro
+ReleaseDate=30/05/2012
+Contacts=(91) 8717-1057 / 8129-1567
+[Excluded Packages]
+C:\Program Files\FastReports\FastReport 4632\LibD7\dclfsIBX7.bpl=FastScript 1.9 IBX Components
