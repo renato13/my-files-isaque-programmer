@@ -37,6 +37,7 @@ object DMNFe: TDMNFe
     ProdutosPorPagina = 0
     ImprimirDetalhamentoEspecifico = True
     NFeCancelada = False
+    LocalImpCanhoto = 0
     EspessuraBorda = 1
     TamanhoFonte_RazaoSocial = 12
     TamanhoFonte_ANTT = 10
@@ -2695,7 +2696,7 @@ object DMNFe: TDMNFe
   object IBSQL: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    Left = 144
+    Left = 56
     Top = 312
   end
   object FrECFPooler: TfrxReport
@@ -4800,5 +4801,107 @@ object DMNFe: TDMNFe
     BCDToCurrency = False
     Left = 260
     Top = 217
+  end
+  object qryNFeEmitida: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    n.ANOVENDA'
+      '  , n.NUMVENDA'
+      '  , n.DATAEMISSAO'
+      '  , n.HORAEMISSAO'
+      '  , n.SERIE'
+      '  , n.NUMERO'
+      '  , n.CHAVE'
+      '  , n.PROTOCOLO'
+      '  , n.RECIBO'
+      '  , n.XML_FILENAME'
+      '  , n.XML_FILE'
+      '  , n.LOTE_ANO'
+      '  , n.LOTE_NUM'
+      'from TBNFE_ENVIADA n'
+      'where n.ANOVENDA = :anovenda'
+      '  and n.NUMVENDA = :numvenda')
+    Left = 144
+    Top = 312
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'AnoVenda'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'NumVenda'
+        ParamType = ptInput
+        Value = 0
+      end>
+    object qryNFeEmitidaANOVENDA: TSmallintField
+      FieldName = 'ANOVENDA'
+      Origin = '"TBNFE_ENVIADA"."ANOVENDA"'
+    end
+    object qryNFeEmitidaNUMVENDA: TIntegerField
+      FieldName = 'NUMVENDA'
+      Origin = '"TBNFE_ENVIADA"."NUMVENDA"'
+    end
+    object qryNFeEmitidaDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."DATAEMISSAO"'
+    end
+    object qryNFeEmitidaHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."HORAEMISSAO"'
+    end
+    object qryNFeEmitidaSERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = '"TBNFE_ENVIADA"."SERIE"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 4
+    end
+    object qryNFeEmitidaNUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = '"TBNFE_ENVIADA"."NUMERO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryNFeEmitidaCHAVE: TIBStringField
+      FieldName = 'CHAVE'
+      Origin = '"TBNFE_ENVIADA"."CHAVE"'
+      Size = 250
+    end
+    object qryNFeEmitidaPROTOCOLO: TIBStringField
+      FieldName = 'PROTOCOLO'
+      Origin = '"TBNFE_ENVIADA"."PROTOCOLO"'
+      Size = 250
+    end
+    object qryNFeEmitidaRECIBO: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = '"TBNFE_ENVIADA"."RECIBO"'
+      Size = 250
+    end
+    object qryNFeEmitidaXML_FILENAME: TIBStringField
+      FieldName = 'XML_FILENAME'
+      Origin = '"TBNFE_ENVIADA"."XML_FILENAME"'
+      Size = 250
+    end
+    object qryNFeEmitidaXML_FILE: TMemoField
+      FieldName = 'XML_FILE'
+      Origin = '"TBNFE_ENVIADA"."XML_FILE"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryNFeEmitidaLOTE_ANO: TSmallintField
+      FieldName = 'LOTE_ANO'
+      Origin = '"TBNFE_ENVIADA"."LOTE_ANO"'
+    end
+    object qryNFeEmitidaLOTE_NUM: TIntegerField
+      FieldName = 'LOTE_NUM'
+      Origin = '"TBNFE_ENVIADA"."LOTE_NUM"'
+      Required = True
+    end
   end
 end
