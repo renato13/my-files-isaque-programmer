@@ -174,35 +174,6 @@ end
 SET TERM ; ^
 
 
-/*!!! Error occured !!!
-Invalid token.
-Dynamic SQL Error.
-SQL error code = -104.
-Token unknown - line 15, column 46.
-as.
-
-*/
-
-/*!!! Error occured !!!
-Invalid token.
-Dynamic SQL Error.
-SQL error code = -104.
-Token unknown - line 9, column 74.
-i.
-
-*/
-
-/*!!! Error occured !!!
-Invalid token.
-Dynamic SQL Error.
-SQL error code = -104.
-Token unknown - line 9, column 18.
-and.
-
-*/
-
-
-
 /*------ SYSDBA 06/02/2013 01:23:14 --------*/
 
 COMMENT ON COLUMN TBVENDAS.STATUS IS
