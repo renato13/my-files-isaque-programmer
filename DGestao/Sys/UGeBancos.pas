@@ -172,4 +172,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeBancos', TfrmGeBancos);
+
 end.

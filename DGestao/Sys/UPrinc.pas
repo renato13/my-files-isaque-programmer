@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ComCtrls, BarMenus, RXCtrls, ExtCtrls, jpeg, // , SpeedBar
+  Dialogs, Menus, ComCtrls, BarMenus, RXCtrls, ExtCtrls, jpeg, 
   EUserAcs, StdCtrls, Buttons, rxSpeedbar, EAppProt;
 
 type
@@ -178,15 +178,14 @@ var
 
 implementation
 
-uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uRelProdutos, uGerRelCR,
-  uGerRelCP, USobre, UfrmRelVendas, UGeBancos, 
-  UGeGrupoProduto, UGeSecaoProduto, UGeUnidade,
+uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uGerRelCR,
+  uGerRelCP, USobre, UfrmRelVendas, UGeGrupoProduto, UGeSecaoProduto, 
   UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto, UGeTeste, UGeEntradaEstoque, UGeContasAPagar,
+  UGeCondicaoPagto,  UGeEntradaEstoque, UGeContasAPagar,
   UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
   UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
   UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa,
-  UFuncoes, UConstantesDGE, UfrmRelEstoque;
+  UFuncoes, UConstantesDGE;
 
 {$R *.dfm}
 
@@ -274,13 +273,7 @@ end;
 
 procedure TfrmPrinc.nmRelatorioProdutoClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelProdutos, frmRelProdutos);
-  frmRelProdutos.IBQuery2.Open;
-  frmRelProdutos.ibqryEmpresa.Open;
-  frmRelProdutos.QuickRep1.preview;
-  frmRelProdutos.IBQuery2.Close;
-  frmRelProdutos.ibqryEmpresa.Close;
-  frmRelProdutos.Destroy;
+  FormFunction.ShowFormReport(Self, 'frmRelEstoque', 'QuickRep1');
 end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
@@ -304,7 +297,7 @@ end;
 
 procedure TfrmPrinc.mnBancoClick(Sender: TObject);
 begin
-  MostrarTabelaBancos(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeBancos');
 end;
 
 procedure TfrmPrinc.nmTiposdeLogradourosClick(Sender: TObject);
@@ -349,7 +342,7 @@ end;
 
 procedure TfrmPrinc.nmUnidadeClick(Sender: TObject);
 begin
-  MostrarTabelaUnidades(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeUnidade');
 end;
 
 procedure TfrmPrinc.nmTabelaCFOPClick(Sender: TObject);
@@ -578,29 +571,12 @@ end;
 
 procedure TfrmPrinc.ProdutosemEstoque1Click(Sender: TObject);
 begin
-Application.CreateForm(TfrmRelProdutos, frmRelProdutos);
-  frmRelProdutos.IBQuery1.Open;
-  frmRelProdutos.ibqryEmpresa.Open;
-  frmRelProdutos.qckrp.preview;
-  frmRelProdutos.IBQuery1.Close;
-  frmRelProdutos.ibqryEmpresa.Close;
-  frmRelProdutos.Destroy;
+  FormFunction.ShowFormReport(Self, 'frmRelEstoque', 'qckrp');
 end;
 
 procedure TfrmPrinc.DemandaAnual1Click(Sender: TObject);
 begin
-  
-  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
-  with frmRelEstoque do
-  begin
-   ibqryDemanda.Open;
-   ibqryEmpresa.Open;
-   qckrp.Preview;
-   ibqryDemanda.close;
-   ibqryEmpresa.Close;
-   Destroy;
-  end;
-
+  FormFunction.ShowFormReport(Self, 'frmRelEstoque');
 end;
 
 end.
