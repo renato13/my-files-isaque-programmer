@@ -325,6 +325,7 @@ inherited frmGeVendaCancelar: TfrmGeVendaCancelar
       ParentFont = False
       ScrollBars = ssVertical
       TabOrder = 2
+      OnKeyPress = dbMotivoKeyPress
     end
     object dbCancelUsuario: TEdit
       Left = 16

@@ -62,6 +62,7 @@ type
     procedure btFecharClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure dbMotivoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -168,6 +169,17 @@ procedure TfrmGeVendaCancelar.FormCreate(Sender: TObject);
 begin
   inherited;
   lblInforme.Caption := EmptyStr;
+end;
+
+procedure TfrmGeVendaCancelar.dbMotivoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  // Procedimento para bloquear caracteres especiais
+  if (Ord(Key) >= 192) then
+  begin
+    Key := #0;
+    Abort;
+  end;
 end;
 
 end.
