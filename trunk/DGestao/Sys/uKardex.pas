@@ -55,7 +55,10 @@ end;
 
 procedure TfrmKardex.FormShow(Sender: TObject);
 begin
-ComboEdit1.SetFocus
+  ComboEdit1.SetFocus
 end;
+
+initialization
+  FormFunction.RegisterForm('frmKardex', TfrmKardex);
 
 end.

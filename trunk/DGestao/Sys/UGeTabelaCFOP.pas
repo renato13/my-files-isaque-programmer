@@ -71,4 +71,7 @@ begin
   CampoDescricao := 'CFOP_DESCRICAO';
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeTabelaCFOP', TfrmGeTabelaCFOP);
+
 end.

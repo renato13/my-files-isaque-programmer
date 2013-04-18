@@ -41,6 +41,7 @@ type
     IBQuery1ENDER: TIBStringField;
     IBQuery1CIDADE: TIBStringField;
     IBQuery1UF: TIBStringField;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -55,5 +56,14 @@ implementation
 uses UDMBusiness;
 
 {$R *.dfm}
+
+procedure TfrmRelFornec.FormCreate(Sender: TObject);
+begin
+  IBQuery1.Open;
+  ibqryEmpresa.Open;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmRelFornec', TfrmRelFornec);
 
 end.

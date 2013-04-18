@@ -2090,8 +2090,6 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
   object IbQryClientes: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    c.cnpj'
@@ -2181,8 +2179,6 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
   object IbQryTitulos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    r.anolanc'
@@ -2404,8 +2400,6 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
   object IbTblBancos: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'BCO_COD'
@@ -2548,7 +2542,6 @@ object frmGeGerarBoleto: TfrmGeGerarBoleto
   end
   object UpdateLanc: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
-    ParamCheck = True
     Transaction = DMBusiness.ibtrnsctnBusiness
     Left = 176
     Top = 264

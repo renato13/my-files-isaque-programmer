@@ -486,4 +486,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeContasAPagar', TfrmGeContasAPagar);
+
 end.

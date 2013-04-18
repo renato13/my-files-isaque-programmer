@@ -404,4 +404,7 @@ begin
   end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGePromocao', TfrmGePromocao);
+
 end.

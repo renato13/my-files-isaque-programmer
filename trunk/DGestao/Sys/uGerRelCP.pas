@@ -234,4 +234,7 @@ begin
 
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGerRelCP', TfrmGerRelCP);
+
 end.

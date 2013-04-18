@@ -419,8 +419,6 @@ object frmAjustEstoq: TfrmAjustEstoq
   object IBDataSet1: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SelectSQL.Strings = (
       'select * from TBPRODUTO')
     Left = 248

@@ -642,4 +642,7 @@ begin
     inherited;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeRetornoBoleto', TfrmGeRetornoBoleto);
+
 end.

@@ -183,8 +183,6 @@ object frmGerRelCP: TfrmGerRelCP
   object ibqryFornec: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select NOMEFORN from TBFORNECEDOR'
       'order by NOMEFORN')

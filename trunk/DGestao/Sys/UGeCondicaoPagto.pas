@@ -231,4 +231,7 @@ begin
   IbDtstTabelaCOND_DESCRICAO_FULL.AsString := Str;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeCondicaoPagto', TfrmGeCondicaoPagto);
+
 end.

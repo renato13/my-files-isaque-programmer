@@ -206,4 +206,7 @@ begin
  else qckrpVendasSintetico.Preview;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmRelVendas', TfrmRelVendas);
+
 end.

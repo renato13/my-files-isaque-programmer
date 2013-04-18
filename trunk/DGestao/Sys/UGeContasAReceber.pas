@@ -511,4 +511,7 @@ begin
       DesbloquearCliente(IbDtstTabelaCNPJ.AsString, EmptyStr)
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeContasAReceber', TfrmGeContasAReceber);
+
 end.

@@ -41,6 +41,7 @@ type
     IBQuery1CIDADE: TIBStringField;
     IBQuery1UF: TIBStringField;
     QRSysData3: TQRSysData;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -55,5 +56,14 @@ implementation
 uses UDMBusiness;
 
 {$R *.dfm}
+
+procedure TfrmRelCli.FormCreate(Sender: TObject);
+begin
+  IBQuery1.Open;
+  ibqryEmpresa.Open;
+end;
+
+initialization
+  FormFunction.RegisterForm('frmRelCli', TfrmRelCli);
 
 end.

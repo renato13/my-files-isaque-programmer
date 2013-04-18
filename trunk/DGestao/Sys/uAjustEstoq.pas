@@ -126,4 +126,7 @@ if DMBusiness.ibdtstProduto.Locate('cod', DBEdit1.Text,[loPartialKey]) then
 
 end;
 
+initialization
+  FormFunction.RegisterForm('frmAjustEstoq', TfrmAjustEstoq);
+
 end.
