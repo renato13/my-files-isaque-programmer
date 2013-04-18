@@ -673,4 +673,7 @@ begin
       Value := FormatDateTime('dd/mm/yyyy', e1Data.Date) + ' a ' + FormatDateTime('dd/mm/yyyy', e2Data.Date);
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeFluxoCaixa', TfrmGeFluxoCaixa);
+
 end.

@@ -515,8 +515,6 @@ object frmGeRetornoBoleto: TfrmGeRetornoBoleto
   object IbTblBancos: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'BCO_COD'
@@ -658,7 +656,6 @@ object frmGeRetornoBoleto: TfrmGeRetornoBoleto
   end
   object UpdateLanc: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
-    ParamCheck = True
     SQL.Strings = (
       'Update TBCONTREC set'
       '    nossonumero = :nossonumero'
@@ -805,8 +802,6 @@ object frmGeRetornoBoleto: TfrmGeRetornoBoleto
   object gFind: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     Left = 80
     Top = 265
   end

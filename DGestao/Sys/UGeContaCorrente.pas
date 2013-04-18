@@ -108,4 +108,7 @@ begin
     end;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeContaCorrente', TfrmGeContaCorrente);
+
 end.

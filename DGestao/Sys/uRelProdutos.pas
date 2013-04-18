@@ -123,9 +123,9 @@ end;
 
 procedure TfrmRelProdutos.FormCreate(Sender: TObject);
 begin
-  frmRelProdutos.IBQuery1.Open;
-  frmRelProdutos.IBQuery2.Open;
-  frmRelProdutos.ibqryEmpresa.Open;
+  IBQuery1.Open;
+  IBQuery2.Open;
+  ibqryEmpresa.Open;
 end;
 
 initialization

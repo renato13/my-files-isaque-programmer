@@ -1894,8 +1894,6 @@ object frmRelVendas: TfrmRelVendas
   object ibqryVendedor: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select NOME from TBVENDEDOR'
       'order by NOME')
@@ -1910,8 +1908,6 @@ object frmRelVendas: TfrmRelVendas
   object ibqryVendas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select C.NOME as CLIENTE, V.CODCONTROL, V.DTFINALIZACAO_VENDA, V' +
@@ -2009,8 +2005,6 @@ object frmRelVendas: TfrmRelVendas
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = ibqryVendasSinteticoCalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select VE.NOME as VENDEDOR, VE.COMISSAO, SUM(V.TOTALVENDA)'
       'from TBVENDAS V inner join TBVENDEDOR VE'
@@ -2071,8 +2065,6 @@ object frmRelVendas: TfrmRelVendas
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 144

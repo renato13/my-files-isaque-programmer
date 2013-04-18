@@ -111,11 +111,11 @@ type
     nmFabricanteProduto: TMenuItem;
     nmUsuarioAlterarSenha: TMenuItem;
     btnEmpresa: TRxSpeedButton;
-    Utilitrios1: TMenuItem;
+    menuUtilitarios: TMenuItem;
     ExportarNFeGeradas1: TMenuItem;
-    Estoque1: TMenuItem;
-    DemandaAnual1: TMenuItem;
-    ProdutosemEstoque1: TMenuItem;
+    mnRelatorioEstoque: TMenuItem;
+    mnRelatorioEstoqueDemanda2012: TMenuItem;
+    mnRelatorioEstoqueProduto: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -149,7 +149,6 @@ type
     procedure nmCondicaoPagtoClick(Sender: TObject);
     procedure nmConfigurarNFeACBrClick(Sender: TObject);
     procedure nmTipoDespesaClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure nmGerarBoletoClick(Sender: TObject);
@@ -165,8 +164,8 @@ type
     procedure nmFabricanteProdutoClick(Sender: TObject);
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
     procedure ExportarNFeGeradas1Click(Sender: TObject);
-    procedure ProdutosemEstoque1Click(Sender: TObject);
-    procedure DemandaAnual1Click(Sender: TObject);
+    procedure mnRelatorioEstoqueProdutoClick(Sender: TObject);
+    procedure mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -178,14 +177,24 @@ var
 
 implementation
 
-uses uAjustEstoq, uKardex, uRelCli, uRelFornec, uGerRelCR,
-  uGerRelCP, USobre, UfrmRelVendas, UGeGrupoProduto, UGeSecaoProduto, 
-  UGeTabelaCFOP, UGeFormaPagto, UGeProduto, UGeVendedor, UGeVenda,
-  UGeCondicaoPagto,  UGeEntradaEstoque, UGeContasAPagar,
-  UGeContasAReceber, UDMNFe, UDMBusiness, UGeTipoDespesa,
-  UfrmAcessoSistema, UGeGerarBoletos, UGeRemessaBoletos, UGeRetornoBoletos,
-  UGePromocao, UGeContaCorrente, UGeCaixa, UGeFluxoCaixa,
-  UFuncoes, UConstantesDGE;
+uses
+  // Conexão e Controles Aplicação
+  UDMBusiness,
+  UDMNFe,
+  USobre,
+  UFuncoes,
+  UConstantesDGE,
+
+  // Estoque, Entrada e Saída
+  UGeProduto,
+  UGeVenda,
+  UGeEntradaEstoque,
+
+  // Financeiro
+  UGeContasAPagar,
+  UGeContasAReceber,
+  UGeCaixa,
+  UGeFluxoCaixa;
 
 {$R *.dfm}
 
@@ -232,16 +241,12 @@ end;
 
 procedure TfrmPrinc.nmAjusteManualClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmAjustEstoq, frmAjustEstoq);
-  frmAjustEstoq.ShowModal;
-  frmAjustEstoq.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmAjustEstoq');
 end;
 
 procedure TfrmPrinc.nmKardexClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmKardex, frmKardex);
-  frmKardex.ShowModal;
-  frmKardex.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmKardex');
 end;
 
 procedure TfrmPrinc.nmVendasClick(Sender: TObject);
@@ -251,24 +256,12 @@ end;
 
 procedure TfrmPrinc.nmRelatorioClienteClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelCli, frmRelCli);
-  frmRelCli.IBQuery1.Open;
-  frmRelCli.ibqryEmpresa.Open;
-  frmRelCli.qckrp.preview;
-  frmRelCli.IBQuery1.Close;
-  frmRelCli.ibqryEmpresa.Close;
-  frmRelCli.Destroy;
+  FormFunction.ShowFormReport(Self, 'frmRelCli', 'qckrp');
 end;
 
 procedure TfrmPrinc.nmRelatorioFornecedorClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelFornec, frmRelFornec);
-  frmRelFornec.IBQuery1.Open;
-  frmRelFornec.ibqryEmpresa.Open;
-  frmRelFornec.qckrp.preview;
-  frmRelFornec.IBQuery1.Close;
-  frmRelFornec.ibqryEmpresa.Close;
-  frmRelFornec.Destroy;
+  FormFunction.ShowFormReport(Self, 'frmRelFornec', 'qckrp');
 end;
 
 procedure TfrmPrinc.nmRelatorioProdutoClick(Sender: TObject);
@@ -278,16 +271,12 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGerRelCR, frmGerRelCR);
-  frmGerRelCR.ShowModal;
-  frmGerRelCR.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmGerRelCR');
 end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAReceberClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmGerRelCP, frmGerRelCP);
-  frmGerRelCP.ShowModal;
-  frmGerRelCP.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmGerRelCP');
 end;
 
 procedure TfrmPrinc.nmAboutClick(Sender: TObject);
@@ -332,12 +321,12 @@ end;
 
 procedure TfrmPrinc.nmGruposProdutoClick(Sender: TObject);
 begin
-  MostrarTabelaGrupoProdutos(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeGrupoProduto');
 end;
 
 procedure TfrmPrinc.nmSecaoProdutoClick(Sender: TObject);
 begin
-  MostrarTabelaSecaoProdutos(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeSecaoProduto');
 end;
 
 procedure TfrmPrinc.nmUnidadeClick(Sender: TObject);
@@ -347,22 +336,22 @@ end;
 
 procedure TfrmPrinc.nmTabelaCFOPClick(Sender: TObject);
 begin
-  MostrarTabelaCFOP(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeTabelaCFOP');
 end;
 
 procedure TfrmPrinc.nmFormaPagtoClick(Sender: TObject);
 begin
-  MostrarTabelaFormaPagtos(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeFormaPagto');
 end;
 
 procedure TfrmPrinc.nmVendedorClick(Sender: TObject);
 begin
-  MostrarTabelaVendedores(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeVendedor');
 end;
 
 procedure TfrmPrinc.nmCondicaoPagtoClick(Sender: TObject);
 begin
-  MostrarTabelaCondicoesPagto(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeCondicaoPagto');
 end;
 
 procedure TfrmPrinc.nmConfigurarNFeACBrClick(Sender: TObject);
@@ -372,12 +361,7 @@ end;
 
 procedure TfrmPrinc.nmTipoDespesaClick(Sender: TObject);
 begin
-  MostrarTipoDespesas(Self);
-end;
-
-procedure TfrmPrinc.Button1Click(Sender: TObject);
-begin
-  frmAcessoSistema.ShowModal
+  FormFunction.ShowModalForm(Self, 'frmGeTipoDespesa');
 end;
 
 procedure TfrmPrinc.FormActivate(Sender: TObject);
@@ -502,27 +486,27 @@ end;
 
 procedure TfrmPrinc.nmGerarBoletoClick(Sender: TObject);
 begin
-  GerarBoleto(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeGerarBoleto');
 end;
 
 procedure TfrmPrinc.nmRemessaBoletoClick(Sender: TObject);
 begin
-  GerarArquivoRemessa(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeRemessaBoleto');
 end;
 
 procedure TfrmPrinc.nmRetornoBoletoClick(Sender: TObject);
 begin
-  ProcessarRetorno(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeRetornoBoleto');
 end;
 
 procedure TfrmPrinc.nmPromocoesClick(Sender: TObject);
 begin
-  MostrarTabelaPromocoes(Self);
+  FormFunction.ShowModalForm(Self, 'frmGePromocao');
 end;
 
 procedure TfrmPrinc.nmContaCorrenteClick(Sender: TObject);
 begin
-  MostrarTabelaContaCorrente(Self);
+  FormFunction.ShowModalForm(Self, 'frmGeContaCorrente');
 end;
 
 procedure TfrmPrinc.nmGerenciaCaixaClick(Sender: TObject);
@@ -549,8 +533,7 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFaturamentoVendasClick(Sender: TObject);
 begin
- Application.CreateForm(TfrmRelVendas, frmRelVendas);
- frmRelVendas.ShowModal;
+  FormFunction.ShowModalForm(Self, 'frmRelVendas');
 end;
 
 procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);
@@ -569,12 +552,12 @@ begin
   FormFunction.ShowModalForm(Self, 'frmGeExportarNFeGerada');
 end;
 
-procedure TfrmPrinc.ProdutosemEstoque1Click(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioEstoqueProdutoClick(Sender: TObject);
 begin
   FormFunction.ShowFormReport(Self, 'frmRelProdutos', 'qckrp');
 end;
 
-procedure TfrmPrinc.DemandaAnual1Click(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
 begin
   FormFunction.ShowFormReport(Self, 'frmRelEstoque');
 end;

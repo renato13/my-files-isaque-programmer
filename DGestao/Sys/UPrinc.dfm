@@ -7295,15 +7295,15 @@ object frmPrinc: TfrmPrinc
         Caption = 'Produtos'
         OnClick = nmRelatorioProdutoClick
       end
-      object Estoque1: TMenuItem
+      object mnRelatorioEstoque: TMenuItem
         Caption = 'Estoque'
-        object DemandaAnual1: TMenuItem
+        object mnRelatorioEstoqueDemanda2012: TMenuItem
           Caption = 'Demanda 2012'
-          OnClick = DemandaAnual1Click
+          OnClick = mnRelatorioEstoqueDemanda2012Click
         end
-        object ProdutosemEstoque1: TMenuItem
+        object mnRelatorioEstoqueProduto: TMenuItem
           Caption = 'Produtos'
-          OnClick = ProdutosemEstoque1Click
+          OnClick = mnRelatorioEstoqueProdutoClick
         end
       end
       object mnRelatorioFaturamento: TMenuItem
@@ -7325,7 +7325,7 @@ object frmPrinc: TfrmPrinc
         end
       end
     end
-    object Utilitrios1: TMenuItem
+    object menuUtilitarios: TMenuItem
       Caption = '&Utilit'#225'rios'
       object nmUsuarioAlterarSenha: TMenuItem
         Bitmap.Data = {

@@ -680,4 +680,7 @@ begin
   CobreBemX := Unassigned;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeGerarBoleto', TfrmGeGerarBoleto);
+
 end.

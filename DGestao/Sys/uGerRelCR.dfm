@@ -2152,8 +2152,6 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCR: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select CR.numlanc, CR.tippag, CR.dtemiss, CR.dtvenc, CR.dtrec, C' +
@@ -2167,8 +2165,6 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryEmp: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -2177,8 +2173,6 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCli: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select NOME from TBCLIENTE'
       'order by nome')

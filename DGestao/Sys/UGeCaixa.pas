@@ -805,4 +805,7 @@ begin
   inherited;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeCaixa', TfrmGeCaixa);
+
 end.

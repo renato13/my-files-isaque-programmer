@@ -1138,4 +1138,7 @@ begin
   DMNFe.ImprimirDANFEEntradaACBr( IbDtstTabelaCODEMP.AsString, IbDtstTabelaCODFORN.AsInteger, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, isPDF);
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeEntradaEstoque', TfrmGeEntradaEstoque);
+
 end.

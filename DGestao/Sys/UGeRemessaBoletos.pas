@@ -491,4 +491,7 @@ begin
     inherited;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeRemessaBoleto', TfrmGeRemessaBoleto);
+
 end.

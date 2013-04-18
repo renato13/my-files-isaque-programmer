@@ -33,7 +33,7 @@ inherited frmGeCondicaoPagto: TfrmGeCondicaoPagto
       end
       inherited pnlFiltros: TPanel
         inherited grpBxFiltro: TGroupBox
-          Left = 432
+          Left = 441
           Width = 282
           inherited lbltFiltrar: TLabel
             Width = 86
@@ -52,8 +52,10 @@ inherited frmGeCondicaoPagto: TfrmGeCondicaoPagto
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 153
+        Width = 727
       end
       inherited GrpBxDadosNominais: TGroupBox
+        Width = 727
         Height = 153
         object lblNome: TLabel [1]
           Left = 88

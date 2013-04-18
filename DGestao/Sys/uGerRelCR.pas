@@ -206,4 +206,7 @@ begin
 
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGerRelCR', TfrmGerRelCR);
+
 end.

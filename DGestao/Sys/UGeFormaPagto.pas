@@ -93,4 +93,7 @@ begin
   IbDtstTabelaDEBITAR_LIMITE_CLIENTE.Value := 1;
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeFormaPagto', TfrmGeFormaPagto);
+
 end.

@@ -12,6 +12,7 @@ object frmRelFornec: TfrmRelFornec
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
@@ -43,13 +44,13 @@ object frmRelFornec: TfrmRelFornec
     Page.Orientation = poPortrait
     Page.PaperSize = A4
     Page.Values = (
-      100
-      2970
-      100
-      2100
-      100
-      100
-      0)
+      100.000000000000000000
+      2970.000000000000000000
+      100.000000000000000000
+      2100.000000000000000000
+      100.000000000000000000
+      100.000000000000000000
+      0.000000000000000000)
     PrinterSettings.Copies = 1
     PrinterSettings.Duplex = False
     PrinterSettings.FirstPage = 0
@@ -75,8 +76,8 @@ object frmRelFornec: TfrmRelFornec
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        177.270833333333
-        1899.70833333333)
+        177.270833333333300000
+        1899.708333333333000000)
       BandType = rbTitle
       object QRLabel6: TQRLabel
         Left = 0
@@ -89,10 +90,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          31.75
-          0
-          2.64583333333333
-          534.458333333333)
+          31.750000000000000000
+          0.000000000000000000
+          2.645833333333333000
+          534.458333333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -120,10 +121,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          31.75
-          1764.77083333333
-          2.64583333333333
-          134.9375)
+          31.750000000000000000
+          1764.770833333333000000
+          2.645833333333333000
+          134.937500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -150,10 +151,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawRight = False
         Frame.Style = psDashDotDot
         Size.Values = (
-          44.9791666666667
-          698.5
-          105.833333333333
-          502.708333333333)
+          44.979166666666670000
+          698.500000000000000000
+          105.833333333333300000
+          502.708333333333300000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
@@ -181,10 +182,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          50.2708333333333
-          865.1875
-          42.3333333333333
-          166.6875)
+          50.270833333333330000
+          865.187500000000000000
+          42.333333333333330000
+          166.687500000000000000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
@@ -224,8 +225,8 @@ object frmRelFornec: TfrmRelFornec
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        63.5
-        1899.70833333333)
+        63.500000000000000000
+        1899.708333333333000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
         Left = 244
@@ -238,10 +239,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          645.583333333333
-          7.9375
-          68.7916666666667)
+          44.979166666666670000
+          645.583333333333300000
+          7.937500000000000000
+          68.791666666666670000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -269,10 +270,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1862.66666666667
-          7.9375
-          37.0416666666667)
+          44.979166666666670000
+          1862.666666666667000000
+          7.937500000000000000
+          37.041666666666670000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -300,10 +301,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          0
-          7.9375
-          179.916666666667)
+          44.979166666666670000
+          0.000000000000000000
+          7.937500000000000000
+          179.916666666666700000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -331,10 +332,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          902.229166666667
-          7.9375
-          121.708333333333)
+          44.979166666666670000
+          902.229166666666700000
+          7.937500000000000000
+          121.708333333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -362,10 +363,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1079.5
-          7.9375
-          142.875)
+          44.979166666666670000
+          1079.500000000000000000
+          7.937500000000000000
+          142.875000000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -393,10 +394,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1624.54166666667
-          7.9375
-          100.541666666667)
+          44.979166666666670000
+          1624.541666666667000000
+          7.937500000000000000
+          100.541666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -435,8 +436,8 @@ object frmRelFornec: TfrmRelFornec
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        66.1458333333333
-        1899.70833333333)
+        66.145833333333330000
+        1899.708333333333000000)
       BandType = rbDetail
       object QRDBText1: TQRDBText
         Left = 244
@@ -449,10 +450,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.3333333333333
-          645.583333333333
-          5.29166666666667
-          68.7916666666667)
+          42.333333333333330000
+          645.583333333333300000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -481,10 +482,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.3333333333333
-          0
-          5.29166666666667
-          616.479166666667)
+          42.333333333333330000
+          0.000000000000000000
+          5.291666666666667000
+          616.479166666666700000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = False
@@ -513,10 +514,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.3333333333333
-          899.583333333333
-          5.29166666666667
-          161.395833333333)
+          42.333333333333300000
+          899.583333333333000000
+          5.291666666666670000
+          161.395833333333000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
@@ -545,10 +546,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.3333333333333
-          1079.5
-          5.29166666666667
-          531.8125)
+          42.333333333333300000
+          1079.500000000000000000
+          5.291666666666670000
+          531.812500000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
@@ -577,10 +578,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1862.66666666667
-          5.29166666666667
-          37.0416666666667)
+          44.979166666666670000
+          1862.666666666667000000
+          5.291666666666667000
+          37.041666666666670000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -610,10 +611,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1624.54166666667
-          5.29166666666667
-          219.604166666667)
+          44.979166666666700000
+          1624.541666666670000000
+          5.291666666666670000
+          219.604166666667000000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
@@ -648,8 +649,8 @@ object frmRelFornec: TfrmRelFornec
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        63.5
-        1899.70833333333)
+        63.500000000000000000
+        1899.708333333333000000)
       BandType = rbSummary
       object QRLabel11: TQRLabel
         Left = 0
@@ -662,10 +663,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          0
-          13.2291666666667
-          111.125)
+          44.979166666666670000
+          0.000000000000000000
+          13.229166666666670000
+          111.125000000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -693,10 +694,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.3333333333333
-          121.708333333333
-          13.2291666666667
-          201.083333333333)
+          42.333333333333330000
+          121.708333333333300000
+          13.229166666666670000
+          201.083333333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -727,8 +728,8 @@ object frmRelFornec: TfrmRelFornec
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        55.5625
-        1899.70833333333)
+        55.562500000000000000
+        1899.708333333333000000)
       BandType = rbPageFooter
       object QRSysData2: TQRSysData
         Left = 685
@@ -741,10 +742,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.9791666666667
-          1812.39583333333
-          5.29166666666667
-          87.3125)
+          44.979166666666670000
+          1812.395833333333000000
+          5.291666666666667000
+          87.312500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -764,8 +765,6 @@ object frmRelFornec: TfrmRelFornec
   object IBQuery1: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select NOMEFORN, CNPJ, CONTATO, ENDER, CIDADE, UF '
       'from TBFORNECEDOR'
@@ -807,8 +806,6 @@ object frmRelFornec: TfrmRelFornec
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 184

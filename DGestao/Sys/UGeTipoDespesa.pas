@@ -79,4 +79,7 @@ begin
   IbDtstTabelaCOD.Value := GetNextID(NomeTabela, CampoCodigo);
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeTipoDespesa', TfrmGeTipoDespesa);
+
 end.

@@ -468,8 +468,6 @@ object frmGeRemessaBoleto: TfrmGeRemessaBoleto
   object IbTblBancos: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'BCO_COD'
@@ -612,8 +610,6 @@ object frmGeRemessaBoleto: TfrmGeRemessaBoleto
   object IbQryTitulos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    r.anolanc'
@@ -905,7 +901,6 @@ object frmGeRemessaBoleto: TfrmGeRemessaBoleto
   end
   object UpdateLanc: TIBSQL
     Database = DMBusiness.ibdtbsBusiness
-    ParamCheck = True
     SQL.Strings = (
       'Update TBCONTREC set'
       '    nossonumero = :nossonumero'
@@ -917,7 +912,7 @@ object frmGeRemessaBoleto: TfrmGeRemessaBoleto
     Top = 264
   end
   object frrRemessa: TfrxReport
-    Version = '4.6.32'
+    Version = '4.9.72'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick]
@@ -1427,6 +1422,7 @@ object frmGeRemessaBoleto: TfrmGeRemessaBoleto
       'ANOVENDA=AnoVenda'
       'NUMVENDA=NumVenda')
     DataSet = CdsTitulos
+    BCDToCurrency = False
     Left = 112
     Top = 297
   end

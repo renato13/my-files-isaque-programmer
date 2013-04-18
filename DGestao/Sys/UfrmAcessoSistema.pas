@@ -65,6 +65,7 @@ begin
     edSenha.setfocus;
     Exit;
    end;
+   
  frmPrinc.Enabled := True;
  frmPrinc.stbMain.Panels[1].Text := 'Usuário: ' + edNome.Text;
  frmAcessoSistema.Release;
@@ -130,10 +131,13 @@ begin
 //    edNome.Text  := 'FERREIRA';
 //    edSenha.Text := 'PONTOLUZ';
     edNome.Text  := 'ISAQUE';
-    edSenha.Text := '123';
+    edSenha.Text := '123-';
 
     btbtnEntrar.Click;
   end;
 end;
+
+initialization
+  FormFunction.RegisterForm('frmAcessoSistema', TfrmAcessoSistema);
 
 end.

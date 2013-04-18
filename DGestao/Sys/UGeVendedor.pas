@@ -92,4 +92,7 @@ begin
   IbDtstTabelaCOD.Value := GetNextID(NomeTabela, CampoCodigo);
 end;
 
+initialization
+  FormFunction.RegisterForm('frmGeVendedor', TfrmGeVendedor);
+
 end.
