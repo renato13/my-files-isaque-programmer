@@ -55,16 +55,8 @@ type
     Analtico1: TMenuItem;
     Sinttico1: TMenuItem;
     ibqryVendedorNOME: TIBStringField;
-    ibqryVendasCLIENTE: TIBStringField;
-    ibqryVendasCODCONTROL: TIntegerField;
-    ibqryVendasDTFINALIZACAO_VENDA: TDateField;
-    ibqryVendasDESCONTO: TIBBCDField;
-    ibqryVendasSTATUS: TSmallintField;
-    ibqryVendasTOTALVENDA: TIBBCDField;
-    ibqryVendasVENDEDOR: TIBStringField;
     QRLabel3: TQRLabel;
     QRDBText3: TQRDBText;
-    ibqryVendasNFE: TLargeintField;
     ibqryVendasSintetico: TIBQuery;
     qckrpVendasSintetico: TQuickRep;
     QRBand1: TQRBand;
@@ -88,14 +80,22 @@ type
     QRSysData5: TQRSysData;
     QRBand5: TQRBand;
     QRSysData6: TQRSysData;
-    ibqryVendasSinteticoVENDEDOR: TIBStringField;
-    ibqryVendasSinteticoCOMISSAO: TIBBCDField;
-    ibqryVendasSinteticoSUM: TIBBCDField;
     ibqryVendasSinteticoVALORCOMISSAO: TCurrencyField;
     QRDBText8: TQRDBText;
     QRDBText9: TQRDBText;
     QRExpr3: TQRExpr;
     ibqryEmpresa: TIBQuery;
+    ibqryVendasCLIENTE: TIBStringField;
+    ibqryVendasCODCONTROL: TIntegerField;
+    ibqryVendasDTFINALIZACAO_VENDA: TDateField;
+    ibqryVendasDESCONTO: TIBBCDField;
+    ibqryVendasSTATUS: TSmallintField;
+    ibqryVendasTOTALVENDA: TIBBCDField;
+    ibqryVendasVENDEDOR: TIBStringField;
+    ibqryVendasNFE: TLargeintField;
+    ibqryVendasSinteticoVENDEDOR: TIBStringField;
+    ibqryVendasSinteticoCOMISSAO: TIBBCDField;
+    ibqryVendasSinteticoSUM: TIBBCDField;
     procedure nmImprimirAnaliticoClick(Sender: TObject);
     procedure Analtico1Click(Sender: TObject);
     procedure btbtnListaClick(Sender: TObject);
@@ -119,7 +119,7 @@ uses UDMBusiness;
 
 procedure TfrmRelVendas.nmImprimirAnaliticoClick(Sender: TObject);
 begin
- qckrpVendas.Preview
+  qckrpVendas.Preview
 end;
 
 procedure TfrmRelVendas.Analtico1Click(Sender: TObject);
@@ -159,18 +159,19 @@ end;
 
 procedure TfrmRelVendas.FormCreate(Sender: TObject);
 begin
- ibqryVendedor.Open;
- cmbbxVendedor.Items.Add('TODOS');
+  ibqryVendedor.Open;
+  cmbbxVendedor.Items.Add('TODOS');
+
   while not ibqryVendedor.Eof do
   begin
-   cmbbxVendedor.Items.Add(ibqryVendedorNOME.Value);
-   ibqryVendedor.Next;
+    cmbbxVendedor.Items.Add(ibqryVendedorNOME.Value);
+    ibqryVendedor.Next;
   end;
- ibqryVendedor.Close;
+  ibqryVendedor.Close;
 
-dttmpcIni.Date := IncMonth(Date, -1);
-dttmpcFim.Date := Date;
-cmbbxVendedor.ItemIndex := 0;
+  dttmpcIni.Date := IncMonth(Date, -1);
+  dttmpcFim.Date := Date;
+  cmbbxVendedor.ItemIndex := 0;
 end;
 
 procedure TfrmRelVendas.ibqryVendasSinteticoCalcFields(DataSet: TDataSet);

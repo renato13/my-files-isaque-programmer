@@ -508,9 +508,9 @@ object frmRelVendas: TfrmRelVendas
         1900.590277777778000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
-        Left = 48
+        Left = 50
         Top = 1
-        Width = 32
+        Width = 28
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -519,9 +519,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           44.097222222222220000
-          211.666666666666700000
+          220.486111111111100000
           4.409722222222222000
-          141.111111111111100000)
+          123.472222222222200000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -572,7 +572,7 @@ object frmRelVendas: TfrmRelVendas
       object qrlblCliMot: TQRLabel
         Left = 99
         Top = 1
-        Width = 28
+        Width = 25
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -583,7 +583,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           436.562500000000000000
           4.409722222222222000
-          123.472222222222200000)
+          110.243055555555600000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -603,7 +603,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel7: TQRLabel
         Left = 0
         Top = 1
-        Width = 33
+        Width = 29
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -614,7 +614,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           0.000000000000000000
           4.409722222222222000
-          145.520833333333300000)
+          127.881944444444400000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -935,7 +935,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel11: TQRLabel
         Left = 0
         Top = 3
-        Width = 24
+        Width = 23
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -946,7 +946,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           0.000000000000000000
           13.229166666666670000
-          105.833333333333300000)
+          101.423611111111100000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -999,7 +999,7 @@ object frmRelVendas: TfrmRelVendas
       object QRSysData3: TQRSysData
         Left = 25
         Top = 3
-        Width = 41
+        Width = 37
         Height = 10
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1010,7 +1010,7 @@ object frmRelVendas: TfrmRelVendas
           44.097222222222220000
           110.243055555555600000
           13.229166666666670000
-          180.798611111111100000)
+          163.159722222222200000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -1416,9 +1416,9 @@ object frmRelVendas: TfrmRelVendas
         1740.958333333333000000)
       BandType = rbColumnHeader
       object QRLabel15: TQRLabel
-        Left = 228
+        Left = 241
         Top = 1
-        Width = 98
+        Width = 85
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1427,9 +1427,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          603.250000000000000000
+          637.645833333333300000
           2.645833333333333000
-          259.291666666666700000)
+          224.895833333333300000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1449,7 +1449,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel17: TQRLabel
         Left = 0
         Top = 1
-        Width = 60
+        Width = 54
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1460,7 +1460,7 @@ object frmRelVendas: TfrmRelVendas
           42.333333333333330000
           0.000000000000000000
           2.645833333333333000
-          158.750000000000000000)
+          142.875000000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1478,9 +1478,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 8
       end
       object QRLabel18: TQRLabel
-        Left = 538
+        Left = 552
         Top = 1
-        Width = 120
+        Width = 106
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1489,9 +1489,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1423.458333333333000000
+          1460.500000000000000000
           2.645833333333333000
-          317.500000000000000000)
+          280.458333333333300000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -1509,9 +1509,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 8
       end
       object QRLabel19: TQRLabel
-        Left = 422
+        Left = 431
         Top = 1
-        Width = 75
+        Width = 66
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1520,9 +1520,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1116.541666666667000000
+          1140.354166666667000000
           2.645833333333333000
-          198.437500000000000000)
+          174.625000000000000000)
         Alignment = taRightJustify
         AlignToBand = False
         AutoSize = True
@@ -1718,7 +1718,7 @@ object frmRelVendas: TfrmRelVendas
       object QRLabel20: TQRLabel
         Left = 0
         Top = 5
-        Width = 40
+        Width = 39
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1729,7 +1729,7 @@ object frmRelVendas: TfrmRelVendas
           44.979166666666670000
           0.000000000000000000
           13.229166666666670000
-          105.833333333333300000)
+          103.187500000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -1747,9 +1747,9 @@ object frmRelVendas: TfrmRelVendas
         FontSize = 9
       end
       object QRExpr2: TQRExpr
-        Left = 406
+        Left = 437
         Top = 5
-        Width = 252
+        Width = 221
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1758,9 +1758,9 @@ object frmRelVendas: TfrmRelVendas
         Frame.DrawRight = False
         Size.Values = (
           44.979166666666670000
-          1074.208333333333000000
+          1156.229166666667000000
           13.229166666666670000
-          666.750000000000000000)
+          584.729166666666700000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -1782,7 +1782,7 @@ object frmRelVendas: TfrmRelVendas
       object QRSysData5: TQRSysData
         Left = 41
         Top = 5
-        Width = 69
+        Width = 62
         Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1793,7 +1793,7 @@ object frmRelVendas: TfrmRelVendas
           44.979166666666670000
           108.479166666666700000
           13.229166666666670000
-          182.562500000000000000)
+          164.041666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -1950,43 +1950,43 @@ object frmRelVendas: TfrmRelVendas
       end>
     object ibqryVendasCLIENTE: TIBStringField
       FieldName = 'CLIENTE'
-      Origin = 'TBCLIENTE.NOME'
+      Origin = '"TBCLIENTE"."NOME"'
       Size = 60
     end
     object ibqryVendasCODCONTROL: TIntegerField
       FieldName = 'CODCONTROL'
-      Origin = 'TBVENDAS.CODCONTROL'
+      Origin = '"TBVENDAS"."CODCONTROL"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
     object ibqryVendasDTFINALIZACAO_VENDA: TDateField
       FieldName = 'DTFINALIZACAO_VENDA'
-      Origin = 'TBVENDAS.DTFINALIZACAO_VENDA'
+      Origin = '"TBVENDAS"."DTFINALIZACAO_VENDA"'
     end
     object ibqryVendasDESCONTO: TIBBCDField
       FieldName = 'DESCONTO'
-      Origin = 'TBVENDAS.DESCONTO'
+      Origin = '"TBVENDAS"."DESCONTO"'
       Precision = 18
-      Size = 2
+      Size = 4
     end
     object ibqryVendasSTATUS: TSmallintField
       FieldName = 'STATUS'
-      Origin = 'TBVENDAS.STATUS'
-      Required = True
+      Origin = '"TBVENDAS"."STATUS"'
     end
     object ibqryVendasTOTALVENDA: TIBBCDField
       FieldName = 'TOTALVENDA'
-      Origin = 'TBVENDAS.TOTALVENDA'
+      Origin = '"TBVENDAS"."TOTALVENDA"'
       Precision = 18
       Size = 2
     end
     object ibqryVendasVENDEDOR: TIBStringField
       FieldName = 'VENDEDOR'
-      Origin = 'TBVENDEDOR.NOME'
+      Origin = '"TBVENDEDOR"."NOME"'
       Size = 60
     end
     object ibqryVendasNFE: TLargeintField
       FieldName = 'NFE'
-      Origin = 'TBVENDAS.NFE'
+      Origin = '"TBVENDAS"."NFE"'
     end
   end
   object PopupMenu1: TPopupMenu
@@ -2043,16 +2043,18 @@ object frmRelVendas: TfrmRelVendas
       end>
     object ibqryVendasSinteticoVENDEDOR: TIBStringField
       FieldName = 'VENDEDOR'
+      ProviderFlags = []
       Size = 60
     end
     object ibqryVendasSinteticoCOMISSAO: TIBBCDField
       FieldName = 'COMISSAO'
-      Origin = 'TBVENDEDOR.COMISSAO'
+      Origin = '"TBVENDEDOR"."COMISSAO"'
       Precision = 9
       Size = 2
     end
     object ibqryVendasSinteticoSUM: TIBBCDField
       FieldName = 'SUM'
+      ProviderFlags = []
       Precision = 18
       Size = 2
     end

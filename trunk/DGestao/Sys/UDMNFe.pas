@@ -1298,7 +1298,7 @@ begin
         Entrega.xMun    := '';
         Entrega.UF      := '';}
 
-  //Adicionando Produtos
+      // Adicionando Produtos
   
       qryDadosProduto.First;
       
@@ -1728,6 +1728,8 @@ begin
         Total.retTrib.vBCRetPrev := 0;
         Total.retTrib.vRetPrev   := 0;}
 
+      // Adicionando Dados da Transportadora
+
       Transp.modFrete            := mfSemFrete; // X02 - Modalidade do frete
                                                 //         (0)=mfContaEmitente     – por conta do emitente;
                                                 //         (1)=mfContaDestinatario – por conta do destinatário)
@@ -1756,6 +1758,8 @@ begin
            UF    := '';
            RNTC  := '';
          end;}
+
+      // Adicionando Dados de Volumes a Transportar
 
       if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
         with Transp.Vol.Add do
