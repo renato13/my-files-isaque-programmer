@@ -39,12 +39,13 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
-    QRLabel6: TQRLabel;
+    lblNomeSistema: TQRLabel;
     QRDBText3: TQRDBText;
     QRSysData1: TQRSysData;
     ibqryEmpresa: TIBQuery;
     QRLabel1: TQRLabel;
     QRDBText1: TQRDBText;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -56,8 +57,14 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses
+  UDMBusiness, UFuncoes;
 
 {$R *.dfm}
+
+procedure TfrmRelCR.FormCreate(Sender: TObject);
+begin
+  lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
+end;
 
 end.

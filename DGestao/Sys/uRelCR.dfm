@@ -12,6 +12,7 @@ object frmRelCR: TfrmRelCR
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrpCR: TQuickRep
@@ -265,7 +266,7 @@ object frmRelCR: TfrmRelCR
         WordWrap = True
         FontSize = 9
       end
-      object QRLabel6: TQRLabel
+      object lblNomeSistema: TQRLabel
         Left = 0
         Top = 1
         Width = 202
@@ -1078,8 +1079,6 @@ object frmRelCR: TfrmRelCR
   object IBQuery1: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC' +
@@ -1093,8 +1092,6 @@ object frmRelCR: TfrmRelCR
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 192

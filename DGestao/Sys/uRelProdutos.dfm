@@ -80,7 +80,7 @@ object frmRelProdutos: TfrmRelProdutos
         154.340277777777800000
         1900.590277777778000000)
       BandType = rbTitle
-      object QRLabel6: TQRLabel
+      object lblNomeSistema1: TQRLabel
         Left = 0
         Top = 0
         Width = 121
@@ -1024,7 +1024,7 @@ object frmRelProdutos: TfrmRelProdutos
         154.340277777777800000
         1900.590277777778000000)
       BandType = rbTitle
-      object QRLabel3: TQRLabel
+      object lblNomeSistema2: TQRLabel
         Left = 0
         Top = 1
         Width = 121
@@ -1647,8 +1647,6 @@ object frmRelProdutos: TfrmRelProdutos
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = IBQuery1CalcFields
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +
@@ -1715,8 +1713,6 @@ object frmRelProdutos: TfrmRelProdutos
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -1725,8 +1721,6 @@ object frmRelProdutos: TfrmRelProdutos
   object IBQuery2: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +

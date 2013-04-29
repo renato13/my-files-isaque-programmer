@@ -14,7 +14,7 @@ type
     QRLabel2: TQRLabel;
     QRLabel14: TQRLabel;
     qrlblStatus: TQRLabel;
-    QRLabel6: TQRLabel;
+    lblNomeSistema: TQRLabel;
     QRDBText3: TQRDBText;
     QRSysData1: TQRSysData;
     ColumnHeaderBand1: TQRBand;
@@ -42,6 +42,7 @@ type
     QRLabel3: TQRLabel;
     QRDBText4: TQRDBText;
     qrlblFornec: TQRLabel;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -53,8 +54,14 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses
+  UDMBusiness, UFuncoes;
 
 {$R *.dfm}
+
+procedure TfrmRelCP.FormCreate(Sender: TObject);
+begin
+  lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
+end;
 
 end.

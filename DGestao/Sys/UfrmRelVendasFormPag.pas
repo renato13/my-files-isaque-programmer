@@ -10,7 +10,7 @@ type
   TfrmRelVendasFormPag = class(TForm)
     qckrpVendas: TQuickRep;
     TitleBand1: TQRBand;
-    QRLabel6: TQRLabel;
+    lblNomeSistema: TQRLabel;
     QRSysData1: TQRSysData;
     qrlblPeriodo: TQRLabel;
     QRLabel2: TQRLabel;
@@ -33,6 +33,7 @@ type
     QRSysData3: TQRSysData;
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,6 +45,14 @@ var
 
 implementation
 
+uses
+  UFuncoes;
+
 {$R *.dfm}
+
+procedure TfrmRelVendasFormPag.FormCreate(Sender: TObject);
+begin
+  lblNomeSistema.Caption := GetProductName;
+end;
 
 end.
