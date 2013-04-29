@@ -16,6 +16,8 @@ type
     class procedure ShowForm(const AOnwer : TComponent; NomeForm: String);
     class procedure ShowFormReport(const AOnwer : TComponent; NomeForm: String); overload;
     class procedure ShowFormReport(const AOnwer : TComponent; NomeForm, NomeQuickRep: String); overload;
+    class procedure ShowFormReportParams(const AOnwer : TComponent; NomeForm, NomeQuickRep,
+      NomePropriedade: String; ValorPropriedade : Variant);
     class procedure RegisterForm(const aFormName: string; aFormClass: TComponentClass);
     class procedure FecharTodosForm;
 end;
@@ -25,7 +27,7 @@ var
 
 implementation
 
-uses FormFactoryU;
+uses FormFactoryU, TypInfo;
 
 class function TFormularios.EstaAberto(sForm: String): Boolean;
 var
@@ -43,8 +45,8 @@ end;
 
 class procedure TFormularios.FecharTodosForm;
 var
-I: Integer;
-FForm: TForm;
+  I : Integer;
+  FForm: TForm;
 begin
   // Fecha todos os formulários Abertos
   for I := Screen.FormCount - 1 downto 0 do
@@ -82,7 +84,7 @@ begin
     for I := 0 to FForm.ComponentCount - 1 do
       if FForm.Components[I] is TQuickRep then
       begin
-        qckrp := FForm.Components[I];
+        qckrp     := FForm.Components[I];
         Break;
       end;
 
@@ -103,6 +105,28 @@ begin
 
     qckrp := FForm.FindComponent(NomeQuickRep);
 
+    if Assigned(qckrp) then
+      TQuickRep(qckrp).PreviewModal;
+  finally
+    FForm.Free;
+  end;
+end;
+
+class procedure TFormularios.ShowFormReportParams(const AOnwer : TComponent; NomeForm, NomeQuickRep,
+  NomePropriedade: String; ValorPropriedade : Variant);
+var
+  qckrp : TComponent;
+  pProp : PPropInfo;
+begin
+  try
+    if TFormularios.EstaAberto(NomeForm) then
+      FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
+
+    pProp := GetPropInfo( FForm.ClassInfo, NomePropriedade);
+    if Assigned(pProp) then
+      SetPropValue(FForm, NomePropriedade, ValorPropriedade);
+
+    qckrp := FForm.FindComponent(NomeQuickRep);
     if Assigned(qckrp) then
       TQuickRep(qckrp).PreviewModal;
   finally
