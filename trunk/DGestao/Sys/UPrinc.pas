@@ -197,7 +197,8 @@ uses
   UGeContasAPagar,
   UGeContasAReceber,
   UGeCaixa,
-  UGeFluxoCaixa, UfrmRelEstoque;
+  UGeFluxoCaixa,
+  UfrmRelEstoque;
 
 {$R *.dfm}
 
@@ -562,7 +563,7 @@ end;
 
 procedure TfrmPrinc.mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
 begin
-  //FormFunction.ShowFormReport(Self, 'frmRelEstoque');
+//  FormFunction.ShowFormReportParams(Self, 'frmRelEstoque', 'qckrp', 'AnoMovimento', 2012);
 
   Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
   with frmRelEstoque do
@@ -576,6 +577,7 @@ begin
     qckrp.Preview;
     Destroy
   end;
+
 end;
 
 procedure TfrmPrinc.Ano20131Click(Sender: TObject);
