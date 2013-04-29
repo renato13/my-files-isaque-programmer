@@ -80,6 +80,9 @@ type
     dtsGrupo: TDataSource;
     lblGrupo: TLabel;
     dbGrupo: TDBLookupComboBox;
+    tbsDadosAdcionais: TTabSheet;
+    IbDtstTabelaTRANSPORTADORA: TSmallintField;
+    DBCheckBox1: TDBCheckBox;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -103,6 +106,7 @@ var
   procedure MostrarTabelaFornecedores(const AOwner : TComponent);
   function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var Nome : String) : Boolean; overload;
   function SelecionarFornecedor(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
+  function SelecionarTransportadora(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
 
 implementation
 
@@ -130,6 +134,8 @@ var
 begin
   frm := TfrmGeFornecedor.Create(AOwner);
   try
+    frm.tbsDuplicatas.TabVisible := False; // Temporário
+    
     Result := frm.SelecionarRegistro(Codigo, Nome);
   finally
     frm.Destroy;
@@ -150,13 +156,37 @@ begin
   end;
 end;
 
+function SelecionarTransportadora(const AOwner : TComponent; var Codigo : Integer; var CNPJ, Nome : String) : Boolean; overload;
+var
+  frm : TfrmGeFornecedor;
+begin
+  frm := TfrmGeFornecedor.Create(AOwner);
+  try
+    frm.WhereAdditional := 'f.Transportadora = 1';
+
+    with frm, IbDtstTabela do
+    begin
+      Close;
+      SelectSQL.Add('where ' + WhereAdditional);
+      SelectSQL.Add('order by ' + CampoDescricao);
+      Open;
+    end;
+
+    Result := frm.SelecionarRegistro(Codigo, Nome);
+    if ( Result ) then
+      CNPJ := frm.IbDtstTabelaCNPJ.AsString;
+  finally
+    frm.Destroy;
+  end;
+end;
+
 procedure TfrmGeFornecedor.FormCreate(Sender: TObject);
 begin
   inherited;
   ControlFirstEdit := dbPessoaFisica;
 
   tblGrupo.Open;
-  
+
   NomeTabela     := 'TBFORNECEDOR';
   CampoCodigo    := 'Codforn';
   CampoDescricao := 'Nomeforn';
@@ -257,10 +287,11 @@ end;
 procedure TfrmGeFornecedor.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-  IbDtstTabelaPESSOA_FISICA.AsInteger := 0;
-  IbDtstTabelaGRF_COD.AsInteger       := 0; 
-  IbDtstTabelaPAIS_ID.AsString        := GetPaisIDDefault;
-  IbDtstTabelaPAIS_NOME.AsString      := GetPaisNomeDefault;
+  IbDtstTabelaPESSOA_FISICA.AsInteger  := 0;
+  IbDtstTabelaGRF_COD.AsInteger        := 0;
+  IbDtstTabelaPAIS_ID.AsString         := GetPaisIDDefault;
+  IbDtstTabelaPAIS_NOME.AsString       := GetPaisNomeDefault;
+  IbDtstTabelaTRANSPORTADORA.AsInteger := 0;
 end;
 
 procedure TfrmGeFornecedor.DtSrcTabelaStateChange(Sender: TObject);
