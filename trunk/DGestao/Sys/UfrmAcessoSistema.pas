@@ -131,7 +131,7 @@ begin
 //    edNome.Text  := 'FERREIRA';
 //    edSenha.Text := 'PONTOLUZ';
     edNome.Text  := 'ISAQUE';
-    edSenha.Text := '123-';
+    edSenha.Text := '123';
 
     btbtnEntrar.Click;
   end;
