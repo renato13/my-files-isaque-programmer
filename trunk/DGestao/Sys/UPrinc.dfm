@@ -2,7 +2,7 @@ object frmPrinc: TfrmPrinc
   Left = 252
   Top = 121
   Width = 916
-  Height = 499
+  Height = 613
   Caption = 'DGE - Sistema Integrado de Gest'#227'o Empresarial'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object frmPrinc: TfrmPrinc
   TextHeight = 13
   object stbMain: TStatusBar
     Left = 0
-    Top = 422
+    Top = 536
     Width = 900
     Height = 19
     Font.Charset = ANSI_CHARSET
@@ -1204,19 +1204,19 @@ object frmPrinc: TfrmPrinc
     Left = 0
     Top = 64
     Width = 900
-    Height = 358
+    Height = 472
     Align = alClient
     BevelOuter = bvLowered
     Color = clWhite
     TabOrder = 2
     DesignSize = (
       900
-      358)
+      472)
     object imgFundo: TImage
       Left = 1
       Top = 1
       Width = 898
-      Height = 356
+      Height = 470
       Align = alClient
       AutoSize = True
       Center = True
@@ -4393,7 +4393,7 @@ object frmPrinc: TfrmPrinc
     end
     object imgEmpresa: TImage
       Left = 48
-      Top = 269
+      Top = 383
       Width = 65
       Height = 67
       Anchors = [akLeft, akBottom]
@@ -4819,7 +4819,7 @@ object frmPrinc: TfrmPrinc
     end
     object ProductName: TLabel
       Left = 120
-      Top = 271
+      Top = 385
       Width = 40
       Height = 23
       Anchors = [akLeft, akBottom]
@@ -4835,7 +4835,7 @@ object frmPrinc: TfrmPrinc
     end
     object Copyright: TLabel
       Left = 120
-      Top = 310
+      Top = 424
       Width = 248
       Height = 26
       Anchors = [akLeft, akBottom]
@@ -4855,7 +4855,7 @@ object frmPrinc: TfrmPrinc
     end
     object FileDescription: TLabel
       Left = 120
-      Top = 293
+      Top = 407
       Width = 236
       Height = 13
       Anchors = [akLeft, akBottom]
@@ -4873,7 +4873,7 @@ object frmPrinc: TfrmPrinc
     end
     object Version: TLabel
       Left = 284
-      Top = 275
+      Top = 389
       Width = 72
       Height = 13
       Alignment = taRightJustify
@@ -7297,13 +7297,20 @@ object frmPrinc: TfrmPrinc
       end
       object mnRelatorioEstoque: TMenuItem
         Caption = 'Estoque'
-        object mnRelatorioEstoqueDemanda2012: TMenuItem
-          Caption = 'Demanda 2012'
-          OnClick = mnRelatorioEstoqueDemanda2012Click
-        end
         object mnRelatorioEstoqueProduto: TMenuItem
           Caption = 'Produtos'
           OnClick = mnRelatorioEstoqueProdutoClick
+        end
+        object DemandaCompraxVenda1: TMenuItem
+          Caption = 'Demanda Compra x Venda'
+          object mnRelatorioEstoqueDemanda2012: TMenuItem
+            Caption = 'Ano 2012'
+            OnClick = mnRelatorioEstoqueDemanda2012Click
+          end
+          object Ano20131: TMenuItem
+            Caption = 'Ano 2013'
+            OnClick = Ano20131Click
+          end
         end
       end
       object mnRelatorioFaturamento: TMenuItem

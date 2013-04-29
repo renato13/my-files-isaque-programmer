@@ -78,7 +78,8 @@ uses
   UGeVendaFormaPagto in 'UGeVendaFormaPagto.pas' {frmGeVendaFormaPagto},
   UGeEntradaEstoqueGerarNFe in 'UGeEntradaEstoqueGerarNFe.pas' {frmGeEntradaEstoqueGerarNFe},
   UGeExportarNFeGerada in 'UGeExportarNFeGerada.pas' {frmGeExportarNFeGerada},
-  UfrmRelEstoque in 'UfrmRelEstoque.pas' {frmRelEstoque};
+  UfrmRelEstoque in 'UfrmRelEstoque.pas' {frmRelEstoque},
+  UfrmRelVendasFormPag in 'UfrmRelVendasFormPag.pas' {frmRelVendasFormPag};
 
 {$R *.res}
 
@@ -91,5 +92,6 @@ begin
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.CreateForm(TfrmPesq, frmPesq);
+  Application.CreateForm(TfrmRelVendasFormPag, frmRelVendasFormPag);
   Application.Run;
 end.

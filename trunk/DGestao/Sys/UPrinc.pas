@@ -116,6 +116,8 @@ type
     mnRelatorioEstoque: TMenuItem;
     mnRelatorioEstoqueDemanda2012: TMenuItem;
     mnRelatorioEstoqueProduto: TMenuItem;
+    DemandaCompraxVenda1: TMenuItem;
+    Ano20131: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -166,6 +168,7 @@ type
     procedure ExportarNFeGeradas1Click(Sender: TObject);
     procedure mnRelatorioEstoqueProdutoClick(Sender: TObject);
     procedure mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
+    procedure Ano20131Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -194,7 +197,7 @@ uses
   UGeContasAPagar,
   UGeContasAReceber,
   UGeCaixa,
-  UGeFluxoCaixa;
+  UGeFluxoCaixa, UfrmRelEstoque;
 
 {$R *.dfm}
 
@@ -559,7 +562,36 @@ end;
 
 procedure TfrmPrinc.mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
 begin
-  FormFunction.ShowFormReport(Self, 'frmRelEstoque');
+  //FormFunction.ShowFormReport(Self, 'frmRelEstoque');
+
+  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
+  with frmRelEstoque do
+  begin
+    ibqryDemanda.Close;
+    ibqryEmpresa.Open;
+    ibqryDemanda.Params[0].Value := 2012;
+    ibqryDemanda.Params[1].Value := 2012;
+    qrlblAno.Caption := 'ANO 2012';
+    ibqryDemanda.Open;
+    qckrp.Preview;
+    Destroy
+  end;
+end;
+
+procedure TfrmPrinc.Ano20131Click(Sender: TObject);
+begin
+  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
+  with frmRelEstoque do
+  begin
+    ibqryDemanda.Close;
+    ibqryEmpresa.Open;
+    ibqryDemanda.Params[0].Value := 2013;
+    ibqryDemanda.Params[1].Value := 2013;
+    qrlblAno.Caption := 'ANO 2013';
+    ibqryDemanda.Open;
+    qckrp.Preview;
+    Destroy
+  end;
 end;
 
 end.
