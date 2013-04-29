@@ -10,7 +10,7 @@ type
   TfrmRelCli = class(TForm)
     qckrp: TQuickRep;
     TitleBand1: TQRBand;
-    QRLabel6: TQRLabel;
+    lblNomeSistema: TQRLabel;
     QRSysData1: TQRSysData;
     QRLabel2: TQRLabel;
     ColumnHeaderBand1: TQRBand;
@@ -53,12 +53,15 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses
+  UDMBusiness, UFuncoes;
 
 {$R *.dfm}
 
 procedure TfrmRelCli.FormCreate(Sender: TObject);
 begin
+  lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
+
   IBQuery1.Open;
   ibqryEmpresa.Open;
 end;

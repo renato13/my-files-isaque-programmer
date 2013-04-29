@@ -3,7 +3,6 @@ object frmRelEstoque: TfrmRelEstoque
   Top = 188
   Width = 991
   Height = 499
-  HorzScrollBar.Position = 629
   Caption = 'frmRelEstoque'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,7 +16,7 @@ object frmRelEstoque: TfrmRelEstoque
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = -614
+    Left = 15
     Top = 20
     Width = 1572
     Height = 1111
@@ -79,7 +78,7 @@ object frmRelEstoque: TfrmRelEstoque
         143.630952380952400000
         2891.517857142857000000)
       BandType = rbTitle
-      object QRLabel6: TQRLabel
+      object lblNomeSistema: TQRLabel
         Left = 0
         Top = 0
         Width = 283
@@ -2492,8 +2491,6 @@ object frmRelEstoque: TfrmRelEstoque
   object ibqryDemanda: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select p.cod as codpro, p.descri as produto, p.qtde as estoque,'
       
@@ -2624,8 +2621,6 @@ object frmRelEstoque: TfrmRelEstoque
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128

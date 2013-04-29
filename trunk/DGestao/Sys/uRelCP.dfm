@@ -12,6 +12,7 @@ object frmRelCP: TfrmRelCP
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrpCP: TQuickRep
@@ -203,7 +204,7 @@ object frmRelCP: TfrmRelCP
         WordWrap = True
         FontSize = 9
       end
-      object QRLabel6: TQRLabel
+      object lblNomeSistema: TQRLabel
         Left = 0
         Top = 1
         Width = 202
@@ -985,8 +986,6 @@ object frmRelCP: TfrmRelCP
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.N' +
@@ -1000,8 +999,6 @@ object frmRelCP: TfrmRelCP
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128

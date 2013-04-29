@@ -10,7 +10,7 @@ type
   TfrmRelFornec = class(TForm)
     qckrp: TQuickRep;
     TitleBand1: TQRBand;
-    QRLabel6: TQRLabel;
+    lblNomeSistema: TQRLabel;
     QRSysData1: TQRSysData;
     QRLabel2: TQRLabel;
     QRDBText9: TQRDBText;
@@ -53,12 +53,14 @@ var
 
 implementation
 
-uses UDMBusiness;
+uses
+  UDMBusiness, UFuncoes;
 
 {$R *.dfm}
 
 procedure TfrmRelFornec.FormCreate(Sender: TObject);
 begin
+  lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
   IBQuery1.Open;
   ibqryEmpresa.Open;
 end;

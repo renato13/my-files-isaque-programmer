@@ -18,7 +18,8 @@ uses
 
 implementation
 
-uses UInfoVersao;
+uses
+  UInfoVersao, UConstantesDGE;
 
 function GetExeVersion(const FileName : TFileName) : String;
 type
@@ -92,7 +93,11 @@ end;
 
 function GetVersion : String;
 begin
+  {$IFDEF DGE}
+  Result := VERSION_NUMBER;
+  {$ELSE}
   Result := TInfoVersao.GetInstance().getPropertyValue(ivFILE_VERSION);
+  {$ENDIF}
 end;
 
 function GetCopyright : String;

@@ -10,7 +10,7 @@ type
   TfrmRelProdutos = class(TForm)
     qckrp: TQuickRep;
     TitleBand1: TQRBand;
-    QRLabel6: TQRLabel;
+    lblNomeSistema1: TQRLabel;
     QRSysData1: TQRSysData;
     QRLabel2: TQRLabel;
     QRDBText9: TQRDBText;
@@ -50,7 +50,7 @@ type
     QRDBText4: TQRDBText;
     QuickRep1: TQuickRep;
     QRBand1: TQRBand;
-    QRLabel3: TQRLabel;
+    lblNomeSistema2: TQRLabel;
     QRSysData4: TQRSysData;
     QRLabel7: TQRLabel;
     QRDBText10: TQRDBText;
@@ -98,7 +98,8 @@ var
 
 implementation
 
-uses UDMBusiness, UConstantesDGE;
+uses
+  UDMBusiness, UConstantesDGE, UFuncoes;
 
 {$R *.dfm}
 
@@ -123,6 +124,9 @@ end;
 
 procedure TfrmRelProdutos.FormCreate(Sender: TObject);
 begin
+  lblNomeSistema1.Caption := GetProductName + ' - versão ' + GetVersion;
+  lblNomeSistema2.Caption := GetProductName + ' - versão ' + GetVersion;
+
   IBQuery1.Open;
   IBQuery2.Open;
   ibqryEmpresa.Open;

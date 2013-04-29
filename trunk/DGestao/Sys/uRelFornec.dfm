@@ -79,7 +79,7 @@ object frmRelFornec: TfrmRelFornec
         177.270833333333300000
         1899.708333333333000000)
       BandType = rbTitle
-      object QRLabel6: TQRLabel
+      object lblNomeSistema: TQRLabel
         Left = 0
         Top = 1
         Width = 202

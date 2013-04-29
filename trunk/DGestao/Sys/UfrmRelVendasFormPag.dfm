@@ -12,6 +12,7 @@ object frmRelVendasFormPag: TfrmRelVendasFormPag
   Font.Style = []
   OldCreateOrder = False
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrpVendas: TQuickRep
@@ -77,7 +78,7 @@ object frmRelVendasFormPag: TfrmRelVendasFormPag
         185.208333333333300000
         1898.385416666667000000)
       BandType = rbTitle
-      object QRLabel6: TQRLabel
+      object lblNomeSistema: TQRLabel
         Left = 0
         Top = 5
         Width = 204
