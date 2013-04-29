@@ -3,6 +3,7 @@ object frmRelEstoque: TfrmRelEstoque
   Top = 188
   Width = 991
   Height = 499
+  HorzScrollBar.Position = 629
   Caption = 'frmRelEstoque'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,7 +17,7 @@ object frmRelEstoque: TfrmRelEstoque
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = 15
+    Left = -614
     Top = 20
     Width = 1572
     Height = 1111
@@ -138,7 +139,7 @@ object frmRelEstoque: TfrmRelEstoque
         Transparent = False
         FontSize = 7
       end
-      object QRLabel2: TQRLabel
+      object qrlblTituloRelat: TQRLabel
         Left = 536
         Top = 50
         Width = 458
@@ -202,12 +203,44 @@ object frmRelEstoque: TfrmRelEstoque
         WordWrap = True
         FontSize = 9
       end
+      object qrlblAno: TQRLabel
+        Left = 1494
+        Top = 50
+        Width = 36
+        Height = 23
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Frame.Style = psDashDotDot
+        Size.Values = (
+          43.467261904761900000
+          2823.482142857143000000
+          94.494047619047620000
+          68.035714285714290000)
+        Alignment = taRightJustify
+        AlignToBand = True
+        AutoSize = True
+        AutoStretch = False
+        Caption = 'ANO'
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -12
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 9
+      end
     end
     object ColumnHeaderBand1: TQRBand
       Left = 21
       Top = 129
       Width = 1530
-      Height = 39
+      Height = 38
       Frame.Color = clBlack
       Frame.DrawTop = True
       Frame.DrawBottom = True
@@ -225,7 +258,7 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        73.705357142857140000
+        71.815476190476190000
         2891.517857142857000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
@@ -1440,9 +1473,9 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object DetailBand1: TQRBand
       Left = 21
-      Top = 168
+      Top = 167
       Width = 1530
-      Height = 19
+      Height = 17
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -1459,7 +1492,7 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        35.907738095238100000
+        32.127976190476190000
         2891.517857142857000000)
       BandType = rbDetail
       object QRDBText1: TQRDBText
@@ -2329,7 +2362,7 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object PageFooterBand1: TQRBand
       Left = 21
-      Top = 187
+      Top = 184
       Width = 1530
       Height = 24
       Frame.Color = clBlack
@@ -2409,7 +2442,7 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object PageFooterBand2: TQRBand
       Left = 21
-      Top = 211
+      Top = 208
       Width = 1530
       Height = 20
       Frame.Color = clBlack
@@ -2459,6 +2492,8 @@ object frmRelEstoque: TfrmRelEstoque
   object ibqryDemanda: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'Select p.cod as codpro, p.descri as produto, p.qtde as estoque,'
       
@@ -2517,7 +2552,7 @@ object frmRelEstoque: TfrmRelEstoque
         '      inner join TBCOMPRASITENS ci on (c.ano = ci.ano and c.codc' +
         'ontrol = ci.codcontrol and c.codemp = ci.codemp)'
       '    where c.status in (2,4)'
-      '      and ci.ano = 2012'
+      '      and ci.ano = :ano'
       '    group by'
       '        ci.codprod'
       '  ) PC on (pc.item = p.cod)'
@@ -2567,20 +2602,33 @@ object frmRelEstoque: TfrmRelEstoque
         '      inner join TVENDASITENS vi on (v.ano = vi.ano and v.codcon' +
         'trol = vi.codcontrol and v.codemp = vi.codemp)'
       '    where v.status in (3, 4)'
-      '      and vi.ano = 2012'
+      '      and vi.ano = :ano'
       '    group by'
       '        vi.codprod'
       '  ) PV on (pv.item = p.cod)'
       'order by p.descri')
-    Left = 31
+    Left = 55
     Top = 20
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'ano'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'ano'
+        ParamType = ptUnknown
+      end>
   end
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 88
-    Top = 24
+    Left = 128
+    Top = 16
   end
 end

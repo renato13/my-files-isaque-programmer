@@ -3,7 +3,7 @@ object frmRelProdutos: TfrmRelProdutos
   Top = 163
   Width = 870
   Height = 500
-  HorzScrollBar.Position = 455
+  HorzScrollBar.Position = 232
   Caption = 'Relat'#243'rio de Produtos'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,7 +17,7 @@ object frmRelProdutos: TfrmRelProdutos
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = 23
+    Left = 246
     Top = 37
     Width = 476
     Height = 674
@@ -373,7 +373,7 @@ object frmRelProdutos: TfrmRelProdutos
         AlignToBand = False
         AutoSize = True
         AutoStretch = False
-        Caption = 'PRE'#199'O R$'
+        Caption = 'VENDA R$'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -961,7 +961,7 @@ object frmRelProdutos: TfrmRelProdutos
     end
   end
   object QuickRep1: TQuickRep
-    Left = 535
+    Left = 758
     Top = 48
     Width = 476
     Height = 674
@@ -1647,6 +1647,8 @@ object frmRelProdutos: TfrmRelProdutos
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = IBQuery1CalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +
@@ -1713,6 +1715,8 @@ object frmRelProdutos: TfrmRelProdutos
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -1721,6 +1725,8 @@ object frmRelProdutos: TfrmRelProdutos
   object IBQuery2: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +

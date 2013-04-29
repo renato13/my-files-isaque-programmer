@@ -12,7 +12,7 @@ type
     TitleBand1: TQRBand;
     QRLabel6: TQRLabel;
     QRSysData1: TQRSysData;
-    QRLabel2: TQRLabel;
+    qrlblTituloRelat: TQRLabel;
     QRDBText9: TQRDBText;
     ColumnHeaderBand1: TQRBand;
     QRLabel4: TQRLabel;
@@ -89,6 +89,7 @@ type
     QRDBText26: TQRDBText;
     QRDBText27: TQRDBText;
     QRDBText28: TQRDBText;
+    qrlblAno: TQRLabel;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
