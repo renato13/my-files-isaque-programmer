@@ -456,7 +456,7 @@ begin
   {$IFDEF DGE}
   Self.Caption           := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER;
   Self.Version.Caption   := 'Versão ' + VERSION_NUMBER;
-  Self.Copyright.Caption := '© 2012 | 2013 - Masterdados Tecnologia da Informação' + #13 + 'Todos os direitos reservados.';//GetCopyright;
+  Self.Copyright.Caption := '© 2012 | 2013 - Masterdados Tecnologia da Informação' + #13 + 'Todos os direitos reservados.';
   {$ELSE}
   Self.Caption           := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion + ' ]';
   Self.Version.Caption   := 'Versão ' + GetExeVersion;
