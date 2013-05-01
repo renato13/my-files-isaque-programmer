@@ -1728,12 +1728,14 @@ begin
         Total.retTrib.vBCRetPrev := 0;
         Total.retTrib.vRetPrev   := 0;}
 
-      // Adicionando Dados da Transportadora
+      // Adicionando Dados da Transportadora (Modalidades de Frete: mfContaEmitente, mfContaDestinatario, mfContaTerceiros, mfSemFrete)
 
       Transp.modFrete            := mfSemFrete; // X02 - Modalidade do frete
-                                                //         (0)=mfContaEmitente     – por conta do emitente;
-                                                //         (1)=mfContaDestinatario – por conta do destinatário)
-                                                //       TAG de grupo Transportador - <transporta> - Ocorrência 0-1
+                                                //         (0) = mfContaEmitente     – por conta do emitente;
+                                                //         (1) = mfContaDestinatario – por conta do destinatário;
+                                                //         (2) = mfContaTerceiros    – por conta do terceiros;
+                                                //         (3) = mfSemFrete          – sem frete;
+                                                //       TAG de grupo Transportador - <transporta> - Ocorrência 0-3
       Transp.Transporta.CNPJCPF  := '';
       Transp.Transporta.xNome    := '';
       Transp.Transporta.IE       := '';
@@ -1750,7 +1752,7 @@ begin
 
         Transp.veicTransp.placa := '';
         Transp.veicTransp.UF    := '';
-        Transp.veicTransp.RNTC  := '';
+        Transp.veicTransp.RNTC  := '';  // RNTC - Registros Nacional de Transportes de Carga (Identificação do vagão quando o transporte é Trem)
   //Dados do Reboque
   {      with Transp.Reboque.Add do
          begin
@@ -1761,7 +1763,8 @@ begin
 
       // Adicionando Dados de Volumes a Transportar
 
-      if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
+//      if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
+      if ( Transp.modFrete in [mfContaEmitente, mfContaDestinatario, mfContaTerceiros] ) then
         with Transp.Vol.Add do
         begin
           qVol  := qryDadosProduto.RecordCount;

@@ -278,6 +278,14 @@ type
     cdsTabelaItensTOTAL_DESCONTO: TIBBCDField;
     cdsTabelaItensTOTAL_LIQUIDO: TIBBCDField;
     IbDtstTabelaTOTALVENDA_BRUTA: TIBBCDField;
+    tbsTransporte: TTabSheet;
+    Bevel16: TBevel;
+    Panel1: TPanel;
+    BtnTransporteInforme: TBitBtn;
+    Bevel17: TBevel;
+    lblModalidadeFrete: TLabel;
+    tblModalidadeFrete: TIBTable;
+    dtsModalidadeFrete: TDataSource;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -419,6 +427,7 @@ begin
   tblVendedor.Open;
   tblFormaPagto.Open;
   tblCondicaoPagto.Open;
+  tblModalidadeFrete.Open;
 
   pgcMaisDados.Height := 150;
   DisplayFormatCodigo := '###0000000';
@@ -445,7 +454,6 @@ end;
 procedure TfrmGeVenda.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
-//  IbDtstTabelaAno.Value     := YearOf(GetDateTimeDB);
   IbDtstTabelaDTVENDA.Value := GetDateTimeDB;
   IbDtstTabelaCODEMP.Value  := GetEmpresaIDDefault;
   IbDtstTabelaCODCLI.Value  := GetClienteIDDefault;
@@ -706,6 +714,8 @@ begin
     btbtnGerarNFe.Enabled    := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) and (not cdsTabelaItens.IsEmpty);
     btbtnCancelarVND.Enabled := ( (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN) or (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE) );
 
+    BtnTransporteInforme.Enabled := btbtnGerarNFe.Enabled;
+
     btnGerarBoleto.Enabled   := GetEmitirBoleto and (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_FIN); // and (IbDtstTabelaFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto);
 
     nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
@@ -716,6 +726,8 @@ begin
     btbtnFinalizar.Enabled   := False;
     btbtnGerarNFe.Enabled    := False;
     btbtnCancelarVND.Enabled := False;
+
+    BtnTransporteInforme.Enabled := False;
 
     nmImprimirDANFE.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);
     nmGerarDANFEXML.Enabled := (IbDtstTabelaSTATUS.AsInteger = STATUS_VND_NFE);

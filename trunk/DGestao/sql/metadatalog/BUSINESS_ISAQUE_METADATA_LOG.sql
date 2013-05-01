@@ -1262,3 +1262,665 @@ COMMENT ON COLUMN TBFORNECEDOR.TRANSPORTADORA IS
 0 - Nao
 1 - Sim';
 
+
+
+
+/*------ SYSDBA 01/05/2013 19:18:22 --------*/
+
+ALTER TABLE TBVENDAS
+    ADD NFE_MODALIDADE_FRETE DMN_SMALLINT_NN,
+    ADD NFE_TRANSPORTADORA DMN_INTEGER_N;
+
+COMMENT ON COLUMN TBVENDAS.NFE_MODALIDADE_FRETE IS
+'Modalidade Frete:
+0 -  (0) Por conta do Emitente
+1 -  (1) Por conta do Destinatario
+2 -  (2) Por conta de Terceiros
+3 -  (9) Sem Frete';
+
+COMMENT ON COLUMN TBVENDAS.NFE_TRANSPORTADORA IS
+'Transportadora:
+
+Codigo do Fornecedor do Servico de Transporte.';
+
+
+
+
+/*------ SYSDBA 01/05/2013 19:18:44 --------*/
+
+ALTER TABLE TBVENDAS ADD IBE$$TEMP_COLUMN
+ SMALLINT DEFAULT 3
+;
+
+UPDATE RDB$RELATION_FIELDS F1
+SET
+F1.RDB$DEFAULT_VALUE  = (SELECT F2.RDB$DEFAULT_VALUE
+                         FROM RDB$RELATION_FIELDS F2
+                         WHERE (F2.RDB$RELATION_NAME = 'TBVENDAS') AND
+                               (F2.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN')),
+F1.RDB$DEFAULT_SOURCE = (SELECT F3.RDB$DEFAULT_SOURCE FROM RDB$RELATION_FIELDS F3
+                         WHERE (F3.RDB$RELATION_NAME = 'TBVENDAS') AND
+                               (F3.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN'))
+WHERE (F1.RDB$RELATION_NAME = 'TBVENDAS') AND
+      (F1.RDB$FIELD_NAME = 'NFE_MODALIDADE_FRETE');
+
+ALTER TABLE TBVENDAS DROP IBE$$TEMP_COLUMN;
+
+
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column ANO position 1;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CODCONTROL position 2;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CODEMP position 3;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CODCLI position 4;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column DTVENDA position 5;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column STATUS position 6;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column TOTALVENDA_BRUTA position 7;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column DESCONTO position 8;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column TOTALVENDA position 9;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column DTFINALIZACAO_VENDA position 10;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column OBS position 11;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column FORMAPAG position 12;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column FATDIAS position 13;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column SERIE position 14;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE position 15;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column DATAEMISSAO position 16;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column HORAEMISSAO position 17;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CFOP position 18;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column VERIFICADOR_NFE position 19;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column XML_NFE position 20;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column VENDEDOR_COD position 21;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column USUARIO position 22;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column FORMAPAGTO_COD position 23;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CONDICAOPAGTO_COD position 24;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column VENDA_PRAZO position 25;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_01 position 26;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_02 position 27;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_03 position 28;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_04 position 29;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_05 position 30;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_06 position 31;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_07 position 32;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_08 position 33;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_09 position 34;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_10 position 35;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_11 position 36;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column PRAZO_12 position 37;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column LOTE_NFE_ANO position 38;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column LOTE_NFE_NUMERO position 39;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_ENVIADA position 40;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CANCEL_USUARIO position 41;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CANCEL_DATAHORA position 42;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column CANCEL_MOTIVO position 43;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column XML_NFE_FILENAME position 44;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_MODALIDADE_FRETE position 45;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_TRANSPORTADORA position 46;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_BASE_ICMS position 47;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_ICMS position 48;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_BASE_ICMS_SUBST position 49;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_ICMS_SUBST position 50;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_TOTAL_PRODUTO position 51;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_FRETE position 52;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_SEGURO position 53;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_DESCONTO position 54;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_TOTAL_II position 55;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_TOTAL_IPI position 56;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_PIS position 57;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_COFINS position 58;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_OUTROS position 59;
+
+
+/*------ SYSDBA 01/05/2013 19:19:04 --------*/
+
+alter table TBVENDAS
+alter column NFE_VALOR_TOTAL_NOTA position 60;
+
+
+/*------ SYSDBA 01/05/2013 19:40:14 --------*/
+
+COMMENT ON COLUMN TBVENDAS.NFE_MODALIDADE_FRETE IS
+'Modalidade Frete:
+0 -  (0) Por conta do Emitente               [CIF - (Cost, Insurance and Freight - “Custo, Seguros e Frete”)]
+1 -  (1) Por conta do Destinatario/Remetente [FOB - (Free on Board - “Livre a bordo”)]
+2 -  (2) Por conta de Terceiros
+3 -  (9) Sem Frete';
+
+
+
+
+/*------ SYSDBA 01/05/2013 19:48:22 --------*/
+
+ALTER TABLE TBVENDAS
+    ADD NFE_PLACA_VEICULO DMN_VCHAR_10,
+    ADD NFE_PLACA_UF DMN_VCHAR_02,
+    ADD NFE_PLACA_RNTC DMN_VCHAR_10;
+
+COMMENT ON COLUMN TBVENDAS.NFE_PLACA_VEICULO IS
+'Placa do Veiculo de Transporte.';
+
+COMMENT ON COLUMN TBVENDAS.NFE_PLACA_UF IS
+'UF da Placa do Veiculo.';
+
+COMMENT ON COLUMN TBVENDAS.NFE_PLACA_RNTC IS
+'RNCT do Veiculo.
+
+RNTC - Registros Nacional de Transportes de Carga (Identificacao do vagao quando o transporte for Trem)';
+
+alter table TBVENDAS
+alter ANO position 1;
+
+alter table TBVENDAS
+alter CODCONTROL position 2;
+
+alter table TBVENDAS
+alter CODEMP position 3;
+
+alter table TBVENDAS
+alter CODCLI position 4;
+
+alter table TBVENDAS
+alter DTVENDA position 5;
+
+alter table TBVENDAS
+alter STATUS position 6;
+
+alter table TBVENDAS
+alter TOTALVENDA_BRUTA position 7;
+
+alter table TBVENDAS
+alter DESCONTO position 8;
+
+alter table TBVENDAS
+alter TOTALVENDA position 9;
+
+alter table TBVENDAS
+alter DTFINALIZACAO_VENDA position 10;
+
+alter table TBVENDAS
+alter OBS position 11;
+
+alter table TBVENDAS
+alter FORMAPAG position 12;
+
+alter table TBVENDAS
+alter FATDIAS position 13;
+
+alter table TBVENDAS
+alter SERIE position 14;
+
+alter table TBVENDAS
+alter NFE position 15;
+
+alter table TBVENDAS
+alter DATAEMISSAO position 16;
+
+alter table TBVENDAS
+alter HORAEMISSAO position 17;
+
+alter table TBVENDAS
+alter CFOP position 18;
+
+alter table TBVENDAS
+alter VERIFICADOR_NFE position 19;
+
+alter table TBVENDAS
+alter XML_NFE position 20;
+
+alter table TBVENDAS
+alter VENDEDOR_COD position 21;
+
+alter table TBVENDAS
+alter USUARIO position 22;
+
+alter table TBVENDAS
+alter FORMAPAGTO_COD position 23;
+
+alter table TBVENDAS
+alter CONDICAOPAGTO_COD position 24;
+
+alter table TBVENDAS
+alter VENDA_PRAZO position 25;
+
+alter table TBVENDAS
+alter PRAZO_01 position 26;
+
+alter table TBVENDAS
+alter PRAZO_02 position 27;
+
+alter table TBVENDAS
+alter PRAZO_03 position 28;
+
+alter table TBVENDAS
+alter PRAZO_04 position 29;
+
+alter table TBVENDAS
+alter PRAZO_05 position 30;
+
+alter table TBVENDAS
+alter PRAZO_06 position 31;
+
+alter table TBVENDAS
+alter PRAZO_07 position 32;
+
+alter table TBVENDAS
+alter PRAZO_08 position 33;
+
+alter table TBVENDAS
+alter PRAZO_09 position 34;
+
+alter table TBVENDAS
+alter PRAZO_10 position 35;
+
+alter table TBVENDAS
+alter PRAZO_11 position 36;
+
+alter table TBVENDAS
+alter PRAZO_12 position 37;
+
+alter table TBVENDAS
+alter LOTE_NFE_ANO position 38;
+
+alter table TBVENDAS
+alter LOTE_NFE_NUMERO position 39;
+
+alter table TBVENDAS
+alter NFE_ENVIADA position 40;
+
+alter table TBVENDAS
+alter CANCEL_USUARIO position 41;
+
+alter table TBVENDAS
+alter CANCEL_DATAHORA position 42;
+
+alter table TBVENDAS
+alter CANCEL_MOTIVO position 43;
+
+alter table TBVENDAS
+alter XML_NFE_FILENAME position 44;
+
+alter table TBVENDAS
+alter NFE_MODALIDADE_FRETE position 45;
+
+alter table TBVENDAS
+alter NFE_TRANSPORTADORA position 46;
+
+alter table TBVENDAS
+alter NFE_PLACA_VEICULO position 47;
+
+alter table TBVENDAS
+alter NFE_PLACA_UF position 48;
+
+alter table TBVENDAS
+alter NFE_PLACA_RNTC position 49;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS position 50;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS position 51;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS_SUBST position 52;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS_SUBST position 53;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_PRODUTO position 54;
+
+alter table TBVENDAS
+alter NFE_VALOR_FRETE position 55;
+
+alter table TBVENDAS
+alter NFE_VALOR_SEGURO position 56;
+
+alter table TBVENDAS
+alter NFE_VALOR_DESCONTO position 57;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_II position 58;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_IPI position 59;
+
+alter table TBVENDAS
+alter NFE_VALOR_PIS position 60;
+
+alter table TBVENDAS
+alter NFE_VALOR_COFINS position 61;
+
+alter table TBVENDAS
+alter NFE_VALOR_OUTROS position 62;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_NOTA position 63;
+
+
+
+
+/*------ SYSDBA 01/05/2013 20:10:03 --------*/
+
+create view vw_modalidade_frete ( codigo, descricao )
+as
+
+Select First 1
+    0
+  , '(0) Por conta do Emitente [CIF]'
+from TBEMPRESA
+
+union
+
+Select First 1
+    1
+  , '(1) Por conta do Destinatario/Remetente [FOB]'
+from TBEMPRESA
+
+union
+
+Select First 1
+    3
+  , '(9) Sem Frete'
+from TBEMPRESA
+;
+
+GRANT ALL ON VW_MODALIDADE_FRETE TO "PUBLIC";
+
+/*------ SYSDBA 01/05/2013 20:25:35 --------*/
+
+update TBVENDAS v set v.nfe_modalidade_frete = 3 where v.nfe_modalidade_frete is null;
+/*------ SYSDBA 01/05/2013 20:25:47 --------*/
+
+COMMIT WORK;

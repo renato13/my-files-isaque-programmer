@@ -1922,7 +1922,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 424
         Width = 1091
         Height = 190
-        ActivePage = tbsRecebimento
+        ActivePage = tbsTransporte
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -2601,6 +2601,81 @@ inherited frmGeVenda: TfrmGeVenda
                 Width = 80
                 Visible = True
               end>
+          end
+        end
+        object tbsTransporte: TTabSheet
+          Caption = 'Dados Transporte'
+          ImageIndex = 2
+          object Bevel16: TBevel
+            Left = 0
+            Top = 0
+            Width = 4
+            Height = 162
+            Align = alLeft
+            Shape = bsSpacer
+          end
+          object Bevel17: TBevel
+            Left = 74
+            Top = 0
+            Width = 4
+            Height = 162
+            Align = alLeft
+            Shape = bsSpacer
+          end
+          object lblModalidadeFrete: TLabel
+            Left = 88
+            Top = 8
+            Width = 87
+            Height = 13
+            Caption = 'Modalidade Frete:'
+          end
+          object Panel1: TPanel
+            Left = 4
+            Top = 0
+            Width = 70
+            Height = 162
+            Align = alLeft
+            AutoSize = True
+            BevelOuter = bvNone
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+            object BtnTransporteInforme: TBitBtn
+              Left = 0
+              Top = 1
+              Width = 70
+              Height = 25
+              Hint = 
+                'Informar dados de transporte:'#13#10'- Modalidade Frete'#13#10'- Dados Ve'#237'cu' +
+                'lo'
+              Caption = 'Info&rme'
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+              NumGlyphs = 2
+            end
+          end
+          object TDBLookupComboBox
+            Left = 88
+            Top = 24
+            Width = 289
+            Height = 21
+            DataSource = DtSrcTabela
+            DropDownRows = 10
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            KeyField = 'CODIGO'
+            ListField = 'DESCRICAO'
+            ListSource = dtsModalidadeFrete
+            ParentFont = False
+            TabOrder = 1
           end
         end
       end
@@ -3721,7 +3796,7 @@ inherited frmGeVenda: TfrmGeVenda
     ModifySQL.Strings = (
       '')
     Left = 1128
-    Top = 504
+    Top = 536
   end
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -3737,7 +3812,7 @@ inherited frmGeVenda: TfrmGeVenda
     ModifySQL.Strings = (
       '')
     Left = 1160
-    Top = 504
+    Top = 536
   end
   object qryTitulos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -4435,5 +4510,18 @@ inherited frmGeVenda: TfrmGeVenda
     DataSet = cdsVendaFormaPagto
     Left = 1056
     Top = 168
+  end
+  object tblModalidadeFrete: TIBTable
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    TableName = 'VW_MODALIDADE_FRETE'
+    TableTypes = [ttView]
+    Left = 1128
+    Top = 504
+  end
+  object dtsModalidadeFrete: TDataSource
+    DataSet = tblModalidadeFrete
+    Left = 1160
+    Top = 504
   end
 end
