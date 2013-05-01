@@ -1,37 +1,38 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas',0,1,57,89,66,0,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,85,84,93,1,0
-File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendasFormPag.pas',0,1,23,81,31,1,0
-File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCli.pas',0,1,39,137,46,1,0
-File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCP.pas',0,1,25,136,32,1,0
-File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCR.pas',0,1,49,134,55,1,0
-File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelFornec.pas',0,1,33,134,39,1,0
-File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,99,130,104,1,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendas.pas',0,1,93,104,98,1,0
-File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uGerRelCP.pas',0,1,204,1,240,1,0
+File_0=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnNFe.pas',0,1,1157,64,1161,0,0
+File_1=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,1,105,11,0,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas',0,1,57,89,66,0,0
+File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,85,84,93,1,0
+File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendasFormPag.pas',0,1,23,81,31,1,0
+File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCli.pas',0,1,39,137,46,1,0
+File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCP.pas',0,1,25,136,32,1,0
+File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCR.pas',0,1,49,134,55,1,0
+File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelFornec.pas',0,1,33,134,39,1,0
+File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,99,130,104,1,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
 Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
 Module4=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
-Count=7
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
+Count=8
 EditWindowCount=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -44,6 +45,11 @@ FormOnTop=0
 [C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas]
 ModuleType=SourceModule
 FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
+ModuleType=SourceModule
+FormState=1
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
@@ -64,9 +70,13 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+FormState=0
+FormOnTop=0
+
 [EditWindow0]
-ViewCount=7
-CurrentView=6
+ViewCount=8
+CurrentView=3
 View0=0
 View1=1
 View2=2
@@ -74,6 +84,7 @@ View3=3
 View4=4
 View5=5
 View6=6
+View7=7
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -125,16 +136,16 @@ LeftCol=1
 
 [View4]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-CursorX=1
-CursorY=1733
-TopLine=1723
+CursorX=54
+CursorY=1740
+TopLine=1705
 LeftCol=1
 
 [View5]
 Module=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
 CursorX=1
-CursorY=149
-TopLine=115
+CursorY=148
+TopLine=114
 LeftCol=1
 
 [View6]
@@ -142,6 +153,13 @@ Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
 CursorX=124
 CursorY=459
 TopLine=395
+LeftCol=1
+
+[View7]
+Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+CursorX=42
+CursorY=730
+TopLine=681
 LeftCol=1
 
 [Watches]
@@ -215,7 +233,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Caption
+SelectedItem=Connected
 ExpandedItems=
 HiddenCategories=
 
