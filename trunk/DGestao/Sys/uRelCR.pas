@@ -40,9 +40,7 @@ type
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
     lblNomeSistema: TQRLabel;
-    QRDBText3: TQRDBText;
     QRSysData1: TQRSysData;
-    ibqryEmpresa: TIBQuery;
     QRLabel1: TQRLabel;
     QRDBText1: TQRDBText;
     procedure FormCreate(Sender: TObject);
@@ -64,7 +62,8 @@ uses
 
 procedure TfrmRelCR.FormCreate(Sender: TObject);
 begin
-  lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
+ lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
+
 end;
 
 end.

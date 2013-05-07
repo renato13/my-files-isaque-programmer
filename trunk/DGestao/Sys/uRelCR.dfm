@@ -297,38 +297,6 @@ object frmRelCR: TfrmRelCR
         WordWrap = True
         FontSize = 7
       end
-      object QRDBText3: TQRDBText
-        Left = 309
-        Top = 16
-        Width = 63
-        Height = 19
-        Frame.Color = clBlack
-        Frame.DrawTop = False
-        Frame.DrawBottom = False
-        Frame.DrawLeft = False
-        Frame.DrawRight = False
-        Size.Values = (
-          50.270833333333330000
-          817.562500000000000000
-          42.333333333333330000
-          166.687500000000000000)
-        Alignment = taCenter
-        AlignToBand = True
-        AutoSize = True
-        AutoStretch = False
-        Color = clWhite
-        DataSet = ibqryEmpresa
-        DataField = 'NMFANT'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Arial Black'
-        Font.Style = [fsBold, fsUnderline]
-        ParentFont = False
-        Transparent = False
-        WordWrap = True
-        FontSize = 10
-      end
       object QRSysData1: TQRSysData
         Left = 630
         Top = 1
@@ -1079,6 +1047,9 @@ object frmRelCR: TfrmRelCR
   object IBQuery1: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select R.DTEMISS, R.DTVENC, R.DTREC, C.NOME, R.TIPPAG, R.NUMLANC' +
@@ -1087,14 +1058,5 @@ object frmRelCR: TfrmRelCR
       'where (R.CNPJ = C.CNPJ)')
     Left = 110
     Top = 64
-  end
-  object ibqryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 192
-    Top = 56
   end
 end

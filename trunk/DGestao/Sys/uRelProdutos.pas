@@ -83,6 +83,8 @@ type
     QRLabel15: TQRLabel;
     QRDBText15: TQRDBText;
     IBQuery2FABRIC: TIBStringField;
+    ibqryEmpresaCNPJ: TIBStringField;
+    ibqryEmpresaNMFANT: TIBStringField;
     procedure qckrpBeforePrint(Sender: TCustomQuickRep;
       var PrintReport: Boolean);
     procedure IBQuery1CalcFields(DataSet: TDataSet);

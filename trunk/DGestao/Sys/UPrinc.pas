@@ -200,7 +200,7 @@ uses
   UGeFluxoCaixa,
 
   // Relatórios
-  UfrmRelEstoque;
+  UfrmRelEstoque, uGerRelCR, uGerRelCP, UfrmRelVendas;
 
 {$R *.dfm}
 
@@ -277,12 +277,18 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
 begin
-  FormFunction.ShowModalForm(Self, 'frmGerRelCR');
+//  FormFunction.ShowModalForm(Self, 'frmGerRelCR');
+  Application.CreateForm(TfrmGerRelCR, frmGerRelCR);
+  frmGerRelCR.ShowModal;
+  frmGerRelCR.Destroy;
 end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAReceberClick(Sender: TObject);
 begin
-  FormFunction.ShowModalForm(Self, 'frmGerRelCP');
+  //FormFunction.ShowModalForm(Self, 'frmGerRelCP');
+  Application.CreateForm(TfrmGerRelCP, frmGerRelCP);
+  frmGerRelCP.ShowModal;
+  frmGerRelCP.Destroy;
 end;
 
 procedure TfrmPrinc.nmAboutClick(Sender: TObject);
@@ -539,7 +545,9 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFaturamentoVendasClick(Sender: TObject);
 begin
-  FormFunction.ShowModalForm(Self, 'frmRelVendas');
+  Application.CreateForm(TfrmRelVendas, frmRelVendas);
+  frmRelVendas.ShowModal;
+  frmRelVendas.Destroy;
 end;
 
 procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);

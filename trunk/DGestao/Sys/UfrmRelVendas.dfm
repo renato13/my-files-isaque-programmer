@@ -3,8 +3,8 @@ object frmRelVendas: TfrmRelVendas
   Top = 182
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio de Vendas'
-  ClientHeight = 222
-  ClientWidth = 270
+  ClientHeight = 221
+  ClientWidth = 269
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -27,7 +27,7 @@ object frmRelVendas: TfrmRelVendas
   object Panel1: TPanel
     Left = 0
     Top = 180
-    Width = 270
+    Width = 269
     Height = 48
     Align = alTop
     BevelOuter = bvLowered
@@ -134,7 +134,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 270
+    Width = 269
     Height = 60
     Align = alTop
     Caption = 'Per'#237'odo do Faturamento'
@@ -440,6 +440,7 @@ object frmRelVendas: TfrmRelVendas
         AutoSize = True
         AutoStretch = False
         Color = clWhite
+        DataSet = ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1078,7 +1079,7 @@ object frmRelVendas: TfrmRelVendas
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 60
-    Width = 270
+    Width = 269
     Height = 60
     Align = alTop
     Caption = 'Status'
@@ -1113,7 +1114,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox2: TGroupBox
     Left = 0
     Top = 120
-    Width = 270
+    Width = 269
     Height = 60
     Align = alTop
     Caption = 'Vendedor'
@@ -1894,6 +1895,8 @@ object frmRelVendas: TfrmRelVendas
   object ibqryVendedor: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select NOME from TBVENDEDOR'
       'order by NOME')
@@ -1908,6 +1911,8 @@ object frmRelVendas: TfrmRelVendas
   object ibqryVendas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select C.NOME as CLIENTE, V.CODCONTROL, V.DTFINALIZACAO_VENDA, V' +
@@ -2005,6 +2010,8 @@ object frmRelVendas: TfrmRelVendas
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = ibqryVendasSinteticoCalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select VE.NOME as VENDEDOR, VE.COMISSAO, SUM(V.TOTALVENDA)'
       'from TBVENDAS V inner join TBVENDEDOR VE'
@@ -2067,6 +2074,9 @@ object frmRelVendas: TfrmRelVendas
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 144

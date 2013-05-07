@@ -419,7 +419,7 @@ object frmRelFornec: TfrmRelFornec
       Left = 38
       Top = 129
       Width = 718
-      Height = 25
+      Height = 16
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -436,12 +436,12 @@ object frmRelFornec: TfrmRelFornec
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        66.145833333333330000
+        42.333333333333330000
         1899.708333333333000000)
       BandType = rbDetail
       object QRDBText1: TQRDBText
         Left = 244
-        Top = 2
+        Top = 0
         Width = 26
         Height = 16
         Frame.Color = clBlack
@@ -452,7 +452,7 @@ object frmRelFornec: TfrmRelFornec
         Size.Values = (
           42.333333333333330000
           645.583333333333300000
-          5.291666666666667000
+          0.000000000000000000
           68.791666666666670000)
         Alignment = taLeftJustify
         AlignToBand = False
@@ -473,7 +473,7 @@ object frmRelFornec: TfrmRelFornec
       end
       object QRDBText2: TQRDBText
         Left = 0
-        Top = 2
+        Top = 0
         Width = 233
         Height = 16
         Frame.Color = clBlack
@@ -484,7 +484,7 @@ object frmRelFornec: TfrmRelFornec
         Size.Values = (
           42.333333333333330000
           0.000000000000000000
-          5.291666666666667000
+          0.000000000000000000
           616.479166666666700000)
         Alignment = taLeftJustify
         AlignToBand = True
@@ -505,7 +505,7 @@ object frmRelFornec: TfrmRelFornec
       end
       object QRDBText4: TQRDBText
         Left = 340
-        Top = 2
+        Top = 0
         Width = 61
         Height = 16
         Frame.Color = clBlack
@@ -514,10 +514,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.333333333333300000
-          899.583333333333000000
-          5.291666666666670000
-          161.395833333333000000)
+          42.333333333333330000
+          899.583333333333300000
+          0.000000000000000000
+          161.395833333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
@@ -537,7 +537,7 @@ object frmRelFornec: TfrmRelFornec
       end
       object QRDBText5: TQRDBText
         Left = 408
-        Top = 2
+        Top = 0
         Width = 201
         Height = 16
         Frame.Color = clBlack
@@ -546,9 +546,9 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          42.333333333333300000
+          42.333333333333330000
           1079.500000000000000000
-          5.291666666666670000
+          0.000000000000000000
           531.812500000000000000)
         Alignment = taLeftJustify
         AlignToBand = False
@@ -569,7 +569,7 @@ object frmRelFornec: TfrmRelFornec
       end
       object QRDBText6: TQRDBText
         Left = 704
-        Top = 2
+        Top = 0
         Width = 14
         Height = 17
         Frame.Color = clBlack
@@ -580,7 +580,7 @@ object frmRelFornec: TfrmRelFornec
         Size.Values = (
           44.979166666666670000
           1862.666666666667000000
-          5.291666666666667000
+          0.000000000000000000
           37.041666666666670000)
         Alignment = taRightJustify
         AlignToBand = True
@@ -602,7 +602,7 @@ object frmRelFornec: TfrmRelFornec
       end
       object QRDBText8: TQRDBText
         Left = 614
-        Top = 2
+        Top = 0
         Width = 83
         Height = 17
         Frame.Color = clBlack
@@ -611,10 +611,10 @@ object frmRelFornec: TfrmRelFornec
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          44.979166666666700000
-          1624.541666666670000000
-          5.291666666666670000
-          219.604166666667000000)
+          44.979166666666670000
+          1624.541666666667000000
+          0.000000000000000000
+          219.604166666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
@@ -635,7 +635,7 @@ object frmRelFornec: TfrmRelFornec
     end
     object PageFooterBand1: TQRBand
       Left = 38
-      Top = 154
+      Top = 145
       Width = 718
       Height = 24
       Frame.Color = clBlack
@@ -715,7 +715,7 @@ object frmRelFornec: TfrmRelFornec
     end
     object PageFooterBand2: TQRBand
       Left = 38
-      Top = 178
+      Top = 169
       Width = 718
       Height = 21
       Frame.Color = clBlack
@@ -765,6 +765,8 @@ object frmRelFornec: TfrmRelFornec
   object IBQuery1: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select NOMEFORN, CNPJ, CONTATO, ENDER, CIDADE, UF '
       'from TBFORNECEDOR'
@@ -806,6 +808,8 @@ object frmRelFornec: TfrmRelFornec
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 184
