@@ -1186,6 +1186,7 @@ begin
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
   pgcMaisDados.ActivePage := tbsRecebimento;
+  HabilitarDesabilitar_Btns;
 end;
 
 procedure TfrmGeVenda.btbtnIncluirClick(Sender: TObject);
