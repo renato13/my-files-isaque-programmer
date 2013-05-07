@@ -172,7 +172,7 @@ begin
       Open;
     end;
 
-    Result := frm.SelecionarRegistro(Codigo, Nome);
+    Result := frm.SelecionarRegistro(Codigo, Nome, frm.WhereAdditional);
     if ( Result ) then
       CNPJ := frm.IbDtstTabelaCNPJ.AsString;
   finally

@@ -1121,10 +1121,8 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       'update TBFORNECEDOR'
       'set'
       '  BAI_COD = :BAI_COD,'
-      '  BAI_NOME = :BAI_NOME,'
       '  CEP = :CEP,'
       '  CID_COD = :CID_COD,'
-      '  CID_NOME = :CID_NOME,'
       '  CIDADE = :CIDADE,'
       '  CNPJ = :CNPJ,'
       '  CODFORN = :CODFORN,'
@@ -1133,17 +1131,14 @@ inherited frmGeFornecedor: TfrmGeFornecedor
       '  EMAIL = :EMAIL,'
       '  ENDER = :ENDER,'
       '  EST_COD = :EST_COD,'
-      '  EST_NOME = :EST_NOME,'
       '  FONE = :FONE,'
       '  GRF_COD = :GRF_COD,'
       '  INSCEST = :INSCEST,'
       '  INSCMUN = :INSCMUN,'
       '  LOG_COD = :LOG_COD,'
-      '  LOGRADOURO = :LOGRADOURO,'
       '  NOMEFORN = :NOMEFORN,'
       '  NUMERO_END = :NUMERO_END,'
       '  PAIS_ID = :PAIS_ID,'
-      '  PAIS_NOME = :PAIS_NOME,'
       '  PESSOA_FISICA = :PESSOA_FISICA,'
       '  SITE = :SITE,'
       '  TLG_TIPO = :TLG_TIPO,'
@@ -1154,29 +1149,26 @@ inherited frmGeFornecedor: TfrmGeFornecedor
     InsertSQL.Strings = (
       'insert into TBFORNECEDOR'
       
-        '  (BAI_COD, BAI_NOME, CEP, CID_COD, CID_NOME, CIDADE, CNPJ, CODF' +
-        'ORN, COMPLEMENTO, '
+        '  (BAI_COD, CEP, CID_COD, CIDADE, CNPJ, CODFORN, COMPLEMENTO, CO' +
+        'NTATO, '
       
-        '   CONTATO, EMAIL, ENDER, EST_COD, EST_NOME, FONE, GRF_COD, INSC' +
-        'EST, INSCMUN, '
+        '   EMAIL, ENDER, EST_COD, FONE, GRF_COD, INSCEST, INSCMUN, LOG_C' +
+        'OD, NOMEFORN, '
       
-        '   LOG_COD, LOGRADOURO, NOMEFORN, NUMERO_END, PAIS_ID, PAIS_NOME' +
-        ', PESSOA_FISICA, '
-      '   SITE, TLG_TIPO, TRANSPORTADORA, UF)'
+        '   NUMERO_END, PAIS_ID, PESSOA_FISICA, SITE, TLG_TIPO, TRANSPORT' +
+        'ADORA, '
+      '   UF)'
       'values'
       
-        '  (:BAI_COD, :BAI_NOME, :CEP, :CID_COD, :CID_NOME, :CIDADE, :CNP' +
-        'J, :CODFORN, '
+        '  (:BAI_COD, :CEP, :CID_COD, :CIDADE, :CNPJ, :CODFORN, :COMPLEME' +
+        'NTO, :CONTATO, '
       
-        '   :COMPLEMENTO, :CONTATO, :EMAIL, :ENDER, :EST_COD, :EST_NOME, ' +
-        ':FONE, '
+        '   :EMAIL, :ENDER, :EST_COD, :FONE, :GRF_COD, :INSCEST, :INSCMUN' +
+        ', :LOG_COD, '
       
-        '   :GRF_COD, :INSCEST, :INSCMUN, :LOG_COD, :LOGRADOURO, :NOMEFOR' +
-        'N, :NUMERO_END, '
-      
-        '   :PAIS_ID, :PAIS_NOME, :PESSOA_FISICA, :SITE, :TLG_TIPO, :TRAN' +
-        'SPORTADORA, '
-      '   :UF)')
+        '   :NOMEFORN, :NUMERO_END, :PAIS_ID, :PESSOA_FISICA, :SITE, :TLG' +
+        '_TIPO, '
+      '   :TRANSPORTADORA, :UF)')
     DeleteSQL.Strings = (
       'delete from TBFORNECEDOR'
       'where'
