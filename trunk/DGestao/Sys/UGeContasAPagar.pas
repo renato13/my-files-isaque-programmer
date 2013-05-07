@@ -28,8 +28,6 @@ type
     IbDtstTabelaNUMCHQ: TIBStringField;
     IbDtstTabelaPAGO_: TIBStringField;
     IbDtstTabelaDOCBAIX: TIBStringField;
-    lblData: TLabel;
-    edData: TDateTimePicker;
     btbtnEfetuarPagto: TBitBtn;
     IbDtstTabelaNOMEEMP: TIBStringField;
     Bevel5: TBevel;
@@ -91,6 +89,9 @@ type
     lblLancamentoAberto: TLabel;
     lblCaixaCancelado: TLabel;
     Label1: TLabel;
+    lblData: TLabel;
+    e1Data: TDateEdit;
+    e2Data: TDateEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbFornecedorButtonClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
@@ -138,7 +139,8 @@ var
 begin
   frm := TfrmGeContasAPagar.Create(AOwner);
   try
-    whr := 'cast(p.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.edData.Date) );
+    whr := '(cast(p.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e1Data.Date) ) +
+           ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e2Data.Date) ) + ')';
 
     with frm, IbDtstTabela do
     begin
@@ -163,7 +165,9 @@ begin
   SQL_Pagamentos := TStringList.Create;
   SQL_Pagamentos.AddStrings( cdsPagamentos.SelectSQL );
 
-  edData.Date      := Date;
+  e1Data.Date     := Date;
+  e2Data.Date     := Date;
+  AbrirTabelaAuto  := True;
   ControlFirstEdit := dbFornecedor;
 
   tblEmpresa.Open;
@@ -176,6 +180,10 @@ begin
   CampoCodigo    := 'numlanc';
   CampoDescricao := 'NomeForn';
   CampoOrdenacao := 'p.dtvenc, f.NomeForn';
+
+  WhereAdditional :=
+    '(cast(p.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
+    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
 
   UpdateGenerator( 'where anolanc = ' + FormatFloat('0000', YearOf(Date)) );
 
@@ -199,7 +207,10 @@ end;
 
 procedure TfrmGeContasAPagar.btnFiltrarClick(Sender: TObject);
 begin
-  WhereAdditional := 'cast(p.dtvenc as date) = ' + QuotedStr( FormatDateTime('yyyy-mm-dd', edData.Date) );
+  WhereAdditional :=
+    '(cast(p.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
+    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
+
   inherited;
 end;
 

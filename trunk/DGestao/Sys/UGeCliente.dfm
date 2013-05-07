@@ -36,6 +36,7 @@ inherited frmGeCliente: TfrmGeCliente
       Height = 31
       Hint = 'Desbloquear Cliente'
       Caption = '&Desbloquear'
+      Enabled = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 7
@@ -1670,8 +1671,6 @@ inherited frmGeCliente: TfrmGeCliente
   object qryTotalComprasAbertas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    g.Valor_limite'
@@ -1717,8 +1716,6 @@ inherited frmGeCliente: TfrmGeCliente
   object qryTitulos: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    r.Anolanc'
@@ -1880,8 +1877,6 @@ inherited frmGeCliente: TfrmGeCliente
   object tblVendedor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBVENDEDOR'
     Left = 672
     Top = 104

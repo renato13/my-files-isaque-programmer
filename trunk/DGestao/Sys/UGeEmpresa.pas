@@ -167,6 +167,7 @@ begin
   tblTipoRegimeNFe.Open;
   tblSegmento.Open;
 
+  AbrirTabelaAuto  := True;
   ControlFirstEdit := dbPessoaFisica;
 
   NomeTabela     := 'TBEMPRESA';

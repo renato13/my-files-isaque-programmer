@@ -462,6 +462,7 @@ begin
 
   e1Data.Date      := Date;
   e2Data.Date      := Date;
+  AbrirTabelaAuto  := True;
   ControlFirstEdit := dbEmpresa;
 
   tblEmpresa.Open;
@@ -476,6 +477,10 @@ begin
   CampoCodigo    := 'Codcontrol';
   CampoDescricao := 'c.NOME';
   CampoOrdenacao := 'v.dtvenda, c.Nome';
+
+  WhereAdditional :=  'cast(v.dtvenda as date) between ' +
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) + ' and ' +
+                        QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) );
 
   UpdateGenerator( 'where Ano = ' + FormatFloat('0000', YearOf(Date)) );
 
