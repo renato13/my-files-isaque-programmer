@@ -1480,6 +1480,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 864
     Top = 8
@@ -1492,6 +1494,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBFORMPAGTO'
     Left = 864
     Top = 40
@@ -1504,6 +1508,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
     Left = 864
@@ -1517,6 +1523,7 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object cdsPagamentos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1622,6 +1629,8 @@ inherited frmGeContasAReceber: TfrmGeContasAReceber
   object tblBanco: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBBANCO_BOLETO'
     TableTypes = [ttView]
     Left = 864

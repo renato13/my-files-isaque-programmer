@@ -163,15 +163,16 @@ var
 begin
   frm := TfrmGeContasAReceber.Create(AOwner);
   try
+
     whr :=
-      '( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' +
+      '( (r.Situacao > 0) and (r.Parcela > 0) ) and (' +
       'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e1Data.Date) ) +
       ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', frm.e2Data.Date) ) + ')';
 
     with frm, IbDtstTabela do
     begin
       Close;
-      SelectSQL.Add('where (r.Situacao > 0) and ' + whr);
+      SelectSQL.Add('where ' + whr);
       SelectSQL.Add('order by ' + CampoOrdenacao);
       Open;
     end;
