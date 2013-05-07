@@ -280,12 +280,42 @@ type
     IbDtstTabelaTOTALVENDA_BRUTA: TIBBCDField;
     tbsTransporte: TTabSheet;
     Bevel16: TBevel;
-    Panel1: TPanel;
+    pnlBotoesTransp: TPanel;
     BtnTransporteInforme: TBitBtn;
     Bevel17: TBevel;
-    lblModalidadeFrete: TLabel;
     tblModalidadeFrete: TIBTable;
     dtsModalidadeFrete: TDataSource;
+    IbDtstTabelaNFE_MODALIDADE_FRETE: TSmallintField;
+    IbDtstTabelaNFE_TRANSPORTADORA: TIntegerField;
+    IbDtstTabelaNFE_PLACA_VEICULO: TIBStringField;
+    IbDtstTabelaNFE_PLACA_UF: TIBStringField;
+    IbDtstTabelaNFE_PLACA_RNTC: TIBStringField;
+    IbDtstTabelaTRANSP_NOME: TIBStringField;
+    IbDtstTabelaTRANSP_CNPJ: TIBStringField;
+    IbDtstTabelaTRANSP_IEST: TIBStringField;
+    GrpBxTransportadora: TGroupBox;
+    lblTranspNome: TLabel;
+    dbTranspNome: TDBEdit;
+    lblTranspCnpj: TLabel;
+    dbTranspCnpj: TDBEdit;
+    lblTranspEndereco: TLabel;
+    dbTranspEndereco: TDBEdit;
+    IbDtstTabelaTRANSP_ENDERECO: TIBStringField;
+    lblModalidadeFrete: TLabel;
+    dbModalidadeFrete: TDBLookupComboBox;
+    cdsVendaVolume: TIBDataSet;
+    updVendaVolume: TIBUpdateSQL;
+    dtsVendaVolume: TDataSource;
+    cdsVendaVolumeANO_VENDA: TSmallintField;
+    cdsVendaVolumeCONTROLE_VENDA: TIntegerField;
+    cdsVendaVolumeSEQUENCIAL: TSmallintField;
+    cdsVendaVolumeNUMERO: TIBStringField;
+    cdsVendaVolumeQUANTIDADE: TSmallintField;
+    cdsVendaVolumeESPECIE: TIBStringField;
+    cdsVendaVolumeMARCA: TIBStringField;
+    cdsVendaVolumePESO_BRUTO: TIBBCDField;
+    cdsVendaVolumePESO_LIQUIDO: TIBBCDField;
+    dbgVolumes: TDBGrid;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -336,15 +366,19 @@ type
       DisplayText: Boolean);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure BtnTransporteInformeClick(Sender: TObject);
+    procedure cdsVendaVolumeNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
     sGeneratorName : String;
     iSeq : Integer;
     SQL_Itens     ,
     SQL_FormaPagto,
+    SQL_Volume    ,
     SQL_Titulos   : TStringList;
     procedure AbrirTabelaItens(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure AbrirTabelaFormasPagto(const AnoVenda : Smallint; const ControleVenda : Integer);
+    procedure AbrirTabelaVolume(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure GerarTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
     procedure CarregarDadosProduto( Codigo : Integer );
@@ -364,13 +398,16 @@ type
 var
   frmGeVenda: TfrmGeVenda;
 
+const
+  MODALIDADE_FRETE_SEMFRETE = 3;
+
   procedure MostrarControleVendas(const AOwner : TComponent);
 
 implementation
 
 uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE;
+  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE, UGeVendaTransporte;
 
 {$R *.dfm}
 
@@ -414,6 +451,10 @@ begin
   SQL_FormaPagto := TStringList.Create;
   SQL_FormaPagto.Clear;
   SQL_FormaPagto.AddStrings( cdsVendaFormaPagto.SelectSQL );
+
+  SQL_Volume := TStringList.Create;
+  SQL_Volume.Clear;
+  SQL_Volume.AddStrings( cdsVendaVolume.SelectSQL );
 
   SQL_Titulos := TStringList.Create;
   SQL_Titulos.Clear;
@@ -466,7 +507,8 @@ begin
   IbDtstTabelaTOTALVENDA_BRUTA.Value  := 0;
   IbDtstTabelaDESCONTO.Value          := 0;
   IbDtstTabelaTOTALVENDA.Value        := 0;
-  IbDtstTabelaNFE_ENVIADA.Value := 0;
+  IbDtstTabelaNFE_ENVIADA.Value          := 0;
+  IbDtstTabelaNFE_MODALIDADE_FRETE.Value := MODALIDADE_FRETE_SEMFRETE;
   IbDtstTabelaUSUARIO.Value     := GetUserApp;
 
 //  IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
@@ -479,6 +521,7 @@ begin
   IbDtstTabelaNFE.Clear;
   IbDtstTabelaLOTE_NFE_ANO.Clear;
   IbDtstTabelaLOTE_NFE_NUMERO.Clear;
+  IbDtstTabelaNFE_TRANSPORTADORA.Clear;
 end;
 
 procedure TfrmGeVenda.dbClienteButtonClick(Sender: TObject);
@@ -594,6 +637,22 @@ begin
   end;
 
   cdsVendaFormaPagto.Open;
+end;
+
+procedure TfrmGeVenda.AbrirTabelaVolume(const AnoVenda: Smallint;
+  const ControleVenda: Integer);
+begin
+  cdsVendaVolume.Close;
+
+  with cdsVendaVolume, SelectSQL do
+  begin
+    Clear;
+    AddStrings( SQL_Volume );
+    Add('where v.ano_venda      = ' + IntToStr(AnoVenda));
+    Add('  and v.controle_venda = ' + IntToStr(ControleVenda));
+  end;
+
+  cdsVendaVolume.Open;
 end;
 
 procedure TfrmGeVenda.AbrirTabelaTitulos(const AnoVenda : Smallint; const ControleVenda : Integer);
@@ -764,6 +823,7 @@ begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 end;
 
@@ -789,6 +849,7 @@ begin
     begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     end;  
   end;
@@ -1051,6 +1112,7 @@ begin
 
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
       // Corrigir Total Forma Pagto
@@ -1120,6 +1182,7 @@ begin
   inherited;
   AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+  AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
   AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
   pgcMaisDados.ActivePage := tbsRecebimento;
@@ -1141,6 +1204,7 @@ begin
 
     AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+    AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
     ZerarFormaPagto;
@@ -1169,6 +1233,7 @@ begin
     begin
       AbrirTabelaItens( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+      AbrirTabelaVolume( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
       AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
     end;  
   end;
@@ -2070,6 +2135,42 @@ begin
       dbgFormaPagto.SetFocus;
     end;
 *)    
+end;
+
+procedure TfrmGeVenda.BtnTransporteInformeClick(Sender: TObject);
+var
+  iNumero : Integer;
+begin
+  if EditarDadosTransportadora(Self) then
+  begin
+    iNumero := IbDtstTabelaCODCONTROL.AsInteger;
+
+    if ( IbDtstTabela.State = dsEdit ) then
+    begin
+      IbDtstTabela.Post;
+      IbDtstTabela.ApplyUpdates;
+    end;
+
+    cdsVendaVolume.ApplyUpdates;
+    
+    CommitTransaction;
+
+    IbDtstTabela.Close;
+    IbDtstTabela.Open;
+
+    IbDtstTabela.Locate(CampoCodigo, iNumero, []);
+  end
+  else
+  if ( IbDtstTabela.State = dsEdit ) then
+    IbDtstTabela.Cancel;
+
+  pgcMaisDados.ActivePage := tbsTransporte;
+end;
+
+procedure TfrmGeVenda.cdsVendaVolumeNewRecord(DataSet: TDataSet);
+begin
+  cdsVendaVolumeANO_VENDA.Assign( IbDtstTabelaANO );
+  cdsVendaVolumeCONTROLE_VENDA.Assign( IbDtstTabelaCODCONTROL );
 end;
 
 end.

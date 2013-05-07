@@ -2606,6 +2606,9 @@ inherited frmGeVenda: TfrmGeVenda
         object tbsTransporte: TTabSheet
           Caption = 'Dados Transporte'
           ImageIndex = 2
+          DesignSize = (
+            1083
+            162)
           object Bevel16: TBevel
             Left = 0
             Top = 0
@@ -2622,14 +2625,7 @@ inherited frmGeVenda: TfrmGeVenda
             Align = alLeft
             Shape = bsSpacer
           end
-          object lblModalidadeFrete: TLabel
-            Left = 88
-            Top = 8
-            Width = 87
-            Height = 13
-            Caption = 'Modalidade Frete:'
-          end
-          object Panel1: TPanel
+          object pnlBotoesTransp: TPanel
             Left = 4
             Top = 0
             Width = 70
@@ -2656,26 +2652,198 @@ inherited frmGeVenda: TfrmGeVenda
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
+              OnClick = BtnTransporteInformeClick
               NumGlyphs = 2
             end
           end
-          object TDBLookupComboBox
-            Left = 88
-            Top = 24
-            Width = 289
-            Height = 21
-            DataSource = DtSrcTabela
-            DropDownRows = 10
-            Font.Charset = DEFAULT_CHARSET
+          object GrpBxTransportadora: TGroupBox
+            Left = 78
+            Top = 0
+            Width = 505
+            Height = 162
+            Align = alLeft
+            Caption = 'Transportadora'
+            TabOrder = 1
+            object lblTranspNome: TLabel
+              Left = 8
+              Top = 64
+              Width = 31
+              Height = 13
+              Caption = 'Nome:'
+              FocusControl = dbTranspNome
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object lblTranspCnpj: TLabel
+              Left = 336
+              Top = 64
+              Width = 33
+              Height = 13
+              Caption = 'CNPJ.:'
+              FocusControl = dbTranspCnpj
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object lblTranspEndereco: TLabel
+              Left = 8
+              Top = 104
+              Width = 49
+              Height = 13
+              Caption = 'Endere'#231'o:'
+              FocusControl = dbTranspEndereco
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              Visible = False
+            end
+            object lblModalidadeFrete: TLabel
+              Left = 8
+              Top = 24
+              Width = 87
+              Height = 13
+              Caption = 'Modalidade Frete:'
+              FocusControl = dbModalidadeFrete
+            end
+            object dbTranspNome: TDBEdit
+              Left = 8
+              Top = 80
+              Width = 321
+              Height = 21
+              TabStop = False
+              Color = clMoneyGreen
+              DataField = 'TRANSP_NOME'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object dbTranspCnpj: TDBEdit
+              Left = 336
+              Top = 80
+              Width = 153
+              Height = 21
+              TabStop = False
+              Color = clMoneyGreen
+              DataField = 'TRANSP_CNPJ'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 2
+            end
+            object dbTranspEndereco: TDBEdit
+              Left = 8
+              Top = 120
+              Width = 481
+              Height = 21
+              TabStop = False
+              Color = clMoneyGreen
+              DataField = 'TRANSP_ENDERECO'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 3
+              Visible = False
+            end
+            object dbModalidadeFrete: TDBLookupComboBox
+              Left = 8
+              Top = 40
+              Width = 481
+              Height = 21
+              DataField = 'NFE_MODALIDADE_FRETE'
+              DataSource = DtSrcTabela
+              DropDownRows = 10
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'MS Sans Serif'
+              Font.Style = []
+              KeyField = 'CODIGO'
+              ListField = 'DESCRICAO'
+              ListSource = dtsModalidadeFrete
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 0
+            end
+          end
+          object dbgVolumes: TDBGrid
+            Left = 583
+            Top = 5
+            Width = 500
+            Height = 157
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            DataSource = dtsVendaVolume
+            Font.Charset = ANSI_CHARSET
             Font.Color = clBlack
             Font.Height = -11
-            Font.Name = 'MS Sans Serif'
+            Font.Name = 'Tahoma'
             Font.Style = []
-            KeyField = 'CODIGO'
-            ListField = 'DESCRICAO'
-            ListSource = dtsModalidadeFrete
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
             ParentFont = False
-            TabOrder = 1
+            ParentShowHint = False
+            ReadOnly = True
+            ShowHint = True
+            TabOrder = 2
+            TitleFont.Charset = ANSI_CHARSET
+            TitleFont.Color = clBlack
+            TitleFont.Height = -11
+            TitleFont.Name = 'Tahoma'
+            TitleFont.Style = [fsBold]
+            OnDrawColumnCell = dbgDadosDrawColumnCell
+            Columns = <
+              item
+                Expanded = False
+                FieldName = 'NUMERO'
+                Title.Caption = 'Volume'
+                Width = 100
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'QUANTIDADE'
+                Title.Caption = 'Quantidade'
+                Width = 100
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'PESO_BRUTO'
+                Title.Caption = 'P. Bruto (Kg)'
+                Width = 100
+                Visible = True
+              end
+              item
+                Expanded = False
+                FieldName = 'PESO_LIQUIDO'
+                Title.Caption = 'P. L'#237'quido (Kg)'
+                Width = 100
+                Visible = True
+              end>
           end
         end
       end
@@ -2854,12 +3022,23 @@ inherited frmGeVenda: TfrmGeVenda
       '  , v.Prazo_10'
       '  , v.Prazo_11'
       '  , v.Prazo_12'
+      '  , v.nfe_modalidade_frete'
+      '  , v.nfe_transportadora'
+      '  , v.nfe_placa_veiculo'
+      '  , v.nfe_placa_uf'
+      '  , v.nfe_placa_rntc'
+      '  , t.nomeforn as transp_nome'
+      '  , t.cnpj     as transp_cnpj'
+      '  , t.inscest  as transp_iest'
+      
+        '  , t.ender || coalesce('#39' - '#39' || t.cidade, '#39#39') as transp_enderec' +
+        'o'
       '  , c.Nome'
       '  , c.Bloqueado'
       '  , c.Bloqueado_motivo'
       'from TBVENDAS v'
       '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
-      '')
+      '  left join TBFORNECEDOR t on (t.codforn = v.nfe_transportadora)')
     GeneratorField.ApplyEvent = gamOnNewRecord
     Left = 992
     object IbDtstTabelaANO: TSmallintField
@@ -3102,6 +3281,53 @@ inherited frmGeVenda: TfrmGeVenda
       FieldName = 'PRAZO_12'
       Origin = 'TBVENDAS.PRAZO_12'
     end
+    object IbDtstTabelaNFE_MODALIDADE_FRETE: TSmallintField
+      DisplayLabel = 'Modalidade do Frete'
+      FieldName = 'NFE_MODALIDADE_FRETE'
+      Origin = '"TBVENDAS"."NFE_MODALIDADE_FRETE"'
+    end
+    object IbDtstTabelaNFE_TRANSPORTADORA: TIntegerField
+      DisplayLabel = 'Transportadora'
+      FieldName = 'NFE_TRANSPORTADORA'
+      Origin = '"TBVENDAS"."NFE_TRANSPORTADORA"'
+    end
+    object IbDtstTabelaNFE_PLACA_VEICULO: TIBStringField
+      DisplayLabel = 'Placa do Ve'#237'culo'
+      FieldName = 'NFE_PLACA_VEICULO'
+      Origin = '"TBVENDAS"."NFE_PLACA_VEICULO"'
+      Size = 10
+    end
+    object IbDtstTabelaNFE_PLACA_UF: TIBStringField
+      DisplayLabel = 'UF da Placa'
+      FieldName = 'NFE_PLACA_UF'
+      Origin = '"TBVENDAS"."NFE_PLACA_UF"'
+      Size = 2
+    end
+    object IbDtstTabelaNFE_PLACA_RNTC: TIBStringField
+      DisplayLabel = 'RNTC (Registro Nacional de Transporte de Carga)'
+      FieldName = 'NFE_PLACA_RNTC'
+      Origin = '"TBVENDAS"."NFE_PLACA_RNTC"'
+      Size = 10
+    end
+    object IbDtstTabelaTRANSP_NOME: TIBStringField
+      FieldName = 'TRANSP_NOME'
+      Origin = '"TBFORNECEDOR"."NOMEFORN"'
+      Size = 60
+    end
+    object IbDtstTabelaTRANSP_CNPJ: TIBStringField
+      FieldName = 'TRANSP_CNPJ'
+      Origin = '"TBFORNECEDOR"."CNPJ"'
+      Size = 18
+    end
+    object IbDtstTabelaTRANSP_IEST: TIBStringField
+      FieldName = 'TRANSP_IEST'
+      Origin = '"TBFORNECEDOR"."INSCEST"'
+    end
+    object IbDtstTabelaTRANSP_ENDERECO: TIBStringField
+      FieldName = 'TRANSP_ENDERECO'
+      ProviderFlags = []
+      Size = 283
+    end
     object IbDtstTabelaNOME: TIBStringField
       DisplayLabel = 'Cliente'
       FieldName = 'NOME'
@@ -3169,6 +3395,11 @@ inherited frmGeVenda: TfrmGeVenda
       '  CANCEL_DATAHORA,'
       '  CANCEL_MOTIVO,'
       '  XML_NFE_FILENAME,'
+      '  NFE_MODALIDADE_FRETE,'
+      '  NFE_TRANSPORTADORA,'
+      '  NFE_PLACA_VEICULO,'
+      '  NFE_PLACA_UF,'
+      '  NFE_PLACA_RNTC,'
       '  NFE_VALOR_BASE_ICMS,'
       '  NFE_VALOR_ICMS,'
       '  NFE_VALOR_BASE_ICMS_SUBST,'
@@ -3210,6 +3441,11 @@ inherited frmGeVenda: TfrmGeVenda
       '  LOTE_NFE_NUMERO = :LOTE_NFE_NUMERO,'
       '  NFE = :NFE,'
       '  NFE_ENVIADA = :NFE_ENVIADA,'
+      '  NFE_MODALIDADE_FRETE = :NFE_MODALIDADE_FRETE,'
+      '  NFE_PLACA_RNTC = :NFE_PLACA_RNTC,'
+      '  NFE_PLACA_UF = :NFE_PLACA_UF,'
+      '  NFE_PLACA_VEICULO = :NFE_PLACA_VEICULO,'
+      '  NFE_TRANSPORTADORA = :NFE_TRANSPORTADORA,'
       '  OBS = :OBS,'
       '  PRAZO_01 = :PRAZO_01,'
       '  PRAZO_02 = :PRAZO_02,'
@@ -3248,15 +3484,20 @@ inherited frmGeVenda: TfrmGeVenda
         '   FATDIAS, FORMAPAG, FORMAPAGTO_COD, HORAEMISSAO, LOTE_NFE_ANO,' +
         ' LOTE_NFE_NUMERO, '
       
-        '   NFE, NFE_ENVIADA, OBS, PRAZO_01, PRAZO_02, PRAZO_03, PRAZO_04' +
-        ', PRAZO_05, '
+        '   NFE, NFE_ENVIADA, NFE_MODALIDADE_FRETE, NFE_PLACA_RNTC, NFE_P' +
+        'LACA_UF, '
       
-        '   PRAZO_06, PRAZO_07, PRAZO_08, PRAZO_09, PRAZO_10, PRAZO_11, P' +
-        'RAZO_12, '
+        '   NFE_PLACA_VEICULO, NFE_TRANSPORTADORA, OBS, PRAZO_01, PRAZO_0' +
+        '2, PRAZO_03, '
       
-        '   SERIE, STATUS, TOTALVENDA, TOTALVENDA_BRUTA, USUARIO, VENDA_P' +
-        'RAZO, VENDEDOR_COD, '
-      '   VERIFICADOR_NFE, XML_NFE, XML_NFE_FILENAME)'
+        '   PRAZO_04, PRAZO_05, PRAZO_06, PRAZO_07, PRAZO_08, PRAZO_09, P' +
+        'RAZO_10, '
+      
+        '   PRAZO_11, PRAZO_12, SERIE, STATUS, TOTALVENDA, TOTALVENDA_BRU' +
+        'TA, USUARIO, '
+      
+        '   VENDA_PRAZO, VENDEDOR_COD, VERIFICADOR_NFE, XML_NFE, XML_NFE_' +
+        'FILENAME)'
       'values'
       
         '  (:ANO, :CANCEL_DATAHORA, :CANCEL_MOTIVO, :CFOP, :CODCLI, :CODC' +
@@ -3268,17 +3509,21 @@ inherited frmGeVenda: TfrmGeVenda
         '   :DTVENDA, :FATDIAS, :FORMAPAG, :FORMAPAGTO_COD, :HORAEMISSAO,' +
         ' :LOTE_NFE_ANO, '
       
-        '   :LOTE_NFE_NUMERO, :NFE, :NFE_ENVIADA, :OBS, :PRAZO_01, :PRAZO' +
-        '_02, :PRAZO_03, '
+        '   :LOTE_NFE_NUMERO, :NFE, :NFE_ENVIADA, :NFE_MODALIDADE_FRETE, ' +
+        ':NFE_PLACA_RNTC, '
       
-        '   :PRAZO_04, :PRAZO_05, :PRAZO_06, :PRAZO_07, :PRAZO_08, :PRAZO' +
-        '_09, :PRAZO_10, '
+        '   :NFE_PLACA_UF, :NFE_PLACA_VEICULO, :NFE_TRANSPORTADORA, :OBS,' +
+        ' :PRAZO_01, '
       
-        '   :PRAZO_11, :PRAZO_12, :SERIE, :STATUS, :TOTALVENDA, :TOTALVEN' +
-        'DA_BRUTA, '
+        '   :PRAZO_02, :PRAZO_03, :PRAZO_04, :PRAZO_05, :PRAZO_06, :PRAZO' +
+        '_07, :PRAZO_08, '
       
-        '   :USUARIO, :VENDA_PRAZO, :VENDEDOR_COD, :VERIFICADOR_NFE, :XML' +
-        '_NFE, :XML_NFE_FILENAME)')
+        '   :PRAZO_09, :PRAZO_10, :PRAZO_11, :PRAZO_12, :SERIE, :STATUS, ' +
+        ':TOTALVENDA, '
+      
+        '   :TOTALVENDA_BRUTA, :USUARIO, :VENDA_PRAZO, :VENDEDOR_COD, :VE' +
+        'RIFICADOR_NFE, '
+      '   :XML_NFE, :XML_NFE_FILENAME)')
     DeleteSQL.Strings = (
       'delete from TBVENDAS'
       'where'
@@ -4065,8 +4310,8 @@ inherited frmGeVenda: TfrmGeVenda
       end>
   end
   object ppImprimir: TPopupMenu
-    Left = 384
-    Top = 608
+    Left = 432
+    Top = 640
     object nmImprimirVenda: TMenuItem
       Caption = 'Or'#231'amento / Venda'
       OnClick = nmImprimirVendaClick
@@ -4523,5 +4768,144 @@ inherited frmGeVenda: TfrmGeVenda
     DataSet = tblModalidadeFrete
     Left = 1160
     Top = 504
+  end
+  object cdsVendaVolume: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    OnNewRecord = cdsVendaVolumeNewRecord
+    CachedUpdates = True
+    RefreshSQL.Strings = (
+      '')
+    SelectSQL.Strings = (
+      'Select'
+      '    v.ano_venda'
+      '  , v.controle_venda'
+      '  , v.sequencial'
+      '  , v.numero'
+      '  , v.quantidade'
+      '  , v.especie'
+      '  , v.marca'
+      '  , v.peso_bruto'
+      '  , v.peso_liquido'
+      'from TBVENDAS_VOLUME v')
+    ModifySQL.Strings = (
+      '')
+    UpdateObject = updVendaVolume
+    Left = 992
+    Top = 200
+    object cdsVendaVolumeANO_VENDA: TSmallintField
+      FieldName = 'ANO_VENDA'
+      Origin = '"TBVENDAS_VOLUME"."ANO_VENDA"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object cdsVendaVolumeCONTROLE_VENDA: TIntegerField
+      FieldName = 'CONTROLE_VENDA'
+      Origin = '"TBVENDAS_VOLUME"."CONTROLE_VENDA"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsVendaVolumeSEQUENCIAL: TSmallintField
+      FieldName = 'SEQUENCIAL'
+      Origin = '"TBVENDAS_VOLUME"."SEQUENCIAL"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object cdsVendaVolumeNUMERO: TIBStringField
+      DisplayLabel = 'N'#250'mero do Volume'
+      FieldName = 'NUMERO'
+      Origin = '"TBVENDAS_VOLUME"."NUMERO"'
+      Size = 50
+    end
+    object cdsVendaVolumeQUANTIDADE: TSmallintField
+      DisplayLabel = 'Quantidade de Volumes'
+      FieldName = 'QUANTIDADE'
+      Origin = '"TBVENDAS_VOLUME"."QUANTIDADE"'
+    end
+    object cdsVendaVolumeESPECIE: TIBStringField
+      DisplayLabel = 'Esp'#233'cie'
+      FieldName = 'ESPECIE'
+      Origin = '"TBVENDAS_VOLUME"."ESPECIE"'
+      Size = 50
+    end
+    object cdsVendaVolumeMARCA: TIBStringField
+      DisplayLabel = 'Marca'
+      FieldName = 'MARCA'
+      Origin = '"TBVENDAS_VOLUME"."MARCA"'
+      Size = 50
+    end
+    object cdsVendaVolumePESO_BRUTO: TIBBCDField
+      DisplayLabel = 'Peso Bruto'
+      FieldName = 'PESO_BRUTO'
+      Origin = '"TBVENDAS_VOLUME"."PESO_BRUTO"'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 3
+    end
+    object cdsVendaVolumePESO_LIQUIDO: TIBBCDField
+      DisplayLabel = 'Peso L'#237'quido'
+      FieldName = 'PESO_LIQUIDO'
+      Origin = '"TBVENDAS_VOLUME"."PESO_LIQUIDO"'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 3
+    end
+  end
+  object updVendaVolume: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  ANO_VENDA,'
+      '  CONTROLE_VENDA,'
+      '  SEQUENCIAL,'
+      '  NUMERO,'
+      '  QUANTIDADE,'
+      '  ESPECIE,'
+      '  MARCA,'
+      '  PESO_BRUTO,'
+      '  PESO_LIQUIDO'
+      'from TBVENDAS_VOLUME '
+      'where'
+      '  ANO_VENDA = :ANO_VENDA and'
+      '  CONTROLE_VENDA = :CONTROLE_VENDA and'
+      '  SEQUENCIAL = :SEQUENCIAL')
+    ModifySQL.Strings = (
+      'update TBVENDAS_VOLUME'
+      'set'
+      '  ANO_VENDA = :ANO_VENDA,'
+      '  CONTROLE_VENDA = :CONTROLE_VENDA,'
+      '  ESPECIE = :ESPECIE,'
+      '  MARCA = :MARCA,'
+      '  NUMERO = :NUMERO,'
+      '  PESO_BRUTO = :PESO_BRUTO,'
+      '  PESO_LIQUIDO = :PESO_LIQUIDO,'
+      '  QUANTIDADE = :QUANTIDADE,'
+      '  SEQUENCIAL = :SEQUENCIAL'
+      'where'
+      '  ANO_VENDA = :OLD_ANO_VENDA and'
+      '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
+      '  SEQUENCIAL = :OLD_SEQUENCIAL')
+    InsertSQL.Strings = (
+      'insert into TBVENDAS_VOLUME'
+      
+        '  (ANO_VENDA, CONTROLE_VENDA, ESPECIE, MARCA, NUMERO, PESO_BRUTO' +
+        ', PESO_LIQUIDO, '
+      '   QUANTIDADE, SEQUENCIAL)'
+      'values'
+      
+        '  (:ANO_VENDA, :CONTROLE_VENDA, :ESPECIE, :MARCA, :NUMERO, :PESO' +
+        '_BRUTO, '
+      '   :PESO_LIQUIDO, :QUANTIDADE, :SEQUENCIAL)')
+    DeleteSQL.Strings = (
+      'delete from TBVENDAS_VOLUME'
+      'where'
+      '  ANO_VENDA = :OLD_ANO_VENDA and'
+      '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
+      '  SEQUENCIAL = :OLD_SEQUENCIAL')
+    Left = 1024
+    Top = 200
+  end
+  object dtsVendaVolume: TDataSource
+    AutoEdit = False
+    DataSet = cdsVendaVolume
+    Left = 1056
+    Top = 200
   end
 end

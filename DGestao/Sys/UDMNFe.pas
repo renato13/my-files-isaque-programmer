@@ -404,6 +404,25 @@ type
     qryNFeEmitidaXML_FILE: TMemoField;
     qryNFeEmitidaLOTE_ANO: TSmallintField;
     qryNFeEmitidaLOTE_NUM: TIntegerField;
+    qryDadosVolume: TIBQuery;
+    qryCalculoImportoNFE_MODALIDADE_FRETE: TSmallintField;
+    qryCalculoImportoNFE_TRANSPORTADORA: TIntegerField;
+    qryCalculoImportoNFE_TRANSPORTADORA_NOME: TIBStringField;
+    qryCalculoImportoNFE_TRANSPORTADORA_CNPJ: TIBStringField;
+    qryCalculoImportoNFE_TRANSPORTADORA_IEST: TIBStringField;
+    qryCalculoImportoNFE_TRANSPORTADORA_ENDER: TIBStringField;
+    qryCalculoImportoNFE_TRANSPORTADORA_CIDADE: TIBStringField;
+    qryCalculoImportoNFE_TRANSPORTADORA_UF: TIBStringField;
+    qryCalculoImportoNFE_PLACA_VEICULO: TIBStringField;
+    qryCalculoImportoNFE_PLACA_UF: TIBStringField;
+    qryCalculoImportoNFE_PLACA_RNTC: TIBStringField;
+    qryDadosVolumeSEQUENCIAL: TSmallintField;
+    qryDadosVolumeNUMERO: TIBStringField;
+    qryDadosVolumeQUANTIDADE: TSmallintField;
+    qryDadosVolumeESPECIE: TIBStringField;
+    qryDadosVolumeMARCA: TIBStringField;
+    qryDadosVolumePESO_BRUTO: TIBBCDField;
+    qryDadosVolumePESO_LIQUIDO: TIBBCDField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -565,6 +584,14 @@ begin
   end;
 
   with qryDadosProduto do
+  begin
+    Close;
+    ParamByName('anovenda').AsInteger := AnoVenda;
+    ParamByName('numvenda').AsInteger := NumeroVenda;
+    Open;
+  end;
+
+  with qryDadosVolume do
   begin
     Close;
     ParamByName('anovenda').AsInteger := AnoVenda;
@@ -1729,19 +1756,22 @@ begin
         Total.retTrib.vRetPrev   := 0;}
 
       // Adicionando Dados da Transportadora (Modalidades de Frete: mfContaEmitente, mfContaDestinatario, mfContaTerceiros, mfSemFrete)
-
+  {
       Transp.modFrete            := mfSemFrete; // X02 - Modalidade do frete
                                                 //         (0) = mfContaEmitente     – por conta do emitente;
                                                 //         (1) = mfContaDestinatario – por conta do destinatário;
                                                 //         (2) = mfContaTerceiros    – por conta do terceiros;
                                                 //         (3) = mfSemFrete          – sem frete;
                                                 //       TAG de grupo Transportador - <transporta> - Ocorrência 0-3
-      Transp.Transporta.CNPJCPF  := '';
-      Transp.Transporta.xNome    := '';
-      Transp.Transporta.IE       := '';
-      Transp.Transporta.xEnder   := '';
-      Transp.Transporta.xMun     := '';
-      Transp.Transporta.UF       := '';
+  }
+      Transp.modFrete            := TpcnModalidadeFrete( qryCalculoImportoNFE_MODALIDADE_FRETE.AsInteger );
+
+      Transp.Transporta.CNPJCPF  := qryCalculoImportoNFE_TRANSPORTADORA_CNPJ.AsString;
+      Transp.Transporta.xNome    := qryCalculoImportoNFE_TRANSPORTADORA_NOME.AsString;
+      Transp.Transporta.IE       := qryCalculoImportoNFE_TRANSPORTADORA_IEST.AsString;
+      Transp.Transporta.xEnder   := qryCalculoImportoNFE_TRANSPORTADORA_ENDER.AsString;
+      Transp.Transporta.xMun     := qryCalculoImportoNFE_TRANSPORTADORA_CIDADE.AsString;
+      Transp.Transporta.UF       := qryCalculoImportoNFE_TRANSPORTADORA_UF.AsString;
 
   {      Transp.retTransp.vServ    := 0;
         Transp.retTransp.vBCRet   := 0;
@@ -1750,9 +1780,10 @@ begin
         Transp.retTransp.CFOP     := '';
         Transp.retTransp.cMunFG   := 0;         }
 
-        Transp.veicTransp.placa := '';
-        Transp.veicTransp.UF    := '';
-        Transp.veicTransp.RNTC  := '';  // RNTC - Registros Nacional de Transportes de Carga (Identificação do vagão quando o transporte é Trem)
+      Transp.veicTransp.placa := qryCalculoImportoNFE_PLACA_VEICULO.AsString;
+      Transp.veicTransp.UF    := qryCalculoImportoNFE_PLACA_UF.AsString;
+      Transp.veicTransp.RNTC  := qryCalculoImportoNFE_PLACA_RNTC.AsString; // RNTC - Registros Nacional de Transportes de Carga (Identificação do vagão quando o transporte é Trem)
+
   //Dados do Reboque
   {      with Transp.Reboque.Add do
          begin
@@ -1763,20 +1794,29 @@ begin
 
       // Adicionando Dados de Volumes a Transportar
 
-//      if ( Transp.modFrete in [mfContaDestinatario, mfContaTerceiros] ) then
       if ( Transp.modFrete in [mfContaEmitente, mfContaDestinatario, mfContaTerceiros] ) then
-        with Transp.Vol.Add do
-        begin
-          qVol  := qryDadosProduto.RecordCount;
-          esp   := 'Especie';
-          marca := 'Marca';
-          nVol  := 'Numero';
-          pesoB := qryDadosProduto.RecordCount * 1;
-          pesoL := qryDadosProduto.RecordCount * 1.01;
+      begin
+        qryDadosVolume.First;
 
-          //Lacres do volume. Pode ser adicionado vários
-          //Lacres.Add.nLacre := '';
+        while not qryDadosVolume.Eof do
+        begin
+          with Transp.Vol.Add do
+          begin
+            qVol  := qryDadosVolumeQUANTIDADE.AsInteger;
+            esp   := qryDadosVolumeESPECIE.AsString;
+            marca := qryDadosVolumeMARCA.AsString;
+            nVol  := qryDadosVolumeNUMERO.AsString;
+            pesoB := qryDadosVolumePESO_BRUTO.AsCurrency;
+            pesoL := qryDadosVolumePESO_LIQUIDO.AsCurrency;
+
+            //Lacres do volume. Pode ser adicionado vários
+            //Lacres.Add.nLacre := '';
+          end;
+
+          qryDadosVolume.Next;
         end;
+        
+      end;
 
 //      // Dados da Fatura
 //
@@ -2731,14 +2771,15 @@ begin
                                                 //         (0)=mfContaEmitente     – por conta do emitente;
                                                 //         (1)=mfContaDestinatario – por conta do destinatário)
                                                 //       TAG de grupo Transportador - <transporta> - Ocorrência 0-1
+
       Transp.Transporta.CNPJCPF  := '';
       Transp.Transporta.xNome    := '';
       Transp.Transporta.IE       := '';
       Transp.Transporta.xEnder   := '';
       Transp.Transporta.xMun     := '';
       Transp.Transporta.UF       := '';
-
-  {      Transp.retTransp.vServ    := 0;
+  {
+        Transp.retTransp.vServ    := 0;
         Transp.retTransp.vBCRet   := 0;
         Transp.retTransp.pICMSRet := 0;
         Transp.retTransp.vICMSRet := 0;
@@ -2748,6 +2789,7 @@ begin
         Transp.veicTransp.placa := '';
         Transp.veicTransp.UF    := '';
         Transp.veicTransp.RNTC  := '';
+        
   //Dados do Reboque
   {      with Transp.Reboque.Add do
          begin

@@ -1,4 +1,6 @@
 inherited frmGeVendaFormaPagto: TfrmGeVendaFormaPagto
+  Left = 872
+  Top = 440
   ActiveControl = dbFormaPagto
   BorderStyle = bsDialog
   BorderWidth = 4

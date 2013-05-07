@@ -3,7 +3,7 @@ object DMNFe: TDMNFe
   OnCreate = DataModuleCreate
   Left = 458
   Top = 133
-  Height = 429
+  Height = 526
   Width = 419
   object ACBrNFe: TACBrNFe
     Configuracoes.Geral.PathSalvar = '..\Bin\'
@@ -2425,12 +2425,26 @@ object DMNFe: TDMNFe
       '  , v.Nfe_valor_outros'
       '  , v.Nfe_valor_total_nota'
       ''
+      '  , v.nfe_modalidade_frete'
+      '  , v.nfe_transportadora'
+      '  , tr.nomeforn as nfe_transportadora_nome'
+      '  , tr.cnpj     as nfe_transportadora_cnpj'
+      '  , tr.inscest  as nfe_transportadora_iest'
+      '  , tr.ender    as nfe_transportadora_ender'
+      '  , tc.cid_nome as nfe_transportadora_cidade'
+      '  , tr.uf       as nfe_transportadora_uf'
+      '  , v.nfe_placa_veiculo'
+      '  , v.nfe_placa_uf'
+      '  , v.nfe_placa_rntc'
       'from TBVENDAS v'
       '  inner join TBCFOP cf on (cf.Cfop_cod = v.Cfop)'
       '  inner join TBVENDEDOR vd on (vd.Cod = v.Vendedor_cod)'
+      
+        '  left join TBFORNECEDOR tr on (tr.codforn = v.nfe_transportador' +
+        'a)'
+      '  left join TBCIDADE tc on (tc.cid_cod = tr.cid_cod)'
       'where v.Ano = :anovenda'
-      '  and v.Codcontrol = :numvenda'
-      '')
+      '  and v.Codcontrol = :numvenda')
     ModifySQL.Strings = (
       '')
     GeneratorField.ApplyEvent = gamOnPost
@@ -2691,6 +2705,59 @@ object DMNFe: TDMNFe
       Origin = '"TBVENDAS"."NFE_VALOR_TOTAL_NOTA"'
       Precision = 18
       Size = 2
+    end
+    object qryCalculoImportoNFE_MODALIDADE_FRETE: TSmallintField
+      FieldName = 'NFE_MODALIDADE_FRETE'
+      Origin = '"TBVENDAS"."NFE_MODALIDADE_FRETE"'
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA: TIntegerField
+      FieldName = 'NFE_TRANSPORTADORA'
+      Origin = '"TBVENDAS"."NFE_TRANSPORTADORA"'
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_NOME: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_NOME'
+      Origin = '"TBFORNECEDOR"."NOMEFORN"'
+      Size = 60
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_CNPJ: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_CNPJ'
+      Origin = '"TBFORNECEDOR"."CNPJ"'
+      Size = 18
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_IEST: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_IEST'
+      Origin = '"TBFORNECEDOR"."INSCEST"'
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_ENDER: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_ENDER'
+      Origin = '"TBFORNECEDOR"."ENDER"'
+      Size = 250
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_CIDADE: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_CIDADE'
+      Origin = '"TBCIDADE"."CID_NOME"'
+      Size = 100
+    end
+    object qryCalculoImportoNFE_TRANSPORTADORA_UF: TIBStringField
+      FieldName = 'NFE_TRANSPORTADORA_UF'
+      Origin = '"TBFORNECEDOR"."UF"'
+      FixedChar = True
+      Size = 2
+    end
+    object qryCalculoImportoNFE_PLACA_VEICULO: TIBStringField
+      FieldName = 'NFE_PLACA_VEICULO'
+      Origin = '"TBVENDAS"."NFE_PLACA_VEICULO"'
+      Size = 10
+    end
+    object qryCalculoImportoNFE_PLACA_UF: TIBStringField
+      FieldName = 'NFE_PLACA_UF'
+      Origin = '"TBVENDAS"."NFE_PLACA_UF"'
+      Size = 2
+    end
+    object qryCalculoImportoNFE_PLACA_RNTC: TIBStringField
+      FieldName = 'NFE_PLACA_RNTC'
+      Origin = '"TBVENDAS"."NFE_PLACA_RNTC"'
+      Size = 10
     end
   end
   object IBSQL: TIBSQL
@@ -4824,7 +4891,7 @@ object DMNFe: TDMNFe
       'where n.ANOVENDA = :anovenda'
       '  and n.NUMVENDA = :numvenda')
     Left = 144
-    Top = 312
+    Top = 360
     ParamData = <
       item
         DataType = ftInteger
@@ -4902,6 +4969,74 @@ object DMNFe: TDMNFe
       FieldName = 'LOTE_NUM'
       Origin = '"TBNFE_ENVIADA"."LOTE_NUM"'
       Required = True
+    end
+  end
+  object qryDadosVolume: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    v.sequencial'
+      '  , v.numero'
+      '  , v.quantidade'
+      '  , v.especie'
+      '  , v.marca'
+      '  , v.peso_bruto'
+      '  , v.peso_liquido'
+      'from TBVENDAS_VOLUME v'
+      'where v.ano_venda = :anovenda'
+      '  and v.controle_venda = :numvenda'
+      '')
+    Left = 144
+    Top = 312
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'AnoVenda'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'NumVenda'
+        ParamType = ptInput
+        Value = 0
+      end>
+    object qryDadosVolumeSEQUENCIAL: TSmallintField
+      FieldName = 'SEQUENCIAL'
+      Origin = '"TBVENDAS_VOLUME"."SEQUENCIAL"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+    end
+    object qryDadosVolumeNUMERO: TIBStringField
+      FieldName = 'NUMERO'
+      Origin = '"TBVENDAS_VOLUME"."NUMERO"'
+      Size = 50
+    end
+    object qryDadosVolumeQUANTIDADE: TSmallintField
+      FieldName = 'QUANTIDADE'
+      Origin = '"TBVENDAS_VOLUME"."QUANTIDADE"'
+    end
+    object qryDadosVolumeESPECIE: TIBStringField
+      FieldName = 'ESPECIE'
+      Origin = '"TBVENDAS_VOLUME"."ESPECIE"'
+      Size = 50
+    end
+    object qryDadosVolumeMARCA: TIBStringField
+      FieldName = 'MARCA'
+      Origin = '"TBVENDAS_VOLUME"."MARCA"'
+      Size = 50
+    end
+    object qryDadosVolumePESO_BRUTO: TIBBCDField
+      FieldName = 'PESO_BRUTO'
+      Origin = '"TBVENDAS_VOLUME"."PESO_BRUTO"'
+      Precision = 18
+      Size = 3
+    end
+    object qryDadosVolumePESO_LIQUIDO: TIBBCDField
+      FieldName = 'PESO_LIQUIDO'
+      Origin = '"TBVENDAS_VOLUME"."PESO_LIQUIDO"'
+      Precision = 18
+      Size = 3
     end
   end
 end
