@@ -193,6 +193,7 @@ begin
 
   e1Data.Date     := Date;
   e2Data.Date     := Date;
+  AbrirTabelaAuto  := True;
   ControlFirstEdit := dbCliente;
 
   tblEmpresa.Open;
@@ -205,6 +206,11 @@ begin
   CampoCodigo    := 'numlanc';
   CampoDescricao := 'Nome';
   CampoOrdenacao := 'r.dtvenc, c.Nome';
+
+  WhereAdditional :=
+    '( (r.Situacao > 0) and (r.Parcela > 0) ) and (' +
+    'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
+    ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
 
   UpdateGenerator( 'where anolanc = ' + FormatFloat('0000', YearOf(Date)) );
 
@@ -228,10 +234,10 @@ end;
 procedure TfrmGeContasAReceber.btnFiltrarClick(Sender: TObject);
 begin
   WhereAdditional :=
-    //'( (vn.Venda_prazo = 1) or (r.Anovenda is null) ) and (' +  Alterado em 11-01-2013 Dorivaldo
     '( (r.Situacao > 0) and (r.Parcela > 0) ) and (' +
     'cast(r.dtvenc as date) between ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) +
     ' and ' + QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) ) + ')';
+    
   inherited;
 end;
 

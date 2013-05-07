@@ -250,6 +250,7 @@ begin
   NomeTabela     := 'TBCLIENTE';
   CampoCodigo    := 'codigo';
   CampoDescricao := 'nome';
+  CampoOrdenacao := CampoDescricao;
 
   UpdateGenerator;
 
@@ -379,14 +380,16 @@ begin
   else
     IbDtstTabelaCNPJ.EditMask := '';
 
-  BtBtnDesbloquear.Enabled := (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
+  BtBtnDesbloquear.Enabled := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
 end;
 
 procedure TfrmGeCliente.DtSrcTabelaDataChange(Sender: TObject;
   Field: TField);
 begin
   inherited;
-  BtBtnDesbloquear.Enabled := (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
+  BtBtnDesbloquear.Enabled := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
 
   if ( Field = IbDtstTabela.FieldByName('CNPJ') ) then
     GetComprasAbertas( IbDtstTabela.FieldByName('CNPJ').AsString );

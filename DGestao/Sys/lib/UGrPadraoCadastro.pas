@@ -198,7 +198,7 @@ begin
   btbtnCancelar.Enabled   := (IbDtstTabela.State in [dsEdit, dsInsert]);
   btbtnSalvar.Enabled     := (IbDtstTabela.State in [dsEdit, dsInsert]);
   btbtnLista.Enabled      := (IbDtstTabela.State in [dsBrowse]);
-  btbtnFechar.Enabled     := (IbDtstTabela.State in [dsBrowse]);
+  btbtnFechar.Enabled     := (IbDtstTabela.State in [dsBrowse]) or (not IbDtstTabela.Active);
   btbtnSelecionar.Enabled := (IbDtstTabela.State in [dsBrowse]) and (not IbDtstTabela.IsEmpty);
 
   DtSrcTabela.AutoEdit   := (IbDtstTabela.State in [dsEdit, dsInsert]);
@@ -214,10 +214,12 @@ end;
 procedure TfrmGrPadraoCadastro.FormCloseQuery(Sender: TObject;
   var CanClose: Boolean);
 begin
-  if ( not btbtnFechar.Enabled ) then
-    ShowWarning('Existe registro em edição');
-
-  CanClose := btbtnFechar.Enabled;
+  if ( IbDtstTabela.Active ) then
+    if ( not btbtnFechar.Enabled ) then
+    begin
+      CanClose := False;
+      ShowWarning('Existe registro em edição');
+    end;
 end;
 
 procedure TfrmGrPadraoCadastro.btbtnIncluirClick(Sender: TObject);
@@ -238,6 +240,7 @@ begin
 
   if ( not IbDtstTabela.Active ) then
     Exit;
+    
   IbDtstTabela.Edit;
 end;
 
@@ -477,8 +480,20 @@ begin
     if ( AbrirTabelaAuto ) then
     begin
       IbDtstTabela.Close;
+      if ( WhereAdditional <> EmptyStr ) then
+
+      if ( Pos('where', IbDtstTabela.SelectSQL.Text) > 0 ) then
+        IbDtstTabela.SelectSQL.Add( '  and (' + WhereAdditional + ')' )
+      else
+        IbDtstTabela.SelectSQL.Add( 'where (' + WhereAdditional + ')' );
+
+      if ( (Pos('order by', IbDtstTabela.SelectSQL.Text) = 0) and (CampoOrdenacao <> EmptyStr) ) then
+        IbDtstTabela.SelectSQL.Add( 'order by ' + CampoOrdenacao );
+
       IbDtstTabela.Open;
     end;
+
+    DtSrcTabelaStateChange( DtSrcTabela );
   end
   else
   if ( not AbrirTabelaAuto ) then
