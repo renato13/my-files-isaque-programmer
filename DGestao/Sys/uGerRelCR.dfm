@@ -1,11 +1,11 @@
 object frmGerRelCR: TfrmGerRelCR
-  Left = 373
-  Top = 147
+  Left = 433
+  Top = 154
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio Contas a Receber'
-  ClientHeight = 260
-  ClientWidth = 309
+  ClientHeight = 257
+  ClientWidth = 307
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,7 +21,7 @@ object frmGerRelCR: TfrmGerRelCR
   object Panel1: TPanel
     Left = 0
     Top = 217
-    Width = 309
+    Width = 307
     Height = 48
     Align = alTop
     BevelOuter = bvLowered
@@ -1272,7 +1272,7 @@ object frmGerRelCR: TfrmGerRelCR
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 0
-    Width = 309
+    Width = 307
     Height = 60
     Align = alTop
     Caption = 'Cliente'
@@ -2050,7 +2050,7 @@ object frmGerRelCR: TfrmGerRelCR
   object rdgrpPeriodo: TRadioGroup
     Left = 0
     Top = 60
-    Width = 309
+    Width = 307
     Height = 69
     Align = alTop
     Caption = 'Per'#237'odo'
@@ -2071,7 +2071,7 @@ object frmGerRelCR: TfrmGerRelCR
   object rdgrpStatus: TRadioGroup
     Left = 0
     Top = 169
-    Width = 309
+    Width = 307
     Height = 48
     Align = alTop
     Caption = 'Status Duplicatas'
@@ -2092,7 +2092,7 @@ object frmGerRelCR: TfrmGerRelCR
   object GroupBox1: TGroupBox
     Left = 0
     Top = 129
-    Width = 309
+    Width = 307
     Height = 40
     Align = alTop
     Font.Charset = DEFAULT_CHARSET
@@ -2152,6 +2152,8 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCR: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select CR.numlanc, CR.tippag, CR.dtemiss, CR.dtvenc, CR.dtrec, C' +
@@ -2165,6 +2167,9 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryEmp: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -2173,6 +2178,8 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCli: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select NOME from TBCLIENTE'
       'order by nome')

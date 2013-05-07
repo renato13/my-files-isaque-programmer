@@ -17,8 +17,8 @@ object frmRelProdutos: TfrmRelProdutos
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = 246
-    Top = 37
+    Left = 14
+    Top = 93
     Width = 476
     Height = 674
     Frame.Color = clBlack
@@ -961,8 +961,8 @@ object frmRelProdutos: TfrmRelProdutos
     end
   end
   object QuickRep1: TQuickRep
-    Left = 758
-    Top = 48
+    Left = 470
+    Top = 64
     Width = 476
     Height = 674
     Frame.Color = clBlack
@@ -1136,6 +1136,7 @@ object frmRelProdutos: TfrmRelProdutos
         AutoSize = True
         AutoStretch = False
         Color = clWhite
+        DataSet = ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1647,6 +1648,9 @@ object frmRelProdutos: TfrmRelProdutos
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = IBQuery1CalcFields
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +
@@ -1713,14 +1717,30 @@ object frmRelProdutos: TfrmRelProdutos
   object ibqryEmpresa: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
     Top = 32
+    object ibqryEmpresaCNPJ: TIBStringField
+      FieldName = 'CNPJ'
+      Origin = 'TBEMPRESA.CNPJ'
+      Required = True
+      Size = 18
+    end
+    object ibqryEmpresaNMFANT: TIBStringField
+      FieldName = 'NMFANT'
+      Origin = 'TBEMPRESA.NMFANT'
+      Size = 25
+    end
   end
   object IBQuery2: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select P.DESCRI, P.COD, P.MODELO, P.REFERENCIA, P.PRECO, P.CUSTO' +

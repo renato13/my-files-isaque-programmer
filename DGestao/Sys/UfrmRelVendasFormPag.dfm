@@ -1,6 +1,6 @@
 object frmRelVendasFormPag: TfrmRelVendasFormPag
-  Left = 277
-  Top = 135
+  Left = 251
+  Top = 138
   Width = 988
   Height = 500
   Caption = 'frmRelVendasFormPag'
@@ -16,8 +16,8 @@ object frmRelVendasFormPag: TfrmRelVendasFormPag
   PixelsPerInch = 96
   TextHeight = 13
   object qckrpVendas: TQuickRep
-    Left = 14
-    Top = 28
+    Left = 22
+    Top = 4
     Width = 952
     Height = 1347
     Frame.Color = clBlack
