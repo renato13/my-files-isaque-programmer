@@ -104,8 +104,6 @@ object frmPesq: TfrmPesq
   object IBQuery1: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select  CODFORN, CNPJ, NOMEFORN from TBFORNECEDOR'
       'order by NOMEFORN')

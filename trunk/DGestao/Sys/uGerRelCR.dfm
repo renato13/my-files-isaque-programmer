@@ -179,7 +179,7 @@ object frmGerRelCR: TfrmGerRelCR
         214.312500000000000000
         1942.041666666667000000)
       BandType = rbTitle
-      object QRLabel6: TQRLabel
+      object lblNomeSistema1: TQRLabel
         Left = 0
         Top = 4
         Width = 170
@@ -1364,7 +1364,7 @@ object frmGerRelCR: TfrmGerRelCR
         238.125000000000000000
         1740.958333333333000000)
       BandType = rbTitle
-      object QRLabel8: TQRLabel
+      object lblNomeSistema2: TQRLabel
         Left = 0
         Top = 4
         Width = 128
@@ -1638,9 +1638,9 @@ object frmGerRelCR: TfrmGerRelCR
         FontSize = 8
       end
       object QRLabel18: TQRLabel
-        Left = 538
+        Left = 552
         Top = 1
-        Width = 120
+        Width = 106
         Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
@@ -1649,9 +1649,9 @@ object frmGerRelCR: TfrmGerRelCR
         Frame.DrawRight = False
         Size.Values = (
           42.333333333333330000
-          1423.458333333333000000
+          1460.500000000000000000
           2.645833333333333000
-          317.500000000000000000)
+          280.458333333333300000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -2152,8 +2152,6 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCR: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       
         'select CR.numlanc, CR.tippag, CR.dtemiss, CR.dtvenc, CR.dtrec, C' +
@@ -2168,8 +2166,6 @@ object frmGerRelCR: TfrmGerRelCR
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 128
@@ -2178,8 +2174,6 @@ object frmGerRelCR: TfrmGerRelCR
   object ibqryCli: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select NOME from TBCLIENTE'
       'order by nome')
