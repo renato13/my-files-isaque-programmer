@@ -45,7 +45,7 @@ procedure TfrmPesq.SpeedButton1Click(Sender: TObject);
 begin
  IBQuery1.Close;
  IBQuery1.SQL.Clear;
- IBQuery1.SQL.Add('select CODFORN, CNPJ, NOMEFORN from TBFORNECEDOR where NOMEFORN like :razaosc order by NOMEFORN');
+ IBQuery1.SQL.Add('Select CODFORN, CNPJ, NOMEFORN from TBFORNECEDOR where NOMEFORN like :razaosc order by NOMEFORN');
  IBQuery1.Params[0].AsString := edt.Text + '%';
  IBQuery1.Open;
 end;

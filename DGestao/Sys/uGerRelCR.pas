@@ -14,7 +14,7 @@ type
     btbtnLista: TBitBtn;
     qckrpCR: TQuickRep;
     TitleBand1: TQRBand;
-    QRLabel6: TQRLabel;
+    lblNomeSistema1: TQRLabel;
     QRSysData1: TQRSysData;
     qrlblPeriodo: TQRLabel;
     QRLabel2: TQRLabel;
@@ -37,7 +37,7 @@ type
     cmbbxCliente: TComboBox;
     qckrpVendasSintetico: TQuickRep;
     QRBand1: TQRBand;
-    QRLabel8: TQRLabel;
+    lblNomeSistema2: TQRLabel;
     QRSysData4: TQRSysData;
     QRLabel9: TQRLabel;
     QRLabel10: TQRLabel;
@@ -101,13 +101,16 @@ var
 
 implementation
 
-uses UDMBusiness, uRelCR;
+uses UDMBusiness, uRelCR, UFuncoes;
 
 {$R *.dfm}
 
 
 procedure TfrmGerRelCR.FormCreate(Sender: TObject);
 begin
+  lblNomeSistema1.Caption := GetProductName + ' - versão ' + GetVersion;
+  lblNomeSistema2.Caption := GetProductName + ' - versão ' + GetVersion;
+
  dttmpcIni.Date := IncMonth(Date, -1);
  dttmpcFim.Date := Date;
 
