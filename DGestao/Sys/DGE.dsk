@@ -11,18 +11,28 @@ File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1
 File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCli.pas',0,1,39,137,46,1,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
-Module7=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
-Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
+Module8=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
 Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 Count=10
 EditWindowCount=1
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
 ModuleType=SourceModule
@@ -44,11 +54,6 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas]
 ModuleType=SourceModule
 FormState=1
@@ -60,11 +65,6 @@ FormState=0
 FormOnTop=0
 
 [C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -88,7 +88,7 @@ FormOnTop=0
 
 [EditWindow0]
 ViewCount=10
-CurrentView=7
+CurrentView=3
 View0=0
 View1=1
 View2=2
@@ -104,21 +104,21 @@ MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
 State=0
-Left=249
-Top=124
-Width=1664
-Height=908
+Left=281
+Top=170
+Width=1632
+Height=862
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1648
-ClientHeight=870
+ClientWidth=1616
+ClientHeight=824
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -143,9 +143,9 @@ LeftCol=1
 
 [View3]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-CursorX=163
-CursorY=207
-TopLine=199
+CursorX=28
+CursorY=32
+TopLine=64
 LeftCol=1
 
 [View4]
@@ -207,8 +207,8 @@ Left=0
 Top=0
 Width=1920
 Height=122
-MaxLeft=-8
-MaxTop=-8
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1936
 MaxHeight=122
 ClientWidth=1920
@@ -319,26 +319,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=770
+Height=812
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=770
+ClientHeight=812
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
-Left=12
-Top=0
-Width=1636
+Left=-10
+Top=-713
+Width=443
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1636
+ClientWidth=443
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443

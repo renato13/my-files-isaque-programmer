@@ -236,7 +236,6 @@ begin
         Registro.Add( sHostName );
         Registro.Add( sSistema );
 
-        {$IFDEF DGE}
         with DMBusiness, qryBusca do
         begin
           Close;
@@ -265,7 +264,6 @@ begin
 
           Return := True;
         end;
-        {$ENDIF}
 
         Registro.EndUpdate;
         Registro.SaveToFile( sFileName );
