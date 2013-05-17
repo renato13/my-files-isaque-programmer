@@ -1993,3 +1993,33 @@ ON DELETE CASCADE
 ON UPDATE CASCADE;
 
 GRANT ALL ON TBVENDAS_VOLUME TO "PUBLIC";
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+PIS.INDICE_ABCR.
+At line 2, column 109.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+P.INDICE_ABCR.
+At line 2, column 103.
+
+*/
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+P.INDICE_ABCR.
+At line 2, column 103.
+
+*/
