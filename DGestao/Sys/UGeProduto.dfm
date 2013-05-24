@@ -688,7 +688,7 @@ inherited frmGeProduto: TfrmGeProduto
         Top = 197
         Width = 953
         Height = 341
-        ActivePage = tbsTributacao
+        ActivePage = tbsValores
         Align = alClient
         TabOrder = 2
         object tbsValores: TTabSheet
@@ -728,6 +728,28 @@ inherited frmGeProduto: TfrmGeProduto
             Height = 13
             Caption = 'Pre'#231'o Prom. (R$):'
             FocusControl = dbPrecoPromocao
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lblPercentualMarckup: TLabel
+            Left = 376
+            Top = 8
+            Width = 68
+            Height = 13
+            Caption = '% Marckup:'
+            FocusControl = dbPercentualMarckup
+          end
+          object lblPrecoVendaSugestao: TLabel
+            Left = 496
+            Top = 8
+            Width = 84
+            Height = 13
+            Caption = 'Sugest'#227'o (R$):'
+            FocusControl = dbPrecoVendaSugestao
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -793,9 +815,42 @@ inherited frmGeProduto: TfrmGeProduto
             Caption = 'Produto Novo'
             DataField = 'PRODUTO_NOVO'
             DataSource = DtSrcTabela
-            TabOrder = 3
+            TabOrder = 5
             ValueChecked = 'True'
             ValueUnchecked = 'False'
+          end
+          object dbPercentualMarckup: TDBEdit
+            Left = 376
+            Top = 24
+            Width = 113
+            Height = 21
+            CharCase = ecUpperCase
+            DataField = 'PERCENTUAL_MARCKUP'
+            DataSource = DtSrcTabela
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 3
+          end
+          object dbPrecoVendaSugestao: TDBEdit
+            Left = 496
+            Top = 24
+            Width = 113
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'PRECO_SUGERIDO'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 4
           end
         end
         object tbsTributacao: TTabSheet
@@ -1655,6 +1710,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Modelo'
       '  , p.Preco'
       '  , p.Preco_Promocao'
+      '  , p.Preco_Sugerido'
       '  , p.Referencia'
       '  , p.Secao'
       '  , p.Qtde'
@@ -1663,6 +1719,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Codgrupo'
       '  , p.Codfabricante'
       '  , p.Customedio'
+      '  , p.Percentual_marckup'
       '  , p.Codemp'
       '  , p.Codsecao'
       '  , p.Codorigem'
@@ -1774,6 +1831,13 @@ inherited frmGeProduto: TfrmGeProduto
       Precision = 18
       Size = 2
     end
+    object IbDtstTabelaPRECO_SUGERIDO: TIBBCDField
+      FieldName = 'PRECO_SUGERIDO'
+      Origin = '"TBPRODUTO"."PRECO_SUGERIDO"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
     object IbDtstTabelaREFERENCIA: TIBStringField
       DisplayLabel = 'Refer'#234'ncia'
       FieldName = 'REFERENCIA'
@@ -1824,6 +1888,13 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 2
+    end
+    object IbDtstTabelaPERCENTUAL_MARCKUP: TIBBCDField
+      FieldName = 'PERCENTUAL_MARCKUP'
+      Origin = '"TBPRODUTO"."PERCENTUAL_MARCKUP"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 3
     end
     object IbDtstTabelaCODEMP: TIBStringField
       DisplayLabel = 'Empresa'
@@ -2082,6 +2153,7 @@ inherited frmGeProduto: TfrmGeProduto
     end
   end
   inherited DtSrcTabela: TDataSource
+    OnDataChange = DtSrcTabelaDataChange
     Left = 824
   end
   inherited IbUpdTabela: TIBUpdateSQL
@@ -2103,6 +2175,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  CODGRUPO,'
       '  CODFABRICANTE,'
       '  CUSTOMEDIO,'
+      '  PERCENTUAL_MARCKUP,'
+      '  PRECO_SUGERIDO,'
       '  CODEMP,'
       '  CODSECAO,'
       '  CODORIGEM,'
@@ -2140,110 +2214,113 @@ inherited frmGeProduto: TfrmGeProduto
     ModifySQL.Strings = (
       'update TBPRODUTO'
       'set'
-      '  CODIGO = :CODIGO,'
-      '  COD = :COD,'
-      '  DESCRI = :DESCRI,'
-      '  APRESENTACAO = :APRESENTACAO,'
-      '  DESCRI_APRESENTACAO = :DESCRI_APRESENTACAO,'
-      '  MODELO = :MODELO,'
-      '  PRECO = :PRECO,'
-      '  PRECO_PROMOCAO = :PRECO_PROMOCAO,'
-      '  REFERENCIA = :REFERENCIA,'
-      '  SECAO = :SECAO,'
-      '  QTDE = :QTDE,'
-      '  UNIDADE = :UNIDADE,'
-      '  ESTOQMIN = :ESTOQMIN,'
-      '  CODGRUPO = :CODGRUPO,'
-      '  CODFABRICANTE = :CODFABRICANTE,'
-      '  CUSTOMEDIO = :CUSTOMEDIO,'
-      '  CODEMP = :CODEMP,'
-      '  CODSECAO = :CODSECAO,'
-      '  CODORIGEM = :CODORIGEM,'
-      '  CODTRIBUTACAO = :CODTRIBUTACAO,'
-      '  CST = :CST,'
-      '  CSOSN = :CSOSN,'
-      '  CST_PIS = :CST_PIS,'
-      '  CST_COFINS = :CST_COFINS,'
-      '  NCM_SH = :NCM_SH,'
-      '  CODCFOP = :CODCFOP,'
-      '  CODBARRA_EAN = :CODBARRA_EAN,'
-      '  CODUNIDADE = :CODUNIDADE,'
-      '  ALIQUOTA_TIPO = :ALIQUOTA_TIPO,'
       '  ALIQUOTA = :ALIQUOTA,'
+      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
       '  ALIQUOTA_CSOSN = :ALIQUOTA_CSOSN,'
       '  ALIQUOTA_PIS = :ALIQUOTA_PIS,'
-      '  ALIQUOTA_COFINS = :ALIQUOTA_COFINS,'
-      '  VALOR_IPI = :VALOR_IPI,'
-      '  RESERVA = :RESERVA,'
-      '  PRODUTO_NOVO = :PRODUTO_NOVO,'
-      '  COR_VEICULO = :COR_VEICULO,'
-      '  COMBUSTIVEL_VEICULO = :COMBUSTIVEL_VEICULO,'
-      '  TIPO_VEICULO = :TIPO_VEICULO,'
-      '  ANO_MODELO_VEICULO = :ANO_MODELO_VEICULO,'
+      '  ALIQUOTA_TIPO = :ALIQUOTA_TIPO,'
       '  ANO_FABRICACAO_VEICULO = :ANO_FABRICACAO_VEICULO,'
-      '  RENAVAM_VEICULO = :RENAVAM_VEICULO,'
+      '  ANO_MODELO_VEICULO = :ANO_MODELO_VEICULO,'
+      '  APRESENTACAO = :APRESENTACAO,'
       '  CHASSI_VEICULO = :CHASSI_VEICULO,'
+      '  COD = :COD,'
+      '  CODBARRA_EAN = :CODBARRA_EAN,'
+      '  CODCFOP = :CODCFOP,'
+      '  CODEMP = :CODEMP,'
+      '  CODFABRICANTE = :CODFABRICANTE,'
+      '  CODGRUPO = :CODGRUPO,'
+      '  CODIGO = :CODIGO,'
+      '  CODORIGEM = :CODORIGEM,'
+      '  CODSECAO = :CODSECAO,'
+      '  CODTRIBUTACAO = :CODTRIBUTACAO,'
+      '  CODUNIDADE = :CODUNIDADE,'
+      '  COMBUSTIVEL_VEICULO = :COMBUSTIVEL_VEICULO,'
+      '  COR_VEICULO = :COR_VEICULO,'
+      '  CSOSN = :CSOSN,'
+      '  CST = :CST,'
+      '  CST_COFINS = :CST_COFINS,'
+      '  CST_PIS = :CST_PIS,'
+      '  CUSTOMEDIO = :CUSTOMEDIO,'
+      '  DESCRI = :DESCRI,'
+      '  DESCRI_APRESENTACAO = :DESCRI_APRESENTACAO,'
+      '  ESTOQMIN = :ESTOQMIN,'
       '  KILOMETRAGEM_VEICULO = :KILOMETRAGEM_VEICULO,'
+      '  MODELO = :MODELO,'
+      '  NCM_SH = :NCM_SH,'
+      '  PERCENTUAL_MARCKUP = :PERCENTUAL_MARCKUP,'
+      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC,'
+      '  PRECO = :PRECO,'
+      '  PRECO_PROMOCAO = :PRECO_PROMOCAO,'
+      '  PRECO_SUGERIDO = :PRECO_SUGERIDO,'
+      '  PRODUTO_NOVO = :PRODUTO_NOVO,'
+      '  QTDE = :QTDE,'
+      '  REFERENCIA = :REFERENCIA,'
+      '  RENAVAM_VEICULO = :RENAVAM_VEICULO,'
+      '  RESERVA = :RESERVA,'
+      '  SECAO = :SECAO,'
       '  SITUACAO_ATUAL_VEICULO = :SITUACAO_ATUAL_VEICULO,'
       '  SITUACAO_HISTORICO_VEICULO = :SITUACAO_HISTORICO_VEICULO,'
-      '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC'
+      '  TIPO_VEICULO = :TIPO_VEICULO,'
+      '  UNIDADE = :UNIDADE,'
+      '  VALOR_IPI = :VALOR_IPI'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
       'insert into TBPRODUTO'
       
-        '  (CODIGO, COD, DESCRI, APRESENTACAO, DESCRI_APRESENTACAO, MODEL' +
-        'O, PRECO, '
+        '  (ALIQUOTA, ALIQUOTA_COFINS, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ALIQ' +
+        'UOTA_TIPO, '
       
-        '   PRECO_PROMOCAO, REFERENCIA, SECAO, QTDE, UNIDADE, ESTOQMIN, C' +
-        'ODGRUPO, '
+        '   ANO_FABRICACAO_VEICULO, ANO_MODELO_VEICULO, APRESENTACAO, CHA' +
+        'SSI_VEICULO, '
       
-        '   CODFABRICANTE, CUSTOMEDIO, CODEMP, CODSECAO, CODORIGEM, CODTR' +
-        'IBUTACAO, '
+        '   COD, CODBARRA_EAN, CODCFOP, CODEMP, CODFABRICANTE, CODGRUPO, ' +
+        'CODIGO, '
       
-        '   CST, CSOSN, CST_PIS, CST_COFINS, NCM_SH, CODCFOP, CODBARRA_EA' +
-        'N, CODUNIDADE, '
+        '   CODORIGEM, CODSECAO, CODTRIBUTACAO, CODUNIDADE, COMBUSTIVEL_V' +
+        'EICULO, '
       
-        '   ALIQUOTA_TIPO, ALIQUOTA, ALIQUOTA_CSOSN, ALIQUOTA_PIS, ALIQUO' +
-        'TA_COFINS, '
+        '   COR_VEICULO, CSOSN, CST, CST_COFINS, CST_PIS, CUSTOMEDIO, DES' +
+        'CRI, DESCRI_APRESENTACAO, '
       
-        '   VALOR_IPI, RESERVA, PRODUTO_NOVO, COR_VEICULO, COMBUSTIVEL_VE' +
-        'ICULO, '
+        '   ESTOQMIN, KILOMETRAGEM_VEICULO, MODELO, NCM_SH, PERCENTUAL_MA' +
+        'RCKUP, '
       
-        '   TIPO_VEICULO, ANO_MODELO_VEICULO, ANO_FABRICACAO_VEICULO, REN' +
-        'AVAM_VEICULO, '
+        '   PERCENTUAL_REDUCAO_BC, PRECO, PRECO_PROMOCAO, PRECO_SUGERIDO,' +
+        ' PRODUTO_NOVO, '
       
-        '   CHASSI_VEICULO, KILOMETRAGEM_VEICULO, SITUACAO_ATUAL_VEICULO,' +
-        ' SITUACAO_HISTORICO_VEICULO, '
-      '   PERCENTUAL_REDUCAO_BC)'
+        '   QTDE, REFERENCIA, RENAVAM_VEICULO, RESERVA, SECAO, SITUACAO_A' +
+        'TUAL_VEICULO, '
+      '   SITUACAO_HISTORICO_VEICULO, TIPO_VEICULO, UNIDADE, VALOR_IPI)'
       'values'
       
-        '  (:CODIGO, :COD, :DESCRI, :APRESENTACAO, :DESCRI_APRESENTACAO, ' +
-        ':MODELO, '
+        '  (:ALIQUOTA, :ALIQUOTA_COFINS, :ALIQUOTA_CSOSN, :ALIQUOTA_PIS, ' +
+        ':ALIQUOTA_TIPO, '
       
-        '   :PRECO, :PRECO_PROMOCAO, :REFERENCIA, :SECAO, :QTDE, :UNIDADE' +
-        ', :ESTOQMIN, '
+        '   :ANO_FABRICACAO_VEICULO, :ANO_MODELO_VEICULO, :APRESENTACAO, ' +
+        ':CHASSI_VEICULO, '
       
-        '   :CODGRUPO, :CODFABRICANTE, :CUSTOMEDIO, :CODEMP, :CODSECAO, :' +
-        'CODORIGEM, '
+        '   :COD, :CODBARRA_EAN, :CODCFOP, :CODEMP, :CODFABRICANTE, :CODG' +
+        'RUPO, :CODIGO, '
       
-        '   :CODTRIBUTACAO, :CST, :CSOSN, :CST_PIS, :CST_COFINS, :NCM_SH,' +
-        ' :CODCFOP, '
+        '   :CODORIGEM, :CODSECAO, :CODTRIBUTACAO, :CODUNIDADE, :COMBUSTI' +
+        'VEL_VEICULO, '
       
-        '   :CODBARRA_EAN, :CODUNIDADE, :ALIQUOTA_TIPO, :ALIQUOTA, :ALIQU' +
-        'OTA_CSOSN, '
+        '   :COR_VEICULO, :CSOSN, :CST, :CST_COFINS, :CST_PIS, :CUSTOMEDI' +
+        'O, :DESCRI, '
       
-        '   :ALIQUOTA_PIS, :ALIQUOTA_COFINS, :VALOR_IPI, :RESERVA, :PRODU' +
-        'TO_NOVO, '
+        '   :DESCRI_APRESENTACAO, :ESTOQMIN, :KILOMETRAGEM_VEICULO, :MODE' +
+        'LO, :NCM_SH, '
       
-        '   :COR_VEICULO, :COMBUSTIVEL_VEICULO, :TIPO_VEICULO, :ANO_MODEL' +
+        '   :PERCENTUAL_MARCKUP, :PERCENTUAL_REDUCAO_BC, :PRECO, :PRECO_P' +
+        'ROMOCAO, '
+      
+        '   :PRECO_SUGERIDO, :PRODUTO_NOVO, :QTDE, :REFERENCIA, :RENAVAM_' +
+        'VEICULO, '
+      
+        '   :RESERVA, :SECAO, :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORIC' +
         'O_VEICULO, '
-      
-        '   :ANO_FABRICACAO_VEICULO, :RENAVAM_VEICULO, :CHASSI_VEICULO, :' +
-        'KILOMETRAGEM_VEICULO, '
-      
-        '   :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORICO_VEICULO, :PERCEN' +
-        'TUAL_REDUCAO_BC)')
+      '   :TIPO_VEICULO, :UNIDADE, :VALOR_IPI)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'

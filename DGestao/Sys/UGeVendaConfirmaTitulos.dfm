@@ -1,8 +1,8 @@
-inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
+inherited frmGeVendaConfirmaTitulos: TfrmGeVendaConfirmaTitulos
   ActiveControl = dbCodigo
   BorderStyle = bsDialog
   BorderWidth = 4
-  Caption = 'Confirma'#231#227'o de Duplicadas'
+  Caption = 'Confirma'#231#227'o de T'#237'tulos'
   ClientHeight = 403
   ClientWidth = 534
   OldCreateOrder = True
@@ -34,7 +34,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     Width = 534
     Height = 73
     Align = alTop
-    Caption = ' Dados da Duplicata Selecionada '
+    Caption = ' Dados do T'#237'tulo Selecionadao'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -120,7 +120,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       TabStop = False
       Color = clMoneyGreen
       DataField = 'Lancamento'
-      DataSource = dtsDuplicatas
+      DataSource = dtsTitulos
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -137,7 +137,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       Height = 21
       Color = clWhite
       DataField = 'DTVENC'
-      DataSource = dtsDuplicatas
+      DataSource = dtsTitulos
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -155,7 +155,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       TabStop = False
       Color = clMoneyGreen
       DataField = 'PARCELA'
-      DataSource = dtsDuplicatas
+      DataSource = dtsTitulos
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -171,8 +171,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       Width = 105
       Height = 21
       Color = clWhite
-      DataField = 'VALORPAG'
-      DataSource = dtsDuplicatas
+      DataField = 'VALORREC'
+      DataSource = dtsTitulos
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -190,7 +190,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       TabStop = False
       Color = clMoneyGreen
       DataField = 'DTEMISS'
-      DataSource = dtsDuplicatas
+      DataSource = dtsTitulos
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlack
       Font.Height = -11
@@ -333,7 +333,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     Height = 288
     TabStop = False
     Align = alClient
-    DataSource = dtsDuplicatas
+    DataSource = dtsTitulos
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -387,8 +387,8 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       end
       item
         Expanded = False
-        FieldName = 'VALORPAG'
-        Title.Caption = 'Valor A Pagar (R$)'
+        FieldName = 'VALORREC'
+        Title.Caption = 'Valor A Rec. (R$)'
         Width = 110
         Visible = True
       end>
@@ -403,7 +403,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     Color = clMoneyGreen
     Ctl3D = True
     DataField = 'TotalEntrada'
-    DataSource = dtsDuplicatas
+    DataSource = dtsTitulos
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -19
@@ -423,7 +423,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     Anchors = [akLeft, akBottom]
     Color = clMoneyGreen
     DataField = 'TotalParcelas'
-    DataSource = dtsDuplicatas
+    DataSource = dtsTitulos
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -19
@@ -454,7 +454,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       Height = 10
       Alignment = taRightJustify
       AutoSize = False
-      Caption = 'Total Entrada (R$)'
+      Caption = 'Total A Prazo Venda (R$)'
       Font.Charset = ANSI_CHARSET
       Font.Color = clBlue
       Font.Height = -8
@@ -462,7 +462,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblTotalEntrada: TLabel
+    object lblTotalVenda: TLabel
       Left = 5
       Top = 16
       Width = 105
@@ -538,7 +538,7 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       ParentFont = False
     end
   end
-  object qryDuplicatas: TIBDataSet
+  object qryTitulos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     RefreshSQL.Strings = (
@@ -548,120 +548,115 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
       '    Anolanc'
       '  , Numlanc'
       '  , parcela'
-      '  , Codforn'
-      '  , Notfisc'
+      '  , Cnpj'
       '  , Tippag'
       '  , Dtemiss'
       '  , Dtvenc'
-      '  , Valorpag'
-      'from TBCONTPAG')
+      '  , Valorrec'
+      'from TBCONTREC')
     ModifySQL.Strings = (
       '')
     UniDirectional = True
     Left = 16
     Top = 120
   end
-  object dtsDuplicatas: TDataSource
+  object dtsTitulos: TDataSource
     AutoEdit = False
-    DataSet = cdsDuplicatas
-    OnDataChange = dtsDuplicatasDataChange
-    OnUpdateData = dtsDuplicatasUpdateData
+    DataSet = cdsTitulos
+    OnDataChange = dtsTitulosDataChange
+    OnUpdateData = dtsTitulosUpdateData
     Left = 16
     Top = 216
   end
-  object dspDuplicatas: TDataSetProvider
-    DataSet = qryDuplicatas
+  object dspTitulos: TDataSetProvider
+    DataSet = qryTitulos
     UpdateMode = upWhereChanged
     Left = 16
     Top = 152
   end
-  object cdsDuplicatas: TClientDataSet
+  object cdsTitulos: TClientDataSet
     Aggregates = <>
     AggregatesActive = True
     Params = <>
-    ProviderName = 'dspDuplicatas'
-    OnCalcFields = cdsDuplicatasCalcFields
+    ProviderName = 'dspTitulos'
+    OnCalcFields = cdsTitulosCalcFields
     Left = 16
     Top = 184
-    object cdsDuplicatasANOLANC: TSmallintField
+    object cdsTitulosANOLANC: TSmallintField
       FieldName = 'ANOLANC'
       ProviderFlags = [pfInUpdate, pfInKey]
       Required = True
     end
-    object cdsDuplicatasNUMLANC: TIntegerField
+    object cdsTitulosNUMLANC: TIntegerField
       FieldName = 'NUMLANC'
       ProviderFlags = [pfInUpdate, pfInKey]
       Required = True
     end
-    object cdsDuplicatasPARCELA: TSmallintField
+    object cdsTitulosPARCELA: TSmallintField
       Alignment = taCenter
       DisplayLabel = 'Parc.'
       FieldName = 'PARCELA'
       ProviderFlags = [pfInUpdate]
       DisplayFormat = '00'
     end
-    object cdsDuplicatasCODFORN: TSmallintField
-      FieldName = 'CODFORN'
+    object cdsTitulosCNPJ: TStringField
+      FieldName = 'CNPJ'
       ProviderFlags = [pfInUpdate]
+      Size = 18
     end
-    object cdsDuplicatasNOTFISC: TStringField
-      FieldName = 'NOTFISC'
-      ProviderFlags = [pfInUpdate]
-      Size = 15
-    end
-    object cdsDuplicatasTIPPAG: TStringField
+    object cdsTitulosTIPPAG: TStringField
       FieldName = 'TIPPAG'
       ProviderFlags = [pfInUpdate]
       Size = 35
     end
-    object cdsDuplicatasDTEMISS: TDateField
+    object cdsTitulosVALORREC: TBCDField
+      FieldName = 'VALORREC'
+      ProviderFlags = [pfInUpdate]
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
+    end
+    object cdsTitulosDTEMISS: TDateField
       Alignment = taCenter
       DisplayLabel = 'Emiss'#227'o'
       FieldName = 'DTEMISS'
       ProviderFlags = [pfInUpdate]
       DisplayFormat = 'dd/mm/yyyy'
     end
-    object cdsDuplicatasDTVENC: TDateField
+    object cdsTitulosDTVENC: TDateField
       Alignment = taCenter
       DisplayLabel = 'Vencimento'
       FieldName = 'DTVENC'
       ProviderFlags = [pfInUpdate]
       DisplayFormat = 'dd/mm/yyyy'
     end
-    object cdsDuplicatasVALORPAG: TBCDField
-      FieldName = 'VALORPAG'
-      ProviderFlags = [pfInUpdate]
-      DisplayFormat = ',0.00'
-      Precision = 18
-      Size = 2
-    end
-    object cdsDuplicatasLancamento: TStringField
+    object cdsTitulosLancamento: TStringField
       Alignment = taCenter
       FieldKind = fkInternalCalc
       FieldName = 'Lancamento'
       ProviderFlags = []
     end
-    object cdsDuplicatasTotalEntrada: TCurrencyField
+    object cdsTitulosTotalEntrada: TCurrencyField
       FieldKind = fkInternalCalc
       FieldName = 'TotalEntrada'
       ProviderFlags = []
       DisplayFormat = ',0.00'
     end
-    object cdsDuplicatasDiaSemana: TSmallintField
+    object cdsTitulosDiaSemana: TSmallintField
       Alignment = taCenter
       FieldKind = fkInternalCalc
       FieldName = 'DiaSemana'
       ProviderFlags = []
-      OnGetText = cdsDuplicatasDiaSemanaGetText
+      OnGetText = cdsTitulosDiaSemanaGetText
     end
-    object cdsDuplicatasTotalParcelas: TAggregateField
+    object cdsTitulosTotalParcelas: TAggregateField
       Alignment = taRightJustify
       FieldName = 'TotalParcelas'
       ProviderFlags = []
       Active = True
       currency = True
       DisplayFormat = ',0.00'
-      Expression = 'SUM(VALORPAG)'
+      Expression = 'SUM(VALORREC)'
     end
   end
   object updParcela: TIBDataSet
@@ -670,10 +665,10 @@ inherited frmGeEntradaConfirmaDuplicatas: TfrmGeEntradaConfirmaDuplicatas
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
-      'Update TBCONTPAG Set'
-      '  Dtvenc = :Vencimento, Valorpag = :Valor'
-      'where AnoCompra = :AnoCompra'
-      '  and NumCompra = :NumCompra'
+      'Update TBCONTREC Set'
+      '  Dtvenc = :Vencimento, Valorrec = :Valor'
+      'where AnoVenda = :AnoVenda'
+      '  and NumVenda = :NumVenda'
       '  and Anolanc = :Anolanc'
       '  and Numlanc = :Numlanc'
       '')

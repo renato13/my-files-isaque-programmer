@@ -405,9 +405,10 @@ const
 
 implementation
 
-uses UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
+uses
+  UDMBusiness, UGeCliente, UGeCondicaoPagto, UGeProduto, UGeTabelaCFOP,
   DateUtils, UDMNFe, UGeVendaGerarNFe, SysConst, UGeVendaCancelar,
-  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE, UGeVendaTransporte;
+  UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE, UGeVendaTransporte, UGeVendaConfirmaTitulos;
 
 {$R *.dfm}
 
@@ -1436,7 +1437,6 @@ begin
     if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 1 ) then
     begin
       GetComprasAbertas( IbDtstTabelaCODCLI.AsString );
-//      if ( IbDtstTabelaTOTALVENDA.AsCurrency > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
       if ( GetTotalValorFormaPagto_APrazo > qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL.AsCurrency ) then
       begin
         ShowWarning('O Valor Total A Parzo da venda está acima do Valor Limite disponível para o cliente.' + #13#13 + 'Favor comunicar ao setor financeiro.');
@@ -1460,6 +1460,12 @@ begin
 
     ShowInformation('Venda finalizada com sucesso !' + #13#13 + 'Ano/Controle: ' + IbDtstTabelaANO.AsString + '/' + FormatFloat('##0000000', IbDtstTabelaCODCONTROL.AsInteger));
 
+    // Confirmar vencimentos de cada parcela
+
+    if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 1 ) then
+      if ( TitulosConfirmados(Self, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, GetTotalValorFormaPagto_APrazo) ) then
+        AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
     HabilitarDesabilitar_Btns;
 
     // Forma de Pagamento: BOLETA BANCÁRIA
@@ -1469,14 +1475,6 @@ begin
         if ( cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto ) then
           if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
             btnGerarBoleto.Click;
-(*
-    // Formas de Pagamento que nao seja a prazo
-
-    if ( IbDtstTabelaVENDA_PRAZO.AsInteger = 0 ) then
-      if ( not qryTitulos.IsEmpty ) then
-        RegistrarPagamento(qryTitulosANOLANC.AsInteger, qryTitulosNUMLANC.AsInteger, GetDateDB, IbDtstTabelaFORMAPAGTO_COD.AsInteger,
-          IbDtstTabelaTOTALVENDA.AsCurrency, IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
-*)
 
     // Formas de Pagamento que nao seja a prazo
 

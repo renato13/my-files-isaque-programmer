@@ -51,6 +51,7 @@ type
     lblTotalParcelas: TLabel;
     Label3: TLabel;
     lblTotalDiferenca: TLabel;
+    cdsDuplicatasDiaSemana: TSmallintField;
     procedure btFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -62,6 +63,8 @@ type
     procedure cdsDuplicatasCalcFields(DataSet: TDataSet);
     procedure dtsDuplicatasDataChange(Sender: TObject; Field: TField);
     procedure dtsDuplicatasUpdateData(Sender: TObject);
+    procedure cdsDuplicatasDiaSemanaGetText(Sender: TField;
+      var Text: String; DisplayText: Boolean);
   private
     { Private declarations }
     fAnoCompra ,
@@ -209,6 +212,7 @@ end;
 procedure TfrmGeEntradaConfirmaDuplicatas.cdsDuplicatasCalcFields(
   DataSet: TDataSet);
 begin
+  cdsDuplicatasDiaSemana.AsInteger     := DayOfWeek(cdsDuplicatasDTVENC.AsDateTime);
   cdsDuplicatasLancamento.AsString     := FormatFloat('0000', cdsDuplicatasANOLANC.AsInteger) + FormatFloat('000000', cdsDuplicatasNUMLANC.AsInteger);
   cdsDuplicatasTotalEntrada.AsCurrency := TotalEntrada;
 end;
@@ -255,6 +259,23 @@ procedure TfrmGeEntradaConfirmaDuplicatas.dtsDuplicatasUpdateData(
   Sender: TObject);
 begin
   DisplayTotais;
+end;
+
+procedure TfrmGeEntradaConfirmaDuplicatas.cdsDuplicatasDiaSemanaGetText(
+  Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+  if Sender.IsNull then
+    Exit;
+
+  Case Sender.AsInteger of
+    1 : Text := 'DOM';
+    2 : Text := 'SEG';
+    3 : Text := 'TER';
+    4 : Text := 'QUA';
+    5 : Text := 'QUI';
+    6 : Text := 'SEX';
+    7 : Text := 'SAB';
+  end;
 end;
 
 end.
