@@ -257,8 +257,10 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
             Visible = True
           end
           item
+            Alignment = taCenter
             Expanded = False
-            FieldName = 'NFSERIE'
+            FieldName = 'S'#233'rie'
+            Title.Alignment = taCenter
             Width = 35
             Visible = True
           end

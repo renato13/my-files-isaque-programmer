@@ -186,6 +186,12 @@ type
     dtsAliquotaCOFINS: TDataSource;
     qryAliquotaPIS: TIBDataSet;
     qryAliquotaCOFINS: TIBDataSet;
+    lblPercentualMarckup: TLabel;
+    dbPercentualMarckup: TDBEdit;
+    lblPrecoVendaSugestao: TLabel;
+    dbPrecoVendaSugestao: TDBEdit;
+    IbDtstTabelaPRECO_SUGERIDO: TIBBCDField;
+    IbDtstTabelaPERCENTUAL_MARCKUP: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -203,6 +209,7 @@ type
       Shift: TShiftState);
     procedure chkProdutoComEstoqueClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
+    procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -559,6 +566,8 @@ begin
   IbDtstTabelaVALOR_IPI.Value      := 0;
   IbDtstTabelaRESERVA.Value        := 0;
   IbDtstTabelaPRODUTO_NOVO.Value   := 0;
+  IbDtstTabelaPERCENTUAL_MARCKUP.Value := 0;
+  IbDtstTabelaPRECO_SUGERIDO.Value     := 0;
   
   IbDtstTabelaPERCENTUAL_REDUCAO_BC.Value := 0;
 
@@ -738,6 +747,15 @@ begin
 
   inherited;
 
+end;
+
+procedure TfrmGeProduto.DtSrcTabelaDataChange(Sender: TObject;
+  Field: TField);
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( Field = IbDtstTabelaPERCENTUAL_MARCKUP ) then
+      IbDtstTabelaPRECO_SUGERIDO.AsCurrency := IbDtstTabelaCUSTOMEDIO.AsCurrency +
+        (IbDtstTabelaCUSTOMEDIO.AsCurrency * IbDtstTabelaPERCENTUAL_MARCKUP.AsCurrency / 100);
 end;
 
 end.

@@ -2023,3 +2023,363 @@ P.INDICE_ABCR.
 At line 2, column 103.
 
 */
+
+
+
+/*------ SYSDBA 23/05/2013 16:37:50 --------*/
+
+ALTER TABLE TBPRODUTO
+    ADD PERCENTUAL_MARCKUP DMN_PERCENTUAL_3;
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_MARCKUP IS
+'Percentual Marckup c/ 3 casas decimais.
+
+Sugestao de composicao:
+Percentual Marckup = (Lucro Desejado + Despesas Administrativas e de Venda) / Custo de Entrada';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter PERCENTUAL_MARCKUP position 17;
+
+alter table TBPRODUTO
+alter CODEMP position 18;
+
+alter table TBPRODUTO
+alter CODSECAO position 19;
+
+alter table TBPRODUTO
+alter CODORIGEM position 20;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 21;
+
+alter table TBPRODUTO
+alter CST position 22;
+
+alter table TBPRODUTO
+alter CSOSN position 23;
+
+alter table TBPRODUTO
+alter CST_PIS position 24;
+
+alter table TBPRODUTO
+alter CST_COFINS position 25;
+
+alter table TBPRODUTO
+alter NCM_SH position 26;
+
+alter table TBPRODUTO
+alter CODCFOP position 27;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 28;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 29;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 30;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 31;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 32;
+
+alter table TBPRODUTO
+alter ALIQUOTA_PIS position 33;
+
+alter table TBPRODUTO
+alter ALIQUOTA_COFINS position 34;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 35;
+
+alter table TBPRODUTO
+alter RESERVA position 36;
+
+alter table TBPRODUTO
+alter PRODUTO_NOVO position 37;
+
+alter table TBPRODUTO
+alter COR_VEICULO position 38;
+
+alter table TBPRODUTO
+alter COMBUSTIVEL_VEICULO position 39;
+
+alter table TBPRODUTO
+alter TIPO_VEICULO position 40;
+
+alter table TBPRODUTO
+alter ANO_MODELO_VEICULO position 41;
+
+alter table TBPRODUTO
+alter ANO_FABRICACAO_VEICULO position 42;
+
+alter table TBPRODUTO
+alter RENAVAM_VEICULO position 43;
+
+alter table TBPRODUTO
+alter CHASSI_VEICULO position 44;
+
+alter table TBPRODUTO
+alter KILOMETRAGEM_VEICULO position 45;
+
+alter table TBPRODUTO
+alter SITUACAO_ATUAL_VEICULO position 46;
+
+alter table TBPRODUTO
+alter SITUACAO_HISTORICO_VEICULO position 47;
+
+alter table TBPRODUTO
+alter PERCENTUAL_REDUCAO_BC position 48;
+
+
+
+
+/*------ SYSDBA 23/05/2013 16:41:26 --------*/
+
+ALTER TABLE TBPRODUTO
+    ADD PRECO_SUGERIDO DMN_MONEY;
+
+COMMENT ON COLUMN TBPRODUTO.PRECO IS
+'Preco Venda.';
+
+COMMENT ON COLUMN TBPRODUTO.PRECO_SUGERIDO IS
+'Preco Venda (Sugerido).';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter PERCENTUAL_MARCKUP position 17;
+
+alter table TBPRODUTO
+alter PRECO_SUGERIDO position 18;
+
+alter table TBPRODUTO
+alter CODEMP position 19;
+
+alter table TBPRODUTO
+alter CODSECAO position 20;
+
+alter table TBPRODUTO
+alter CODORIGEM position 21;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 22;
+
+alter table TBPRODUTO
+alter CST position 23;
+
+alter table TBPRODUTO
+alter CSOSN position 24;
+
+alter table TBPRODUTO
+alter CST_PIS position 25;
+
+alter table TBPRODUTO
+alter CST_COFINS position 26;
+
+alter table TBPRODUTO
+alter NCM_SH position 27;
+
+alter table TBPRODUTO
+alter CODCFOP position 28;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 29;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 30;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 31;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 32;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 33;
+
+alter table TBPRODUTO
+alter ALIQUOTA_PIS position 34;
+
+alter table TBPRODUTO
+alter ALIQUOTA_COFINS position 35;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 36;
+
+alter table TBPRODUTO
+alter RESERVA position 37;
+
+alter table TBPRODUTO
+alter PRODUTO_NOVO position 38;
+
+alter table TBPRODUTO
+alter COR_VEICULO position 39;
+
+alter table TBPRODUTO
+alter COMBUSTIVEL_VEICULO position 40;
+
+alter table TBPRODUTO
+alter TIPO_VEICULO position 41;
+
+alter table TBPRODUTO
+alter ANO_MODELO_VEICULO position 42;
+
+alter table TBPRODUTO
+alter ANO_FABRICACAO_VEICULO position 43;
+
+alter table TBPRODUTO
+alter RENAVAM_VEICULO position 44;
+
+alter table TBPRODUTO
+alter CHASSI_VEICULO position 45;
+
+alter table TBPRODUTO
+alter KILOMETRAGEM_VEICULO position 46;
+
+alter table TBPRODUTO
+alter SITUACAO_ATUAL_VEICULO position 47;
+
+alter table TBPRODUTO
+alter SITUACAO_HISTORICO_VEICULO position 48;
+
+alter table TBPRODUTO
+alter PERCENTUAL_REDUCAO_BC position 49;
+
+
+/*------ SYSDBA 23/05/2013 16:54:07 --------*/
+
+Update TBPRODUTO p Set
+    p.percentual_marckup = cast( (((p.preco - p.customedio) / p.customedio) * 100) as numeric(18,3) )
+  , p.preco_sugerido     = cast( (p.customedio + (p.customedio * ((p.preco - p.customedio) / p.customedio))) as numeric(15,2) )
+where (p.percentual_marckup is null)
+  and (p.preco_sugerido is null)
+  and (coalesce(p.customedio, 0) > 0)
+;
+/*------ SYSDBA 23/05/2013 16:54:11 --------*/
+
+COMMIT WORK;
+
+/*------ SYSDBA 23/05/2013 16:54:41 --------*/
+
+--update TBVENDAS v set v.nfe_modalidade_frete = 3 where v.nfe_modalidade_frete is null
+/*
+Select
+    p.codigo
+  , p.descri
+  , p.customedio
+  , p.preco
+  , p.percentual_marckup
+  , p.preco_sugerido
+  , cast( (((p.preco - p.customedio) / p.customedio) * 100) as numeric(18,3) ) as tmp_percentual_marckup
+  , cast( (p.customedio + (p.customedio * ((p.preco - p.customedio) / p.customedio))) as numeric(15,2) ) as tmp_preco_sugerido
+from TBPRODUTO p
+--where (p.percentual_marckup is null)
+--  and (p.preco_sugerido is null)
+*/
+
+Update TBPRODUTO p Set
+    p.percentual_marckup = cast( (((p.preco - p.customedio) / p.customedio) * 100) as numeric(18,3) )
+  , p.preco_sugerido     = cast( (p.customedio + (p.customedio * ((p.preco - p.customedio) / p.customedio))) as numeric(15,2) )
+where (p.percentual_marckup is null)
+  and (p.preco_sugerido is null)
+  and (coalesce(p.customedio, 0) > 0);
+/*------ SYSDBA 23/05/2013 16:54:43 --------*/
+
+COMMIT WORK;
