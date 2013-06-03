@@ -4,36 +4,44 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, QRCtrls, QuickRpt, ExtCtrls;
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls, DB, IBCustomDataSet, IBQuery,
+  StdCtrls, Buttons, ComCtrls;
 
 type
   TfrmRelVendasFormPag = class(TForm)
-    qckrpVendas: TQuickRep;
+    qckrpGrpFormPag: TQuickRep;
     TitleBand1: TQRBand;
     lblNomeSistema: TQRLabel;
     QRSysData1: TQRSysData;
     qrlblPeriodo: TQRLabel;
     QRLabel2: TQRLabel;
-    QRDBText5: TQRDBText;
     ColumnHeaderBand1: TQRBand;
-    QRLabel4: TQRLabel;
     QRLabel5: TQRLabel;
-    qrlblCliMot: TQRLabel;
     QRLabel7: TQRLabel;
-    QRLabel3: TQRLabel;
     DetailBand1: TQRBand;
-    QRDBText1: TQRDBText;
-    QRDBText2: TQRDBText;
     QRDBText6: TQRDBText;
     QRDBText10: TQRDBText;
-    QRDBText3: TQRDBText;
     PageFooterBand1: TQRBand;
     QRLabel11: TQRLabel;
     QRExpr1: TQRExpr;
     QRSysData3: TQRSysData;
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
+    ibqryGrpFormPag: TIBQuery;
+    ibqryGrpFormPagDESCRI: TIBStringField;
+    ibqryGrpFormPagSUM: TIBBCDField;
+    Panel1: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    dttmpcIni: TDateTimePicker;
+    dttmpcFim: TDateTimePicker;
+    QRDBText4: TQRDBText;
+    ibqryEmpresa: TIBQuery;
     procedure FormCreate(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,13 +54,31 @@ var
 implementation
 
 uses
-  UFuncoes;
+  UFuncoes, UDMBusiness;
 
 {$R *.dfm}
 
 procedure TfrmRelVendasFormPag.FormCreate(Sender: TObject);
 begin
   lblNomeSistema.Caption := GetProductName;
+  dttmpcIni.Date := IncMonth(Date, -1);
+  dttmpcFim.Date := Date;
+end;
+
+procedure TfrmRelVendasFormPag.BitBtn3Click(Sender: TObject);
+begin
+ with ibqryGrpFormPag do
+ begin
+   Close;
+   ParamByName('dtini').Value := DateToStr(dttmpcIni.Date);
+   ParamByName('dtfim').Value := DateToStr(dttmpcFim.Date);
+   Open;
+   qrlblPeriodo.Caption:= 'PERÍODO: '+ DateToStr(dttmpcIni.Date) +' a '+ DateToStr(dttmpcFim.date);
+   if IsEmpty then
+    MessageDlg ('Relatório Sem Registros!',mtWarning, [mbOk],0)
+   else qckrpGrpFormPag.Preview;
+ end;
+         
 end;
 
 end.
