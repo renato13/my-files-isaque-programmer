@@ -1,11 +1,12 @@
 object DMBusiness: TDMBusiness
   OldCreateOrder = True
   OnCreate = DataModuleCreate
-  Left = 718
-  Top = 175
+  Left = 292
+  Top = 188
   Height = 426
   Width = 706
   object ibdtbsBusiness: TIBDatabase
+    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -13,10 +14,14 @@ object DMBusiness: TDMBusiness
       'lc_ctype=ISO8859_2')
     LoginPrompt = False
     DefaultTransaction = ibtrnsctnBusiness
+    IdleTimer = 0
+    SQLDialect = 3
+    TraceFlags = []
     Left = 40
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
+    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -34,6 +39,8 @@ object DMBusiness: TDMBusiness
   object ibdtstAjustEstoq: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBAJUSTESTOQ'
       'where'
@@ -145,6 +152,8 @@ object DMBusiness: TDMBusiness
   object ibdtstProduto: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SelectSQL.Strings = (
       'select COD, DESCRI, QTDE from TBPRODUTO'
       'order by cod')
@@ -154,6 +163,8 @@ object DMBusiness: TDMBusiness
   object ibdtstFornec: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SelectSQL.Strings = (
       'select CODFORN, NOMEFORN from TBFORNECEDOR'
       'order by NOMEFORN')
@@ -163,12 +174,16 @@ object DMBusiness: TDMBusiness
   object qryBusca: TIBQuery
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     Left = 232
     Top = 56
   end
   object ibdtstUsers: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBUSERS'
       'where'
@@ -264,6 +279,8 @@ object DMBusiness: TDMBusiness
   object qryCaixaAberto: TIBDataSet
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     DeleteSQL.Strings = (
       'delete from TBUSERS'
       'where'
@@ -378,6 +395,7 @@ object DMBusiness: TDMBusiness
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
     ForcedRefresh = True
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
