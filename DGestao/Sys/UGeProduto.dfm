@@ -184,13 +184,13 @@ inherited frmGeProduto: TfrmGeProduto
         end
         object ShpLucroZerado: TShape [3]
           Left = 288
-          Top = 8
-          Width = 17
-          Height = 17
+          Top = 9
+          Width = 15
+          Height = 15
           Brush.Color = clYellow
         end
         object Label1: TLabel [4]
-          Left = 309
+          Left = 308
           Top = 10
           Width = 73
           Height = 13
@@ -205,13 +205,13 @@ inherited frmGeProduto: TfrmGeProduto
         end
         object ShpLucroNegativo: TShape [5]
           Left = 288
-          Top = 26
-          Width = 17
-          Height = 17
-          Brush.Color = clRed
+          Top = 27
+          Width = 15
+          Height = 15
+          Brush.Color = 7434751
         end
         object Label2: TLabel [6]
-          Left = 309
+          Left = 308
           Top = 28
           Width = 46
           Height = 13

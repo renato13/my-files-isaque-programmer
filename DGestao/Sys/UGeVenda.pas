@@ -213,7 +213,6 @@ type
     qryTotalComprasAbertasVALOR_COMPRAS_ABERTAS: TIBBCDField;
     qryTotalComprasAbertasVALOR_LIMITE_DISPONIVEL: TIBBCDField;
     cdsTotalComprasAbertas: TDataSource;
-    Label1: TLabel;
     lblVendaCancelada: TLabel;
     lblVendaAberta: TLabel;
     IbDtstTabelaBLOQUEADO: TSmallintField;
@@ -317,6 +316,11 @@ type
     cdsVendaVolumePESO_LIQUIDO: TIBBCDField;
     dbgVolumes: TDBGrid;
     RdgStatusVenda: TRadioGroup;
+    IbDtstTabelaLUCRO_CALCULADO: TIBBCDField;
+    ShpLucroZerado: TShape;
+    Label3: TLabel;
+    ShpLucroNegativo: TShape;
+    Label4: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -412,6 +416,9 @@ uses
   UGeGerarBoletos, UGeEfetuarPagtoREC, UGeVendaFormaPagto, UConstantesDGE, UGeVendaTransporte, UGeVendaConfirmaTitulos;
 
 {$R *.dfm}
+
+const
+ COLUMN_LUCRO = 7;
 
 procedure MostrarControleVendas(const AOwner : TComponent);
 var
@@ -1677,7 +1684,10 @@ begin
         btbtnGerarNFe.Visible    := False;
         btbtnCancelarVND.Visible := False;
       end;
-  end
+  end;
+
+  dbgDados.Columns[COLUMN_LUCRO].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
+    FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2, FUNCTION_USER_ID_SUPORTE_TI, FUNCTION_USER_ID_SYSTEM_ADM] );
 end;
 
 procedure TfrmGeVenda.nmImprimirVendaClick(Sender: TObject);
@@ -1801,7 +1811,17 @@ begin
     // Destacar produtos em Promocao
     if ( IbDtstTabelaSTATUS.AsInteger = STATUS_VND_CAN ) then
       dbgDados.Canvas.Font.Color := lblVendaCancelada.Font.Color;
-      
+
+    // Destacar alerta de lucros
+    if (not IbDtstTabelaLUCRO_CALCULADO.IsNull) then
+    begin
+      if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger = 0 ) then
+        dbgDados.Canvas.Brush.Color := ShpLucroZerado.Brush.Color
+      else
+      if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger < 0 ) then
+        dbgDados.Canvas.Brush.Color := ShpLucroNegativo.Brush.Color;
+    end;
+
     dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
   end
   else

@@ -246,6 +246,10 @@ uses UDMBusiness, UGeSecaoProduto, UGeGrupoProduto, UGeUnidade,
 
 {$R *.dfm}
 
+const
+  COLUMN_LUCRO = 12;
+  COLUMN_GRUPO = 13;
+
 procedure MostrarTabelaProdutos(const AOwner : TComponent; const TipoAliquota : TAliquota);
 var
   frm : TfrmGeProduto;
@@ -626,11 +630,11 @@ begin
     IbDtstTabelaREFERENCIA.DisplayLabel := 'Placa';
   end;
 
-  IbDtstTabelaCOR_VEICULO.Required         := tbsEspecificacaoVeiculo.TabVisible;
-  IbDtstTabelaCOMBUSTIVEL_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
-  IbDtstTabelaTIPO_VEICULO.Required    := tbsEspecificacaoVeiculo.TabVisible;
-  IbDtstTabelaRENAVAM_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
-  IbDtstTabelaCHASSI_VEICULO.Required  := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaCOR_VEICULO.Required            := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaCOMBUSTIVEL_VEICULO.Required    := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaTIPO_VEICULO.Required           := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaRENAVAM_VEICULO.Required        := tbsEspecificacaoVeiculo.TabVisible;
+  IbDtstTabelaCHASSI_VEICULO.Required         := tbsEspecificacaoVeiculo.TabVisible;
   IbDtstTabelaKILOMETRAGEM_VEICULO.Required   := tbsEspecificacaoVeiculo.TabVisible;
   IbDtstTabelaANO_MODELO_VEICULO.Required     := tbsEspecificacaoVeiculo.TabVisible;
   IbDtstTabelaANO_FABRICACAO_VEICULO.Required := tbsEspecificacaoVeiculo.TabVisible;
@@ -644,7 +648,7 @@ begin
     Columns[7].Visible  := tbsEspecificacaoVeiculo.TabVisible;
     Columns[8].Visible  := tbsEspecificacaoVeiculo.TabVisible;
     Columns[9].Visible  := not tbsEspecificacaoVeiculo.TabVisible;
-    Columns[12].Visible := not tbsEspecificacaoVeiculo.TabVisible;
+    Columns[COLUMN_GRUPO].Visible := not tbsEspecificacaoVeiculo.TabVisible;
   end;
 end;
 
@@ -660,20 +664,44 @@ begin
   inherited;
 
   case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
-    1 : EvUA.UserID := 1;   // Diretoria
-    2 : EvUA.UserID := 2;   // Gerente de Vendas
-    3 : EvUA.UserID := 3;   // Gerente Financeiro
-    4 : EvUA.UserID := 4;   // Vendedor
-    5 : EvUA.UserID := 5;   // Gerente ADM
-    6 : EvUA.UserID := 6;   // Caixa
-    7 : EvUA.UserID := 7;   // Aux.Financeiro 1
-    8 : EvUA.UserID := 8;   // Aux.Financeiro 2
-    9 : EvUA.UserID := 9;   // Supervisor Caixa
-    10: EvUA.UserID := 10;  // Estoquista
-    11: EvUA.UserID := 11;  // TI
-    12: EvUA.UserID := 12;  // Masterdados-Supervisor
-  else
-    ShowWarning('Falta cruzar nova função com EvUserID!');
+    FUNCTION_USER_ID_DIRETORIA:
+      EvUA.UserID := FUNCTION_USER_ID_DIRETORIA;   // Diretoria
+
+    FUNCTION_USER_ID_GERENTE_VND:
+      EvUA.UserID := FUNCTION_USER_ID_GERENTE_VND; // Gerente de Vendas
+
+    FUNCTION_USER_ID_GERENTE_FIN:
+      EvUA.UserID := FUNCTION_USER_ID_GERENTE_FIN; // Gerente Financeiro
+
+    FUNCTION_USER_ID_VENDEDOR:
+      EvUA.UserID := FUNCTION_USER_ID_VENDEDOR;    // Vendedor
+      
+    FUNCTION_USER_ID_GERENTE_ADM:
+      EvUA.UserID := FUNCTION_USER_ID_GERENTE_ADM; // Gerente ADM
+
+    FUNCTION_USER_ID_CAIXA:
+      EvUA.UserID := FUNCTION_USER_ID_CAIXA;       // Caixa
+
+    FUNCTION_USER_ID_AUX_FINANC1:
+      EvUA.UserID := FUNCTION_USER_ID_AUX_FINANC1; // Aux.Financeiro 1
+
+    FUNCTION_USER_ID_AUX_FINANC2:
+      EvUA.UserID := FUNCTION_USER_ID_AUX_FINANC2; // Aux.Financeiro 2
+      
+    FUNCTION_USER_ID_SUPERV_CX:
+      EvUA.UserID := FUNCTION_USER_ID_SUPERV_CX;   // Supervisor Caixa
+
+    FUNCTION_USER_ID_ESTOQUISTA:
+      EvUA.UserID := FUNCTION_USER_ID_ESTOQUISTA;  // Estoquista
+      
+    FUNCTION_USER_ID_SUPORTE_TI:
+      EvUA.UserID := FUNCTION_USER_ID_SUPORTE_TI;  // TI
+
+    FUNCTION_USER_ID_SYSTEM_ADM:
+      EvUA.UserID := FUNCTION_USER_ID_SYSTEM_ADM;  // Masterdados-Supervisor
+      
+    else
+      ShowWarning('Falta cruzar nova função com EvUserID!');
   end;
 
   if pgcGuias.ActivePage = tbsTabela then
@@ -681,6 +709,9 @@ begin
     FiltarDados;
     edtFiltrar.SetFocus;
   end;
+
+  dbgDados.Columns[COLUMN_LUCRO].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
+    FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2, FUNCTION_USER_ID_SUPORTE_TI, FUNCTION_USER_ID_SYSTEM_ADM] );
 end;
 
 procedure TfrmGeProduto.dbgDadosDrawColumnCell(Sender: TObject;
@@ -696,11 +727,15 @@ begin
   if ( IbDtstTabelaPRECO_PROMOCAO.AsCurrency > 0 ) then
     dbgDados.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
     
-  if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger = 0 ) then
-    dbgDados.Canvas.Brush.Color := ShpLucroZerado.Brush.Color
-  else
-  if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger < 0 ) then
-    dbgDados.Canvas.Brush.Color := ShpLucroNegativo.Brush.Color;
+  // Destacar alerta de lucros
+  if (not IbDtstTabelaLUCRO_CALCULADO.IsNull) then
+  begin
+    if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger = 0 ) then
+      dbgDados.Canvas.Brush.Color := ShpLucroZerado.Brush.Color
+    else
+    if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger < 0 ) then
+      dbgDados.Canvas.Brush.Color := ShpLucroNegativo.Brush.Color;
+  end;
 
   dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
 end;
