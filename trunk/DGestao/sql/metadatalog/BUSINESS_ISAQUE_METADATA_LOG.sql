@@ -2383,3 +2383,12 @@ where (p.percentual_marckup is null)
 /*------ SYSDBA 23/05/2013 16:54:43 --------*/
 
 COMMIT WORK;
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 65, column 23.
+>.
+
+*/

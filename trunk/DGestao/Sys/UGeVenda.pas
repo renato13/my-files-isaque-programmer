@@ -316,6 +316,7 @@ type
     cdsVendaVolumePESO_BRUTO: TIBBCDField;
     cdsVendaVolumePESO_LIQUIDO: TIBBCDField;
     dbgVolumes: TDBGrid;
+    RdgStatusVenda: TRadioGroup;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -488,6 +489,8 @@ begin
   // Configurar Legendas de acordo com o segmento
   btnConsultarProduto.Caption := StrDescricaoProduto;
   btnConsultarProduto.Hint    := 'Consultar ' + StrDescricaoProduto;
+
+  RdgStatusVenda.Controls[2].Enabled := False;
 end;
 
 procedure TfrmGeVenda.btnFiltrarClick(Sender: TObject);
@@ -495,6 +498,9 @@ begin
   WhereAdditional :=  'cast(v.dtvenda as date) between ' +
                         QuotedStr( FormatDateTime('yyyy-mm-dd', e1Data.Date) ) + ' and ' +
                         QuotedStr( FormatDateTime('yyyy-mm-dd', e2Data.Date) );
+  if ( RdgStatusVenda.ItemIndex > 0 ) then
+    WhereAdditional := WhereAdditional + ' and (v.status = ' + IntToStr(RdgStatusVenda.ItemIndex) + ')';
+
   inherited;
 end;
 
@@ -1215,6 +1221,8 @@ begin
     AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
 
     ZerarFormaPagto;
+
+    RdgStatusVenda.ItemIndex := 0;
   end;
 end;
 
@@ -1491,6 +1499,8 @@ begin
 
     if ( CxContaCorrente > 0 ) then
       GerarSaldoContaCorrente(CxContaCorrente, GetDateDB);
+
+    RdgStatusVenda.ItemIndex := 0;
   end;
 end;
 
