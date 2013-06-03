@@ -1,9 +1,8 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 305
-  Top = 102
+  Left = 382
+  Top = 114
   Width = 977
   Height = 648
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -24,7 +23,6 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
@@ -130,6 +128,13 @@ inherited frmGeProduto: TfrmGeProduto
           end
           item
             Expanded = False
+            FieldName = 'LUCRO_CALCULADO'
+            Title.Caption = '% Lucro'
+            Width = 55
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'DESCRICAO_GRUPO'
             Visible = True
           end>
@@ -177,24 +182,67 @@ inherited frmGeProduto: TfrmGeProduto
           ParentFont = False
           Visible = False
         end
+        object ShpLucroZerado: TShape [3]
+          Left = 288
+          Top = 8
+          Width = 17
+          Height = 17
+          Brush.Color = clYellow
+        end
+        object Label1: TLabel [4]
+          Left = 309
+          Top = 10
+          Width = 73
+          Height = 13
+          Caption = 'Lucro zerado'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object ShpLucroNegativo: TShape [5]
+          Left = 288
+          Top = 26
+          Width = 17
+          Height = 17
+          Brush.Color = clRed
+        end
+        object Label2: TLabel [6]
+          Left = 309
+          Top = 28
+          Width = 46
+          Height = 13
+          Caption = 'Preju'#237'zo'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
         inherited grpBxFiltro: TGroupBox
-          Left = 584
-          Width = 365
+          Left = 392
+          Width = 557
           Caption = 'Pesquisar    '
           DesignSize = (
-            365
+            557
             54)
           inherited lbltFiltrar: TLabel
             Width = 48
             Caption = 'Produto:'
+            Visible = False
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 320
+            Left = 512
           end
           inherited edtFiltrar: TEdit
-            Left = 68
-            Width = 247
-            TabOrder = 1
+            Left = 224
+            Width = 283
+            TabOrder = 2
           end
           object chkProdutoComEstoque: TCheckBox
             Left = 68
@@ -207,6 +255,22 @@ inherited frmGeProduto: TfrmGeProduto
             State = cbChecked
             TabOrder = 0
             OnClick = chkProdutoComEstoqueClick
+          end
+          object CmbBxFiltrarTipo: TComboBox
+            Left = 8
+            Top = 21
+            Width = 217
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            ItemIndex = 0
+            TabOrder = 1
+            Text = 'por Produto (C'#243'digo / Descri'#231#227'o)'
+            Items.Strings = (
+              'por Produto (C'#243'digo / Descri'#231#227'o)'
+              'por Refer'#234'ncia'
+              'por Fabricante'
+              'por Grupo')
           end
         end
       end
@@ -757,6 +821,20 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Style = [fsBold]
             ParentFont = False
           end
+          object lblLucroCalculado: TLabel
+            Left = 616
+            Top = 8
+            Width = 107
+            Height = 13
+            Caption = '% Lucro Calculado:'
+            FocusControl = dbLucroCalculado
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
           object dbCusto: TDBEdit
             Left = 256
             Top = 24
@@ -815,7 +893,7 @@ inherited frmGeProduto: TfrmGeProduto
             Caption = 'Produto Novo'
             DataField = 'PRODUTO_NOVO'
             DataSource = DtSrcTabela
-            TabOrder = 5
+            TabOrder = 6
             ValueChecked = 'True'
             ValueUnchecked = 'False'
           end
@@ -851,6 +929,23 @@ inherited frmGeProduto: TfrmGeProduto
             ParentFont = False
             ReadOnly = True
             TabOrder = 4
+          end
+          object dbLucroCalculado: TDBEdit
+            Left = 616
+            Top = 24
+            Width = 113
+            Height = 21
+            Color = clMoneyGreen
+            DataField = 'LUCRO_CALCULADO'
+            DataSource = DtSrcTabela
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            ReadOnly = True
+            TabOrder = 5
           end
         end
         object tbsTributacao: TTabSheet
@@ -1769,6 +1864,10 @@ inherited frmGeProduto: TfrmGeProduto
       
         '  , coalesce(p.Ano_fabricacao_veiculo || '#39'/'#39' || p.Ano_modelo_vei' +
         'culo, '#39#39') as modelo_fabricacao'
+      '  , Case when p.Customedio > 0'
+      '      then ((p.Preco / p.Customedio) - 1) * 100'
+      '      else 0.0'
+      '    end Lucro_Calculado'
       'from TBPRODUTO p'
       '  left join TBGRUPOPROD g on (g.Cod = p.Codgrupo)'
       '  left join TBSECAOPROD s on (s.Scp_cod = p.Codsecao)'
@@ -2128,11 +2227,13 @@ inherited frmGeProduto: TfrmGeProduto
     object IbDtstTabelaCFOP_DESCRICAO: TIBStringField
       FieldName = 'CFOP_DESCRICAO'
       Origin = 'TBCFOP.CFOP_DESCRICAO'
+      ProviderFlags = []
       Size = 250
     end
     object IbDtstTabelaCFOP_ESPECIFICACAO: TMemoField
       FieldName = 'CFOP_ESPECIFICACAO'
       Origin = 'TBCFOP.CFOP_ESPECIFICACAO'
+      ProviderFlags = []
       BlobType = ftMemo
       Size = 8
     end
@@ -2140,18 +2241,28 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'Cor'
       FieldName = 'DESCRICAO_COR'
       Origin = 'RENAVAM_COR.DESCRICAO'
+      ProviderFlags = []
       Size = 50
     end
     object IbDtstTabelaDESCRICAO_COMBUSTIVEL: TIBStringField
       DisplayLabel = 'Combust'#237'vel'
       FieldName = 'DESCRICAO_COMBUSTIVEL'
       Origin = 'RENAVAM_COBUSTIVEL.DESCRICAO'
+      ProviderFlags = []
       Size = 100
     end
     object IbDtstTabelaMODELO_FABRICACAO: TIBStringField
       DisplayLabel = 'Ano/Modelo'
       FieldName = 'MODELO_FABRICACAO'
+      ProviderFlags = []
       Size = 13
+    end
+    object IbDtstTabelaLUCRO_CALCULADO: TIBBCDField
+      FieldName = 'LUCRO_CALCULADO'
+      ProviderFlags = []
+      DisplayFormat = ',0.00##'
+      Precision = 18
+      Size = 4
     end
   end
   inherited DtSrcTabela: TDataSource
@@ -2335,8 +2446,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 296
   end
@@ -2347,8 +2456,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblOrigem: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'ORP_COD'
@@ -2385,8 +2492,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoNM: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2427,8 +2532,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2465,8 +2568,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoSN: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2505,8 +2606,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2529,8 +2628,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCombustivel: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2555,8 +2652,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTipoVeiculo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2590,8 +2685,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaPIS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -2608,8 +2701,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaCOFINS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (

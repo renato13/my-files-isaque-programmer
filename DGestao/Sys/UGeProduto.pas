@@ -192,6 +192,14 @@ type
     dbPrecoVendaSugestao: TDBEdit;
     IbDtstTabelaPRECO_SUGERIDO: TIBBCDField;
     IbDtstTabelaPERCENTUAL_MARCKUP: TIBBCDField;
+    CmbBxFiltrarTipo: TComboBox;
+    lblLucroCalculado: TLabel;
+    dbLucroCalculado: TDBEdit;
+    IbDtstTabelaLUCRO_CALCULADO: TIBBCDField;
+    ShpLucroZerado: TShape;
+    Label1: TLabel;
+    ShpLucroNegativo: TShape;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -216,6 +224,7 @@ type
     fAliquota : TAliquota;
   public
     { Public declarations }
+    procedure FiltarDados(const iTipoPesquisa : Integer); overload;
   end;
 
 var
@@ -687,6 +696,12 @@ begin
   if ( IbDtstTabelaPRECO_PROMOCAO.AsCurrency > 0 ) then
     dbgDados.Canvas.Font.Color := lblProdutoPromocao.Font.Color;
     
+  if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger = 0 ) then
+    dbgDados.Canvas.Brush.Color := ShpLucroZerado.Brush.Color
+  else
+  if ( IbDtstTabelaLUCRO_CALCULADO.AsInteger < 0 ) then
+    dbgDados.Canvas.Brush.Color := ShpLucroNegativo.Brush.Color;
+
   dbgDados.DefaultDrawDataCell(Rect, dbgDados.Columns[DataCol].Field, State);
 end;
 
@@ -745,8 +760,8 @@ begin
   else
     WhereAdditional := EmptyStr;  
 
-  inherited;
-
+  // inherited;
+  FiltarDados(CmbBxFiltrarTipo.ItemIndex);
 end;
 
 procedure TfrmGeProduto.DtSrcTabelaDataChange(Sender: TObject;
@@ -756,6 +771,90 @@ begin
     if ( Field = IbDtstTabelaPERCENTUAL_MARCKUP ) then
       IbDtstTabelaPRECO_SUGERIDO.AsCurrency := IbDtstTabelaCUSTOMEDIO.AsCurrency +
         (IbDtstTabelaCUSTOMEDIO.AsCurrency * IbDtstTabelaPERCENTUAL_MARCKUP.AsCurrency / 100);
+end;
+
+procedure TfrmGeProduto.FiltarDados(const iTipoPesquisa : Integer);
+begin
+  try
+
+    if (Trim(CampoCodigo) = EmptyStr) or ((Trim(CampoDescricao) = EmptyStr)) then
+    begin
+      ShowWarning('O nome do campo chave e/ou de descrição não foram informados');
+      Abort;
+    end;
+
+    with IbDtstTabela, SelectSQL do
+    begin
+      if ( Trim(CampoOrdenacao) = EmptyStr ) then
+        CampoOrdenacao := CampoDescricao;
+
+      Close;
+      Clear;
+      AddStrings( SQLTabela );
+
+      if ( Trim(edtFiltrar.Text) <> EmptyStr ) then
+      begin
+
+        Case iTipoPesquisa of
+          // Por Código, Descrição
+          0:
+            if ( StrToIntDef(Trim(edtFiltrar.Text), 0) > 0 ) then
+              Add( 'where ' + CampoCodigo +  ' = ' + Trim(edtFiltrar.Text) )
+            else
+              Add( 'where (upper(' + CampoDescricao +  ') like ' + QuotedStr('%' + UpperCase(Trim(edtFiltrar.Text)) + '%') +
+                   '    or upper(' + CampoDescricao +  ') like ' + QuotedStr('%' + UpperCase(FuncoesString.StrRemoveAllAccents(Trim(edtFiltrar.Text))) + '%') + ')');
+
+          // Por Referência
+          1:
+            Add( 'where p.Referencia = ' + QuotedStr(Trim(edtFiltrar.Text)) );
+
+          // Por Fabricante
+          2:
+            if ( StrToIntDef(Trim(edtFiltrar.Text), 0) > 0 ) then
+              Add( 'where p.Codfabricante = ' + Trim(edtFiltrar.Text) )
+            else
+              Add( 'where (upper(f.Nome) like ' + QuotedStr('%' + UpperCase(Trim(edtFiltrar.Text)) + '%') + ')' );
+
+          // Por Grupo
+          3:
+            if ( StrToIntDef(Trim(edtFiltrar.Text), 0) > 0 ) then
+              Add( 'where p.Codgrupo = ' + Trim(edtFiltrar.Text) )
+            else
+              Add( 'where (upper(g.Descri) like ' + QuotedStr('%' + UpperCase(Trim(edtFiltrar.Text)) + '%') + ')' );
+        end;
+
+      end;
+
+      if ( WhereAdditional <> EmptyStr ) then
+        if ( Pos('where', SelectSQL.Text) > 0 ) then
+          Add( '  and (' + WhereAdditional + ')' )
+        else
+          Add( 'where (' + WhereAdditional + ')' );
+
+      Add( 'order by ' + CampoOrdenacao );
+
+      Open;
+
+      try
+      
+        if ( not IsEmpty ) then
+          dbgDados.SetFocus
+        else
+        begin
+          ShowWarning('Não existe registros na tabela para este tipo de pesquisa');
+
+          edtFiltrar.SetFocus;
+          edtFiltrar.SelectAll;
+        end;
+
+      except
+      end;
+
+    end;
+  except
+    On E : Exception do
+      ShowWarning('Erro ao tentar filtrar registros na tabela.' + #13#13 + E.Message + #13#13 + 'Script:' + #13 + IbDtstTabela.SelectSQL.Text);
+  end;
 end;
 
 end.

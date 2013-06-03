@@ -296,16 +296,15 @@ inherited frmGeVenda: TfrmGeVenda
   inherited pgcGuias: TPageControl
     Width = 1099
     Height = 643
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
-        Top = 548
+        Top = 540
         Width = 1091
       end
       inherited dbgDados: TDBGrid
         Width = 1091
-        Height = 548
+        Height = 540
         Columns = <
           item
             Expanded = False
@@ -389,8 +388,9 @@ inherited frmGeVenda: TfrmGeVenda
           end>
       end
       inherited pnlFiltros: TPanel
-        Top = 552
+        Top = 544
         Width = 1091
+        Height = 70
         object Label1: TLabel [0]
           Left = 2
           Top = 44
@@ -432,35 +432,40 @@ inherited frmGeVenda: TfrmGeVenda
           ParentFont = False
         end
         inherited grpBxFiltro: TGroupBox
-          Left = 496
-          Width = 591
+          Left = 472
+          Width = 615
+          Height = 62
+          TabOrder = 1
           DesignSize = (
-            591
-            54)
+            615
+            62)
           inherited lbltFiltrar: TLabel
             Left = 294
-            Width = 38
-            Caption = 'Venda:'
+            Top = 27
+            Width = 89
+            Caption = 'Venda / Cliente:'
           end
           inherited btnFiltrar: TSpeedButton
-            Left = 546
+            Left = 570
+            Height = 35
           end
           object lblData: TLabel [2]
             Left = 14
-            Top = 25
+            Top = 27
             Width = 49
             Height = 13
             Caption = 'Emiss'#227'o:'
             FocusControl = e1Data
           end
           inherited edtFiltrar: TEdit
-            Left = 336
-            Width = 206
+            Left = 392
+            Top = 23
+            Width = 174
             TabOrder = 2
           end
           object e1Data: TDateEdit
             Left = 72
-            Top = 21
+            Top = 23
             Width = 102
             Height = 21
             GlyphKind = gkCustom
@@ -515,13 +520,31 @@ inherited frmGeVenda: TfrmGeVenda
           end
           object e2Data: TDateEdit
             Left = 184
-            Top = 21
+            Top = 23
             Width = 104
             Height = 21
             NumGlyphs = 2
             TabOrder = 1
             Text = '01/01/2012'
           end
+        end
+        object RdgStatusVenda: TRadioGroup
+          Left = 216
+          Top = 4
+          Width = 256
+          Height = 62
+          Align = alRight
+          Caption = '&Status venda'
+          Columns = 2
+          ItemIndex = 0
+          Items.Strings = (
+            '(Todas)'
+            'Atendimento/Aberta'
+            '--'
+            'Finalizada'
+            'NF-e emitida'
+            'Cancelada')
+          TabOrder = 0
         end
       end
     end
