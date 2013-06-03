@@ -3,8 +3,8 @@ object frmRelVendas: TfrmRelVendas
   Top = 182
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio de Vendas'
-  ClientHeight = 221
-  ClientWidth = 269
+  ClientHeight = 479
+  ClientWidth = 755
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -27,7 +27,7 @@ object frmRelVendas: TfrmRelVendas
   object Panel1: TPanel
     Left = 0
     Top = 180
-    Width = 269
+    Width = 755
     Height = 48
     Align = alTop
     BevelOuter = bvLowered
@@ -134,7 +134,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 269
+    Width = 755
     Height = 60
     Align = alTop
     Caption = 'Per'#237'odo do Faturamento'
@@ -1079,7 +1079,7 @@ object frmRelVendas: TfrmRelVendas
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 60
-    Width = 269
+    Width = 755
     Height = 60
     Align = alTop
     Caption = 'Status'
@@ -1114,7 +1114,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox2: TGroupBox
     Left = 0
     Top = 120
-    Width = 269
+    Width = 755
     Height = 60
     Align = alTop
     Caption = 'Vendedor'
