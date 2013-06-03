@@ -2392,3 +2392,282 @@ Token unknown - line 65, column 23.
 >.
 
 */
+
+
+
+/*------ SYSDBA 03/06/2013 17:52:11 --------*/
+
+ALTER TABLE TBVENDAS
+    ADD TOTALCUSTO DMN_MONEY;
+
+COMMENT ON COLUMN TBVENDAS.TOTALCUSTO IS
+'Valor Total Custo (Corresponde a totalizacao dos custos dos itens da venda).';
+
+alter table TBVENDAS
+alter ANO position 1;
+
+alter table TBVENDAS
+alter CODCONTROL position 2;
+
+alter table TBVENDAS
+alter CODEMP position 3;
+
+alter table TBVENDAS
+alter CODCLI position 4;
+
+alter table TBVENDAS
+alter DTVENDA position 5;
+
+alter table TBVENDAS
+alter STATUS position 6;
+
+alter table TBVENDAS
+alter TOTALVENDA_BRUTA position 7;
+
+alter table TBVENDAS
+alter DESCONTO position 8;
+
+alter table TBVENDAS
+alter TOTALVENDA position 9;
+
+alter table TBVENDAS
+alter TOTALCUSTO position 10;
+
+alter table TBVENDAS
+alter DTFINALIZACAO_VENDA position 11;
+
+alter table TBVENDAS
+alter OBS position 12;
+
+alter table TBVENDAS
+alter FORMAPAG position 13;
+
+alter table TBVENDAS
+alter FATDIAS position 14;
+
+alter table TBVENDAS
+alter SERIE position 15;
+
+alter table TBVENDAS
+alter NFE position 16;
+
+alter table TBVENDAS
+alter DATAEMISSAO position 17;
+
+alter table TBVENDAS
+alter HORAEMISSAO position 18;
+
+alter table TBVENDAS
+alter CFOP position 19;
+
+alter table TBVENDAS
+alter VERIFICADOR_NFE position 20;
+
+alter table TBVENDAS
+alter XML_NFE position 21;
+
+alter table TBVENDAS
+alter VENDEDOR_COD position 22;
+
+alter table TBVENDAS
+alter USUARIO position 23;
+
+alter table TBVENDAS
+alter FORMAPAGTO_COD position 24;
+
+alter table TBVENDAS
+alter CONDICAOPAGTO_COD position 25;
+
+alter table TBVENDAS
+alter VENDA_PRAZO position 26;
+
+alter table TBVENDAS
+alter PRAZO_01 position 27;
+
+alter table TBVENDAS
+alter PRAZO_02 position 28;
+
+alter table TBVENDAS
+alter PRAZO_03 position 29;
+
+alter table TBVENDAS
+alter PRAZO_04 position 30;
+
+alter table TBVENDAS
+alter PRAZO_05 position 31;
+
+alter table TBVENDAS
+alter PRAZO_06 position 32;
+
+alter table TBVENDAS
+alter PRAZO_07 position 33;
+
+alter table TBVENDAS
+alter PRAZO_08 position 34;
+
+alter table TBVENDAS
+alter PRAZO_09 position 35;
+
+alter table TBVENDAS
+alter PRAZO_10 position 36;
+
+alter table TBVENDAS
+alter PRAZO_11 position 37;
+
+alter table TBVENDAS
+alter PRAZO_12 position 38;
+
+alter table TBVENDAS
+alter LOTE_NFE_ANO position 39;
+
+alter table TBVENDAS
+alter LOTE_NFE_NUMERO position 40;
+
+alter table TBVENDAS
+alter NFE_ENVIADA position 41;
+
+alter table TBVENDAS
+alter CANCEL_USUARIO position 42;
+
+alter table TBVENDAS
+alter CANCEL_DATAHORA position 43;
+
+alter table TBVENDAS
+alter CANCEL_MOTIVO position 44;
+
+alter table TBVENDAS
+alter XML_NFE_FILENAME position 45;
+
+alter table TBVENDAS
+alter NFE_MODALIDADE_FRETE position 46;
+
+alter table TBVENDAS
+alter NFE_TRANSPORTADORA position 47;
+
+alter table TBVENDAS
+alter NFE_PLACA_VEICULO position 48;
+
+alter table TBVENDAS
+alter NFE_PLACA_UF position 49;
+
+alter table TBVENDAS
+alter NFE_PLACA_RNTC position 50;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS position 51;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS position 52;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS_SUBST position 53;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS_SUBST position 54;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_PRODUTO position 55;
+
+alter table TBVENDAS
+alter NFE_VALOR_FRETE position 56;
+
+alter table TBVENDAS
+alter NFE_VALOR_SEGURO position 57;
+
+alter table TBVENDAS
+alter NFE_VALOR_DESCONTO position 58;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_II position 59;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_IPI position 60;
+
+alter table TBVENDAS
+alter NFE_VALOR_PIS position 61;
+
+alter table TBVENDAS
+alter NFE_VALOR_COFINS position 62;
+
+alter table TBVENDAS
+alter NFE_VALOR_OUTROS position 63;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_NOTA position 64;
+
+
+
+
+/*------ SYSDBA 03/06/2013 17:52:33 --------*/
+
+update RDB$RELATION_FIELDS set
+RDB$FIELD_SOURCE = 'DMN_MONEY'
+where (RDB$FIELD_NAME = 'TOTALVENDA') and
+(RDB$RELATION_NAME = 'TBVENDAS')
+;
+
+
+
+
+/*------ SYSDBA 03/06/2013 17:55:22 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_vendasitens_total_venda for tvendasitens
+active after insert or update or delete position 10
+AS
+  declare variable anovenda Smallint;
+  declare variable numvenda Integer;
+  declare variable total_bruto Dmn_money;
+  declare variable total_desconto dmn_money;
+  declare variable total_liquido Dmn_money;
+  declare variable total_custo Dmn_money;
+begin
+  if ( (Inserting) or (Updating) ) then
+  begin
+    anovenda = new.Ano;
+    numvenda = new.Codcontrol;
+  end
+  else
+  begin
+    anovenda = old.Ano;
+    numvenda = old.Codcontrol;
+  end
+
+  Select
+      sum( coalesce(i.total_bruto,    0) )
+    , sum( coalesce(i.total_desconto, 0) )
+    , sum( coalesce(i.qtde, 0) * coalesce(p.customedio, 0) )
+  from TVENDASITENS i
+    inner join TBPRODUTO p on (p.cod = i.codprod)
+  where i.Ano = :Anovenda
+    and i.Codcontrol = :Numvenda
+  into
+      Total_bruto
+    , Total_desconto
+    , Total_custo;
+
+  Total_bruto    = coalesce(:Total_bruto, 0);
+  Total_desconto = coalesce(:Total_desconto, 0);
+  total_liquido  = :Total_bruto - :Total_desconto;
+
+  Update TBVENDAS v Set
+      v.Totalvenda_bruta = :Total_bruto
+    , v.Desconto   = :Total_desconto
+    , v.Totalvenda = :Total_liquido
+    , v.Totalcusto = :Total_custo
+  where v.Ano = :Anovenda
+    and v.Codcontrol = :Numvenda;
+end^
+
+SET TERM ; ^
+
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 59, column 29.
+when.
+
+*/

@@ -361,6 +361,12 @@ inherited frmGeVenda: TfrmGeVenda
           end
           item
             Expanded = False
+            FieldName = 'LUCRO_CALCULADO'
+            Width = 55
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'NFE'
             Font.Charset = ANSI_CHARSET
             Font.Color = clMaroon
@@ -391,21 +397,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 544
         Width = 1091
         Height = 70
-        object Label1: TLabel [0]
-          Left = 2
-          Top = 44
-          Width = 16
-          Height = 13
-          Caption = '* ?'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clRed
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold]
-          ParentFont = False
-          Visible = False
-        end
-        object lblVendaCancelada: TLabel [1]
+        object lblVendaCancelada: TLabel [0]
           Left = 2
           Top = 24
           Width = 118
@@ -418,7 +410,7 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object lblVendaAberta: TLabel [2]
+        object lblVendaAberta: TLabel [1]
           Left = 2
           Top = 4
           Width = 99
@@ -430,6 +422,48 @@ inherited frmGeVenda: TfrmGeVenda
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+        end
+        object ShpLucroZerado: TShape [2]
+          Left = 2
+          Top = 49
+          Width = 15
+          Height = 15
+          Brush.Color = clYellow
+        end
+        object Label3: TLabel [3]
+          Left = 22
+          Top = 50
+          Width = 73
+          Height = 13
+          Caption = 'Lucro zerado'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object ShpLucroNegativo: TShape [4]
+          Left = 99
+          Top = 49
+          Width = 15
+          Height = 15
+          Brush.Color = 7434751
+        end
+        object Label4: TLabel [5]
+          Left = 119
+          Top = 50
+          Width = 46
+          Height = 13
+          Caption = 'Preju'#237'zo'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
         end
         inherited grpBxFiltro: TGroupBox
           Left = 472
@@ -1962,7 +1996,7 @@ inherited frmGeVenda: TfrmGeVenda
             object lblObservacao: TLabel
               Left = 0
               Top = 0
-              Width = 503
+              Width = 67
               Height = 13
               Align = alTop
               Caption = '&Observa'#231#245'es:'
@@ -3059,6 +3093,12 @@ inherited frmGeVenda: TfrmGeVenda
       '  , c.Nome'
       '  , c.Bloqueado'
       '  , c.Bloqueado_motivo'
+      '  , Case when coalesce(v.totalcusto, 0) > 0'
+      
+        '      then ((v.totalvenda / coalesce(v.totalcusto, 0)) - 1) * 10' +
+        '0'
+      '      else 0.0'
+      '    end Lucro_Calculado'
       'from TBVENDAS v'
       '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
       '  left join TBFORNECEDOR t on (t.codforn = v.nfe_transportadora)')
@@ -3366,6 +3406,14 @@ inherited frmGeVenda: TfrmGeVenda
       Origin = 'TBCLIENTE.BLOQUEADO_MOTIVO'
       BlobType = ftMemo
       Size = 8
+    end
+    object IbDtstTabelaLUCRO_CALCULADO: TIBBCDField
+      DisplayLabel = '% Lucro'
+      FieldName = 'LUCRO_CALCULADO'
+      ProviderFlags = []
+      DisplayFormat = ',0.00##'
+      Precision = 18
+      Size = 4
     end
   end
   inherited DtSrcTabela: TDataSource
