@@ -118,6 +118,7 @@ type
     mnRelatorioEstoqueProduto: TMenuItem;
     DemandaCompraxVenda1: TMenuItem;
     Ano20131: TMenuItem;
+    PorFormadePagamento1: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -169,6 +170,7 @@ type
     procedure mnRelatorioEstoqueProdutoClick(Sender: TObject);
     procedure mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
     procedure Ano20131Click(Sender: TObject);
+    procedure PorFormadePagamento1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -200,7 +202,8 @@ uses
   UGeFluxoCaixa,
 
   // Relatórios
-  UfrmRelEstoque, uGerRelCR, uGerRelCP, UfrmRelVendas;
+  UfrmRelEstoque, uGerRelCR, uGerRelCP, UfrmRelVendas,
+  UfrmRelVendasFormPag;
 
 {$R *.dfm}
 
@@ -601,6 +604,13 @@ begin
     qckrp.Preview;
     Destroy
   end;
+end;
+
+procedure TfrmPrinc.PorFormadePagamento1Click(Sender: TObject);
+begin
+  Application.CreateForm(TfrmRelVendasFormPag, frmRelVendasFormPag);
+  frmRelVendasFormPag.ShowModal;
+  frmRelVendasFormPag.Destroy;
 end;
 
 end.

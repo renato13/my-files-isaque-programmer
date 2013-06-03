@@ -7330,6 +7330,10 @@ object frmPrinc: TfrmPrinc
           Caption = 'Contas A Pagar'
           OnClick = mnRelatorioFinanceiroContasAReceberClick
         end
+        object PorFormadePagamento1: TMenuItem
+          Caption = 'Por Forma de Pagamento'
+          OnClick = PorFormadePagamento1Click
+        end
       end
     end
     object menuUtilitarios: TMenuItem
