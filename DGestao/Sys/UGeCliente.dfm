@@ -3,6 +3,7 @@ inherited frmGeCliente: TfrmGeCliente
   Top = 131
   Width = 860
   Height = 536
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   OnClose = FormClose
@@ -106,6 +107,7 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 844
     Height = 455
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -911,7 +913,7 @@ inherited frmGeCliente: TfrmGeCliente
         Top = 237
         Width = 836
         Height = 189
-        ActivePage = tbsFinanceiro
+        ActivePage = tbsContato
         Align = alClient
         TabOrder = 2
         TabStop = False
@@ -952,9 +954,9 @@ inherited frmGeCliente: TfrmGeCliente
           object lblFoneComercial: TLabel
             Left = 328
             Top = 0
-            Width = 82
+            Width = 95
             Height = 13
-            Caption = 'Telefone Celular:'
+            Caption = 'Telefone Comercial:'
             FocusControl = dbFoneComercial
           end
           object dbFoneFixo: TDBEdit
@@ -1326,6 +1328,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  , cl.Bloqueado_motivo'
       '  , cl.Bloqueado_usuario'
       '  , cl.DesBloqueado_data'
+      '  , cl.Usuario'
       
         '  , coalesce( cast(coalesce(coalesce(t.Tlg_sigla, t.Tlg_descrica' +
         'o) || '#39' '#39', '#39#39') || l.Log_nome as varchar(250)), cl.Ender ) as Log' +
@@ -1550,6 +1553,11 @@ inherited frmGeCliente: TfrmGeCliente
       FieldName = 'DESBLOQUEADO_DATA'
       Origin = 'TBCLIENTE.DESBLOQUEADO_DATA'
     end
+    object IbDtstTabelaUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = '"TBCLIENTE"."USUARIO"'
+      Size = 50
+    end
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
@@ -1602,6 +1610,7 @@ inherited frmGeCliente: TfrmGeCliente
       '  BLOQUEADO_DATA = :BLOQUEADO_DATA,'
       '  BLOQUEADO_MOTIVO = :BLOQUEADO_MOTIVO,'
       '  BLOQUEADO_USUARIO = :BLOQUEADO_USUARIO,'
+      '  USUARIO = :USUARIO,'
       '  CEP = :CEP,'
       '  CID_COD = :CID_COD,'
       '  CIDADE = :CIDADE,'
@@ -1644,21 +1653,23 @@ inherited frmGeCliente: TfrmGeCliente
       
         '   LOG_COD, NOME, NUMERO_END, PAIS_ID, PESSOA_FISICA, SITE, TLG_' +
         'TIPO, UF, '
-      '   VALOR_LIMITE_COMPRA, VENDEDOR_COD)'
+      '   VALOR_LIMITE_COMPRA, VENDEDOR_COD, USUARIO)'
       'values'
       
         '  (:BAI_COD, :BAIRRO, :BLOQUEADO, :BLOQUEADO_DATA, :BLOQUEADO_MO' +
-        'TIVO, :BLOQUEADO_USUARIO, '
+        'TIVO, :BLOQUEADO_USUARIO,'
       
         '   :CEP, :CID_COD, :CIDADE, :CNPJ, :CODIGO, :COMPLEMENTO, :DESBL' +
-        'OQUEADO_DATA, '
+        'OQUEADO_DATA,'
       
         '   :DTCAD, :EMAIL, :ENDER, :EST_COD, :FONE, :FONECEL, :FONECOMER' +
-        'C, :INSCEST, '
+        'C, :INSCEST,'
       
         '   :INSCMUN, :LOG_COD, :NOME, :NUMERO_END, :PAIS_ID, :PESSOA_FIS' +
-        'ICA, :SITE, '
-      '   :TLG_TIPO, :UF, :VALOR_LIMITE_COMPRA, :VENDEDOR_COD)')
+        'ICA, :SITE,'
+      
+        '   :TLG_TIPO, :UF, :VALOR_LIMITE_COMPRA, :VENDEDOR_COD, :USUARIO' +
+        ')')
     DeleteSQL.Strings = (
       'delete from TBCLIENTE'
       'where'
