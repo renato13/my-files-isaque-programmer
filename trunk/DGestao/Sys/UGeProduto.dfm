@@ -3,6 +3,7 @@ inherited frmGeProduto: TfrmGeProduto
   Top = 114
   Width = 977
   Height = 648
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -23,6 +24,7 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
@@ -128,8 +130,8 @@ inherited frmGeProduto: TfrmGeProduto
           end
           item
             Expanded = False
-            FieldName = 'LUCRO_CALCULADO'
-            Title.Caption = '% Lucro'
+            FieldName = 'LUCRO_VALOR'
+            Title.Caption = 'Lucro'
             Width = 55
             Visible = True
           end
@@ -821,13 +823,13 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Style = [fsBold]
             ParentFont = False
           end
-          object lblLucroCalculado: TLabel
+          object lblLucroValor: TLabel
             Left = 616
             Top = 8
-            Width = 107
+            Width = 91
             Height = 13
-            Caption = '% Lucro Calculado:'
-            FocusControl = dbLucroCalculado
+            Caption = 'Lucro Calc. (R$):'
+            FocusControl = dbLucroValor
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -930,13 +932,13 @@ inherited frmGeProduto: TfrmGeProduto
             ReadOnly = True
             TabOrder = 4
           end
-          object dbLucroCalculado: TDBEdit
+          object dbLucroValor: TDBEdit
             Left = 616
             Top = 24
             Width = 113
             Height = 21
             Color = clMoneyGreen
-            DataField = 'LUCRO_CALCULADO'
+            DataField = 'LUCRO_VALOR'
             DataSource = DtSrcTabela
             Font.Charset = ANSI_CHARSET
             Font.Color = clBlack
@@ -1868,6 +1870,7 @@ inherited frmGeProduto: TfrmGeProduto
       '      then ((p.Preco / p.Customedio) - 1) * 100'
       '      else 0.0'
       '    end Lucro_Calculado'
+      '  , (p.Preco - p.Customedio) as Lucro_Valor'
       'from TBPRODUTO p'
       '  left join TBGRUPOPROD g on (g.Cod = p.Codgrupo)'
       '  left join TBSECAOPROD s on (s.Scp_cod = p.Codsecao)'
@@ -2263,6 +2266,13 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayFormat = ',0.00##'
       Precision = 18
       Size = 4
+    end
+    object IbDtstTabelaLUCRO_VALOR: TIBBCDField
+      FieldName = 'LUCRO_VALOR'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 2
     end
   end
   inherited DtSrcTabela: TDataSource

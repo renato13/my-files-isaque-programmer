@@ -193,13 +193,14 @@ type
     IbDtstTabelaPRECO_SUGERIDO: TIBBCDField;
     IbDtstTabelaPERCENTUAL_MARCKUP: TIBBCDField;
     CmbBxFiltrarTipo: TComboBox;
-    lblLucroCalculado: TLabel;
-    dbLucroCalculado: TDBEdit;
+    lblLucroValor: TLabel;
+    dbLucroValor: TDBEdit;
     IbDtstTabelaLUCRO_CALCULADO: TIBBCDField;
     ShpLucroZerado: TShape;
     Label1: TLabel;
     ShpLucroNegativo: TShape;
     Label2: TLabel;
+    IbDtstTabelaLUCRO_VALOR: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
