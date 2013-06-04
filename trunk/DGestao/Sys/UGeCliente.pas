@@ -138,6 +138,7 @@ type
     IbDtstTabelaVENDEDOR_COD: TIntegerField;
     lblVendedor: TLabel;
     dbVendedor: TDBLookupComboBox;
+    IbDtstTabelaUSUARIO: TIBStringField;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -431,6 +432,7 @@ begin
     end;
   end;
 
+  IbDtstTabelaUSUARIO.AsString := GetUserApp;
   inherited;
 end;
 

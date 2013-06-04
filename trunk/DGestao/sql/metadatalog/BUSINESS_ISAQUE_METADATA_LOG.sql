@@ -2671,3 +2671,1591 @@ Token unknown - line 59, column 29.
 when.
 
 */
+
+
+
+/*------ SYSDBA 04/06/2013 13:50:51 --------*/
+
+CREATE SEQUENCE IBE$LOG_TABLES_GEN;
+
+CREATE TABLE IBE$LOG_TABLES (
+  ID NUMERIC(18,0) NOT NULL PRIMARY KEY,
+  TABLE_NAME VARCHAR(67) CHARACTER SET UTF8 NOT NULL,
+  OPERATION VARCHAR(1) NOT NULL,
+  DATE_TIME TIMESTAMP NOT NULL,
+  USER_NAME VARCHAR(67) NOT NULL);
+
+CREATE TABLE IBE$LOG_KEYS (
+  LOG_TABLES_ID NUMERIC(18,0) NOT NULL,
+  KEY_FIELD VARCHAR(67) CHARACTER SET UTF8 NOT NULL,
+  KEY_VALUE VARCHAR(255) CHARACTER SET UTF8);
+
+CREATE INDEX IBE$LOG_KEYS_IDX1
+ON IBE$LOG_KEYS (LOG_TABLES_ID);
+
+CREATE TABLE IBE$LOG_FIELDS (
+  LOG_TABLES_ID NUMERIC(18,0) NOT NULL,
+  FIELD_NAME VARCHAR(67) CHARACTER SET UTF8 NOT NULL,
+  OLD_VALUE VARCHAR(255) CHARACTER SET UTF8,
+  NEW_VALUE VARCHAR(255) CHARACTER SET UTF8);
+
+CREATE INDEX IBE$LOG_FIELDS_IDX1
+ON IBE$LOG_FIELDS (LOG_TABLES_ID);
+
+CREATE TABLE IBE$LOG_BLOB_FIELDS (
+  LOG_TABLES_ID NUMERIC(18,0) NOT NULL,
+  FIELD_NAME VARCHAR(67) CHARACTER SET UTF8 NOT NULL,
+  OLD_CHAR_VALUE VARCHAR(8000) CHARACTER SET UTF8,
+  NEW_CHAR_VALUE VARCHAR(8000) CHARACTER SET UTF8,
+  OLD_BLOB_VALUE BLOB,
+  NEW_BLOB_VALUE BLOB);
+
+CREATE INDEX IBE$LOG_BLOB_FIELDS_IDX1
+ON IBE$LOG_BLOB_FIELDS (LOG_TABLES_ID);
+
+SET TERM ^ ;
+
+CREATE TRIGGER IBE$LOG_TABLES_BD FOR IBE$LOG_TABLES
+ACTIVE BEFORE DELETE POSITION 0
+AS
+BEGIN
+  DELETE FROM IBE$LOG_FIELDS WHERE LOG_TABLES_ID = OLD.ID;
+  DELETE FROM IBE$LOG_BLOB_FIELDS WHERE LOG_TABLES_ID = OLD.ID;
+  DELETE FROM IBE$LOG_KEYS WHERE LOG_TABLES_ID = OLD.ID;
+END^
+
+SET TERM ; ^
+
+GRANT UPDATE,REFERENCES ON IBE$LOG_TABLES TO TRIGGER IBE$LOG_TABLES_BD;
+
+GRANT SELECT,DELETE ON IBE$LOG_FIELDS TO TRIGGER IBE$LOG_TABLES_BD;
+
+GRANT SELECT,DELETE ON IBE$LOG_BLOB_FIELDS TO TRIGGER IBE$LOG_TABLES_BD;
+
+GRANT SELECT,DELETE ON IBE$LOG_KEYS TO TRIGGER IBE$LOG_TABLES_BD;
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:54:40 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.CODIGO IS
+'Codigo';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:54:57 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.PESSOA_FISICA IS
+'Pessoa Fisica:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:03 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.CNPJ IS
+'CPF/CNPJ';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:07 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.NOME IS
+'Nome';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:21 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.INSCEST IS
+'RG / Inscricao Estadual';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:29 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.INSCMUN IS
+'Inscricao Municipal';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:35 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.ENDER IS
+'Endereco';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:55:52 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.COMPLEMENTO IS
+'Complemento';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:09 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BAIRRO IS
+'Bairro';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:12 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.CEP IS
+'CEP';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:17 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.CIDADE IS
+'Cidade';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:20 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.UF IS
+'UF';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:30 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONE IS
+'Telefone Fixo';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:32 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONECEL IS
+'Telefone Celular';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:35 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.FONECOMERC IS
+'Telefone Comercial';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:40 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.EMAIL IS
+'E-mail';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:46 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.SITE IS
+'Home Page';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:56:56 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.TLG_TIPO IS
+'Tipo Logradouro';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:12 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.LOG_COD IS
+'Logradouro';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:18 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BAI_COD IS
+'Bairro';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:22 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.CID_COD IS
+'Cidade';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:26 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.EST_COD IS
+'Estado';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:33 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.NUMERO_END IS
+'Numero Endereco';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:37 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.PAIS_ID IS
+'Pais';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:49 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.VALOR_LIMITE_COMPRA IS
+'Valor Limite de Credito';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:55 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BLOQUEADO IS
+'Bloqueado:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:57:58 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BLOQUEADO_DATA IS
+'Data do bloqueio';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:58:00 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BLOQUEADO_MOTIVO IS
+'Motivo do bloqueio';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:58:05 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.BLOQUEADO_USUARIO IS
+'Usuario do bloqueio';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:58:08 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.DESBLOQUEADO_DATA IS
+'Data de desbloqueio';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:58:24 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.DTCAD IS
+'Data Cadastro';
+
+
+
+
+/*------ SYSDBA 04/06/2013 13:58:28 --------*/
+
+COMMENT ON COLUMN TBCLIENTE.VENDEDOR_COD IS
+'Vendedor responsavel pelo cliente';
+
+GRANT ALL ON IBE$LOG_BLOB_FIELDS TO "PUBLIC";
+GRANT ALL ON IBE$LOG_FIELDS TO "PUBLIC";
+GRANT ALL ON IBE$LOG_KEYS TO "PUBLIC";
+GRANT ALL ON IBE$LOG_TABLES TO "PUBLIC";
+GRANT EXECUTE ON PROCEDURE SET_CAIXA_MOVIMENTO_PAG_ESTORNO TO "PUBLIC";
+GRANT EXECUTE ON PROCEDURE SET_CAIXA_MOVIMENTO_REC_ESTORNO TO "PUBLIC";
+
+
+
+/*------ SYSDBA 04/06/2013 14:07:47 --------*/
+
+SET TERM ^ ;
+
+CREATE TRIGGER IBE$TBCLIENTE_AI FOR TBCLIENTE
+ACTIVE AFTER INSERT POSITION 32767
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'I', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', new.cnpj);
+
+  if (new.codigo is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CODIGO', null, new.codigo);
+
+  if (new.pessoa_fisica is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PESSOA_FISICA', null, new.pessoa_fisica);
+
+  if (new.cnpj is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CNPJ', null, new.cnpj);
+
+  if (new.nome is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NOME', null, new.nome);
+
+  if (new.inscest is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCEST', null, new.inscest);
+
+  if (new.inscmun is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCMUN', null, new.inscmun);
+
+  if (new.ender is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'ENDER', null, new.ender);
+
+  if (new.complemento is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'COMPLEMENTO', null, new.complemento);
+
+  if (new.bairro is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BAIRRO', null, new.bairro);
+
+  if (new.cep is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CEP', null, new.cep);
+
+  if (new.cidade is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CIDADE', null, new.cidade);
+
+  if (new.uf is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'UF', null, new.uf);
+
+  if (new.fone is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONE', null, new.fone);
+
+  if (new.fonecel is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECEL', null, new.fonecel);
+
+  if (new.fonecomerc is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECOMERC', null, new.fonecomerc);
+
+  if (new.email is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'EMAIL', null, new.email);
+
+  if (new.site is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'SITE', null, new.site);
+
+  if (new.numero_end is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NUMERO_END', null, new.numero_end);
+
+  if (new.pais_id is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PAIS_ID', null, new.pais_id);
+
+  if (new.valor_limite_compra is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VALOR_LIMITE_COMPRA', null, new.valor_limite_compra);
+
+  if (new.bloqueado is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO', null, new.bloqueado);
+
+  if (new.bloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_DATA', null, new.bloqueado_data);
+
+  if (not (new.bloqueado_motivo is null)) then
+    insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+           values (:tid,'BLOQUEADO_MOTIVO',null, new.bloqueado_motivo);
+
+  if (new.bloqueado_usuario is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_USUARIO', null, new.bloqueado_usuario);
+
+  if (new.desbloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DESBLOQUEADO_DATA', null, new.desbloqueado_data);
+
+  if (new.dtcad is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DTCAD', null, new.dtcad);
+
+  if (new.vendedor_cod is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VENDEDOR_COD', null, new.vendedor_cod);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+CREATE TRIGGER IBE$TBCLIENTE_AU FOR TBCLIENTE
+ACTIVE AFTER UPDATE POSITION 32767
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'U', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  if ((old.pessoa_fisica is null and new.pessoa_fisica is not null) or
+      (new.pessoa_fisica is null and old.pessoa_fisica is not null) or
+      (new.pessoa_fisica is not null and old.pessoa_fisica is not null and new.pessoa_fisica <> old.pessoa_fisica)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, new.pessoa_fisica);
+
+  if ((old.cnpj is null and new.cnpj is not null) or
+      (new.cnpj is null and old.cnpj is not null) or
+      (new.cnpj is not null and old.cnpj is not null and new.cnpj <> old.cnpj)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CNPJ', old.cnpj, new.cnpj);
+
+  if ((old.nome is null and new.nome is not null) or
+      (new.nome is null and old.nome is not null) or
+      (new.nome is not null and old.nome is not null and new.nome <> old.nome)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NOME', old.nome, new.nome);
+
+  if ((old.inscest is null and new.inscest is not null) or
+      (new.inscest is null and old.inscest is not null) or
+      (new.inscest is not null and old.inscest is not null and new.inscest <> old.inscest)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCEST', old.inscest, new.inscest);
+
+  if ((old.inscmun is null and new.inscmun is not null) or
+      (new.inscmun is null and old.inscmun is not null) or
+      (new.inscmun is not null and old.inscmun is not null and new.inscmun <> old.inscmun)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCMUN', old.inscmun, new.inscmun);
+
+  if ((old.ender is null and new.ender is not null) or
+      (new.ender is null and old.ender is not null) or
+      (new.ender is not null and old.ender is not null and new.ender <> old.ender)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'ENDER', old.ender, new.ender);
+
+  if ((old.complemento is null and new.complemento is not null) or
+      (new.complemento is null and old.complemento is not null) or
+      (new.complemento is not null and old.complemento is not null and new.complemento <> old.complemento)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'COMPLEMENTO', old.complemento, new.complemento);
+
+  if ((old.bairro is null and new.bairro is not null) or
+      (new.bairro is null and old.bairro is not null) or
+      (new.bairro is not null and old.bairro is not null and new.bairro <> old.bairro)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BAIRRO', old.bairro, new.bairro);
+
+  if ((old.cep is null and new.cep is not null) or
+      (new.cep is null and old.cep is not null) or
+      (new.cep is not null and old.cep is not null and new.cep <> old.cep)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CEP', old.cep, new.cep);
+
+  if ((old.cidade is null and new.cidade is not null) or
+      (new.cidade is null and old.cidade is not null) or
+      (new.cidade is not null and old.cidade is not null and new.cidade <> old.cidade)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CIDADE', old.cidade, new.cidade);
+
+  if ((old.uf is null and new.uf is not null) or
+      (new.uf is null and old.uf is not null) or
+      (new.uf is not null and old.uf is not null and new.uf <> old.uf)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'UF', old.uf, new.uf);
+
+  if ((old.fone is null and new.fone is not null) or
+      (new.fone is null and old.fone is not null) or
+      (new.fone is not null and old.fone is not null and new.fone <> old.fone)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONE', old.fone, new.fone);
+
+  if ((old.fonecel is null and new.fonecel is not null) or
+      (new.fonecel is null and old.fonecel is not null) or
+      (new.fonecel is not null and old.fonecel is not null and new.fonecel <> old.fonecel)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECEL', old.fonecel, new.fonecel);
+
+  if ((old.fonecomerc is null and new.fonecomerc is not null) or
+      (new.fonecomerc is null and old.fonecomerc is not null) or
+      (new.fonecomerc is not null and old.fonecomerc is not null and new.fonecomerc <> old.fonecomerc)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECOMERC', old.fonecomerc, new.fonecomerc);
+
+  if ((old.email is null and new.email is not null) or
+      (new.email is null and old.email is not null) or
+      (new.email is not null and old.email is not null and new.email <> old.email)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'EMAIL', old.email, new.email);
+
+  if ((old.site is null and new.site is not null) or
+      (new.site is null and old.site is not null) or
+      (new.site is not null and old.site is not null and new.site <> old.site)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'SITE', old.site, new.site);
+
+  if ((old.numero_end is null and new.numero_end is not null) or
+      (new.numero_end is null and old.numero_end is not null) or
+      (new.numero_end is not null and old.numero_end is not null and new.numero_end <> old.numero_end)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NUMERO_END', old.numero_end, new.numero_end);
+
+  if ((old.pais_id is null and new.pais_id is not null) or
+      (new.pais_id is null and old.pais_id is not null) or
+      (new.pais_id is not null and old.pais_id is not null and new.pais_id <> old.pais_id)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PAIS_ID', old.pais_id, new.pais_id);
+
+  if ((old.valor_limite_compra is null and new.valor_limite_compra is not null) or
+      (new.valor_limite_compra is null and old.valor_limite_compra is not null) or
+      (new.valor_limite_compra is not null and old.valor_limite_compra is not null and new.valor_limite_compra <> old.valor_limite_compra)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, new.valor_limite_compra);
+
+  if ((old.bloqueado is null and new.bloqueado is not null) or
+      (new.bloqueado is null and old.bloqueado is not null) or
+      (new.bloqueado is not null and old.bloqueado is not null and new.bloqueado <> old.bloqueado)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO', old.bloqueado, new.bloqueado);
+
+  if ((old.bloqueado_data is null and new.bloqueado_data is not null) or
+      (new.bloqueado_data is null and old.bloqueado_data is not null) or
+      (new.bloqueado_data is not null and old.bloqueado_data is not null and new.bloqueado_data <> old.bloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, new.bloqueado_data);
+
+  if ((old.bloqueado_motivo is null and new.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is null and old.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is not null and old.bloqueado_motivo is not null and new.bloqueado_motivo <> old.bloqueado_motivo)) then
+     insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+            values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, new.bloqueado_motivo);
+
+  if ((old.bloqueado_usuario is null and new.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is null and old.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is not null and old.bloqueado_usuario is not null and new.bloqueado_usuario <> old.bloqueado_usuario)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, new.bloqueado_usuario);
+
+  if ((old.desbloqueado_data is null and new.desbloqueado_data is not null) or
+      (new.desbloqueado_data is null and old.desbloqueado_data is not null) or
+      (new.desbloqueado_data is not null and old.desbloqueado_data is not null and new.desbloqueado_data <> old.desbloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, new.desbloqueado_data);
+
+  if ((old.dtcad is null and new.dtcad is not null) or
+      (new.dtcad is null and old.dtcad is not null) or
+      (new.dtcad is not null and old.dtcad is not null and new.dtcad <> old.dtcad)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DTCAD', old.dtcad, new.dtcad);
+
+  if ((old.vendedor_cod is null and new.vendedor_cod is not null) or
+      (new.vendedor_cod is null and old.vendedor_cod is not null) or
+      (new.vendedor_cod is not null and old.vendedor_cod is not null and new.vendedor_cod <> old.vendedor_cod)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VENDEDOR_COD', old.vendedor_cod, new.vendedor_cod);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+CREATE TRIGGER IBE$TBCLIENTE_AD FOR TBCLIENTE
+ACTIVE AFTER DELETE POSITION 32767
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'D', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CODIGO', old.codigo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CNPJ', old.cnpj, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NOME', old.nome, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCEST', old.inscest, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCMUN', old.inscmun, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'ENDER', old.ender, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'COMPLEMENTO', old.complemento, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BAIRRO', old.bairro, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CEP', old.cep, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CIDADE', old.cidade, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'UF', old.uf, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONE', old.fone, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECEL', old.fonecel, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECOMERC', old.fonecomerc, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'EMAIL', old.email, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'SITE', old.site, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NUMERO_END', old.numero_end, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PAIS_ID', old.pais_id, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO', old.bloqueado, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, null);
+
+  insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+         values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DTCAD', old.dtcad, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VENDEDOR_COD', old.vendedor_cod, null);
+
+
+end;^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 04/06/2013 14:10:57 --------*/
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AI
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'I', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', new.cnpj);
+
+  if (new.codigo is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CODIGO', null, new.codigo);
+
+  if (new.pessoa_fisica is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PESSOA_FISICA', null, new.pessoa_fisica);
+
+  if (new.cnpj is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CNPJ', null, new.cnpj);
+
+  if (new.nome is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NOME', null, new.nome);
+
+  if (new.inscest is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCEST', null, new.inscest);
+
+  if (new.inscmun is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCMUN', null, new.inscmun);
+
+  if (new.ender is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'ENDER', null, new.ender);
+
+  if (new.complemento is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'COMPLEMENTO', null, new.complemento);
+
+  if (new.bairro is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BAIRRO', null, new.bairro);
+
+  if (new.cep is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CEP', null, new.cep);
+
+  if (new.cidade is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CIDADE', null, new.cidade);
+
+  if (new.uf is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'UF', null, new.uf);
+
+  if (new.fone is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONE', null, new.fone);
+
+  if (new.fonecel is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECEL', null, new.fonecel);
+
+  if (new.fonecomerc is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECOMERC', null, new.fonecomerc);
+
+  if (new.email is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'EMAIL', null, new.email);
+
+  if (new.site is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'SITE', null, new.site);
+
+  if (new.numero_end is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NUMERO_END', null, new.numero_end);
+
+  if (new.pais_id is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PAIS_ID', null, new.pais_id);
+
+  if (new.valor_limite_compra is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VALOR_LIMITE_COMPRA', null, new.valor_limite_compra);
+
+  if (new.bloqueado is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO', null, new.bloqueado);
+
+  if (new.bloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_DATA', null, new.bloqueado_data);
+
+  if (not (new.bloqueado_motivo is null)) then
+    insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+           values (:tid,'BLOQUEADO_MOTIVO',null, new.bloqueado_motivo);
+
+  if (new.bloqueado_usuario is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_USUARIO', null, new.bloqueado_usuario);
+
+  if (new.desbloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DESBLOQUEADO_DATA', null, new.desbloqueado_data);
+
+  if (new.dtcad is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DTCAD', null, new.dtcad);
+
+  if (new.vendedor_cod is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VENDEDOR_COD', null, new.vendedor_cod);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AU
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'U', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  if ((old.codigo is null and new.codigo is not null) or
+      (new.codigo is null and old.codigo is not null) or
+      (new.codigo is not null and old.codigo is not null and new.codigo <> old.codigo)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CODIGO', old.codigo, new.codigo);
+
+  if ((old.pessoa_fisica is null and new.pessoa_fisica is not null) or
+      (new.pessoa_fisica is null and old.pessoa_fisica is not null) or
+      (new.pessoa_fisica is not null and old.pessoa_fisica is not null and new.pessoa_fisica <> old.pessoa_fisica)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, new.pessoa_fisica);
+
+  if ((old.nome is null and new.nome is not null) or
+      (new.nome is null and old.nome is not null) or
+      (new.nome is not null and old.nome is not null and new.nome <> old.nome)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NOME', old.nome, new.nome);
+
+  if ((old.inscest is null and new.inscest is not null) or
+      (new.inscest is null and old.inscest is not null) or
+      (new.inscest is not null and old.inscest is not null and new.inscest <> old.inscest)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCEST', old.inscest, new.inscest);
+
+  if ((old.inscmun is null and new.inscmun is not null) or
+      (new.inscmun is null and old.inscmun is not null) or
+      (new.inscmun is not null and old.inscmun is not null and new.inscmun <> old.inscmun)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCMUN', old.inscmun, new.inscmun);
+
+  if ((old.ender is null and new.ender is not null) or
+      (new.ender is null and old.ender is not null) or
+      (new.ender is not null and old.ender is not null and new.ender <> old.ender)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'ENDER', old.ender, new.ender);
+
+  if ((old.complemento is null and new.complemento is not null) or
+      (new.complemento is null and old.complemento is not null) or
+      (new.complemento is not null and old.complemento is not null and new.complemento <> old.complemento)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'COMPLEMENTO', old.complemento, new.complemento);
+
+  if ((old.bairro is null and new.bairro is not null) or
+      (new.bairro is null and old.bairro is not null) or
+      (new.bairro is not null and old.bairro is not null and new.bairro <> old.bairro)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BAIRRO', old.bairro, new.bairro);
+
+  if ((old.cep is null and new.cep is not null) or
+      (new.cep is null and old.cep is not null) or
+      (new.cep is not null and old.cep is not null and new.cep <> old.cep)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CEP', old.cep, new.cep);
+
+  if ((old.cidade is null and new.cidade is not null) or
+      (new.cidade is null and old.cidade is not null) or
+      (new.cidade is not null and old.cidade is not null and new.cidade <> old.cidade)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CIDADE', old.cidade, new.cidade);
+
+  if ((old.uf is null and new.uf is not null) or
+      (new.uf is null and old.uf is not null) or
+      (new.uf is not null and old.uf is not null and new.uf <> old.uf)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'UF', old.uf, new.uf);
+
+  if ((old.fone is null and new.fone is not null) or
+      (new.fone is null and old.fone is not null) or
+      (new.fone is not null and old.fone is not null and new.fone <> old.fone)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONE', old.fone, new.fone);
+
+  if ((old.fonecel is null and new.fonecel is not null) or
+      (new.fonecel is null and old.fonecel is not null) or
+      (new.fonecel is not null and old.fonecel is not null and new.fonecel <> old.fonecel)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECEL', old.fonecel, new.fonecel);
+
+  if ((old.fonecomerc is null and new.fonecomerc is not null) or
+      (new.fonecomerc is null and old.fonecomerc is not null) or
+      (new.fonecomerc is not null and old.fonecomerc is not null and new.fonecomerc <> old.fonecomerc)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECOMERC', old.fonecomerc, new.fonecomerc);
+
+  if ((old.email is null and new.email is not null) or
+      (new.email is null and old.email is not null) or
+      (new.email is not null and old.email is not null and new.email <> old.email)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'EMAIL', old.email, new.email);
+
+  if ((old.site is null and new.site is not null) or
+      (new.site is null and old.site is not null) or
+      (new.site is not null and old.site is not null and new.site <> old.site)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'SITE', old.site, new.site);
+
+  if ((old.numero_end is null and new.numero_end is not null) or
+      (new.numero_end is null and old.numero_end is not null) or
+      (new.numero_end is not null and old.numero_end is not null and new.numero_end <> old.numero_end)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NUMERO_END', old.numero_end, new.numero_end);
+
+  if ((old.pais_id is null and new.pais_id is not null) or
+      (new.pais_id is null and old.pais_id is not null) or
+      (new.pais_id is not null and old.pais_id is not null and new.pais_id <> old.pais_id)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PAIS_ID', old.pais_id, new.pais_id);
+
+  if ((old.valor_limite_compra is null and new.valor_limite_compra is not null) or
+      (new.valor_limite_compra is null and old.valor_limite_compra is not null) or
+      (new.valor_limite_compra is not null and old.valor_limite_compra is not null and new.valor_limite_compra <> old.valor_limite_compra)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, new.valor_limite_compra);
+
+  if ((old.bloqueado is null and new.bloqueado is not null) or
+      (new.bloqueado is null and old.bloqueado is not null) or
+      (new.bloqueado is not null and old.bloqueado is not null and new.bloqueado <> old.bloqueado)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO', old.bloqueado, new.bloqueado);
+
+  if ((old.bloqueado_data is null and new.bloqueado_data is not null) or
+      (new.bloqueado_data is null and old.bloqueado_data is not null) or
+      (new.bloqueado_data is not null and old.bloqueado_data is not null and new.bloqueado_data <> old.bloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, new.bloqueado_data);
+
+  if ((old.bloqueado_motivo is null and new.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is null and old.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is not null and old.bloqueado_motivo is not null and new.bloqueado_motivo <> old.bloqueado_motivo)) then
+     insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+            values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, new.bloqueado_motivo);
+
+  if ((old.bloqueado_usuario is null and new.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is null and old.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is not null and old.bloqueado_usuario is not null and new.bloqueado_usuario <> old.bloqueado_usuario)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, new.bloqueado_usuario);
+
+  if ((old.desbloqueado_data is null and new.desbloqueado_data is not null) or
+      (new.desbloqueado_data is null and old.desbloqueado_data is not null) or
+      (new.desbloqueado_data is not null and old.desbloqueado_data is not null and new.desbloqueado_data <> old.desbloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, new.desbloqueado_data);
+
+  if ((old.dtcad is null and new.dtcad is not null) or
+      (new.dtcad is null and old.dtcad is not null) or
+      (new.dtcad is not null and old.dtcad is not null and new.dtcad <> old.dtcad)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DTCAD', old.dtcad, new.dtcad);
+
+  if ((old.vendedor_cod is null and new.vendedor_cod is not null) or
+      (new.vendedor_cod is null and old.vendedor_cod is not null) or
+      (new.vendedor_cod is not null and old.vendedor_cod is not null and new.vendedor_cod <> old.vendedor_cod)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VENDEDOR_COD', old.vendedor_cod, new.vendedor_cod);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AD
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'D', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CODIGO', old.codigo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CNPJ', old.cnpj, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NOME', old.nome, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCEST', old.inscest, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCMUN', old.inscmun, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'ENDER', old.ender, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'COMPLEMENTO', old.complemento, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BAIRRO', old.bairro, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CEP', old.cep, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CIDADE', old.cidade, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'UF', old.uf, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONE', old.fone, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECEL', old.fonecel, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECOMERC', old.fonecomerc, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'EMAIL', old.email, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'SITE', old.site, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NUMERO_END', old.numero_end, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PAIS_ID', old.pais_id, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO', old.bloqueado, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, null);
+
+  insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+         values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DTCAD', old.dtcad, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VENDEDOR_COD', old.vendedor_cod, null);
+
+
+end;^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 04/06/2013 14:14:24 --------*/
+
+ALTER TABLE TBCLIENTE
+    ADD USUARIO DMN_VCHAR_50;
+
+COMMENT ON COLUMN TBCLIENTE.USUARIO IS
+'Usuario Insercao/Atualizacao';
+
+
+
+
+/*------ SYSDBA 04/06/2013 14:14:37 --------*/
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AI
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'I', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', new.cnpj);
+
+  if (new.codigo is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CODIGO', null, new.codigo);
+
+  if (new.pessoa_fisica is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PESSOA_FISICA', null, new.pessoa_fisica);
+
+  if (new.cnpj is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CNPJ', null, new.cnpj);
+
+  if (new.nome is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NOME', null, new.nome);
+
+  if (new.inscest is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCEST', null, new.inscest);
+
+  if (new.inscmun is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'INSCMUN', null, new.inscmun);
+
+  if (new.ender is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'ENDER', null, new.ender);
+
+  if (new.complemento is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'COMPLEMENTO', null, new.complemento);
+
+  if (new.bairro is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BAIRRO', null, new.bairro);
+
+  if (new.cep is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CEP', null, new.cep);
+
+  if (new.cidade is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'CIDADE', null, new.cidade);
+
+  if (new.uf is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'UF', null, new.uf);
+
+  if (new.fone is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONE', null, new.fone);
+
+  if (new.fonecel is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECEL', null, new.fonecel);
+
+  if (new.fonecomerc is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'FONECOMERC', null, new.fonecomerc);
+
+  if (new.email is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'EMAIL', null, new.email);
+
+  if (new.site is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'SITE', null, new.site);
+
+  if (new.numero_end is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'NUMERO_END', null, new.numero_end);
+
+  if (new.pais_id is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'PAIS_ID', null, new.pais_id);
+
+  if (new.valor_limite_compra is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VALOR_LIMITE_COMPRA', null, new.valor_limite_compra);
+
+  if (new.bloqueado is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO', null, new.bloqueado);
+
+  if (new.bloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_DATA', null, new.bloqueado_data);
+
+  if (not (new.bloqueado_motivo is null)) then
+    insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+           values (:tid,'BLOQUEADO_MOTIVO',null, new.bloqueado_motivo);
+
+  if (new.bloqueado_usuario is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'BLOQUEADO_USUARIO', null, new.bloqueado_usuario);
+
+  if (new.desbloqueado_data is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DESBLOQUEADO_DATA', null, new.desbloqueado_data);
+
+  if (new.dtcad is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'DTCAD', null, new.dtcad);
+
+  if (new.vendedor_cod is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'VENDEDOR_COD', null, new.vendedor_cod);
+
+  if (new.usuario is not null) then
+    insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+           values (:tid, 'USUARIO', null, new.usuario);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AU
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'U', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  if ((old.codigo is null and new.codigo is not null) or
+      (new.codigo is null and old.codigo is not null) or
+      (new.codigo is not null and old.codigo is not null and new.codigo <> old.codigo)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CODIGO', old.codigo, new.codigo);
+
+  if ((old.pessoa_fisica is null and new.pessoa_fisica is not null) or
+      (new.pessoa_fisica is null and old.pessoa_fisica is not null) or
+      (new.pessoa_fisica is not null and old.pessoa_fisica is not null and new.pessoa_fisica <> old.pessoa_fisica)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, new.pessoa_fisica);
+
+  if ((old.nome is null and new.nome is not null) or
+      (new.nome is null and old.nome is not null) or
+      (new.nome is not null and old.nome is not null and new.nome <> old.nome)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NOME', old.nome, new.nome);
+
+  if ((old.inscest is null and new.inscest is not null) or
+      (new.inscest is null and old.inscest is not null) or
+      (new.inscest is not null and old.inscest is not null and new.inscest <> old.inscest)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCEST', old.inscest, new.inscest);
+
+  if ((old.inscmun is null and new.inscmun is not null) or
+      (new.inscmun is null and old.inscmun is not null) or
+      (new.inscmun is not null and old.inscmun is not null and new.inscmun <> old.inscmun)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'INSCMUN', old.inscmun, new.inscmun);
+
+  if ((old.ender is null and new.ender is not null) or
+      (new.ender is null and old.ender is not null) or
+      (new.ender is not null and old.ender is not null and new.ender <> old.ender)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'ENDER', old.ender, new.ender);
+
+  if ((old.complemento is null and new.complemento is not null) or
+      (new.complemento is null and old.complemento is not null) or
+      (new.complemento is not null and old.complemento is not null and new.complemento <> old.complemento)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'COMPLEMENTO', old.complemento, new.complemento);
+
+  if ((old.bairro is null and new.bairro is not null) or
+      (new.bairro is null and old.bairro is not null) or
+      (new.bairro is not null and old.bairro is not null and new.bairro <> old.bairro)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BAIRRO', old.bairro, new.bairro);
+
+  if ((old.cep is null and new.cep is not null) or
+      (new.cep is null and old.cep is not null) or
+      (new.cep is not null and old.cep is not null and new.cep <> old.cep)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CEP', old.cep, new.cep);
+
+  if ((old.cidade is null and new.cidade is not null) or
+      (new.cidade is null and old.cidade is not null) or
+      (new.cidade is not null and old.cidade is not null and new.cidade <> old.cidade)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'CIDADE', old.cidade, new.cidade);
+
+  if ((old.uf is null and new.uf is not null) or
+      (new.uf is null and old.uf is not null) or
+      (new.uf is not null and old.uf is not null and new.uf <> old.uf)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'UF', old.uf, new.uf);
+
+  if ((old.fone is null and new.fone is not null) or
+      (new.fone is null and old.fone is not null) or
+      (new.fone is not null and old.fone is not null and new.fone <> old.fone)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONE', old.fone, new.fone);
+
+  if ((old.fonecel is null and new.fonecel is not null) or
+      (new.fonecel is null and old.fonecel is not null) or
+      (new.fonecel is not null and old.fonecel is not null and new.fonecel <> old.fonecel)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECEL', old.fonecel, new.fonecel);
+
+  if ((old.fonecomerc is null and new.fonecomerc is not null) or
+      (new.fonecomerc is null and old.fonecomerc is not null) or
+      (new.fonecomerc is not null and old.fonecomerc is not null and new.fonecomerc <> old.fonecomerc)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'FONECOMERC', old.fonecomerc, new.fonecomerc);
+
+  if ((old.email is null and new.email is not null) or
+      (new.email is null and old.email is not null) or
+      (new.email is not null and old.email is not null and new.email <> old.email)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'EMAIL', old.email, new.email);
+
+  if ((old.site is null and new.site is not null) or
+      (new.site is null and old.site is not null) or
+      (new.site is not null and old.site is not null and new.site <> old.site)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'SITE', old.site, new.site);
+
+  if ((old.numero_end is null and new.numero_end is not null) or
+      (new.numero_end is null and old.numero_end is not null) or
+      (new.numero_end is not null and old.numero_end is not null and new.numero_end <> old.numero_end)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'NUMERO_END', old.numero_end, new.numero_end);
+
+  if ((old.pais_id is null and new.pais_id is not null) or
+      (new.pais_id is null and old.pais_id is not null) or
+      (new.pais_id is not null and old.pais_id is not null and new.pais_id <> old.pais_id)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'PAIS_ID', old.pais_id, new.pais_id);
+
+  if ((old.valor_limite_compra is null and new.valor_limite_compra is not null) or
+      (new.valor_limite_compra is null and old.valor_limite_compra is not null) or
+      (new.valor_limite_compra is not null and old.valor_limite_compra is not null and new.valor_limite_compra <> old.valor_limite_compra)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, new.valor_limite_compra);
+
+  if ((old.bloqueado is null and new.bloqueado is not null) or
+      (new.bloqueado is null and old.bloqueado is not null) or
+      (new.bloqueado is not null and old.bloqueado is not null and new.bloqueado <> old.bloqueado)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO', old.bloqueado, new.bloqueado);
+
+  if ((old.bloqueado_data is null and new.bloqueado_data is not null) or
+      (new.bloqueado_data is null and old.bloqueado_data is not null) or
+      (new.bloqueado_data is not null and old.bloqueado_data is not null and new.bloqueado_data <> old.bloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, new.bloqueado_data);
+
+  if ((old.bloqueado_motivo is null and new.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is null and old.bloqueado_motivo is not null) or
+      (new.bloqueado_motivo is not null and old.bloqueado_motivo is not null and new.bloqueado_motivo <> old.bloqueado_motivo)) then
+     insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+            values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, new.bloqueado_motivo);
+
+  if ((old.bloqueado_usuario is null and new.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is null and old.bloqueado_usuario is not null) or
+      (new.bloqueado_usuario is not null and old.bloqueado_usuario is not null and new.bloqueado_usuario <> old.bloqueado_usuario)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, new.bloqueado_usuario);
+
+  if ((old.desbloqueado_data is null and new.desbloqueado_data is not null) or
+      (new.desbloqueado_data is null and old.desbloqueado_data is not null) or
+      (new.desbloqueado_data is not null and old.desbloqueado_data is not null and new.desbloqueado_data <> old.desbloqueado_data)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, new.desbloqueado_data);
+
+  if ((old.dtcad is null and new.dtcad is not null) or
+      (new.dtcad is null and old.dtcad is not null) or
+      (new.dtcad is not null and old.dtcad is not null and new.dtcad <> old.dtcad)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'DTCAD', old.dtcad, new.dtcad);
+
+  if ((old.vendedor_cod is null and new.vendedor_cod is not null) or
+      (new.vendedor_cod is null and old.vendedor_cod is not null) or
+      (new.vendedor_cod is not null and old.vendedor_cod is not null and new.vendedor_cod <> old.vendedor_cod)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'VENDEDOR_COD', old.vendedor_cod, new.vendedor_cod);
+
+  if ((old.usuario is null and new.usuario is not null) or
+      (new.usuario is null and old.usuario is not null) or
+      (new.usuario is not null and old.usuario is not null and new.usuario <> old.usuario)) then
+     insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+            values (:tid, 'USUARIO', old.usuario, new.usuario);
+
+
+end;^
+
+SET TERM ; ^
+
+SET TERM ^ ;
+
+ALTER TRIGGER IBE$TBCLIENTE_AD
+as
+declare variable tid integer;
+begin
+  tid = gen_id(ibe$log_tables_gen,1);
+
+  insert into ibe$log_tables (id, table_name, operation, date_time, user_name)
+         values (:tid, 'TBCLIENTE', 'D', 'NOW', user);
+
+  insert into ibe$log_keys (log_tables_id, key_field, key_value)
+         values (:tid, 'CNPJ', old.cnpj);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CODIGO', old.codigo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PESSOA_FISICA', old.pessoa_fisica, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CNPJ', old.cnpj, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NOME', old.nome, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCEST', old.inscest, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'INSCMUN', old.inscmun, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'ENDER', old.ender, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'COMPLEMENTO', old.complemento, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BAIRRO', old.bairro, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CEP', old.cep, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'CIDADE', old.cidade, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'UF', old.uf, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONE', old.fone, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECEL', old.fonecel, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'FONECOMERC', old.fonecomerc, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'EMAIL', old.email, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'SITE', old.site, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'NUMERO_END', old.numero_end, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'PAIS_ID', old.pais_id, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VALOR_LIMITE_COMPRA', old.valor_limite_compra, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO', old.bloqueado, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_DATA', old.bloqueado_data, null);
+
+  insert into ibe$log_blob_fields (log_tables_id, field_name, old_blob_value, new_blob_value)
+         values (:tid, 'BLOQUEADO_MOTIVO', old.bloqueado_motivo, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'BLOQUEADO_USUARIO', old.bloqueado_usuario, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DESBLOQUEADO_DATA', old.desbloqueado_data, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'DTCAD', old.dtcad, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'VENDEDOR_COD', old.vendedor_cod, null);
+
+  insert into ibe$log_fields (log_tables_id, field_name, old_value, new_value)
+         values (:tid, 'USUARIO', old.usuario, null);
+
+
+end;^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 04/06/2013 14:15:38 --------*/
+
+ALTER TABLE TBPRODUTO
+    ADD USUARIO DMN_VCHAR_50;
+
+COMMENT ON COLUMN TBPRODUTO.USUARIO IS
+'Usuario Insercao/Atualizacao';
+

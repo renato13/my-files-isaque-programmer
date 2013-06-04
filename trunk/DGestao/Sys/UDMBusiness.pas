@@ -407,7 +407,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = user,');
-    SQL.Add('  Desbloqueado_data = null, Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
+    SQL.Add('  Usuario = user, Desbloqueado_data = null, Bloqueado_motivo = ' + QuotedStr(CLIENTE_BLOQUEADO_PORDEBITO));
     SQL.Add('where Bloqueado = 0');
     SQL.Add('  and ((Desbloqueado_data is null) or (Desbloqueado_data <> Current_date))');
     SQL.Add('  and Cnpj in (');
@@ -433,6 +433,7 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
+    SQL.Add('  Usuario = ' + QuotedStr(GetUserApp) + ',');
 
     if Trim(Motivo) = EmptyStr then
       SQL.Add('  Bloqueado_motivo = Null')
