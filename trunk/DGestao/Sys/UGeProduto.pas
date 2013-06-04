@@ -444,21 +444,7 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
-
-  EvUA.UserID := GetUserFunctionID;
-
-  Case GetUserFunctionID of
-    FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
-      begin
-        btbtnIncluir.Visible  := False;
-        btbtnAlterar.Visible  := False;
-        btbtnExcluir.Visible  := False;
-        btbtnCancelar.Visible := False;
-        btbtnSalvar.Visible   := False;
-
-        DtSrcTabela.AutoEdit := False;
-      end;
-  end
+  
 end;
 
 procedure TfrmGeProduto.dbGrupoButtonClick(Sender: TObject);
@@ -664,46 +650,25 @@ procedure TfrmGeProduto.FormActivate(Sender: TObject);
 begin
   inherited;
 
-  case DMBusiness.ibdtstUsersCODFUNCAO.AsInteger of
-    FUNCTION_USER_ID_DIRETORIA:
-      EvUA.UserID := FUNCTION_USER_ID_DIRETORIA;   // Diretoria
-
-    FUNCTION_USER_ID_GERENTE_VND:
-      EvUA.UserID := FUNCTION_USER_ID_GERENTE_VND; // Gerente de Vendas
-
-    FUNCTION_USER_ID_GERENTE_FIN:
-      EvUA.UserID := FUNCTION_USER_ID_GERENTE_FIN; // Gerente Financeiro
-
-    FUNCTION_USER_ID_VENDEDOR:
-      EvUA.UserID := FUNCTION_USER_ID_VENDEDOR;    // Vendedor
-      
-    FUNCTION_USER_ID_GERENTE_ADM:
-      EvUA.UserID := FUNCTION_USER_ID_GERENTE_ADM; // Gerente ADM
-
-    FUNCTION_USER_ID_CAIXA:
-      EvUA.UserID := FUNCTION_USER_ID_CAIXA;       // Caixa
-
-    FUNCTION_USER_ID_AUX_FINANC1:
-      EvUA.UserID := FUNCTION_USER_ID_AUX_FINANC1; // Aux.Financeiro 1
-
-    FUNCTION_USER_ID_AUX_FINANC2:
-      EvUA.UserID := FUNCTION_USER_ID_AUX_FINANC2; // Aux.Financeiro 2
-      
-    FUNCTION_USER_ID_SUPERV_CX:
-      EvUA.UserID := FUNCTION_USER_ID_SUPERV_CX;   // Supervisor Caixa
-
-    FUNCTION_USER_ID_ESTOQUISTA:
-      EvUA.UserID := FUNCTION_USER_ID_ESTOQUISTA;  // Estoquista
-      
-    FUNCTION_USER_ID_SUPORTE_TI:
-      EvUA.UserID := FUNCTION_USER_ID_SUPORTE_TI;  // TI
-
-    FUNCTION_USER_ID_SYSTEM_ADM:
-      EvUA.UserID := FUNCTION_USER_ID_SYSTEM_ADM;  // Masterdados-Supervisor
-      
-    else
-      ShowWarning('Falta cruzar nova função com EvUserID!');
+ EvUA.UserID := GetUserFunctionID;
+  Case GetUserFunctionID of
+    FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
+      begin
+        btbtnIncluir.Visible  := False;
+        btbtnAlterar.Visible  := False;
+        btbtnExcluir.Visible  := False;
+        btbtnCancelar.Visible := False;
+        btbtnSalvar.Visible   := False;
+        DtSrcTabela.AutoEdit := False;
+        lblCusto.Visible := False;
+        dbCusto.Visible := False;
+        lblPercentualMarckup.Visible := False;
+        dbPercentualMarckup.Visible := False;
+        lblLucroValor.Visible := False;
+        dbLucroValor.Visible := False;
+      end;
   end;
+
 
   if pgcGuias.ActivePage = tbsTabela then
   begin
@@ -711,7 +676,7 @@ begin
     edtFiltrar.SetFocus;
   end;
 
-  dbgDados.Columns[COLUMN_LUCRO].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
+  dbgDados.Columns[12].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
     FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2, FUNCTION_USER_ID_SUPORTE_TI, FUNCTION_USER_ID_SYSTEM_ADM] );
 end;
 

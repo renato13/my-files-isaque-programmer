@@ -1,9 +1,8 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 382
-  Top = 114
+  Left = 267
+  Top = 79
   Width = 977
   Height = 648
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -24,7 +23,6 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
-    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
@@ -130,9 +128,9 @@ inherited frmGeProduto: TfrmGeProduto
           end
           item
             Expanded = False
-            FieldName = 'LUCRO_VALOR'
-            Title.Caption = 'Lucro'
-            Width = 55
+            FieldName = 'PERCENTUAL_MARCKUP'
+            Title.Caption = 'Markup(%)'
+            Width = 60
             Visible = True
           end
           item
@@ -804,13 +802,13 @@ inherited frmGeProduto: TfrmGeProduto
           object lblPercentualMarckup: TLabel
             Left = 376
             Top = 8
-            Width = 68
+            Width = 62
             Height = 13
-            Caption = '% Marckup:'
+            Caption = '% Markup:'
             FocusControl = dbPercentualMarckup
           end
           object lblPrecoVendaSugestao: TLabel
-            Left = 496
+            Left = 616
             Top = 8
             Width = 84
             Height = 13
@@ -822,9 +820,10 @@ inherited frmGeProduto: TfrmGeProduto
             Font.Name = 'Tahoma'
             Font.Style = [fsBold]
             ParentFont = False
+            Visible = False
           end
           object lblLucroValor: TLabel
-            Left = 616
+            Left = 496
             Top = 8
             Width = 91
             Height = 13
@@ -905,18 +904,20 @@ inherited frmGeProduto: TfrmGeProduto
             Width = 113
             Height = 21
             CharCase = ecUpperCase
+            Color = clMoneyGreen
             DataField = 'PERCENTUAL_MARCKUP'
             DataSource = DtSrcTabela
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clBlack
             Font.Height = -11
             Font.Name = 'MS Sans Serif'
-            Font.Style = []
+            Font.Style = [fsBold]
             ParentFont = False
+            ReadOnly = True
             TabOrder = 3
           end
           object dbPrecoVendaSugestao: TDBEdit
-            Left = 496
+            Left = 616
             Top = 24
             Width = 113
             Height = 21
@@ -931,9 +932,10 @@ inherited frmGeProduto: TfrmGeProduto
             ParentFont = False
             ReadOnly = True
             TabOrder = 4
+            Visible = False
           end
           object dbLucroValor: TDBEdit
-            Left = 616
+            Left = 496
             Top = 24
             Width = 113
             Height = 21
@@ -1883,7 +1885,7 @@ inherited frmGeProduto: TfrmGeProduto
         'veiculo)')
     GeneratorField.Field = 'CODIGO'
     GeneratorField.Generator = 'GEN_PRODUTO_ID'
-    Left = 760
+    Left = 752
     object IbDtstTabelaCODIGO: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
@@ -2277,7 +2279,7 @@ inherited frmGeProduto: TfrmGeProduto
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
-    Left = 824
+    Left = 816
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -2448,14 +2450,16 @@ inherited frmGeProduto: TfrmGeProduto
       'delete from TBPRODUTO'
       'where'
       '  CODIGO = :OLD_CODIGO')
-    Left = 792
+    Left = 784
   end
   inherited ImgList: TImageList
-    Left = 728
+    Left = 720
   end
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 296
   end
@@ -2466,6 +2470,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblOrigem: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'ORP_COD'
@@ -2502,6 +2508,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoNM: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2542,6 +2550,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2565,19 +2575,26 @@ inherited frmGeProduto: TfrmGeProduto
   end
   object EvUA: TEvUserAccess
     Consents.Strings = (
-      'btbtnAlterar=D1,2,3,5,11,12'
-      'btbtnCancelar=D1,2,3,5,11,12'
-      'btbtnExcluir=D1,2,3,5,11,12'
-      'btbtnIncluir=D1,2,3,5,11,12'
-      'btbtnSalvar=D1,2,3,5,11,12'
-      'dbCusto=H1,2,3,5,11,12'
-      'lblCusto=H1,2,3,5,11,12')
-    Left = 700
+      'btbtnAlterar=H'
+      'btbtnCancelar=D'
+      'btbtnExcluir=D'
+      'btbtnIncluir=H'
+      'btbtnSalvar=D'
+      'dbCusto=H'
+      'lblCusto=H'
+      'dbPercentualMarckup=D'
+      'dbLucroValor=D'
+      'lblPercentualMarckup=H'
+      'lblLucroValor=H'
+      'dbgDados=H')
+    Left = 692
     Top = 9
   end
   object tblTributacaoSN: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2616,6 +2633,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2638,6 +2657,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCombustivel: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2662,6 +2683,8 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTipoVeiculo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2695,6 +2718,8 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaPIS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -2711,6 +2736,8 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaCOFINS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (

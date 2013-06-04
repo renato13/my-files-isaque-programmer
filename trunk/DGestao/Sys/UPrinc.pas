@@ -417,6 +417,7 @@ begin
 
         mnRelatorioFinanceiro.Enabled := False;
         nmRelatorioProduto.Enabled    := False;
+        mnRelatorioEstoque.Enabled := False;
 
         btnEmpresa.Enabled       := False;
         btnProduto.Enabled       := False;
