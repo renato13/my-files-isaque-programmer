@@ -444,7 +444,15 @@ begin
   UpdateGenerator;
 
   pgcMaisDados.ActivePageIndex := 0;
-  
+
+  {$IFNDEF DGE}
+  dbPercentualMarckup.Color    := clWindow;
+  dbPercentualMarckup.ReadOnly := False;
+  dbPercentualMarckup.TabStop  := True;
+
+  lblPrecoVendaSugestao.Visible := True;
+  dbPrecoVendaSugestao.Visible  := True;
+  {$ENDIF}
 end;
 
 procedure TfrmGeProduto.dbGrupoButtonClick(Sender: TObject);
