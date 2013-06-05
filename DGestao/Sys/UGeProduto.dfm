@@ -812,9 +812,9 @@ inherited frmGeProduto: TfrmGeProduto
           object lblPrecoVendaSugestao: TLabel
             Left = 616
             Top = 8
-            Width = 84
+            Width = 93
             Height = 13
-            Caption = 'Sugest'#227'o (R$):'
+            Caption = 'PV. Sugest. (R$):'
             FocusControl = dbPrecoVendaSugestao
             Font.Charset = ANSI_CHARSET
             Font.Color = clWindowText
