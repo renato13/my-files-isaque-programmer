@@ -649,23 +649,31 @@ end;
 procedure TfrmGeProduto.FormActivate(Sender: TObject);
 begin
   inherited;
+  EvUA.UserID := GetUserFunctionID;
 
- EvUA.UserID := GetUserFunctionID;
   Case GetUserFunctionID of
-    FUNCTION_USER_ID_ESTOQUISTA, FUNCTION_USER_ID_VENDEDOR, FUNCTION_USER_ID_CAIXA, FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2:
+    FUNCTION_USER_ID_ESTOQUISTA ,
+    FUNCTION_USER_ID_VENDEDOR   ,
+    FUNCTION_USER_ID_CAIXA      ,
+    FUNCTION_USER_ID_AUX_FINANC1,
+    FUNCTION_USER_ID_AUX_FINANC2:
       begin
         btbtnIncluir.Visible  := False;
         btbtnAlterar.Visible  := False;
         btbtnExcluir.Visible  := False;
         btbtnCancelar.Visible := False;
         btbtnSalvar.Visible   := False;
+
         DtSrcTabela.AutoEdit := False;
+
         lblCusto.Visible := False;
-        dbCusto.Visible := False;
+        dbCusto.Visible  := False;
+
         lblPercentualMarckup.Visible := False;
-        dbPercentualMarckup.Visible := False;
+        dbPercentualMarckup.Visible  := False;
+
         lblLucroValor.Visible := False;
-        dbLucroValor.Visible := False;
+        dbLucroValor.Visible  := False;
       end;
   end;
 
@@ -673,10 +681,11 @@ begin
   if pgcGuias.ActivePage = tbsTabela then
   begin
     FiltarDados;
-    edtFiltrar.SetFocus;
+    if ( edtFiltrar.Visible and edtFiltrar.Enabled ) then
+      edtFiltrar.SetFocus;
   end;
 
-  dbgDados.Columns[12].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
+  dbgDados.Columns[COLUMN_LUCRO].Visible := ( DMBusiness.ibdtstUsersCODFUNCAO.AsInteger in [FUNCTION_USER_ID_DIRETORIA..FUNCTION_USER_ID_GERENTE_FIN,
     FUNCTION_USER_ID_AUX_FINANC1, FUNCTION_USER_ID_AUX_FINANC2, FUNCTION_USER_ID_SUPORTE_TI, FUNCTION_USER_ID_SYSTEM_ADM] );
 end;
 
