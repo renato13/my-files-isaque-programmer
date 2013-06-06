@@ -4477,3 +4477,301 @@ end^
 
 SET TERM ; ^
 
+
+
+
+/*------ SYSDBA 06/06/2013 11:08:55 --------*/
+
+ALTER TABLE TBPRODUTO
+    ADD PERCENTUAL_MARGEM DMN_PERCENTUAL_3;
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_MARCKUP IS
+'Percentual Marckup c/ 3 casas decimais.
+
+Sugestao de composicao:
+Percentual Marckup = ((Valor de Venda - Custo de Entrada) / Custo de Entrada) * 100';
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_MARGEM IS
+'Percentual de Margem Aplicada p/ Venda c/ 3 casas decimais.
+
+Sugestao de composicao:
+Percentual Margem = ((Lucro Desejado + Despesas Administrativas e de Venda) / Custo de Entrada) * 100';
+
+COMMENT ON COLUMN TBPRODUTO.PRECO_SUGERIDO IS
+'Preco Venda (Sugerido).
+
+Composicao:
+Preco Sugerido = Custo de Entrada * Percentual Margem / 100';
+
+alter table TBPRODUTO
+alter CODIGO position 1;
+
+alter table TBPRODUTO
+alter COD position 2;
+
+alter table TBPRODUTO
+alter DESCRI position 3;
+
+alter table TBPRODUTO
+alter APRESENTACAO position 4;
+
+alter table TBPRODUTO
+alter DESCRI_APRESENTACAO position 5;
+
+alter table TBPRODUTO
+alter MODELO position 6;
+
+alter table TBPRODUTO
+alter PRECO position 7;
+
+alter table TBPRODUTO
+alter PRECO_PROMOCAO position 8;
+
+alter table TBPRODUTO
+alter REFERENCIA position 9;
+
+alter table TBPRODUTO
+alter SECAO position 10;
+
+alter table TBPRODUTO
+alter QTDE position 11;
+
+alter table TBPRODUTO
+alter UNIDADE position 12;
+
+alter table TBPRODUTO
+alter ESTOQMIN position 13;
+
+alter table TBPRODUTO
+alter CODGRUPO position 14;
+
+alter table TBPRODUTO
+alter CODFABRICANTE position 15;
+
+alter table TBPRODUTO
+alter CUSTOMEDIO position 16;
+
+alter table TBPRODUTO
+alter PERCENTUAL_MARCKUP position 17;
+
+alter table TBPRODUTO
+alter PERCENTUAL_MARGEM position 18;
+
+alter table TBPRODUTO
+alter PRECO_SUGERIDO position 19;
+
+alter table TBPRODUTO
+alter CODEMP position 20;
+
+alter table TBPRODUTO
+alter CODSECAO position 21;
+
+alter table TBPRODUTO
+alter CODORIGEM position 22;
+
+alter table TBPRODUTO
+alter CODTRIBUTACAO position 23;
+
+alter table TBPRODUTO
+alter CST position 24;
+
+alter table TBPRODUTO
+alter CSOSN position 25;
+
+alter table TBPRODUTO
+alter CST_PIS position 26;
+
+alter table TBPRODUTO
+alter CST_COFINS position 27;
+
+alter table TBPRODUTO
+alter NCM_SH position 28;
+
+alter table TBPRODUTO
+alter CODCFOP position 29;
+
+alter table TBPRODUTO
+alter CODBARRA_EAN position 30;
+
+alter table TBPRODUTO
+alter CODUNIDADE position 31;
+
+alter table TBPRODUTO
+alter ALIQUOTA_TIPO position 32;
+
+alter table TBPRODUTO
+alter ALIQUOTA position 33;
+
+alter table TBPRODUTO
+alter ALIQUOTA_CSOSN position 34;
+
+alter table TBPRODUTO
+alter ALIQUOTA_PIS position 35;
+
+alter table TBPRODUTO
+alter ALIQUOTA_COFINS position 36;
+
+alter table TBPRODUTO
+alter VALOR_IPI position 37;
+
+alter table TBPRODUTO
+alter RESERVA position 38;
+
+alter table TBPRODUTO
+alter PRODUTO_NOVO position 39;
+
+alter table TBPRODUTO
+alter COR_VEICULO position 40;
+
+alter table TBPRODUTO
+alter COMBUSTIVEL_VEICULO position 41;
+
+alter table TBPRODUTO
+alter TIPO_VEICULO position 42;
+
+alter table TBPRODUTO
+alter ANO_MODELO_VEICULO position 43;
+
+alter table TBPRODUTO
+alter ANO_FABRICACAO_VEICULO position 44;
+
+alter table TBPRODUTO
+alter RENAVAM_VEICULO position 45;
+
+alter table TBPRODUTO
+alter CHASSI_VEICULO position 46;
+
+alter table TBPRODUTO
+alter KILOMETRAGEM_VEICULO position 47;
+
+alter table TBPRODUTO
+alter SITUACAO_ATUAL_VEICULO position 48;
+
+alter table TBPRODUTO
+alter SITUACAO_HISTORICO_VEICULO position 49;
+
+alter table TBPRODUTO
+alter PERCENTUAL_REDUCAO_BC position 50;
+
+alter table TBPRODUTO
+alter USUARIO position 51;
+
+
+
+
+/*------ SYSDBA 06/06/2013 11:11:17 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_compras_atualizar_estoque for tbcompras
+active after update position 1
+AS
+  declare variable produto varchar(10);
+  declare variable empresa varchar(18);
+  declare variable estoque integer;
+  declare variable quantidade integer;
+  declare variable custo_produto numeric(15,2);
+  declare variable custo_compra numeric(15,2);
+  declare variable custo_medio numeric(15,2);
+  declare variable preco_venda dmn_money;
+  declare variable percentual_markup dmn_percentual_3;
+begin
+  if ( (coalesce(old.Status, 0) <> coalesce(new.Status, 0)) and (new.Status = 2)) then
+  begin
+
+    -- Incrimentar Estoque do produto
+    for
+      Select
+          i.Codprod
+        , i.Codemp
+        , i.Qtde
+        , coalesce(p.Qtde, 0)
+        , coalesce(i.Customedio, 0)
+        , coalesce(p.Customedio, 0)
+        , p.percentual_marckup
+        , p.preco
+      from TBCOMPRASITENS i
+        inner join TBPRODUTO p on (p.Cod = i.Codprod)
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+      into
+          Produto
+        , Empresa
+        , Quantidade
+        , Estoque
+        , Custo_compra
+        , Custo_produto
+        , Percentual_markup
+        , Preco_venda
+    do
+    begin
+      if ( (:Custo_compra > 0) and (:Custo_produto > 0) and (:Estoque > 0) ) then
+        Custo_medio = (:Custo_compra + :Custo_produto) / 2;
+      else
+        Custo_medio = :Custo_compra;
+
+--      Percentual_markup = cast( ( ( (:Preco_venda - :Custo_medio) / :Custo_medio) * 100) as numeric(18,3) );
+      Percentual_markup = cast( ( ( (:Preco_venda - :Custo_compra) / :Custo_compra) * 100 ) as numeric(18,3) );
+
+      -- Incrementar estoque
+      Update TBPRODUTO p Set
+          --p.Customedio = :Custo_medio
+          p.Customedio = :Custo_compra
+        , p.Qtde       = :Estoque + :Quantidade
+        , p.percentual_marckup = :Percentual_markup
+--        , p.preco_sugerido     = cast( (:Custo_medio + (:Custo_medio * :Percentual_markup / 100)) as numeric(15,2) )
+        , p.preco_sugerido     = cast( (:Custo_compra + (:Custo_compra * :Percentual_markup / 100)) as numeric(15,2) )
+      where p.Cod    = :Produto
+        and p.Codemp = :Empresa;
+
+      -- Gravar posicao de estoque
+      Update TBCOMPRASITENS i Set
+          i.Qtdeantes = :Estoque
+        , i.Qtdefinal = :Estoque + :Quantidade
+      where i.Ano = new.Ano
+        and i.Codcontrol = new.Codcontrol
+        and i.Codemp     = new.Codemp
+        and i.Codprod    = :Produto;
+
+      -- Gerar historico
+      Insert Into TBPRODHIST (
+          Codempresa
+        , Codprod
+        , Doc
+        , Historico
+        , Dthist
+        , Qtdeatual
+        , Qtdenova
+        , Qtdefinal
+        , Resp
+        , Motivo
+      ) values (
+          :Empresa
+        , :Produto
+        , new.Ano || '/' || new.Codcontrol
+        , 'ENTRADA - COMPRA'
+        , Current_time
+        , :Estoque
+        , :Quantidade
+        , :Estoque + :Quantidade
+        , new.Usuario
+        , 'Custo Medio no valor de R$ ' || :Custo_medio
+      );
+    end
+     
+  end 
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 06/06/2013 11:12:02 --------*/
+
+COMMENT ON COLUMN TBPRODUTO.PERCENTUAL_MARCKUP IS
+'Percentual de Marckup c/ 3 casas decimais.
+
+Sugestao de composicao:
+Percentual Marckup = ((Valor de Venda - Custo de Entrada) / Custo de Entrada) * 100';
+
