@@ -1823,6 +1823,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Codfabricante'
       '  , p.Customedio'
       '  , p.Percentual_marckup'
+      '  , p.Percentual_margem'
       '  , p.Codemp'
       '  , p.Codsecao'
       '  , p.Codorigem'
@@ -2000,6 +2001,13 @@ inherited frmGeProduto: TfrmGeProduto
     object IbDtstTabelaPERCENTUAL_MARCKUP: TIBBCDField
       FieldName = 'PERCENTUAL_MARCKUP'
       Origin = '"TBPRODUTO"."PERCENTUAL_MARCKUP"'
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 3
+    end
+    object IbDtstTabelaPERCENTUAL_MARGEM: TIBBCDField
+      FieldName = 'PERCENTUAL_MARGEM'
+      Origin = '"TBPRODUTO"."PERCENTUAL_MARGEM"'
       DisplayFormat = ',0.00'
       Precision = 18
       Size = 3
@@ -2375,6 +2383,7 @@ inherited frmGeProduto: TfrmGeProduto
       '  MODELO = :MODELO,'
       '  NCM_SH = :NCM_SH,'
       '  PERCENTUAL_MARCKUP = :PERCENTUAL_MARCKUP,'
+      '  PERCENTUAL_MARGEM = :PERCENTUAL_MARGEM,'
       '  PERCENTUAL_REDUCAO_BC = :PERCENTUAL_REDUCAO_BC,'
       '  PRECO = :PRECO,'
       '  PRECO_PROMOCAO = :PRECO_PROMOCAO,'
@@ -2411,7 +2420,7 @@ inherited frmGeProduto: TfrmGeProduto
         'CRI, DESCRI_APRESENTACAO, '
       
         '   ESTOQMIN, KILOMETRAGEM_VEICULO, MODELO, NCM_SH, PERCENTUAL_MA' +
-        'RCKUP, '
+        'RCKUP, PERCENTUAL_MARGEM,'
       
         '   PERCENTUAL_REDUCAO_BC, PRECO, PRECO_PROMOCAO, PRECO_SUGERIDO,' +
         ' PRODUTO_NOVO, '
@@ -2439,8 +2448,8 @@ inherited frmGeProduto: TfrmGeProduto
         '   :DESCRI_APRESENTACAO, :ESTOQMIN, :KILOMETRAGEM_VEICULO, :MODE' +
         'LO, :NCM_SH, '
       
-        '   :PERCENTUAL_MARCKUP, :PERCENTUAL_REDUCAO_BC, :PRECO, :PRECO_P' +
-        'ROMOCAO, '
+        '   :PERCENTUAL_MARCKUP, :PERCENTUAL_MARGEM, :PERCENTUAL_REDUCAO_' +
+        'BC, :PRECO, :PRECO_PROMOCAO,'
       
         '   :PRECO_SUGERIDO, :PRODUTO_NOVO, :QTDE, :REFERENCIA, :RENAVAM_' +
         'VEICULO, '

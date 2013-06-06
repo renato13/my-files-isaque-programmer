@@ -201,6 +201,7 @@ type
     ShpLucroNegativo: TShape;
     Label2: TLabel;
     IbDtstTabelaLUCRO_VALOR: TIBBCDField;
+    IbDtstTabelaPERCENTUAL_MARGEM: TIBBCDField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -503,6 +504,9 @@ begin
 
   IbDtstTabelaCST.Value := IbDtstTabelaCODORIGEM.AsString + IbDtstTabelaCODTRIBUTACAO.AsString;
 
+  if ( IbDtstTabelaPERCENTUAL_MARGEM.IsNull and (not IbDtstTabelaPERCENTUAL_MARCKUP.IsNull) ) then
+    IbDtstTabelaPERCENTUAL_MARGEM.Value := IbDtstTabelaPERCENTUAL_MARCKUP.Value;
+
   if ( IbDtstTabela.State = dsInsert ) then
     if ( Trim(IbDtstTabelaCOD.AsString) = EmptyStr ) then
       IbDtstTabelaCOD.Value := FormatFloat(DisplayFormatCodigo, IbDtstTabelaCODIGO.AsInteger);
@@ -786,9 +790,9 @@ procedure TfrmGeProduto.DtSrcTabelaDataChange(Sender: TObject;
   Field: TField);
 begin
   if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
-    if ( Field = IbDtstTabelaPERCENTUAL_MARCKUP ) then
+    if ( Field = IbDtstTabelaPERCENTUAL_MARGEM ) then
       IbDtstTabelaPRECO_SUGERIDO.AsCurrency := IbDtstTabelaCUSTOMEDIO.AsCurrency +
-        (IbDtstTabelaCUSTOMEDIO.AsCurrency * IbDtstTabelaPERCENTUAL_MARCKUP.AsCurrency / 100);
+        (IbDtstTabelaCUSTOMEDIO.AsCurrency * IbDtstTabelaPERCENTUAL_MARGEM.AsCurrency / 100);
 end;
 
 procedure TfrmGeProduto.FiltarDados(const iTipoPesquisa : Integer);
