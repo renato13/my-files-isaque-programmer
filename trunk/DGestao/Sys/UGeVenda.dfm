@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 43
-  Top = 33
+  Left = 276
+  Top = 89
   Width = 1132
   Height = 724
   ActiveControl = nil
@@ -363,7 +363,7 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'LUCRO_CALCULADO'
-            Title.Caption = 'Markup (%)'
+            Title.Caption = 'Margem (%)'
             Width = 78
             Visible = True
           end
