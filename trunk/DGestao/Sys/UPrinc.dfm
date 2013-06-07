@@ -7303,14 +7303,7 @@ object frmPrinc: TfrmPrinc
         end
         object DemandaCompraxVenda1: TMenuItem
           Caption = 'Demanda Compra x Venda'
-          object mnRelatorioEstoqueDemanda2012: TMenuItem
-            Caption = 'Ano 2012'
-            OnClick = mnRelatorioEstoqueDemanda2012Click
-          end
-          object Ano20131: TMenuItem
-            Caption = 'Ano 2013'
-            OnClick = Ano20131Click
-          end
+          OnClick = DemandaCompraxVenda1Click
         end
       end
       object mnRelatorioFaturamento: TMenuItem

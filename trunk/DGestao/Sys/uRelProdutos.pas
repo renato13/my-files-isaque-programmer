@@ -32,7 +32,6 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
-    ibqryEmpresa: TIBQuery;
     QRLabel1: TQRLabel;
     QRDBText3: TQRDBText;
     QRExpr1: TQRExpr;
@@ -83,8 +82,6 @@ type
     QRLabel15: TQRLabel;
     QRDBText15: TQRDBText;
     IBQuery2FABRIC: TIBStringField;
-    ibqryEmpresaCNPJ: TIBStringField;
-    ibqryEmpresaNMFANT: TIBStringField;
     procedure qckrpBeforePrint(Sender: TCustomQuickRep;
       var PrintReport: Boolean);
     procedure IBQuery1CalcFields(DataSet: TDataSet);
@@ -131,7 +128,7 @@ begin
 
   IBQuery1.Open;
   IBQuery2.Open;
-  ibqryEmpresa.Open;
+
 end;
 
 initialization

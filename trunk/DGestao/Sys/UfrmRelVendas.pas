@@ -84,7 +84,6 @@ type
     QRDBText8: TQRDBText;
     QRDBText9: TQRDBText;
     QRExpr3: TQRExpr;
-    ibqryEmpresa: TIBQuery;
     ibqryVendasCLIENTE: TIBStringField;
     ibqryVendasCODCONTROL: TIntegerField;
     ibqryVendasDTFINALIZACAO_VENDA: TDateField;

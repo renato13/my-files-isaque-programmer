@@ -326,6 +326,38 @@ object frmRelCR: TfrmRelCR
         Transparent = False
         FontSize = 7
       end
+      object QRDBText3: TQRDBText
+        Left = 309
+        Top = 16
+        Width = 63
+        Height = 19
+        Frame.Color = clBlack
+        Frame.DrawTop = False
+        Frame.DrawBottom = False
+        Frame.DrawLeft = False
+        Frame.DrawRight = False
+        Size.Values = (
+          50.270833333333330000
+          817.562500000000000000
+          42.333333333333330000
+          166.687500000000000000)
+        Alignment = taCenter
+        AlignToBand = True
+        AutoSize = True
+        AutoStretch = False
+        Color = clWhite
+        DataSet = DMBusiness.ibqryEmpresa
+        DataField = 'NMFANT'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial Black'
+        Font.Style = [fsBold, fsUnderline]
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+        FontSize = 10
+      end
     end
     object ColumnHeaderBand1: TQRBand
       Left = 57

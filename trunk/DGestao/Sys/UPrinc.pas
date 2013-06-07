@@ -114,11 +114,9 @@ type
     menuUtilitarios: TMenuItem;
     ExportarNFeGeradas1: TMenuItem;
     mnRelatorioEstoque: TMenuItem;
-    mnRelatorioEstoqueDemanda2012: TMenuItem;
     mnRelatorioEstoqueProduto: TMenuItem;
-    DemandaCompraxVenda1: TMenuItem;
-    Ano20131: TMenuItem;
     PorFormadePagamento1: TMenuItem;
+    DemandaCompraxVenda1: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -168,9 +166,9 @@ type
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
     procedure ExportarNFeGeradas1Click(Sender: TObject);
     procedure mnRelatorioEstoqueProdutoClick(Sender: TObject);
-    procedure mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
     procedure Ano20131Click(Sender: TObject);
     procedure PorFormadePagamento1Click(Sender: TObject);
+    procedure DemandaCompraxVenda1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -575,35 +573,18 @@ begin
   FormFunction.ShowFormReport(Self, 'frmRelProdutos', 'qckrp');
 end;
 
-procedure TfrmPrinc.mnRelatorioEstoqueDemanda2012Click(Sender: TObject);
-begin
-  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
-  with frmRelEstoque do
-  begin
-    ibqryDemanda.Close;
-    ibqryEmpresa.Open;
-    ibqryDemanda.Params[0].Value := 2012;
-    ibqryDemanda.Params[1].Value := 2012;
-    qrlblAno.Caption := 'ANO 2012';
-    ibqryDemanda.Open;
-    qckrp.Preview;
-    Destroy
-  end;
-end;
-
 procedure TfrmPrinc.Ano20131Click(Sender: TObject);
 begin
   Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
   with frmRelEstoque do
   begin
     ibqryDemanda.Close;
-    ibqryEmpresa.Open;
+    ibdtsFabric.Close;
+    ibdtsFabric.Open;
     ibqryDemanda.Params[0].Value := 2013;
     ibqryDemanda.Params[1].Value := 2013;
-    qrlblAno.Caption := 'ANO 2013';
-    ibqryDemanda.Open;
-    qckrp.Preview;
-    Destroy
+    ibqryDemanda.Params[2].Value := dblkpcmbbxFabric.KeyValue;
+    qrlblAno.Caption := dblkpcmbbxFabric.Text + ' - ANO 2013';
   end;
 end;
 
@@ -612,6 +593,13 @@ begin
   Application.CreateForm(TfrmRelVendasFormPag, frmRelVendasFormPag);
   frmRelVendasFormPag.ShowModal;
   frmRelVendasFormPag.Destroy;
+end;
+
+procedure TfrmPrinc.DemandaCompraxVenda1Click(Sender: TObject);
+begin
+ Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
+ frmRelEstoque.ShowModal;
+ frmRelEstoque.Destroy;
 end;
 
 end.

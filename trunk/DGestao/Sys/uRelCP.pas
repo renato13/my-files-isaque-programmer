@@ -38,7 +38,6 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
-    ibqryEmpresa: TIBQuery;
     QRLabel3: TQRLabel;
     QRDBText4: TQRDBText;
     qrlblFornec: TQRLabel;

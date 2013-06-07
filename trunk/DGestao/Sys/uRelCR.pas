@@ -43,6 +43,7 @@ type
     QRSysData1: TQRSysData;
     QRLabel1: TQRLabel;
     QRDBText1: TQRDBText;
+    QRDBText3: TQRDBText;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
