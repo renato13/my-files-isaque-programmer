@@ -1,7 +1,7 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 419
-  Top = 163
-  Width = 1115
+  Left = 43
+  Top = 33
+  Width = 1132
   Height = 724
   ActiveControl = nil
   Caption = 'Controle de Vendas'
@@ -12,15 +12,15 @@ inherited frmGeVenda: TfrmGeVenda
   TextHeight = 13
   inherited Bevel1: TBevel
     Top = 682
-    Width = 1099
+    Width = 1116
   end
   inherited Bevel3: TBevel
     Top = 643
-    Width = 1099
+    Width = 1116
   end
   inherited tlbBotoes: TToolBar
     Top = 647
-    Width = 1099
+    Width = 1116
     inherited btbtnLista: TBitBtn
       Caption = 'Im&primir'
       PopupMenu = ppImprimir
@@ -294,16 +294,16 @@ inherited frmGeVenda: TfrmGeVenda
     end
   end
   inherited pgcGuias: TPageControl
-    Width = 1099
+    Width = 1116
     Height = 643
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 540
-        Width = 1091
+        Width = 1108
       end
       inherited dbgDados: TDBGrid
-        Width = 1091
+        Width = 1108
         Height = 540
         Columns = <
           item
@@ -327,19 +327,20 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'NOME'
-            Width = 305
+            Width = 279
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'TOTALVENDA_BRUTA'
             Title.Caption = 'Total Venda (R$)'
+            Width = 107
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'DESCONTO'
-            Width = 95
+            Width = 88
             Visible = True
           end
           item
@@ -362,7 +363,8 @@ inherited frmGeVenda: TfrmGeVenda
           item
             Expanded = False
             FieldName = 'LUCRO_CALCULADO'
-            Width = 55
+            Title.Caption = 'Markup (%)'
+            Width = 78
             Visible = True
           end
           item
@@ -379,7 +381,7 @@ inherited frmGeVenda: TfrmGeVenda
             Title.Font.Height = -11
             Title.Font.Name = 'Tahoma'
             Title.Font.Style = [fsBold]
-            Width = 82
+            Width = 72
             Visible = True
           end
           item
@@ -395,7 +397,7 @@ inherited frmGeVenda: TfrmGeVenda
       end
       inherited pnlFiltros: TPanel
         Top = 544
-        Width = 1091
+        Width = 1108
         Height = 70
         object lblVendaCancelada: TLabel [0]
           Left = 2
@@ -466,7 +468,7 @@ inherited frmGeVenda: TfrmGeVenda
           Transparent = True
         end
         inherited grpBxFiltro: TGroupBox
-          Left = 472
+          Left = 489
           Width = 615
           Height = 62
           TabOrder = 1
@@ -563,7 +565,7 @@ inherited frmGeVenda: TfrmGeVenda
           end
         end
         object RdgStatusVenda: TRadioGroup
-          Left = 216
+          Left = 233
           Top = 4
           Width = 256
           Height = 62
@@ -585,12 +587,12 @@ inherited frmGeVenda: TfrmGeVenda
     inherited tbsCadastro: TTabSheet
       inherited Bevel8: TBevel
         Top = 233
-        Width = 1091
+        Width = 1108
       end
       object Bevel5: TBevel [1]
         Left = 0
         Top = 113
-        Width = 1091
+        Width = 1108
         Height = 4
         Align = alTop
         Shape = bsSpacer
@@ -598,13 +600,13 @@ inherited frmGeVenda: TfrmGeVenda
       object Bevel6: TBevel [2]
         Left = 0
         Top = 420
-        Width = 1091
+        Width = 1108
         Height = 4
         Align = alBottom
         Shape = bsSpacer
       end
       inherited GrpBxDadosNominais: TGroupBox
-        Width = 1091
+        Width = 1108
         Height = 113
         Caption = 'Dados da venda'
         inherited lblCodigo: TLabel
@@ -1097,13 +1099,13 @@ inherited frmGeVenda: TfrmGeVenda
       object GrpBxDadosProduto: TGroupBox
         Left = 0
         Top = 117
-        Width = 1091
+        Width = 1108
         Height = 116
         Align = alTop
         Caption = 'Dados do produto'
         TabOrder = 1
         DesignSize = (
-          1091
+          1108
           116)
         object lblProduto: TLabel
           Left = 88
@@ -1251,7 +1253,7 @@ inherited frmGeVenda: TfrmGeVenda
           FocusControl = dbTotalDesconto
         end
         object lblProdutoPromocao: TLabel
-          Left = 944
+          Left = 961
           Top = 98
           Width = 142
           Height = 13
@@ -1977,7 +1979,7 @@ inherited frmGeVenda: TfrmGeVenda
       object pgcMaisDados: TPageControl
         Left = 0
         Top = 424
-        Width = 1091
+        Width = 1108
         Height = 190
         ActivePage = tbsTransporte
         Align = alBottom
@@ -1988,7 +1990,7 @@ inherited frmGeVenda: TfrmGeVenda
           object pnlObservacao: TPanel
             Left = 0
             Top = 0
-            Width = 503
+            Width = 520
             Height = 154
             Align = alClient
             BevelOuter = bvNone
@@ -2030,7 +2032,7 @@ inherited frmGeVenda: TfrmGeVenda
             end
           end
           object pnlFormaPagto: TPanel
-            Left = 503
+            Left = 520
             Top = 0
             Width = 572
             Height = 154
@@ -2664,7 +2666,7 @@ inherited frmGeVenda: TfrmGeVenda
           Caption = 'Dados Transporte'
           ImageIndex = 2
           DesignSize = (
-            1083
+            1100
             162)
           object Bevel16: TBevel
             Left = 0
@@ -2851,7 +2853,7 @@ inherited frmGeVenda: TfrmGeVenda
           object dbgVolumes: TDBGrid
             Left = 583
             Top = 5
-            Width = 500
+            Width = 517
             Height = 157
             Anchors = [akLeft, akTop, akRight, akBottom]
             DataSource = dtsVendaVolume
@@ -2907,7 +2909,7 @@ inherited frmGeVenda: TfrmGeVenda
       object dbgProdutos: TDBGrid
         Left = 0
         Top = 237
-        Width = 1091
+        Width = 1108
         Height = 183
         TabStop = False
         Align = alClient
@@ -3104,6 +3106,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  left join TBFORNECEDOR t on (t.codforn = v.nfe_transportadora)')
     GeneratorField.ApplyEvent = gamOnNewRecord
     Left = 992
+    Top = 80
     object IbDtstTabelaANO: TSmallintField
       FieldName = 'ANO'
       Origin = 'TBVENDAS.ANO'
@@ -3418,6 +3421,7 @@ inherited frmGeVenda: TfrmGeVenda
   end
   inherited DtSrcTabela: TDataSource
     Left = 1056
+    Top = 80
   end
   inherited IbUpdTabela: TIBUpdateSQL
     RefreshSQL.Strings = (
@@ -3601,6 +3605,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  ANO = :OLD_ANO and'
       '  CODCONTROL = :OLD_CODCONTROL')
     Left = 1024
+    Top = 80
   end
   inherited ImgList: TImageList
     Left = 1192
@@ -3609,30 +3614,36 @@ inherited frmGeVenda: TfrmGeVenda
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBEMPRESA'
-    Left = 1128
-    Top = 376
+    Left = 928
+    Top = 352
   end
   object dtsEmpresa: TDataSource
     DataSet = tblEmpresa
-    Left = 1160
-    Top = 376
+    Left = 960
+    Top = 352
   end
   object tblVendedor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'TBVENDEDOR'
-    Left = 1128
-    Top = 408
+    Left = 928
+    Top = 384
   end
   object dtsVendedor: TDataSource
     DataSet = tblVendedor
-    Left = 1160
-    Top = 408
+    Left = 960
+    Top = 384
   end
   object tblFormaPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'COD'
@@ -3668,31 +3679,34 @@ inherited frmGeVenda: TfrmGeVenda
       end>
     StoreDefs = True
     TableName = 'TBFORMPAGTO'
-    Left = 1128
-    Top = 440
+    Left = 928
+    Top = 416
   end
   object dtsFormaPagto: TDataSource
     DataSet = tblFormaPagto
-    Left = 1160
-    Top = 440
+    Left = 960
+    Top = 416
   end
   object tblCondicaoPagto: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_CONDICAOPAGTO'
     TableTypes = [ttView]
-    Left = 1128
-    Top = 472
+    Left = 928
+    Top = 448
   end
   object dtsCondicaoPagto: TDataSource
     DataSet = tblCondicaoPagto
-    Left = 1160
-    Top = 472
+    Left = 960
+    Top = 448
   end
   object cdsTabelaItens: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnNewRecord = cdsTabelaItensNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -3738,7 +3752,7 @@ inherited frmGeVenda: TfrmGeVenda
       '')
     UpdateObject = IbUpdTabelaItens
     Left = 992
-    Top = 40
+    Top = 112
     object cdsTabelaItensANO: TSmallintField
       FieldName = 'ANO'
       Origin = 'TVENDASITENS.ANO'
@@ -4047,18 +4061,20 @@ inherited frmGeVenda: TfrmGeVenda
       '  CODPROD = :OLD_CODPROD and'
       '  SEQ = :OLD_SEQ')
     Left = 1024
-    Top = 40
+    Top = 112
   end
   object DtSrcTabelaItens: TDataSource
     AutoEdit = False
     DataSet = cdsTabelaItens
     OnStateChange = DtSrcTabelaItensStateChange
     Left = 1056
-    Top = 40
+    Top = 112
   end
   object qryProduto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -4111,12 +4127,14 @@ inherited frmGeVenda: TfrmGeVenda
       'where p.Codigo = :Codigo')
     ModifySQL.Strings = (
       '')
-    Left = 1128
-    Top = 536
+    Left = 928
+    Top = 512
   end
   object qryCFOP: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -4127,13 +4145,15 @@ inherited frmGeVenda: TfrmGeVenda
       'where c.Cfop_cod = :Cfop_cod')
     ModifySQL.Strings = (
       '')
-    Left = 1160
-    Top = 536
+    Left = 960
+    Top = 512
   end
   object qryTitulos: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = qryTitulosCalcFields
+    BufferChunks = 1000
+    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -4163,7 +4183,7 @@ inherited frmGeVenda: TfrmGeVenda
     ModifySQL.Strings = (
       '')
     Left = 992
-    Top = 72
+    Top = 144
     object qryTitulosANOLANC: TSmallintField
       FieldName = 'ANOLANC'
       Origin = 'TBCONTREC.ANOLANC'
@@ -4310,14 +4330,14 @@ inherited frmGeVenda: TfrmGeVenda
     DataSet = qryTitulos
     OnStateChange = DtSrcTabelaItensStateChange
     Left = 1056
-    Top = 72
+    Top = 144
   end
   object IbStrPrcGerarTitulos: TIBStoredProc
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     StoredProcName = 'SET_GERAR_TITULOS'
     Left = 1024
-    Top = 72
+    Top = 144
     ParamData = <
       item
         DataType = ftString
@@ -4404,6 +4424,8 @@ inherited frmGeVenda: TfrmGeVenda
   object qryNFE: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SelectSQL.Strings = (
       'Select'
       '    n.ANOVENDA'
@@ -4424,7 +4446,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  and n.NUMVENDA = :numvenda')
     UpdateObject = updNFE
     Left = 992
-    Top = 104
+    Top = 176
     object qryNFEANOVENDA: TSmallintField
       FieldName = 'ANOVENDA'
       Origin = 'TBNFE_ENVIADA.ANOVENDA'
@@ -4549,11 +4571,13 @@ inherited frmGeVenda: TfrmGeVenda
       '  SERIE = :OLD_SERIE and'
       '  NUMERO = :OLD_NUMERO')
     Left = 1024
-    Top = 104
+    Top = 176
   end
   object qryTotalComprasAbertas: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       'Select'
       '    g.Valor_limite'
@@ -4561,7 +4585,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , g.Valor_limite_disponivel'
       'from GET_LIMITE_DISPONIVEL_CLIENTE(:CNPJ) g')
     Left = 1024
-    Top = 137
+    Top = 209
     ParamData = <
       item
         DataType = ftString
@@ -4594,13 +4618,14 @@ inherited frmGeVenda: TfrmGeVenda
   object cdsTotalComprasAbertas: TDataSource
     DataSet = qryTotalComprasAbertas
     Left = 1056
-    Top = 137
+    Top = 209
   end
   object cdsVendaFormaPagto: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     BeforePost = cdsVendaFormaPagtoBeforePost
     OnNewRecord = cdsVendaFormaPagtoNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -4629,7 +4654,7 @@ inherited frmGeVenda: TfrmGeVenda
       '')
     UpdateObject = updVendaFormaPagto
     Left = 992
-    Top = 168
+    Top = 240
     object cdsVendaFormaPagtoANO_VENDA: TSmallintField
       FieldName = 'ANO_VENDA'
       Origin = '"TBVENDAS_FORMAPAGTO"."ANO_VENDA"'
@@ -4819,31 +4844,34 @@ inherited frmGeVenda: TfrmGeVenda
       '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
       '  FORMAPAGTO_COD = :OLD_FORMAPAGTO_COD')
     Left = 1024
-    Top = 168
+    Top = 240
   end
   object dtsVendaFormaPagto: TDataSource
     AutoEdit = False
     DataSet = cdsVendaFormaPagto
     Left = 1056
-    Top = 168
+    Top = 240
   end
   object tblModalidadeFrete: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
+    BufferChunks = 1000
+    CachedUpdates = False
     TableName = 'VW_MODALIDADE_FRETE'
     TableTypes = [ttView]
-    Left = 1128
-    Top = 504
+    Left = 928
+    Top = 480
   end
   object dtsModalidadeFrete: TDataSource
     DataSet = tblModalidadeFrete
-    Left = 1160
-    Top = 504
+    Left = 960
+    Top = 480
   end
   object cdsVendaVolume: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnNewRecord = cdsVendaVolumeNewRecord
+    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -4863,7 +4891,7 @@ inherited frmGeVenda: TfrmGeVenda
       '')
     UpdateObject = updVendaVolume
     Left = 992
-    Top = 200
+    Top = 272
     object cdsVendaVolumeANO_VENDA: TSmallintField
       FieldName = 'ANO_VENDA'
       Origin = '"TBVENDAS_VOLUME"."ANO_VENDA"'
@@ -4971,12 +4999,12 @@ inherited frmGeVenda: TfrmGeVenda
       '  CONTROLE_VENDA = :OLD_CONTROLE_VENDA and'
       '  SEQUENCIAL = :OLD_SEQUENCIAL')
     Left = 1024
-    Top = 200
+    Top = 272
   end
   object dtsVendaVolume: TDataSource
     AutoEdit = False
     DataSet = cdsVendaVolume
     Left = 1056
-    Top = 200
+    Top = 272
   end
 end

@@ -1,10 +1,10 @@
 object frmRelEstoque: TfrmRelEstoque
-  Left = 482
-  Top = 255
+  Left = 285
+  Top = 73
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio Demanda de Produtos'
-  ClientHeight = 160
-  ClientWidth = 201
+  ClientHeight = 159
+  ClientWidth = 202
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,10 +18,10 @@ object frmRelEstoque: TfrmRelEstoque
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = 7
+    Left = -169
     Top = 212
-    Width = 1572
-    Height = 1111
+    Width = 1123
+    Height = 794
     Frame.Color = clBlack
     Frame.DrawTop = False
     Frame.DrawBottom = False
@@ -61,12 +61,12 @@ object frmRelEstoque: TfrmRelEstoque
     PrintIfEmpty = True
     SnapToGrid = True
     Units = Pixels
-    Zoom = 140
+    Zoom = 100
     object TitleBand1: TQRBand
-      Left = 21
-      Top = 53
-      Width = 1530
-      Height = 89
+      Left = 15
+      Top = 38
+      Width = 1093
+      Height = 62
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -77,24 +77,24 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        168.199404761904800000
-        2891.517857142857000000)
+        164.041666666666700000
+        2891.895833333333000000)
       BandType = rbTitle
       object lblNomeSistema: TQRLabel
         Left = 0
         Top = 0
-        Width = 283
-        Height = 16
+        Width = 202
+        Height = 12
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          30.238095238095240000
+          31.750000000000000000
           0.000000000000000000
           0.000000000000000000
-          534.836309523809500000)
+          534.458333333333300000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -112,20 +112,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 7
       end
       object QRSysData1: TQRSysData
-        Left = 1459
+        Left = 1042
         Top = 1
-        Width = 71
-        Height = 16
+        Width = 51
+        Height = 12
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          30.238095238095240000
-          2757.336309523810000000
-          1.889880952380952000
-          134.181547619047600000)
+          31.750000000000000000
+          2756.958333333333000000
+          2.645833333333333000
+          134.937500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -141,10 +141,10 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 7
       end
       object qrlblTituloRelat: TQRLabel
-        Left = 536
-        Top = 50
-        Width = 458
-        Height = 23
+        Left = 383
+        Top = 36
+        Width = 327
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -152,10 +152,10 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Frame.Style = psDashDotDot
         Size.Values = (
-          43.467261904761900000
-          1012.976190476190000000
-          94.494047619047620000
-          865.565476190476200000)
+          44.979166666666670000
+          1013.354166666667000000
+          95.250000000000000000
+          865.187500000000000000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
@@ -173,20 +173,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 9
       end
       object QRDBText9: TQRDBText
-        Left = 724
-        Top = 15
-        Width = 81
-        Height = 27
+        Left = 517
+        Top = 11
+        Width = 58
+        Height = 19
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          51.026785714285710000
-          1368.273809523810000000
-          28.348214285714290000
-          153.080357142857100000)
+          50.270833333333330000
+          1367.895833333333000000
+          29.104166666666670000
+          153.458333333333300000)
         Alignment = taCenter
         AlignToBand = True
         AutoSize = True
@@ -206,9 +206,9 @@ object frmRelEstoque: TfrmRelEstoque
       end
       object qrlblAno: TQRLabel
         Left = 0
-        Top = 68
-        Width = 36
-        Height = 22
+        Top = 48
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -216,10 +216,10 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Frame.Style = psDashDotDot
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           0.000000000000000000
-          128.511904761904800000
-          68.035714285714290000)
+          127.000000000000000000
+          68.791666666666670000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -238,10 +238,10 @@ object frmRelEstoque: TfrmRelEstoque
       end
     end
     object ColumnHeaderBand1: TQRBand
-      Left = 21
-      Top = 142
-      Width = 1530
-      Height = 44
+      Left = 15
+      Top = 100
+      Width = 1093
+      Height = 33
       Frame.Color = clBlack
       Frame.DrawTop = True
       Frame.DrawBottom = True
@@ -259,24 +259,24 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        83.154761904761900000
-        2891.517857142857000000)
+        87.312500000000000000
+        2891.895833333333000000)
       BandType = rbColumnHeader
       object QRLabel4: TQRLabel
-        Left = 299
-        Top = 4
-        Width = 55
-        Height = 23
+        Left = 212
+        Top = 2
+        Width = 39
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          43.467261904761900000
-          565.074404761904800000
-          7.559523809523810000
-          103.943452380952400000)
+          44.979166666666670000
+          560.916666666666700000
+          5.291666666666667000
+          103.187500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -294,19 +294,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel5: TQRLabel
-        Left = 368
-        Top = 4
-        Width = 63
-        Height = 23
+        Left = 262
+        Top = 2
+        Width = 45
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          43.467261904761900000
-          695.476190476190500000
-          7.559523809523810000
+          44.979166666666670000
+          693.208333333333300000
+          5.291666666666667000
           119.062500000000000000)
         Alignment = taCenter
         AlignToBand = False
@@ -326,19 +326,19 @@ object frmRelEstoque: TfrmRelEstoque
       end
       object qrlblCliMot: TQRLabel
         Left = 0
-        Top = 4
-        Width = 66
-        Height = 22
+        Top = 2
+        Width = 47
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           0.000000000000000000
-          7.559523809523810000
-          124.732142857142900000)
+          5.291666666666667000
+          124.354166666666700000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -356,20 +356,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel12: TQRLabel
-        Left = 458
-        Top = 4
-        Width = 60
-        Height = 23
+        Left = 328
+        Top = 2
+        Width = 43
+        Height = 17
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          43.467261904761900000
-          865.565476190476200000
-          7.559523809523810000
-          113.392857142857100000)
+          44.979166666666670000
+          867.833333333333300000
+          5.291666666666667000
+          113.770833333333300000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -387,20 +387,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel3: TQRLabel
-        Left = 456
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 326
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          861.785714285714300000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          862.541666666666700000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -418,19 +418,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel7: TQRLabel
-        Left = 493
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 353
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          931.711309523809500000
-          41.577380952380950000
+          42.333333333333330000
+          933.979166666666700000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -449,19 +449,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel1: TQRLabel
-        Left = 540
-        Top = 4
-        Width = 77
-        Height = 22
+        Left = 386
+        Top = 2
+        Width = 55
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1020.535714285714000000
-          7.559523809523810000
+          42.333333333333330000
+          1021.291666666667000000
+          5.291666666666667000
           145.520833333333300000)
         Alignment = taCenter
         AlignToBand = False
@@ -480,20 +480,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel8: TQRLabel
-        Left = 544
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 388
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1028.095238095238000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          1026.583333333333000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -511,19 +511,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel9: TQRLabel
-        Left = 582
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 416
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1099.910714285714000000
-          41.577380952380950000
+          42.333333333333330000
+          1100.666666666667000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -542,20 +542,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel10: TQRLabel
-        Left = 640
-        Top = 4
-        Width = 52
-        Height = 22
+        Left = 458
+        Top = 2
+        Width = 37
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1209.523809523810000000
-          7.559523809523810000
-          98.273809523809520000)
+          42.333333333333330000
+          1211.791666666667000000
+          5.291666666666667000
+          97.895833333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -573,20 +573,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel13: TQRLabel
-        Left = 733
-        Top = 4
-        Width = 43
-        Height = 22
+        Left = 522
+        Top = 2
+        Width = 31
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1385.282738095238000000
-          7.559523809523810000
-          81.264880952380950000)
+          42.333333333333330000
+          1381.125000000000000000
+          5.291666666666667000
+          82.020833333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -604,20 +604,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel14: TQRLabel
-        Left = 824
-        Top = 4
-        Width = 36
-        Height = 22
+        Left = 589
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1557.261904761905000000
-          7.559523809523810000
-          68.035714285714290000)
+          42.333333333333330000
+          1558.395833333333000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -635,20 +635,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel15: TQRLabel
-        Left = 905
-        Top = 4
-        Width = 48
-        Height = 22
+        Left = 646
+        Top = 2
+        Width = 34
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1710.342261904762000000
-          7.559523809523810000
-          90.714285714285710000)
+          42.333333333333330000
+          1709.208333333333000000
+          5.291666666666667000
+          89.958333333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -666,20 +666,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel16: TQRLabel
-        Left = 994
-        Top = 4
-        Width = 46
-        Height = 22
+        Left = 710
+        Top = 2
+        Width = 33
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           1878.541666666667000000
-          7.559523809523810000
-          86.934523809523810000)
+          5.291666666666667000
+          87.312500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -697,19 +697,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel17: TQRLabel
-        Left = 1078
-        Top = 4
-        Width = 56
-        Height = 22
+        Left = 770
+        Top = 2
+        Width = 40
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           2037.291666666667000000
-          7.559523809523810000
+          5.291666666666667000
           105.833333333333300000)
         Alignment = taCenter
         AlignToBand = False
@@ -728,20 +728,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel18: TQRLabel
-        Left = 1156
-        Top = 4
-        Width = 74
-        Height = 22
+        Left = 826
+        Top = 2
+        Width = 53
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2184.702380952381000000
-          7.559523809523810000
-          139.851190476190500000)
+          42.333333333333330000
+          2185.458333333333000000
+          5.291666666666667000
+          140.229166666666700000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -759,20 +759,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel19: TQRLabel
-        Left = 632
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 452
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1194.404761904762000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          1195.916666666667000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -790,20 +790,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel20: TQRLabel
-        Left = 720
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 514
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1360.714285714286000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          1359.958333333333000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -821,20 +821,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel21: TQRLabel
-        Left = 808
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 578
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1527.023809523810000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          1529.291666666667000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -852,20 +852,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel22: TQRLabel
-        Left = 896
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 640
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           1693.333333333333000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -883,20 +883,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel23: TQRLabel
-        Left = 984
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 702
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1859.642857142857000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          1857.375000000000000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -914,20 +914,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel24: TQRLabel
-        Left = 1072
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 766
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2025.952380952381000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          2026.708333333333000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -945,20 +945,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel25: TQRLabel
-        Left = 1160
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 829
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2192.261904761905000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          2193.395833333333000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -976,19 +976,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel26: TQRLabel
-        Left = 670
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 478
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1266.220238095238000000
-          41.577380952380950000
+          42.333333333333330000
+          1264.708333333333000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1007,19 +1007,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel27: TQRLabel
-        Left = 757
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 541
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1430.639880952381000000
-          41.577380952380950000
+          42.333333333333330000
+          1431.395833333333000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1038,19 +1038,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel28: TQRLabel
-        Left = 845
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 604
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1596.949404761905000000
-          41.577380952380950000
+          42.333333333333330000
+          1598.083333333333000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1069,19 +1069,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel29: TQRLabel
-        Left = 933
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 666
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1763.258928571429000000
-          41.577380952380950000
+          42.333333333333330000
+          1762.125000000000000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1100,19 +1100,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel30: TQRLabel
-        Left = 1021
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 729
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1929.568452380952000000
-          41.577380952380950000
+          42.333333333333330000
+          1928.812500000000000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1131,19 +1131,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel31: TQRLabel
-        Left = 1109
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 792
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2095.877976190476000000
-          41.577380952380950000
+          42.333333333333330000
+          2095.500000000000000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1162,19 +1162,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel32: TQRLabel
-        Left = 1197
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 855
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           2262.187500000000000000
-          41.577380952380950000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1193,20 +1193,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel33: TQRLabel
-        Left = 1247
-        Top = 4
-        Width = 67
-        Height = 22
+        Left = 891
+        Top = 2
+        Width = 48
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2356.681547619048000000
-          7.559523809523810000
-          126.622023809523800000)
+          42.333333333333330000
+          2357.437500000000000000
+          5.291666666666667000
+          127.000000000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1224,20 +1224,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel34: TQRLabel
-        Left = 1248
-        Top = 22
-        Width = 32
-        Height = 22
+        Left = 891
+        Top = 16
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2358.571428571429000000
-          41.577380952380950000
-          60.476190476190480000)
+          42.333333333333330000
+          2357.437500000000000000
+          42.333333333333330000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1255,19 +1255,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel35: TQRLabel
-        Left = 1285
-        Top = 22
-        Width = 28
-        Height = 22
+        Left = 918
+        Top = 16
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2428.497023809524000000
-          41.577380952380950000
+          42.333333333333330000
+          2428.875000000000000000
+          42.333333333333330000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1286,20 +1286,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel36: TQRLabel
-        Left = 1331
-        Top = 4
-        Width = 78
-        Height = 22
+        Left = 951
+        Top = 2
+        Width = 56
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2515.431547619048000000
-          7.559523809523810000
-          147.410714285714300000)
+          42.333333333333330000
+          2516.187500000000000000
+          5.291666666666667000
+          148.166666666666700000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1317,20 +1317,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel37: TQRLabel
-        Left = 1336
-        Top = 20
-        Width = 32
-        Height = 22
+        Left = 954
+        Top = 14
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2524.880952380952000000
-          37.797619047619050000
-          60.476190476190480000)
+          42.333333333333330000
+          2524.125000000000000000
+          37.041666666666670000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1348,19 +1348,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel38: TQRLabel
-        Left = 1373
-        Top = 20
-        Width = 28
-        Height = 22
+        Left = 981
+        Top = 14
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2594.806547619048000000
-          37.797619047619050000
+          42.333333333333330000
+          2595.562500000000000000
+          37.041666666666670000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1379,19 +1379,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel39: TQRLabel
-        Left = 1420
-        Top = 4
-        Width = 77
-        Height = 22
+        Left = 1014
+        Top = 2
+        Width = 55
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2683.630952380952000000
-          7.559523809523810000
+          42.333333333333330000
+          2682.875000000000000000
+          5.291666666666667000
           145.520833333333300000)
         Alignment = taCenter
         AlignToBand = False
@@ -1410,20 +1410,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel40: TQRLabel
-        Left = 1424
-        Top = 20
-        Width = 32
-        Height = 22
+        Left = 1017
+        Top = 14
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2691.190476190476000000
-          37.797619047619050000
-          60.476190476190480000)
+          42.333333333333330000
+          2690.812500000000000000
+          37.041666666666670000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1441,19 +1441,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel41: TQRLabel
-        Left = 1461
-        Top = 20
-        Width = 28
-        Height = 22
+        Left = 1044
+        Top = 14
+        Width = 20
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2761.116071428571000000
-          37.797619047619050000
+          42.333333333333330000
+          2762.250000000000000000
+          37.041666666666670000
           52.916666666666670000)
         Alignment = taCenter
         AlignToBand = False
@@ -1473,10 +1473,10 @@ object frmRelEstoque: TfrmRelEstoque
       end
     end
     object DetailBand1: TQRBand
-      Left = 21
-      Top = 186
-      Width = 1530
-      Height = 21
+      Left = 15
+      Top = 133
+      Width = 1093
+      Height = 17
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -1493,24 +1493,24 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        39.687500000000000000
-        2891.517857142857000000)
+        44.979166666666670000
+        2891.895833333333000000)
       BandType = rbDetail
       object QRDBText1: TQRDBText
-        Left = 299
-        Top = 0
-        Width = 57
-        Height = 22
+        Left = 212
+        Top = 2
+        Width = 41
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          565.074404761904800000
-          0.000000000000000000
-          107.723214285714300000)
+          42.333333333333330000
+          560.916666666666700000
+          5.291666666666667000
+          108.479166666666700000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1530,19 +1530,19 @@ object frmRelEstoque: TfrmRelEstoque
       end
       object QRDBText2: TQRDBText
         Left = 0
-        Top = 0
-        Width = 289
-        Height = 22
+        Top = 2
+        Width = 207
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           0.000000000000000000
-          0.000000000000000000
-          546.175595238095200000)
+          5.291666666666667000
+          547.687500000000000000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = False
@@ -1561,20 +1561,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText6: TQRDBText
-        Left = 367
-        Top = 0
-        Width = 64
-        Height = 22
+        Left = 262
+        Top = 2
+        Width = 46
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          693.586309523809500000
-          0.000000000000000000
-          120.952380952381000000)
+          42.333333333333330000
+          693.208333333333300000
+          5.291666666666667000
+          121.708333333333300000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1593,20 +1593,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText3: TQRDBText
-        Left = 454
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 324
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          858.005952380952400000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          857.250000000000000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1625,19 +1625,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText4: TQRDBText
-        Left = 490
-        Top = 0
-        Width = 35
-        Height = 22
+        Left = 350
+        Top = 2
+        Width = 25
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           926.041666666666700000
-          0.000000000000000000
+          5.291666666666667000
           66.145833333333330000)
         Alignment = taCenter
         AlignToBand = False
@@ -1657,20 +1657,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText5: TQRDBText
-        Left = 542
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 388
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1024.315476190476000000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          1026.583333333333000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1689,19 +1689,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText7: TQRDBText
-        Left = 578
-        Top = 0
-        Width = 35
-        Height = 22
+        Left = 412
+        Top = 2
+        Width = 25
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1092.351190476190000000
-          0.000000000000000000
+          42.333333333333330000
+          1090.083333333333000000
+          5.291666666666667000
           66.145833333333330000)
         Alignment = taCenter
         AlignToBand = False
@@ -1721,20 +1721,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText8: TQRDBText
-        Left = 628
-        Top = 0
-        Width = 41
-        Height = 22
+        Left = 448
+        Top = 2
+        Width = 29
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1186.845238095238000000
-          0.000000000000000000
-          77.485119047619050000)
+          42.333333333333330000
+          1185.333333333333000000
+          5.291666666666667000
+          76.729166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1753,20 +1753,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText10: TQRDBText
-        Left = 717
-        Top = 0
-        Width = 38
-        Height = 22
+        Left = 512
+        Top = 2
+        Width = 27
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1355.044642857143000000
-          0.000000000000000000
-          71.815476190476190000)
+          42.333333333333330000
+          1354.666666666667000000
+          5.291666666666667000
+          71.437500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1785,20 +1785,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText11: TQRDBText
-        Left = 808
-        Top = 0
-        Width = 34
-        Height = 22
+        Left = 578
+        Top = 2
+        Width = 24
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1527.023809523810000000
-          0.000000000000000000
-          64.255952380952380000)
+          42.333333333333330000
+          1529.291666666667000000
+          5.291666666666667000
+          63.500000000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1817,20 +1817,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText12: TQRDBText
-        Left = 893
-        Top = 0
-        Width = 38
-        Height = 22
+        Left = 638
+        Top = 2
+        Width = 27
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1687.663690476190000000
-          0.000000000000000000
-          71.815476190476190000)
+          42.333333333333330000
+          1688.041666666667000000
+          5.291666666666667000
+          71.437500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1849,20 +1849,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText13: TQRDBText
-        Left = 665
-        Top = 0
-        Width = 39
-        Height = 22
+        Left = 475
+        Top = 2
+        Width = 28
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           1256.770833333333000000
-          0.000000000000000000
-          73.705357142857140000)
+          5.291666666666667000
+          74.083333333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1881,20 +1881,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText14: TQRDBText
-        Left = 753
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 538
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1423.080357142857000000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          1423.458333333333000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1913,20 +1913,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText15: TQRDBText
-        Left = 844
-        Top = 0
-        Width = 32
-        Height = 22
+        Left = 602
+        Top = 2
+        Width = 23
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1595.059523809524000000
-          0.000000000000000000
-          60.476190476190480000)
+          42.333333333333330000
+          1592.791666666667000000
+          5.291666666666667000
+          60.854166666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1945,20 +1945,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText16: TQRDBText
-        Left = 929
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 664
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1755.699404761905000000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          1756.833333333333000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -1977,19 +1977,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText17: TQRDBText
-        Left = 982
-        Top = 0
-        Width = 35
-        Height = 22
+        Left = 701
+        Top = 2
+        Width = 25
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1855.863095238095000000
-          0.000000000000000000
+          42.333333333333330000
+          1854.729166666667000000
+          5.291666666666667000
           66.145833333333330000)
         Alignment = taCenter
         AlignToBand = False
@@ -2009,20 +2009,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText18: TQRDBText
-        Left = 1069
-        Top = 0
-        Width = 39
-        Height = 22
+        Left = 764
+        Top = 2
+        Width = 28
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2020.282738095238000000
-          0.000000000000000000
-          73.705357142857140000)
+          42.333333333333330000
+          2021.416666666667000000
+          5.291666666666667000
+          74.083333333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2041,20 +2041,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText19: TQRDBText
-        Left = 1158
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 828
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2188.482142857143000000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          2190.750000000000000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2073,20 +2073,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText20: TQRDBText
-        Left = 1019
-        Top = 0
-        Width = 34
-        Height = 22
+        Left = 728
+        Top = 2
+        Width = 24
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          1925.788690476190000000
-          0.000000000000000000
-          64.255952380952380000)
+          42.333333333333330000
+          1926.166666666667000000
+          5.291666666666667000
+          63.500000000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2105,20 +2105,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText21: TQRDBText
-        Left = 1104
-        Top = 0
-        Width = 38
-        Height = 22
+        Left = 789
+        Top = 2
+        Width = 27
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2086.428571428571000000
-          0.000000000000000000
-          71.815476190476190000)
+          42.333333333333330000
+          2087.562500000000000000
+          5.291666666666667000
+          71.437500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2137,19 +2137,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText22: TQRDBText
-        Left = 1193
-        Top = 0
-        Width = 35
-        Height = 22
+        Left = 853
+        Top = 2
+        Width = 25
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2254.627976190476000000
-          0.000000000000000000
+          42.333333333333330000
+          2256.895833333333000000
+          5.291666666666667000
           66.145833333333330000)
         Alignment = taCenter
         AlignToBand = False
@@ -2169,20 +2169,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText23: TQRDBText
-        Left = 1280
-        Top = 0
-        Width = 38
-        Height = 22
+        Left = 914
+        Top = 2
+        Width = 27
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2419.047619047619000000
-          0.000000000000000000
-          71.815476190476190000)
+          42.333333333333330000
+          2418.291666666667000000
+          5.291666666666667000
+          71.437500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2201,20 +2201,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText24: TQRDBText
-        Left = 1368
-        Top = 0
-        Width = 38
-        Height = 22
+        Left = 977
+        Top = 2
+        Width = 27
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2585.357142857143000000
-          0.000000000000000000
-          71.815476190476190000)
+          42.333333333333330000
+          2584.979166666667000000
+          5.291666666666667000
+          71.437500000000000000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2233,19 +2233,19 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText25: TQRDBText
-        Left = 1457
-        Top = 0
-        Width = 35
-        Height = 22
+        Left = 1041
+        Top = 2
+        Width = 25
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2753.556547619048000000
-          0.000000000000000000
+          42.333333333333330000
+          2754.312500000000000000
+          5.291666666666667000
           66.145833333333330000)
         Alignment = taCenter
         AlignToBand = False
@@ -2265,20 +2265,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText26: TQRDBText
-        Left = 1245
-        Top = 0
-        Width = 39
-        Height = 22
+        Left = 889
+        Top = 2
+        Width = 28
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2352.901785714286000000
-          0.000000000000000000
-          73.705357142857140000)
+          42.333333333333330000
+          2352.145833333333000000
+          5.291666666666667000
+          74.083333333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2297,20 +2297,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText27: TQRDBText
-        Left = 1333
-        Top = 0
-        Width = 39
-        Height = 22
+        Left = 952
+        Top = 2
+        Width = 28
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2519.211309523810000000
-          0.000000000000000000
-          73.705357142857140000)
+          42.333333333333330000
+          2518.833333333333000000
+          5.291666666666667000
+          74.083333333333330000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2329,20 +2329,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRDBText28: TQRDBText
-        Left = 1422
-        Top = 0
-        Width = 36
-        Height = 22
+        Left = 1016
+        Top = 2
+        Width = 26
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          2687.410714285714000000
-          0.000000000000000000
-          68.035714285714290000)
+          42.333333333333330000
+          2688.166666666667000000
+          5.291666666666667000
+          68.791666666666670000)
         Alignment = taCenter
         AlignToBand = False
         AutoSize = True
@@ -2362,10 +2362,10 @@ object frmRelEstoque: TfrmRelEstoque
       end
     end
     object PageFooterBand1: TQRBand
-      Left = 21
-      Top = 207
-      Width = 1530
-      Height = 24
+      Left = 15
+      Top = 150
+      Width = 1093
+      Height = 17
       Frame.Color = clBlack
       Frame.DrawTop = True
       Frame.DrawBottom = False
@@ -2377,24 +2377,24 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        45.357142857142860000
-        2891.517857142857000000)
+        44.979166666666670000
+        2891.895833333333000000)
       BandType = rbSummary
       object QRLabel11: TQRLabel
         Left = 0
-        Top = 4
-        Width = 48
-        Height = 22
+        Top = 2
+        Width = 34
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           0.000000000000000000
-          7.559523809523810000
-          90.714285714285710000)
+          5.291666666666667000
+          89.958333333333330000)
         Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
@@ -2412,20 +2412,20 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRSysData3: TQRSysData
-        Left = 50
-        Top = 4
-        Width = 87
-        Height = 22
+        Left = 36
+        Top = 2
+        Width = 62
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
-          94.494047619047620000
-          7.559523809523810000
-          164.419642857142900000)
+          42.333333333333330000
+          95.250000000000000000
+          5.291666666666667000
+          164.041666666666700000)
         Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = True
@@ -2442,10 +2442,10 @@ object frmRelEstoque: TfrmRelEstoque
       end
     end
     object PageFooterBand2: TQRBand
-      Left = 21
-      Top = 231
-      Width = 1530
-      Height = 20
+      Left = 15
+      Top = 167
+      Width = 1093
+      Height = 14
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = False
@@ -2456,24 +2456,24 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        37.797619047619050000
-        2891.517857142857000000)
+        37.041666666666670000
+        2891.895833333333000000)
       BandType = rbPageFooter
       object QRSysData2: TQRSysData
-        Left = 1484
+        Left = 1060
         Top = -1
-        Width = 46
-        Height = 22
+        Width = 33
+        Height = 16
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
         Frame.DrawLeft = False
         Frame.DrawRight = False
         Size.Values = (
-          41.577380952380950000
+          42.333333333333330000
           2804.583333333333000000
-          -1.889880952380952000
-          86.934523809523810000)
+          -2.645833333333333000
+          87.312500000000000000)
         Alignment = taRightJustify
         AlignToBand = True
         AutoSize = True
@@ -2493,7 +2493,7 @@ object frmRelEstoque: TfrmRelEstoque
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 0
-    Width = 201
+    Width = 202
     Height = 59
     Align = alTop
     Caption = 'Fabricante'
@@ -2525,7 +2525,7 @@ object frmRelEstoque: TfrmRelEstoque
   object Panel1: TPanel
     Left = 0
     Top = 107
-    Width = 201
+    Width = 202
     Height = 58
     Align = alTop
     BevelOuter = bvLowered
@@ -2622,7 +2622,7 @@ object frmRelEstoque: TfrmRelEstoque
   object GroupBox1: TGroupBox
     Left = 0
     Top = 59
-    Width = 201
+    Width = 202
     Height = 48
     Align = alTop
     Caption = 'Ano'
