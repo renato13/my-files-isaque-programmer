@@ -1,6 +1,6 @@
 object frmRelFornec: TfrmRelFornec
-  Left = 192
-  Top = 114
+  Left = 290
+  Top = 128
   Width = 870
   Height = 500
   Caption = 'Relat'#243'rio de Fornecedor'
@@ -191,7 +191,7 @@ object frmRelFornec: TfrmRelFornec
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -804,15 +804,5 @@ object frmRelFornec: TfrmRelFornec
       FixedChar = True
       Size = 2
     end
-  end
-  object ibqryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 184
-    Top = 32
   end
 end

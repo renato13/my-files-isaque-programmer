@@ -105,8 +105,8 @@ begin
   begin
 //    edNome.Text  := 'FERREIRA';
 //    edSenha.Text := 'PONTOLUZ';
-    edNome.Text  := 'ISAQUE';
-    edSenha.Text := '123x';
+    edNome.Text  := 'VIEIRA';
+    edSenha.Text := '12345';
 
     btbtnEntrar.Click;
   end;

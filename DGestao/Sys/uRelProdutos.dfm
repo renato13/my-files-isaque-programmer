@@ -18,7 +18,7 @@ object frmRelProdutos: TfrmRelProdutos
   TextHeight = 13
   object qckrp: TQuickRep
     Left = 14
-    Top = 93
+    Top = 53
     Width = 476
     Height = 674
     Frame.Color = clBlack
@@ -192,7 +192,7 @@ object frmRelProdutos: TfrmRelProdutos
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1136,7 +1136,7 @@ object frmRelProdutos: TfrmRelProdutos
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1648,7 +1648,6 @@ object frmRelProdutos: TfrmRelProdutos
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     OnCalcFields = IBQuery1CalcFields
-    Active = True
     BufferChunks = 1000
     CachedUpdates = False
     SQL.Strings = (
@@ -1659,8 +1658,8 @@ object frmRelProdutos: TfrmRelProdutos
       'on (P.CODFABRICANTE = F.COD)'
       'where P.QTDE > 0'
       'order by F.NOME, P.DESCRI')
-    Left = 78
-    Top = 24
+    Left = 6
+    Top = 8
     object IBQuery1DESCRI: TIBStringField
       FieldName = 'DESCRI'
       Origin = 'TBPRODUTO.DESCRI'
@@ -1714,28 +1713,6 @@ object frmRelProdutos: TfrmRelProdutos
       Size = 50
     end
   end
-  object ibqryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 128
-    Top = 32
-    object ibqryEmpresaCNPJ: TIBStringField
-      FieldName = 'CNPJ'
-      Origin = 'TBEMPRESA.CNPJ'
-      Required = True
-      Size = 18
-    end
-    object ibqryEmpresaNMFANT: TIBStringField
-      FieldName = 'NMFANT'
-      Origin = 'TBEMPRESA.NMFANT'
-      Size = 25
-    end
-  end
   object IBQuery2: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
@@ -1748,8 +1725,8 @@ object frmRelProdutos: TfrmRelProdutos
       'from TBPRODUTO P left join TBFABRICANTE F'
       'on (P.CODFABRICANTE = F.COD)'
       'order by F.NOME, P.DESCRI')
-    Left = 398
-    Top = 288
+    Left = 54
+    Top = 8
     object IBStringField1: TIBStringField
       FieldName = 'DESCRI'
       Origin = 'TBPRODUTO.DESCRI'

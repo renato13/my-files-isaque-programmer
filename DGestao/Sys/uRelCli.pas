@@ -32,7 +32,6 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
-    ibqryEmpresa: TIBQuery;
     QRDBText9: TQRDBText;
     IBQuery1NOME: TIBStringField;
     IBQuery1CNPJ: TIBStringField;
@@ -63,7 +62,7 @@ begin
   lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
 
   IBQuery1.Open;
-  ibqryEmpresa.Open;
+
 end;
 
 initialization

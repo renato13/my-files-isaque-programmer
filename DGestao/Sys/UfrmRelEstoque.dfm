@@ -1,9 +1,10 @@
 object frmRelEstoque: TfrmRelEstoque
-  Left = 274
-  Top = 186
-  Width = 991
-  Height = 499
-  Caption = 'frmRelEstoque'
+  Left = 482
+  Top = 255
+  BorderStyle = bsToolWindow
+  Caption = 'Relat'#243'rio Demanda de Produtos'
+  ClientHeight = 160
+  ClientWidth = 201
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,13 +12,14 @@ object frmRelEstoque: TfrmRelEstoque
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poMainFormCenter
   Scaled = False
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object qckrp: TQuickRep
-    Left = 15
-    Top = 12
+    Left = 7
+    Top = 212
     Width = 1572
     Height = 1111
     Frame.Color = clBlack
@@ -64,7 +66,7 @@ object frmRelEstoque: TfrmRelEstoque
       Left = 21
       Top = 53
       Width = 1530
-      Height = 76
+      Height = 89
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -75,7 +77,7 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        143.630952380952400000
+        168.199404761904800000
         2891.517857142857000000)
       BandType = rbTitle
       object lblNomeSistema: TQRLabel
@@ -190,7 +192,7 @@ object frmRelEstoque: TfrmRelEstoque
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -203,10 +205,10 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 9
       end
       object qrlblAno: TQRLabel
-        Left = 1494
-        Top = 50
+        Left = 0
+        Top = 68
         Width = 36
-        Height = 23
+        Height = 22
         Frame.Color = clBlack
         Frame.DrawTop = False
         Frame.DrawBottom = False
@@ -214,11 +216,11 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Frame.Style = psDashDotDot
         Size.Values = (
-          43.467261904761900000
-          2823.482142857143000000
-          94.494047619047620000
+          41.577380952380950000
+          0.000000000000000000
+          128.511904761904800000
           68.035714285714290000)
-        Alignment = taRightJustify
+        Alignment = taLeftJustify
         AlignToBand = True
         AutoSize = True
         AutoStretch = False
@@ -237,7 +239,7 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object ColumnHeaderBand1: TQRBand
       Left = 21
-      Top = 129
+      Top = 142
       Width = 1530
       Height = 44
       Frame.Color = clBlack
@@ -354,7 +356,7 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel12: TQRLabel
-        Left = 459
+        Left = 458
         Top = 4
         Width = 60
         Height = 23
@@ -365,7 +367,7 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Size.Values = (
           43.467261904761900000
-          867.455357142857100000
+          865.565476190476200000
           7.559523809523810000
           113.392857142857100000)
         Alignment = taCenter
@@ -447,7 +449,7 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel1: TQRLabel
-        Left = 541
+        Left = 540
         Top = 4
         Width = 77
         Height = 22
@@ -458,7 +460,7 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Size.Values = (
           41.577380952380950000
-          1022.425595238095000000
+          1020.535714285714000000
           7.559523809523810000
           145.520833333333300000)
         Alignment = taCenter
@@ -540,7 +542,7 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel10: TQRLabel
-        Left = 642
+        Left = 640
         Top = 4
         Width = 52
         Height = 22
@@ -551,7 +553,7 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Size.Values = (
           41.577380952380950000
-          1213.303571428571000000
+          1209.523809523810000000
           7.559523809523810000
           98.273809523809520000)
         Alignment = taCenter
@@ -571,7 +573,7 @@ object frmRelEstoque: TfrmRelEstoque
         FontSize = 8
       end
       object QRLabel13: TQRLabel
-        Left = 734
+        Left = 733
         Top = 4
         Width = 43
         Height = 22
@@ -582,7 +584,7 @@ object frmRelEstoque: TfrmRelEstoque
         Frame.DrawRight = False
         Size.Values = (
           41.577380952380950000
-          1387.172619047619000000
+          1385.282738095238000000
           7.559523809523810000
           81.264880952380950000)
         Alignment = taCenter
@@ -1472,9 +1474,9 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object DetailBand1: TQRBand
       Left = 21
-      Top = 173
+      Top = 186
       Width = 1530
-      Height = 20
+      Height = 21
       Frame.Color = clBlack
       Frame.DrawTop = False
       Frame.DrawBottom = True
@@ -1491,7 +1493,7 @@ object frmRelEstoque: TfrmRelEstoque
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        37.797619047619050000
+        39.687500000000000000
         2891.517857142857000000)
       BandType = rbDetail
       object QRDBText1: TQRDBText
@@ -2361,7 +2363,7 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object PageFooterBand1: TQRBand
       Left = 21
-      Top = 193
+      Top = 207
       Width = 1530
       Height = 24
       Frame.Color = clBlack
@@ -2441,7 +2443,7 @@ object frmRelEstoque: TfrmRelEstoque
     end
     object PageFooterBand2: TQRBand
       Left = 21
-      Top = 217
+      Top = 231
       Width = 1530
       Height = 20
       Frame.Color = clBlack
@@ -2486,6 +2488,172 @@ object frmRelEstoque: TfrmRelEstoque
         Transparent = False
         FontSize = 8
       end
+    end
+  end
+  object grpbxVendedor: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 201
+    Height = 59
+    Align = alTop
+    Caption = 'Fabricante'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    object dblkpcmbbxFabric: TDBLookupComboBox
+      Left = 8
+      Top = 24
+      Width = 185
+      Height = 21
+      DropDownRows = 15
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      KeyField = 'COD'
+      ListField = 'NOME'
+      ListSource = dtsrcFabric
+      ParentFont = False
+      TabOrder = 0
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 107
+    Width = 201
+    Height = 58
+    Align = alTop
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object BitBtn2: TBitBtn
+      Left = 104
+      Top = 13
+      Width = 89
+      Height = 27
+      Caption = '&Fechar'
+      TabOrder = 0
+      Kind = bkClose
+    end
+    object btbtnLista: TBitBtn
+      Left = 8
+      Top = 13
+      Width = 89
+      Height = 27
+      Caption = '&Imprimir'
+      TabOrder = 1
+      OnClick = btbtnListaClick
+      Glyph.Data = {
+        76080000424DB608000000000000B60000002800000020000000100000000100
+        2000000000000008000000000000000000001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00008080000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000808000008080007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F000080800000000000BFBF
+        BF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBF
+        BF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00000000007F7F7F00FFFF
+        FF00008080000080800000808000008080000080800000808000008080000080
+        800000808000008080000080800000808000008080007F7F7F0000000000BFBF
+        BF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBF
+        BF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00BFBFBF00000000007F7F7F00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF007F7F7F00000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000000000000000000007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F0000000000FFFF
+        FF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFF
+        FF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00000000007F7F7F00FFFF
+        FF00008080000080800000808000008080000080800000808000008080000080
+        800000808000008080000080800000808000FFFFFF007F7F7F0000000000BFBF
+        BF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBF
+        BF00FFFFFF00BFBFBF00FFFFFF000000FF00FFFFFF00000000007F7F7F00FFFF
+        FF00008080000080800000808000008080000080800000808000008080000080
+        80000080800000808000008080007F7F7F00008080007F7F7F0000000000FFFF
+        FF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00FFFF
+        FF00BFBFBF00FFFFFF00BFBFBF00FFFFFF00BFBFBF00000000007F7F7F00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF007F7F7F00000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000000000000000000000000000000000000007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F00008080000080
+        80000080800000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF0000000000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF0000808000FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF0000808000FFFFFF007F7F7F00FFFFFF000080800000808000008080000080
+        80000080800000000000FFFFFF0000000000000000000000000000000000FFFF
+        FF0000000000FFFFFF0000000000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF007F7F7F007F7F7F007F7F7F007F7F7F000080
+        80007F7F7F00008080007F7F7F00FFFFFF000080800000808000008080000080
+        80000080800000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF0000000000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF0000808000FFFFFF00FFFFFF0000808000FFFF
+        FF00FFFFFF00FFFFFF007F7F7F00FFFFFF000080800000808000008080000080
+        80000080800000000000FFFFFF000000000000000000FFFFFF00000000000000
+        0000000000000000000000000000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF007F7F7F007F7F7F00008080007F7F7F007F7F
+        7F007F7F7F007F7F7F007F7F7F00008080000080800000808000008080000080
+        80000080800000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000FFFF
+        FF00FFFFFF000000000000808000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF0000808000FFFFFF00008080007F7F7F00FFFF
+        FF00008080007F7F7F0000808000008080000080800000808000008080000080
+        80000080800000000000FFFFFF0000000000BFBFBF00FFFFFF0000000000FFFF
+        FF00000000000080800000808000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF007F7F7F0000808000008080007F7F7F00FFFF
+        FF007F7F7F000080800000808000008080000080800000808000008080000080
+        80000080800000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000008080000080800000808000008080000080800000808000008080000080
+        8000008080007F7F7F00FFFFFF00FFFFFF00FFFFFF00FFFFFF007F7F7F007F7F
+        7F00008080000080800000808000008080000080800000808000008080000080
+        8000008080000000000000000000000000000000000000000000000000000080
+        8000008080000080800000808000008080000080800000808000008080000080
+        8000008080007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F007F7F7F000080
+        8000008080000080800000808000008080000080800000808000}
+      NumGlyphs = 2
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 59
+    Width = 201
+    Height = 48
+    Align = alTop
+    Caption = 'Ano'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+    object cmbbxAno: TComboBox
+      Left = 8
+      Top = 18
+      Width = 73
+      Height = 21
+      Style = csDropDownList
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ItemHeight = 13
+      ItemIndex = 0
+      ParentFont = False
+      TabOrder = 0
+      Text = '2012'
+      Items.Strings = (
+        '2012'
+        '2013'
+        '2014'
+        '2015')
     end
   end
   object ibqryDemanda: TIBQuery
@@ -2605,9 +2773,10 @@ object frmRelEstoque: TfrmRelEstoque
       '    group by'
       '        vi.codprod'
       '  ) PV on (pv.item = p.cod)'
+      'where p.codfabricante= :codfab'
       'order by p.descri')
-    Left = 55
-    Top = 20
+    Left = 31
+    Top = 220
     ParamData = <
       item
         DataType = ftUnknown
@@ -2618,16 +2787,37 @@ object frmRelEstoque: TfrmRelEstoque
         DataType = ftUnknown
         Name = 'ano'
         ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'codfab'
+        ParamType = ptUnknown
       end>
   end
-  object ibqryEmpresa: TIBQuery
+  object ibdtsFabric: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     BufferChunks = 1000
     CachedUpdates = False
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 128
-    Top = 16
+    SelectSQL.Strings = (
+      'select * from TBFABRICANTE'
+      'order by NOME')
+    Left = 112
+    Top = 48
+    object ibdtsFabricCOD: TIntegerField
+      FieldName = 'COD'
+      Origin = 'TBFABRICANTE.COD'
+      Required = True
+    end
+    object ibdtsFabricNOME: TIBStringField
+      FieldName = 'NOME'
+      Origin = 'TBFABRICANTE.NOME'
+      Size = 50
+    end
+  end
+  object dtsrcFabric: TDataSource
+    DataSet = ibdtsFabric
+    Left = 160
+    Top = 48
   end
 end

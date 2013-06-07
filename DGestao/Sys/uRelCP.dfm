@@ -255,7 +255,7 @@ object frmRelCP: TfrmRelCP
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -986,6 +986,8 @@ object frmRelCP: TfrmRelCP
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
+    BufferChunks = 1000
+    CachedUpdates = False
     SQL.Strings = (
       
         'select F.NOMEFORN, P.DTEMISS, P.DTPAG, P.DTVENC, P.HISTORIC, P.N' +
@@ -993,15 +995,6 @@ object frmRelCP: TfrmRelCP
       'from TBCONTPAG P, TBFORNECEDOR F'
       'where (P.CODFORN = F.CODFORN)')
     Left = 62
-    Top = 24
-  end
-  object ibqryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 128
     Top = 24
   end
 end

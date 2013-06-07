@@ -34,7 +34,6 @@ type
     PageFooterBand2: TQRBand;
     QRSysData2: TQRSysData;
     IBQuery1: TIBQuery;
-    ibqryEmpresa: TIBQuery;
     IBQuery1NOMEFORN: TIBStringField;
     IBQuery1CNPJ: TIBStringField;
     IBQuery1CONTATO: TIBStringField;
@@ -62,7 +61,7 @@ procedure TfrmRelFornec.FormCreate(Sender: TObject);
 begin
   lblNomeSistema.Caption := GetProductName + ' - versão ' + GetVersion;
   IBQuery1.Open;
-  ibqryEmpresa.Open;
+
 end;
 
 initialization

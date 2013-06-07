@@ -3,8 +3,8 @@ object frmRelVendas: TfrmRelVendas
   Top = 182
   BorderStyle = bsToolWindow
   Caption = 'Relat'#243'rio de Vendas'
-  ClientHeight = 479
-  ClientWidth = 755
+  ClientHeight = 222
+  ClientWidth = 267
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -27,7 +27,7 @@ object frmRelVendas: TfrmRelVendas
   object Panel1: TPanel
     Left = 0
     Top = 180
-    Width = 755
+    Width = 267
     Height = 48
     Align = alTop
     BevelOuter = bvLowered
@@ -134,7 +134,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 755
+    Width = 267
     Height = 60
     Align = alTop
     Caption = 'Per'#237'odo do Faturamento'
@@ -440,7 +440,7 @@ object frmRelVendas: TfrmRelVendas
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -1079,7 +1079,7 @@ object frmRelVendas: TfrmRelVendas
   object grpbxVendedor: TGroupBox
     Left = 0
     Top = 60
-    Width = 755
+    Width = 267
     Height = 60
     Align = alTop
     Caption = 'Status'
@@ -1114,7 +1114,7 @@ object frmRelVendas: TfrmRelVendas
   object GroupBox2: TGroupBox
     Left = 0
     Top = 120
-    Width = 755
+    Width = 267
     Height = 60
     Align = alTop
     Caption = 'Vendedor'
@@ -1348,7 +1348,7 @@ object frmRelVendas: TfrmRelVendas
         AutoSize = True
         AutoStretch = False
         Color = clWhite
-        DataSet = ibqryEmpresa
+        DataSet = DMBusiness.ibqryEmpresa
         DataField = 'NMFANT'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -2070,16 +2070,5 @@ object frmRelVendas: TfrmRelVendas
       FieldName = 'VALORCOMISSAO'
       Calculated = True
     end
-  end
-  object ibqryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
-    SQL.Strings = (
-      'select CNPJ, NMFANT from TBEMPRESA')
-    Left = 144
-    Top = 72
   end
 end

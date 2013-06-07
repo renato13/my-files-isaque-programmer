@@ -57,6 +57,9 @@ type
     qryEvAcessUserFORM_NAME: TIBStringField;
     qryEvAcessUserOBJECT_NAME: TIBStringField;
     qryEvAcessUserCONSENTS_STRING: TMemoField;
+    ibqryEmpresa: TIBQuery;
+    ibqryEmpresaCNPJ: TIBStringField;
+    ibqryEmpresaNMFANT: TIBStringField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -1201,7 +1204,10 @@ begin
       Connected := True;
 
       if ( Connected ) then
+        begin
         ibdtstUsers.Open;
+        ibqryEmpresa.Open;
+        end;
     end;
 
   except

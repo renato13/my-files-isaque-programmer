@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, QRCtrls, QuickRpt, ExtCtrls, DB, IBCustomDataSet, IBQuery;
+  Dialogs, QRCtrls, QuickRpt, ExtCtrls, DB, IBCustomDataSet, IBQuery,
+  StdCtrls, Buttons, DBCtrls, EFocCol;
 
 type
   TfrmRelEstoque = class(TForm)
@@ -31,7 +32,6 @@ type
     ibqryDemanda: TIBQuery;
     QRLabel3: TQRLabel;
     QRLabel7: TQRLabel;
-    ibqryEmpresa: TIBQuery;
     QRDBText3: TQRDBText;
     QRDBText4: TQRDBText;
     QRLabel1: TQRLabel;
@@ -90,7 +90,19 @@ type
     QRDBText27: TQRDBText;
     QRDBText28: TQRDBText;
     qrlblAno: TQRLabel;
+    grpbxVendedor: TGroupBox;
+    Panel1: TPanel;
+    BitBtn2: TBitBtn;
+    btbtnLista: TBitBtn;
+    dblkpcmbbxFabric: TDBLookupComboBox;
+    ibdtsFabric: TIBDataSet;
+    dtsrcFabric: TDataSource;
+    ibdtsFabricCOD: TIntegerField;
+    ibdtsFabricNOME: TIBStringField;
+    GroupBox1: TGroupBox;
+    cmbbxAno: TComboBox;
     procedure FormCreate(Sender: TObject);
+    procedure btbtnListaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -110,9 +122,20 @@ uses
 procedure TfrmRelEstoque.FormCreate(Sender: TObject);
 begin
   lblNomeSistema.Caption := GetProductName;
+  ibdtsFabric.Close;
+  ibdtsFabric.Open;
+  while not ibdtsFabric.Eof do ibdtsFabric.Next;
+end;
 
-  ibqryDemanda.Open;
-  ibqryEmpresa.Open;
+procedure TfrmRelEstoque.btbtnListaClick(Sender: TObject);
+begin
+    ibqryDemanda.Close;
+    ibqryDemanda.Params[0].Value := StrToInt(cmbbxAno.Text);
+    ibqryDemanda.Params[1].Value := StrToInt(cmbbxAno.Text);
+    ibqryDemanda.Params[2].Value := dblkpcmbbxFabric.KeyValue;
+    qrlblAno.Caption := 'FABRICANTE: '+ dblkpcmbbxFabric.Text + '  -  ANO: '+ cmbbxAno.Text ;
+    ibqryDemanda.Open;
+    qckrp.Preview;
 end;
 
 initialization
