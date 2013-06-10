@@ -1204,10 +1204,10 @@ begin
       Connected := True;
 
       if ( Connected ) then
-        begin
+      begin
         ibdtstUsers.Open;
         ibqryEmpresa.Open;
-        end;
+      end;
     end;
 
   except

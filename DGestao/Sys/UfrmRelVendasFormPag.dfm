@@ -747,8 +747,6 @@ object frmRelVendasFormPag: TfrmRelVendasFormPag
   object ibqryGrpFormPag: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select f.descri, sum( vf.valor_fpagto)'
       'from tbvendas_formapagto vf'
@@ -789,8 +787,6 @@ object frmRelVendasFormPag: TfrmRelVendasFormPag
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     Active = True
-    BufferChunks = 1000
-    CachedUpdates = False
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 32
