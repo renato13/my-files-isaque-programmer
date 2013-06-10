@@ -115,8 +115,8 @@ type
     ExportarNFeGeradas1: TMenuItem;
     mnRelatorioEstoque: TMenuItem;
     mnRelatorioEstoqueProduto: TMenuItem;
-    PorFormadePagamento1: TMenuItem;
-    DemandaCompraxVenda1: TMenuItem;
+    mnRelatorioFinanceiroPorFormaPagto: TMenuItem;
+    mnRelatorioEstoqueDemanda: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -166,9 +166,8 @@ type
     procedure nmUsuarioAlterarSenhaClick(Sender: TObject);
     procedure ExportarNFeGeradas1Click(Sender: TObject);
     procedure mnRelatorioEstoqueProdutoClick(Sender: TObject);
-    procedure Ano20131Click(Sender: TObject);
-    procedure PorFormadePagamento1Click(Sender: TObject);
-    procedure DemandaCompraxVenda1Click(Sender: TObject);
+    procedure mnRelatorioFinanceiroPorFormaPagtoClick(Sender: TObject);
+    procedure mnRelatorioEstoqueDemandaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -200,8 +199,7 @@ uses
   UGeFluxoCaixa,
 
   // Relatórios
-  UfrmRelEstoque, uGerRelCR, uGerRelCP, UfrmRelVendas,
-  UfrmRelVendasFormPag;
+  UfrmRelEstoque;
 
 {$R *.dfm}
 
@@ -278,18 +276,12 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAPagarClick(Sender: TObject);
 begin
-//  FormFunction.ShowModalForm(Self, 'frmGerRelCR');
-  Application.CreateForm(TfrmGerRelCR, frmGerRelCR);
-  frmGerRelCR.ShowModal;
-  frmGerRelCR.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmGerRelCR');
 end;
 
 procedure TfrmPrinc.mnRelatorioFinanceiroContasAReceberClick(Sender: TObject);
 begin
-  //FormFunction.ShowModalForm(Self, 'frmGerRelCP');
-  Application.CreateForm(TfrmGerRelCP, frmGerRelCP);
-  frmGerRelCP.ShowModal;
-  frmGerRelCP.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmGerRelCP');
 end;
 
 procedure TfrmPrinc.nmAboutClick(Sender: TObject);
@@ -547,9 +539,7 @@ end;
 
 procedure TfrmPrinc.mnRelatorioFaturamentoVendasClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelVendas, frmRelVendas);
-  frmRelVendas.ShowModal;
-  frmRelVendas.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmRelVendas');
 end;
 
 procedure TfrmPrinc.nmFabricanteProdutoClick(Sender: TObject);
@@ -573,33 +563,14 @@ begin
   FormFunction.ShowFormReport(Self, 'frmRelProdutos', 'qckrp');
 end;
 
-procedure TfrmPrinc.Ano20131Click(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioFinanceiroPorFormaPagtoClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
-  with frmRelEstoque do
-  begin
-    ibqryDemanda.Close;
-    ibdtsFabric.Close;
-    ibdtsFabric.Open;
-    ibqryDemanda.Params[0].Value := 2013;
-    ibqryDemanda.Params[1].Value := 2013;
-    ibqryDemanda.Params[2].Value := dblkpcmbbxFabric.KeyValue;
-    qrlblAno.Caption := dblkpcmbbxFabric.Text + ' - ANO 2013';
-  end;
+  FormFunction.ShowModalForm(Self, 'frmRelVendasFormPag');
 end;
 
-procedure TfrmPrinc.PorFormadePagamento1Click(Sender: TObject);
+procedure TfrmPrinc.mnRelatorioEstoqueDemandaClick(Sender: TObject);
 begin
-  Application.CreateForm(TfrmRelVendasFormPag, frmRelVendasFormPag);
-  frmRelVendasFormPag.ShowModal;
-  frmRelVendasFormPag.Destroy;
-end;
-
-procedure TfrmPrinc.DemandaCompraxVenda1Click(Sender: TObject);
-begin
- Application.CreateForm(TfrmRelEstoque, frmRelEstoque);
- frmRelEstoque.ShowModal;
- frmRelEstoque.Destroy;
+  FormFunction.ShowModalForm(Self, 'frmRelEstoque');
 end;
 
 end.

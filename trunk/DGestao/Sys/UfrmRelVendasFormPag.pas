@@ -81,4 +81,7 @@ begin
          
 end;
 
+initialization
+  FormFunction.RegisterForm('frmRelVendasFormPag', TfrmRelVendasFormPag);
+
 end.

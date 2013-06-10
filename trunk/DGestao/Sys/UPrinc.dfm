@@ -7301,9 +7301,9 @@ object frmPrinc: TfrmPrinc
           Caption = 'Produtos'
           OnClick = mnRelatorioEstoqueProdutoClick
         end
-        object DemandaCompraxVenda1: TMenuItem
+        object mnRelatorioEstoqueDemanda: TMenuItem
           Caption = 'Demanda Compra x Venda'
-          OnClick = DemandaCompraxVenda1Click
+          OnClick = mnRelatorioEstoqueDemandaClick
         end
       end
       object mnRelatorioFaturamento: TMenuItem
@@ -7323,9 +7323,9 @@ object frmPrinc: TfrmPrinc
           Caption = 'Contas A Pagar'
           OnClick = mnRelatorioFinanceiroContasAReceberClick
         end
-        object PorFormadePagamento1: TMenuItem
+        object mnRelatorioFinanceiroPorFormaPagto: TMenuItem
           Caption = 'Por Forma de Pagamento'
-          OnClick = PorFormadePagamento1Click
+          OnClick = mnRelatorioFinanceiroPorFormaPagtoClick
         end
       end
     end
