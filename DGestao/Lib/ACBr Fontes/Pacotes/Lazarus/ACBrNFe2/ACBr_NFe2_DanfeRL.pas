@@ -8,7 +8,8 @@ interface
 
 uses
   ACBrNFeDANFeRL, ACBrNFeDANFeRLClass, ACBrNFeDANFeRLReg, 
-  ACBrNFeDANFeRLRetrato, ACBrNFeDANFeRLPaisagem, LazarusPackageIntf;
+  ACBrNFeDANFeRLRetrato, ACBrNFeDANFeRLPaisagem, ACBrNFeDANFeEventoRL, 
+  ACBrNFeDANFeEventoRLRetrato, LazarusPackageIntf;
 
 implementation
 

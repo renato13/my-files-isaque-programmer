@@ -59,6 +59,15 @@ TACBrNFeCTeCmd = class
     property Resposta: WideString  read fsResposta write fsResposta ;
   end;
 
+TACBrCmd = class
+  private
+    fsComando: WideString;
+    fsResposta: WideString;
+  public
+    property Comando : WideString  read fsComando write fsComando ;
+    property Resposta: WideString  read fsResposta write fsResposta ;
+  end;
+
 implementation
 
 uses StrUtils;

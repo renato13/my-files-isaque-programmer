@@ -770,6 +770,8 @@ begin
    ACBrNFSe1.NotasFiscais.Imprimir;
 
    MemoDados.Lines.Add('Arquivo Carregado de: '+ACBrNFSe1.NotasFiscais.Items[0].NomeArq);
+   MemoDados.Lines.Add('Nota Numero: '+ACBrNFSe1.NotasFiscais.Items[0].NFSe.Numero);
+   MemoDados.Lines.Add('Código de Verificação: '+ACBrNFSe1.NotasFiscais.Items[0].NFSe.CodigoVerificacao);
    MemoResp.Lines.LoadFromFile(ACBrNFSe1.NotasFiscais.Items[0].NomeArq);
    LoadXML(MemoResp, WBResposta);
    PageControl2.ActivePageIndex := 1;
@@ -1000,14 +1002,16 @@ end;
 
 procedure TfrmDemo_ACBrNFSe.btnLinkNFSeClick(Sender: TObject);
 var
- vNumNFSe, sCodVerif, sLink : String;
+ vNumNFSe, sCodVerif, sIM, sLink : String;
 begin
  if not(InputQuery('Gerar o Link da NFSe', 'Numero da NFSe', vNumNFSe))
   then exit;
  if not(InputQuery('Gerar o Link da NFSe', 'Codigo de Verificacao', sCodVerif))
   then exit;
+ if not(InputQuery('Gerar o Link da NFSe', 'Inscrição Municipal', sIM))
+  then exit;
 
- sLink := ACBrNFSe1.LinkNFSe(StrToIntDef(vNumNFSe, 0), sCodVerif);
+ sLink := ACBrNFSe1.LinkNFSe(StrToIntDef(vNumNFSe, 0), sCodVerif, sIM);
 
  MemoResp.Lines.Add('Link Gerado: ' + sLink);
  PageControl2.ActivePageIndex := 0;

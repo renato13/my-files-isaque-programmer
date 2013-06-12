@@ -45,11 +45,11 @@ Function EnderecosToINI : String;
 implementation
 
 uses ACBrUtil,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 procedure DoCEP( Cmd: TACBrCmd ) ;
 begin
-   with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrCEP1 {$ELSE}dm.ACBrCEP1 {$ENDIF} do
+   with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrCEP1 {$ELSE}dm.ACBrCEP1 {$ENDIF} do
    begin
       if Cmd.Metodo = 'buscarporcep' then
        begin
@@ -80,7 +80,7 @@ var
   Secao : String ;
   SL : TStringList ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrCEP1 {$ELSE}dm.ACBrCEP1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrCEP1 {$ELSE}dm.ACBrCEP1 {$ENDIF} do
   begin
      if Enderecos.Count < 1 then
         raise Exception.Create( 'Nenhum endereço encontrado' ) ;

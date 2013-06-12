@@ -25,7 +25,7 @@
       </Other>
     </CompilerOptions>
     <Description Value="Migrado do Delphi para Lazarus"/>
-    <Files Count="40">
+    <Files Count="39">
       <Item1>
         <Filename Value="..\..\..\Fontes\PCN2\pcnAuxiliar.pas"/>
         <UnitName Value="pcnAuxiliar"/>
@@ -159,33 +159,29 @@
         <UnitName Value="pcnSignature"/>
       </Item33>
       <Item34>
-        <Filename Value="..\..\..\Fontes\PCN2\pcnValidador.pas"/>
-        <UnitName Value="pcnValidador"/>
-      </Item34>
-      <Item35>
         <Filename Value="..\..\..\Fontes\PCN2\pcnCCeNFe.pas"/>
         <UnitName Value="pcnCCeNFe"/>
-      </Item35>
-      <Item36>
+      </Item34>
+      <Item35>
         <Filename Value="..\..\..\Fontes\PCN2\pcnRetCCeNFe.pas"/>
         <UnitName Value="pcnRetCCeNFe"/>
-      </Item36>
-      <Item37>
+      </Item35>
+      <Item36>
         <Filename Value="..\..\..\Fontes\PCN2\pcnDownloadNFe.pas"/>
         <UnitName Value="pcnDownloadNFe"/>
-      </Item37>
-      <Item38>
+      </Item36>
+      <Item37>
         <Filename Value="..\..\..\Fontes\PCN2\pcnConsNFeDest.pas"/>
         <UnitName Value="pcnConsNFeDest"/>
-      </Item38>
-      <Item39>
+      </Item37>
+      <Item38>
         <Filename Value="..\..\..\Fontes\PCN2\pcnRetConsNFeDest.pas"/>
         <UnitName Value="pcnRetConsNFeDest"/>
-      </Item39>
-      <Item40>
+      </Item38>
+      <Item39>
         <Filename Value="..\..\..\Fontes\PCN2\pcnRetDownloadNFe.pas"/>
         <UnitName Value="pcnRetDownloadNFe"/>
-      </Item40>
+      </Item39>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="2">

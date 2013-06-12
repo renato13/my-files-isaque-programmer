@@ -51,7 +51,7 @@ Procedure StringToMemo( AString : AnsiString; Memo : TStringList );
 
 implementation
 uses ACBrECF, ACBrDevice, ACBrUtil, ACBrECFClass, StrUtils, UtilUnit,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 function AjustaNomeArquivoCmd( Cmd : TACBrCmd; Param: Integer = 2 ) : String ;
 begin
@@ -73,19 +73,19 @@ Var wDescricao  : AnsiString ;
     ICMS        : TACBrECFAliquota ;
     CNF         : TACBrECFComprovanteNaoFiscal ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativar' then  { Ativa o ecf }
          begin
            Ativar ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.AvaliaEstadoTsECF ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.AvaliaEstadoTsECF ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'desativar' then
          begin
            Desativar ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.AvaliaEstadoTsECF ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.AvaliaEstadoTsECF ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'ativo' then
@@ -1039,7 +1039,7 @@ Function PegaAliquotas : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      if Aliquotas.Count < 1 then
         CarregaAliquotas ;
@@ -1058,7 +1058,7 @@ function PegaRelatoriosGerenciais : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      if RelatoriosGerenciais.Count < 1 then
         CarregaRelatoriosGerenciais ;
@@ -1077,7 +1077,7 @@ function PegaTotaisRelatoriosGerenciais : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      LerTotaisRelatoriosGerenciais ;
 
@@ -1097,7 +1097,7 @@ Function PegaTotaisAliquotas : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      LerTotaisAliquota ;
 
@@ -1116,7 +1116,7 @@ Var I : Integer ;
     Vinc : Char ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      if FormasPagamento.Count < 1 then
         CarregaFormasPagamento ;
@@ -1141,7 +1141,7 @@ Function PegaTotaisFormasPagamento : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      LerTotaisFormaPagamento ;
      
@@ -1162,7 +1162,7 @@ Var I : Integer ;
     Vinc : Char ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      if ComprovantesNaoFiscais.Count < 1 then
         CarregaComprovantesNaoFiscais ;
@@ -1188,7 +1188,7 @@ Function PegaTotaisComprovantesNaoFiscais : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      LerTotaisComprovanteNaoFiscal ;
      
@@ -1208,7 +1208,7 @@ Function PegaUnidadesMedida : String ;
 Var I : Integer ;
 begin
   Result := '' ;
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrECF1 {$ELSE}dm.ACBrECF1 {$ENDIF} do
   begin
      if UnidadesMedida.Count < 1 then
         CarregaUnidadesMedida ;

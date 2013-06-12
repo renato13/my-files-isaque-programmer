@@ -41,13 +41,13 @@ Procedure DoCHQ( Cmd : TACBrCmd ) ;
 
 implementation
 uses ACBrCHQ, ACBrUtil,  DoECFUnit,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Procedure DoCHQ( Cmd : TACBrCmd ) ;
 Var Linhas : TStringList ;
 
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrCHQ1 {$ELSE}dm.ACBrCHQ1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrCHQ1 {$ELSE}dm.ACBrCHQ1 {$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativar' then  { Ativa a Impress.Cheque }
@@ -83,7 +83,7 @@ begin
         else if Cmd.Metodo = 'setcidade' then
          begin
            Cidade := Cmd.Params(0) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.edCHQCidade.Text := Cidade ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.edCHQCidade.Text := Cidade ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'favorecido' then
@@ -92,7 +92,7 @@ begin
         else if Cmd.Metodo = 'setfavorecido' then
          begin
            Favorecido := Cmd.Params(0) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.edCHQFavorecido.Text := Favorecido ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.edCHQFavorecido.Text := Favorecido ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'observacao' then
@@ -119,7 +119,7 @@ begin
 
         else if Cmd.Metodo = 'imprimircheque' then
          begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
              if FrmACBrMonitor.chCHQVerForm.Checked and (not ChequePronto) then
            {$ELSE}
              if dm.VerificaCheque then

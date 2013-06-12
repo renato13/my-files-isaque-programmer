@@ -1,5 +1,5 @@
 object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
-  Left = 468
+  Left = 469
   Top = 133
   Width = 587
   Height = 583
@@ -4133,7 +4133,7 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
       Top = 1
       Width = 569
       Height = 261
-      ActivePage = Diretorios
+      ActivePage = Monitor
       Align = alClient
       Style = tsFlatButtons
       TabOrder = 0
@@ -4141,10 +4141,10 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         Caption = 'Monitor'
         object gbTCP: TGroupBox
           Left = 6
-          Top = 3
+          Top = 8
           Width = 188
           Height = 68
-          TabOrder = 0
+          TabOrder = 1
           object Label12: TLabel
             Left = 8
             Top = 21
@@ -4181,10 +4181,10 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object gbTXT: TGroupBox
           Left = 216
-          Top = 3
+          Top = 8
           Width = 338
           Height = 68
-          TabOrder = 1
+          TabOrder = 4
           object Label14: TLabel
             Left = 16
             Top = 21
@@ -4235,10 +4235,10 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object gbSenha: TGroupBox
           Left = 6
-          Top = 96
+          Top = 101
           Width = 188
           Height = 46
-          TabOrder = 2
+          TabOrder = 6
           object Label17: TLabel
             Left = 8
             Top = 24
@@ -4257,10 +4257,10 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object gbLog: TGroupBox
           Left = 216
-          Top = 74
+          Top = 79
           Width = 338
           Height = 68
-          TabOrder = 3
+          TabOrder = 8
           object Label18: TLabel
             Left = 26
             Top = 21
@@ -4315,16 +4315,16 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object rbTCP: TRadioButton
           Left = 24
-          Top = -1
+          Top = 4
           Width = 65
           Height = 17
           Caption = 'TCP/IP'
-          TabOrder = 4
+          TabOrder = 0
           OnClick = rbTCPClick
         end
         object cbSenha: TCheckBox
           Left = 24
-          Top = 92
+          Top = 97
           Width = 137
           Height = 17
           Caption = 'Proteger Configura'#231'oes'
@@ -4333,16 +4333,16 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object rbTXT: TRadioButton
           Left = 224
-          Top = -1
+          Top = 4
           Width = 89
           Height = 17
           Caption = 'Arquivo TXT'
-          TabOrder = 6
+          TabOrder = 2
           OnClick = rbTCPClick
         end
         object cbLog: TCheckBox
           Left = 224
-          Top = 70
+          Top = 75
           Width = 217
           Height = 17
           Caption = 'Log de Comandos Enviado e Recebidos'
@@ -4351,10 +4351,10 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object gbLogComp: TGroupBox
           Left = 216
-          Top = 146
+          Top = 151
           Width = 338
           Height = 68
-          TabOrder = 8
+          TabOrder = 10
           object Label40: TLabel
             Left = 26
             Top = 21
@@ -4409,7 +4409,7 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object cbLogComp: TCheckBox
           Left = 224
-          Top = 142
+          Top = 147
           Width = 265
           Height = 17
           Caption = 'Log de Mensagens do Componente ACBrNFePCN'
@@ -4418,19 +4418,19 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
         end
         object cbUmaInstancia: TCheckBox
           Left = 6
-          Top = 146
+          Top = 151
           Width = 195
           Height = 17
           Caption = 'Permite executar apenas um Monitor'
-          TabOrder = 10
+          TabOrder = 11
         end
         object btnDoar: TBitBtn
           Left = 6
-          Top = 187
+          Top = 192
           Width = 188
           Height = 25
           Caption = 'Doa'#231#245'es'
-          TabOrder = 11
+          TabOrder = 13
           OnClick = btnDoarClick
           Glyph.Data = {
             36030000424D3603000000000000360000002800000010000000100000000100
@@ -4459,6 +4459,23 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
             FFFFFFFFFFFF00000080B030000000FFFFFFFFFFFF00000080B030000000FFFF
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF010101687E68010101FF
             FFFFFFFFFF010101687E68010101FFFFFFFFFFFFFFFFFFFFFFFF}
+        end
+        object cbModoXML: TCheckBox
+          Left = 6
+          Top = 170
+          Width = 205
+          Height = 17
+          Caption = 'Receber e Enviar Respostas em XML'
+          TabOrder = 12
+        end
+        object cbMonitorarPasta: TCheckBox
+          Left = 329
+          Top = 3
+          Width = 97
+          Height = 17
+          Caption = 'Monitorar Pasta'
+          TabOrder = 3
+          OnClick = cbMonitorarPastaClick
         end
       end
       object Certificado: TTabSheet
@@ -4844,13 +4861,13 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
           Left = 6
           Top = 4
           Width = 550
-          Height = 213
+          Height = 225
           Anchors = [akLeft, akTop, akRight]
           Caption = 'Email'
           TabOrder = 0
           DesignSize = (
             550
-            213)
+            225)
           object Label20: TLabel
             Left = 8
             Top = 16
@@ -4932,23 +4949,23 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
           end
           object cbEmailSSL: TCheckBox
             Left = 10
-            Top = 144
+            Top = 138
             Width = 167
             Height = 17
-            Caption = 'SMTP exige conex'#227'o segura'
+            Caption = 'Email SSL - Conex'#227'o Segura'
             TabOrder = 5
           end
           object mmEmailMsg: TMemo
             Left = 288
             Top = 32
             Width = 254
-            Height = 169
+            Height = 185
             Anchors = [akLeft, akTop, akRight]
             TabOrder = 6
           end
           object rgEmailTipoEnvio: TRadioGroup
             Left = 8
-            Top = 166
+            Top = 180
             Width = 268
             Height = 38
             Caption = 'Tipo de Envio'
@@ -4958,6 +4975,14 @@ object frmAcbrNfeMonitor: TfrmAcbrNfeMonitor
               'Synapse'
               'Indy')
             TabOrder = 7
+          end
+          object cbEmailTLS: TCheckBox
+            Left = 10
+            Top = 157
+            Width = 167
+            Height = 17
+            Caption = 'Email TLS - Conex'#227'o Segura'
+            TabOrder = 8
           end
         end
       end

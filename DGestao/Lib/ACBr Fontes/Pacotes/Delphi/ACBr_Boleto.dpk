@@ -32,10 +32,12 @@ requires
   vcl,
   designide,
   synapse,
-  ACBrDiversos,
-  ACBrComum,
+{$IFDEF COMPILER7_UP}
   vclactnband,
-  vclx;
+  vclx,
+{$ENDIF}
+  ACBrDiversos,
+  ACBrComum;
 
 contains
   ACBrBancoBradesco in '..\..\Fontes\ACBrBoleto\ACBrBancoBradesco.pas',

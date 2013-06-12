@@ -45,11 +45,11 @@ Function CidadesToINI : String;
 implementation
 
 uses ACBrUtil,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 procedure DoIBGE( Cmd: TACBrCmd ) ;
 begin
-   with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrIBGE1 {$ELSE}dm.ACBrIBGE1 {$ENDIF} do
+   with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrIBGE1 {$ELSE}dm.ACBrIBGE1 {$ENDIF} do
    begin
       if Cmd.Metodo = 'buscarporcodigo' then
        begin
@@ -76,7 +76,7 @@ var
   Secao : String ;
   SL : TStringList ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrIBGE1 {$ELSE}dm.ACBrIBGE1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrIBGE1 {$ELSE}dm.ACBrIBGE1 {$ENDIF} do
   begin
      if Cidades.Count < 1 then
         raise Exception.Create( 'Nenhuma Cidade encontrada' ) ;

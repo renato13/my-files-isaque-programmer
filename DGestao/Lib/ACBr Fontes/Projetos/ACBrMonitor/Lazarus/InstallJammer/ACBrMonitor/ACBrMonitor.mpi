@@ -81,7 +81,7 @@ InstallPassword
 {}
 
 InstallVersion
-{0.9.14.0}
+{0.9.22.3}
 
 Language,ca
 {No}
@@ -192,7 +192,7 @@ UpgradeApplicationID
 {}
 
 Version
-{0.9.14}
+{0.9.22.3}
 
 ViewReadme
 {Yes}
@@ -294,6 +294,7 @@ File ::4EA794E9-522B-4692-7878-6A15973B867E -name 745.bmp -parent F26D2079-31D4-
 File ::85A7CF78-8FCB-24BB-07BE-252A75BFD6E4 -name 748.bmp -parent F26D2079-31D4-5099-50B2-94E21F9936E9
 File ::6937F8CF-C870-9448-1208-CF654C94BABB -name 749.bmp -parent F26D2079-31D4-5099-50B2-94E21F9936E9
 File ::ACF1B73C-55DB-224A-780C-A39FFA61BB93 -name 756.bmp -parent F26D2079-31D4-5099-50B2-94E21F9936E9
+File ::84E5B9FC-6A00-4621-6EB1-EFDFAFA58A34 -name 004.bmp -parent F26D2079-31D4-5099-50B2-94E21F9936E9
 File ::472F8213-0157-F7E3-E98F-F6735B076476 -name /home/user/lazarus/Comp/ACBr/Projetos/ACBrMonitor/Lazarus/banner_acbrmonitor.gif -location ../../ -parent 15133E1A-7B55-8242-7D70-0B8ACE8BF3C2
 FileGroup ::A7445EB0-8070-6A51-67CA-70F86582B322 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name ACBrMonitorConsole -parent FileGroups
 File ::B93A23F0-4828-6CDC-5C80-3FBC8A7E0B87 -name ACBrMonitorConsole -location ../../ -parent A7445EB0-8070-6A51-67CA-70F86582B322
@@ -896,7 +897,7 @@ array set Properties {
 {Programas do ACBrMonitor}
 
 15133E1A-7B55-8242-7D70-0B8ACE8BF3C2,FileSize
-{17269786}
+{15980628}
 
 15133E1A-7B55-8242-7D70-0B8ACE8BF3C2,Name
 {Program Files}
@@ -1409,7 +1410,7 @@ A0AAD91A-0EEE-FEE2-D547-23427A537F3A,Destination
 {<%InstallDir%>}
 
 A0AAD91A-0EEE-FEE2-D547-23427A537F3A,FileSize
-{2101306}
+{2336307}
 
 A0AAD91A-0EEE-FEE2-D547-23427A537F3A,Name
 {Documentacao}
@@ -1478,7 +1479,7 @@ A7445EB0-8070-6A51-67CA-70F86582B322,Destination
 {<%InstallDir%>}
 
 A7445EB0-8070-6A51-67CA-70F86582B322,FileSize
-{3133392}
+{2611892}
 
 A7445EB0-8070-6A51-67CA-70F86582B322,Name
 {ACBrMonitorConsole}

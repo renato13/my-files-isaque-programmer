@@ -366,7 +366,7 @@ begin
  with ACBrMDFe1.Manifestos.Add.MDFe do
   begin
    //
-   // Dados de Identificação do CT-e
+   // Dados de Identificação do MDF-e
    //
    Ide.cUF := 35;
 

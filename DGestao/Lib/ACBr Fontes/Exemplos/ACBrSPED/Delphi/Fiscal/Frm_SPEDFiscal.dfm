@@ -140,7 +140,6 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
-      ExplicitWidth = 341
     end
     object Label6: TLabel
       Left = 526
@@ -154,7 +153,7 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
     object edtFile: TEdit
       Left = 22
       Top = 28
-      Width = 311
+      Width = 307
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
@@ -163,7 +162,7 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
       OnExit = edtFileChange
     end
     object cbConcomitante: TCheckBox
-      Left = 357
+      Left = 353
       Top = 30
       Width = 134
       Height = 19
@@ -186,7 +185,7 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
     object edNotas: TEdit
       Left = 526
       Top = 29
-      Width = 74
+      Width = 70
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
@@ -206,7 +205,7 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
     object Label4: TLabel
       Left = 1
       Top = 1
-      Width = 747
+      Width = 450
       Height = 16
       Align = alTop
       Alignment = taCenter
@@ -221,7 +220,6 @@ object FrmSPEDFiscal: TFrmSPEDFiscal
       Font.Style = [fsBold]
       ParentColor = False
       ParentFont = False
-      ExplicitWidth = 450
     end
     object btnB_0: TButton
       Left = 16

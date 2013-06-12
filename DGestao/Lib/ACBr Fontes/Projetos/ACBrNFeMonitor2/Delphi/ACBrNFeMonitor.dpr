@@ -8,7 +8,8 @@ uses
   IniFiles,
   ACBrNFeMonitor1 in 'ACBrNFeMonitor1.pas' {frmAcbrNfeMonitor},
   DoACBrNFeUnit in 'DoACBrNFeUnit.pas',
-  DoACBrCTeUnit in 'DoACBrCTeUnit.pas';
+  DoACBrCTeUnit in 'DoACBrCTeUnit.pas',
+  DoACBrNFeXMLUnit in 'DoACBrNFeXMLUnit.pas';
 
 {$R *.res}
 var 

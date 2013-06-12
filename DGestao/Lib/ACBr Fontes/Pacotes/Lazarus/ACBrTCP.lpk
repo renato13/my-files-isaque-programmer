@@ -24,11 +24,11 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Description Value="Componentes para facilitar o uso das Calsses do Projeto Synapse"/>
+    <Description Value="Componentes para facilitar o uso das Classes do Projeto Synapse"/>
     <License Value="LGPL
 "/>
     <Version Minor="10"/>
-    <Files Count="9">
+    <Files Count="11">
       <Item1>
         <Filename Value="..\..\Fontes\ACBrTCP\ACBrSocket.pas"/>
         <UnitName Value="ACBrSocket"/>
@@ -66,6 +66,14 @@
         <Filename Value="..\..\Fontes\ACBrTCP\ACBrNFPws.pas"/>
         <UnitName Value="ACBrNFPws"/>
       </Item9>
+      <Item10>
+        <Filename Value="..\..\Fontes\ACBrTCP\ACBrConsultaCNPJ.pas"/>
+        <UnitName Value="ACBrConsultaCNPJ"/>
+      </Item10>
+      <Item11>
+        <Filename Value="..\..\Fontes\ACBrTCP\ACBrIBPTax.pas"/>
+        <UnitName Value="ACBrIBPTax"/>
+      </Item11>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="4">
@@ -73,7 +81,7 @@
         <PackageName Value="ACBrDiversos"/>
       </Item1>
       <Item2>
-        <PackageName Value="synapse"/>
+        <PackageName Value="laz_synapse"/>
       </Item2>
       <Item3>
         <PackageName Value="FCL"/>

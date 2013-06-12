@@ -44,13 +44,12 @@ object frmPrincipal: TfrmPrincipal
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    ItemIndex = 0
     TabOrder = 0
-    Text = 'Filizola'
     Items.Strings = (
       'Filizola'
       'Toledo'
-      'Urano')
+      'Urano'
+      'ToledoMGV5')
   end
   object edtDiretorio: TEdit
     Left = 15

@@ -29,7 +29,7 @@ Voce pode acessar do seu sistema em qualquer linguagem. Basta passar os parametr
 4-PARÂMETROS DISPONÍVEIS
 ACBrDanfe.exe [parametro_obrigatorio 1] [parametro_opcional 1] [parametro_opcional 2]
 -parametro_obrigatorio 1: deverá ser sempre o arquivo XML que vc deseja imprimir o DANFE
--parametro_opcional 1 e 2: pode conter a informacao PDF ou C
+-parametro_opcional 1 e 2: pode conter a informacao PDF e/ou C
 
 Se o parâmetro for PDF o DANFe será gerado em PDF no diretorio especificado na propriedade PathPDF 
 do arquivo .INI
@@ -52,7 +52,7 @@ no arquivo .INI
 
 6-DUVIDAS SUGESTOES
 Utilize o fórum oficial do Projeto ACBr:
-http://www.djsystem.com.br/acbr/forum/viewforum.php?f=6
+http://www.projetoacbr.com.br/forum/index.php?/forum/4-acbrnfeacbrnfemonitor/
 
 
 Joao Henrique de Souza

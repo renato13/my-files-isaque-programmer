@@ -47,7 +47,7 @@ Function ConvertStrRecived( AStr: AnsiString ) : AnsiString ;
 implementation
 Uses ACBrUtil, DateUtils,
   {$IFDEF MSWINDOWS}sndkey32, Windows,{$ENDIF}
-  {$IFNDEF CONSOLE}Forms, ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}Forms, ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Procedure DoACBr( Cmd : TACBrCmd ) ;
 Var AltTab : Boolean ;
@@ -58,7 +58,7 @@ Var AltTab : Boolean ;
     {$ENDIF}
     Files  : String ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor{$ELSE}dm{$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor{$ELSE}dm{$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativo' then
@@ -82,7 +82,7 @@ begin
            {$ENDIF}
          end
 
-        {$IFNDEF CONSOLE}
+        {$IFNDEF NOGUI}
           else if Cmd.Metodo = 'restaurar' then
              Restaurar1Click( FrmACBrMonitor )
 
@@ -148,7 +148,7 @@ begin
                  end ;
               end ;
 
-              {$IFNDEF CONSOLE}
+              {$IFNDEF NOGUI}
                Application.ProcessMessages ;
               {$ENDIF}
               sleep(100) ;
@@ -166,7 +166,7 @@ begin
            dtFim := IncSecond(now, StrToIntDef(Cmd.Params(1),0) ) ;
            while (now <= dtFim) and ( not FileExists( Files ) ) do
            begin
-              {$IFNDEF CONSOLE}
+              {$IFNDEF NOGUI}
                Application.ProcessMessages ;
               {$ENDIF}
               sleep(100) ;
@@ -191,7 +191,7 @@ begin
         else if pos('|'+Cmd.Metodo+'|', '|exit|bye|fim|sair|') > 0 then {fecha conexao}
          begin
            Cmd.Resposta := 'Obrigado por usar o ACBrMonitor' ;
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
              mCmd.Lines.Clear;
            {$ELSE}
              WriteLn( 'Obrigado por usar o ACBrMonitorConsole' ) ;
@@ -212,9 +212,9 @@ end ;
 
 Procedure VerificaPermiteComandosRemoto ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor{$ELSE}dm{$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor{$ELSE}dm{$ENDIF} do
   begin
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
        if not cbComandos.Checked then
      {$ELSE}
        if not PermiteComandos then

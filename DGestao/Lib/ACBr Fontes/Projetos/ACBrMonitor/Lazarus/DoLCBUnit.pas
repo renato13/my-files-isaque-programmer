@@ -41,11 +41,11 @@ Procedure DoLCB( Cmd : TACBrCmd ) ;
 
 implementation
 uses  ACBrUtil,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Procedure DoLCB( Cmd : TACBrCmd ) ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrLCB1 {$ELSE}dm.ACBrLCB1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrLCB1 {$ELSE}dm.ACBrLCB1 {$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativar' then  { Ativa o Leitor }
@@ -81,7 +81,7 @@ begin
         else if Cmd.Metodo = 'setprefixoaexcluir' then
          begin
            PrefixoAExcluir := Cmd.Params(0) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.edLCBPreExcluir.Text := PrefixoAExcluir ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.edLCBPreExcluir.Text := PrefixoAExcluir ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'sufixo' then
@@ -90,7 +90,7 @@ begin
         else if Cmd.Metodo = 'setsufixo' then
          begin
            Sufixo := Cmd.Params(0) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.cbLCBSufixoLeitor.Text := Sufixo ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.cbLCBSufixoLeitor.Text := Sufixo ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'excluirsufixo' then
@@ -99,7 +99,7 @@ begin
         else if Cmd.Metodo = 'setexcluirsufixo' then
          begin
            ExcluirSufixo := StrToBool( Cmd.Params(0) ) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.chLCBExcluirSufixo.Checked := ExcluirSufixo ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.chLCBExcluirSufixo.Checked := ExcluirSufixo ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'usarfila' then
@@ -108,7 +108,7 @@ begin
         else if Cmd.Metodo = 'setusarfila' then
          begin
            UsarFila := StrToBool( Cmd.Params(0) ) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.rbLCBFila.Checked := UsarFila ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.rbLCBFila.Checked := UsarFila ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'filamaxitens' then

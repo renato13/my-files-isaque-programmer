@@ -1238,6 +1238,11 @@ begin
        ACBrECF1.InfoRodapeCupom.NotaLegalDF.ValorISS  := 123456.88;
      end;
 
+     // lei 12.741/2013 transparencia dos impostos
+     // ACBrECF1.InfoRodapeCupom.Imposto.Texto := '...'; utilize essa propriedade se quiser personalizar o texto exemplo: Valor impostos %s (%s %) meu texto
+     ACBrECF1.InfoRodapeCupom.Imposto.ValorAproximado := 1.23;  // informar o valor aproximado calculado a partir dos itens
+     ACBrECF1.InfoRodapeCupom.Imposto.Fonte           := 'IBPT'; // informar a fonte de onde veio a informação para calculo
+
      Obs := StringReplace(Obs,'|',#10,[rfReplaceAll,rfIgnoreCase]) ;
      ACBrECF1.FechaCupom( Obs, StrToIntDef(IndiceBMP, 0) );
      mResp.Lines.Add( 'Fecha Cupom: '+#10+Obs );

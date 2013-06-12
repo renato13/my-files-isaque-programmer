@@ -13,9 +13,9 @@ uses
   pcnLayoutTXT, pcnLeitor, pcnNFe, pcnNFeR, pcnNFeRTXT, pcnNFeW, pcnProcNFe, 
   pcnRetAtuCadEmiDFe, pcnRetCancNFe, pcnRetConsCad, pcnRetConsReciNFe, 
   pcnRetConsSitNFe, pcnRetConsStatServ, pcnRetDPEC, pcnRetEnvEventoNFe, 
-  pcnRetEnvNFe, pcnRetInutNFe, pcnSignature, pcnValidador, pcnCCeNFe, 
-  pcnRetCCeNFe, pcnDownloadNFe, pcnConsNFeDest, pcnRetConsNFeDest, 
-  pcnRetDownloadNFe, LazarusPackageIntf;
+  pcnRetEnvNFe, pcnRetInutNFe, pcnSignature, pcnCCeNFe, pcnRetCCeNFe, 
+  pcnDownloadNFe, pcnConsNFeDest, pcnRetConsNFeDest, pcnRetDownloadNFe, 
+  LazarusPackageIntf;
 
 implementation
 

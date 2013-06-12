@@ -40,6 +40,10 @@ type
     btnStatusServ: TButton;
     btnValidarAssinatura: TButton;
     btnValidarXML: TButton;
+    btnManifDestConfirmacao: TButton;
+    btnNfeDestinadas: TButton;
+    btnImprimirCCe: TButton;
+    btnEnviarEvento: TButton;
     cbEmailSSL: TCheckBox;
     cbUF: TComboBox;
     ckSalvar: TCheckBox;
@@ -120,6 +124,7 @@ type
     PageControl2: TPageControl;
     PageControl3: TPageControl;
     Panel1: TPanel;
+    Panel2: TPanel;
     Panel3: TPanel;
     rgFormaEmissao: TRadioGroup;
     rgTipoAmb: TRadioGroup;
@@ -167,10 +172,14 @@ type
     procedure btnImportarXMLClick(Sender: TObject);
     procedure btnImprimirClick(Sender: TObject);
     procedure btnInutilizarClick(Sender: TObject);
+    procedure btnManifDestConfirmacaoClick(Sender: TObject);
+    procedure btnNfeDestinadasClick(Sender: TObject);
     procedure btnSalvarConfigClick(Sender: TObject);
     procedure btnStatusServClick(Sender: TObject);
     procedure btnValidarAssinaturaClick(Sender: TObject);
     procedure btnValidarXMLClick(Sender: TObject);
+    procedure btnImprimirCCeClick(Sender: TObject);
+    procedure btnEnviarEventoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnLogoMarcaClick(Sender: TObject);
@@ -2150,6 +2159,108 @@ begin
 
 end;
 
+procedure TForm1.btnManifDestConfirmacaoClick(Sender: TObject);
+var
+ Chave, idLote, CNPJ: string;
+ lMsg: string;
+begin
+  Chave:='';
+  if not(InputQuery('WebServices Eventos: Manif. Destinatario - Conf. Operacao', 'Chave da NF-e', Chave)) then
+     exit;
+  Chave := Trim(OnlyNumber(Chave));
+  idLote := '1';
+  if not(InputQuery('WebServices Eventos: Manif. Destinatario - Conf. Operacao', 'Identificador de controle do Lote de envio do Evento', idLote)) then
+     exit;
+  CNPJ := '';
+  if not(InputQuery('WebServices Eventos: Manif. Destinatario - Conf. Operacao', 'CNPJ ou o CPF do autor do Evento', CNPJ)) then
+     exit;
+
+  ACBrNFe1.EventoNFe.Evento.Clear;
+  with ACBrNFe1.EventoNFe.Evento.Add do
+   begin
+     infEvento.chNFe := Chave;
+     infEvento.CNPJ   := CNPJ;
+     infEvento.dhEvento := now;
+     infEvento.tpEvento := teManifDestConfirmacao;
+   end;
+  ACBrNFe1.EnviarEventoNFe(StrToInt(IDLote));
+
+  with AcbrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].RetInfEvento do
+  begin
+    lMsg:=
+    'Id: '+Id+#13+
+    'tpAmb: '+TpAmbToStr(tpAmb)+#13+
+    'verAplic: '+verAplic+#13+
+    'cOrgao: '+IntToStr(cOrgao)+#13+
+    'cStat: '+IntToStr(cStat)+#13+
+    'xMotivo: '+xMotivo+#13+
+    'chNFe: '+chNFe+#13+
+    'tpEvento: '+TpEventoToStr(tpEvento)+#13+
+    'xEvento: '+xEvento+#13+
+    'nSeqEvento: '+IntToStr(nSeqEvento)+#13+
+    'CNPJDest: '+CNPJDest+#13+
+    'emailDest: '+emailDest+#13+
+    'dhRegEvento: '+DateTimeToStr(dhRegEvento)+#13+
+    'nProt: '+nProt;
+  end;
+  ShowMessage(lMsg);
+
+  MemoResp.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetWS);
+  memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetornoWS);
+//  ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].XXXX
+  LoadXML(MemoResp, SynReposta);
+end;
+
+procedure TForm1.btnNfeDestinadasClick(Sender: TObject);
+var
+ CNPJ, IndNFe, IndEmi, ultNSU: string;
+ ok: boolean;
+begin
+  CNPJ := '';
+  if not(InputQuery('WebServices Consulta NFe Destinadas', 'CNPJ do destinatário da NFe', CNPJ)) then
+     exit;
+
+  (*veja NT 2012/002 pág. 11 para identificar os valores possíveis
+  Indicador de NF-e consultada:
+  0=Todas as NF-e;
+  1=Somente as NF-e que ainda não tiveram manifestação do destinatário
+    (Desconhecimento da operação, Operação não Realizada ou Confirmação da Operação);
+  2=Idem anterior, incluindo as NF-e que também não tiveram a Ciência da Operação.*)
+  indNFe := '0';
+  if not(InputQuery('WebServices Consulta NFe Destinadas', 'Indicador de NF-e consultada', indNFe)) then
+     exit;
+
+  (*veja NT 2012/002 pág. 11 para identificar os valores possíveis
+  Indicador do Emissor da NF-e:
+  0=Todos os Emitentes / Remetentes;
+  1=Somente as NF-e emitidas por emissores / remetentes que não tenham a mesma
+    raiz do CNPJ do destinatário (para excluir as notas fiscais de transferência
+    entre filiais).*)
+  IndEmi := '0';
+  if not(InputQuery('WebServices Consulta NFe Destinadas', 'Indicador do Emissor da NF-e', IndEmi)) then
+     exit;
+
+  (*veja NT 2012/002 pág. 11 para identificar os valores possíveis
+   Último NSU recebido pela Empresa.
+   Caso seja informado com zero, ou com um NSU muito antigo, a consulta retornará
+   unicamente as notas fiscais que tenham sido recepcionadas nos últimos 15 dias.*)
+  ultNSU := '0';
+  if not(InputQuery('WebServices Consulta NFe Destinadas', 'Último NSU recebido pela Empresa', ultNSU)) then
+     exit;
+
+  ACBrNFe1.ConsultaNFeDest(CNPJ,
+                           StrToIndicadorNFe(ok,indNFe),
+                           StrToIndicadorEmissor(ok,IndEmi),
+                           UltNSu);
+
+  //AcbrNFe1.WebServices.ConsNFeDest.retConsNFeDest
+
+  MemoResp.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetWS);
+  memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.EnvEvento.RetornoWS);
+//  ACBrNFe1.WebServices.EnvEvento.EventoRetorno.retEvento.Items[0].XXXX
+  LoadXML(MemoResp, SynReposta);
+end;
+
 procedure TForm1.btnStatusServClick(Sender: TObject);
 begin
  ACBrNFe1.WebServices.StatusServico.Executar;
@@ -2209,6 +2320,84 @@ begin
    showmessage('Nota Fiscal Eletrônica Valida');
  end;
 
+end;
+
+procedure TForm1.btnImprimirCCeClick(Sender: TObject);
+begin
+    OpenDialog1.Title := 'Selecione a NFE';
+  OpenDialog1.DefaultExt := '*.XML';
+  OpenDialog1.Filter := 'Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Geral.PathSalvar;
+  if OpenDialog1.Execute then
+  begin
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
+  end;
+
+  OpenDialog1.Title := 'Selecione o Evento';
+  OpenDialog1.DefaultExt := '*.XML';
+  OpenDialog1.Filter := 'Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Geral.PathSalvar;
+  if OpenDialog1.Execute then
+  begin
+    ACBrNFe1.EventoNFe.Evento.Clear;
+    ACBrNFe1.EventoNFe.LerXML(OpenDialog1.FileName) ;
+    ACBrNFe1.ImprimirEvento;
+  end;
+//  LoadXML(MemoResp, WBResposta);
+end;
+
+procedure TForm1.btnEnviarEventoClick(Sender: TObject);
+var
+ Para : String;
+ CC, Evento: Tstrings;
+begin
+  if not(InputQuery('Enviar Email', 'Email de destino', Para)) then
+    exit;
+
+  OpenDialog1.Title := 'Selecione a NFE';
+  OpenDialog1.DefaultExt := '*.XML';
+  OpenDialog1.Filter := 'Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Geral.PathSalvar;
+  if OpenDialog1.Execute then
+  begin
+    ACBrNFe1.NotasFiscais.Clear;
+    ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
+  end;
+
+  OpenDialog1.Title := 'Selecione ao Evento';
+  OpenDialog1.DefaultExt := '*.XML';
+  OpenDialog1.Filter := 'Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+  OpenDialog1.InitialDir := ACBrNFe1.Configuracoes.Geral.PathSalvar;
+  if OpenDialog1.Execute then
+  begin
+    Evento := TStringList.Create;
+    Evento.Clear;
+    Evento.Add(OpenDialog1.FileName);
+    ACBrNFe1.EventoNFe.Evento.Clear;
+    ACBrNFe1.EventoNFe.LerXML(OpenDialog1.FileName) ;
+    CC:=TstringList.Create;
+    CC.Add('andrefmoraes@gmail.com'); //especifique um email válido
+    CC.Add('anfm@zipmail.com.br');    //especifique um email válido
+    ACBrNFe1.EnviarEmailEvento(edtSmtpHost.Text
+                             , edtSmtpPort.Text
+                             , edtSmtpUser.Text
+                             , edtSmtpPass.Text
+                             , edtSmtpUser.Text
+                             , Para
+                             , edtEmailAssunto.Text
+                             , mmEmailMsg.Lines
+                             , cbEmailSSL.Checked // SSL - Conexão Segura
+                             , True //Enviar PDF junto
+                             , CC //Lista com emails que serão enviado cópias - TStrings
+                             , Evento // Lista de anexos - TStrings
+                             , False  //Pede confirmação de leitura do email
+                             , False  //Aguarda Envio do Email(não usa thread)
+                             , 'ACBrNFe2' // Nome do Rementente
+                             , cbEmailSSL.Checked ); // Auto TLS
+    CC.Free;
+    Evento.Free;
+  end;
 end;
 
 end.

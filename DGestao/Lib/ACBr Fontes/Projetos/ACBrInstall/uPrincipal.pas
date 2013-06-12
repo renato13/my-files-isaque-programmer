@@ -710,7 +710,7 @@ begin
      if VersionNumberStr = 'd16' then
         Sender.Options.Add('-NSData.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;System.Win');
 
-     if VersionNumberStr = 'd17' then
+     if (VersionNumberStr = 'd17') or (VersionNumberStr = 'd18') then
         Sender.Options.Add('-NSWinapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell');
   end;
 end;
@@ -756,7 +756,9 @@ begin
     else if oACBr.Installations[iFor].VersionNumberStr = 'd16' then
       edtDelphiVersion.Items.Add('Delphi XE2')
     else if oACBr.Installations[iFor].VersionNumberStr = 'd17' then
-      edtDelphiVersion.Items.Add('Delphi XE3');
+      edtDelphiVersion.Items.Add('Delphi XE3')
+    else if oACBr.Installations[iFor].VersionNumberStr = 'd18' then
+      edtDelphiVersion.Items.Add('Delphi XE4');
 
     // -- Evento disparado antes de iniciar a execução do processo.
     oACBr.Installations[iFor].DCC32.OnBeforeExecute := BeforeExecute;
@@ -1182,7 +1184,7 @@ end;
 procedure TfrmPrincipal.wizPgConfiguracaoNextButtonClick(Sender: TObject;
   var Stop: Boolean);
 begin
-  if Pos(oACBr.Installations[iVersion].VersionNumberStr, 'd3, d4, d5, d6') > 0 then
+  if Pos(oACBr.Installations[iVersion].VersionNumberStr, 'd3, d4, d5') > 0 then
   begin
     Stop := True;
     edtDelphiVersion.SetFocus;

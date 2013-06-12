@@ -406,7 +406,20 @@ begin
   begin
     with Registro1001New do
     begin
-      IND_MOV := imSemDados;
+      IND_MOV := imComDados;
+
+      with Registro1010New do
+      begin
+        IND_EXP   := 'N'; // Reg. 1100 - Ocorreu averbação (conclusão) de exportação no período:
+        IND_CCRF  := 'N'; // Reg. 1200 – Existem informações acerca de créditos de ICMS a serem controlados, definidos pela Sefaz:
+        IND_COMB  := 'N'; // Reg. 1300 – É comercio varejista de combustíveis:
+        IND_USINA := 'N'; // Reg. 1390 – Usinas de açúcar e/álcool – O estabelecimento é produtor de açúcar e/ou álcool carburante:
+        IND_VA    := 'N'; // Reg. 1400 – Existem informações a serem prestadas neste registro e o registro é obrigatório em sua Unidade da Federação:
+        IND_EE    := 'N'; // Reg. 1500 - A empresa é distribuidora de energia e ocorreu fornecimento de energia elétrica para consumidores de outra UF:
+        IND_CART  := 'N'; // Reg. 1600 - Realizou vendas com Cartão de Crédito ou de débito:
+        IND_FORM  := 'N'; // Reg. 1700 - É obrigatório em sua unidade da federação o controle de utilização de documentos  fiscais em papel:
+        IND_AER   := 'N'; // Reg. 1800 – A empresa prestou serviços de transporte aéreo de cargas e de passageiros:
+      end;
     end;
   end;
 

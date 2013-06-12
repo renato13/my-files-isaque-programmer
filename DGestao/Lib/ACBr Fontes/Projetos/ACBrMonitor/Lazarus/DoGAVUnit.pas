@@ -41,23 +41,23 @@ Procedure DoGAV( Cmd : TACBrCmd ) ;
 
 implementation
 uses ACBrGAV, ACBrUtil, ACBrDevice,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Procedure DoGAV( Cmd : TACBrCmd ) ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrGAV1  {$ELSE}dm.ACBrGAV1  {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrGAV1  {$ELSE}dm.ACBrGAV1  {$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativar' then  { Ativa a Gaveta }
          begin
            Ativar ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.AvaliaEstadoTsGAV ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.AvaliaEstadoTsGAV ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'desativar' then
          begin
            Desativar ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.AvaliaEstadoTsGAV ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.AvaliaEstadoTsGAV ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'ativo' then
@@ -84,7 +84,7 @@ begin
         else if Cmd.Metodo = 'setstrcomando' then
          begin
            StrComando := Cmd.Params(0) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.cbGAVStrAbre.Text := StrComando ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.cbGAVStrAbre.Text := StrComando ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'aberturaintervalo' then
@@ -93,7 +93,7 @@ begin
         else if Cmd.Metodo = 'setaberturaintervalo' then
          begin
            AberturaIntervalo := StrToIntDef( Cmd.Params(0), AberturaIntervalo) ;
-           {$IFNDEF CONSOLE}FrmACBrMonitor.sedGAVIntervaloAbertura.Value := AberturaIntervalo ;{$ENDIF}
+           {$IFNDEF NOGUI}FrmACBrMonitor.sedGAVIntervaloAbertura.Value := AberturaIntervalo ;{$ENDIF}
          end
 
         else if Cmd.Metodo = 'aberturaantecipada' then

@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 269
   Top = 149
+  Width = 894
+  Height = 631
   Caption = 'ACBrNFe - Demonstra'#231#227'o'
-  ClientHeight = 593
-  ClientWidth = 878
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -102,7 +102,7 @@ object Form1: TForm1
         Top = 15
         Width = 277
         Height = 360
-        ActivePage = TabSheet2
+        ActivePage = TabSheet7
         Align = alClient
         MultiLine = True
         TabOrder = 0
@@ -368,6 +368,7 @@ object Form1: TForm1
               Font.Height = -13
               Font.Name = 'MS Sans Serif'
               Font.Style = []
+              ItemHeight = 16
               ItemIndex = 24
               ParentFont = False
               TabOrder = 1
@@ -779,6 +780,8 @@ object Form1: TForm1
       Width = 153
       Height = 25
       Caption = 'Salvar Configura'#231#245'es'
+      TabOrder = 1
+      OnClick = btnSalvarConfigClick
       Glyph.Data = {
         76010000424D7601000000000000760000002800000020000000100000000100
         04000000000000010000130B0000130B00001000000000000000000000000000
@@ -793,8 +796,6 @@ object Form1: TForm1
         99337F3FF7F3733777F30F08F0F0337999337F7737F73F7777330FFFF0039999
         93337FFFF7737777733300000033333333337777773333333333}
       NumGlyphs = 2
-      TabOrder = 1
-      OnClick = btnSalvarConfigClick
     end
   end
   object Panel2: TPanel
@@ -808,250 +809,277 @@ object Form1: TForm1
       Left = 1
       Top = 1
       Width = 579
-      Height = 272
+      Height = 300
       Align = alTop
       TabOrder = 0
-      object btnImprimir: TButton
-        Left = 192
-        Top = 156
-        Width = 177
-        Height = 25
-        Caption = 'Imprimir DANFE'
-        TabOrder = 3
-        OnClick = btnImprimirClick
-      end
-      object btnConsultar: TButton
-        Left = 8
-        Top = 66
-        Width = 177
-        Height = 25
-        Caption = 'Consultar carregando XML'
-        TabOrder = 4
-        OnClick = btnConsultarClick
-      end
-      object btnValidarXML: TButton
-        Left = 376
-        Top = 126
-        Width = 177
-        Height = 25
-        Caption = 'Validar XML'
-        TabOrder = 1
-        OnClick = btnValidarXMLClick
-      end
-      object btnStatusServ: TButton
-        Left = 9
-        Top = 6
-        Width = 177
-        Height = 25
-        Caption = 'Status Servi'#231'o'
+      object PageControl3: TPageControl
+        Left = 1
+        Top = 1
+        Width = 577
+        Height = 298
+        ActivePage = tsNFe
+        Align = alClient
         TabOrder = 0
-        OnClick = btnStatusServClick
-      end
-      object btnCancNF: TButton
-        Left = 9
-        Top = 125
-        Width = 177
-        Height = 25
-        Caption = 'Cancelamento NFe com XML'
-        TabOrder = 6
-        OnClick = btnCancNFClick
-      end
-      object btnCriarEnviar: TButton
-        Left = 8
-        Top = 36
-        Width = 177
-        Height = 25
-        Caption = 'Criar e Enviar'
-        TabOrder = 2
-        OnClick = btnCriarEnviarClick
-      end
-      object btnInutilizar: TButton
-        Left = 192
-        Top = 6
-        Width = 177
-        Height = 25
-        Caption = 'Inutilizar Numera'#231#227'o'
-        TabOrder = 5
-        OnClick = btnInutilizarClick
-      end
-      object btnGerarNFE: TButton
-        Left = 192
-        Top = 96
-        Width = 177
-        Height = 25
-        Caption = 'Gerar NFe'
-        TabOrder = 7
-        OnClick = btnGerarNFEClick
-      end
-      object btnConsCad: TButton
-        Left = 193
-        Top = 66
-        Width = 177
-        Height = 25
-        Caption = 'Consulta Cadastro'
-        TabOrder = 8
-        OnClick = btnConsCadClick
-      end
-      object btnGerarPDF: TButton
-        Left = 192
-        Top = 126
-        Width = 177
-        Height = 25
-        Caption = 'Gerar PDF'
-        TabOrder = 9
-        OnClick = btnGerarPDFClick
-      end
-      object btnEnviarEmail: TButton
-        Left = 376
-        Top = 156
-        Width = 177
-        Height = 25
-        Caption = 'Enviar NFe Email'
-        TabOrder = 10
-        OnClick = btnEnviarEmailClick
-      end
-      object btnConsultarRecibo: TButton
-        Left = 192
-        Top = 36
-        Width = 177
-        Height = 25
-        Caption = 'Consultar Recibo Lote'
-        TabOrder = 11
-        OnClick = btnConsultarReciboClick
-      end
-      object btnEnvDPEC: TButton
-        Left = 376
-        Top = 6
-        Width = 177
-        Height = 25
-        Caption = 'Enviar DPEC'
-        TabOrder = 12
-        OnClick = btnEnvDPECClick
-      end
-      object btnConsultarDPEC: TButton
-        Left = 376
-        Top = 36
-        Width = 177
-        Height = 25
-        Caption = 'Consultar DPEC'
-        TabOrder = 13
-        OnClick = btnConsultarDPECClick
-      end
-      object btnImportarXML: TButton
-        Left = 375
-        Top = 95
-        Width = 177
-        Height = 25
-        Caption = 'Importar TXT/XML'
-        TabOrder = 14
-        OnClick = btnImportarXMLClick
-      end
-      object btnConsultarChave: TButton
-        Left = 8
-        Top = 96
-        Width = 177
-        Height = 25
-        Caption = 'Consultar pela Chave'
-        TabOrder = 15
-        OnClick = btnConsultarChaveClick
-      end
-      object btnCancelarChave: TButton
-        Left = 9
-        Top = 156
-        Width = 177
-        Height = 25
-        Caption = 'Cancelamento NFe pela Chave'
-        TabOrder = 16
-        OnClick = btnCancelarChaveClick
-      end
-      object btnGerarTXT: TButton
-        Left = 376
-        Top = 66
-        Width = 177
-        Height = 25
-        Caption = 'Gerar TXT'
-        TabOrder = 17
-        OnClick = btnGerarTXTClick
-      end
-      object btnAdicionarProtNFe: TButton
-        Left = 9
-        Top = 184
-        Width = 177
-        Height = 25
-        Caption = 'Adicionar nfeProc ao XML'
-        TabOrder = 18
-        OnClick = btnAdicionarProtNFeClick
-      end
-      object btnCarregarXMLEnviar: TButton
-        Left = 192
-        Top = 184
-        Width = 177
-        Height = 25
-        Caption = 'Carregar XML e Enviar'
-        TabOrder = 19
-        OnClick = btnCarregarXMLEnviarClick
-      end
-      object btnCartadeCorrecao: TButton
-        Left = 376
-        Top = 184
-        Width = 177
-        Height = 25
-        Caption = 'Carta de Corre'#231#227'o'
-        TabOrder = 20
-        OnClick = btnCartadeCorrecaoClick
-      end
-      object btnValidarAssinatura: TButton
-        Left = 9
-        Top = 212
-        Width = 177
-        Height = 25
-        Caption = 'Validar Assinatura'
-        TabOrder = 21
-        OnClick = btnValidarAssinaturaClick
-      end
-      object btnManifDestConfirmacao: TButton
-        Left = 192
-        Top = 212
-        Width = 178
-        Height = 25
-        Caption = 'Manif. Dest. - Conf. Opera'#231#227'o'
-        TabOrder = 22
-        OnClick = btnManifDestConfirmacaoClick
-      end
-      object btnNfeDestinadas: TButton
-        Left = 375
-        Top = 211
-        Width = 178
-        Height = 25
-        Caption = 'Consulta NFe Destinadas'
-        TabOrder = 23
-        OnClick = btnNfeDestinadasClick
-      end
-      object btnImprimirCCe: TButton
-        Left = 8
-        Top = 240
-        Width = 177
-        Height = 25
-        Caption = 'Imprimir Evento'
-        TabOrder = 24
-        OnClick = btnImprimirCCeClick
-      end
-      object btnEnviarEvento: TButton
-        Left = 193
-        Top = 240
-        Width = 177
-        Height = 25
-        Caption = 'Enviar Evento Email'
-        TabOrder = 25
-        OnClick = btnEnviarEventoClick
+        object tsNFe: TTabSheet
+          Caption = 'NF-e'
+          OnEnter = tsNFeEnter
+          object btnImprimir: TButton
+            Left = 192
+            Top = 156
+            Width = 177
+            Height = 25
+            Caption = 'Imprimir DANFE'
+            TabOrder = 0
+            OnClick = btnImprimirClick
+          end
+          object btnConsultar: TButton
+            Left = 8
+            Top = 66
+            Width = 177
+            Height = 25
+            Caption = 'Consultar carregando XML'
+            TabOrder = 1
+            OnClick = btnConsultarClick
+          end
+          object btnValidarXML: TButton
+            Left = 376
+            Top = 126
+            Width = 177
+            Height = 25
+            Caption = 'Validar XML'
+            TabOrder = 2
+            OnClick = btnValidarXMLClick
+          end
+          object btnStatusServ: TButton
+            Left = 9
+            Top = 6
+            Width = 177
+            Height = 25
+            Caption = 'Status Servi'#231'o'
+            TabOrder = 3
+            OnClick = btnStatusServClick
+          end
+          object btnCancNF: TButton
+            Left = 9
+            Top = 125
+            Width = 177
+            Height = 25
+            Caption = 'Cancelamento NFe com XML'
+            TabOrder = 4
+            OnClick = btnCancNFClick
+          end
+          object btnCriarEnviar: TButton
+            Left = 8
+            Top = 36
+            Width = 177
+            Height = 25
+            Caption = 'Criar e Enviar'
+            TabOrder = 5
+            OnClick = btnCriarEnviarClick
+          end
+          object btnInutilizar: TButton
+            Left = 192
+            Top = 6
+            Width = 177
+            Height = 25
+            Caption = 'Inutilizar Numera'#231#227'o'
+            TabOrder = 6
+            OnClick = btnInutilizarClick
+          end
+          object btnGerarNFE: TButton
+            Left = 192
+            Top = 96
+            Width = 177
+            Height = 25
+            Caption = 'Gerar NFe'
+            TabOrder = 7
+            OnClick = btnGerarNFEClick
+          end
+          object btnConsCad: TButton
+            Left = 193
+            Top = 66
+            Width = 177
+            Height = 25
+            Caption = 'Consulta Cadastro'
+            TabOrder = 8
+            OnClick = btnConsCadClick
+          end
+          object btnGerarPDF: TButton
+            Left = 192
+            Top = 126
+            Width = 177
+            Height = 25
+            Caption = 'Gerar PDF'
+            TabOrder = 9
+            OnClick = btnGerarPDFClick
+          end
+          object btnEnviarEmail: TButton
+            Left = 376
+            Top = 156
+            Width = 177
+            Height = 25
+            Caption = 'Enviar NFe Email'
+            TabOrder = 10
+            OnClick = btnEnviarEmailClick
+          end
+          object btnConsultarRecibo: TButton
+            Left = 192
+            Top = 36
+            Width = 177
+            Height = 25
+            Caption = 'Consultar Recibo Lote'
+            TabOrder = 11
+            OnClick = btnConsultarReciboClick
+          end
+          object btnEnvDPEC: TButton
+            Left = 376
+            Top = 6
+            Width = 177
+            Height = 25
+            Caption = 'Enviar DPEC'
+            TabOrder = 12
+            OnClick = btnEnvDPECClick
+          end
+          object btnConsultarDPEC: TButton
+            Left = 376
+            Top = 36
+            Width = 177
+            Height = 25
+            Caption = 'Consultar DPEC'
+            TabOrder = 13
+            OnClick = btnConsultarDPECClick
+          end
+          object btnImportarXML: TButton
+            Left = 375
+            Top = 95
+            Width = 177
+            Height = 25
+            Caption = 'Importar TXT/XML'
+            TabOrder = 14
+            OnClick = btnImportarXMLClick
+          end
+          object btnConsultarChave: TButton
+            Left = 8
+            Top = 96
+            Width = 177
+            Height = 25
+            Caption = 'Consultar pela Chave'
+            TabOrder = 15
+            OnClick = btnConsultarChaveClick
+          end
+          object btnCancelarChave: TButton
+            Left = 9
+            Top = 156
+            Width = 177
+            Height = 25
+            Caption = 'Cancelamento NFe pela Chave'
+            TabOrder = 16
+            OnClick = btnCancelarChaveClick
+          end
+          object btnGerarTXT: TButton
+            Left = 376
+            Top = 66
+            Width = 177
+            Height = 25
+            Caption = 'Gerar TXT'
+            TabOrder = 17
+            OnClick = btnGerarTXTClick
+          end
+          object btnAdicionarProtNFe: TButton
+            Left = 9
+            Top = 184
+            Width = 177
+            Height = 25
+            Caption = 'Adicionar nfeProc ao XML'
+            TabOrder = 18
+            OnClick = btnAdicionarProtNFeClick
+          end
+          object btnCarregarXMLEnviar: TButton
+            Left = 192
+            Top = 184
+            Width = 177
+            Height = 25
+            Caption = 'Carregar XML e Enviar'
+            TabOrder = 19
+            OnClick = btnCarregarXMLEnviarClick
+          end
+          object btnCartadeCorrecao: TButton
+            Left = 376
+            Top = 184
+            Width = 177
+            Height = 25
+            Caption = 'Carta de Corre'#231#227'o'
+            TabOrder = 20
+            OnClick = btnCartadeCorrecaoClick
+          end
+          object btnValidarAssinatura: TButton
+            Left = 9
+            Top = 212
+            Width = 177
+            Height = 25
+            Caption = 'Validar Assinatura'
+            TabOrder = 21
+            OnClick = btnValidarAssinaturaClick
+          end
+          object btnManifDestConfirmacao: TButton
+            Left = 192
+            Top = 212
+            Width = 178
+            Height = 25
+            Caption = 'Manif. Dest. - Conf. Opera'#231#227'o'
+            TabOrder = 22
+            OnClick = btnManifDestConfirmacaoClick
+          end
+          object btnNfeDestinadas: TButton
+            Left = 375
+            Top = 211
+            Width = 178
+            Height = 25
+            Caption = 'Consulta NFe Destinadas'
+            TabOrder = 23
+            OnClick = btnNfeDestinadasClick
+          end
+          object btnImprimirCCe: TButton
+            Left = 8
+            Top = 240
+            Width = 177
+            Height = 25
+            Caption = 'Imprimir Evento'
+            TabOrder = 24
+            OnClick = btnImprimirCCeClick
+          end
+          object btnEnviarEvento: TButton
+            Left = 193
+            Top = 240
+            Width = 177
+            Height = 25
+            Caption = 'Enviar Evento Email'
+            TabOrder = 25
+            OnClick = btnEnviarEventoClick
+          end
+        end
+        object tsNFCe: TTabSheet
+          Caption = 'NFC-e'
+          ImageIndex = 1
+          OnEnter = tsNFCeEnter
+          object btnCriarEnviarNFCe: TButton
+            Left = 9
+            Top = 6
+            Width = 177
+            Height = 25
+            Caption = 'Criar e Enviar'
+            TabOrder = 0
+            OnClick = btnCriarEnviarNFCeClick
+          end
+        end
       end
     end
     object PageControl2: TPageControl
       Left = 1
-      Top = 273
+      Top = 301
       Width = 579
-      Height = 319
-      ActivePage = TabSheet6
+      Height = 291
+      ActivePage = TabSheet5
       Align = alClient
       TabOrder = 1
       object TabSheet5: TTabSheet
@@ -1060,7 +1088,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
@@ -1073,11 +1101,11 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           TabOrder = 0
           ControlData = {
-            4C000000043B0000131E00000000000000000000000000000000000000000000
+            4C000000043B00002F1B00000000000000000000000000000000000000000000
             000000004C000000000000000000000001000000E0D057007335CF11AE690800
             2B2E126208000000000000004C0000000114020000000000C000000000000046
             8000000000000000000000000000000000000000000000000000000000000000
@@ -1091,7 +1119,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
@@ -1104,7 +1132,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           Indent = 19
           TabOrder = 0
@@ -1117,7 +1145,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
@@ -1130,7 +1158,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
@@ -1143,7 +1171,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 571
-          Height = 291
+          Height = 263
           Align = alClient
           Indent = 19
           TabOrder = 0
@@ -1193,6 +1221,7 @@ object Form1: TForm1
     ProdutosPorPagina = 0
     ImprimirDetalhamentoEspecifico = True
     NFeCancelada = False
+    LocalImpCanhoto = 0
     RavFile = 
       'D:\delphi\ACBr\trunk\Exemplos\ACBrNFe2\Delphi\Report\NotaFiscalE' +
       'letronica.rav'
@@ -1226,6 +1255,7 @@ object Form1: TForm1
     ProdutosPorPagina = 0
     ImprimirDetalhamentoEspecifico = True
     NFeCancelada = False
+    LocalImpCanhoto = 0
     TamanhoCampoCodigo = 0
     TamanhoFonte_ANTT = 10
     Fonte = ftCourier

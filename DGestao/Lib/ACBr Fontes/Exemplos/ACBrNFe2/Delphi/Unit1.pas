@@ -76,15 +76,8 @@ type
     edtEmitUF: TEdit;
     Panel2: TPanel;
     Panel3: TPanel;
-    btnImprimir: TButton;
-    btnConsultar: TButton;
-    btnValidarXML: TButton;
-    btnStatusServ: TButton;
-    btnCancNF: TButton;
     PageControl2: TPageControl;
     TabSheet5: TTabSheet;
-    btnCriarEnviar: TButton;
-    btnInutilizar: TButton;
     MemoResp: TMemo;
     TabSheet6: TTabSheet;
     WBResposta: TWebBrowser;
@@ -95,10 +88,6 @@ type
     rgFormaEmissao: TRadioGroup;
     ACBrNFe1: TACBrNFe;
     sbtnGetCert: TSpeedButton;
-    btnGerarNFE: TButton;
-    btnConsCad: TButton;
-    btnGerarPDF: TButton;
-    btnEnviarEmail: TButton;
     TabSheet7: TTabSheet;
     GroupBox5: TGroupBox;
     Label3: TLabel;
@@ -115,12 +104,8 @@ type
     cbEmailSSL: TCheckBox;
     mmEmailMsg: TMemo;
     ACBrNFeDANFERave1: TACBrNFeDANFERave;
-    btnConsultarRecibo: TButton;
-    btnEnvDPEC: TButton;
-    btnConsultarDPEC: TButton;
     TabSheet8: TTabSheet;
     memoLog: TMemo;
-    btnImportarXML: TButton;
     TabSheet9: TTabSheet;
     trvwNFe: TTreeView;
     lblColaborador: TLabel;
@@ -129,22 +114,41 @@ type
     lblDoar2: TLabel;
     TabSheet10: TTabSheet;
     memoRespWS: TMemo;
-    btnConsultarChave: TButton;
-    btnCancelarChave: TButton;
     Dados: TTabSheet;
     MemoDados: TMemo;
+    TabSheet11: TTabSheet;
+    TreeViewRetornoConsulta: TTreeView;
+    ACBrNFeDANFERaveCB1: TACBrNFeDANFERaveCB;
+    PageControl3: TPageControl;
+    tsNFe: TTabSheet;
+    tsNFCe: TTabSheet;
+    btnImprimir: TButton;
+    btnConsultar: TButton;
+    btnValidarXML: TButton;
+    btnStatusServ: TButton;
+    btnCancNF: TButton;
+    btnCriarEnviar: TButton;
+    btnInutilizar: TButton;
+    btnGerarNFE: TButton;
+    btnConsCad: TButton;
+    btnGerarPDF: TButton;
+    btnEnviarEmail: TButton;
+    btnConsultarRecibo: TButton;
+    btnEnvDPEC: TButton;
+    btnConsultarDPEC: TButton;
+    btnImportarXML: TButton;
+    btnConsultarChave: TButton;
+    btnCancelarChave: TButton;
     btnGerarTXT: TButton;
     btnAdicionarProtNFe: TButton;
     btnCarregarXMLEnviar: TButton;
     btnCartadeCorrecao: TButton;
     btnValidarAssinatura: TButton;
-    TabSheet11: TTabSheet;
-    TreeViewRetornoConsulta: TTreeView;
     btnManifDestConfirmacao: TButton;
     btnNfeDestinadas: TButton;
     btnImprimirCCe: TButton;
-    ACBrNFeDANFERaveCB1: TACBrNFeDANFERaveCB;
     btnEnviarEvento: TButton;
+    btnCriarEnviarNFCe: TButton;
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnLogoMarcaClick(Sender: TObject);
     procedure sbtnPathSalvarClick(Sender: TObject);
@@ -184,12 +188,16 @@ type
     procedure btnNfeDestinadasClick(Sender: TObject);
     procedure btnImprimirCCeClick(Sender: TObject);
     procedure btnEnviarEventoClick(Sender: TObject);
+    procedure btnCriarEnviarNFCeClick(Sender: TObject);
+    procedure tsNFeEnter(Sender: TObject);
+    procedure tsNFCeEnter(Sender: TObject);
     
   private
     { Private declarations }
     procedure GravarConfiguracao ;
     procedure LerConfiguracao ;
     procedure GerarNFe(NumNFe : String);
+    procedure GerarNFCe(NumNFe : String);
     procedure LoadXML(MyMemo: TMemo; MyWebBrowser: TWebBrowser);
 
     procedure LoadConsulta201(XML: string);
@@ -461,6 +469,8 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
  LerConfiguracao;
+ PageControl3.ActivePage := tsNFe;
+ PageControl2.ActivePageIndex := 2;
 end;
 
 procedure TForm1.btnSalvarConfigClick(Sender: TObject);
@@ -706,6 +716,7 @@ begin
 
   ACBrNFe1.NotasFiscais.Clear;
 
+  ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
   GerarNFe(vAux);
 
   ACBrNFe1.Enviar(vNumLote,True);
@@ -2016,6 +2027,9 @@ begin
 
  {        with Imposto do
           begin
+            // lei da transparencia nos impostos
+            vTotTrib := 0;
+
             with ICMS do
              begin
                CST          := cst00;
@@ -2165,6 +2179,9 @@ begin
       Total.ICMSTot.vOutro  := 0;
       Total.ICMSTot.vNF     := 100;
 
+      // lei da transparencia de impostos
+      Total.ICMSTot.vTotTrib := 0;
+
       Total.ISSQNtot.vServ   := 100;
       Total.ISSQNTot.vBC     := 100;
       Total.ISSQNTot.vISS    := 2;
@@ -2265,6 +2282,308 @@ begin
       compra.xNEmp := '';
       compra.xPed  := '';
       compra.xCont := '';
+   end;
+
+end;
+
+procedure TForm1.GerarNFCe(NumNFe: String);
+begin
+  with ACBrNFe1.NotasFiscais.Add.NFe do
+   begin
+     Ide.cNF       := StrToInt(NumNFe); //Caso não seja preenchido será gerado um número aleatório pelo componente
+     Ide.natOp     := 'VENDA';
+     Ide.indPag    := ipVista;
+     Ide.modelo    := 65;
+     Ide.serie     := 1;
+     Ide.nNF       := StrToInt(NumNFe);
+     Ide.dEmi      := now;
+     Ide.dSaiEnt   := now;
+     Ide.hSaiEnt   := now;
+     Ide.tpNF      := tnSaida;
+     Ide.tpEmis    := teNormal;
+     Ide.tpAmb     := taHomologacao;  //Lembre-se de trocar esta variável quando for para ambiente de produção
+     Ide.cUF       := NotaUtil.UFtoCUF(edtEmitUF.Text);
+     Ide.cMunFG    := StrToInt(edtEmitCodCidade.Text);
+     Ide.finNFe    := fnNormal;
+     Ide.tpImp     := tiNFCe;
+     Ide.indFinal  := cfConsumidorFinal;
+     Ide.indPres   := pcPresencial;
+
+//     Ide.dhCont := date;
+//     Ide.xJust  := 'Justificativa Contingencia';
+
+      Emit.CNPJCPF           := edtEmitCNPJ.Text;
+      Emit.IE                := edtEmitIE.Text;
+      Emit.xNome             := edtEmitRazao.Text;
+      Emit.xFant             := edtEmitFantasia.Text;
+
+      Emit.EnderEmit.fone    := edtEmitFone.Text;
+      Emit.EnderEmit.CEP     := StrToInt(edtEmitCEP.Text);
+      Emit.EnderEmit.xLgr    := edtEmitLogradouro.Text;
+      Emit.EnderEmit.nro     := edtEmitNumero.Text;
+      Emit.EnderEmit.xCpl    := edtEmitComp.Text;
+      Emit.EnderEmit.xBairro := edtEmitBairro.Text;
+      Emit.EnderEmit.cMun    := StrToInt(edtEmitCodCidade.Text);
+      Emit.EnderEmit.xMun    := edtEmitCidade.Text;
+      Emit.EnderEmit.UF      := edtEmitUF.Text;
+      Emit.enderEmit.cPais   := 1058;
+      Emit.enderEmit.xPais   := 'BRASIL';
+
+      Emit.IEST              := '';
+//      Emit.IM                := '2648800'; // Preencher no caso de existir serviços na nota
+//      Emit.CNAE              := '6201500'; // Verifique na cidade do emissor da NFe se é permitido
+                                    // a inclusão de serviços na NFe
+      Emit.CRT               := crtRegimeNormal;// (1-crtSimplesNacional, 2-crtSimplesExcessoReceita, 3-crtRegimeNormal)
+
+      Dest.CNPJCPF           := '05481336000137';
+//      Dest.IE                := '687138770110'; //NFC-e não aceita IE
+      Dest.ISUF              := '';
+      Dest.xNome             := 'D.J. COM. E LOCAÇÃO DE SOFTWARES LTDA - ME';
+
+      Dest.EnderDest.Fone    := '1533243333';
+      Dest.EnderDest.CEP     := 18270170;
+      Dest.EnderDest.xLgr    := 'Rua Coronel Aureliano de Camargo';
+      Dest.EnderDest.nro     := '973';
+      Dest.EnderDest.xCpl    := '';
+      Dest.EnderDest.xBairro := 'Centro';
+      Dest.EnderDest.cMun    := 3554003;
+      Dest.EnderDest.xMun    := 'Tatuí';
+      Dest.EnderDest.UF      := 'SP';
+      Dest.EnderDest.cPais   := 1058;
+      Dest.EnderDest.xPais   := 'BRASIL';
+
+//Use os campos abaixo para informar o endereço de retirada quando for diferente do Remetente/Destinatário
+{      Retirada.CNPJCPF := '';
+      Retirada.xLgr    := '';
+      Retirada.nro     := '';
+      Retirada.xCpl    := '';
+      Retirada.xBairro := '';
+      Retirada.cMun    := 0;
+      Retirada.xMun    := '';
+      Retirada.UF      := '';}
+
+//Use os campos abaixo para informar o endereço de entrega quando for diferente do Remetente/Destinatário
+{      Entrega.CNPJCPF := '';
+      Entrega.xLgr    := '';
+      Entrega.nro     := '';
+      Entrega.xCpl    := '';
+      Entrega.xBairro := '';
+      Entrega.cMun    := 0;
+      Entrega.xMun    := '';
+      Entrega.UF      := '';}
+
+//Adicionando Produtos
+      with Det.Add do
+       begin
+         Prod.nItem    := 1; // Número sequencial, para cada item deve ser incrementado
+         Prod.cProd    := '123456';
+         Prod.cEAN     := '7896523206646';
+         Prod.xProd    := 'Descrição do Produto';
+         Prod.NCM      := '94051010'; // Tabela NCM disponível em  http://www.receita.fazenda.gov.br/Aliquotas/DownloadArqTIPI.htm
+         Prod.EXTIPI   := '';
+         Prod.CFOP     := '5101';
+         Prod.uCom     := 'UN';
+         Prod.qCom     := 1 ;
+         Prod.vUnCom   := 100;
+         Prod.vProd    := 100 ;
+
+         Prod.cEANTrib  := '7896523206646';
+         Prod.uTrib     := 'UN';
+         Prod.qTrib     := 1;
+         Prod.vUnTrib   := 100;
+
+         Prod.vOutro    := 0;
+         Prod.vFrete    := 0;
+         Prod.vSeg      := 0;
+         Prod.vDesc     := 0;
+
+//         infAdProd      := 'Informação Adicional do Produto';
+
+         with Imposto do
+          begin
+            // lei da transparencia nos impostos
+            vTotTrib := 0;
+
+            with ICMS do
+             begin
+               CST          := cst00;
+               ICMS.orig    := oeNacional;
+               ICMS.modBC   := dbiValorOperacao;
+               ICMS.vBC     := 100;
+               ICMS.pICMS   := 18;
+               ICMS.vICMS   := 18;
+               ICMS.modBCST := dbisMargemValorAgregado;
+               ICMS.pMVAST  := 0;
+               ICMS.pRedBCST:= 0;
+               ICMS.vBCST   := 0;
+               ICMS.pICMSST := 0;
+               ICMS.vICMSST := 0;
+               ICMS.pRedBC  := 0;
+             end;
+{            with PIS do
+             begin
+               CST      := pis99;
+               PIS.vBC  := 0;
+               PIS.pPIS := 0;
+               PIS.vPIS := 0;
+
+               PIS.qBCProd   := 0;
+               PIS.vAliqProd := 0;
+               PIS.vPIS      := 0;
+             end;
+
+            with PISST do
+             begin
+               vBc       := 0;
+               pPis      := 0;
+               qBCProd   := 0;
+               vAliqProd := 0;
+               vPIS      := 0;
+             end;
+
+            with COFINS do
+             begin
+               CST            := cof99;
+               COFINS.vBC     := 0;
+               COFINS.pCOFINS := 0;
+               COFINS.vCOFINS := 0;
+
+               COFINS.qBCProd   := 0;
+               COFINS.vAliqProd := 0;
+             end;
+
+            with COFINSST do
+             begin
+               vBC       := 0;
+               pCOFINS   := 0;
+               qBCProd   := 0;
+               vAliqProd := 0;
+               vCOFINS   := 0;
+             end;
+}
+//Grupo para serviços
+{            with ISSQN do
+             begin
+               vBC       := 0;
+               vAliq     := 0;
+               vISSQN    := 0;
+               cMunFG    := 0;
+               cListServ := 1402; // Preencha este campo usando a tabela disponível
+                               // em http://www.planalto.gov.br/Ccivil_03/LEIS/LCP/Lcp116.htm
+      {       end;}
+          end;
+       end ;
+
+//Adicionando Serviços
+{      with Det.Add do
+       begin
+         Prod.nItem    := 1; // Número sequencial, para cada item deve ser incrementado
+         Prod.cProd    := '123457';
+         Prod.cEAN     := '';
+         Prod.xProd    := 'Descrição do Serviço';
+         Prod.NCM      := '99';
+         Prod.EXTIPI   := '';
+         Prod.CFOP     := '5933';
+         Prod.uCom     := 'UN';
+         Prod.qCom     := 1 ;
+         Prod.vUnCom   := 100;
+         Prod.vProd    := 100 ;
+
+         Prod.cEANTrib  := '';
+         Prod.uTrib     := 'UN';
+         Prod.qTrib     := 1;
+         Prod.vUnTrib   := 100;
+
+         Prod.vFrete    := 0;
+         Prod.vSeg      := 0;
+         Prod.vDesc     := 0;
+
+         infAdProd      := 'Informação Adicional do Serviço';
+
+//Grupo para serviços
+            with Imposto.ISSQN do
+             begin
+               cSitTrib  := ISSQNcSitTribNORMAL;
+               vBC       := 100;
+               vAliq     := 2;
+               vISSQN    := 2;
+               cMunFG    := 3554003;
+               cListServ := 1402; // Preencha este campo usando a tabela disponível
+                               // em http://www.planalto.gov.br/Ccivil_03/LEIS/LCP/Lcp116.htm
+             end;
+       end ;
+}
+      Total.ICMSTot.vBC     := 100;
+      Total.ICMSTot.vICMS   := 18;
+      Total.ICMSTot.vBCST   := 0;
+      Total.ICMSTot.vST     := 0;
+      Total.ICMSTot.vProd   := 100;
+      Total.ICMSTot.vFrete  := 0;
+      Total.ICMSTot.vSeg    := 0;
+      Total.ICMSTot.vDesc   := 0;
+      Total.ICMSTot.vII     := 0;
+      Total.ICMSTot.vIPI    := 0;
+      Total.ICMSTot.vPIS    := 0;
+      Total.ICMSTot.vCOFINS := 0;
+      Total.ICMSTot.vOutro  := 0;
+      Total.ICMSTot.vNF     := 100;
+
+      Total.ISSQNtot.vServ   := 0;
+      Total.ISSQNTot.vBC     := 0;
+      Total.ISSQNTot.vISS    := 0;
+      Total.ISSQNTot.vPIS    := 0;
+      Total.ISSQNTot.vCOFINS := 0;
+
+{      Total.retTrib.vRetPIS    := 0;
+      Total.retTrib.vRetCOFINS := 0;
+      Total.retTrib.vRetCSLL   := 0;
+      Total.retTrib.vBCIRRF    := 0;
+      Total.retTrib.vIRRF      := 0;
+      Total.retTrib.vBCRetPrev := 0;
+      Total.retTrib.vRetPrev   := 0;}
+
+      Transp.modFrete := mfSemFrete; // NFC-e não pode ter FRETE
+
+{      Cobr.Fat.nFat  := 'Numero da Fatura';
+      Cobr.Fat.vOrig := 100 ;
+      Cobr.Fat.vDesc := 0 ;
+      Cobr.Fat.vLiq  := 100 ;
+
+      with Cobr.Dup.Add do
+       begin
+         nDup  := '1234';
+         dVenc := now+10;
+         vDup  := 50;
+       end;
+
+      with Cobr.Dup.Add do
+       begin
+         nDup  := '1235';
+         dVenc := now+10;
+         vDup  := 50;
+       end;
+ }
+
+      with pag.Add do //PAGAMENTOS apenas para NFC-e
+       begin
+         tPag := fpDinheiro;
+         vPag := 100;
+       end;
+
+      InfAdic.infCpl     :=  '';
+      InfAdic.infAdFisco :=  '';
+
+{      with InfAdic.obsCont.Add do
+       begin
+         xCampo := 'ObsCont';
+         xTexto := 'Texto';
+       end;
+
+      with InfAdic.obsFisco.Add do
+       begin
+         xCampo := 'ObsFisco';
+         xTexto := 'Texto';
+       end; }
    end;
 
 end;
@@ -2547,6 +2866,89 @@ begin
     CC.Free;
     Evento.Free;
   end;
+end;
+
+procedure TForm1.btnCriarEnviarNFCeClick(Sender: TObject);
+var
+ vAux, vNumLote, vSincrono : String;
+ Sincrono : boolean;
+begin
+  if not(InputQuery('WebServices Enviar', 'Numero da Nota', vAux)) then
+    exit;
+
+  if not(InputQuery('WebServices Enviar', 'Numero do Lote', vNumLote)) then
+    exit;
+
+  vSincrono := '1';
+  if not(InputQuery('WebServices Enviar', 'Envio Síncrono(1=Sim, 0=Não)', vSincrono)) then
+    exit;
+
+  vNumLote := OnlyNumber(vNumLote);
+
+  if Trim(vNumLote) = '' then
+   begin
+     MessageDlg('Número do Lote inválido.',mtError,[mbok],0);
+     exit;
+   end;
+
+  if (Trim(vSincrono) <> '1') and
+     (Trim(vSincrono) <> '0') then
+   begin
+     MessageDlg('Valor Inválido.',mtError,[mbok],0);
+     exit;
+   end;
+
+  if (Trim(vSincrono) = '1') then
+    Sincrono := True
+  else
+    Sincrono := False;  
+
+  ACBrNFe1.NotasFiscais.Clear;
+
+  ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFCe;  
+  GerarNFCe(vAux);
+
+  ACBrNFe1.Enviar(vNumLote,True,Sincrono);
+
+  MemoResp.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetWS);
+  memoRespWS.Lines.Text := UTF8Encode(ACBrNFe1.WebServices.Retorno.RetornoWS);
+  LoadXML(MemoResp, WBResposta);
+
+  MemoDados.Lines.Add('');
+  MemoDados.Lines.Add('Envio NFe');
+  MemoDados.Lines.Add('tpAmb: '+ TpAmbToStr(ACBrNFe1.WebServices.Retorno.TpAmb));
+  MemoDados.Lines.Add('verAplic: '+ ACBrNFe1.WebServices.Retorno.verAplic);
+  MemoDados.Lines.Add('cStat: '+ IntToStr(ACBrNFe1.WebServices.Retorno.cStat));
+  MemoDados.Lines.Add('cUF: '+ IntToStr(ACBrNFe1.WebServices.Retorno.cUF));
+  MemoDados.Lines.Add('xMotivo: '+ ACBrNFe1.WebServices.Retorno.xMotivo);
+  MemoDados.Lines.Add('cMsg: '+ IntToStr(ACBrNFe1.WebServices.Retorno.cMsg));
+  MemoDados.Lines.Add('xMsg: '+ ACBrNFe1.WebServices.Retorno.xMsg);
+  MemoDados.Lines.Add('Recibo: '+ ACBrNFe1.WebServices.Retorno.Recibo);
+  MemoDados.Lines.Add('Protocolo: '+ ACBrNFe1.WebServices.Retorno.Protocolo);
+// MemoDados.Lines.Add('cStat: '+ ACBrNFe1.WebServices.Retorno.NFeRetorno;
+
+{ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].tpAmb
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].verAplic
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].chNFe
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].dhRecbto
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].nProt
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].digVal
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat
+ ACBrNFe1.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo }
+
+  ACBrNFe1.NotasFiscais.Clear;
+end;
+
+
+
+procedure TForm1.tsNFeEnter(Sender: TObject);
+begin
+  ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
+end;
+
+procedure TForm1.tsNFCeEnter(Sender: TObject);
+begin
+  ACBrNFe1.Configuracoes.Geral.ModeloDF := moNFe;
 end;
 
 end.
