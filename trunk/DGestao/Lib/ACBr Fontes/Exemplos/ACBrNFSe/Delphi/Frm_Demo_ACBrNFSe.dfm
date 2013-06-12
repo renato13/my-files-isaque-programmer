@@ -19,7 +19,7 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
     Left = 0
     Top = 0
     Width = 297
-    Height = 534
+    Height = 530
     Align = alLeft
     TabOrder = 0
     object lblColaborador: TLabel
@@ -316,9 +316,11 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
               'Brusque/4202909/SC'
               'Campos dos Goytacazes/3301009/RJ'
               'Canoas/4304606/RS'
+              'Capao Bonito/3510203/SP'
               'Caruaru/2604106/PE'
               'Cataguases/3115300/MG'
               'Catanduva/3511102/SP'
+              'Caxias/2103000/MA'
               'Cedral/3511300/SP'
               'Chapeco/4204202/SC'
               'Colina/3512001/SP'
@@ -338,6 +340,7 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
               'Franca/3516200/SP'
               'Francisco Beltrao/4108403/PR'
               'Frederico Westphalen/4308508/RS'
+              'Frutal/3127107/MG'
               'Gaspar/4205902/SC'
               'Goiania/5208707/GO'
               'Guaiba/4309308/RS'
@@ -351,6 +354,7 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
               'Ipatinga/3131307/MG'
               'Itajai/4208203/SC'
               'Itapema/4208302/SC'
+              'Itatinga/3523503/SP'
               'Itu/3523909/SP'
               'Ituporanga/4208500/SC'
               'Jaguariuna/3524709/SP'
@@ -1011,14 +1015,14 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
   object Panel2: TPanel
     Left = 297
     Top = 0
-    Width = 574
-    Height = 534
+    Width = 566
+    Height = 530
     Align = alClient
     TabOrder = 1
     object Panel3: TPanel
       Left = 1
       Top = 1
-      Width = 572
+      Width = 564
       Height = 136
       Align = alTop
       TabOrder = 0
@@ -1134,8 +1138,8 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
     object PageControl2: TPageControl
       Left = 1
       Top = 137
-      Width = 572
-      Height = 396
+      Width = 564
+      Height = 392
       ActivePage = TabSheet8
       Align = alClient
       TabOrder = 1
@@ -1174,8 +1178,8 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
         object memoLog: TMemo
           Left = 0
           Top = 0
-          Width = 564
-          Height = 368
+          Width = 556
+          Height = 364
           Align = alClient
           ScrollBars = ssVertical
           TabOrder = 0
@@ -1187,8 +1191,8 @@ object frmDemo_ACBrNFSe: TfrmDemo_ACBrNFSe
         object trvwNFSe: TTreeView
           Left = 0
           Top = 0
-          Width = 564
-          Height = 368
+          Width = 556
+          Height = 364
           Align = alClient
           Indent = 19
           TabOrder = 0

@@ -261,7 +261,7 @@ ACBrECF, ACBrRFD, ACBrDIS, ACBrGAV, ACBrCHQ, ACBrETQ, ACBrLCB, ACBrTER
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="5">
       <Item1>
-        <PackageName Value="synapse"/>
+        <PackageName Value="laz_synapse"/>
       </Item1>
       <Item2>
         <PackageName Value="ACBrDiversos"/>

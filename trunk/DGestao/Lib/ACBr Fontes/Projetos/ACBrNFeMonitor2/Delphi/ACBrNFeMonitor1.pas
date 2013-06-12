@@ -268,6 +268,9 @@ type
     btnConsultarCTe: TButton;
     btnCancelarCTe: TButton;
     btnEnviarCTe: TButton;
+    cbModoXML: TCheckBox;
+    cbEmailTLS: TCheckBox;
+    cbMonitorarPasta: TCheckBox;
     procedure DoACBrTimer(Sender: TObject);
     procedure edOnlyNumbers(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
@@ -323,14 +326,16 @@ type
     procedure btnValidarXMLCTeClick(Sender: TObject);
     procedure btnImprimirCTeClick(Sender: TObject);
     procedure btnInutilizarCTeClick(Sender: TObject);
+    procedure cbMonitorarPastaClick(Sender: TObject);
   private
     { Private declarations }
     ACBrNFeMonitorINI : string;
-    Inicio  : Boolean ;
+    Inicio, MonitorarPasta  : Boolean ;
     ArqSaiTXT, ArqSaiTMP, ArqEntTXT, ArqLogTXT, ArqLogCompTXT, ArqEntOrig, ArqSaiOrig : String ;
     NewLines : String ;
     fsHashSenha:Integer;
     Cmd : TACBrNFeCTeCmd ;
+    CmdXML : TACBrCmd ;
 
     procedure ExibeResp( Resposta : AnsiString );
     procedure Inicializar ;
@@ -361,7 +366,8 @@ var
 
 implementation
 
-uses ACBrUtil, IdStack, UtilUnit, DoACBrNFeUnit, DoACBrCTeUnit, Math;
+uses ACBrUtil, IdStack, UtilUnit, DoACBrNFeUnit, DoACBrCTeUnit, Math,
+  DoACBrNFeXMLUnit;
 
 const
   SELDIRHELP = 1000;
@@ -463,6 +469,7 @@ begin
   cbxImpressora.Items.Assign(Printer.Printers);
   Timer1.Enabled := false ;
   Inicio         := false ;
+  MonitorarPasta := false ;
   Erro           := '' ;
   ACBrNFeMonitorINI := ExtractFilePath(Application.ExeName)+ 'ACBrNFeMonitor.ini';
 
@@ -539,8 +546,16 @@ begin
       end
      else
       begin
-        mResp.Lines.Add('Monitorando Comandos TXT em: '+ArqEntTXT);
-        mResp.Lines.Add('Respostas gravadas em: '+ArqSaiTXT);
+        if MonitorarPasta then
+         begin
+           mResp.Lines.Add('Monitorando Arquivos em: '+ExtractFilePath(ArqEntTXT));
+           mResp.Lines.Add('Respostas gravadas em: '+ExtractFilePath(ArqSaiTXT));
+         end
+        else
+         begin
+           mResp.Lines.Add('Monitorando Comandos TXT em: '+ArqEntTXT);
+           mResp.Lines.Add('Respostas gravadas em: '+ArqSaiTXT);
+         end;  
       end ;
 
      if cbLog.Checked then
@@ -695,21 +710,22 @@ begin
      { Parametros do Monitor }
      rbTCP.Checked        := Ini.ReadBool('ACBrNFeMonitor','Modo_TCP',false);
      rbTXT.Checked        := Ini.ReadBool('ACBrNFeMonitor','Modo_TXT',false);
+     cbMonitorarPasta.Checked := Ini.ReadBool('ACBrNFeMonitor','MonitorarPasta',false);
+     MonitorarPasta       := cbMonitorarPasta.Checked;
      edPortaTCP.Text      := IntToStr(Ini.ReadInteger('ACBrNFeMonitor','TCP_Porta',3434));
      sedConexoesTCP.Value := Ini.ReadInteger('ACBrNFeMonitor','Conexoes_Simultaneas',1);
      edEntTXT.Text        := Ini.ReadString('ACBrNFeMonitor','TXT_Entrada','ENT.TXT');
      edSaiTXT.Text        := Ini.ReadString('ACBrNFeMonitor','TXT_Saida','SAI.TXT');
      sedIntervalo.Value   := Ini.ReadInteger('ACBrNFeMonitor','Intervalo',50);
      edLogArq.Text        := Ini.ReadString('ACBrNFeMonitor','Arquivo_Log','LOG.TXT');
-     cbLog.Checked        := Ini.ReadBool('ACBrNFeMonitor','Gravar_Log',false) and
-                           ( edLogArq.Text <> '' ) ;
+     cbLog.Checked        := Ini.ReadBool('ACBrNFeMonitor','Gravar_Log',false) and ( edLogArq.Text <> '' ) ;
      sedLogLinhas.Value   := Ini.ReadInteger('ACBrNFeMonitor','Linhas_Log',0);
 
-     edLogComp.Text        := Ini.ReadString('ACBrNFeMonitor','Arquivo_Log_Comp','LOG_COMP.TXT');
-     cbLogComp.Checked        := Ini.ReadBool('ACBrNFeMonitor','Gravar_Log_Comp',false) and
-                           ( edLogComp.Text <> '' ) ;
-     sedLogLinhasComp.Value   := Ini.ReadInteger('ACBrNFeMonitor','Linhas_Log_Comp',0);
-     cbUmaInstancia.Checked  := Ini.ReadBool('ACBrNFeMonitor','Uma_Instancia',false);
+     edLogComp.Text         := Ini.ReadString('ACBrNFeMonitor','Arquivo_Log_Comp','LOG_COMP.TXT');
+     cbLogComp.Checked      := Ini.ReadBool('ACBrNFeMonitor','Gravar_Log_Comp',false) and ( edLogComp.Text <> '' ) ;
+     sedLogLinhasComp.Value := Ini.ReadInteger('ACBrNFeMonitor','Linhas_Log_Comp',0);
+     cbUmaInstancia.Checked := Ini.ReadBool('ACBrNFeMonitor','Uma_Instancia',false);
+     cbModoXML.Checked      := Ini.ReadBool('ACBrNFeMonitor','ModoXML',false);
 
      ArqEntTXT := AcertaPath( edEntTXT.Text ) ;
      ArqEntOrig := ArqEntTXT;
@@ -793,6 +809,8 @@ begin
      edtCaminho.Text  := Ini.ReadString( 'Certificado','Caminho' ,'') ;
      ACBrNFe1.Configuracoes.Certificados.Certificado  := edtCaminho.Text;
      ACBrCTe1.Configuracoes.Certificados.Certificado  := edtCaminho.Text;
+     ACBrCTe1.Configuracoes.Geral.IniFinXMLSECAutomatico := False;
+     ACBrNFe1.Configuracoes.Geral.IniFinXMLSECAutomatico := False;
      {$ELSE}
      lblCaminho.Caption := 'Número de Série';
      edtCaminho.Text  := Ini.ReadString( 'Certificado','Caminho' ,'') ;
@@ -919,6 +937,7 @@ begin
      edtSmtpPass.Text      := LeINICrypt( INI, 'Email','Pass' ,_C) ;
      edtEmailAssunto.Text  := Ini.ReadString( 'Email','Assunto','') ;
      cbEmailSSL.Checked    := Ini.ReadBool(   'Email','SSL'    ,False) ;
+     cbEmailTLS.Checked    := Ini.ReadBool(   'Email','TLS'    ,cbEmailSSL.Checked) ;
      rgEmailTipoEnvio.ItemIndex := Ini.ReadInteger( 'Email','Tipo'   ,0) ;
      StreamMemo := TMemoryStream.Create;
      Ini.ReadBinaryStream( 'Email','Mensagem',StreamMemo) ;
@@ -967,7 +986,7 @@ procedure TfrmAcbrNfeMonitor.SalvarIni;
 var
   Ini : TIniFile;
   StreamMemo : TMemoryStream;
-  OldMonitoraTXT, OldMonitoraTCP : Boolean ;
+  OldMonitoraTXT, OldMonitoraTCP, OldMonitoraPasta : Boolean ;
 begin
   if cbSenha.Checked and (edSenha.Text <> 'NADAAQUI') and (edSenha.Text <> '') then
      fsHashSenha := StringCrc16(edSenha.Text) ;
@@ -977,14 +996,24 @@ begin
      // Verificando se modificou o Modo de Monitoramento //
      OldMonitoraTCP := Ini.ReadBool('ACBrNFeMonitor','Modo_TCP',false) ;
      OldMonitoraTXT := Ini.ReadBool('ACBrNFeMonitor','Modo_TXT',false) ;
+     OldMonitoraPasta := Ini.ReadBool('ACBrNFeMonitor','MonitorarPasta',false) ;
 
      // Parametros do Monitor //
      Ini.WriteBool('ACBrNFeMonitor','Modo_TCP',rbTCP.Checked);
      Ini.WriteBool('ACBrNFeMonitor','Modo_TXT',rbTXT.Checked);
+     Ini.WriteBool('ACBrNFeMonitor','MonitorarPasta',cbMonitorarPasta.Checked);
      Ini.WriteInteger('ACBrNFeMonitor','TCP_Porta',StrToIntDef(edPortaTCP.Text,3434));
      Ini.WriteInteger('ACBrNFeMonitor','Conexoes_Simultaneas',sedConexoesTCP.Value);
-     Ini.WriteString('ACBrNFeMonitor','TXT_Entrada',edEntTXT.Text);
-     Ini.WriteString('ACBrNFeMonitor','TXT_Saida',edSaiTXT.Text);
+     if cbMonitorarPasta.Checked then
+      begin
+        Ini.WriteString('ACBrNFeMonitor','TXT_Entrada',PathWithDelim(edEntTXT.Text));
+        Ini.WriteString('ACBrNFeMonitor','TXT_Saida',PathWithDelim(edSaiTXT.Text));
+      end
+     else
+      begin
+        Ini.WriteString('ACBrNFeMonitor','TXT_Entrada',edEntTXT.Text);
+        Ini.WriteString('ACBrNFeMonitor','TXT_Saida',edSaiTXT.Text);
+      end;
      Ini.WriteInteger('ACBrNFeMonitor','Intervalo',sedIntervalo.Value);
      GravaINICrypt(INI,'ACBrNFeMonitor','HashSenha', IntToStrZero(fsHashSenha,8), _C) ;
 
@@ -997,6 +1026,7 @@ begin
      Ini.WriteInteger('ACBrNFeMonitor','Linhas_Log_Comp',sedLogLinhasComp.Value);
 
      Ini.WriteBool('ACBrNFeMonitor','Uma_Instancia',cbUmaInstancia.Checked);
+     Ini.WriteBool('ACBrNFeMonitor','ModoXML',cbModoXML.Checked);
 
      Ini.WriteString( 'Certificado','Caminho' ,edtCaminho.Text) ;
      GravaINICrypt(INI,'Certificado','Senha', edtSenha.Text, _C) ;
@@ -1027,6 +1057,7 @@ begin
      GravaINICrypt(INI, 'Email','Pass'  ,edtSmtpPass.Text, _C) ;
      Ini.WriteString( 'Email','Assunto' ,edtEmailAssunto.Text) ;
      Ini.WriteBool(   'Email','SSL'     ,cbEmailSSL.Checked ) ;
+     Ini.WriteBool(   'Email','TLS'     ,cbEmailTLS.Checked ) ;     
      Ini.WriteInteger('Email','Tipo'    ,rgEmailTipoEnvio.ItemIndex) ;
      StreamMemo := TMemoryStream.Create;
      mmEmailMsg.Lines.SaveToStream(StreamMemo);
@@ -1075,7 +1106,7 @@ begin
      Ini.Free ;
   end ;
 
-  if (OldMonitoraTXT <> rbTXT.Checked) or (OldMonitoraTCP <> rbTCP.Checked) then
+  if (OldMonitoraTXT <> rbTXT.Checked) or (OldMonitoraTCP <> rbTCP.Checked) or (OldMonitoraPasta <> cbMonitorarPasta.Checked)  then
   begin
      MessageDlg('O Método de Monitoramento do ACBrNFeMonitor foi modificado'+sLineBreak+
                 'Será necessário reinicar o ACBrNFeMonitor.',
@@ -1107,9 +1138,9 @@ begin
 
      if FileExists(ArqSaiTXT) then
         RenameFile(ArqSaiTXT, ArqSaiTMP) ; { GravaArqResp faz append se arq. existir }
-        WriteToTXT(ArqSaiTMP, Resposta);
-        RenameFile(ArqSaiTMP, ArqSaiTXT) ;
 
+     WriteToTXT(ArqSaiTMP, Resposta);
+     RenameFile(ArqSaiTMP, ArqSaiTXT) ;
   end ;
 
   mResp.Lines.BeginUpdate ;
@@ -1125,6 +1156,8 @@ end;
 procedure TfrmAcbrNfeMonitor.Processar;
 var
   Linha : WideString;
+  ArqSefaz : Boolean;
+  Arquivo : TStringList;
 begin
   if NewLines <> '' then
      mCmd.Lines.Add( NewLines ) ;
@@ -1147,17 +1180,52 @@ begin
         sbProcessando.Panels[1].Text := Linha ;
 
         try
-           if pos('.',Linha) = 0 then              { Comandos do ACBrMonitor }
-              Linha := 'NFE.'+Linha ;
+           ArqSefaz := False;
+           if (copy(UpperCase(Linha),1,4) <> 'NFE.') and
+              (copy(UpperCase(Linha),1,4) <> 'CTE.') then              { Comandos do ACBrMonitor }
+            begin
+              if (copy(Linha, 1, 10) = 'NOTAFISCAL') or (copy(Linha, 1, 11) = 'NOTA FISCAL') then
+               begin
+                 Linha    := 'NFE.CriarNFeSEFAZ("'+Linha+'")' ;
+                 ArqSefaz := True;
+               end
+              else
+               begin
+                 if not cbModoXML.Checked then
+                    Linha := 'NFE.'+Linha ;
+               end
+            end;
 
-           Cmd.Comando := Linha ;
+           if not cbModoXML.Checked or ArqSefaz then
+            begin
+              Cmd.Comando := Linha ;
+              
+              if Cmd.Objeto = 'NFE' then
+                 DoACBrNFe( Cmd )
+              else if Cmd.Objeto = 'CTE' then
+                 DoACBrCTe( Cmd );
 
-           if Cmd.Objeto = 'NFE' then
-              DoACBrNFe( Cmd )
-           else if Cmd.Objeto = 'CTE' then
-              DoACBrCTe( Cmd );
+              if not cbModoXML.Checked then
+                 Resposta(Linha, 'OK: '+Cmd.Resposta )
+              else
+               begin
+                  Arquivo := TStringList.Create;
+                  try
+                     Arquivo.LoadFromFile(Cmd.Resposta);
+                     Resposta(Linha, Arquivo.Text );
+                  finally
+                     Arquivo.Free;
+                  end;
+               end;
+            end
+           else
+            begin
+              CmdXML.Comando := Linha;
 
-           Resposta(Linha, 'OK: '+Cmd.Resposta );
+              DoACBrNFeXML( CmdXML );
+              
+              Resposta(Linha, CmdXML.Resposta );
+            end;
            
         except
            on E : Exception do
@@ -1211,16 +1279,37 @@ begin
 
   try
      try
-        NomeArqEnt := PathWithDelim(ExtractFileDir(ArqEntOrig)) + StringReplace(ExtractFileName(ArqEntOrig),ExtractFileExt(ArqEntOrig),'',[rfReplaceAll]) +'*'+ExtractFileExt(ArqEntOrig);
-        RetFind := SysUtils.FindFirst( NomeArqEnt, faAnyFile, SearchRec) ;
-        if (RetFind = 0) then
+        if MonitorarPasta then
          begin
-           NomeArqEnt := StringReplace(ExtractFileName(ArqEntOrig),ExtractFileExt(ArqEntOrig),'',[rfReplaceAll]);
-           NomeArqSai := StringReplace(ExtractFileName(ArqSaiOrig),ExtractFileExt(ArqSaiOrig),'',[rfReplaceAll]);
-           ArqEntTXT  := PathWithDelim(ExtractFileDir(ArqEntOrig)) + SearchRec.Name ;  { Arquivo de Requisicao }
-           ArqSaiTXT  := PathWithDelim(ExtractFilePath(ArqSaiOrig))+StringReplace( ExtractFileName(LowerCase(ArqEntTXT)),LowerCase(NomeArqEnt),LowerCase(NomeArqSai),[rfReplaceAll]) ;
-           ArqSaiTMP  := ChangeFileExt(ArqSaiTXT,'.tmp');
-         end;  
+           NomeArqEnt := PathWithDelim(ExtractFileDir(ArqEntOrig)) + '*.*';
+           RetFind := SysUtils.FindFirst( NomeArqEnt, faAnyFile, SearchRec) ;
+           if (RetFind = 0) then
+            begin
+              if SearchRec.Name = '.' then
+                 FindNext( SearchRec );
+              if SearchRec.Name = '..' then
+                 FindNext( SearchRec );
+
+              ArqEntTXT  := PathWithDelim(ExtractFileDir(ArqEntOrig)) + SearchRec.Name ;  { Arquivo de Requisicao }
+              NomeArqEnt := StringReplace(ExtractFileName(ArqEntTXT),ExtractFileExt(ArqEntTXT),'',[rfReplaceAll]);
+              NomeArqEnt := NomeArqEnt+'-resp'+ExtractFileExt(ArqEntTXT);
+              ArqSaiTXT  := PathWithDelim(ExtractFilePath(ArqSaiOrig))+NomeArqEnt ;
+              ArqSaiTMP  := ChangeFileExt(ArqSaiTXT,'.tmp');
+            end;
+         end
+        else
+         begin
+           NomeArqEnt := PathWithDelim(ExtractFileDir(ArqEntOrig)) + StringReplace(ExtractFileName(ArqEntOrig),ExtractFileExt(ArqEntOrig),'',[rfReplaceAll]) +'*'+ExtractFileExt(ArqEntOrig);
+           RetFind := SysUtils.FindFirst( NomeArqEnt, faAnyFile, SearchRec) ;
+           if (RetFind = 0) then
+            begin
+              NomeArqEnt := StringReplace(ExtractFileName(ArqEntOrig),ExtractFileExt(ArqEntOrig),'',[rfReplaceAll]);
+              NomeArqSai := StringReplace(ExtractFileName(ArqSaiOrig),ExtractFileExt(ArqSaiOrig),'',[rfReplaceAll]);
+              ArqEntTXT  := PathWithDelim(ExtractFileDir(ArqEntOrig)) + SearchRec.Name ;  { Arquivo de Requisicao }
+              ArqSaiTXT  := PathWithDelim(ExtractFilePath(ArqSaiOrig))+StringReplace( ExtractFileName(LowerCase(ArqEntTXT)),LowerCase(NomeArqEnt),LowerCase(NomeArqSai),[rfReplaceAll]) ;
+              ArqSaiTMP  := ChangeFileExt(ArqSaiTXT,'.tmp');
+            end;
+         end;
      finally
         SysUtils.FindClose(SearchRec) ;
      end ;
@@ -1268,6 +1357,7 @@ begin
      ACBrGIF1.Visible := False;
 
   Cmd       := TACBrNFeCTeCmd.Create ;
+  CmdXML    := TACBrCmd.Create;
 
   Inicio    := true ;
   ArqSaiTXT := '' ;
@@ -1322,6 +1412,7 @@ end;
 procedure TfrmAcbrNfeMonitor.FormDestroy(Sender: TObject);
 begin
   Cmd.Free ;
+  CmdXML.Free ;
   nid.uFlags := 0;
   Shell_NotifyIcon (NIM_DELETE, @nid);
   Timer1.Enabled := false ;
@@ -1379,6 +1470,7 @@ procedure TfrmAcbrNfeMonitor.rbTCPClick(Sender: TObject);
 begin
   gbTCP.Enabled := rbTCP.Checked ;
   gbTXT.Enabled := rbTXT.Checked ;
+  cbMonitorarPasta.Enabled := rbTXT.Checked ;
 
   if rbTXT.Checked then
    begin
@@ -1489,7 +1581,7 @@ begin
   begin
     if rgModeloDanfe.ItemIndex = 0 then
      begin
-       if ExtractFileExt(edtLogoMarca.Text) <> '.bmp' then
+       if LowerCase(ExtractFileExt(edtLogoMarca.Text)) <> '.bmp' then
         begin
           MessageDlg('O arquivo de logo deve ser no formato BMP.',mtError,[mbOk],0);
           edtLogoMarca.SetFocus;
@@ -1497,7 +1589,7 @@ begin
      end
     else
      begin
-       if ExtractFileExt(edtLogoMarca.Text) <> '.jpg' then
+       if LowerCase(ExtractFileExt(edtLogoMarca.Text)) <> '.jpg' then
         begin
           MessageDlg('O arquivo de logo deve ser no formato JPG.',mtError,[mbOk],0);
           edtLogoMarca.SetFocus;
@@ -1683,7 +1775,7 @@ begin
   begin
     if rgModeloDanfe.ItemIndex = 0 then
      begin
-       if ExtractFileExt(edtLogoMarca.Text) <> '.bmp' then
+       if LowerCase(ExtractFileExt(edtLogoMarca.Text)) <> '.bmp' then
         begin
           MessageDlg('O arquivo de logo deve ser no formato BMP.',mtError,[mbOk],0);
           edtLogoMarca.SetFocus;
@@ -1691,7 +1783,7 @@ begin
      end
     else
      begin
-       if ExtractFileExt(edtLogoMarca.Text) <> '.jpg' then
+       if LowerCase(ExtractFileExt(edtLogoMarca.Text)) <> '.jpg' then
         begin
           MessageDlg('O arquivo de logo deve ser no formato JPG.',mtError,[mbOk],0);
           edtLogoMarca.SetFocus;
@@ -1727,9 +1819,9 @@ begin
        exit;
     try
        if rgEmailTipoEnvio.ItemIndex = 0 then
-          EnviarEmail(edtSmtpHost.Text, edtSmtpPort.Text, edtSmtpUser.Text, edtSmtpPass.Text, edtSmtpUser.Text, vPara, edtEmailAssunto.Text, OpenDialog1.FileName, ArqPDF, mmEmailMsg.Lines, cbEmailSSL.Checked)
+          EnviarEmail(edtSmtpHost.Text, edtSmtpPort.Text, edtSmtpUser.Text, edtSmtpPass.Text, edtSmtpUser.Text, vPara, edtEmailAssunto.Text, OpenDialog1.FileName, ArqPDF, mmEmailMsg.Lines, cbEmailSSL.Checked, cbEmailTLS.Checked)
        else
-          EnviarEmailIndy(edtSmtpHost.Text, edtSmtpPort.Text, edtSmtpUser.Text, edtSmtpPass.Text, edtSmtpUser.Text, vPara, edtEmailAssunto.Text, OpenDialog1.FileName, ArqPDF, mmEmailMsg.Lines, cbEmailSSL.Checked);
+          EnviarEmailIndy(edtSmtpHost.Text, edtSmtpPort.Text, edtSmtpUser.Text, edtSmtpPass.Text, edtSmtpUser.Text, vPara, edtEmailAssunto.Text, OpenDialog1.FileName, ArqPDF, mmEmailMsg.Lines, cbEmailSSL.Checked, cbEmailTLS.Checked);
     except
        on E: Exception do
         begin
@@ -1969,6 +2061,19 @@ begin
 
   ACBrCTe1.WebServices.Inutiliza(CNPJ, Justificativa, StrToInt(Ano), StrToInt(Modelo), StrToInt(Serie), StrToInt(NumeroInicial), StrToInt(NumeroFinal));
   ExibeResp(ACBrCTe1.WebServices.Inutilizacao.RetWS);
+end;
+
+procedure TfrmAcbrNfeMonitor.cbMonitorarPastaClick(Sender: TObject);
+begin
+  if cbMonitorarPasta.Checked then
+   begin
+     if MessageDlg('Ao ativar esta opção, todos os arquivos do diretório serão lidos e apagados.'+sLineBreak+
+                   'Deseja realmente continuar?',
+        mtConfirmation,[mbYes, mbNo], 0) = mrYes then
+        cbMonitorarPasta.Checked := True
+     else
+        cbMonitorarPasta.Checked := False;        
+   end;
 end;
 
 end.

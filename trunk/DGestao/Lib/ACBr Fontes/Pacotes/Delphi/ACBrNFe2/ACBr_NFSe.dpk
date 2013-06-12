@@ -30,8 +30,10 @@ requires
   vcl,
   ACBrComum,
   designide,
+{$IFDEF COMPILER7_UP}
   vclactnband,
   vclx,
+{$ENDIF}
   ACBrCapicom,
   synapse,
   soaprtl,

@@ -8,7 +8,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="..\..\..\Fontes\ACBrNFe2"/>
-        <UnitOutputDirectory Value="..\..\..\Fontes\ACBrNFe2\lib\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="..\..\..\Fontes\ACBrNFe2\lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Other>
         <CompilerMessages>
@@ -17,7 +17,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Files Count="5">
+    <Files Count="7">
       <Item1>
         <Filename Value="..\..\..\Fontes\ACBrNFe2\ACBrNFeDANFeRL.pas"/>
         <UnitName Value="ACBrNFeDANFeRL"/>
@@ -39,6 +39,14 @@
         <Filename Value="..\..\..\Fontes\ACBrNFe2\ACBrNFeDANFeRLPaisagem.pas"/>
         <UnitName Value="ACBrNFeDANFeRLPaisagem"/>
       </Item5>
+      <Item6>
+        <Filename Value="..\..\..\Fontes\ACBrNFe2\ACBrNFeDANFeEventoRL.pas"/>
+        <UnitName Value="ACBrNFeDANFeEventoRL"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\..\..\Fontes\ACBrNFe2\ACBrNFeDANFeEventoRLRetrato.pas"/>
+        <UnitName Value="ACBrNFeDANFeEventoRLRetrato"/>
+      </Item7>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">

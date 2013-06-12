@@ -45,7 +45,7 @@ Function MudaBemaACBr( Comando : String ) : String ;
 implementation
 
 Uses ACBrECFClass,
-     {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF}  ;
+     {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF}  ;
 
 Function Parametro(Texto : String; Posicao : Integer ) : String;
 Var P, i : Integer ;
@@ -96,7 +96,7 @@ Var
     COO       : String ;
 begin
   Result := '' ;
-  {$IFNDEF CONSOLE}
+  {$IFNDEF NOGUI}
    if not FrmACBrMonitor.ACBrECF1.Ativo then
        FrmACBrMonitor.ACBrECF1.Ativar ;
   {$ELSE}
@@ -111,7 +111,7 @@ begin
      // Bematech_FI_AbreCupomMFD 110|10.123.154-98|José da Silva|R. Sem Fim, 1000| 
      if Parametro(Comando,1) = '110' then
      begin
-        {$IFNDEF CONSOLE}
+        {$IFNDEF NOGUI}
              Cliente := FrmACBrMonitor.ACBrECF1.Consumidor.Create;
              Cliente.AtribuiConsumidor( Parametro(Comando,2), Parametro(Comando,3), Parametro(Comando,4)  );
         {$ELSE}
@@ -133,7 +133,7 @@ begin
   if Parametro(Comando,1) = '011' then
   begin
      //Bematech_FI_CancelaItemAnterior
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
           UltItem := FrmACBrMonitor.ACBrECF1.NumUltItem ;
      {$ELSE}
           UltItem := dm.ACBrECF1.NumUltItem ;
@@ -152,7 +152,7 @@ begin
   if Parametro(Comando,1) = '023' then
   begin
      //Bematech_FI_EfetuaFormaPagamento 023|Dinheiro|25,00|
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -164,7 +164,7 @@ begin
   if Parametro(Comando,1) = '024' then
   begin
      //Bematech_FI_EfetuaFormaPagamentoDescricaoForma  024|Cheque|50,00|Bom p/ 30 dias|
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -185,7 +185,7 @@ begin
   begin
      //Bematech_FI_FechaCupom  028|Dinheiro|A|$|0000|35,00|Obrigado, volte sempre !!!| 
      // Tem q Subtotalizar com desconto ou acréscimo e efetuar pagamento
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -197,7 +197,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( -'+ Parametro(Comando,5) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -211,7 +211,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( '+ Parametro(Comando,5) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -231,13 +231,13 @@ begin
   begin
      // Bematech_FI_FechaCupomResumido 029|Dinheiro|Obrigado, volte sempre !!!|
      // Tem q efetuar pagamento
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
          Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
      {$ELSE}
          Total := dm.ACBrECF1.Subtotal ;
      {$ENDIF}
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -259,7 +259,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( -'+ Parametro(Comando,3) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -273,7 +273,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( '+ Parametro(Comando,4) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -307,7 +307,7 @@ begin
      begin
         if Parametro(Comando,9) = '%' then
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -351,7 +351,7 @@ begin
      //Bematech_FI_AbreComprovanteNaoFiscalVinculado    002|Cartao|||
      if Length(Parametro(Comando,2)) <= 0 then
      begin
-        {$IFNDEF CONSOLE}
+        {$IFNDEF NOGUI}
            COO := FrmACBrMonitor.ACBrECF1.NumCOO ;
         {$ELSE}
            COO := dm.ACBrECF1.NumCOO ;
@@ -360,7 +360,7 @@ begin
      else
         COO := Parametro(Comando,2) ;
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -388,13 +388,13 @@ begin
   begin
      //Bematech_FI_RecebimentoNaoFiscal 070|05-IndiceTotalizador|30,00-ValorRecebimento|Dinheiro-FormaPagamento|
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         CNF := FrmACBrMonitor.ACBrECF1.AchaCNFIndice( Parametro(Comando,2) ) ;
      {$ELSE}
         CNF := dm.ACBrECF1.AchaCNFIndice( Parametro(Comando,2) ) ;
      {$ENDIF}
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGIndice( Parametro(Comando,4) ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGIndice( Parametro(Comando,4) ) ;
@@ -443,7 +443,7 @@ begin
   if Parametro(Comando,1) = '046' then
   begin
      //Bematech_FI_LeituraXSerial  046|
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         COO := FrmACBrMonitor.ACBrECF1.NumCRZ ;
      {$ELSE}
         COO := dm.ACBrECF1.NumCRZ ;

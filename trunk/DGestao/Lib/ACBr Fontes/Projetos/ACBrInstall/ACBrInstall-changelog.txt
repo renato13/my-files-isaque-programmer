@@ -39,6 +39,16 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+20/06/2012
+----------
+[*] Implementado para compilar e instalar no Delphi XE4.
+    por: Isaque Pinheiro
+
+04/04/2013
+----------
+[+] Implementado instalação da Suite ACbr no Delphi 6
+    (por Isaque Pinheiro)
+
 27/03/2013
 ----------
 [+] Implementado instalação do pacote ACBr_LFD.dpk

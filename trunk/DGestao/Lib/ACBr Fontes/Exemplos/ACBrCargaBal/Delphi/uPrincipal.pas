@@ -82,7 +82,23 @@ begin
         Validade        := 15;
         Tecla           := 0;
         Receita         := Format('Receita do item %d', [I]);
-        Nutricional     := Format('Informação Nutricional do item %d', [I]);;
+//        Nutricional     := Format('Informação Nutricional do item %d', [I]);;
+
+        Nutricional.Codigo:=I;
+        Nutricional.Qtd :=1;
+        Nutricional.UndPorcao := tpGramas;
+        Nutricional.PartInteira :=1;
+        Nutricional.PartDecimal:= tpPara12;
+        Nutricional.MedCaseira := tpColherSopa;
+        Nutricional.ValorEnergetico := 20;
+        Nutricional.Carboidrato := 2;
+        Nutricional.Proteina := 3;
+        Nutricional.GorduraTotal:= 4;
+        Nutricional.GorduraSaturada:=5;
+        Nutricional.GorduraTrans := 6;
+        Nutricional.Fibra := 7;
+        Nutricional.Sodio :=8;
+
         Setor.Codigo    := 1;
         Setor.Descricao := 'GERAL';
       end;

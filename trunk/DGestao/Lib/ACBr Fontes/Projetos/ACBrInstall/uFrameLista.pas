@@ -80,26 +80,26 @@ type
     ACBrCTeDacteFR_dpk: TCheckBox;
     Label7: TLabel;
     ACBrNFeDanfeQR_dpk: TCheckBox;
-    ACBrNFeDanfeRL_dpk: TCheckBox;
     ACBrNFeDanfeRV_dpk: TCheckBox;
     ACBrCTeDacteQR_dpk: TCheckBox;
-    ACBr_BoletoFC_Fortes_dpk: TCheckBox;
     ACBr_BoletoFC_Quick_dpk: TCheckBox;
     ACBrNFeDanfeRVCodeBase_dpk: TCheckBox;
     Label8: TLabel;
     ACBr_NFSe_dpk: TCheckBox;
     Label9: TLabel;
     Label10: TLabel;
-    Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
-    Label17: TLabel;
     Label18: TLabel;
     ACBr_MDFe_dpk: TCheckBox;
     ACBr_LFD_dpk: TCheckBox;
+    Label11: TLabel;
+    Label17: TLabel;
+    ACBrNFeDanfeRL_dpk: TCheckBox;
+    ACBr_BoletoFC_Fortes_dpk: TCheckBox;
     procedure btnPacotesMarcarTodosClick(Sender: TObject);
     procedure btnPacotesDesmarcarTodosClick(Sender: TObject);
     procedure VerificarCheckboxes(Sender: TObject);
@@ -158,10 +158,10 @@ end;
 
 function TframePacotes.IsPacoteNF2(const ANomePacote: String): Boolean;
 const
-  PACOTES_NF2: array [0..8] of String =
+  PACOTES_NF2: array [0..9] of String =
     ('PCN2.dpk', 'ACBr_NFe2.dpk', 'ACBr_CTe.dpk', 'ACBr_NFSe.dpk', 'ACBr_MDFe.dpk',
      'ACBrNFeDanfeFRpkg.dpk', 'ACBrCTeDacteFRpkg.dpk', 'ACBrNFeDanfeRV.dpk',
-     'ACBrNFeDanfeRVCodeBase.dpk');
+     'ACBrNFeDanfeRVCodeBase.dpk', 'ACBrNFeDanfeRLpkg.dpk');
 begin
   Result := MatchText(ANomePacote, PACOTES_NF2);
 end;

@@ -31,7 +31,9 @@ requires
   PCN2,
   ACBrComum,
   designide,
+{$IFDEF COMPILER7_UP}
   vclactnband,
+{$ENDIF}
   ACBrCapicom,
   synapse,
   soaprtl,

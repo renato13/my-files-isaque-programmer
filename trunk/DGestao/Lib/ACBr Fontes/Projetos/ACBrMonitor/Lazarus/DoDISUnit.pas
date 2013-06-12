@@ -36,7 +36,7 @@ unit DoDISUnit ;
 
 interface
 Uses Classes, TypInfo, SysUtils, CmdUnit,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 
 Procedure DoDIS( Cmd : TACBrCmd ) ;
@@ -46,9 +46,9 @@ uses ACBrDIS, ACBrUtil;
 
 Procedure DoDIS( Cmd : TACBrCmd ) ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrDIS1 {$ELSE}dm.ACBrDIS1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrDIS1 {$ELSE}dm.ACBrDIS1 {$ENDIF} do
   begin
-     {$IFNDEF CONSOLE}FrmACBrMonitor.{$ELSE}dm.{$ENDIF}DISWorking := True ;
+     {$IFNDEF NOGUI}FrmACBrMonitor.{$ELSE}dm.{$ENDIF}DISWorking := True ;
      try
         if Cmd.Metodo = 'ativar' then  { Ativa o Display }
            Ativar
@@ -152,7 +152,7 @@ begin
            raise Exception.Create('Comando inválido ('+Cmd.Comando+')') ;
 
      finally
-     {$IFNDEF CONSOLE}FrmACBrMonitor.{$ELSE}dm.{$ENDIF}DISWorking := False ;
+     {$IFNDEF NOGUI}FrmACBrMonitor.{$ELSE}dm.{$ENDIF}DISWorking := False ;
      end ;
   end ;
 end ;

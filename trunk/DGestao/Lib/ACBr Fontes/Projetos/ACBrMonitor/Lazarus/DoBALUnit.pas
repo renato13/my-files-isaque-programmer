@@ -41,11 +41,11 @@ Procedure DoBAL( Cmd : TACBrCmd ) ;
 
 implementation
 uses  ACBrUtil, ACBrBAL,
-  {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+  {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Procedure DoBAL( Cmd : TACBrCmd ) ;
 begin
-  with {$IFNDEF CONSOLE}FrmACBrMonitor.ACBrBAL1 {$ELSE}dm.ACBrBAL1 {$ENDIF} do
+  with {$IFNDEF NOGUI}FrmACBrMonitor.ACBrBAL1 {$ELSE}dm.ACBrBAL1 {$ENDIF} do
   begin
      try
         if Cmd.Metodo = 'ativar' then begin { Ativa a Balança }

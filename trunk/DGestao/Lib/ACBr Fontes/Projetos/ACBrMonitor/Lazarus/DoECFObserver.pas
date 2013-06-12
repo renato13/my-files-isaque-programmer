@@ -45,7 +45,7 @@ Function MudaObserverACBr( Comando : String ) : String ;
 implementation
 
 Uses ACBrECFClass,
-     {$IFNDEF CONSOLE}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
+     {$IFNDEF NOGUI}ACBrMonitor1 {$ELSE}ACBrMonitorConsoleDM {$ENDIF} ;
 
 Function Parametro(Texto : String; Posicao : Integer ) : String;
 Var P, i : Integer ;
@@ -95,7 +95,7 @@ Var
     Cliente   : TACBrECFConsumidor ;
 begin
   Result := '' ;
-  {$IFNDEF CONSOLE}
+  {$IFNDEF NOGUI}
    if not FrmACBrMonitor.ACBrECF1.Ativo then
        FrmACBrMonitor.ACBrECF1.Ativar ;
   {$ELSE}
@@ -118,7 +118,7 @@ begin
      begin
         if Parametro(Comando,9) = '%' then
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -161,7 +161,7 @@ begin
   if (Parametro(Comando,1) = '1005') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_CANCELAITEMANTERIOR') then
   begin
      //DARUMA_FI_CancelaItemAnterior
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
           UltItem := FrmACBrMonitor.ACBrECF1.NumUltItem ;
      {$ELSE}
           UltItem := dm.ACBrECF1.NumUltItem ;
@@ -186,7 +186,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( -'+ Parametro(Comando,3) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -200,7 +200,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( '+ Parametro(Comando,4) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -216,7 +216,7 @@ begin
   if (Parametro(Comando,1) = '1008') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_EFETUAFORMAPAGAMENTO') then
   begin
      //DARUMA_FI_EfetuaFormaPagamento(Str_Descricao_da_Forma_Pagamento, Str_Valor_da_Forma_Pagamento)
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -228,7 +228,7 @@ begin
   if (Parametro(Comando,1) = '1009') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_EFETUAFORMAPAGAMENTODESCRICAOFORMA') then
   begin
      //DARUMA_FI_EfetuaFormaPagamentoDescricaoForma(Str_Descricao_da_Forma_Pagamento, Str_Valor_da_Forma_Pagamento, Str_Texto_Livre)
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -241,13 +241,13 @@ begin
   if (Parametro(Comando,1) = '1012') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_FECHACUPOMRESUMIDO') then
   begin
      //DARUMA_FI_FechaCupomResumido(Str_Descricao_da_Forma_Pagamento, Str_Mensagem_Promocional)
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
          Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
      {$ELSE}
          Total := dm.ACBrECF1.Subtotal ;
      {$ENDIF}
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -263,7 +263,7 @@ begin
   if (Parametro(Comando,1) = '1011') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_FECHACUPOM') then
   begin
      //DARUMA_FI_FechaCupom(Str_Descricao_da_Forma_Pagamento, Str_Acrescimo_ou_Desconto, Str_Tipo_Acrescimo_ou_Desconto, Str_Valor_Acrescimo_ou_Desconto, Str_Valor_Pago, Str_Mensagem_Promocional)
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
@@ -275,7 +275,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( -'+ Parametro(Comando,5) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -289,7 +289,7 @@ begin
            Result := 'ECF.SubtotalizaCupom( '+ Parametro(Comando,5) +' )'
         else
         begin
-           {$IFNDEF CONSOLE}
+           {$IFNDEF NOGUI}
                Total := FrmACBrMonitor.ACBrECF1.Subtotal ;
            {$ELSE}
                Total := dm.ACBrECF1.Subtotal ;
@@ -322,7 +322,7 @@ begin
   begin
      //DARUMA_FI_IdentificaConsumidor(Str_Nome_do_Consumidor, Str_Endereco, Str_CPF_ou_CNPJ)
 
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
           Cliente := FrmACBrMonitor.ACBrECF1.Consumidor.Create;
           Cliente.AtribuiConsumidor( Parametro(Comando,4), Parametro(Comando,2), Parametro(Comando,3) );
      {$ELSE}
@@ -357,7 +357,7 @@ begin
   if (Parametro(Comando,1) = '1203') or (UpperCase(Parametro(Comando,1)) = 'DARUMA_FI_ABRECOMPROVANTENAOFISCALVINCULADO') then
   begin
      // DARUMA_FI_AbreComprovanteNaoFiscalVinculado (Str_Forma_de_Pagamento, Str_Valor_Pago, Str_Numero_do_Cupom)
-     {$IFNDEF CONSOLE}
+     {$IFNDEF NOGUI}
         FPG := FrmACBrMonitor.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;
      {$ELSE}
         FPG := dm.ACBrECF1.AchaFPGDescricao( Parametro(Comando,2), True ) ;

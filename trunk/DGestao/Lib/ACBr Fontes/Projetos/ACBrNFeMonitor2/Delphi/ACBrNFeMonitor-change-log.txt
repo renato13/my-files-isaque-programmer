@@ -48,6 +48,10 @@ Símbolo : Significado
 [*]     : Recurso modificado/melhorado
 [-]     : Correção de Bug (assim esperamos)
 
+09/04/2013
+[*]	: Alterado no CT-e para ler as tag xCaracAd e xCaracSer do compl
+[*]	: Alterado a unit DoACBrNFeUnit.pas com a function SubstituirVariaveis(const ATexto: String): String para atender o Ct-e
+
 15/03/2013
 [+]	: Adicionado na aba "WebService" a opção de escolher se o cancelamento será feito por evento ou do modo antigo(Por padrão será adota Evento, exceto para os estados PR|ES|MA|PA|PI|RN)
 [+]	: Adiconado na aba "Diretórios" os campos para configurar os Paths para Salvar os arquivos da CCe e Eventos e a opção "Salvar Arqs Canc./CCe na pasta Eventos", caso esta opção esteja selecionada, qdo o cancelamento for feito por evento será gravado dentro do diretório configurado no campo "Pasta Arquivos Evento" dentro do subdiretório Cancelamento, e as CCes serão gravadas na mesma pasta dentro do subdiretório CCe. Os demais eventos serão gravados nos subdiretórios Confirmacao, Ciencia, Desconhecimento e NaoRealizada
