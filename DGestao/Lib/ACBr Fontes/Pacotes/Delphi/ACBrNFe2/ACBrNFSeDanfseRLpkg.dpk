@@ -1,0 +1,51 @@
+package ACBrNFSeDanfseRLpkg;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ACBrNFSeDANFSeQR - (http://acbr.sourceforge.net/)'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  vclx,
+  bdertl,
+  dbrtl,
+  ACBr_NFSe,
+  PCN2,
+  ACBrComum,
+  {$IFDEF VER150} RLibWinD7vcl, vcljpg;{$ENDIF} // D7
+  {$IFDEF VER200} RLibWinD2009, vclimg;{$ENDIF} // D2009
+  {$IFDEF VER210} RLibWinD2010, vclimg;{$ENDIF} // D2010
+  {$IFDEF VER220} RLibWinDXE, vclimg;{$ENDIF} // XE
+  {$IFDEF VER230} RLibWinDXE2, vclimg;{$ENDIF} //XE2
+  {$IFDEF VER240} RLibWinDXE3, vclimg;{$ENDIF} //XE3
+  
+
+contains
+  ACBrNFSeDANFSeRLClass in '..\..\..\Fontes\ACBrNFSe\ACBrNFSeDANFSeRLClass.pas',
+  ACBrNFSeDANFSeRLReg in '..\..\..\Fontes\ACBrNFSe\ACBrNFSeDANFSeRLReg.pas',
+  ACBrNFSeDANFSeRL in '..\..\..\Fontes\ACBrNFSe\ACBrNFSeDANFSeRL.pas' {frlDANFSeRL},
+  ACBrNFSeDANFSeRLRetrato in '..\..\..\Fontes\ACBrNFSe\ACBrNFSeDANFSeRLRetrato.pas' {frlDANFSeRLRetrato};
+
+end.
