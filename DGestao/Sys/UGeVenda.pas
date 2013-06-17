@@ -391,6 +391,7 @@ type
     procedure HabilitarDesabilitar_Btns;
     procedure GetComprasAbertas(sCNPJ : String);
     procedure ZerarFormaPagto;
+    procedure RecarregarRegistro;
 
     function ValidarQuantidade(Codigo : Integer; Quantidade : Integer) : Boolean;
     function PossuiTitulosPagos(AnoVenda : Smallint; NumVenda : Integer) : Boolean;
@@ -850,6 +851,8 @@ procedure TfrmGeVenda.btbtnExcluirClick(Sender: TObject);
 var
   sMsg : String;
 begin
+  RecarregarRegistro;
+  
   if ( IbDtstTabelaSTATUS.AsInteger > STATUS_VND_ABR ) then
   begin
     Case IbDtstTabelaSTATUS.AsInteger of
@@ -1237,6 +1240,8 @@ procedure TfrmGeVenda.btbtnAlterarClick(Sender: TObject);
 var
   sMsg : String;
 begin
+  RecarregarRegistro;
+  
   if ( IbDtstTabelaSTATUS.AsInteger > STATUS_VND_ABR ) then
   begin
     Case IbDtstTabelaSTATUS.AsInteger of
@@ -1379,6 +1384,8 @@ begin
   CxAno    := 0;
   CxNumero := 0;
   CxContaCorrente := 0;
+
+  RecarregarRegistro;
 
   AbrirTabelaItens(IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger);
   AbrirTabelaFormasPagto( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
@@ -1525,6 +1532,8 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
+  RecarregarRegistro;
+
   if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
                 iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
   ) ) then
@@ -1649,6 +1658,8 @@ var
 begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
+
+  RecarregarRegistro;
 
   if ( PossuiTitulosPagos(IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value) ) then
   begin
@@ -2175,6 +2186,8 @@ procedure TfrmGeVenda.BtnTransporteInformeClick(Sender: TObject);
 var
   iNumero : Integer;
 begin
+  RecarregarRegistro;
+
   if EditarDadosTransportadora(Self) then
   begin
     iNumero := IbDtstTabelaCODCONTROL.AsInteger;
@@ -2205,6 +2218,28 @@ procedure TfrmGeVenda.cdsVendaVolumeNewRecord(DataSet: TDataSet);
 begin
   cdsVendaVolumeANO_VENDA.Assign( IbDtstTabelaANO );
   cdsVendaVolumeCONTROLE_VENDA.Assign( IbDtstTabelaCODCONTROL );
+end;
+
+procedure TfrmGeVenda.RecarregarRegistro;
+var
+  iAno ,
+  iCod : Integer;
+  sID : String;
+begin
+  if IbDtstTabela.IsEmpty then
+    sID := EmptyStr
+  else
+    sID := IbDtstTabelaCODCONTROL.AsString;
+
+  if ( sID <> EmptyStr ) then
+  begin
+    iAno := IbDtstTabelaANO.AsInteger;
+    iCod := IbDtstTabelaCODCONTROL.AsInteger;
+
+    IbDtstTabela.Close;
+    IbDtstTabela.Open;
+    IbDtstTabela.Locate('CODCONTROL', sID, []);
+  end;
 end;
 
 end.
