@@ -6,7 +6,6 @@ object DMBusiness: TDMBusiness
   Height = 426
   Width = 706
   object ibdtbsBusiness: TIBDatabase
-    Connected = True
     DatabaseName = 'localhost:BUSINESS'
     Params.Strings = (
       'user_name=SYSDBA'
@@ -18,7 +17,6 @@ object DMBusiness: TDMBusiness
     Top = 8
   end
   object ibtrnsctnBusiness: TIBTransaction
-    Active = True
     DefaultDatabase = ibdtbsBusiness
     Params.Strings = (
       'read_committed'
@@ -448,7 +446,6 @@ object DMBusiness: TDMBusiness
   object ibqryEmpresa: TIBQuery
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-    Active = True
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 312
