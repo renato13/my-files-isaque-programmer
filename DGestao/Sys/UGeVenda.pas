@@ -2226,6 +2226,9 @@ var
   iCod : Integer;
   sID : String;
 begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    Exit;
+
   if IbDtstTabela.IsEmpty then
     sID := EmptyStr
   else
