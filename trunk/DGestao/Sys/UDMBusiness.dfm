@@ -462,11 +462,8 @@ object DMBusiness: TDMBusiness
   object ibqryEmpresa: TIBQuery
     Database = ibdtbsBusiness
     Transaction = ibtrnsctnBusiness
-<<<<<<< .mine
     BufferChunks = 1000
     CachedUpdates = False
-=======
->>>>>>> .r454
     SQL.Strings = (
       'select CNPJ, NMFANT from TBEMPRESA')
     Left = 312
