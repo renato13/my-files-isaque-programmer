@@ -156,7 +156,7 @@ const
   FUNCTION_USER_ID_SUPORTE_TI  = 11;
   FUNCTION_USER_ID_SYSTEM_ADM  = 12;
 
-  BOLETO_ARQUIVO_LOGOTIPO = 'Imagens\Emitente.gif';
+  BOLETO_ARQUIVO_LOGOTIPO = 'Imagens\Emitente.gif'; //gif
   BOLETO_IMAGENS          = 'Imagens\';
   BOLETO_LICENCAS         = 'Licencas\';
 
