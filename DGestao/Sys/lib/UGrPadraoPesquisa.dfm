@@ -4,6 +4,7 @@ inherited frmGrPadraoPesquisa: TfrmGrPadraoPesquisa
   Width = 793
   Height = 469
   ActiveControl = edPesquisar
+  BorderIcons = [biSystemMenu]
   Caption = 'Padr'#227'o Pesquisa!'
   Font.Charset = ANSI_CHARSET
   Font.Name = 'Tahoma'

@@ -38,7 +38,7 @@ var
 implementation
 
 uses
-  UDMBusiness, UConstantesDGE;
+  UDMBusiness, UConstantesDGE, UGrPadrao;
 
 {$R *.dfm}
 
@@ -60,8 +60,9 @@ var
 begin
   Screen.Cursor := crSQLWait;
   try
-    sDataInicial := FormatDateTime('yyyy-mm-dd', StrToDateDef(e1Data.Text, Date));
-    sDataFinal   := FormatDateTime('yyyy-mm-dd', StrToDateDef(e2Data.Text, Date));
+    sDataInicial     := FormatDateTime('yyyy-mm-dd', StrToDateDef(e1Data.Text, Date));
+    sDataFinal       := FormatDateTime('yyyy-mm-dd', StrToDateDef(e2Data.Text, Date));
+    edPesquisar.Text := Trim(edPesquisar.Text);
 
     QryPesquisa.Close;
 
@@ -69,7 +70,8 @@ begin
     begin
       SQL.Clear;
       SQL.AddStrings( SQLSelect );
-      SQL.Add('where v.dtvenda between ' + QuotedStr(sDataInicial) + ' and ' + QuotedStr(sDataFinal));
+      SQL.Add('where v.status in (3, 4)');
+      SQL.Add('  and v.dtvenda between ' + QuotedStr(sDataInicial) + ' and ' + QuotedStr(sDataFinal));
 
       Case edTipoPesquisa.ItemIndex of
         0:
@@ -78,10 +80,10 @@ begin
             SQL[10] := '  , cast(null as varchar(18)) as Cliente_Cpf';
             SQL[11] := '  , cast(null as varchar(60)) as Cliente_Nome';
 
-            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
-              SQL.Add('  and i.codprod = ' + FormatFloat('0000000', StrToInt(Trim(edPesquisar.Text))))
+            if FuncoesString.StrIsInt(edPesquisar.Text) then
+              SQL.Add('  and i.codprod = ' + FormatFloat('0000000', StrToInt(edPesquisar.Text)))
             else
-              SQL.Add('  and p.descri like ' + QuotedStr(Trim(edPesquisar.Text) + '%'));
+              SQL.Add('  and p.descri like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
         1:
@@ -92,10 +94,10 @@ begin
             SQL[10] := '  , cast(null as varchar(18)) as Cliente_Cpf';
             SQL[11] := '  , cast(null as varchar(60)) as Cliente_Nome';
 
-            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
-              SQL.Add('  and p.codgrupo = ' + Trim(edPesquisar.Text))
+            if FuncoesString.StrIsInt(edPesquisar.Text) then
+              SQL.Add('  and p.codgrupo = ' + edPesquisar.Text)
             else
-              SQL.Add('  and g.descri like ' + QuotedStr(Trim(edPesquisar.Text) + '%'));
+              SQL.Add('  and g.descri like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
         2:
@@ -104,10 +106,10 @@ begin
             SQL[10] := '  , cast(null as varchar(18)) as Cliente_Cpf';
             SQL[11] := '  , cast(null as varchar(60)) as Cliente_Nome';
 
-            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
-              SQL.Add('  and v.vendedor_cod = ' + Trim(edPesquisar.Text))
+            if FuncoesString.StrIsInt(edPesquisar.Text) then
+              SQL.Add('  and v.vendedor_cod = ' + edPesquisar.Text)
             else
-              SQL.Add('  and vd.nome like ' + QuotedStr(Trim(edPesquisar.Text) + '%'));
+              SQL.Add('  and vd.nome like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
         3:
@@ -115,10 +117,16 @@ begin
             SQL[3]  := '  , cast(null as varchar(30)) as Grupo';
             SQL[9]  := '  , cast(null as varchar(60)) as Vendedor';
 
-            //if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
-            //  SQL.Add('  and v.codcli = ' + QuotedStr(Trim(edPesquisar.Text)))
-            //else
-              SQL.Add('  and cl.nome like ' + QuotedStr(Trim(edPesquisar.Text) + '%'));
+            if ( edPesquisar.Text = '99999999999999' ) then
+              SQL.Add('  and v.codcli = ' + QuotedStr(edPesquisar.Text))
+            else  
+            if FuncoesString.StrIsCPF( StringReplace(StringReplace(edPesquisar.Text, '.', '', [rfReplaceAll]), '-', '', [rfReplaceAll]) ) then
+              SQL.Add('  and v.codcli = ' + QuotedStr(StringReplace(StringReplace(edPesquisar.Text, '.', '', [rfReplaceAll]), '-', '', [rfReplaceAll])))
+            else
+            if FuncoesString.StrIsCNPJ( StringReplace(StringReplace(edPesquisar.Text, '.', '', [rfReplaceAll]), '-', '', [rfReplaceAll]) ) then
+              SQL.Add('  and v.codcli = ' + QuotedStr(StringReplace(StringReplace(edPesquisar.Text, '.', '', [rfReplaceAll]), '-', '', [rfReplaceAll])))
+            else
+              SQL.Add('  and cl.nome like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
       end;
 

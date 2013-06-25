@@ -80,7 +80,9 @@ uses
   UGeExportarNFeGerada in 'UGeExportarNFeGerada.pas' {frmGeExportarNFeGerada},
   UfrmRelEstoque in 'UfrmRelEstoque.pas' {frmRelEstoque},
   UfrmRelVendasFormPag in 'UfrmRelVendasFormPag.pas' {frmRelVendasFormPag},
-  UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte};
+  UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte},
+  UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
+  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa};
 
 {$R *.res}
 
