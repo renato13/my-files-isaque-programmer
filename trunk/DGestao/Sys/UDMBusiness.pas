@@ -9,6 +9,13 @@ uses
   FuncoesFormulario, UConstantesDGE, IBUpdateSQL, EUserAcs;
 
 type
+  TUsuarioLogado = record
+    Codigo : Integer;
+    Nome   : String;
+    Funcao : Integer;
+    Empresa: String;
+  end;
+
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
   TDMBusiness = class(TDataModule)
     ibdtbsBusiness: TIBDatabase;

@@ -82,7 +82,8 @@ uses
   UfrmRelVendasFormPag in 'UfrmRelVendasFormPag.pas' {frmRelVendasFormPag},
   UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte},
   UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
-  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa};
+  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
+  UGrPadraoLogin in 'lib\UGrPadraoLogin.pas' {frmGrPadraoLogin};
 
 {$R *.res}
 
