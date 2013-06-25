@@ -3,7 +3,6 @@ inherited frmGeCliente: TfrmGeCliente
   Top = 131
   Width = 860
   Height = 536
-  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   OnClose = FormClose
@@ -30,19 +29,19 @@ inherited frmGeCliente: TfrmGeCliente
     inherited bvlTool4: TBevel
       Left = 689
     end
-    object BtBtnDesbloquear: TBitBtn
+    object BtBtnProcesso: TBitBtn
       Left = 693
       Top = 2
       Width = 120
       Height = 31
-      Hint = 'Desbloquear Cliente'
-      Caption = '&Desbloquear'
+      Hint = 'Bloqueio e Desbloqueio de Cliente'
+      Caption = '&Bloqueio / Desbloq.'
       Enabled = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 7
       TabStop = False
-      OnClick = BtBtnDesbloquearClick
+      OnClick = BtBtnProcessoClick
       Glyph.Data = {
         36060000424D3606000000000000360000002800000020000000100000000100
         180000000000000600000000000000000000000000000000000000FF0000FF00
@@ -107,7 +106,6 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 844
     Height = 455
-    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
@@ -1896,5 +1894,20 @@ inherited frmGeCliente: TfrmGeCliente
     DataSet = tblVendedor
     Left = 704
     Top = 104
+  end
+  object popProcesso: TPopupMenu
+    Images = ImgList
+    Left = 688
+    Top = 414
+    object mpClienteBloquear: TMenuItem
+      Caption = '&Bloquear'
+      ImageIndex = 37
+      OnClick = mpClienteBloquearClick
+    end
+    object mpClienteDesbloquear: TMenuItem
+      Caption = '&Desbloquear '
+      ImageIndex = 39
+      OnClick = mpClienteDesbloquearClick
+    end
   end
 end
