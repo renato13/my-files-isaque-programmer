@@ -42,15 +42,21 @@ uses
 
 {$R *.dfm}
 
+const
+  TIPO_AUT = 0;
+  TIPO_GRP = 1;
+  TIPO_VND = 2;
+  TIPO_CLI = 3;
+
 { TFrmGeVendaItemPesquisa }
 
 procedure TFrmGeVendaItemPesquisa.ConfigurarColunas;
 begin
-  dbgDados.Columns[0].Visible := edTipoPesquisa.ItemIndex in [0, 2, 3]; // Código
-  dbgDados.Columns[1].Visible := edTipoPesquisa.ItemIndex in [0, 2, 3]; // Produto
-  dbgDados.Columns[2].Visible := edTipoPesquisa.ItemIndex in [0, 1];    // Grupo
-  dbgDados.Columns[3].Visible := edTipoPesquisa.ItemIndex in [2];       // Vendedor
-  dbgDados.Columns[4].Visible := edTipoPesquisa.ItemIndex in [3];       // Cliente
+  dbgDados.Columns[0].Visible := edTipoPesquisa.ItemIndex in [TIPO_AUT, TIPO_VND, TIPO_CLI]; // Código
+  dbgDados.Columns[1].Visible := edTipoPesquisa.ItemIndex in [TIPO_AUT, TIPO_VND, TIPO_CLI]; // Produto
+  dbgDados.Columns[2].Visible := edTipoPesquisa.ItemIndex in [TIPO_AUT, TIPO_GRP];           // Grupo
+  dbgDados.Columns[3].Visible := edTipoPesquisa.ItemIndex in [TIPO_VND];                     // Vendedor
+  dbgDados.Columns[4].Visible := edTipoPesquisa.ItemIndex in [TIPO_CLI];                     // Cliente
 end;
 
 function TFrmGeVendaItemPesquisa.ExecutarPesquisa: Boolean;
@@ -74,7 +80,7 @@ begin
       SQL.Add('  and v.dtvenda between ' + QuotedStr(sDataInicial) + ' and ' + QuotedStr(sDataFinal));
 
       Case edTipoPesquisa.ItemIndex of
-        0:
+        TIPO_AUT:
           begin
             SQL[9]  := '  , cast(null as varchar(60)) as Vendedor';
             SQL[10] := '  , cast(null as varchar(18)) as Cliente_Cpf';
@@ -86,7 +92,7 @@ begin
               SQL.Add('  and p.descri like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
-        1:
+        TIPO_GRP:
           begin
             SQL[1]  := '    cast(null as varchar(10)) as codprod';
             SQL[2]  := '  , cast(null as varchar(50)) as Produto';
@@ -100,7 +106,7 @@ begin
               SQL.Add('  and g.descri like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
-        2:
+        TIPO_VND:
           begin
             SQL[3]  := '  , cast(null as varchar(30)) as Grupo';
             SQL[10] := '  , cast(null as varchar(18)) as Cliente_Cpf';
@@ -112,7 +118,7 @@ begin
               SQL.Add('  and vd.nome like ' + QuotedStr(edPesquisar.Text + '%'));
           end;
 
-        3:
+        TIPO_CLI:
           begin
             SQL[3]  := '  , cast(null as varchar(30)) as Grupo';
             SQL[9]  := '  , cast(null as varchar(60)) as Vendedor';
@@ -132,24 +138,24 @@ begin
 
       SQL.Add('group by');
 
-      if ( edTipoPesquisa.ItemIndex in [0, 2, 3] ) then
+      if ( edTipoPesquisa.ItemIndex in [TIPO_AUT, TIPO_VND, TIPO_CLI] ) then
       begin
         SQL.Add('    i.codprod');
         SQL.Add('  , p.descri');
       end;
 
-      if ( edTipoPesquisa.ItemIndex in [1] ) then
+      if ( edTipoPesquisa.ItemIndex in [TIPO_GRP] ) then
         SQL.Add('    p.codgrupo');
 
-      if ( edTipoPesquisa.ItemIndex in [0, 1] ) then
+      if ( edTipoPesquisa.ItemIndex in [TIPO_AUT, TIPO_GRP] ) then
         SQL.Add('  , g.descri');
 
       SQL.Add('  , u.unp_sigla');
 
-      if ( edTipoPesquisa.ItemIndex in [2] ) then
+      if ( edTipoPesquisa.ItemIndex in [TIPO_VND] ) then
         SQL.Add('  , vd.nome');
 
-      if ( edTipoPesquisa.ItemIndex in [3] ) then
+      if ( edTipoPesquisa.ItemIndex in [TIPO_CLI] ) then
       begin
         SQL.Add('  , v.codcli');
         SQL.Add('  , cl.nome');
