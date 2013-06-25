@@ -166,7 +166,6 @@ inherited FrmGeVendaItemPesquisa: TFrmGeVendaItemPesquisa
       '  left join TBUNIDADEPROD u on (u.unp_cod = i.unid_cod)'
       '  left join TBGRUPOPROD g on (g.cod = p.codgrupo)'
       '')
-    ParamData = <>
     object QryPesquisaCODPROD: TIBStringField
       FieldName = 'CODPROD'
       Origin = '"TVENDASITENS"."CODPROD"'

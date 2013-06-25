@@ -1,40 +1,32 @@
 [Closed Files]
-File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,88,91,91,1,0
-File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelFornec.pas',0,1,10,98,14,1,0
-File_2=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnNFe.pas',0,1,1107,41,1136,0,0
-File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFornecedor.pas',0,1,210,89,211,1,0
-File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,138,80,144,1,0
-File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendas.pas',0,1,1,83,19,1,0
-File_6=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendasFormPag.pas',0,1,1,78,30,1,0
-File_7=SourceModule,'C:\Delphi\ACBr\Fontes\ACBrNFe2\ACBrNFe.pas',0,1,1,105,11,0,0
-File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelEstoque.pas',0,1,85,84,93,1,0
-File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCli.pas',0,1,39,137,46,1,0
+File_0=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaItemPesquisa.pas',0,1,1,104,13,0,0
+File_1=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas',0,1,743,63,776,1,0
+File_2=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas',0,1,186,47,232,1,0
+File_3=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas',0,1,67,28,97,0,0
+File_4=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelProdutos.pas',0,1,88,91,91,1,0
+File_5=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelFornec.pas',0,1,10,98,14,1,0
+File_6=SourceModule,'C:\Delphi\ACBr\Fontes\PCN2\pcnNFe.pas',0,1,1107,41,1136,0,0
+File_7=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeFornecedor.pas',0,1,210,89,211,1,0
+File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaFormaPagto.pas',0,1,138,80,144,1,0
+File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\UfrmRelVendas.pas',0,1,1,83,19,1,0
 
 [Modules]
 Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
-Module7=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
-Module8=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
-Count=10
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module4=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
+Count=7
 EditWindowCount=1
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
+FormOnTop=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -44,19 +36,9 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas]
-ModuleType=SourceModule
-FormState=0
 FormOnTop=0
 
 [C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas]
@@ -78,16 +60,20 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
-FormState=0
-FormOnTop=0
-
 [E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadrao.pas]
 FormState=0
 FormOnTop=0
 
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoCadastro.pas]
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoPesquisa.pas]
+FormState=0
+FormOnTop=0
+
 [EditWindow0]
-ViewCount=10
+ViewCount=7
 CurrentView=3
 View0=0
 View1=1
@@ -96,9 +82,6 @@ View3=3
 View4=4
 View5=5
 View6=6
-View7=7
-View8=8
-View9=9
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -116,14 +99,14 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
 CursorX=19
-CursorY=96
+CursorY=98
 TopLine=68
 LeftCol=1
 
@@ -164,30 +147,9 @@ LeftCol=1
 
 [View6]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-CursorX=79
-CursorY=544
-TopLine=540
-LeftCol=1
-
-[View7]
-Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVenda.pas
-CursorX=63
-CursorY=776
-TopLine=743
-LeftCol=1
-
-[View8]
-Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeVendaTransporte.pas
-CursorX=47
-CursorY=232
-TopLine=186
-LeftCol=1
-
-[View9]
-Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
-CursorX=28
-CursorY=97
-TopLine=67
+CursorX=115
+CursorY=562
+TopLine=552
 LeftCol=1
 
 [Watches]
@@ -260,7 +222,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Caption
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
@@ -319,26 +281,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=770
+Height=858
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=770
+ClientHeight=858
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
-Left=12
-Top=0
-Width=1636
+Left=-10
+Top=-713
+Width=443
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1636
+ClientWidth=443
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
