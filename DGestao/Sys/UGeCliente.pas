@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin, IBTable, rxToolEdit, RXDBCtrl, IBQuery;
+  ToolWin, IBTable, rxToolEdit, RXDBCtrl, IBQuery, Menus;
 
 type
   TfrmGeCliente = class(TfrmGrPadraoCadastro)
@@ -126,7 +126,7 @@ type
     dbcBloqueio: TDBCheckBox;
     IbDtstTabelaDESBLOQUEADO_DATA: TDateField;
     Bevel10: TBevel;
-    BtBtnDesbloquear: TBitBtn;
+    BtBtnProcesso: TBitBtn;
     IbDtstTabelaFONECEL: TIBStringField;
     IbDtstTabelaFONECOMERC: TIBStringField;
     lblFoneCelular: TLabel;
@@ -139,6 +139,9 @@ type
     lblVendedor: TLabel;
     dbVendedor: TDBLookupComboBox;
     IbDtstTabelaUSUARIO: TIBStringField;
+    popProcesso: TPopupMenu;
+    mpClienteBloquear: TMenuItem;
+    mpClienteDesbloquear: TMenuItem;
     procedure ProximoCampoKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure dbEstadoButtonClick(Sender: TObject);
@@ -155,8 +158,10 @@ type
     procedure dbgDadosDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure BtBtnDesbloquearClick(Sender: TObject);
+    procedure BtBtnProcessoClick(Sender: TObject);
     procedure btbtnAlterarClick(Sender: TObject);
+    procedure mpClienteDesbloquearClick(Sender: TObject);
+    procedure mpClienteBloquearClick(Sender: TObject);
   private
     { Private declarations }
     procedure GetComprasAbertas(sCNPJ : String);
@@ -381,7 +386,12 @@ begin
   else
     IbDtstTabelaCNPJ.EditMask := '';
 
-  BtBtnDesbloquear.Enabled := IbDtstTabela.Active and
+  BtBtnProcesso.Enabled := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert]));
+
+  mpClienteBloquear.Enabled    := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 0);
+  mpClienteDesbloquear.Enabled := IbDtstTabela.Active and
     (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
 end;
 
@@ -389,7 +399,12 @@ procedure TfrmGeCliente.DtSrcTabelaDataChange(Sender: TObject;
   Field: TField);
 begin
   inherited;
-  BtBtnDesbloquear.Enabled := IbDtstTabela.Active and
+  BtBtnProcesso.Enabled := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert]));
+
+  mpClienteBloquear.Enabled    := IbDtstTabela.Active and
+    (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 0);
+  mpClienteDesbloquear.Enabled := IbDtstTabela.Active and
     (not (IbDtstTabela.State in [dsEdit, dsInsert])) and (IbDtstTabelaBLOQUEADO.AsInteger = 1);
 
   if ( Field = IbDtstTabela.FieldByName('CNPJ') ) then
@@ -504,7 +519,20 @@ begin
   Action := caFree;
 end;
 
-procedure TfrmGeCliente.BtBtnDesbloquearClick(Sender: TObject);
+procedure TfrmGeCliente.BtBtnProcessoClick(Sender: TObject);
+begin
+  popProcesso.Popup(BtBtnProcesso.ClientOrigin.X, BtBtnProcesso.ClientOrigin.Y + BtBtnProcesso.Height);
+end;
+
+procedure TfrmGeCliente.btbtnAlterarClick(Sender: TObject);
+begin
+  inherited;
+  if ( not btbtnAlterar.Enabled ) then
+    if ( IbDtstTabelaDTCAD.IsNull ) then
+      IbDtstTabelaDTCAD.AsDateTime := GetDateTimeDB;
+end;
+
+procedure TfrmGeCliente.mpClienteDesbloquearClick(Sender: TObject);
 var
   sCNPJ ,
   sMotivo : String;
@@ -525,15 +553,31 @@ begin
         IbDtstTabela.Close;
         IbDtstTabela.Open;
         IbDtstTabela.Locate('CNPJ', sCNPJ, []);
-      end;   
+      end;
 end;
 
-procedure TfrmGeCliente.btbtnAlterarClick(Sender: TObject);
+procedure TfrmGeCliente.mpClienteBloquearClick(Sender: TObject);
+var
+  sCNPJ ,
+  sMotivo : String;
 begin
-  inherited;
-  if ( not btbtnAlterar.Enabled ) then
-    if ( IbDtstTabelaDTCAD.IsNull ) then
-      IbDtstTabelaDTCAD.AsDateTime := GetDateTimeDB;
+  if not (GetUserFunctionID in [FUNCTION_USER_ID_DIRETORIA, FUNCTION_USER_ID_GERENTE_FIN, FUNCTION_USER_ID_AUX_FINANC1]) then
+  begin
+    ShowWarning('Usuário sem permisssão para execução desta rotina!');
+    Exit;
+  end;
+
+  if ( IbDtstTabelaBLOQUEADO.AsInteger = 0 ) then
+    if InputQuery('Bloquear cliente:', 'Informe o motivo do bloqueio:', sMotivo) then
+      if Trim(sMotivo) <> EmptyStr then
+      begin
+        sCNPJ := IbDtstTabelaCNPJ.AsString;
+        BloquearCliente(sCNPJ, GetUserApp + ' -> ' + AnsiUpperCase(sMotivo));
+
+        IbDtstTabela.Close;
+        IbDtstTabela.Open;
+        IbDtstTabela.Locate('CNPJ', sCNPJ, []);
+      end;
 end;
 
 initialization

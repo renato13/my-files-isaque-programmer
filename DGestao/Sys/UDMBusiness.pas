@@ -85,6 +85,7 @@ var
   procedure GerarSaldoContaCorrente(const ContaCorrente : Integer; const Data : TDateTime);
   procedure BloquearClientes;
   procedure DesbloquearCliente(CNPJ : String; const Motivo : String = '');
+  procedure BloquearCliente(CNPJ : String; const Motivo : String = '');
   procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
   procedure RegistrarControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess);
 
@@ -436,6 +437,27 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Desbloqueado_data = Current_date, Bloqueado = 0, Bloqueado_data = Null, Bloqueado_usuario = Null,');
+    SQL.Add('  Usuario = ' + QuotedStr(GetUserApp) + ',');
+
+    if Trim(Motivo) = EmptyStr then
+      SQL.Add('  Bloqueado_motivo = Null')
+    else
+      SQL.Add('  Bloqueado_motivo = ' + QuotedStr(Trim(Motivo)));
+
+    SQL.Add('where Cnpj = ' + QuotedStr(CNPJ));
+    ExecSQL;
+
+    CommitTransaction;
+  end;
+end;
+
+procedure BloquearCliente(CNPJ : String; const Motivo : String = '');
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Update TBCLIENTE Set Dtcad = coalesce(Dtcad, Current_date), Desbloqueado_data = Null, Bloqueado = 1, Bloqueado_data = Current_date, Bloqueado_usuario = ' + QuotedStr(GetUserApp) + ',');
     SQL.Add('  Usuario = ' + QuotedStr(GetUserApp) + ',');
 
     if Trim(Motivo) = EmptyStr then
