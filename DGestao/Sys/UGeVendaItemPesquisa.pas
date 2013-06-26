@@ -76,7 +76,8 @@ begin
     begin
       SQL.Clear;
       SQL.AddStrings( SQLSelect );
-      SQL.Add('where v.status in (3, 4)');
+      SQL.Add('where v.codemp = ' + QuotedStr(GetEmpresaIDDefault));
+      SQL.Add('  and v.status in (3, 4)');
       SQL.Add('  and v.dtvenda between ' + QuotedStr(sDataInicial) + ' and ' + QuotedStr(sDataFinal));
 
       Case edTipoPesquisa.ItemIndex of
