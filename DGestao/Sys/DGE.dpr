@@ -82,8 +82,9 @@ uses
   UfrmRelVendasFormPag in 'UfrmRelVendasFormPag.pas' {frmRelVendasFormPag},
   UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte},
   UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
-  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa};
- // UGrPadraoLogin in 'lib\UGrPadraoLogin.pas' {frmGrPadraoLogin};
+  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
+  UGrPadraoLogin in 'lib\UGrPadraoLogin.pas' {frmGrPadraoLogin},
+  UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin};
 
 {$R *.res}
 
@@ -96,5 +97,6 @@ begin
   Application.CreateForm(TDMNFe, DMNFe);
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.CreateForm(TfrmPesq, frmPesq);
+  Application.CreateForm(TFrmEfetuarLogin, FrmEfetuarLogin);
   Application.Run;
 end.
