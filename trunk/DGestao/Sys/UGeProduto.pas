@@ -202,6 +202,26 @@ type
     Label2: TLabel;
     IbDtstTabelaLUCRO_VALOR: TIBBCDField;
     IbDtstTabelaPERCENTUAL_MARGEM: TIBBCDField;
+    IbDtstTabelaFRACIONADOR: TIBBCDField;
+    IbDtstTabelaVENDA_FRACIONADA: TSmallintField;
+    IbDtstTabelaCODUNIDADE_FRACIONADA: TSmallintField;
+    IbDtstTabelaDESCRICAO_UNIDADE_FRAC: TIBStringField;
+    IbDtstTabelaUNP_SIGLA_FRAC: TIBStringField;
+    IbDtstTabelaPRECO_FRAC: TFMTBCDField;
+    IbDtstTabelaPRECO_PROMOCAO_FRAC: TFMTBCDField;
+    IbDtstTabelaPRECO_SUGERIDO_FRAC: TFMTBCDField;
+    GrpBxFracionamentoPreco: TGroupBox;
+    lblPrecoFrac: TLabel;
+    dbPrecoFrac: TDBEdit;
+    dbPrecoPromocaoFrac: TDBEdit;
+    lblPrecoPromocaoFrac: TLabel;
+    lblPrecoSugeridoFrac: TLabel;
+    dbPrecoSugeridoFrac: TDBEdit;
+    lblFracionador: TLabel;
+    dbFracionador: TDBEdit;
+    dbVendaFracionada: TDBCheckBox;
+    lblUnidadeFracao: TLabel;
+    dbUnidadeFracao: TRxDBComboEdit;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
@@ -220,6 +240,7 @@ type
     procedure chkProdutoComEstoqueClick(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure DtSrcTabelaDataChange(Sender: TObject; Field: TField);
+    procedure dbUnidadeFracaoButtonClick(Sender: TObject);
   private
     { Private declarations }
     fOrdenado : Boolean;
@@ -485,7 +506,11 @@ end;
 
 procedure TfrmGeProduto.IbDtstTabelaBeforePost(DataSet: TDataSet);
 begin
+  IbDtstTabelaFRACIONADOR.Required           := (IbDtstTabelaVENDA_FRACIONADA.AsInteger = 1);
+  IbDtstTabelaCODUNIDADE_FRACIONADA.Required := (IbDtstTabelaVENDA_FRACIONADA.AsInteger = 1);
+
   inherited;
+
   IbDtstTabelaDESCRI_APRESENTACAO.AsString := Trim(IbDtstTabelaDESCRI.AsString + ' ' + IbDtstTabelaAPRESENTACAO.AsString);
 
   if ( IbDtstTabelaQTDE.AsInteger < 0 ) then
@@ -496,7 +521,7 @@ begin
 
   if ( IbDtstTabelaPRODUTO_NOVO.IsNull ) then
     IbDtstTabelaPRODUTO_NOVO.Value := 0;
-    
+
   if ( (IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency < 0) or (IbDtstTabelaPERCENTUAL_REDUCAO_BC.AsCurrency > 100) ) then
     IbDtstTabelaPERCENTUAL_REDUCAO_BC.Value := 0;
 
@@ -522,6 +547,9 @@ begin
   IbDtstTabelaDESCRICAO_COR.AsString         := dbCorVeiculo.Text;
   IbDtstTabelaDESCRICAO_COMBUSTIVEL.AsString := dbTipoCombustivel.Text;
   IbDtstTabelaMODELO_FABRICACAO.AsString     := dbAnoFabricacao.Text + '/' + dbAnoModelo.Text;
+
+  if ( IbDtstTabelaFRACIONADOR.AsCurrency <= 0 ) then
+    IbDtstTabelaFRACIONADOR.AsCurrency := 1;
 end;
 
 procedure TfrmGeProduto.dbUnidadeButtonClick(Sender: TObject);
@@ -580,7 +608,10 @@ begin
   IbDtstTabelaPRODUTO_NOVO.Value   := 0;
   IbDtstTabelaPERCENTUAL_MARCKUP.Value := 0;
   IbDtstTabelaPRECO_SUGERIDO.Value     := 0;
-  
+
+  IbDtstTabelaFRACIONADOR.Value        := 1;
+  IbDtstTabelaVENDA_FRACIONADA.Value   := 0;
+
   IbDtstTabelaPERCENTUAL_REDUCAO_BC.Value := 0;
 
   IbDtstTabelaCOR_VEICULO.Clear;
@@ -877,6 +908,21 @@ begin
     On E : Exception do
       ShowWarning('Erro ao tentar filtrar registros na tabela.' + #13#13 + E.Message + #13#13 + 'Script:' + #13 + IbDtstTabela.SelectSQL.Text);
   end;
+end;
+
+procedure TfrmGeProduto.dbUnidadeFracaoButtonClick(Sender: TObject);
+var
+  iCodigo    : Integer;
+  sDescricao,
+  sSigla    : String;
+begin
+  if ( IbDtstTabela.State in [dsEdit, dsInsert] ) then
+    if ( SelecionarUnidade(Self, iCodigo, sDescricao, sSigla) ) then
+    begin
+      IbDtstTabelaCODUNIDADE_FRACIONADA.AsInteger := iCodigo;
+      IbDtstTabelaDESCRICAO_UNIDADE_FRAC.AsString := sDescricao;
+      IbDtstTabelaUNP_SIGLA_FRAC.AsString         := sSigla;
+    end;
 end;
 
 end.
