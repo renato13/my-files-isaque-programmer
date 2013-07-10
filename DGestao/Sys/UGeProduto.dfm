@@ -1,8 +1,9 @@
 inherited frmGeProduto: TfrmGeProduto
-  Left = 267
-  Top = 79
+  Left = 625
+  Top = 226
   Width = 977
   Height = 648
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Produtos/Servi'#231'os'
   OldCreateOrder = True
   OnActivate = FormActivate
@@ -23,6 +24,7 @@ inherited frmGeProduto: TfrmGeProduto
   inherited pgcGuias: TPageControl
     Width = 961
     Height = 567
+    ActivePage = tbsCadastro
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
         Top = 472
@@ -888,15 +890,15 @@ inherited frmGeProduto: TfrmGeProduto
           end
           object dbProdutoNovo: TDBCheckBox
             Left = 16
-            Top = 56
+            Top = 128
             Width = 113
             Height = 17
             Caption = 'Produto Novo'
             DataField = 'PRODUTO_NOVO'
             DataSource = DtSrcTabela
-            TabOrder = 6
-            ValueChecked = 'True'
-            ValueUnchecked = 'False'
+            TabOrder = 7
+            ValueChecked = '1'
+            ValueUnchecked = '0'
           end
           object dbPercentualMarckup: TDBEdit
             Left = 376
@@ -950,6 +952,120 @@ inherited frmGeProduto: TfrmGeProduto
             ParentFont = False
             ReadOnly = True
             TabOrder = 4
+          end
+          object GrpBxFracionamentoPreco: TGroupBox
+            Left = 16
+            Top = 48
+            Width = 713
+            Height = 73
+            Caption = 'Fracionamento'
+            TabOrder = 6
+            object lblPrecoFrac: TLabel
+              Left = 16
+              Top = 24
+              Width = 101
+              Height = 13
+              Caption = 'Pre'#231'o Venda (R$):'
+              FocusControl = dbPrecoFrac
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object lblPrecoPromocaoFrac: TLabel
+              Left = 136
+              Top = 24
+              Width = 99
+              Height = 13
+              Caption = 'Pre'#231'o Prom. (R$):'
+              FocusControl = dbPrecoPromocaoFrac
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object lblPrecoSugeridoFrac: TLabel
+              Left = 256
+              Top = 24
+              Width = 93
+              Height = 13
+              Caption = 'PV. Sugest. (R$):'
+              FocusControl = dbPrecoSugeridoFrac
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object dbPrecoFrac: TDBEdit
+              Left = 16
+              Top = 40
+              Width = 113
+              Height = 21
+              Color = clMoneyGreen
+              DataField = 'PRECO_FRAC'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 0
+            end
+            object dbPrecoPromocaoFrac: TDBEdit
+              Left = 136
+              Top = 40
+              Width = 113
+              Height = 21
+              Color = clMoneyGreen
+              DataField = 'PRECO_PROMOCAO_FRAC'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object dbPrecoSugeridoFrac: TDBEdit
+              Left = 256
+              Top = 40
+              Width = 113
+              Height = 21
+              Color = clMoneyGreen
+              DataField = 'PRECO_SUGERIDO_FRAC'
+              DataSource = DtSrcTabela
+              Font.Charset = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 2
+            end
+            object dbVendaFracionada: TDBCheckBox
+              Left = 376
+              Top = 42
+              Width = 137
+              Height = 17
+              Caption = 'Venda Fracionada'
+              DataField = 'VENDA_FRACIONADA'
+              DataSource = DtSrcTabela
+              Enabled = False
+              TabOrder = 3
+              ValueChecked = '1'
+              ValueUnchecked = '0'
+            end
           end
         end
         object tbsTributacao: TTabSheet
@@ -1693,7 +1809,7 @@ inherited frmGeProduto: TfrmGeProduto
         Caption = 'Dados estoque'
         TabOrder = 1
         object lblEstoqueQtde: TLabel
-          Left = 632
+          Left = 376
           Top = 24
           Width = 60
           Height = 13
@@ -1701,7 +1817,7 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbEstoqueQtde
         end
         object lblEstoqueMinimo: TLabel
-          Left = 736
+          Left = 480
           Top = 24
           Width = 36
           Height = 13
@@ -1725,8 +1841,24 @@ inherited frmGeProduto: TfrmGeProduto
           FocusControl = dbReserva
           Visible = False
         end
+        object lblFracionador: TLabel
+          Left = 584
+          Top = 24
+          Width = 61
+          Height = 13
+          Caption = 'Fracionador:'
+          FocusControl = dbFracionador
+        end
+        object lblUnidadeFracao: TLabel
+          Left = 688
+          Top = 24
+          Width = 94
+          Height = 13
+          Caption = 'Unidade da Fra'#231#227'o:'
+          FocusControl = dbUnidadeFracao
+        end
         object dbEstoqueQtde: TDBEdit
-          Left = 632
+          Left = 376
           Top = 40
           Width = 97
           Height = 21
@@ -1744,7 +1876,7 @@ inherited frmGeProduto: TfrmGeProduto
           TabOrder = 1
         end
         object dbEstoqueMinimo: TDBEdit
-          Left = 736
+          Left = 480
           Top = 40
           Width = 97
           Height = 21
@@ -1762,7 +1894,7 @@ inherited frmGeProduto: TfrmGeProduto
         object dbEmpresa: TDBLookupComboBox
           Left = 16
           Top = 40
-          Width = 609
+          Width = 355
           Height = 21
           DataField = 'CODEMP'
           DataSource = DtSrcTabela
@@ -1792,8 +1924,99 @@ inherited frmGeProduto: TfrmGeProduto
           Font.Name = 'MS Sans Serif'
           Font.Style = []
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 5
           Visible = False
+        end
+        object dbFracionador: TDBEdit
+          Left = 584
+          Top = 40
+          Width = 97
+          Height = 21
+          CharCase = ecUpperCase
+          DataField = 'FRACIONADOR'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+        end
+        object dbUnidadeFracao: TRxDBComboEdit
+          Left = 688
+          Top = 40
+          Width = 145
+          Height = 21
+          ButtonHint = 'Pesquisar Unidade (Ctrl+P)'
+          CharCase = ecUpperCase
+          ClickKey = 16464
+          Color = clMoneyGreen
+          DataField = 'DESCRICAO_UNIDADE_FRAC'
+          DataSource = DtSrcTabela
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          Glyph.Data = {
+            36060000424D3606000000000000360000002800000020000000100000000100
+            18000000000000060000000000000000000000000000000000001DE6B51DE6B5
+            1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B5B1AD
+            AC203040ACA5A21DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
+            C3C3C3C3C3C3C3C3C3C3C3C3C3C37F7F7F7F7F7FACA5A2C3C3C31DE6B5B0A090
+            6048306048306048306048306048306048306048306048306048305048403050
+            604078C0304860B1ACA6C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
+            7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3B1ACA61DE6B5B0A090
+            FFFFFFB0A090B0A090B0A090B0A090B0A090B0A090B0A0909088803050703080
+            D04098E050B0F0506870C3C3C37F7F7FFFFFFFC3C3C3C3C3C3C3C3C3C3C3C3C3
+            C3C3C3C3C3C3C3C39088807F7F7FC3C3C3C3C3C3C3C3C37F7F7F1DE6B5B0A090
+            FFFFFFFFFFFFFFF8FFF0F0F0D0D8D090989070686060686050586040709040A0
+            E060C8FF7090A0C5BEB5C3C3C37F7F7FFFFFFFFFFFFFFFF8FFF0F0F0D0D8D07F
+            7F7F7F7F7F7F7F7F505860C3C3C3C3C3C3C3C3C37090A0C5BEB51DE6B5B0A090
+            FFFFFFFFFFFFFFFFFFE0E0E0909090B0A8A0D0C0B0D0B0A08078705058506090
+            B07098B0AEAEAA1DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFE0E0E07F7F7F7F
+            7F7FD0C0B0D0B0A0807870505850C3C3C37098B0AEAEAAC3C3C31DE6B5B0A090
+            FFFFFFFFFFFFFFFFFFB0B0B0C0B8B0FFF0E0FFE8E0F0D8C0F0D0B08078709D8F
+            8CAEAFAA1DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+            F0E0FFE8E0F0D8C0F0D0B08078709D8F8CAEAFAAC3C3C3C3C3C31DE6B5C0A890
+            FFFFFFFFFFFFFFFFFFA09890F0E8E0FFF8F0FFF0F0FFE8E0F0D8D0D0B0A06367
+            5E1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+            F8F0FFF0F0FFE8E0F0D8D0D0B0A063675EC3C3C3C3C3C3C3C3C31DE6B5C0A8A0
+            FFFFFFFFFFFFFFFFFFA0A090F0E8E0FFFFFFFFF8F0FFF0F0FFE8E0E0C0B0716E
+            6C1DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+            FFFFFFF8F0FFF0F0FFE8E0E0C0B0716E6CC3C3C3C3C3C3C3C3C31DE6B5C0B0A0
+            FFFFFFFFFFFFFFFFFFC0C8C0C0C0C0FFFFFFFFFFFFFFF8F0FFF0E0B0A090A69C
+            951DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFF7F7F7F7F7F7FFF
+            FFFFFFFFFFFFF8F0FFF0E0B0A090A69C95C3C3C3C3C3C3C3C3C31DE6B5D0B0A0
+            FFFFFFFFFFFFFFFFFFF0F8FFC0B8B0C0C0C0F0E8E0F0E8E0B0B0A07070601DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFF0F8FF7F7F7F7F
+            7F7FF0E8E0F0E8E0B0B0A0707060C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8A0
+            FFFFFFFFFFFFFFFFFFFFFFFFF0F8FFC0C8C0A0A0909090809090906050401DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFF0F8FF7F
+            7F7FA0A0907F7F7F909090605040C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0B8B0
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0A0906048306048306048301DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFF7F7F7F604830604830604830C3C3C3C3C3C3C3C3C3C3C3C31DE6B5D0C0B0
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A890D0C8C06048301DE6B51DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFF7F7F7FC3C3C3604830C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0A8A0604830E0C6B71DE6B51DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFF7F7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B5E0C0B0
+            E0C0B0E0C0B0E0C0B0E0C0B0D0C0B0D0B8B0D0B0A0E0C7B91DE6B51DE6B51DE6
+            B51DE6B51DE6B51DE6B5C3C3C37F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
+            7F7F7F7F7F7F7F7FC3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C31DE6B51DE6B5
+            1DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6B51DE6
+            B51DE6B51DE6B51DE6B5C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3
+            C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3C3}
+          NumGlyphs = 2
+          ParentFont = False
+          ParentShowHint = False
+          ReadOnly = True
+          ShowHint = True
+          TabOrder = 4
+          OnButtonClick = dbUnidadeFracaoButtonClick
         end
       end
     end
@@ -1817,6 +2040,9 @@ inherited frmGeProduto: TfrmGeProduto
       '  , p.Qtde'
       '  , p.Unidade'
       '  , p.Estoqmin'
+      '  , p.fracionador'
+      '  , p.venda_fracionada'
+      '  , p.codunidade_fracionada'
       '  , p.Codgrupo'
       '  , p.Codfabricante'
       '  , p.Customedio'
@@ -1862,6 +2088,8 @@ inherited frmGeProduto: TfrmGeProduto
       '  , coalesce(s.Scp_descricao, p.Secao) as Descricao_Secao'
       '  , coalesce(u.Unp_descricao, p.Unidade) as Descricao_Unidade'
       '  , u.Unp_sigla'
+      '  , uf.unp_descricao as Descricao_Unidade_frac'
+      '  , uf.unp_sigla as unp_sigla_frac'
       '  , c.Cfop_descricao'
       '  , c.Cfop_especificacao'
       '  , cr.Descricao as descricao_cor'
@@ -1874,10 +2102,22 @@ inherited frmGeProduto: TfrmGeProduto
       '      else 0.0'
       '    end Lucro_Calculado'
       '  , (p.Preco - p.Customedio) as Lucro_Valor'
+      
+        '  , p.preco / coalesce(nullif(p.fracionador, 0), 1) as preco_fra' +
+        'c'
+      
+        '  , p.preco_promocao / coalesce(nullif(p.fracionador, 0), 1) as ' +
+        'preco_promocao_frac'
+      
+        '  , p.preco_sugerido / coalesce(nullif(p.fracionador, 0), 1) as ' +
+        'preco_sugerido_frac'
       'from TBPRODUTO p'
       '  left join TBGRUPOPROD g on (g.Cod = p.Codgrupo)'
       '  left join TBSECAOPROD s on (s.Scp_cod = p.Codsecao)'
       '  left join TBUNIDADEPROD u on (u.Unp_cod = p.Codunidade)'
+      
+        '  left join TBUNIDADEPROD uf on (uf.Unp_cod = p.codunidade_fraci' +
+        'onada)'
       '  left join TBCFOP c on (c.Cfop_cod = p.Codcfop)'
       '  left join TBFABRICANTE f on (f.Cod = p.Codfabricante)'
       '  left join RENAVAM_COR cr on (cr.Codigo = p.Cor_veiculo)'
@@ -1960,6 +2200,22 @@ inherited frmGeProduto: TfrmGeProduto
       DisplayLabel = 'Quantidade'
       FieldName = 'QTDE'
       Origin = 'TBPRODUTO.QTDE'
+    end
+    object IbDtstTabelaFRACIONADOR: TIBBCDField
+      DisplayLabel = 'Fracionador'
+      FieldName = 'FRACIONADOR'
+      Origin = '"TBPRODUTO"."FRACIONADOR"'
+      Precision = 18
+      Size = 3
+    end
+    object IbDtstTabelaVENDA_FRACIONADA: TSmallintField
+      FieldName = 'VENDA_FRACIONADA'
+      Origin = '"TBPRODUTO"."VENDA_FRACIONADA"'
+    end
+    object IbDtstTabelaCODUNIDADE_FRACIONADA: TSmallintField
+      DisplayLabel = 'Unidade da Fra'#231#227'o'
+      FieldName = 'CODUNIDADE_FRACIONADA'
+      Origin = '"TBPRODUTO"."CODUNIDADE_FRACIONADA"'
     end
     object IbDtstTabelaUNIDADE: TIBStringField
       DisplayLabel = 'Unidade'
@@ -2284,6 +2540,39 @@ inherited frmGeProduto: TfrmGeProduto
       Precision = 18
       Size = 2
     end
+    object IbDtstTabelaDESCRICAO_UNIDADE_FRAC: TIBStringField
+      FieldName = 'DESCRICAO_UNIDADE_FRAC'
+      Origin = '"TBUNIDADEPROD"."UNP_DESCRICAO"'
+      ProviderFlags = []
+      Size = 50
+    end
+    object IbDtstTabelaUNP_SIGLA_FRAC: TIBStringField
+      FieldName = 'UNP_SIGLA_FRAC'
+      Origin = '"TBUNIDADEPROD"."UNP_SIGLA"'
+      ProviderFlags = []
+      Size = 5
+    end
+    object IbDtstTabelaPRECO_FRAC: TFMTBCDField
+      FieldName = 'PRECO_FRAC'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 5
+    end
+    object IbDtstTabelaPRECO_PROMOCAO_FRAC: TFMTBCDField
+      FieldName = 'PRECO_PROMOCAO_FRAC'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 5
+    end
+    object IbDtstTabelaPRECO_SUGERIDO_FRAC: TFMTBCDField
+      FieldName = 'PRECO_SUGERIDO_FRAC'
+      ProviderFlags = []
+      DisplayFormat = ',0.00'
+      Precision = 18
+      Size = 5
+    end
   end
   inherited DtSrcTabela: TDataSource
     OnDataChange = DtSrcTabelaDataChange
@@ -2396,7 +2685,10 @@ inherited frmGeProduto: TfrmGeProduto
       '  SITUACAO_HISTORICO_VEICULO = :SITUACAO_HISTORICO_VEICULO,'
       '  TIPO_VEICULO = :TIPO_VEICULO,'
       '  UNIDADE = :UNIDADE,'
-      '  VALOR_IPI = :VALOR_IPI'
+      '  VALOR_IPI = :VALOR_IPI,'
+      '  FRACIONADOR = :FRACIONADOR,'
+      '  VENDA_FRACIONADA = :VENDA_FRACIONADA,'
+      '  CODUNIDADE_FRACIONADA = :CODUNIDADE_FRACIONADA'
       'where'
       '  CODIGO = :OLD_CODIGO')
     InsertSQL.Strings = (
@@ -2425,36 +2717,39 @@ inherited frmGeProduto: TfrmGeProduto
       
         '   QTDE, REFERENCIA, RENAVAM_VEICULO, RESERVA, SECAO, SITUACAO_A' +
         'TUAL_VEICULO, '
-      '   SITUACAO_HISTORICO_VEICULO, TIPO_VEICULO, UNIDADE, VALOR_IPI)'
+      '   SITUACAO_HISTORICO_VEICULO, TIPO_VEICULO, UNIDADE, VALOR_IPI,'
+      '   FRACIONADOR, VENDA_FRACIONADA, CODUNIDADE_FRACIONADA)'
       'values'
       
         '  (:ALIQUOTA, :ALIQUOTA_COFINS, :ALIQUOTA_CSOSN, :ALIQUOTA_PIS, ' +
-        ':ALIQUOTA_TIPO, '
+        ':ALIQUOTA_TIPO,'
       
         '   :ANO_FABRICACAO_VEICULO, :ANO_MODELO_VEICULO, :APRESENTACAO, ' +
-        ':CHASSI_VEICULO, '
+        ':CHASSI_VEICULO,'
       
         '   :COD, :CODBARRA_EAN, :CODCFOP, :CODEMP, :CODFABRICANTE, :CODG' +
-        'RUPO, :CODIGO, '
+        'RUPO, :CODIGO,'
       
         '   :CODORIGEM, :CODSECAO, :CODTRIBUTACAO, :CODUNIDADE, :COMBUSTI' +
-        'VEL_VEICULO, '
+        'VEL_VEICULO,'
       
         '   :COR_VEICULO, :CSOSN, :CST, :CST_COFINS, :CST_PIS, :CUSTOMEDI' +
-        'O, :DESCRI, '
+        'O, :DESCRI,'
       
         '   :DESCRI_APRESENTACAO, :ESTOQMIN, :KILOMETRAGEM_VEICULO, :MODE' +
-        'LO, :NCM_SH, '
+        'LO, :NCM_SH,'
       
         '   :PERCENTUAL_MARCKUP, :PERCENTUAL_MARGEM, :PERCENTUAL_REDUCAO_' +
         'BC, :PRECO, :PRECO_PROMOCAO,'
       
         '   :PRECO_SUGERIDO, :PRODUTO_NOVO, :QTDE, :REFERENCIA, :RENAVAM_' +
-        'VEICULO, '
+        'VEICULO,'
       
         '   :RESERVA, :SECAO, :SITUACAO_ATUAL_VEICULO, :SITUACAO_HISTORIC' +
-        'O_VEICULO, '
-      '   :TIPO_VEICULO, :UNIDADE, :VALOR_IPI)')
+        'O_VEICULO,'
+      
+        '   :TIPO_VEICULO, :UNIDADE, :VALOR_IPI, :FRACIONADOR, :VENDA_FRA' +
+        'CIONADA, :CODUNIDADE_FRACIONADA)')
     DeleteSQL.Strings = (
       'delete from TBPRODUTO'
       'where'
@@ -2467,8 +2762,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblEmpresa: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     TableName = 'TBEMPRESA'
     Left = 296
   end
@@ -2479,8 +2772,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblOrigem: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'ORP_COD'
@@ -2517,8 +2808,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoNM: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2559,8 +2848,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblAliquota: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2602,8 +2889,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTributacaoSN: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'TPT_COD'
@@ -2642,8 +2927,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCor: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2666,8 +2949,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblCombustivel: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2692,8 +2973,6 @@ inherited frmGeProduto: TfrmGeProduto
   object tblTipoVeiculo: TIBTable
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     FieldDefs = <
       item
         Name = 'CODIGO'
@@ -2727,8 +3006,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaPIS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
@@ -2745,8 +3022,6 @@ inherited frmGeProduto: TfrmGeProduto
   object qryAliquotaCOFINS: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
-    BufferChunks = 1000
-    CachedUpdates = False
     RefreshSQL.Strings = (
       '')
     SelectSQL.Strings = (
