@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UGrPadraoLogin, DB, IBCustomDataSet, IBQuery, StdCtrls, Buttons,
+  Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, Buttons,
   ExtCtrls, dxGDIPlusClasses;
 
 type
