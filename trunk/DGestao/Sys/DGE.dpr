@@ -22,8 +22,9 @@ uses
   uGerRelCP in 'uGerRelCP.pas' {frmGerRelCP},
   uRelCP in 'uRelCP.pas' {frmRelCP},
   UfrmRelVendas in 'UfrmRelVendas.pas' {frmRelVendas},
-  UGrPadraoCadastro in 'lib\UGrPadraoCadastro.pas' {frmGrPadraoCadastro},
   UGrPadrao in 'lib\UGrPadrao.pas' {frmGrPadrao},
+  UGrPadraoCadastro in 'lib\UGrPadraoCadastro.pas' {frmGrPadraoCadastro},
+  UGrPadraoLogin in 'lib\UGrPadraoLogin.pas' {frmGrPadraoLogin},
   UGeBancos in 'UGeBancos.pas' {frmGeBancos},
   UGeTipoLogradouro in 'UGeTipoLogradouro.pas' {frmGeTipoLogradouro},
   UGeEstado in 'UGeEstado.pas' {frmGeEstado},
@@ -82,7 +83,8 @@ uses
   UfrmRelVendasFormPag in 'UfrmRelVendasFormPag.pas' {frmRelVendasFormPag},
   UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte},
   UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
-  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa};
+  UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
+  UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin};
 
 {$R *.res}
 
