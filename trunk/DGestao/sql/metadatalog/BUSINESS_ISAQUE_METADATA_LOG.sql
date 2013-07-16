@@ -5014,3 +5014,915 @@ Token unknown - line 76, column 28.
 (.
 
 */
+
+
+
+/*------ SYSDBA 15/07/2013 22:34:17 --------*/
+
+CREATE DOMAIN DMN_NUMERO AS
+NUMERIC(18,4);COMMENT ON DOMAIN DMN_NUMERO IS 'Numero longo c/ ponto flutuante.';
+
+
+
+
+/*------ SYSDBA 15/07/2013 22:54:51 --------*/
+
+CREATE TABLE TBPRODUTO_ROTATIVIDADE (
+    COD_PRODUTO DMN_VCHAR_10_KEY NOT NULL,
+    "01_COMPRA_QTDE" DMN_NUMERO,
+    "01_COMPRA_VALOR" DMN_NUMERO,
+    "01_VENDA_QTDE" DMN_NUMERO,
+    "01_VENDA_VALOR" DMN_NUMERO);
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+ADD CONSTRAINT PK_TBPRODUTO_ROTATIVIDADE
+PRIMARY KEY (COD_PRODUTO);
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.COD_PRODUTO IS
+'Produto.';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."01_COMPRA_QTDE" IS
+'Quantidade compra (0 a 1 mes).';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."01_COMPRA_VALOR" IS
+'Valor compra (0 a 1 mes).';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."01_VENDA_QTDE" IS
+'Quantidade venda (0 a 1 mes).';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."01_VENDA_VALOR" IS
+'Valor venda (0 a 1 mes).';
+
+
+
+
+/*------ SYSDBA 15/07/2013 22:57:30 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+    ADD "03_COMPRA_QTDE" DMN_NUMERO;
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."03_COMPRA_QTDE" IS
+'Quantidade compra (1 a 3 mes).';
+
+
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "06_COMPRA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "09_COMPRA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "12_COMPRA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "99_COMPRA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_COMPRA_QTDE" IS 'Quantidade compra (3 a 6 meses).';
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_COMPRA_QTDE" IS 'Quantidade compra (6 a 9 meses).';
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_COMPRA_QTDE" IS 'Quantidade compra (9 a 12 meses).';
+
+/*------ 15/07/2013 23:02:06 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_COMPRA_QTDE" IS 'Quantidade compra (+12 meses).';
+
+
+/*------ SYSDBA 15/07/2013 23:02:28 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."03_COMPRA_QTDE" IS
+'Quantidade compra (1 a 3 meses).';
+
+
+
+
+/*------ SYSDBA 15/07/2013 23:04:36 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+    ADD "03_COMPRA_VALOR" DMN_NUMERO;
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."03_COMPRA_VALOR" IS
+'Valor compra (1 a 3 meses).';
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter COD_PRODUTO position 1;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "01_COMPRA_QTDE" position 2;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "01_COMPRA_VALOR" position 3;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "01_VENDA_QTDE" position 4;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "01_VENDA_VALOR" position 5;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "03_COMPRA_QTDE" position 6;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "03_COMPRA_VALOR" position 7;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "06_COMPRA_QTDE" position 8;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "09_COMPRA_QTDE" position 9;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "12_COMPRA_QTDE" position 10;
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter "99_COMPRA_QTDE" position 11;
+
+
+/*------ SYSDBA 15/07/2013 23:08:10 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "06_COMPRA_VALOR" DMN_NUMERO;
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "09_COMPRA_VALOR" DMN_NUMERO;
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "12_COMPRA_VALOR" DMN_NUMERO;
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "99_COMPRA_VALOR" DMN_NUMERO;
+
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_COMPRA_VALOR" IS 'Valor compra (3 a 6 meses).';
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_COMPRA_VALOR" IS 'Valor compra (6 a 9 meses).';
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_COMPRA_VALOR" IS 'Valor compra (9 a 12 meses).';
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_COMPRA_VALOR" IS 'Valor compra (+12 meses).';
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 2, column 1.
+ALTER.
+
+*/
+
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "06_COMPRA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "09_COMPRA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "12_COMPRA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "99_COMPRA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_COMPRA_VALOR" IS 'Valor compra (3 a 6 meses).';
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_COMPRA_VALOR" IS 'Valor compra (6 a 9 meses).';
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_COMPRA_VALOR" IS 'Valor compra (9 a 12 meses).';
+
+/*------ 15/07/2013 23:08:28 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_COMPRA_VALOR" IS 'Valor compra (+12 meses).';
+/*------ SYSDBA 15/07/2013 23:09:09 --------*/
+
+ROLLBACK WORK;
+
+
+/*------ 15/07/2013 23:09:16 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_COMPRA_VALOR" IS 'Valor compra (3 a 6 meses).';
+
+/*------ 15/07/2013 23:09:16 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_COMPRA_VALOR" IS 'Valor compra (6 a 9 meses).';
+
+/*------ 15/07/2013 23:09:16 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_COMPRA_VALOR" IS 'Valor compra (9 a 12 meses).';
+
+/*------ 15/07/2013 23:09:16 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_COMPRA_VALOR" IS 'Valor compra (+12 meses).';
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COD_PRODUTO position 1;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_QTDE" position 2;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_VALOR" position 3;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_QTDE" position 4;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_VALOR" position 5;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_QTDE" position 6;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_VALOR" position 7;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_QTDE" position 8;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_VALOR" position 9;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_QTDE" position 10;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_VALOR" position 11;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_QTDE" position 12;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_VALOR" position 13;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_QTDE" position 14;
+
+
+/*------ SYSDBA 15/07/2013 23:09:57 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_VALOR" position 15;
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "06_VENDA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "09_VENDA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "12_VENDA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "99_VENDA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_VENDA_QTDE" IS 'Quantidade venda (3 a 6 meses).';
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_VENDA_QTDE" IS 'Quantidade venda (6 a 9 meses).';
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_VENDA_QTDE" IS 'Quantidade venda (9 a 12 meses).';
+
+/*------ 15/07/2013 23:11:17 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_VENDA_QTDE" IS 'Quantidade venda (+12 meses).';
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COD_PRODUTO position 1;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_QTDE" position 2;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_VALOR" position 3;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_QTDE" position 4;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_VALOR" position 5;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_QTDE" position 6;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_VALOR" position 7;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_QTDE" position 8;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_VALOR" position 9;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_VENDA_QTDE" position 10;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_QTDE" position 11;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_VALOR" position 12;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_VENDA_QTDE" position 13;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_QTDE" position 14;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_VALOR" position 15;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_VENDA_QTDE" position 16;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_QTDE" position 17;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_VALOR" position 18;
+
+
+/*------ SYSDBA 15/07/2013 23:11:52 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_VENDA_QTDE" position 19;
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "03_VENDA_QTDE" DMN_NUMERO;
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."03_VENDA_QTDE" IS 'Quantidade venda (1 a 3 meses).';
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_VENDA_QTDE" IS 'Quantidade venda (3 a 6 meses).';
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_VENDA_QTDE" IS 'Quantidade venda (6 a 9 meses).';
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_VENDA_QTDE" IS 'Quantidade venda (9 a 12 meses).';
+
+/*------ 15/07/2013 23:12:47 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_VENDA_QTDE" IS 'Quantidade venda (+12 meses).';
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COD_PRODUTO position 1;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_QTDE" position 2;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_VALOR" position 3;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_QTDE" position 4;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_VALOR" position 5;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_QTDE" position 6;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_VALOR" position 7;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_VENDA_QTDE" position 8;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_QTDE" position 9;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_VALOR" position 10;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_VENDA_QTDE" position 11;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_QTDE" position 12;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_VALOR" position 13;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_VENDA_QTDE" position 14;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_QTDE" position 15;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_VALOR" position 16;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_VENDA_QTDE" position 17;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_QTDE" position 18;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_VALOR" position 19;
+
+
+/*------ SYSDBA 15/07/2013 23:13:09 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_VENDA_QTDE" position 20;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "03_VENDA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "06_VENDA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "09_VENDA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "12_VENDA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ADD "99_VENDA_VALOR" DMN_NUMERO;
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."03_VENDA_VALOR" IS 'Valor venda (1 a 3 meses).';
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."06_VENDA_VALOR" IS 'Valor venda (3 a 6 meses).';
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."09_VENDA_VALOR" IS 'Valor venda (6 a 9 meses).';
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."12_VENDA_VALOR" IS 'Valor venda (9 a 12 meses).';
+
+/*------ 15/07/2013 23:20:19 --------*/
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE."99_VENDA_VALOR" IS 'Valor venda (+12 meses).';
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COD_PRODUTO position 1;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_QTDE" position 2;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_COMPRA_VALOR" position 3;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_QTDE" position 4;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "01_VENDA_VALOR" position 5;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_QTDE" position 6;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_COMPRA_VALOR" position 7;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_VENDA_QTDE" position 8;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "03_VENDA_VALOR" position 9;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_QTDE" position 10;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_COMPRA_VALOR" position 11;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_VENDA_QTDE" position 12;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "06_VENDA_VALOR" position 13;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_QTDE" position 14;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_COMPRA_VALOR" position 15;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_VENDA_QTDE" position 16;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "09_VENDA_VALOR" position 17;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_QTDE" position 18;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_COMPRA_VALOR" position 19;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_VENDA_QTDE" position 20;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "12_VENDA_VALOR" position 21;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_QTDE" position 22;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_COMPRA_VALOR" position 23;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_VENDA_QTDE" position 24;
+
+
+/*------ SYSDBA 15/07/2013 23:20:49 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column "99_VENDA_VALOR" position 25;
+
+
+/*------ SYSDBA 15/07/2013 23:44:33 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure SET_PRODUTO_ROTATIVIDADE (
+    PRODUTO varchar(10),
+    DATA_INICIAL date,
+    DATA_FINAL date)
+returns (
+    COMPRA_QTDE numeric(18,4),
+    COMPRA_VALOR numeric(18,4),
+    VENDA_QTDE numeric(18,4),
+    VENDA_VALOR numeric(18,4))
+as
+begin
+  /* Buscar compras */
+  Select
+      sum(c.qtde)
+    , sum(c.qtde * c.customedio)
+  from TBCOMPRAS cc
+    inner join TBCOMPRASITENS c on (cc.ano = c.ano and cc.codcontrol = c.codcontrol)
+  where cc.dtent between :data_inicial and :data_final
+    and cc.status in (2, 4) -- Finalizada, NF-e
+    and c.codprod = :produto
+  Into
+      compra_qtde
+    , compra_valor;
+
+  /* Buscar vendas */
+  Select
+      sum(v.qtde)
+    , sum(v.qtde * v.pfinal)
+  from TBVENDAS vv
+    inner join TVENDASITENS v on (vv.ano = v.ano and vv.codcontrol = v.codcontrol)
+  where vv.dtvenda between :data_inicial and :data_final
+    and vv.status in (3, 4) -- Finalizada, NF-e
+    and v.codprod = :produto
+  Into
+      venda_qtde
+    , venda_valor;
+
+  suspend;
+end^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE SET_PRODUTO_ROTATIVIDADE TO "PUBLIC";
+
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure GET_PRODUTO_ROTATIVIDADE (
+    PRODUTO varchar(10),
+    DATA_INICIAL date,
+    DATA_FINAL date)
+returns (
+    COMPRA_QTDE numeric(18,4),
+    COMPRA_VALOR numeric(18,4),
+    VENDA_QTDE numeric(18,4),
+    VENDA_VALOR numeric(18,4))
+as
+begin
+  /* Buscar compras */
+  Select
+      sum(c.qtde)
+    , sum(c.qtde * c.customedio)
+  from TBCOMPRAS cc
+    inner join TBCOMPRASITENS c on (cc.ano = c.ano and cc.codcontrol = c.codcontrol)
+  where cc.dtent between :data_inicial and :data_final
+    and cc.status in (2, 4) -- Finalizada, NF-e
+    and c.codprod = :produto
+  Into
+      compra_qtde
+    , compra_valor;
+
+  /* Buscar vendas */
+  Select
+      sum(v.qtde)
+    , sum(v.qtde * v.pfinal)
+  from TBVENDAS vv
+    inner join TVENDASITENS v on (vv.ano = v.ano and vv.codcontrol = v.codcontrol)
+  where vv.dtvenda between :data_inicial and :data_final
+    and vv.status in (3, 4) -- Finalizada, NF-e
+    and v.codprod = :produto
+  Into
+      venda_qtde
+    , venda_valor;
+
+  suspend;
+end^
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+SET TERM ; ^
+
+GRANT SELECT ON TBCOMPRAS TO PROCEDURE GET_PRODUTO_ROTATIVIDADE;
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+GRANT SELECT ON TBCOMPRASITENS TO PROCEDURE GET_PRODUTO_ROTATIVIDADE;
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+GRANT SELECT ON TBVENDAS TO PROCEDURE GET_PRODUTO_ROTATIVIDADE;
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+GRANT SELECT ON TVENDASITENS TO PROCEDURE GET_PRODUTO_ROTATIVIDADE;
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+GRANT EXECUTE ON PROCEDURE GET_PRODUTO_ROTATIVIDADE TO "PUBLIC";
+
+/*------ 15/07/2013 23:48:21 --------*/
+
+GRANT EXECUTE ON PROCEDURE GET_PRODUTO_ROTATIVIDADE TO SYSDBA;
+
+
+/*------ SYSDBA 15/07/2013 23:48:33 --------*/
+
+DROP PROCEDURE SET_PRODUTO_ROTATIVIDADE;
+
+
+
+
+/*------ SYSDBA 16/07/2013 00:31:06 --------*/
+
+COMMENT ON COLUMN TBPRODUTO.CODGRUPO IS
+'Grupo.';
+
