@@ -61,7 +61,6 @@ object frmGerRelCP: TfrmGerRelCP
       Height = 25
       Caption = 'Imprimir'
       Default = True
-      ModalResult = 1
       TabOrder = 1
       OnClick = btbtnGrupoClick
       Glyph.Data = {

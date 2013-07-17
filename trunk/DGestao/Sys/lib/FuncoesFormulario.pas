@@ -137,9 +137,13 @@ end;
 class function TFormularios.ShowModalForm(const AOnwer: TComponent;
   NomeForm: String): Boolean;
 begin
-  if TFormularios.EstaAberto(NomeForm) then
-    FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
-  Result := (FForm.ShowModal = mrOk);
+  try
+    if TFormularios.EstaAberto(NomeForm) then
+      FForm := _FormFactory.CreateForm(AOnwer, NomeForm);
+    Result := (FForm.ShowModal = mrOk);
+  finally
+    FForm.Free;
+  end;
 end;
 
 end.
