@@ -207,9 +207,6 @@ type
     IbDtstTabelaCODUNIDADE_FRACIONADA: TSmallintField;
     IbDtstTabelaDESCRICAO_UNIDADE_FRAC: TIBStringField;
     IbDtstTabelaUNP_SIGLA_FRAC: TIBStringField;
-    IbDtstTabelaPRECO_FRAC: TFMTBCDField;
-    IbDtstTabelaPRECO_PROMOCAO_FRAC: TFMTBCDField;
-    IbDtstTabelaPRECO_SUGERIDO_FRAC: TFMTBCDField;
     GrpBxFracionamentoPreco: TGroupBox;
     lblPrecoFrac: TLabel;
     dbPrecoFrac: TDBEdit;
@@ -222,6 +219,9 @@ type
     dbVendaFracionada: TDBCheckBox;
     lblUnidadeFracao: TLabel;
     dbUnidadeFracao: TRxDBComboEdit;
+    IbDtstTabelaPRECO_FRAC: TFloatField;
+    IbDtstTabelaPRECO_PROMOCAO_FRAC: TFloatField;
+    IbDtstTabelaPRECO_SUGERIDO_FRAC: TFloatField;
     procedure FormCreate(Sender: TObject);
     procedure dbGrupoButtonClick(Sender: TObject);
     procedure dbSecaoButtonClick(Sender: TObject);
