@@ -5926,3 +5926,619 @@ DROP PROCEDURE SET_PRODUTO_ROTATIVIDADE;
 COMMENT ON COLUMN TBPRODUTO.CODGRUPO IS
 'Grupo.';
 
+
+
+
+/*------ SYSDBA 18/07/2013 20:08:31 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+    ADD PROCESSO_DATA DMN_DATE,
+    ADD PROCESSO_HORA DMN_TIME,
+    ADD PROCESSO_USUARIO DMN_VCHAR_50;
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.PROCESSO_DATA IS
+'Data do processo.';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.PROCESSO_HORA IS
+'Hora do processo.';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.PROCESSO_USUARIO IS
+'Usuario do processo.';
+
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 43, column 40.
+rt.
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 45, column 9.
+01.
+
+*/
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "01_COMPRA_QTDE" TO "_01_COMPRA_QTDE";
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:19 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "_01_COMPRA_QTDE" TO COMPRA_QTDE;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:33 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER COMPRA_QTDE TO COMPRA_QTDE_01;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:41 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "01_COMPRA_VALOR" TO COMPRA_VALOR_01;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:49 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "01_VENDA_QTDE" TO VENDA_QTDE_01;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:15:56 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "01_VENDA_VALOR" TO VENDA_VALOR_01;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:04 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "03_COMPRA_QTDE" TO COMPRA_QTDE_03;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:12 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "03_COMPRA_VALOR" TO COMPRA_VALOR_03;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:18 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "03_VENDA_QTDE" TO VENDA_QTDE_03;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:28 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "03_VENDA_VALOR" TO VENDA_VALOR_03;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:36 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "06_COMPRA_QTDE" TO COMPRA_QTDE_06;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:42 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "06_COMPRA_VALOR" TO COMPRA_VALOR_06;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:47 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "06_VENDA_QTDE" TO VENDA_QTDE_06;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:16:52 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "06_VENDA_VALOR" TO VENDA_VALOR_06;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:00 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "09_COMPRA_QTDE" TO COMPRA_QTDE_09;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:05 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "09_COMPRA_VALOR" TO COMPRA_VALOR_09;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:10 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "09_VENDA_QTDE" TO VENDA_QTDE_09;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:18 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "09_VENDA_VALOR" TO VENDA_VALOR_09;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:25 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "12_COMPRA_QTDE" TO COMPRA_QTDE_12;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:30 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "12_COMPRA_VALOR" TO COMPRA_VALOR_12;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:35 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "12_VENDA_QTDE" TO VENDA_QTDE_12;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:45 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "12_VENDA_VALOR" TO VENDA_VALOR_12;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:53 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "99_COMPRA_QTDE" TO COMPRA_QTDE_99;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:17:57 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "99_COMPRA_VALOR" TO COMPRA_VALOR_99;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:18:02 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "99_VENDA_QTDE" TO VENDA_QTDE_99;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:18:06 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE ALTER "99_VENDA_VALOR" TO VENDA_VALOR_99;
+
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+TMP_COMPRA_QTDE.
+At line 51, column 9.
+
+*/
+
+
+
+/*------ SYSDBA 18/07/2013 20:37:41 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_PRODUTO_ROTATIVIDADE (
+    PRODUTO varchar(10),
+    DATA_INICIAL date,
+    DATA_FINAL date)
+returns (
+    COMPRA_QTDE numeric(18,4),
+    COMPRA_VALOR numeric(18,4),
+    VENDA_QTDE numeric(18,4),
+    VENDA_VALOR numeric(18,4))
+as
+begin
+  /* Buscar compras */
+  Select
+      sum(c.qtde)
+    , sum(c.qtde * c.customedio)
+  from TBCOMPRAS cc
+    inner join TBCOMPRASITENS c on (c.ano = cc.ano and c.codcontrol = cc.codcontrol)
+  where cc.dtent between :data_inicial and :data_final
+    and cc.status in (2, 4) -- Finalizada, NF-e
+    and c.codprod = :produto
+  Into
+      compra_qtde
+    , compra_valor;
+
+  /* Buscar vendas */
+  Select
+      sum(v.qtde)
+    , sum(v.qtde * v.pfinal)
+  from TBVENDAS vv
+    inner join TVENDASITENS v on (vv.ano = v.ano and vv.codcontrol = v.codcontrol)
+  where vv.dtvenda between :data_inicial and :data_final
+    and vv.status in (3, 4) -- Finalizada, NF-e
+    and v.codprod = :produto
+  Into
+      venda_qtde
+    , venda_valor;
+
+  suspend;
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:37:59 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_PRODUTO_ROTATIVIDADE (
+    PRODUTO varchar(10),
+    DATA_INICIAL date,
+    DATA_FINAL date)
+returns (
+    COMPRA_QTDE numeric(18,4),
+    COMPRA_VALOR numeric(18,4),
+    VENDA_QTDE numeric(18,4),
+    VENDA_VALOR numeric(18,4))
+as
+begin
+  /* Buscar compras */
+  Select
+      sum(c.qtde)
+    , sum(c.qtde * c.customedio)
+  from TBCOMPRAS cc
+    inner join TBCOMPRASITENS c on (c.ano = cc.ano and c.codcontrol = cc.codcontrol)
+  where cc.dtent between :data_inicial and :data_final
+    and cc.status in (2, 4) -- Finalizada, NF-e
+    and c.codprod = :produto
+  Into
+      compra_qtde
+    , compra_valor;
+
+  /* Buscar vendas */
+  Select
+      sum(v.qtde)
+    , sum(v.qtde * v.pfinal)
+  from TBVENDAS vv
+    inner join TVENDASITENS v on (v.ano = vv.ano and v.codcontrol = vv.codcontrol)
+  where vv.dtvenda between :data_inicial and :data_final
+    and vv.status in (3, 4) -- Finalizada, NF-e
+    and v.codprod = :produto
+  Into
+      venda_qtde
+    , venda_valor;
+
+  suspend;
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:47:06 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure GET_PRODUTO_ROTATIVIDADE (
+    PRODUTO varchar(10),
+    DATA_INICIAL date,
+    DATA_FINAL date)
+returns (
+    COMPRA_QTDE numeric(18,4),
+    COMPRA_VALOR numeric(18,4),
+    VENDA_QTDE numeric(18,4),
+    VENDA_VALOR numeric(18,4))
+as
+begin
+  /* Buscar compras */
+  Select
+      sum(c.qtde)
+    , sum(c.qtde * c.customedio)
+  from TBCOMPRAS cc
+    inner join TBCOMPRASITENS c on (c.ano = cc.ano and c.codcontrol = cc.codcontrol)
+  where cc.dtent between :data_inicial and :data_final
+    and cc.status in (2, 4) -- Finalizada, NF-e
+    and c.codprod = :produto
+  Into
+      compra_qtde
+    , compra_valor;
+
+  /* Buscar vendas */
+  Select
+      sum(v.qtde)
+    , sum(v.qtde * v.pfinal)
+  from TBVENDAS vv
+    inner join TVENDASITENS v on (v.ano = vv.ano and v.codcontrol = vv.codcontrol)
+  where cast(vv.dtvenda as date) between :data_inicial and :data_final
+    and vv.status in (3, 4) -- Finalizada, NF-e
+    and v.codprod = :produto
+  Into
+      venda_qtde
+    , venda_valor;
+
+  suspend;
+end^
+
+SET TERM ; ^
+
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 28, column 3.
+Delete.
+
+*/
+
+
+
+/*------ SYSDBA 18/07/2013 20:55:52 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+    ADD MOVIMENTADO DMN_LOGICO;
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.MOVIMENTADO IS
+'Produto movimentado:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:55:57 --------*/
+
+UPDATE TBPRODUTO_ROTATIVIDADE
+SET MOVIMENTADO = 0;
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COD_PRODUTO position 1;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_01 position 2;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_01 position 3;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_01 position 4;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_01 position 5;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_03 position 6;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_03 position 7;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_03 position 8;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_03 position 9;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_06 position 10;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_06 position 11;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_06 position 12;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_06 position 13;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_09 position 14;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_09 position 15;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_09 position 16;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_09 position 17;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_12 position 18;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_12 position 19;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_12 position 20;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_12 position 21;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_QTDE_99 position 22;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column COMPRA_VALOR_99 position 23;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_QTDE_99 position 24;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column VENDA_VALOR_99 position 25;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column MOVIMENTADO position 26;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column PROCESSO_DATA position 27;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column PROCESSO_HORA position 28;
+
+
+/*------ SYSDBA 18/07/2013 20:56:06 --------*/
+
+alter table TBPRODUTO_ROTATIVIDADE
+alter column PROCESSO_USUARIO position 29;
+
+
+/*------ SYSDBA 18/07/2013 20:56:42 --------*/
+
+CREATE INDEX IDX_PRODUTO_ROTATIVIDADE
+ON TBPRODUTO_ROTATIVIDADE (MOVIMENTADO);
+
+
+
+
+/*------ SYSDBA 18/07/2013 20:59:26 --------*/
+
+SET TERM ^ ;
+
+CREATE trigger tg_produto_rotatividade_mov for tbproduto_rotatividade
+active before insert or update position 0
+AS
+  declare variable movimento numeric(18,4);
+begin
+  movimento =
+    coalesce(new.compra_qtde_01, 0) + coalesce(new.venda_qtde_01, 0) +
+    coalesce(new.compra_qtde_03, 0) + coalesce(new.venda_qtde_03, 0) +
+    coalesce(new.compra_qtde_06, 0) + coalesce(new.venda_qtde_06, 0) +
+    coalesce(new.compra_qtde_09, 0) + coalesce(new.venda_qtde_09, 0) +
+    coalesce(new.compra_qtde_12, 0) + coalesce(new.venda_qtde_12, 0) +
+    coalesce(new.compra_qtde_99, 0) + coalesce(new.venda_qtde_99, 0);
+
+  if ( :movimento > 0 ) then
+    new.movimentado = 1;
+  else
+    new.movimentado = 0;
+end^
+
+SET TERM ; ^
+

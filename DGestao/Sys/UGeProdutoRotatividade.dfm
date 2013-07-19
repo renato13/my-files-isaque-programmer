@@ -36,21 +36,21 @@ inherited FrmGeProdutoRotatividade: TFrmGeProdutoRotatividade
         Width = 105
         Height = 13
         Caption = 'Per'#237'odo inicial fixo:'
-        Enabled = False
         FocusControl = e1Data
       end
       inherited edPesquisar: TEdit
         Left = 240
         Width = 603
+        TabOrder = 2
       end
       object e1Data: TDateEdit
         Left = 16
         Top = 40
         Width = 104
         Height = 21
-        Enabled = False
         NumGlyphs = 2
-        TabOrder = 1
+        ReadOnly = True
+        TabOrder = 0
         Text = '24/06/2013'
       end
       object e2Data: TDateEdit
@@ -58,10 +58,10 @@ inherited FrmGeProdutoRotatividade: TFrmGeProdutoRotatividade
         Top = 40
         Width = 105
         Height = 21
-        Enabled = False
         NumGlyphs = 2
-        TabOrder = 2
+        TabOrder = 1
         Text = '24/06/2013'
+        OnChange = e2DataChange
       end
     end
   end

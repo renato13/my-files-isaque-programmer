@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoPesquisa, DB, IBCustomDataSet, IBQuery, Grids, DBGrids,
-  StdCtrls, Buttons, ExtCtrls, Mask, rxToolEdit;
+  StdCtrls, Buttons, ExtCtrls, Mask, rxToolEdit, IBSQL;
 
 type
   TFrmGeProdutoRotatividade = class(TfrmGrPadraoPesquisa)
@@ -13,6 +13,7 @@ type
     e1Data: TDateEdit;
     e2Data: TDateEdit;
     procedure FormCreate(Sender: TObject);
+    procedure e2DataChange(Sender: TObject);
   private
     { Private declarations }
     procedure ConfigurarColunas;
@@ -47,6 +48,14 @@ begin
   e2Data.Date := Date;
 
   ConfigurarColunas;
+end;
+
+procedure TFrmGeProdutoRotatividade.e2DataChange(Sender: TObject);
+var
+  dDate : TDateTime;
+begin
+  if ( TryStrToDate(e2Data.Text, dDate) ) then
+    e1Data.Date := dDate - 30;
 end;
 
 initialization

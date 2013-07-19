@@ -86,6 +86,9 @@ begin
   inherited;
   CarregarEmpresa;
   Empresa := GetEmpresaIDDefault;
+  
+  if ( ImgLogo.Picture.Height = 0 ) then
+    ImgLogo.Picture.Icon := Application.Icon;
 end;
 
 procedure TfrmGrPadraoLogin.CarregarEmpresa;
