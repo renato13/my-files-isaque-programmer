@@ -6542,3 +6542,1368 @@ end^
 
 SET TERM ; ^
 
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 60, column 5.
+from.
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 153, column 5.
+from.
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 246, column 5.
+from.
+
+*/
+
+
+
+/*------ SYSDBA 23/07/2013 20:03:59 --------*/
+
+SET TERM ^ ;
+
+create or alter procedure SET_PRODUTO_ROTATIVIDADE (
+    DATA date,
+    USUARIO varchar(30),
+    PRODUTO varchar(10),
+    EXCLUIR_ROT smallint,
+    TIPO_ROTATI smallint)
+as
+declare variable TMP_DATA_INI date;
+declare variable TMP_DATA_FIM date;
+declare variable TMP_COMPRA_QTDE numeric(18,4);
+declare variable TMP_COMPRA_VALOR numeric(18,4);
+declare variable TMP_VENDA_QTDE numeric(18,4);
+declare variable TMP_VENDA_VALOR numeric(18,4);
+declare variable UM integer;
+declare variable TRES integer;
+declare variable SEIS integer;
+declare variable NOVE integer;
+declare variable DOZE integer;
+declare variable NNNN integer;
+begin
+  um   = 30 * 1;
+  tres = 30 * 3;
+  seis = 30 * 6;
+  nove = 30 * 9;
+  doze = 30 * 12;
+  nnnn = 30 * 36;
+
+  excluir_rot = coalesce(:excluir_rot, 0);
+  tipo_rotati = coalesce(:tipo_rotati, 0); /* 0. Compra | 1. Venda */
+
+  -- Excluir processamento antigo
+  if ( :excluir_rot = 1 ) then
+    Delete from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto  = :produto;
+
+  /************************************* MES 0-1 *************************************/
+
+  tmp_data_fim = :data;
+  tmp_data_ini = :tmp_data_fim - :um;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_01
+        , compra_valor_01
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_01
+        , venda_valor_01
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_01  = :tmp_compra_qtde
+        , rp.compra_valor_01 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_01   = :tmp_venda_qtde
+        , rp.venda_valor_01  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 1-3 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :tres;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_03
+        , compra_valor_03
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_03
+        , venda_valor_03
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_03  = :tmp_compra_qtde
+        , rp.compra_valor_03 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_03   = :tmp_venda_qtde
+        , rp.venda_valor_03  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 3-6 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :seis;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_06
+        , compra_valor_06
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_06
+        , venda_valor_06
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_06  = :tmp_compra_qtde
+        , rp.compra_valor_06 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_06   = :tmp_venda_qtde
+        , rp.venda_valor_06  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 6-9 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :nove;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_09
+        , compra_valor_09
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_09
+        , venda_valor_09
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_09  = :tmp_compra_qtde
+        , rp.compra_valor_09 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_09   = :tmp_venda_qtde
+        , rp.venda_valor_09  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 9-12 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :doze;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_12
+        , compra_valor_12
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_12
+        , venda_valor_12
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_12  = :tmp_compra_qtde
+        , rp.compra_valor_12 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_12   = :tmp_venda_qtde
+        , rp.venda_valor_12  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 12-nn *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :nnnn;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_99
+        , compra_valor_99
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_99
+        , venda_valor_99
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_99  = :tmp_compra_qtde
+        , rp.compra_valor_99 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_99   = :tmp_venda_qtde
+        , rp.venda_valor_99  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+end^
+
+SET TERM ; ^
+
+GRANT EXECUTE ON PROCEDURE SET_PRODUTO_ROTATIVIDADE TO "PUBLIC";
+
+
+
+/*------ SYSDBA 23/07/2013 20:12:21 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+    ADD DATA_ULTIMA_COMPRA DMN_DATE,
+    ADD DATA_ULTIMA_VENDA DMN_DATE;
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.DATA_ULTIMA_COMPRA IS
+'Data da ultima compra.';
+
+COMMENT ON COLUMN TBPRODUTO_ROTATIVIDADE.DATA_ULTIMA_VENDA IS
+'Data da ultima venda.';
+
+
+
+
+/*------ SYSDBA 23/07/2013 20:14:02 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER procedure SET_PRODUTO_ROTATIVIDADE (
+    DATA date,
+    USUARIO varchar(30),
+    PRODUTO varchar(10),
+    EXCLUIR_ROT smallint,
+    TIPO_ROTATI smallint,
+    ULTIMA_COMPRA date,
+    ULTIMA_VENDA date)
+as
+declare variable TMP_DATA_INI date;
+declare variable TMP_DATA_FIM date;
+declare variable TMP_COMPRA_QTDE numeric(18,4);
+declare variable TMP_COMPRA_VALOR numeric(18,4);
+declare variable TMP_VENDA_QTDE numeric(18,4);
+declare variable TMP_VENDA_VALOR numeric(18,4);
+declare variable UM integer;
+declare variable TRES integer;
+declare variable SEIS integer;
+declare variable NOVE integer;
+declare variable DOZE integer;
+declare variable NNNN integer;
+begin
+  um   = 30 * 1;
+  tres = 30 * 3;
+  seis = 30 * 6;
+  nove = 30 * 9;
+  doze = 30 * 12;
+  nnnn = 30 * 36;
+
+  excluir_rot = coalesce(:excluir_rot, 0);
+  tipo_rotati = coalesce(:tipo_rotati, 0); /* 0. Compra | 1. Venda */
+
+  -- Excluir processamento antigo
+  if ( :excluir_rot = 1 ) then
+    Delete from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto  = :produto;
+
+  /************************************* MES 0-1 *************************************/
+
+  tmp_data_fim = :data;
+  tmp_data_ini = :tmp_data_fim - :um;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_01
+        , compra_valor_01
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_01
+        , venda_valor_01
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_01  = :tmp_compra_qtde
+        , rp.compra_valor_01 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_01   = :tmp_venda_qtde
+        , rp.venda_valor_01  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 1-3 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :tres;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_03
+        , compra_valor_03
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_03
+        , venda_valor_03
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_03  = :tmp_compra_qtde
+        , rp.compra_valor_03 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_03   = :tmp_venda_qtde
+        , rp.venda_valor_03  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 3-6 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :seis;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_06
+        , compra_valor_06
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_06
+        , venda_valor_06
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_06  = :tmp_compra_qtde
+        , rp.compra_valor_06 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_06   = :tmp_venda_qtde
+        , rp.venda_valor_06  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 6-9 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :nove;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_09
+        , compra_valor_09
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_09
+        , venda_valor_09
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_09  = :tmp_compra_qtde
+        , rp.compra_valor_09 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_09   = :tmp_venda_qtde
+        , rp.venda_valor_09  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 9-12 *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :doze;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_12
+        , compra_valor_12
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_12
+        , venda_valor_12
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_12  = :tmp_compra_qtde
+        , rp.compra_valor_12 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_12   = :tmp_venda_qtde
+        , rp.venda_valor_12  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  /************************************* MES 12-nn *************************************/
+
+  tmp_data_fim = :tmp_data_ini - 1;
+  tmp_data_ini = :tmp_data_fim - :nnnn;
+
+  Select
+      r.compra_qtde
+    , r.compra_valor
+    , r.venda_qtde
+    , r.venda_valor
+  from GET_PRODUTO_ROTATIVIDADE(:produto, :tmp_data_ini, :tmp_data_fim) r
+  Into
+      tmp_compra_qtde
+    , tmp_compra_valor
+    , tmp_venda_qtde
+    , tmp_venda_valor;
+
+  if (not exists(
+    Select
+      x.cod_produto
+    from TBPRODUTO_ROTATIVIDADE x
+    where x.cod_produto = :produto
+  )) then
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , compra_qtde_99
+        , compra_valor_99
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_compra_qtde
+        , :tmp_compra_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Insert Into TBPRODUTO_ROTATIVIDADE (
+          cod_produto
+        , venda_qtde_99
+        , venda_valor_99
+        , processo_data
+        , processo_hora
+        , processo_usuario
+      ) values (
+          :produto
+        , :tmp_venda_qtde
+        , :tmp_venda_valor
+        , current_date
+        , current_time
+        , :usuario
+      );
+
+    end
+
+  end 
+  else
+  begin
+
+    if ( :tipo_rotati = 0 ) then -- Compra
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.compra_qtde_99  = :tmp_compra_qtde
+        , rp.compra_valor_99 = :tmp_compra_valor
+      where rp.cod_produto = :produto;
+
+    end
+    else
+    if ( :tipo_rotati = 1 ) then -- Venda
+    begin
+
+      Update TBPRODUTO_ROTATIVIDADE rp Set
+          rp.venda_qtde_99   = :tmp_venda_qtde
+        , rp.venda_valor_99  = :tmp_venda_valor
+      where rp.cod_produto = :produto;
+
+    end
+
+  end 
+
+  -- Atualizar das Datas de Compra e Venda
+  Update TBPRODUTO_ROTATIVIDADE rp Set
+      rp.data_ultima_compra = :ultima_compra
+    , rp.data_ultima_venda = :ultima_venda
+  where rp.cod_produto = :produto;
+
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/07/2013 21:21:15 --------*/
+
+ALTER TABLE TBPRODUTO_ROTATIVIDADE
+ADD CONSTRAINT FK_TBPRODUTO_ROTATIVIDADE
+FOREIGN KEY (COD_PRODUTO)
+REFERENCES TBPRODUTO(COD);
+
+
+
+
+/*------ SYSDBA 23/07/2013 22:34:27 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_produto_rotatividade_mov for tbproduto_rotatividade
+active before insert or update position 0
+AS
+  declare variable movimento numeric(18,4);
+begin
+  movimento =
+    coalesce(new.compra_qtde_01, 0) + coalesce(new.venda_qtde_01, 0) +
+    coalesce(new.compra_qtde_03, 0) + coalesce(new.venda_qtde_03, 0) +
+    coalesce(new.compra_qtde_06, 0) + coalesce(new.venda_qtde_06, 0) +
+    coalesce(new.compra_qtde_09, 0) + coalesce(new.venda_qtde_09, 0) +
+    coalesce(new.compra_qtde_12, 0) + coalesce(new.venda_qtde_12, 0) +
+    coalesce(new.compra_qtde_99, 0) + coalesce(new.venda_qtde_99, 0);
+
+  if ( :movimento > 0 ) then
+    new.movimentado = 1;
+  else
+    new.movimentado = 0;
+
+  if ( new.data_ultima_compra = '30.12.1899' ) then
+    new.data_ultima_compra = null;
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/07/2013 22:35:08 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_produto_rotatividade_mov for tbproduto_rotatividade
+active before insert or update position 0
+AS
+  declare variable movimento numeric(18,4);
+begin
+  movimento =
+    coalesce(new.compra_qtde_01, 0) + coalesce(new.venda_qtde_01, 0) +
+    coalesce(new.compra_qtde_03, 0) + coalesce(new.venda_qtde_03, 0) +
+    coalesce(new.compra_qtde_06, 0) + coalesce(new.venda_qtde_06, 0) +
+    coalesce(new.compra_qtde_09, 0) + coalesce(new.venda_qtde_09, 0) +
+    coalesce(new.compra_qtde_12, 0) + coalesce(new.venda_qtde_12, 0) +
+    coalesce(new.compra_qtde_99, 0) + coalesce(new.venda_qtde_99, 0);
+
+  if ( :movimento > 0 ) then
+    new.movimentado = 1;
+  else
+    new.movimentado = 0;
+
+  if ( new.data_ultima_compra = '1899.12.30' ) then
+    new.data_ultima_compra = null;
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/07/2013 22:36:09 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_produto_rotatividade_mov for tbproduto_rotatividade
+active before insert or update position 0
+AS
+  declare variable movimento numeric(18,4);
+begin
+  movimento =
+    coalesce(new.compra_qtde_01, 0) + coalesce(new.venda_qtde_01, 0) +
+    coalesce(new.compra_qtde_03, 0) + coalesce(new.venda_qtde_03, 0) +
+    coalesce(new.compra_qtde_06, 0) + coalesce(new.venda_qtde_06, 0) +
+    coalesce(new.compra_qtde_09, 0) + coalesce(new.venda_qtde_09, 0) +
+    coalesce(new.compra_qtde_12, 0) + coalesce(new.venda_qtde_12, 0) +
+    coalesce(new.compra_qtde_99, 0) + coalesce(new.venda_qtde_99, 0);
+
+  if ( :movimento > 0 ) then
+    new.movimentado = 1;
+  else
+    new.movimentado = 0;
+
+  if ( new.data_ultima_compra = '1899.12.30' ) then
+    new.data_ultima_compra = null;
+
+  if ( new.data_ultima_venda = '1899.12.30' ) then
+    new.data_ultima_venda = null;
+end^
+
+SET TERM ; ^
+
