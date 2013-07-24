@@ -2,6 +2,7 @@ execute block (
     data_inicial Date = :data_inicial
   , data_final   Date = :data_final
   , usuario      Varchar(30) = :usuario
+  , produto      Varchar(10) = :produto
 )
 as
   declare variable tmp_data_ini Date;
@@ -25,13 +26,19 @@ begin
   nnnn = 30 * 36;
 
   -- Excluir processamento antigo
-  Delete from TBPRODUTO_ROTATIVIDADE;
+  Delete from TBPRODUTO_ROTATIVIDADE x
+  where
+       (x.cod_produto  = :produto)
+    or (trim(:produto) = '');
 
   /* Listar Produtos */
   for
     Select
       p.cod
     from TBPRODUTO p
+    where
+         (p.cod_produto  = :produto)
+      or (trim(:produto) = '');
     Into
       produto
   do
