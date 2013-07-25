@@ -46,7 +46,6 @@ type
     dbgProdutoLvl: TcxGridLevel;
     dbgProduto: TcxGrid;
     dbgProdutoTbl: TcxGridDBBandedTableView;
-    Label1: TLabel;
     Label2: TLabel;
     QryListaProduto: TIBQuery;
     QryProduto: TIBQuery;
@@ -128,6 +127,68 @@ type
     CdsProdutoUNP_SIGLA: TStringField;
     dbgProdutoTblColumn29: TcxGridDBBandedColumn;
     dbgProdutoTblColumn30: TcxGridDBBandedColumn;
+    QryGrupo: TIBQuery;
+    DspGrupo: TDataSetProvider;
+    CdsGrupo: TClientDataSet;
+    dsGrupo: TDataSource;
+    CdsGrupoCODIGO: TSmallintField;
+    CdsGrupoDESCRICAO: TStringField;
+    CdsGrupoQTDE: TLargeintField;
+    CdsGrupoITENS: TIntegerField;
+    CdsGrupoDATA_ULTIMA_COMPRA: TDateField;
+    CdsGrupoDATA_ULTIMA_VENDA: TDateField;
+    CdsGrupoCOMPRA_QTDE_01: TBCDField;
+    CdsGrupoCOMPRA_VALOR_01: TBCDField;
+    CdsGrupoVENDA_QTDE_01: TBCDField;
+    CdsGrupoVENDA_VALOR_01: TBCDField;
+    CdsGrupoCOMPRA_QTDE_03: TBCDField;
+    CdsGrupoCOMPRA_VALOR_03: TBCDField;
+    CdsGrupoVENDA_QTDE_03: TBCDField;
+    CdsGrupoVENDA_VALOR_03: TBCDField;
+    CdsGrupoCOMPRA_QTDE_06: TBCDField;
+    CdsGrupoCOMPRA_VALOR_06: TBCDField;
+    CdsGrupoVENDA_QTDE_06: TBCDField;
+    CdsGrupoVENDA_VALOR_06: TBCDField;
+    CdsGrupoCOMPRA_QTDE_09: TBCDField;
+    CdsGrupoCOMPRA_VALOR_09: TBCDField;
+    CdsGrupoVENDA_QTDE_09: TBCDField;
+    CdsGrupoVENDA_VALOR_09: TBCDField;
+    CdsGrupoCOMPRA_QTDE_12: TBCDField;
+    CdsGrupoCOMPRA_VALOR_12: TBCDField;
+    CdsGrupoVENDA_QTDE_12: TBCDField;
+    CdsGrupoVENDA_VALOR_12: TBCDField;
+    CdsGrupoCOMPRA_QTDE_99: TBCDField;
+    CdsGrupoCOMPRA_VALOR_99: TBCDField;
+    CdsGrupoVENDA_QTDE_99: TBCDField;
+    CdsGrupoVENDA_VALOR_99: TBCDField;
+    CdsGrupoPERCENT_CQ01: TBCDField;
+    CdsGrupoPERCENT_CV01: TBCDField;
+    CdsGrupoPERCENT_VQ01: TBCDField;
+    CdsGrupoPERCENT_VV01: TBCDField;
+    CdsGrupoPERCENT_CQ03: TBCDField;
+    CdsGrupoPERCENT_CV03: TBCDField;
+    CdsGrupoPERCENT_VQ03: TBCDField;
+    CdsGrupoPERCENT_VV03: TBCDField;
+    CdsGrupoPERCENT_CQ06: TBCDField;
+    CdsGrupoPERCENT_CV06: TBCDField;
+    CdsGrupoPERCENT_VQ06: TBCDField;
+    CdsGrupoPERCENT_VV06: TBCDField;
+    CdsGrupoPERCENT_CQ09: TBCDField;
+    CdsGrupoPERCENT_CV09: TBCDField;
+    CdsGrupoPERCENT_VQ09: TBCDField;
+    CdsGrupoPERCENT_VV09: TBCDField;
+    CdsGrupoPERCENT_CQ12: TBCDField;
+    CdsGrupoPERCENT_CV12: TBCDField;
+    CdsGrupoPERCENT_VQ12: TBCDField;
+    CdsGrupoPERCENT_VV12: TBCDField;
+    CdsGrupoPERCENT_CQ99: TBCDField;
+    CdsGrupoPERCENT_CV99: TBCDField;
+    CdsGrupoPERCENT_VQ99: TBCDField;
+    CdsGrupoPERCENT_VV99: TBCDField;
+    StyleRepository: TcxStyleRepository;
+    StyleSelecao: TcxStyle;
+    StyleContent: TcxStyle;
+    StyleContentEven: TcxStyle;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -137,6 +198,7 @@ type
       Shift: TShiftState);
   private
     { Private declarations }
+    FSQLGrupo   ,
     FSQLProduto : TStringList;
     procedure HabilitarGuia(const TipoProcesso : Integer);
     procedure ExecutarPesquisa(const TipoProcesso : Integer);
@@ -187,9 +249,12 @@ begin
   {$ENDIF}
 
   inherited;
+  FSQLGrupo := TStringList.Create;
+  FSQLGrupo.AddStrings( QryGrupo.SQL );
+
   FSQLProduto := TStringList.Create;
   FSQLProduto.AddStrings( QryProduto.SQL );
-  
+
   edTipoProcesso.ItemIndex := 0;
   HabilitarGuia(edTipoProcesso.ItemIndex);
 end;
@@ -213,6 +278,7 @@ begin
     Application.ProcessMessages;
 
     CdsListaProduto.Close;
+    CdsListaProduto.Params.ParamByName('empresa').AsString := GetEmpresaIDDefault;
     CdsListaProduto.Open;
 
     gagProcesso.MaxValue := CdsListaProduto.RecordCount;
@@ -260,6 +326,8 @@ begin
         Next;
       end;
 
+      gagProcesso.Progress := gagProcesso.MaxValue;
+
     end;
 
   finally
@@ -278,7 +346,7 @@ procedure TFrmProdutoRotatividadePRC.ExecutarPesquisa(
 var
   sWhr : String;
 begin
-  sWhr := WHR_DEFAULT;
+  sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
   
   Case TipoProcesso of
     TIPO_PRD:
@@ -291,7 +359,7 @@ begin
 
           if ( Trim(edPesquisar.Text) <> EmptyStr ) then
             if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
-              sWhr := sWhr + ' and (r.cod_produto like ' + QuotedStr('%' + edPesquisar.Text + '%') + ')'
+              sWhr := sWhr + ' and (p.cod like ' + QuotedStr('%' + edPesquisar.Text + '%') + ')'
             else
               sWhr := sWhr + ' and (upper(p.descri) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
 

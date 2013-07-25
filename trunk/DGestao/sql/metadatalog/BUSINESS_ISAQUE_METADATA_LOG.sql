@@ -7907,3 +7907,20 @@ end^
 
 SET TERM ; ^
 
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Invalid expression in the select list (not contained in either an aggregate function or the GROUP BY clause).
+
+*/
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 11, column 8.
+end.
+
+*/
