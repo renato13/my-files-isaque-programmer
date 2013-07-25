@@ -29,7 +29,7 @@ type
     lblTipoProcesso: TLabel;
     edTipoProcesso: TComboBox;
     GrpBxPesquisar: TGroupBox;
-    BrnPesquisar: TSpeedButton;
+    BtnPesquisar: TSpeedButton;
     lblPesquisar: TLabel;
     edPesquisar: TEdit;
     BtnProcessar: TSpeedButton;
@@ -128,13 +128,18 @@ type
     CdsProdutoUNP_SIGLA: TStringField;
     dbgProdutoTblColumn29: TcxGridDBBandedColumn;
     dbgProdutoTblColumn30: TcxGridDBBandedColumn;
+    procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
     procedure BtnProcessarClick(Sender: TObject);
-    procedure BrnPesquisarClick(Sender: TObject);
+    procedure BtnPesquisarClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
+    FSQLProduto : TStringList;
     procedure HabilitarGuia(const TipoProcesso : Integer);
+    procedure ExecutarPesquisa(const TipoProcesso : Integer);
   public
     { Public declarations }
   end;
@@ -153,6 +158,8 @@ const
   TIPO_PRD = 0;
   TIPO_GRP = 1;
   TIPO_FOR = 2;
+
+  WHR_DEFAULT = 'where 1=1';
   
 { TFrmProdutoRotatividadePRC }
 
@@ -180,6 +187,8 @@ begin
   {$ENDIF}
 
   inherited;
+  FSQLProduto := TStringList.Create;
+  FSQLProduto.AddStrings( QryProduto.SQL );
   
   edTipoProcesso.ItemIndex := 0;
   HabilitarGuia(edTipoProcesso.ItemIndex);
@@ -192,6 +201,9 @@ end;
 
 procedure TFrmProdutoRotatividadePRC.BtnProcessarClick(Sender: TObject);
 begin
+  if ( not ShowConfirm('Deseja processar a rotatividade dos produtos?', 'Processar') ) then
+    Exit;
+
   Screen.Cursor        := crSQLWait;
   pnlProcesso.Visible  := True;
   gagProcesso.MinValue := 0;
@@ -256,10 +268,72 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.BrnPesquisarClick(Sender: TObject);
+procedure TFrmProdutoRotatividadePRC.BtnPesquisarClick(Sender: TObject);
 begin
-  CdsProduto.Close;
-  CdsProduto.Open;
+  ExecutarPesquisa(edTipoProcesso.ItemIndex);
+end;
+
+procedure TFrmProdutoRotatividadePRC.ExecutarPesquisa(
+  const TipoProcesso: Integer);
+var
+  sWhr : String;
+begin
+  sWhr := WHR_DEFAULT;
+  
+  Case TipoProcesso of
+    TIPO_PRD:
+      begin
+        CdsProduto.Close;
+        with QryProduto do
+        begin
+          SQL.Clear;
+          SQL.AddStrings( FSQLProduto );
+
+          if ( Trim(edPesquisar.Text) <> EmptyStr ) then
+            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
+              sWhr := sWhr + ' and (r.cod_produto like ' + QuotedStr('%' + edPesquisar.Text + '%') + ')'
+            else
+              sWhr := sWhr + ' and (upper(p.descri) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
+
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+        end;
+        CdsProduto.Open;
+
+        if ( CdsProduto.IsEmpty ) then
+          ShowWarning('Dados não encontados de acordo com o filtro informado!');
+      end;
+
+    TIPO_GRP:
+      ;
+
+    TIPO_FOR:
+      ;
+  end;
+end;
+
+procedure TFrmProdutoRotatividadePRC.FormKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if ( (Key = VK_RETURN) and (ActiveControl = edPesquisar) ) then
+    BtnPesquisar.Click
+  else
+  if ( Key = VK_F5 ) then
+    BtnProcessar.Click;
+    
+  inherited;
+end;
+
+procedure TFrmProdutoRotatividadePRC.NovaPesquisaKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if ( Key in ['0'..'9', 'a'..'z', 'A'..'Z', ' '] ) then
+  begin
+    edPesquisar.Text := Trim(Key);
+    edPesquisar.SetFocus;
+    edPesquisar.SelStart := Length(edPesquisar.Text) + 1;
+
+    Key := #0;
+  end
 end;
 
 initialization
