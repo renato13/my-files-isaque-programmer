@@ -84,7 +84,8 @@ uses
   UGeVendaTransporte in 'UGeVendaTransporte.pas' {frmGeVendaTransporte},
   UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
   UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
-  UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin};
+  UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin},
+  UGeProdutoRotatividadePRC in 'UGeProdutoRotatividadePRC.pas' {FrmProdutoRotatividadePRC};
 
 {$R *.res}
 

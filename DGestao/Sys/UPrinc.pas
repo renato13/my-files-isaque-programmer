@@ -119,6 +119,8 @@ type
     mnRelatorioEstoqueDemanda: TMenuItem;
     menuConsulta: TMenuItem;
     nmConultarVendaItem: TMenuItem;
+    popRotatividade: TMenuItem;
+    nmRotatividade: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -171,6 +173,7 @@ type
     procedure mnRelatorioFinanceiroPorFormaPagtoClick(Sender: TObject);
     procedure mnRelatorioEstoqueDemandaClick(Sender: TObject);
     procedure nmConultarVendaItemClick(Sender: TObject);
+    procedure nmRotatividadeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -579,6 +582,11 @@ end;
 procedure TfrmPrinc.nmConultarVendaItemClick(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'FrmGeVendaItemPesquisa');
+end;
+
+procedure TfrmPrinc.nmRotatividadeClick(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'FrmProdutoRotatividadePRC');
 end;
 
 end.

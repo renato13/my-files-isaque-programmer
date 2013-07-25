@@ -72,7 +72,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
         Top = 40
         Width = 23
         Height = 22
-        Hint = 'Processar rotatividade'
+        Hint = 'Processar rotatividade (F5)'
         Anchors = [akTop, akRight]
         Flat = True
         Glyph.Data = {
@@ -141,7 +141,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       DesignSize = (
         738
         73)
-      object BrnPesquisar: TSpeedButton
+      object BtnPesquisar: TSpeedButton
         Left = 701
         Top = 40
         Width = 23
@@ -178,7 +178,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
           00FFFF00FFA77E70A98073A4786EFF00FFFF00FFFF00FFFF00FF}
         ParentShowHint = False
         ShowHint = True
-        OnClick = BrnPesquisarClick
+        OnClick = BtnPesquisarClick
       end
       object lblPesquisar: TLabel
         Left = 16
@@ -243,6 +243,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
           Align = alClient
           TabOrder = 0
           object dbgProdutoTbl: TcxGridDBBandedTableView
+            OnKeyPress = NovaPesquisaKeyPress
             NavigatorButtons.ConfirmDelete = False
             DataController.DataSource = dsProduto
             DataController.Summary.DefaultGroupSummaryItems = <>
@@ -282,6 +283,42 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
                 Kind = skSum
                 FieldName = 'VENDA_VALOR_06'
                 Column = dbgProdutoTblColumn16
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_09'
+                Column = dbgProdutoTblColumn18
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_QTDE_09'
+                Column = dbgProdutoTblColumn20
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_12'
+                Column = dbgProdutoTblColumn22
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_12'
+                Column = dbgProdutoTblColumn24
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_99'
+                Column = dbgProdutoTblColumn26
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_99'
+                Column = dbgProdutoTblColumn28
               end>
             DataController.Summary.SummaryGroups = <>
             OptionsBehavior.CellHints = True
@@ -775,6 +812,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      TabStop = False
       NumGlyphs = 2
     end
   end
