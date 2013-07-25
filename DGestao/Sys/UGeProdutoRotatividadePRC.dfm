@@ -327,10 +327,15 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
             OptionsData.DeletingConfirmation = False
             OptionsData.Editing = False
             OptionsData.Inserting = False
+            OptionsSelection.CellSelect = False
             OptionsView.CellEndEllipsis = True
             OptionsView.NoDataToDisplayInfoText = '<Sem dados para visualiza'#231#227'o>'
             OptionsView.Footer = True
             OptionsView.GroupByBox = False
+            Styles.Content = StyleContent
+            Styles.ContentEven = StyleContentEven
+            Styles.Inactive = StyleSelecao
+            Styles.Selection = StyleSelecao
             Bands = <
               item
                 Caption = 'Produto'
@@ -461,7 +466,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
               DataBinding.FieldName = 'CODIGO'
               Options.Filtering = False
               Options.Moving = False
-              Width = 50
+              Width = 60
               Position.BandIndex = 0
               Position.ColIndex = 0
               Position.RowIndex = 0
@@ -471,7 +476,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
               DataBinding.FieldName = 'DESCRICAO'
               Options.Filtering = False
               Options.Moving = False
-              Width = 250
+              Width = 247
               Position.BandIndex = 0
               Position.ColIndex = 1
               Position.RowIndex = 0
@@ -752,7 +757,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
               Options.Filtering = False
               Options.Moving = False
               Options.Sorting = False
-              Width = 35
+              Width = 34
               Position.BandIndex = 0
               Position.ColIndex = 3
               Position.RowIndex = 0
@@ -766,13 +771,6 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       object TbsGrupo: TTabSheet
         Caption = 'TbsGrupo'
         ImageIndex = 1
-        object Label1: TLabel
-          Left = 248
-          Top = 152
-          Width = 29
-          Height = 13
-          Caption = 'Grupo'
-        end
       end
       object TbsFornecedor: TTabSheet
         Caption = 'TbsFornecedor'
@@ -895,6 +893,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
         '       inner join TBCOMPRASITENS c on (c.ano = cc.ano and c.codc' +
         'ontrol = cc.codcontrol)'
       '     where cc.status in (2, 4) -- Finalizada, NF-e'
+      '       and cc.codemp = p.codemp'
       '       and c.codprod = p.cod'
       '    ) as data_ultima_compra'
       ''
@@ -905,18 +904,26 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
         '       inner join TVENDASITENS v on (v.ano = vv.ano and v.codcon' +
         'trol = vv.codcontrol)'
       '     where vv.status in (3, 4) -- Finalizada, NF-e'
+      '       and vv.codemp = p.codemp'
       '       and v.codprod = p.cod'
       '    ) as data_ultima_venda'
-      'from TBPRODUTO p')
+      'from TBPRODUTO p'
+      'where p.codemp = :empresa')
     Left = 24
     Top = 184
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'empresa'
+        ParamType = ptInput
+      end>
   end
   object QryProduto: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     SQL.Strings = (
       'select'
-      '    r.cod_produto as Codigo'
+      '    p.cod as Codigo'
       '  , coalesce(p.descri_apresentacao, p.descri) as descricao'
       '  , p.qtde'
       '  , u.unp_descricao'
@@ -951,8 +958,8 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       '  , r.processo_data'
       '  , r.processo_hora'
       '  , r.processo_usuario'
-      'from TBPRODUTO_ROTATIVIDADE r'
-      '  inner join TBPRODUTO p on (p.cod = r.cod_produto)'
+      'from TBPRODUTO p'
+      '  left join TBPRODUTO_ROTATIVIDADE r on (r.cod_produto = p.cod)'
       '  left join TBUNIDADEPROD u on (u.unp_cod = p.codunidade)'
       ''
       'where 1=1'
@@ -973,7 +980,12 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
   end
   object CdsListaProduto: TClientDataSet
     Aggregates = <>
-    Params = <>
+    Params = <
+      item
+        DataType = ftString
+        Name = 'empresa'
+        ParamType = ptInput
+      end>
     ProviderName = 'DspListaProduto'
     Left = 88
     Top = 184
@@ -1257,6 +1269,443 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       FieldName = 'PROCESSO_USUARIO'
       Origin = '"TBPRODUTO_ROTATIVIDADE"."PROCESSO_USUARIO"'
       Size = 50
+    end
+  end
+  object QryGrupo: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'select'
+      '    p.codgrupo as Codigo'
+      '  , coalesce(g.descri, '#39'* A Definir'#39') as descricao'
+      '  , sum( coalesce(p.qtde, 0) ) as qtde'
+      '  , count( p.cod ) as itens'
+      '  , max( r.data_ultima_compra ) as data_ultima_compra'
+      '  , max( r.data_ultima_venda  ) as data_ultima_venda'
+      '  , sum( coalesce(r.compra_qtde_01, 0) )  as compra_qtde_01'
+      '  , sum( coalesce(r.compra_valor_01, 0) ) as compra_valor_01'
+      '  , sum( coalesce(r.venda_qtde_01, 0) )   as venda_qtde_01'
+      '  , sum( coalesce(r.venda_valor_01, 0) )  as venda_valor_01'
+      '  , sum( coalesce(r.compra_qtde_03, 0) )  as compra_qtde_03'
+      '  , sum( coalesce(r.compra_valor_03, 0) ) as compra_valor_03'
+      '  , sum( coalesce(r.venda_qtde_03, 0) )   as venda_qtde_03'
+      '  , sum( coalesce(r.venda_valor_03, 0) )  as venda_valor_03'
+      '  , sum( coalesce(r.compra_qtde_06, 0) )  as compra_qtde_06'
+      '  , sum( coalesce(r.compra_valor_06, 0) ) as compra_valor_06'
+      '  , sum( coalesce(r.venda_qtde_06, 0) )   as venda_qtde_06'
+      '  , sum( coalesce(r.venda_valor_06, 0) )  as venda_valor_06'
+      '  , sum( coalesce(r.compra_qtde_09, 0) )  as compra_qtde_09'
+      '  , sum( coalesce(r.compra_valor_09, 0) ) as compra_valor_09'
+      '  , sum( coalesce(r.venda_qtde_09, 0) )   as venda_qtde_09'
+      '  , sum( coalesce(r.venda_valor_09, 0) )  as venda_valor_09'
+      '  , sum( coalesce(r.compra_qtde_12, 0) )  as compra_qtde_12'
+      '  , sum( coalesce(r.compra_valor_12, 0) ) as compra_valor_12'
+      '  , sum( coalesce(r.venda_qtde_12, 0) )   as venda_qtde_12'
+      '  , sum( coalesce(r.venda_valor_12, 0) )  as venda_valor_12'
+      '  , sum( coalesce(r.compra_qtde_99, 0) )  as compra_qtde_99'
+      '  , sum( coalesce(r.compra_valor_99, 0) ) as compra_valor_99'
+      '  , sum( coalesce(r.venda_qtde_99, 0) )   as venda_qtde_99'
+      '  , sum( coalesce(r.venda_valor_99, 0) )  as venda_valor_99'
+      '  , 0.0 as percent_cq01'
+      '  , 0.0 as percent_cv01'
+      '  , 0.0 as percent_vq01'
+      '  , 0.0 as percent_vv01'
+      '  , 0.0 as percent_cq03'
+      '  , 0.0 as percent_cv03'
+      '  , 0.0 as percent_vq03'
+      '  , 0.0 as percent_vv03'
+      '  , 0.0 as percent_cq06'
+      '  , 0.0 as percent_cv06'
+      '  , 0.0 as percent_vq06'
+      '  , 0.0 as percent_vv06'
+      '  , 0.0 as percent_cq09'
+      '  , 0.0 as percent_cv09'
+      '  , 0.0 as percent_vq09'
+      '  , 0.0 as percent_vv09'
+      '  , 0.0 as percent_cq12'
+      '  , 0.0 as percent_cv12'
+      '  , 0.0 as percent_vq12'
+      '  , 0.0 as percent_vv12'
+      '  , 0.0 as percent_cq99'
+      '  , 0.0 as percent_cv99'
+      '  , 0.0 as percent_vq99'
+      '  , 0.0 as percent_vv99'
+      'from TBPRODUTO p'
+      '  left join TBPRODUTO_ROTATIVIDADE r on (r.cod_produto = p.cod)'
+      '  left join TBGRUPOPROD g on (g.cod = p.codgrupo)'
+      ''
+      'where 1=1'
+      ''
+      'group by 1, 2'
+      ''
+      'order by 2')
+    Left = 24
+    Top = 280
+  end
+  object DspGrupo: TDataSetProvider
+    DataSet = QryGrupo
+    Left = 56
+    Top = 280
+  end
+  object CdsGrupo: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DspGrupo'
+    Left = 88
+    Top = 280
+    object CdsGrupoCODIGO: TSmallintField
+      FieldName = 'CODIGO'
+      DisplayFormat = '##000'
+    end
+    object CdsGrupoDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 30
+    end
+    object CdsGrupoQTDE: TLargeintField
+      FieldName = 'QTDE'
+      DisplayFormat = ',0'
+    end
+    object CdsGrupoITENS: TIntegerField
+      FieldName = 'ITENS'
+      DisplayFormat = ',0'
+    end
+    object CdsGrupoDATA_ULTIMA_COMPRA: TDateField
+      Alignment = taCenter
+      FieldName = 'DATA_ULTIMA_COMPRA'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object CdsGrupoDATA_ULTIMA_VENDA: TDateField
+      Alignment = taCenter
+      FieldName = 'DATA_ULTIMA_VENDA'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object CdsGrupoCOMPRA_QTDE_01: TBCDField
+      FieldName = 'COMPRA_QTDE_01'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_01: TBCDField
+      FieldName = 'COMPRA_VALOR_01'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_01: TBCDField
+      FieldName = 'VENDA_QTDE_01'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_01: TBCDField
+      FieldName = 'VENDA_VALOR_01'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_QTDE_03: TBCDField
+      FieldName = 'COMPRA_QTDE_03'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_03: TBCDField
+      FieldName = 'COMPRA_VALOR_03'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_03: TBCDField
+      FieldName = 'VENDA_QTDE_03'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_03: TBCDField
+      FieldName = 'VENDA_VALOR_03'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_QTDE_06: TBCDField
+      FieldName = 'COMPRA_QTDE_06'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_06: TBCDField
+      FieldName = 'COMPRA_VALOR_06'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_06: TBCDField
+      FieldName = 'VENDA_QTDE_06'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_06: TBCDField
+      FieldName = 'VENDA_VALOR_06'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_QTDE_09: TBCDField
+      FieldName = 'COMPRA_QTDE_09'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_09: TBCDField
+      FieldName = 'COMPRA_VALOR_09'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_09: TBCDField
+      FieldName = 'VENDA_QTDE_09'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_09: TBCDField
+      FieldName = 'VENDA_VALOR_09'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_QTDE_12: TBCDField
+      FieldName = 'COMPRA_QTDE_12'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_12: TBCDField
+      FieldName = 'COMPRA_VALOR_12'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_12: TBCDField
+      FieldName = 'VENDA_QTDE_12'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_12: TBCDField
+      FieldName = 'VENDA_VALOR_12'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_QTDE_99: TBCDField
+      FieldName = 'COMPRA_QTDE_99'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoCOMPRA_VALOR_99: TBCDField
+      FieldName = 'COMPRA_VALOR_99'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_QTDE_99: TBCDField
+      FieldName = 'VENDA_QTDE_99'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsGrupoVENDA_VALOR_99: TBCDField
+      FieldName = 'VENDA_VALOR_99'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsGrupoPERCENT_CQ01: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ01'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV01: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV01'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ01: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ01'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV01: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV01'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CQ03: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ03'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV03: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV03'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ03: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ03'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV03: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV03'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CQ06: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ06'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV06: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV06'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ06: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ06'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV06: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV06'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CQ09: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ09'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV09: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV09'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ09: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ09'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV09: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV09'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CQ12: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ12'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV12: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV12'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ12: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ12'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV12: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV12'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CQ99: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CQ99'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_CV99: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_CV99'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VQ99: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VQ99'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+    object CdsGrupoPERCENT_VV99: TBCDField
+      DisplayLabel = '%'
+      FieldName = 'PERCENT_VV99'
+      DisplayFormat = ',0.##'
+      Precision = 18
+      Size = 1
+    end
+  end
+  object dsGrupo: TDataSource
+    DataSet = CdsGrupo
+    Left = 120
+    Top = 280
+  end
+  object StyleRepository: TcxStyleRepository
+    Left = 16
+    Top = 456
+    PixelsPerInch = 96
+    object StyleSelecao: TcxStyle
+      AssignedValues = [svColor, svFont, svTextColor]
+      Color = clMoneyGreen
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      TextColor = clBlack
+    end
+    object StyleContent: TcxStyle
+      AssignedValues = [svColor, svFont, svTextColor]
+      Color = clMenuBar
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      TextColor = clBlack
+    end
+    object StyleContentEven: TcxStyle
+      AssignedValues = [svColor, svFont, svTextColor]
+      Color = 10930928
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      TextColor = clBlack
     end
   end
 end
