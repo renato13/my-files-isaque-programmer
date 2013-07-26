@@ -218,7 +218,7 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       Top = 0
       Width = 1011
       Height = 466
-      ActivePage = TbsProduto
+      ActivePage = TbsGrupo
       Align = alClient
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -771,6 +771,1077 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       object TbsGrupo: TTabSheet
         Caption = 'TbsGrupo'
         ImageIndex = 1
+        object pnlTotal: TPanel
+          Left = 0
+          Top = 328
+          Width = 1003
+          Height = 110
+          Align = alBottom
+          BevelOuter = bvNone
+          TabOrder = 1
+          object dbgTotal: TcxGrid
+            Left = 0
+            Top = 0
+            Width = 1003
+            Height = 110
+            Align = alClient
+            TabOrder = 0
+            object dbgTotalTbl: TcxGridDBBandedTableView
+              OnKeyPress = NovaPesquisaKeyPress
+              NavigatorButtons.ConfirmDelete = False
+              DataController.DataSource = dsTotal
+              DataController.Summary.DefaultGroupSummaryItems = <>
+              DataController.Summary.FooterSummaryItems = <>
+              DataController.Summary.SummaryGroups = <>
+              OptionsBehavior.CellHints = True
+              OptionsData.CancelOnExit = False
+              OptionsData.Deleting = False
+              OptionsData.DeletingConfirmation = False
+              OptionsData.Editing = False
+              OptionsData.Inserting = False
+              OptionsSelection.CellSelect = False
+              OptionsView.CellEndEllipsis = True
+              OptionsView.NoDataToDisplayInfoText = '<Sem dados para visualiza'#231#227'o>'
+              OptionsView.GroupByBox = False
+              Styles.Content = StyleContent
+              Styles.ContentEven = StyleContentEven
+              Styles.Inactive = StyleSelecao
+              Styles.Selection = StyleSelecao
+              Bands = <
+                item
+                  Caption = 'Consolida'#231#227'o Geral'
+                  Options.Moving = False
+                  Width = 113
+                end
+                item
+                  Caption = #218'ltimo Movimento'
+                  Options.Moving = False
+                  Width = 150
+                end
+                item
+                  Caption = '0 - 1'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 2
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 2
+                  Position.ColIndex = 1
+                  Width = 140
+                end
+                item
+                  Caption = '1 - 3'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 5
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 5
+                  Position.ColIndex = 1
+                  Width = 140
+                end
+                item
+                  Caption = '3 - 6'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 8
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 8
+                  Position.ColIndex = 1
+                  Width = 140
+                end
+                item
+                  Caption = '6 - 9'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 11
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 11
+                  Position.ColIndex = 1
+                  Width = 140
+                end
+                item
+                  Caption = '9 - 12'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 14
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 14
+                  Position.ColIndex = 1
+                  Width = 140
+                end
+                item
+                  Caption = '12 - 99'
+                  Options.Moving = False
+                  Width = 280
+                end
+                item
+                  Caption = 'Compra'
+                  Options.Moving = False
+                  Position.BandIndex = 17
+                  Position.ColIndex = 0
+                  Width = 140
+                end
+                item
+                  Caption = 'Venda'
+                  Options.Moving = False
+                  Position.BandIndex = 17
+                  Position.ColIndex = 1
+                  Width = 140
+                end>
+              object cxGridDBBandedColumn3: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'DATA_ULTIMA_COMPRA'
+                HeaderAlignmentHorz = taCenter
+                Options.Moving = False
+                Width = 75
+                Position.BandIndex = 1
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn4: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'DATA_ULTIMA_VENDA'
+                HeaderAlignmentHorz = taCenter
+                Options.Moving = False
+                Width = 75
+                Position.BandIndex = 1
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn5: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_QTDE_01'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 3
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn6: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_01'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 3
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn7: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_QTDE_01'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 4
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn8: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_01'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Position.BandIndex = 4
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn9: TcxGridDBBandedColumn
+                Tag = 60
+                DataBinding.FieldName = 'COMPRA_QTDE_03'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 6
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn10: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_03'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 6
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn11: TcxGridDBBandedColumn
+                Tag = 60
+                DataBinding.FieldName = 'VENDA_QTDE_03'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 7
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn12: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_03'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 7
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn13: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_QTDE_06'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 9
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn14: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_06'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 9
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn15: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_QTDE_06'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 10
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn16: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_06'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 10
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn17: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_QTDE_09'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 12
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn18: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_09'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 12
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn19: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_QTDE_09'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 13
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn20: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_09'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 13
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn21: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_QTDE_12'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 15
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn22: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_12'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 15
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn23: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_QTDE_12'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 16
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn24: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_12'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 16
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn25: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_QTDE_99'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 18
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn26: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'COMPRA_VALOR_99'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 18
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn27: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_QTDE_99'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 60
+                Position.BandIndex = 19
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn28: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'VENDA_VALOR_99'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 80
+                Position.BandIndex = 19
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn29: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'QTDE'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 62
+                Position.BandIndex = 0
+                Position.ColIndex = 0
+                Position.RowIndex = 0
+              end
+              object cxGridDBBandedColumn30: TcxGridDBBandedColumn
+                DataBinding.FieldName = 'ITENS'
+                Options.Filtering = False
+                Options.Moving = False
+                Options.Sorting = False
+                Width = 51
+                Position.BandIndex = 0
+                Position.ColIndex = 1
+                Position.RowIndex = 0
+              end
+            end
+            object dbgTotalLvl: TcxGridLevel
+              GridView = dbgTotalTbl
+            end
+          end
+        end
+        object dbgGrupo: TcxGrid
+          Left = 0
+          Top = 0
+          Width = 1003
+          Height = 328
+          Align = alClient
+          TabOrder = 0
+          object dbgGrupoTbl: TcxGridDBBandedTableView
+            OnKeyPress = NovaPesquisaKeyPress
+            NavigatorButtons.ConfirmDelete = False
+            DataController.DataSource = dsGrupo
+            DataController.Summary.DefaultGroupSummaryItems = <>
+            DataController.Summary.FooterSummaryItems = <
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_01'
+                Column = cxGridDBBandedColumn34
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_01'
+                Column = cxGridDBBandedColumn36
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_03'
+                Column = cxGridDBBandedColumn38
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_03'
+                Column = cxGridDBBandedColumn40
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_06'
+                Column = cxGridDBBandedColumn42
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_06'
+                Column = cxGridDBBandedColumn44
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_09'
+                Column = cxGridDBBandedColumn46
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_QTDE_09'
+                Column = cxGridDBBandedColumn48
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_12'
+                Column = cxGridDBBandedColumn50
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_12'
+                Column = cxGridDBBandedColumn52
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'COMPRA_VALOR_99'
+                Column = cxGridDBBandedColumn54
+              end
+              item
+                Format = ',0.00'
+                Kind = skSum
+                FieldName = 'VENDA_VALOR_99'
+                Column = cxGridDBBandedColumn56
+              end>
+            DataController.Summary.SummaryGroups = <>
+            OptionsBehavior.CellHints = True
+            OptionsData.CancelOnExit = False
+            OptionsData.Deleting = False
+            OptionsData.DeletingConfirmation = False
+            OptionsData.Editing = False
+            OptionsData.Inserting = False
+            OptionsSelection.CellSelect = False
+            OptionsView.CellEndEllipsis = True
+            OptionsView.NoDataToDisplayInfoText = '<Sem dados para visualiza'#231#227'o>'
+            OptionsView.Footer = True
+            OptionsView.GroupByBox = False
+            Styles.Content = StyleContent
+            Styles.ContentEven = StyleContentEven
+            Styles.Inactive = StyleSelecao
+            Styles.Selection = StyleSelecao
+            Bands = <
+              item
+                Caption = 'Grupo'
+                Options.Moving = False
+                Width = 336
+              end
+              item
+                Caption = #218'ltimo Movimento'
+                Options.Moving = False
+                Width = 150
+              end
+              item
+                Caption = '0 - 1'
+                Options.Moving = False
+                Width = 400
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 2
+                Position.ColIndex = 0
+                Width = 200
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 2
+                Position.ColIndex = 1
+                Width = 200
+              end
+              item
+                Caption = '1 - 3'
+                Options.Moving = False
+                Width = 400
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 5
+                Position.ColIndex = 0
+                Width = 200
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 5
+                Position.ColIndex = 1
+                Width = 200
+              end
+              item
+                Caption = '3 - 6'
+                Options.Moving = False
+                Width = 280
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 8
+                Position.ColIndex = 0
+                Width = 140
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 8
+                Position.ColIndex = 1
+                Width = 140
+              end
+              item
+                Caption = '6 - 9'
+                Options.Moving = False
+                Width = 280
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 11
+                Position.ColIndex = 0
+                Width = 140
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 11
+                Position.ColIndex = 1
+                Width = 140
+              end
+              item
+                Caption = '9 - 12'
+                Options.Moving = False
+                Width = 280
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 14
+                Position.ColIndex = 0
+                Width = 140
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 14
+                Position.ColIndex = 1
+                Width = 140
+              end
+              item
+                Caption = '12 - 99'
+                Options.Moving = False
+                Width = 280
+              end
+              item
+                Caption = 'Compra'
+                Options.Moving = False
+                Position.BandIndex = 17
+                Position.ColIndex = 0
+                Width = 140
+              end
+              item
+                Caption = 'Venda'
+                Options.Moving = False
+                Position.BandIndex = 17
+                Position.ColIndex = 1
+                Width = 140
+              end>
+            object cxGridDBBandedColumn1: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'CODIGO'
+              Options.Filtering = False
+              Options.Moving = False
+              Width = 50
+              Position.BandIndex = 0
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn2: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'DESCRICAO'
+              Options.Filtering = False
+              Options.Moving = False
+              Width = 178
+              Position.BandIndex = 0
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn31: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'DATA_ULTIMA_COMPRA'
+              HeaderAlignmentHorz = taCenter
+              Options.Moving = False
+              Width = 75
+              Position.BandIndex = 1
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn32: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'DATA_ULTIMA_VENDA'
+              HeaderAlignmentHorz = taCenter
+              Options.Moving = False
+              Width = 75
+              Position.BandIndex = 1
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn33: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_QTDE_01'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 70
+              Position.BandIndex = 3
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn34: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_01'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 90
+              Position.BandIndex = 3
+              Position.ColIndex = 2
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn35: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_QTDE_01'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 70
+              Position.BandIndex = 4
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn36: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_01'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 90
+              Position.BandIndex = 4
+              Position.ColIndex = 2
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn37: TcxGridDBBandedColumn
+              Tag = 60
+              DataBinding.FieldName = 'COMPRA_QTDE_03'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 70
+              Position.BandIndex = 6
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn38: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_03'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 90
+              Position.BandIndex = 6
+              Position.ColIndex = 2
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn39: TcxGridDBBandedColumn
+              Tag = 60
+              DataBinding.FieldName = 'VENDA_QTDE_03'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 70
+              Position.BandIndex = 7
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn40: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_03'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 90
+              Position.BandIndex = 7
+              Position.ColIndex = 2
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn41: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_QTDE_06'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 9
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn42: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_06'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 9
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn43: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_QTDE_06'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 10
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn44: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_06'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 10
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn45: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_QTDE_09'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 12
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn46: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_09'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 12
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn47: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_QTDE_09'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 13
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn48: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_09'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 13
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn49: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_QTDE_12'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 15
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn50: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_12'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 15
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn51: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_QTDE_12'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 16
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn52: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_12'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 16
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn53: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_QTDE_99'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 18
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn54: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'COMPRA_VALOR_99'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 18
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn55: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_QTDE_99'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 60
+              Position.BandIndex = 19
+              Position.ColIndex = 0
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn56: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'VENDA_VALOR_99'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 80
+              Position.BandIndex = 19
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn57: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'QTDE'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 63
+              Position.BandIndex = 0
+              Position.ColIndex = 2
+              Position.RowIndex = 0
+            end
+            object cxGridDBBandedColumn58: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'ITENS'
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Width = 45
+              Position.BandIndex = 0
+              Position.ColIndex = 3
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn1: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CQ01'
+              HeaderAlignmentHorz = taCenter
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 3
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn2: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CV01'
+              HeaderAlignmentHorz = taCenter
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 3
+              Position.ColIndex = 3
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn3: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CQ03'
+              HeaderAlignmentHorz = taCenter
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 4
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn4: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CV03'
+              HeaderAlignmentHorz = taCenter
+              Options.Filtering = False
+              Options.Moving = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 4
+              Position.ColIndex = 3
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn5: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CQ03'
+              HeaderAlignmentHorz = taCenter
+              Options.Editing = False
+              Options.Filtering = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 6
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn6: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_CV03'
+              HeaderAlignmentHorz = taCenter
+              Options.Editing = False
+              Options.Filtering = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 6
+              Position.ColIndex = 3
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn7: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_VQ03'
+              HeaderAlignmentHorz = taCenter
+              Options.Editing = False
+              Options.Filtering = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 7
+              Position.ColIndex = 1
+              Position.RowIndex = 0
+            end
+            object dbgGrupoTblColumn8: TcxGridDBBandedColumn
+              DataBinding.FieldName = 'PERCENT_VV03'
+              HeaderAlignmentHorz = taCenter
+              Options.Editing = False
+              Options.Filtering = False
+              Options.Sorting = False
+              Styles.Content = StyleContentEven
+              Width = 40
+              Position.BandIndex = 7
+              Position.ColIndex = 3
+              Position.RowIndex = 0
+            end
+          end
+          object dbgGrupoLvl: TcxGridLevel
+            GridView = dbgGrupoTbl
+          end
+        end
       end
       object TbsFornecedor: TTabSheet
         Caption = 'TbsFornecedor'
@@ -1354,147 +2425,177 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     Left = 88
     Top = 280
     object CdsGrupoCODIGO: TSmallintField
+      DisplayLabel = 'C'#243'digo'
       FieldName = 'CODIGO'
       DisplayFormat = '##000'
     end
     object CdsGrupoDESCRICAO: TStringField
+      DisplayLabel = 'Descri'#231#227'o'
       FieldName = 'DESCRICAO'
       Size = 30
     end
     object CdsGrupoQTDE: TLargeintField
+      DisplayLabel = 'Estoque'
       FieldName = 'QTDE'
       DisplayFormat = ',0'
     end
     object CdsGrupoITENS: TIntegerField
+      DisplayLabel = 'Itens'
       FieldName = 'ITENS'
       DisplayFormat = ',0'
     end
     object CdsGrupoDATA_ULTIMA_COMPRA: TDateField
       Alignment = taCenter
+      DisplayLabel = 'Compra'
       FieldName = 'DATA_ULTIMA_COMPRA'
       DisplayFormat = 'dd/mm/yyyy'
     end
     object CdsGrupoDATA_ULTIMA_VENDA: TDateField
       Alignment = taCenter
+      DisplayLabel = 'Venda'
       FieldName = 'DATA_ULTIMA_VENDA'
       DisplayFormat = 'dd/mm/yyyy'
     end
     object CdsGrupoCOMPRA_QTDE_01: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_01'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_01: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_01'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_01: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_01'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_01: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_01'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoCOMPRA_QTDE_03: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_03'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_03: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_03'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_03: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_03'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_03: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_03'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoCOMPRA_QTDE_06: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_06'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_06: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_06'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_06: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_06'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_06: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_06'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoCOMPRA_QTDE_09: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_09'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_09: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_09'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_09: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_09'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_09: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_09'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoCOMPRA_QTDE_12: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_12'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_12: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_12'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_12: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_12'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_12: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_12'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoCOMPRA_QTDE_99: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'COMPRA_QTDE_99'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoCOMPRA_VALOR_99: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'COMPRA_VALOR_99'
       DisplayFormat = ',0.00'
       Precision = 18
     end
     object CdsGrupoVENDA_QTDE_99: TBCDField
+      DisplayLabel = 'Quant.'
       FieldName = 'VENDA_QTDE_99'
       DisplayFormat = ',0'
       Precision = 18
     end
     object CdsGrupoVENDA_VALOR_99: TBCDField
+      DisplayLabel = 'Valor'
       FieldName = 'VENDA_VALOR_99'
       DisplayFormat = ',0.00'
       Precision = 18
@@ -1502,168 +2603,168 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     object CdsGrupoPERCENT_CQ01: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ01'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV01: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV01'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ01: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ01'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV01: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV01'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CQ03: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ03'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV03: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV03'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ03: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ03'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV03: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV03'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CQ06: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ06'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV06: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV06'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ06: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ06'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV06: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV06'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CQ09: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ09'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV09: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV09'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ09: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ09'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV09: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV09'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CQ12: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ12'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV12: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV12'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ12: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ12'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV12: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV12'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CQ99: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CQ99'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_CV99: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_CV99'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VQ99: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VQ99'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
     object CdsGrupoPERCENT_VV99: TBCDField
       DisplayLabel = '%'
       FieldName = 'PERCENT_VV99'
-      DisplayFormat = ',0.##'
+      DisplayFormat = ',0.0'
       Precision = 18
       Size = 1
     end
@@ -1674,8 +2775,8 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     Top = 280
   end
   object StyleRepository: TcxStyleRepository
-    Left = 16
-    Top = 456
+    Left = 968
+    Top = 88
     PixelsPerInch = 96
     object StyleSelecao: TcxStyle
       AssignedValues = [svColor, svFont, svTextColor]
@@ -1707,5 +2808,228 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
       Font.Style = []
       TextColor = clBlack
     end
+  end
+  object QryTotal: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'select'
+      '    sum( coalesce(p.qtde, 0) ) as qtde'
+      '  , count( p.cod ) as itens'
+      '  , max( r.data_ultima_compra ) as data_ultima_compra'
+      '  , max( r.data_ultima_venda  ) as data_ultima_venda'
+      '  , sum( coalesce(r.compra_qtde_01, 0) )  as compra_qtde_01'
+      '  , sum( coalesce(r.compra_valor_01, 0) ) as compra_valor_01'
+      '  , sum( coalesce(r.venda_qtde_01, 0) )   as venda_qtde_01'
+      '  , sum( coalesce(r.venda_valor_01, 0) )  as venda_valor_01'
+      '  , sum( coalesce(r.compra_qtde_03, 0) )  as compra_qtde_03'
+      '  , sum( coalesce(r.compra_valor_03, 0) ) as compra_valor_03'
+      '  , sum( coalesce(r.venda_qtde_03, 0) )   as venda_qtde_03'
+      '  , sum( coalesce(r.venda_valor_03, 0) )  as venda_valor_03'
+      '  , sum( coalesce(r.compra_qtde_06, 0) )  as compra_qtde_06'
+      '  , sum( coalesce(r.compra_valor_06, 0) ) as compra_valor_06'
+      '  , sum( coalesce(r.venda_qtde_06, 0) )   as venda_qtde_06'
+      '  , sum( coalesce(r.venda_valor_06, 0) )  as venda_valor_06'
+      '  , sum( coalesce(r.compra_qtde_09, 0) )  as compra_qtde_09'
+      '  , sum( coalesce(r.compra_valor_09, 0) ) as compra_valor_09'
+      '  , sum( coalesce(r.venda_qtde_09, 0) )   as venda_qtde_09'
+      '  , sum( coalesce(r.venda_valor_09, 0) )  as venda_valor_09'
+      '  , sum( coalesce(r.compra_qtde_12, 0) )  as compra_qtde_12'
+      '  , sum( coalesce(r.compra_valor_12, 0) ) as compra_valor_12'
+      '  , sum( coalesce(r.venda_qtde_12, 0) )   as venda_qtde_12'
+      '  , sum( coalesce(r.venda_valor_12, 0) )  as venda_valor_12'
+      '  , sum( coalesce(r.compra_qtde_99, 0) )  as compra_qtde_99'
+      '  , sum( coalesce(r.compra_valor_99, 0) ) as compra_valor_99'
+      '  , sum( coalesce(r.venda_qtde_99, 0) )   as venda_qtde_99'
+      '  , sum( coalesce(r.venda_valor_99, 0) )  as venda_valor_99'
+      'from TBPRODUTO p'
+      '  left join TBPRODUTO_ROTATIVIDADE r on (r.cod_produto = p.cod)'
+      ''
+      'where 1=1')
+    Left = 24
+    Top = 352
+  end
+  object DspTotal: TDataSetProvider
+    DataSet = QryTotal
+    Left = 56
+    Top = 352
+  end
+  object CdsTotal: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'DspTotal'
+    Left = 88
+    Top = 352
+    object CdsTotalQTDE: TLargeintField
+      DisplayLabel = 'Estoque'
+      FieldName = 'QTDE'
+      DisplayFormat = ',0'
+    end
+    object CdsTotalITENS: TIntegerField
+      DisplayLabel = 'Itens'
+      FieldName = 'ITENS'
+      DisplayFormat = ',0'
+    end
+    object CdsTotalDATA_ULTIMA_COMPRA: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Compra'
+      FieldName = 'DATA_ULTIMA_COMPRA'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object CdsTotalDATA_ULTIMA_VENDA: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Venda'
+      FieldName = 'DATA_ULTIMA_VENDA'
+      DisplayFormat = 'dd/mm/yyyy'
+    end
+    object CdsTotalCOMPRA_QTDE_01: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_01'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_01: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_01'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_01: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_01'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_01: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_01'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_QTDE_03: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_03'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_03: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_03'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_03: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_03'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_03: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_03'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_QTDE_06: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_06'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_06: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_06'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_06: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_06'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_06: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_06'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_QTDE_09: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_09'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_09: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_09'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_09: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_09'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_09: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_09'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_QTDE_12: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_12'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_12: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_12'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_12: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_12'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_12: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_12'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_QTDE_99: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'COMPRA_QTDE_99'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalCOMPRA_VALOR_99: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'COMPRA_VALOR_99'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+    object CdsTotalVENDA_QTDE_99: TBCDField
+      DisplayLabel = 'Quant.'
+      FieldName = 'VENDA_QTDE_99'
+      DisplayFormat = ',0'
+      Precision = 18
+    end
+    object CdsTotalVENDA_VALOR_99: TBCDField
+      DisplayLabel = 'Valor'
+      FieldName = 'VENDA_VALOR_99'
+      DisplayFormat = ',0.00'
+      Precision = 18
+    end
+  end
+  object dsTotal: TDataSource
+    DataSet = CdsTotal
+    Left = 120
+    Top = 352
   end
 end
