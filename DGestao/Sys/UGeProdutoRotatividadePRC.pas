@@ -19,7 +19,7 @@ uses
   cxEdit, DB, cxDBData, cxGridCustomView, cxGridCustomTableView,
   cxGridTableView, cxGridBandedTableView, cxGridDBBandedTableView,
   cxClasses, cxGridLevel, cxGrid, DBClient, Provider, IBCustomDataSet,
-  IBQuery, IBStoredProc, DBCtrls, Gauges;
+  IBQuery, IBStoredProc, DBCtrls, Gauges, Grids, DBGrids;
 
 type
   TFrmProdutoRotatividadePRC = class(TfrmGrPadrao)
@@ -189,6 +189,111 @@ type
     StyleSelecao: TcxStyle;
     StyleContent: TcxStyle;
     StyleContentEven: TcxStyle;
+    QryTotal: TIBQuery;
+    DspTotal: TDataSetProvider;
+    CdsTotal: TClientDataSet;
+    dsTotal: TDataSource;
+    CdsTotalQTDE: TLargeintField;
+    CdsTotalITENS: TIntegerField;
+    CdsTotalDATA_ULTIMA_COMPRA: TDateField;
+    CdsTotalDATA_ULTIMA_VENDA: TDateField;
+    CdsTotalCOMPRA_QTDE_01: TBCDField;
+    CdsTotalCOMPRA_VALOR_01: TBCDField;
+    CdsTotalVENDA_QTDE_01: TBCDField;
+    CdsTotalVENDA_VALOR_01: TBCDField;
+    CdsTotalCOMPRA_QTDE_03: TBCDField;
+    CdsTotalCOMPRA_VALOR_03: TBCDField;
+    CdsTotalVENDA_QTDE_03: TBCDField;
+    CdsTotalVENDA_VALOR_03: TBCDField;
+    CdsTotalCOMPRA_QTDE_06: TBCDField;
+    CdsTotalCOMPRA_VALOR_06: TBCDField;
+    CdsTotalVENDA_QTDE_06: TBCDField;
+    CdsTotalVENDA_VALOR_06: TBCDField;
+    CdsTotalCOMPRA_QTDE_09: TBCDField;
+    CdsTotalCOMPRA_VALOR_09: TBCDField;
+    CdsTotalVENDA_QTDE_09: TBCDField;
+    CdsTotalVENDA_VALOR_09: TBCDField;
+    CdsTotalCOMPRA_QTDE_12: TBCDField;
+    CdsTotalCOMPRA_VALOR_12: TBCDField;
+    CdsTotalVENDA_QTDE_12: TBCDField;
+    CdsTotalVENDA_VALOR_12: TBCDField;
+    CdsTotalCOMPRA_QTDE_99: TBCDField;
+    CdsTotalCOMPRA_VALOR_99: TBCDField;
+    CdsTotalVENDA_QTDE_99: TBCDField;
+    CdsTotalVENDA_VALOR_99: TBCDField;
+    pnlTotal: TPanel;
+    dbgTotal: TcxGrid;
+    dbgTotalTbl: TcxGridDBBandedTableView;
+    cxGridDBBandedColumn3: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn4: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn5: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn6: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn7: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn8: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn9: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn10: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn11: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn12: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn13: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn14: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn15: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn16: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn17: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn18: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn19: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn20: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn21: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn22: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn23: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn24: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn25: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn26: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn27: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn28: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn29: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn30: TcxGridDBBandedColumn;
+    dbgTotalLvl: TcxGridLevel;
+    dbgGrupo: TcxGrid;
+    dbgGrupoTbl: TcxGridDBBandedTableView;
+    cxGridDBBandedColumn1: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn2: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn31: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn32: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn33: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn34: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn35: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn36: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn37: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn38: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn39: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn40: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn41: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn42: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn43: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn44: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn45: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn46: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn47: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn48: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn49: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn50: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn51: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn52: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn53: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn54: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn55: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn56: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn57: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn58: TcxGridDBBandedColumn;
+    dbgGrupoLvl: TcxGridLevel;
+    dbgGrupoTblColumn1: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn2: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn3: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn4: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn5: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn6: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn7: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn8: TcxGridDBBandedColumn;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -198,10 +303,12 @@ type
       Shift: TShiftState);
   private
     { Private declarations }
+    FSQLTotal   ,
     FSQLGrupo   ,
     FSQLProduto : TStringList;
     procedure HabilitarGuia(const TipoProcesso : Integer);
     procedure ExecutarPesquisa(const TipoProcesso : Integer);
+    procedure CalcularPercentuais( cdsTabela : TClientDataSet );
   public
     { Public declarations }
   end;
@@ -237,6 +344,9 @@ begin
   begin
     PgcTabelas.Pages[TipoProcesso].TabVisible := True;
     PgcTabelas.Pages[TipoProcesso].Caption    := edTipoProcesso.Items.Strings[TipoProcesso];
+
+    if (PgcTabelas.Pages[TipoProcesso] = TbsGrupo) or (PgcTabelas.Pages[TipoProcesso] = TbsFornecedor) then
+      pnlTotal.Parent := PgcTabelas.Pages[TipoProcesso];
   end;
 end;
 
@@ -249,6 +359,9 @@ begin
   {$ENDIF}
 
   inherited;
+  FSQLTotal := TStringList.Create;
+  FSQLTotal.AddStrings( QryTotal.SQL );
+
   FSQLGrupo := TStringList.Create;
   FSQLGrupo.AddStrings( QryGrupo.SQL );
 
@@ -347,7 +460,16 @@ var
   sWhr : String;
 begin
   sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
-  
+
+  CdsTotal.Close;
+  with QryTotal do
+  begin
+    SQL.Clear;
+    SQL.AddStrings( FSQLTotal );
+    SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+  end;
+  CdsTotal.Open;
+
   Case TipoProcesso of
     TIPO_PRD:
       begin
@@ -372,7 +494,28 @@ begin
       end;
 
     TIPO_GRP:
-      ;
+      begin
+        CdsGrupo.Close;
+        with QryGrupo do
+        begin
+          SQL.Clear;
+          SQL.AddStrings( FSQLGrupo );
+
+          if ( Trim(edPesquisar.Text) <> EmptyStr ) then
+            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
+              sWhr := sWhr + ' and (p.codgrupo = ' + edPesquisar.Text + ')'
+            else
+              sWhr := sWhr + ' and (upper(g.descri) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
+
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+        end;
+        CdsGrupo.Open;
+
+        if ( CdsGrupo.IsEmpty ) then
+          ShowWarning('Dados não encontados de acordo com o filtro informado!')
+        else
+          CalcularPercentuais( CdsGrupo );
+      end;
 
     TIPO_FOR:
       ;
@@ -387,7 +530,7 @@ begin
   else
   if ( Key = VK_F5 ) then
     BtnProcessar.Click;
-    
+
   inherited;
 end;
 
@@ -402,6 +545,69 @@ begin
 
     Key := #0;
   end
+end;
+
+procedure TFrmProdutoRotatividadePRC.CalcularPercentuais(
+  cdsTabela: TClientDataSet);
+var
+  I ,
+  X : Integer;
+  sOrigem  ,
+  sDestino : String;
+const
+  // Coompra
+  FIELD_CMP_QTDE   = 'compra_qtde_';
+  FIELD_CMP_VALOR  = 'compra_valor_';
+  FIELD_PERCENT_CQ = 'percent_cq';
+  FIELD_PERCENT_CV = 'percent_cv';
+  // Venda
+  FIELD_VND_QTDE   = 'venda_qtde_';
+  FIELD_VND_VALOR  = 'venda_valor_';
+  FIELD_PERCENT_VQ = 'percent_vq';
+  FIELD_PERCENT_VV = 'percent_vv';
+  // Controlles Fields
+  FIELDS_CONTADOR : Array[1..6] of String = ('01', '03', '06', '09', '12', '99');
+  FIELDS_ORIGEM   : Array[1..4] of String = (FIELD_CMP_QTDE,   FIELD_CMP_VALOR,  FIELD_VND_QTDE,   FIELD_VND_VALOR);
+  FIELDS_DESTINO  : Array[1..4] of String = (FIELD_PERCENT_CQ, FIELD_PERCENT_CV, FIELD_PERCENT_VQ, FIELD_PERCENT_VV);
+begin
+
+  with cdsTabela do
+  begin
+
+  if ( IsEmpty ) then
+    Exit;
+
+    DisableControls;
+    First;
+
+    while not Eof do
+    begin
+      Edit;
+
+      for I := Low(FIELDS_CONTADOR) to High(FIELDS_CONTADOR) do
+      begin
+        for X := Low(FIELDS_ORIGEM) to High(FIELDS_ORIGEM) do
+        begin
+          sOrigem  := FIELDS_ORIGEM[X]  + FIELDS_CONTADOR[I];
+          sDestino := FIELDS_DESTINO[X] + FIELDS_CONTADOR[I];
+
+          if ( FieldByName(sOrigem).AsCurrency = 0 ) then
+            FieldByName(sDestino).AsCurrency := 0
+          else
+            FieldByName(sDestino).AsCurrency := (FieldByName(sOrigem).AsCurrency / CdsTotal.FieldByName(sOrigem).AsCurrency) * 100;
+        end;
+      end;
+
+      Post;
+
+      Next;
+    end;
+
+    First;
+    EnableControls;
+
+  end;
+
 end;
 
 initialization
