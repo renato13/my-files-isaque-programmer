@@ -309,6 +309,7 @@ type
     CdsGrupoPERCENT_CV99: TBCDField;
     CdsGrupoPERCENT_VQ99: TBCDField;
     CdsGrupoPERCENT_VV99: TBCDField;
+    svdArquivo: TSaveDialog;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -317,6 +318,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure dbgGrupoTblDblClick(Sender: TObject);
+    procedure btbtnIncluirClick(Sender: TObject);
   private
     { Private declarations }
     FSQLTotal   ,
@@ -335,7 +337,7 @@ var
 implementation
 
 uses
-  UDMBusiness, UConstantesDGE;
+  UDMBusiness, UConstantesDGE, cxGridExportLink;
 
 {$R *.dfm}
 
@@ -664,6 +666,31 @@ begin
       end;
 
   end;
+end;
+
+procedure TFrmProdutoRotatividadePRC.btbtnIncluirClick(Sender: TObject);
+begin
+  Case PgcTabelas.ActivePageIndex of
+    TIPO_GRP:
+      if ( CdsGrupo.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+
+    TIPO_PRD:
+      if ( CdsProduto.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+  end;
+
+  if ( svdArquivo.Execute ) then
+    Case PgcTabelas.ActivePageIndex of
+      TIPO_GRP: ExportGridToExcel(svdArquivo.FileName, dbgGrupo);
+      TIPO_PRD: ExportGridToExcel(svdArquivo.FileName, dbgProduto);
+    end;
 end;
 
 initialization
