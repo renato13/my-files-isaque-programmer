@@ -42,11 +42,10 @@ type
     PgcTabelas: TPageControl;
     TbsProduto: TTabSheet;
     TbsGrupo: TTabSheet;
-    TbsFornecedor: TTabSheet;
+    TbsFabricante: TTabSheet;
     dbgProdutoLvl: TcxGridLevel;
     dbgProduto: TcxGrid;
     dbgProdutoTbl: TcxGridDBBandedTableView;
-    Label2: TLabel;
     QryListaProduto: TIBQuery;
     QryProduto: TIBQuery;
     dsProduto: TDataSource;
@@ -161,30 +160,6 @@ type
     CdsGrupoCOMPRA_VALOR_99: TBCDField;
     CdsGrupoVENDA_QTDE_99: TBCDField;
     CdsGrupoVENDA_VALOR_99: TBCDField;
-    CdsGrupoPERCENT_CQ01: TBCDField;
-    CdsGrupoPERCENT_CV01: TBCDField;
-    CdsGrupoPERCENT_VQ01: TBCDField;
-    CdsGrupoPERCENT_VV01: TBCDField;
-    CdsGrupoPERCENT_CQ03: TBCDField;
-    CdsGrupoPERCENT_CV03: TBCDField;
-    CdsGrupoPERCENT_VQ03: TBCDField;
-    CdsGrupoPERCENT_VV03: TBCDField;
-    CdsGrupoPERCENT_CQ06: TBCDField;
-    CdsGrupoPERCENT_CV06: TBCDField;
-    CdsGrupoPERCENT_VQ06: TBCDField;
-    CdsGrupoPERCENT_VV06: TBCDField;
-    CdsGrupoPERCENT_CQ09: TBCDField;
-    CdsGrupoPERCENT_CV09: TBCDField;
-    CdsGrupoPERCENT_VQ09: TBCDField;
-    CdsGrupoPERCENT_VV09: TBCDField;
-    CdsGrupoPERCENT_CQ12: TBCDField;
-    CdsGrupoPERCENT_CV12: TBCDField;
-    CdsGrupoPERCENT_VQ12: TBCDField;
-    CdsGrupoPERCENT_VV12: TBCDField;
-    CdsGrupoPERCENT_CQ99: TBCDField;
-    CdsGrupoPERCENT_CV99: TBCDField;
-    CdsGrupoPERCENT_VQ99: TBCDField;
-    CdsGrupoPERCENT_VV99: TBCDField;
     StyleRepository: TcxStyleRepository;
     StyleSelecao: TcxStyle;
     StyleContent: TcxStyle;
@@ -294,6 +269,46 @@ type
     dbgGrupoTblColumn6: TcxGridDBBandedColumn;
     dbgGrupoTblColumn7: TcxGridDBBandedColumn;
     dbgGrupoTblColumn8: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn9: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn10: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn11: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn12: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn13: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn14: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn15: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn16: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn17: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn18: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn19: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn20: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn21: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn22: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn23: TcxGridDBBandedColumn;
+    dbgGrupoTblColumn24: TcxGridDBBandedColumn;
+    CdsGrupoPERCENT_CQ01: TBCDField;
+    CdsGrupoPERCENT_CV01: TBCDField;
+    CdsGrupoPERCENT_VQ01: TBCDField;
+    CdsGrupoPERCENT_VV01: TBCDField;
+    CdsGrupoPERCENT_CQ03: TBCDField;
+    CdsGrupoPERCENT_CV03: TBCDField;
+    CdsGrupoPERCENT_VQ03: TBCDField;
+    CdsGrupoPERCENT_VV03: TBCDField;
+    CdsGrupoPERCENT_CQ06: TBCDField;
+    CdsGrupoPERCENT_CV06: TBCDField;
+    CdsGrupoPERCENT_VQ06: TBCDField;
+    CdsGrupoPERCENT_VV06: TBCDField;
+    CdsGrupoPERCENT_CQ09: TBCDField;
+    CdsGrupoPERCENT_CV09: TBCDField;
+    CdsGrupoPERCENT_VQ09: TBCDField;
+    CdsGrupoPERCENT_VV09: TBCDField;
+    CdsGrupoPERCENT_CQ12: TBCDField;
+    CdsGrupoPERCENT_CV12: TBCDField;
+    CdsGrupoPERCENT_VQ12: TBCDField;
+    CdsGrupoPERCENT_VV12: TBCDField;
+    CdsGrupoPERCENT_CQ99: TBCDField;
+    CdsGrupoPERCENT_CV99: TBCDField;
+    CdsGrupoPERCENT_VQ99: TBCDField;
+    CdsGrupoPERCENT_VV99: TBCDField;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -301,6 +316,7 @@ type
     procedure BtnPesquisarClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure dbgGrupoTblDblClick(Sender: TObject);
   private
     { Private declarations }
     FSQLTotal   ,
@@ -324,9 +340,9 @@ uses
 {$R *.dfm}
 
 const
-  TIPO_PRD = 0;
-  TIPO_GRP = 1;
-  TIPO_FOR = 2;
+  TIPO_GRP = 0;
+  TIPO_PRD = 1;
+  TIPO_FAB = 2;
 
   WHR_DEFAULT = 'where 1=1';
   
@@ -345,7 +361,7 @@ begin
     PgcTabelas.Pages[TipoProcesso].TabVisible := True;
     PgcTabelas.Pages[TipoProcesso].Caption    := edTipoProcesso.Items.Strings[TipoProcesso];
 
-    if (PgcTabelas.Pages[TipoProcesso] = TbsGrupo) or (PgcTabelas.Pages[TipoProcesso] = TbsFornecedor) then
+    if (PgcTabelas.Pages[TipoProcesso] = TbsGrupo) or (PgcTabelas.Pages[TipoProcesso] = TbsFabricante) then
       pnlTotal.Parent := PgcTabelas.Pages[TipoProcesso];
   end;
 end;
@@ -517,7 +533,7 @@ begin
           CalcularPercentuais( CdsGrupo );
       end;
 
-    TIPO_FOR:
+    TIPO_FAB:
       ;
   end;
 end;
@@ -529,7 +545,13 @@ begin
     BtnPesquisar.Click
   else
   if ( Key = VK_F5 ) then
-    BtnProcessar.Click;
+    BtnProcessar.Click
+  else
+  if ( Key = VK_ESCAPE ) then
+  begin
+    if ( PgcTabelas.ActivePageIndex <> edTipoProcesso.ItemIndex ) then
+      HabilitarGuia( edTipoProcesso.ItemIndex );
+  end;
 
   inherited;
 end;
@@ -608,6 +630,40 @@ begin
 
   end;
 
+end;
+
+procedure TFrmProdutoRotatividadePRC.dbgGrupoTblDblClick(Sender: TObject);
+var
+  sWhr : String;
+begin
+  sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
+
+  Case edTipoProcesso.ItemIndex of
+    TIPO_GRP:
+      begin
+        if ( CdsGrupo.IsEmpty ) then
+          Exit;
+
+        CdsProduto.Close;
+        with QryProduto do
+        begin
+          SQL.Clear;
+          SQL.AddStrings( FSQLProduto );
+
+          if ( CdsGrupoCODIGO.IsNull ) then
+            sWhr := sWhr + ' and (p.codgrupo is null)'
+          else
+            sWhr := sWhr + ' and (p.codgrupo = ' + CdsGrupoCODIGO.AsString + ')';
+
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+        end;
+        CdsProduto.Open;
+
+        if ( not CdsProduto.IsEmpty ) then
+          HabilitarGuia( TIPO_PRD );
+      end;
+
+  end;
 end;
 
 initialization
