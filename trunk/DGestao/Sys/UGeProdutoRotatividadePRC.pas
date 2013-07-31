@@ -344,7 +344,7 @@ const
   TIPO_PRD = 1;
   TIPO_FAB = 2;
 
-  WHR_DEFAULT = 'where 1=1';
+  WHR_DEFAULT = 'where 1=1'; //
   
 { TFrmProdutoRotatividadePRC }
 
