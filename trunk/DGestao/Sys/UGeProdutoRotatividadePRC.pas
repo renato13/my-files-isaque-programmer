@@ -310,6 +310,8 @@ type
     CdsGrupoPERCENT_VQ99: TBCDField;
     CdsGrupoPERCENT_VV99: TBCDField;
     svdArquivo: TSaveDialog;
+    lblTipoFiltro: TLabel;
+    edTipoFiltro: TComboBox;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -346,8 +348,15 @@ const
   TIPO_PRD = 1;
   TIPO_FAB = 2;
 
-  WHR_DEFAULT = 'where 1=1'; //
-  
+  WHR_DEFAULT = 'where 1=1'; 
+
+  MES_01 = 30 * 1;
+  MES_03 = 30 * 3;
+  MES_06 = 30 * 6;
+  MES_09 = 30 * 9;
+  MES_12 = 30 * 12;
+  MES_99 = MES_12 + 1;
+
 { TFrmProdutoRotatividadePRC }
 
 procedure TFrmProdutoRotatividadePRC.HabilitarGuia(
@@ -386,6 +395,7 @@ begin
   FSQLProduto := TStringList.Create;
   FSQLProduto.AddStrings( QryProduto.SQL );
 
+  edTipoFiltro.ItemIndex   := 0;
   edTipoProcesso.ItemIndex := 0;
   HabilitarGuia(edTipoProcesso.ItemIndex);
 end;
@@ -479,6 +489,19 @@ var
 begin
   sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
 
+  Case edTipoFiltro.ItemIndex of
+    1 : sWhr := sWhr + ' and (r.movimentado = 1)';
+    2 : sWhr := sWhr + ' and (r.movimentado = 0)';
+    3 : sWhr := sWhr + ' and (r.data_ultima_compra is null)';
+    4 : sWhr := sWhr + ' and (r.data_ultima_venda is null)';
+    5 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_01)) + ')';
+    6 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_03)) + ')';
+    7 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_06)) + ')';
+    8 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_09)) + ')';
+    9 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_12)) + ')';
+    10: sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_99)) + ')';
+  end;
+
   CdsTotal.Close;
   with QryTotal do
   begin
@@ -525,7 +548,7 @@ begin
             else
               sWhr := sWhr + ' and (upper(g.descri) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
 
-          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);  
         end;
         CdsGrupo.Open;
 
@@ -639,6 +662,19 @@ var
   sWhr : String;
 begin
   sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
+
+  Case edTipoFiltro.ItemIndex of
+    1 : sWhr := sWhr + ' and (r.movimentado = 1)';
+    2 : sWhr := sWhr + ' and (r.movimentado = 0)';
+    3 : sWhr := sWhr + ' and (r.data_ultima_compra is null)';
+    4 : sWhr := sWhr + ' and (r.data_ultima_venda is null)';
+    5 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_01)) + ')';
+    6 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_03)) + ')';
+    7 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_06)) + ')';
+    8 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_09)) + ')';
+    9 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_12)) + ')';
+    10: sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_99)) + ')';
+  end;
 
   Case edTipoProcesso.ItemIndex of
     TIPO_GRP:
