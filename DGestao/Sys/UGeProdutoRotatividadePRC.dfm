@@ -180,21 +180,50 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
         OnClick = BtnPesquisarClick
       end
       object lblPesquisar: TLabel
-        Left = 16
+        Left = 424
         Top = 24
         Width = 55
         Height = 13
         Caption = '&Pesquisar'
         FocusControl = edPesquisar
       end
-      object edPesquisar: TEdit
+      object lblTipoFiltro: TLabel
         Left = 16
+        Top = 24
+        Width = 67
+        Height = 13
+        Caption = '&Definir filtro'
+        FocusControl = edTipoFiltro
+      end
+      object edPesquisar: TEdit
+        Left = 424
         Top = 40
-        Width = 678
+        Width = 270
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         CharCase = ecUpperCase
+        TabOrder = 1
+      end
+      object edTipoFiltro: TComboBox
+        Left = 16
+        Top = 40
+        Width = 401
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
         TabOrder = 0
+        Items.Strings = (
+          '(Todos)'
+          'Apenas produtos movimentados'
+          'Apenas produtos s/ movimenta'#231#227'o'
+          'Produtos s/ movimenta'#231#227'o de Compra'
+          'Produtos s/ movimenta'#231#227'o de Venda'
+          'Produtos s/ movimenta'#231#227'o de Venda a 1 m'#234's'
+          'Produtos s/ movimenta'#231#227'o de Venda a 3 m'#234's'
+          'Produtos s/ movimenta'#231#227'o de Venda a 6 m'#234's'
+          'Produtos s/ movimenta'#231#227'o de Venda a 9 m'#234's'
+          'Produtos s/ movimenta'#231#227'o de Venda a 1 ano'
+          'Produtos s/ movimenta'#231#227'o de Venda a mais de 1 ano')
       end
     end
   end
