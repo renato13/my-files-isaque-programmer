@@ -312,6 +312,125 @@ type
     svdArquivo: TSaveDialog;
     lblTipoFiltro: TLabel;
     edTipoFiltro: TComboBox;
+    CdsProdutoGRUPO: TStringField;
+    CdsProdutoFABRICANTE: TStringField;
+    dbgProdutoTblColumn31: TcxGridDBBandedColumn;
+    dbgProdutoTblColumn32: TcxGridDBBandedColumn;
+    QryFabricante: TIBQuery;
+    DspFabricante: TDataSetProvider;
+    CdsFabricante: TClientDataSet;
+    LargeintField1: TLargeintField;
+    IntegerField1: TIntegerField;
+    DateField1: TDateField;
+    DateField2: TDateField;
+    BCDField1: TBCDField;
+    BCDField2: TBCDField;
+    BCDField3: TBCDField;
+    BCDField4: TBCDField;
+    BCDField5: TBCDField;
+    BCDField6: TBCDField;
+    BCDField7: TBCDField;
+    BCDField8: TBCDField;
+    BCDField9: TBCDField;
+    BCDField10: TBCDField;
+    BCDField11: TBCDField;
+    BCDField12: TBCDField;
+    BCDField13: TBCDField;
+    BCDField14: TBCDField;
+    BCDField15: TBCDField;
+    BCDField16: TBCDField;
+    BCDField17: TBCDField;
+    BCDField18: TBCDField;
+    BCDField19: TBCDField;
+    BCDField20: TBCDField;
+    BCDField21: TBCDField;
+    BCDField22: TBCDField;
+    BCDField23: TBCDField;
+    BCDField24: TBCDField;
+    BCDField25: TBCDField;
+    BCDField26: TBCDField;
+    BCDField27: TBCDField;
+    BCDField28: TBCDField;
+    BCDField29: TBCDField;
+    BCDField30: TBCDField;
+    BCDField31: TBCDField;
+    BCDField32: TBCDField;
+    BCDField33: TBCDField;
+    BCDField34: TBCDField;
+    BCDField35: TBCDField;
+    BCDField36: TBCDField;
+    BCDField37: TBCDField;
+    BCDField38: TBCDField;
+    BCDField39: TBCDField;
+    BCDField40: TBCDField;
+    BCDField41: TBCDField;
+    BCDField42: TBCDField;
+    BCDField43: TBCDField;
+    BCDField44: TBCDField;
+    BCDField45: TBCDField;
+    BCDField46: TBCDField;
+    BCDField47: TBCDField;
+    BCDField48: TBCDField;
+    dsFabricante: TDataSource;
+    CdsFabricanteDESCRICAO: TStringField;
+    dbgFab: TcxGrid;
+    dbgFabTbl: TcxGridDBBandedTableView;
+    cxGridDBBandedColumn59: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn60: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn61: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn62: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn63: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn64: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn65: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn66: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn67: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn68: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn69: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn70: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn71: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn72: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn73: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn74: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn75: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn76: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn77: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn78: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn79: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn80: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn81: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn82: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn83: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn84: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn85: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn86: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn87: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn88: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn89: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn90: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn91: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn92: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn93: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn94: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn95: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn96: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn97: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn98: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn99: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn100: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn101: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn102: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn103: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn104: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn105: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn106: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn107: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn108: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn109: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn110: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn111: TcxGridDBBandedColumn;
+    cxGridDBBandedColumn112: TcxGridDBBandedColumn;
+    dbgFabLvl: TcxGridLevel;
+    CdsFabricanteCODIGO: TIntegerField;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -321,10 +440,12 @@ type
       Shift: TShiftState);
     procedure dbgGrupoTblDblClick(Sender: TObject);
     procedure btbtnIncluirClick(Sender: TObject);
+    procedure dbgFabTblDblClick(Sender: TObject);
   private
     { Private declarations }
     FSQLTotal   ,
     FSQLGrupo   ,
+    FSQLFabricante,
     FSQLProduto : TStringList;
     procedure HabilitarGuia(const TipoProcesso : Integer);
     procedure ExecutarPesquisa(const TipoProcesso : Integer);
@@ -345,8 +466,8 @@ uses
 
 const
   TIPO_GRP = 0;
-  TIPO_PRD = 1;
-  TIPO_FAB = 2;
+  TIPO_FAB = 1;
+  TIPO_PRD = 2;
 
   WHR_DEFAULT = 'where 1=1'; 
 
@@ -391,6 +512,9 @@ begin
 
   FSQLGrupo := TStringList.Create;
   FSQLGrupo.AddStrings( QryGrupo.SQL );
+
+  FSQLFabricante := TStringList.Create;
+  FSQLFabricante.AddStrings( QryFabricante.SQL );
 
   FSQLProduto := TStringList.Create;
   FSQLProduto.AddStrings( QryProduto.SQL );
@@ -559,7 +683,28 @@ begin
       end;
 
     TIPO_FAB:
-      ;
+      begin
+        CdsFabricante.Close;
+        with QryFabricante do
+        begin
+          SQL.Clear;
+          SQL.AddStrings( FSQLFabricante );
+
+          if ( Trim(edPesquisar.Text) <> EmptyStr ) then
+            if ( StrToIntDef(Trim(edPesquisar.Text), 0) > 0 ) then
+              sWhr := sWhr + ' and (p.codfabricante = ' + edPesquisar.Text + ')'
+            else
+              sWhr := sWhr + ' and (upper(f.nome) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
+
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+        end;
+        CdsFabricante.Open;
+
+        if ( CdsFabricante.IsEmpty ) then
+          ShowWarning('Dados não encontados de acordo com o filtro informado!')
+        else
+          CalcularPercentuais( CdsFabricante );
+      end;
   end;
 end;
 
@@ -714,6 +859,13 @@ begin
         Exit;
       end;
 
+    TIPO_FAB:
+      if ( CdsFabricante.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+
     TIPO_PRD:
       if ( CdsProduto.IsEmpty ) then
       begin
@@ -725,8 +877,56 @@ begin
   if ( svdArquivo.Execute ) then
     Case PgcTabelas.ActivePageIndex of
       TIPO_GRP: ExportGridToExcel(svdArquivo.FileName, dbgGrupo);
+      TIPO_FAB: ExportGridToExcel(svdArquivo.FileName, dbgFab);
       TIPO_PRD: ExportGridToExcel(svdArquivo.FileName, dbgProduto);
     end;
+end;
+
+procedure TFrmProdutoRotatividadePRC.dbgFabTblDblClick(Sender: TObject);
+var
+  sWhr : String;
+begin
+  sWhr := 'where (p.codemp = ' + QuotedStr(GetEmpresaIDDefault) + ')';
+
+  Case edTipoFiltro.ItemIndex of
+    1 : sWhr := sWhr + ' and (r.movimentado = 1)';
+    2 : sWhr := sWhr + ' and (r.movimentado = 0)';
+    3 : sWhr := sWhr + ' and (r.data_ultima_compra is null)';
+    4 : sWhr := sWhr + ' and (r.data_ultima_venda is null)';
+    5 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_01)) + ')';
+    6 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_03)) + ')';
+    7 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_06)) + ')';
+    8 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_09)) + ')';
+    9 : sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_12)) + ')';
+    10: sWhr := sWhr + ' and (r.data_ultima_venda <=' + QuotedStr(FormatDateTime('yyyy.mm.dd', Date - MES_99)) + ')';
+  end;
+
+  Case edTipoProcesso.ItemIndex of
+    TIPO_FAB:
+      begin
+        if ( CdsFabricante.IsEmpty ) then
+          Exit;
+
+        CdsProduto.Close;
+        with QryProduto do
+        begin
+          SQL.Clear;
+          SQL.AddStrings( FSQLProduto );
+
+          if ( CdsFabricanteCODIGO.IsNull ) then
+            sWhr := sWhr + ' and (p.codfabricante is null)'
+          else
+            sWhr := sWhr + ' and (p.codfabricante = ' + CdsFabricanteCODIGO.AsString + ')';
+
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
+        end;
+        CdsProduto.Open;
+
+        if ( not CdsProduto.IsEmpty ) then
+          HabilitarGuia( TIPO_PRD );
+      end;
+
+  end;
 end;
 
 initialization
