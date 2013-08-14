@@ -139,6 +139,9 @@ begin
     if ( Cont ) then
       if ( cdsVendaSTATUS.AsInteger = STATUS_VND_NFE ) then
       begin
+        if not DMNFe.GetValidadeCertificado then
+          Exit;
+
         lblInforme.Caption := 'Cancelando NF-e junto a SEFA. Aguarde . . . ';
         Application.ProcessMessages;
 
