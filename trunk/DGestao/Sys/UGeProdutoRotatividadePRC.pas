@@ -939,8 +939,10 @@ end;
 procedure TFrmProdutoRotatividadePRC.btBtnEnviarEmailClick(
   Sender: TObject);
 var
+  sAssunto  ,
   sEmailTo  ,
-  sFileName : String;
+  sFileNameHtml,
+  sFileNameXls : String;
 begin
   Case PgcTabelas.ActivePageIndex of
     TIPO_GRP:
@@ -965,28 +967,46 @@ begin
       end;
   end;
 
-  sFileName := ExtractFilePath(Application.ExeName) + '_Temp\' + FormatDateTime('yyyymmdd_hhmmss".html"', Now);
-  ForceDirectories(ExtractFilePath(sFileName));
+  if not InputQuery('Enviar e-mail', 'Favor informar e-mail do destinatário:', sEmailTo) then
+    Exit;
+
+  if ( Trim(sEmailTo) = EmptyStr ) then
+    Exit;
+
+  sFileNameHtml := ExtractFilePath(Application.ExeName) + '_Temp\' + FormatDateTime('yyyymmdd_hhmmss".html"', Now);
+  sFileNameXls  := ExtractFilePath(Application.ExeName) + '_Temp\' + FormatDateTime('yyyymmdd_hhmmss".xls"', Now);
+  ForceDirectories(ExtractFilePath(sFileNameHtml));
 
   Case PgcTabelas.ActivePageIndex of
-    TIPO_GRP: ExportGridToHTML(sFileName, dbgGrupo);
-    TIPO_FAB: ExportGridToHTML(sFileName, dbgFab);
-    TIPO_PRD: ExportGridToHTML(sFileName, dbgProduto);
+    TIPO_GRP:
+      begin
+        ExportGridToHTML(sFileNameHtml, dbgGrupo);
+        ExportGridToExcel(sFileNameXls, dbgGrupo);
+      end;
+
+    TIPO_FAB:
+      begin
+        ExportGridToHTML(sFileNameHtml, dbgFab);
+        ExportGridToExcel(sFileNameXls, dbgFab);
+      end;
+
+    TIPO_PRD:
+      begin
+        ExportGridToHTML(sFileNameHtml, dbgProduto);
+        ExportGridToExcel(sFileNameXls, dbgProduto);
+      end;
   end;
 
   Screen.Cursor := crHourGlass;
   try
     try
-      sEmailTo := 'isaque.ribeiro@outlook.com.br';
+      sAssunto := FormatDateTime('dd/mm/yyyy', Date) + ' - Rotatividade de Produtos';
+      CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, sAssunto);
 
-      if ( Trim(sEmailTo) = EmptyStr ) then
-        Exit;
-
-      CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, 'Mapa de rotatividade.');
-
-      smtpEmail.Username := gContaEmail.Conta;
-      smtpEmail.Password := gContaEmail.Senha;
-      smtpEmail.Host     := gContaEmail.Servidor_SMTP;
+      smtpEmail.Username    := gContaEmail.Conta;
+      smtpEmail.Password    := gContaEmail.Senha;
+      smtpEmail.Host        := gContaEmail.Servidor_SMTP;
+      smtpEmail.ReadTimeout := 10000;    // Leitura da Conexão em 10 segundos!
 
       if gContaEmail.RequerAutenticacao then
         smtpEmail.AuthenticationType := atLogin
@@ -1001,15 +1021,19 @@ begin
       // Origem
       msgEmail.From.Address := gContaEmail.Conta;
       msgEmail.Body.Text    := gContaEmail.Assinatura_Padrao;
-      msgEmail.Subject      := 'Rotatividade de Produtos';
+      msgEmail.Subject      := sAssunto;
 
       // Destino
       msgEmail.Recipients.EMailAddresses := sEmailTo;
 
-      TIdAttachment.Create(msgEmail.MessageParts, sFileName);
+      TIdAttachment.Create(msgEmail.MessageParts, sFileNameHtml);
+      TIdAttachment.Create(msgEmail.MessageParts, sFileNameXls);
 
-      smtpEmail.Connect(1000);
+      smtpEmail.Connect;
+      smtpEmail.Authenticate;
       smtpEmail.Send(msgEmail);
+
+      ShowInformation('E-mail enviado com sucesso!' + #13 + 'Arquivo(s) anexo(s) : ' + #13 + sFileNameHtml + #13 + sFileNameXls);
     except
       On E : Exception do
         ShowError('Erro ao tentar enviar e-mail com o resultado da consulta de rotatividade.' + #13#13 + E.Message);

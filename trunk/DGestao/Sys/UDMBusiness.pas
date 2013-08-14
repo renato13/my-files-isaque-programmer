@@ -534,6 +534,7 @@ end;
 procedure CarregarConfiguracoesEmpresa(CNPJ : String; Mensagem : String);
 var
   sMsg : String;
+  bFaltaConfigurado : Boolean;
 const
   sHTML =
     '<html>'                  + #13 +
@@ -563,6 +564,20 @@ begin
     ParamByName('empresa').AsString := Trim(CNPJ);
     Open;
 
+    if IsEmpty then
+      raise Exception.Create('Tabela de Configurações vazia!');
+
+    bFaltaConfigurado := False;
+
+    bFaltaConfigurado := bFaltaConfigurado
+      or (Trim(FieldByName('email_conta').AsString) = EmptyStr)
+      or (Trim(FieldByName('email_senha').AsString) = EmptyStr)
+      or (Trim(FieldByName('email_pop').AsString)   = EmptyStr)
+      or (Trim(FieldByName('email_smtp').AsString)  = EmptyStr);
+
+    if bFaltaConfigurado then
+      raise Exception.Create('Configurações da conta de e-mail do sistema não informadas!');
+
     if (Trim(Mensagem) <> EmptyStr) then
       sMsg := '<p>' + Trim(Mensagem) + '</p>'
     else
@@ -579,14 +594,20 @@ begin
     gContaEmail.Assunto_Padrao    := FieldByName('email_assunto_padrao').AsString;
     gContaEmail.Mensagem_Padrao   := FieldByName('email_mensagem_padrao').AsString;
 
-    gContaEmail.RequerAutenticacao := False;
+    gContaEmail.RequerAutenticacao := True;
     gContaEmail.ConexaoSeguraSSL   := False;
-    
+(*
     gContaEmail.Assinatura_Padrao := Format(sHTML, [sMsg,
       FieldByName('empresa_razao').AsString,
       FieldByName('empresa_fone_1').AsString,
       FieldByName('empresa_email').AsString,
       FieldByName('empresa_homepage').AsString, FieldByName('empresa_homepage').AsString]);
+*)
+    gContaEmail.Assinatura_Padrao := '-'     + #13 +
+      FieldByName('empresa_razao').AsString  + #13 +
+      FieldByName('empresa_fone_1').AsString + #13 +
+      FieldByName('empresa_email').AsString  + #13 +
+      FieldByName('empresa_homepage').AsString;
   end;
 end;
 
