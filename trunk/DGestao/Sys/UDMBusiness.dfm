@@ -462,4 +462,47 @@ object DMBusiness: TDMBusiness
       Size = 25
     end
   end
+  object qryConfiguracoes: TIBQuery
+    Database = ibdtbsBusiness
+    Transaction = ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    c.empresa as empresa_cnpj'
+      '  , e.rzsoc   as empresa_razao'
+      '  , e.nmfant  as empresa_fantasia'
+      '  , e.ender   as empresa_end'
+      '  , e.numero_end  as empresa_end_nro'
+      '  , e.complemento as empresa_end_compl'
+      '  , e.bairro      as empresa_end_bairro'
+      '  , e.cep         as empresa_end_cep'
+      '  , e.cidade      as empresa_end_cidade'
+      '  , e.uf          as empresa_end_uf'
+      
+        '  , '#39'+55 ('#39' || substring(e.fone  from 1 for 2) || '#39')'#39' || substri' +
+        'ng(e.fone  from 3 for 4) || '#39'.'#39' || substring(e.fone  from 7 for ' +
+        '4) as empresa_fone_1'
+      
+        '  , '#39'+55 ('#39' || substring(e.fone2 from 1 for 2) || '#39')'#39' || substri' +
+        'ng(e.fone2 from 3 for 4) || '#39'.'#39' || substring(e.fone2 from 7 for ' +
+        '4) as empresa_fone_2'
+      '  , e.email       as empresa_email'
+      '  , e.home_page   as empresa_homepage'
+      '  , c.email_conta'
+      '  , c.email_senha'
+      '  , c.email_pop'
+      '  , c.email_smtp'
+      '  , c.email_assunto_padrao'
+      '  , c.email_mensagem_padrao'
+      'from TBCONFIGURACAO c'
+      '  inner join TBEMPRESA e on (e.cnpj = c.empresa)'
+      'where c.empresa = :empresa')
+    Left = 504
+    Top = 128
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'empresa'
+        ParamType = ptUnknown
+      end>
+  end
 end

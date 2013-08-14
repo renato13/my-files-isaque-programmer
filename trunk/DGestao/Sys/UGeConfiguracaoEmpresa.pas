@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin;
+  ToolWin, IBTable;
 
 type
   TfrmGeConfiguracaoEmpresa = class(TfrmGrPadraoCadastro)
@@ -21,7 +21,12 @@ type
     IbDtstTabelaEMAIL_MENSAGEM_PADRAO: TIBStringField;
     IbDtstTabelaRZSOC: TIBStringField;
     IbDtstTabelaNMFANT: TIBStringField;
+    tblEmpresa: TIBTable;
+    dtsEmpresa: TDataSource;
+    lblEmpresa: TLabel;
+    dbEmpresa: TDBLookupComboBox;
     procedure FormCreate(Sender: TObject);
+    procedure DtSrcTabelaStateChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,13 +42,18 @@ uses UConstantesDGE, UDMBusiness;
 procedure TfrmGeConfiguracaoEmpresa.FormCreate(Sender: TObject);
 begin
   inherited;
-  ControlFirstEdit := dbNome;
-  
+  ControlFirstEdit := dbEmpresa;
+
   NomeTabela     := 'TBCONFIGURACAO';
   CampoCodigo    := 'EMPRESA';
   CampoDescricao := 'e.RZSOC';
+end;
 
-  UpdateGenerator;
+procedure TfrmGeConfiguracaoEmpresa.DtSrcTabelaStateChange(
+  Sender: TObject);
+begin
+  inherited;
+  dbEmpresa.ReadOnly := (IbDtstTabela.State = dsEdit);
 end;
 
 initialization

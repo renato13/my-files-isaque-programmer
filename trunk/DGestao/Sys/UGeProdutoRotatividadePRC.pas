@@ -19,7 +19,9 @@ uses
   cxEdit, DB, cxDBData, cxGridCustomView, cxGridCustomTableView,
   cxGridTableView, cxGridBandedTableView, cxGridDBBandedTableView,
   cxClasses, cxGridLevel, cxGrid, DBClient, Provider, IBCustomDataSet,
-  IBQuery, IBStoredProc, DBCtrls, Gauges, Grids, DBGrids;
+  IBQuery, IBStoredProc, DBCtrls, Gauges, Grids, DBGrids, IdBaseComponent,
+  IdComponent, IdTCPConnection, IdTCPClient, IdMessageClient, IdSMTP,
+  IdMessage, IdIOHandler, IdIOHandlerSocket, IdSSLOpenSSL;
 
 type
   TFrmProdutoRotatividadePRC = class(TfrmGrPadrao)
@@ -431,6 +433,10 @@ type
     cxGridDBBandedColumn112: TcxGridDBBandedColumn;
     dbgFabLvl: TcxGridLevel;
     CdsFabricanteCODIGO: TIntegerField;
+    btBtnEnviarEmail: TBitBtn;
+    smtpEmail: TIdSMTP;
+    msgEmail: TIdMessage;
+    IdSSLIOHandlerSocket: TIdSSLIOHandlerSocket;
     procedure NovaPesquisaKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure edTipoProcessoChange(Sender: TObject);
@@ -441,6 +447,7 @@ type
     procedure dbgGrupoTblDblClick(Sender: TObject);
     procedure btbtnIncluirClick(Sender: TObject);
     procedure dbgFabTblDblClick(Sender: TObject);
+    procedure btBtnEnviarEmailClick(Sender: TObject);
   private
     { Private declarations }
     FSQLTotal   ,
@@ -926,6 +933,91 @@ begin
           HabilitarGuia( TIPO_PRD );
       end;
 
+  end;
+end;
+
+procedure TFrmProdutoRotatividadePRC.btBtnEnviarEmailClick(
+  Sender: TObject);
+var
+  sEmailTo  ,
+  sFileName : String;
+begin
+  Case PgcTabelas.ActivePageIndex of
+    TIPO_GRP:
+      if ( CdsGrupo.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+
+    TIPO_FAB:
+      if ( CdsFabricante.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+
+    TIPO_PRD:
+      if ( CdsProduto.IsEmpty ) then
+      begin
+        ShowWarning('Sem dados para exportar!');
+        Exit;
+      end;
+  end;
+
+  sFileName := ExtractFilePath(Application.ExeName) + '_Temp\' + FormatDateTime('yyyymmdd_hhmmss".html"', Now);
+  ForceDirectories(ExtractFilePath(sFileName));
+
+  Case PgcTabelas.ActivePageIndex of
+    TIPO_GRP: ExportGridToHTML(sFileName, dbgGrupo);
+    TIPO_FAB: ExportGridToHTML(sFileName, dbgFab);
+    TIPO_PRD: ExportGridToHTML(sFileName, dbgProduto);
+  end;
+
+  Screen.Cursor := crHourGlass;
+  try
+    try
+      sEmailTo := 'isaque.ribeiro@outlook.com.br';
+
+      if ( Trim(sEmailTo) = EmptyStr ) then
+        Exit;
+
+      CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, 'Mapa de rotatividade.');
+
+      smtpEmail.Username := gContaEmail.Conta;
+      smtpEmail.Password := gContaEmail.Senha;
+      smtpEmail.Host     := gContaEmail.Servidor_SMTP;
+
+      if gContaEmail.RequerAutenticacao then
+        smtpEmail.AuthenticationType := atLogin
+      else
+        smtpEmail.AuthenticationType := atNone;
+
+      if gContaEmail.ConexaoSeguraSSL then
+        smtpEmail.IOHandler := IdSSLIOHandlerSocket
+      else
+        smtpEmail.IOHandler := nil;
+
+      // Origem
+      msgEmail.From.Address := gContaEmail.Conta;
+      msgEmail.Body.Text    := gContaEmail.Assinatura_Padrao;
+      msgEmail.Subject      := 'Rotatividade de Produtos';
+
+      // Destino
+      msgEmail.Recipients.EMailAddresses := sEmailTo;
+
+      TIdAttachment.Create(msgEmail.MessageParts, sFileName);
+
+      smtpEmail.Connect(1000);
+      smtpEmail.Send(msgEmail);
+    except
+      On E : Exception do
+        ShowError('Erro ao tentar enviar e-mail com o resultado da consulta de rotatividade.' + #13#13 + E.Message);
+    end;
+  finally
+    Screen.Cursor := crDefault;
+    if smtpEmail.Connected then
+      smtpEmail.Disconnect;
   end;
 end;
 

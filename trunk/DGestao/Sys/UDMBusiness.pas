@@ -16,6 +16,18 @@ type
     Empresa: String;
   end;
 
+  TContaEmail = record
+    Conta : String;
+    Senha : String;
+    Servidor_POP    : String;
+    Servidor_SMTP   : String;
+    Assunto_Padrao    : String;
+    Mensagem_Padrao   : String;
+    Assinatura_Padrao : String;
+    RequerAutenticacao : Boolean;
+    ConexaoSeguraSSL   : Boolean;
+  end;
+
   TTipoMovimentoCaixa = (tmcxCredito, tmcxDebito);
   TDMBusiness = class(TDataModule)
     ibdtbsBusiness: TIBDatabase;
@@ -67,6 +79,7 @@ type
     ibqryEmpresa: TIBQuery;
     ibqryEmpresaCNPJ: TIBStringField;
     ibqryEmpresaNMFANT: TIBStringField;
+    qryConfiguracoes: TIBQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
@@ -79,6 +92,8 @@ var
 
   FileINI : TIniFile;
   FormFunction : TFormularios;
+
+  gContaEmail : TContaEmail;
 
   function NetWorkActive(const Alertar : Boolean = FALSE) : Boolean;
 
@@ -95,6 +110,7 @@ var
   procedure BloquearCliente(CNPJ : String; const Motivo : String = '');
   procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
   procedure RegistrarControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess);
+  procedure CarregarConfiguracoesEmpresa(CNPJ : String; Mensagem : String);
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -512,6 +528,65 @@ begin
     end;
 
     CommitTransaction;
+  end;
+end;
+
+procedure CarregarConfiguracoesEmpresa(CNPJ : String; Mensagem : String);
+var
+  sMsg : String;
+const
+  sHTML =
+    '<html>'                  + #13 +
+    '<style type="text/css">' + #13 +
+    '<!--'      + #13 +
+    '.style1 {' + #13 +
+    '	font-family: Verdana, Arial, Helvetica, sans-serif;' + #13 +
+    '	font-size: 12px;' + #13 +
+    '}'   + #13 +
+    '-->' + #13 +
+    '</style>'  + #13 +
+    '<body>'    + #13 +
+    '  %s'      + #13 +
+    '  <p>&nbsp;</p>' + #13 +
+    '  <p><span class="style1"><strong>%s</strong><br>' + #13 +
+    '    %s<br>'           + #13 +
+    '    %s<br>' + #13 +
+    '    <a href="http://%s">%s</a>' + #13 +
+    '  </span></p>' + #13 +
+    '</body>'       + #13 +
+    '</html>';
+
+begin
+  with gContaEmail, DMBusiness, qryConfiguracoes do
+  begin
+    Close;
+    ParamByName('empresa').AsString := Trim(CNPJ);
+    Open;
+
+    if (Trim(Mensagem) <> EmptyStr) then
+      sMsg := '<p>' + Trim(Mensagem) + '</p>'
+    else
+    if (Trim(FieldByName('email_mensagem_padrao').AsString) <> EmptyStr) then
+      sMsg := '<p>' + Trim(FieldByName('email_mensagem_padrao').AsString) + '</p>'
+    else
+    if (Trim(FieldByName('email_mensagem_padrao').AsString) = EmptyStr) then
+      sMsg := '<p>-</p>';
+
+    gContaEmail.Conta := FieldByName('email_conta').AsString;
+    gContaEmail.Senha := FieldByName('email_senha').AsString;
+    gContaEmail.Servidor_POP  := FieldByName('email_pop').AsString;
+    gContaEmail.Servidor_SMTP := FieldByName('email_smtp').AsString;
+    gContaEmail.Assunto_Padrao    := FieldByName('email_assunto_padrao').AsString;
+    gContaEmail.Mensagem_Padrao   := FieldByName('email_mensagem_padrao').AsString;
+
+    gContaEmail.RequerAutenticacao := False;
+    gContaEmail.ConexaoSeguraSSL   := False;
+    
+    gContaEmail.Assinatura_Padrao := Format(sHTML, [sMsg,
+      FieldByName('empresa_razao').AsString,
+      FieldByName('empresa_fone_1').AsString,
+      FieldByName('empresa_email').AsString,
+      FieldByName('empresa_homepage').AsString, FieldByName('empresa_homepage').AsString]);
   end;
 end;
 
