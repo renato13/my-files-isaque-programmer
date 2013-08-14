@@ -97,12 +97,15 @@ type
     rgModoGerarNFe: TRadioGroup;
     lblInfoFisco: TLabel;
     edInfoFisco: TEdit;
+    btnValidadeCertificado: TBitBtn;
     procedure btnCancelarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure sbtnCaminhoCertClick(Sender: TObject);
     procedure sbtnLogoMarcaClick(Sender: TObject);
     procedure sbtnPathSalvarClick(Sender: TObject);
+    procedure edtNumSerieChange(Sender: TObject);
+    procedure btnValidadeCertificadoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -114,7 +117,7 @@ var
 
 implementation
 
-uses UDMNFe, FileCtrl;
+uses UDMNFe, FileCtrl, DateUtils;
 
 {$R *.dfm}
 
@@ -173,6 +176,17 @@ begin
 
   if SelectDirectory(Dir, [sdAllowCreate, sdPerformCreate, sdPrompt], SELDIRHELP) then
     edtPathLogs.Text := Dir;
+end;
+
+procedure TfrmGeConfigurarNFeACBr.edtNumSerieChange(Sender: TObject);
+begin
+  btnValidadeCertificado.Enabled := (Trim(edtNumSerie.Text) <> EmptyStr);
+end;
+
+procedure TfrmGeConfigurarNFeACBr.btnValidadeCertificadoClick(
+  Sender: TObject);
+begin
+  DMNFe.GetValidadeCertificado;
 end;
 
 end.

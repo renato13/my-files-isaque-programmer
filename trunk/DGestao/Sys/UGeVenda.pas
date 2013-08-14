@@ -1534,6 +1534,9 @@ begin
 
   RecarregarRegistro;
 
+  if not DMNFe.GetValidadeCertificado then
+    Exit;
+
   if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
                 iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
   ) ) then

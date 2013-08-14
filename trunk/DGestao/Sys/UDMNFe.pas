@@ -460,6 +460,7 @@ type
 
     function GerarNFeOnLine : Boolean;
     function GetInformacaoFisco : String;
+    function GetValidadeCertificado : Boolean;
 
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
@@ -505,7 +506,7 @@ implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
   ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe, UFuncoes,
-  UConstantesDGE;
+  UConstantesDGE, DateUtils;
 
 {$R *.dfm}
 
@@ -3032,6 +3033,30 @@ begin
     end;
   end;
 
+end;
+
+function TDMNFe.GetValidadeCertificado: Boolean;
+var
+  sDataVenc,
+  sMsg     : String;
+  iPrazo   : Integer;
+begin
+  sDataVenc := FormatDateTime('dd/mm/yyyy', ACBrNFe.Configuracoes.Certificados.DataVenc);
+  iPrazo    := DaysBetween(now, ACBrNFe.Configuracoes.Certificados.DataVenc);
+
+  Result := (iPrazo >= 0);
+
+  if ( iPrazo = 0 ) then
+    sMsg := 'A Data de Vencimento do Certificado expira hoje!' + #13#13 + 'Favor providenciar um novo certificado.'
+  else
+  if ( iPrazo > 0 ) then
+    sMsg := 'Data de Vencimento do Certificado: ' + sDataVenc + #13#13 + 'Prazo de expiração : ' + FormatFloat(',0', iPrazo) + ' dia(s).'
+  else
+  if ( iPrazo < 0 ) then
+    sMsg := 'Data de Vencimento do Certificado: ' + sDataVenc + #13#13 + 'Prazo expirado à ' + FormatFloat(',0', iPrazo) + ' dia(s)!';
+
+  if (iPrazo <= 30) then
+    ShowWarning('A T E N Ç Ã O :' + #13#13 + '-----------------------------------------' + #13#13 + sMsg);
 end;
 
 end.

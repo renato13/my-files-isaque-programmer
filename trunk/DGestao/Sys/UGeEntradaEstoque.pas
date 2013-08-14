@@ -1056,6 +1056,9 @@ begin
   if ( IbDtstTabela.IsEmpty ) then
     Exit;
 
+  if not DMNFe.GetValidadeCertificado then
+    Exit;
+
   if ( GerarNFeEntrada(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
                 iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
   ) ) then

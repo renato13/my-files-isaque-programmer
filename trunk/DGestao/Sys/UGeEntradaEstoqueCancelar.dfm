@@ -490,7 +490,6 @@ inherited frmGeEntradaEstoqueCancelar: TfrmGeEntradaEstoqueCancelar
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
