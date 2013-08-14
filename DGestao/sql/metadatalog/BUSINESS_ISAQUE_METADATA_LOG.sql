@@ -7976,3 +7976,12 @@ REFERENCES TBEMPRESA(CNPJ)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
 
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 12, column 100.
+(.
+
+*/
