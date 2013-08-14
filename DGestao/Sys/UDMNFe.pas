@@ -448,8 +448,8 @@ type
     property ConfigACBr : TfrmGeConfigurarNFeACBr read frmACBr write frmACBr;
     procedure LoadXML(MyMemo: TStringList; MyWebBrowser: TWebBrowser);
 
-    procedure LerConfiguracao;
-    procedure GravarConfiguracao;
+    procedure LerConfiguracao(const sCNPJEmitente : String);
+    procedure GravarConfiguracao(const sCNPJEmitente : String);
 
     procedure AbrirEmitente(sCNPJ : String);
     procedure AbrirDestinatario(sCNPJ : String);
@@ -487,6 +487,9 @@ type
     function GerarNFeEntradaOffLineACBr(const sCNPJEmitente : String; const iCodFornecedor : Integer; const iAnoCompra, iNumCompra : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE : String;
       const Imprimir : Boolean = TRUE) : Boolean;
+
+    function InutilizaNumeroNFeACBr(const sCNPJEmitente : String; iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal : Integer; const sJustificativa : String; var sRetorno : String) : Boolean;
+
   end;
 
 var
@@ -500,7 +503,7 @@ const
   DIRECTORY_PRINT  = 'NFe\Imprimir\';
   DIRECTORY_CLIENT = 'NFe\Clientes\';
 
-  procedure ConfigurarNFeACBr;
+  procedure ConfigurarNFeACBr(const sCNPJEmitente : String = '');
 
 implementation
 
@@ -510,7 +513,7 @@ uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
 
 {$R *.dfm}
 
-procedure ConfigurarNFeACBr;
+procedure ConfigurarNFeACBr(const sCNPJEmitente : String = '');
 var
  I : Integer;
 begin
@@ -524,7 +527,7 @@ begin
       if ( not Assigned(ConfigACBr) ) then
         ConfigACBr := TfrmGeConfigurarNFeACBr.Create(Application);
 
-      LerConfiguracao;
+      LerConfiguracao(sCNPJEmitente);
 
       if ( not ConfigACBr.Showing ) then
         I := ConfigACBr.ShowModal;
@@ -533,8 +536,8 @@ begin
 
       if ( I = ID_OK ) then
       begin
-        GravarConfiguracao;
-        LerConfiguracao;
+        GravarConfiguracao(sCNPJEmitente);
+        LerConfiguracao(sCNPJEmitente);
       end;
 
     end;
@@ -630,7 +633,7 @@ begin
   
   rvDANFE.Sistema := GetCompanyName + ' - Contato(s): ' + GetContacts;
 
-  LerConfiguracao;
+  LerConfiguracao(GetEmpresaIDDefault);
 
   fr3Designer := TfrxDesigner.Create(Self);
 
@@ -638,7 +641,7 @@ begin
   GerarTabela_CST_COFINS;
 end;
 
-procedure TDMNFe.GravarConfiguracao;
+procedure TDMNFe.GravarConfiguracao(const sCNPJEmitente : String);
 Var
   StreamMemo : TMemoryStream;
 begin
@@ -702,7 +705,7 @@ begin
   end;
 end;
 
-procedure TDMNFe.LerConfiguracao;
+procedure TDMNFe.LerConfiguracao(const sCNPJEmitente : String);
 Var
   Ok : Boolean;
   StreamMemo : TMemoryStream;
@@ -792,12 +795,27 @@ begin
       edtEmitUF.Text         := ReadString( 'Emitente', 'UF'         , '' ) ;
       edInfoFisco.Text       := ReadString( 'Emitente', 'InfoFisco'  , 'EMPRESA OPTANTE PELO SIMPLES DE ACORDO COM A LEI COMPLEMENTAR 123, DE DEZEMBRO DE 2006' ) ;
 
-      edtSmtpHost.Text      := ReadString( 'Email', 'Host'   ,'') ;
-      edtSmtpPort.Text      := ReadString( 'Email', 'Port'   ,'') ;
-      edtSmtpUser.Text      := ReadString( 'Email', 'User'   ,'') ;
-      edtSmtpPass.Text      := ReadString( 'Email', 'Pass'   ,'') ;
-      edtEmailAssunto.Text  := ReadString( 'Email', 'Assunto','') ;
-      cbEmailSSL.Checked    := ReadBool(   'Email', 'SSL'    ,False) ;
+      // Configuração para envio de e-mails
+      
+      CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, 'Envio de NF-e (Emitente: ' + edtEmitRazao.Text + ')');
+      if ( Trim(gContaEmail.Conta) <> EmptyStr ) then
+      begin
+        edtSmtpHost.Text      := gContaEmail.Servidor_SMTP;
+        edtSmtpPort.Text      := '25';
+        edtSmtpUser.Text      := gContaEmail.Conta;
+        edtSmtpPass.Text      := gContaEmail.Senha;
+        edtEmailAssunto.Text  := 'Envio de NF-e (Emitente: ' + edtEmitRazao.Text + ')';
+        cbEmailSSL.Checked    := False;
+      end
+      else
+      begin
+        edtSmtpHost.Text      := ReadString( 'Email', 'Host'   ,'') ;
+        edtSmtpPort.Text      := ReadString( 'Email', 'Port'   ,'') ;
+        edtSmtpUser.Text      := ReadString( 'Email', 'User'   ,'') ;
+        edtSmtpPass.Text      := ReadString( 'Email', 'Pass'   ,'') ;
+        edtEmailAssunto.Text  := ReadString( 'Email', 'Assunto','') ;
+        cbEmailSSL.Checked    := ReadBool(   'Email', 'SSL'    ,False) ;
+      end;
 
       StreamMemo := TMemoryStream.Create;
 
@@ -1173,7 +1191,7 @@ begin
 
   try
 
-    LerConfiguracao;
+    LerConfiguracao(sCNPJEmitente);
 
     AbrirEmitente( sCNPJEmitente );
     AbrirDestinatario( sCNPJDestinatario );
@@ -2191,7 +2209,7 @@ begin
 
   try
 
-    LerConfiguracao;
+    LerConfiguracao(sCNPJEmitente);
 
     AbrirEmitente( sCNPJEmitente );
     AbrirDestinatarioFornecedor( iCodFornecedor );
@@ -3057,6 +3075,49 @@ begin
 
   if (iPrazo <= 30) then
     ShowWarning('A T E N Ç Ã O :' + #13#13 + '-----------------------------------------' + #13#13 + sMsg);
+end;
+
+function TDMNFe.InutilizaNumeroNFeACBr(const sCNPJEmitente: String; iAno,
+  iModelo, iSerie, iNumeroInicial, iNumeroFinal: Integer;
+  const sJustificativa: String; var sRetorno : String): Boolean;
+begin
+  try
+
+    LerConfiguracao(sCNPJEmitente);
+
+    with ACBrNFe do
+    begin
+      WebServices.Inutiliza(
+        sCNPJEmitente,
+        sJustificativa,
+        iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal);
+
+      Result   := True;
+      sRetorno :=
+        'Ambiente:    ' + IntToStr( Ord(WebServices.Inutilizacao.TpAmb) ) + #13 +
+        'Versão App.: ' + WebServices.Inutilizacao.verAplic        + #13 +
+        'Status Trn.: ' + IntToStr(WebServices.Inutilizacao.cStat) + #13 +
+        'Motivo:      ' + WebServices.Inutilizacao.xMotivo         + #13 +
+        'Justif.:     ' + WebServices.Inutilizacao.Justificativa   + #13 +
+        '---'     + #13 +
+        'Emitente:    ' + WebServices.Inutilizacao.CNPJ + #13 +
+        'Modelo NF-e: ' + IntToStr( WebServices.Inutilizacao.Modelo ) + #13 +
+        'Série NF-e:  ' + IntToStr( WebServices.Inutilizacao.Serie )  + #13 +
+        'No. Incial:  ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
+        'No. Final:   ' + IntToStr( WebServices.Inutilizacao.NumeroFinal )   + #13 +
+        '---'     + #13 +
+        'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Inutilizacao.dhRecbto) + #13 +
+        'Protocolo:   ' + WebServices.Inutilizacao.Protocolo;
+   end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar inutilizar numeração de notas.' + #13#13 + 'InutilizaNumeroNFeACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
 end;
 
 end.

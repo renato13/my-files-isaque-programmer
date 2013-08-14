@@ -914,6 +914,7 @@ inherited frmGeConfigurarNFeACBr: TfrmGeConfigurarNFeACBr
             Top = 72
             Width = 120
             Height = 21
+            PasswordChar = '*'
             TabOrder = 3
           end
           object edtEmailAssunto: TEdit
