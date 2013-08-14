@@ -174,6 +174,7 @@ type
     procedure mnRelatorioEstoqueDemandaClick(Sender: TObject);
     procedure nmConultarVendaItemClick(Sender: TObject);
     procedure nmRotatividadeClick(Sender: TObject);
+    procedure nmInutilizarNumeroNFeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -587,6 +588,11 @@ end;
 procedure TfrmPrinc.nmRotatividadeClick(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'FrmProdutoRotatividadePRC');
+end;
+
+procedure TfrmPrinc.nmInutilizarNumeroNFeClick(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'frmGeInutilizarNumeroNFe');
 end;
 
 end.

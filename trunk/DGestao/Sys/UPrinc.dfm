@@ -6553,7 +6553,7 @@ object frmPrinc: TfrmPrinc
             3E3E3E3E3E3E3E3E00003E3E3E3E3E3E3E3E3E3E3E3E3E3E00003E3E3E3E3E3E
             3E3E3E3E3E3E3E3E00003E3E3E3E3E3E3E3E3E3E3E3E3E3E0000}
           Caption = 'Inutilizar Numera'#231#227'o NF-e'
-          Enabled = False
+          OnClick = nmInutilizarNumeroNFeClick
         end
         object ExportarNFeGeradas1: TMenuItem
           Bitmap.Data = {

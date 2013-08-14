@@ -85,7 +85,8 @@ uses
   UGrPadraoPesquisa in 'lib\UGrPadraoPesquisa.pas' {frmGrPadraoPesquisa},
   UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
   UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin},
-  UGeProdutoRotatividadePRC in 'UGeProdutoRotatividadePRC.pas' {FrmProdutoRotatividadePRC};
+  UGeProdutoRotatividadePRC in 'UGeProdutoRotatividadePRC.pas' {FrmProdutoRotatividadePRC},
+  UGeInutilizarNumeroNFe in 'UGeInutilizarNumeroNFe.pas' {frmGeInutilizarNumeroNFe};
 
 {$R *.res}
 
