@@ -8272,3 +8272,87 @@ COMMENT ON COLUMN TBLOG_TRANSACAO.TIPO IS
 1 - Transacao SEFA
 2 - Sistema';
 
+
+
+
+/*------ SYSDBA 15/08/2013 10:51:46 --------*/
+
+ALTER TABLE TBCONFIGURACAO
+    ADD EMAIL_SMTP_PORTA DMN_INTEGER_N DEFAULT 25;
+
+COMMENT ON COLUMN TBCONFIGURACAO.EMAIL_SMTP_PORTA IS
+'E-mail: Porta SMTP.';
+
+alter table TBCONFIGURACAO
+alter EMPRESA position 1;
+
+alter table TBCONFIGURACAO
+alter EMAIL_CONTA position 2;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SENHA position 3;
+
+alter table TBCONFIGURACAO
+alter EMAIL_POP position 4;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SMTP position 5;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SMTP_PORTA position 6;
+
+alter table TBCONFIGURACAO
+alter EMAIL_ASSUNTO_PADRAO position 7;
+
+alter table TBCONFIGURACAO
+alter EMAIL_MENSAGEM_PADRAO position 8;
+
+
+
+
+/*------ SYSDBA 15/08/2013 10:53:52 --------*/
+
+ALTER TABLE TBCONFIGURACAO
+    ADD EMAIL_REQUER_AUTENTICACAO DMN_LOGICO DEFAULT 1,
+    ADD EMAIL_CONEXAO_SSL DMN_LOGICO DEFAULT 0;
+
+COMMENT ON COLUMN TBCONFIGURACAO.EMAIL_REQUER_AUTENTICACAO IS
+'E-mail: Servidor requer autenticacao:
+0 - Nao
+1 - Sim';
+
+COMMENT ON COLUMN TBCONFIGURACAO.EMAIL_CONEXAO_SSL IS
+'E-mail: Conexao Segura (SSL):
+0 - Nao
+1 - Sim';
+
+alter table TBCONFIGURACAO
+alter EMPRESA position 1;
+
+alter table TBCONFIGURACAO
+alter EMAIL_CONTA position 2;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SENHA position 3;
+
+alter table TBCONFIGURACAO
+alter EMAIL_POP position 4;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SMTP position 5;
+
+alter table TBCONFIGURACAO
+alter EMAIL_SMTP_PORTA position 6;
+
+alter table TBCONFIGURACAO
+alter EMAIL_REQUER_AUTENTICACAO position 7;
+
+alter table TBCONFIGURACAO
+alter EMAIL_CONEXAO_SSL position 8;
+
+alter table TBCONFIGURACAO
+alter EMAIL_ASSUNTO_PADRAO position 9;
+
+alter table TBCONFIGURACAO
+alter EMAIL_MENSAGEM_PADRAO position 10;
+

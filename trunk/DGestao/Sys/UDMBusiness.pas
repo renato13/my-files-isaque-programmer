@@ -21,6 +21,7 @@ type
     Senha : String;
     Servidor_POP    : String;
     Servidor_SMTP   : String;
+    Porta_SMTP      : Integer;
     Assunto_Padrao    : String;
     Mensagem_Padrao   : String;
     Assinatura_Padrao : String;
@@ -99,6 +100,7 @@ var
 
   procedure ShowInformation(sMsg : String);
   procedure ShowWarning(sMsg : String);
+  procedure ShowStop(sMsg : String);
   procedure ShowError(sMsg : String);
   procedure UpdateSequence(GeneratorName, NomeTabela, CampoChave : String; const sWhr : String = '');
   procedure CommitTransaction;
@@ -351,6 +353,11 @@ begin
   Application.MessageBox(PChar(sMsg), 'Alerta', MB_ICONWARNING);
 end;
 
+procedure ShowStop(sMsg : String);
+begin
+  Application.MessageBox(PChar(sMsg), 'Pare!', MB_ICONSTOP);
+end;
+
 procedure ShowError(sMsg : String);
 begin
   Application.MessageBox(PChar(sMsg), 'Erro', MB_ICONERROR);
@@ -591,11 +598,12 @@ begin
     gContaEmail.Senha := FieldByName('email_senha').AsString;
     gContaEmail.Servidor_POP  := FieldByName('email_pop').AsString;
     gContaEmail.Servidor_SMTP := FieldByName('email_smtp').AsString;
+    gContaEmail.Porta_SMTP    := FieldByName('email_smtp_porta').AsInteger;
     gContaEmail.Assunto_Padrao    := FieldByName('email_assunto_padrao').AsString;
     gContaEmail.Mensagem_Padrao   := FieldByName('email_mensagem_padrao').AsString;
 
-    gContaEmail.RequerAutenticacao := True;
-    gContaEmail.ConexaoSeguraSSL   := False;
+    gContaEmail.RequerAutenticacao := (FieldByName('email_requer_autenticacao').AsInteger = 1);
+    gContaEmail.ConexaoSeguraSSL   := (FieldByName('email_conexao_ssl').AsInteger = 1);
 (*
     gContaEmail.Assinatura_Padrao := Format(sHTML, [sMsg,
       FieldByName('empresa_razao').AsString,

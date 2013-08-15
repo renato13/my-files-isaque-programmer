@@ -121,6 +121,7 @@ type
     nmConultarVendaItem: TMenuItem;
     popRotatividade: TMenuItem;
     nmRotatividade: TMenuItem;
+    nmConfiguracaoEmpresa: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -175,6 +176,7 @@ type
     procedure nmConultarVendaItemClick(Sender: TObject);
     procedure nmRotatividadeClick(Sender: TObject);
     procedure nmInutilizarNumeroNFeClick(Sender: TObject);
+    procedure nmConfiguracaoEmpresaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -593,6 +595,11 @@ end;
 procedure TfrmPrinc.nmInutilizarNumeroNFeClick(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'frmGeInutilizarNumeroNFe');
+end;
+
+procedure TfrmPrinc.nmConfiguracaoEmpresaClick(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'frmGeConfiguracaoEmpresa');
 end;
 
 end.

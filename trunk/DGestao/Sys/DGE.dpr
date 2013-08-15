@@ -86,7 +86,8 @@ uses
   UGeVendaItemPesquisa in 'UGeVendaItemPesquisa.pas' {FrmGeVendaItemPesquisa},
   UGeEfetuarLogin in 'UGeEfetuarLogin.pas' {FrmEfetuarLogin},
   UGeProdutoRotatividadePRC in 'UGeProdutoRotatividadePRC.pas' {FrmProdutoRotatividadePRC},
-  UGeInutilizarNumeroNFe in 'UGeInutilizarNumeroNFe.pas' {frmGeInutilizarNumeroNFe};
+  UGeInutilizarNumeroNFe in 'UGeInutilizarNumeroNFe.pas' {frmGeInutilizarNumeroNFe},
+  UGeConfiguracaoEmpresa in 'UGeConfiguracaoEmpresa.pas' {frmGeConfiguracaoEmpresa};
 
 {$R *.res}
 
