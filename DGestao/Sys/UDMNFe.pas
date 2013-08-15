@@ -1216,7 +1216,7 @@ begin
       else
         Ide.indPag  := ipPrazo;
 
-      Ide.modelo    := 55;
+      Ide.modelo    := MODELO_NFE;
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
       Ide.dEmi      := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
@@ -2234,7 +2234,7 @@ begin
       else
         Ide.indPag  := ipPrazo;
 
-      Ide.modelo    := 55;
+      Ide.modelo    := MODELO_NFE;
       Ide.serie     := iSerieNFe;
       Ide.nNF       := iNumeroNFe;
       Ide.dEmi      := GetDateDB; // StrToDate( FormatDateTime('dd/mm/yyyy', DtHoraEmiss) );
@@ -3103,7 +3103,7 @@ begin
         'Emitente:    ' + WebServices.Inutilizacao.CNPJ + #13 +
         'Modelo NF-e: ' + IntToStr( WebServices.Inutilizacao.Modelo ) + #13 +
         'Série NF-e:  ' + IntToStr( WebServices.Inutilizacao.Serie )  + #13 +
-        'No. Incial:  ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
+        'No. Inicial: ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
         'No. Final:   ' + IntToStr( WebServices.Inutilizacao.NumeroFinal )   + #13 +
         '---'     + #13 +
         'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Inutilizacao.dhRecbto) + #13 +
