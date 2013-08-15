@@ -131,6 +131,7 @@ var
   function GetModeloEmissaoCupom : Integer;
   function GetSegmentoID(const CNPJ : String) : Integer;
   function GetControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess) : Boolean;
+  function GetEmailEmpresa(const sCNPJEmpresa : String) : String;
 
   function StrIsCNPJ(const Num: string): Boolean;
   function StrIsCPF(const Num: string): Boolean;
@@ -726,6 +727,21 @@ begin
       EvUserAcesso.Consents.Clear;
       EvUserAcesso.Consents.Text := qryEvAcessUserCONSENTS_STRING.AsString;
     end;
+  end;
+end;
+
+function GetEmailEmpresa(const sCNPJEmpresa : String) : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select email from TBEMPRESA where cnpj = ' + QuotedStr(sCNPJEmpresa));
+    Open;
+
+    Result := AnsiLowerCase( FieldByName('email').AsString );
+
+    Close;
   end;
 end;
 

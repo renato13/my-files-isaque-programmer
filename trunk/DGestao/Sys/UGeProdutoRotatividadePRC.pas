@@ -24,7 +24,7 @@ uses
   IdMessage, IdIOHandler, IdIOHandlerSocket, IdSSLOpenSSL;
 
 type
-  TFrmProdutoRotatividadePRC = class(TfrmGrPadrao)
+  TFrmGeProdutoRotatividadePRC = class(TfrmGrPadrao)
     pnlPesquisa: TPanel;
     BvlTipoPesquisa: TBevel;
     GrpBxTipoPesquisa: TGroupBox;
@@ -462,7 +462,7 @@ type
   end;
 
 var
-  FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC;
+  FrmGeProdutoRotatividadePRC: TFrmGeProdutoRotatividadePRC;
 
 implementation
 
@@ -487,7 +487,7 @@ const
 
 { TFrmProdutoRotatividadePRC }
 
-procedure TFrmProdutoRotatividadePRC.HabilitarGuia(
+procedure TFrmGeProdutoRotatividadePRC.HabilitarGuia(
   const TipoProcesso: Integer);
 var
   I : Integer;
@@ -505,9 +505,17 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.FormCreate(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.FormCreate(Sender: TObject);
 begin
   {$IFDEF DGE}
+  dbgGrupo.LookAndFeel.AssignedValues := [lfvKind,lfvNativeStyle,lfvSkinName];
+  dbgGrupo.LookAndFeel.Kind           := lfStandard;
+  dbgGrupo.LookAndFeel.NativeStyle    := True;
+
+  dbgFab.LookAndFeel.AssignedValues := [lfvKind,lfvNativeStyle,lfvSkinName];
+  dbgFab.LookAndFeel.Kind           := lfStandard;
+  dbgFab.LookAndFeel.NativeStyle    := True;
+
   dbgProduto.LookAndFeel.AssignedValues := [lfvKind,lfvNativeStyle,lfvSkinName];
   dbgProduto.LookAndFeel.Kind           := lfStandard;
   dbgProduto.LookAndFeel.NativeStyle    := True;
@@ -531,12 +539,12 @@ begin
   HabilitarGuia(edTipoProcesso.ItemIndex);
 end;
 
-procedure TFrmProdutoRotatividadePRC.edTipoProcessoChange(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.edTipoProcessoChange(Sender: TObject);
 begin
   HabilitarGuia(edTipoProcesso.ItemIndex);
 end;
 
-procedure TFrmProdutoRotatividadePRC.BtnProcessarClick(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.BtnProcessarClick(Sender: TObject);
 begin
   if ( not ShowConfirm('Deseja processar a rotatividade dos produtos?', 'Processar') ) then
     Exit;
@@ -608,12 +616,12 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.BtnPesquisarClick(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.BtnPesquisarClick(Sender: TObject);
 begin
   ExecutarPesquisa(edTipoProcesso.ItemIndex);
 end;
 
-procedure TFrmProdutoRotatividadePRC.ExecutarPesquisa(
+procedure TFrmGeProdutoRotatividadePRC.ExecutarPesquisa(
   const TipoProcesso: Integer);
 var
   sWhr : String;
@@ -679,7 +687,7 @@ begin
             else
               sWhr := sWhr + ' and (upper(g.descri) like ' + QuotedStr(edPesquisar.Text + '%') + ')';
 
-          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);  
+          SQL.Text := StringReplace(SQL.Text, WHR_DEFAULT, sWhr, [rfReplaceAll]);
         end;
         CdsGrupo.Open;
 
@@ -715,7 +723,7 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.FormKeyDown(Sender: TObject;
+procedure TFrmGeProdutoRotatividadePRC.FormKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
   if ( (Key = VK_RETURN) and (ActiveControl = edPesquisar) ) then
@@ -733,7 +741,7 @@ begin
   inherited;
 end;
 
-procedure TFrmProdutoRotatividadePRC.NovaPesquisaKeyPress(Sender: TObject;
+procedure TFrmGeProdutoRotatividadePRC.NovaPesquisaKeyPress(Sender: TObject;
   var Key: Char);
 begin
   if ( Key in ['0'..'9', 'a'..'z', 'A'..'Z', ' '] ) then
@@ -746,7 +754,7 @@ begin
   end
 end;
 
-procedure TFrmProdutoRotatividadePRC.CalcularPercentuais(
+procedure TFrmGeProdutoRotatividadePRC.CalcularPercentuais(
   cdsTabela: TClientDataSet);
 var
   I ,
@@ -809,7 +817,7 @@ begin
 
 end;
 
-procedure TFrmProdutoRotatividadePRC.dbgGrupoTblDblClick(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.dbgGrupoTblDblClick(Sender: TObject);
 var
   sWhr : String;
 begin
@@ -856,7 +864,7 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.btbtnIncluirClick(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.btbtnIncluirClick(Sender: TObject);
 begin
   Case PgcTabelas.ActivePageIndex of
     TIPO_GRP:
@@ -889,7 +897,7 @@ begin
     end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.dbgFabTblDblClick(Sender: TObject);
+procedure TFrmGeProdutoRotatividadePRC.dbgFabTblDblClick(Sender: TObject);
 var
   sWhr : String;
 begin
@@ -936,7 +944,7 @@ begin
   end;
 end;
 
-procedure TFrmProdutoRotatividadePRC.btBtnEnviarEmailClick(
+procedure TFrmGeProdutoRotatividadePRC.btBtnEnviarEmailClick(
   Sender: TObject);
 var
   sAssunto  ,
@@ -1000,12 +1008,13 @@ begin
   Screen.Cursor := crHourGlass;
   try
     try
-      sAssunto := FormatDateTime('dd/mm/yyyy', Date) + ' - Rotatividade de Produtos';
+      sAssunto := FormatDateTime('dd/mm/yyyy', Date) + ' - Rotatividade de Produtos (' + edTipoProcesso.Text + ')';;
       CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, sAssunto);
 
       smtpEmail.Username    := gContaEmail.Conta;
       smtpEmail.Password    := gContaEmail.Senha;
       smtpEmail.Host        := gContaEmail.Servidor_SMTP;
+      smtpEmail.Port        := gContaEmail.Porta_SMTP;
       smtpEmail.ReadTimeout := 10000;    // Leitura da Conexão em 10 segundos!
 
       if gContaEmail.RequerAutenticacao then
@@ -1046,6 +1055,6 @@ begin
 end;
 
 initialization
-  FormFunction.RegisterForm('FrmProdutoRotatividadePRC', TFrmProdutoRotatividadePRC);
+  FormFunction.RegisterForm('FrmGeProdutoRotatividadePRC', TFrmGeProdutoRotatividadePRC);
 
 end.

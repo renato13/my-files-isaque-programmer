@@ -1,4 +1,4 @@
-inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
+inherited FrmGeProdutoRotatividadePRC: TFrmGeProdutoRotatividadePRC
   Left = 429
   Top = 185
   Width = 1027
@@ -3917,8 +3917,8 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     Top = 280
   end
   object StyleRepository: TcxStyleRepository
-    Left = 968
-    Top = 88
+    Left = 408
+    Top = 200
     PixelsPerInch = 96
     object StyleSelecao: TcxStyle
       AssignedValues = [svColor, svFont, svTextColor]
@@ -4178,8 +4178,8 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     DefaultExt = '.xls'
     Filter = 'Planilha Excel (*.xls)|*.xls'
     Title = 'Salvar arquivo'
-    Left = 276
-    Top = 201
+    Left = 280
+    Top = 200
   end
   object QryFabricante: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
@@ -4593,8 +4593,8 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     MaxLineAction = maException
     Port = 25
     AuthenticationType = atNone
-    Left = 60
-    Top = 449
+    Left = 312
+    Top = 200
   end
   object msgEmail: TIdMessage
     AttachmentEncoding = 'MIME'
@@ -4605,15 +4605,15 @@ inherited FrmProdutoRotatividadePRC: TFrmProdutoRotatividadePRC
     Priority = mpHigh
     Recipients = <>
     ReplyTo = <>
-    Left = 92
-    Top = 449
+    Left = 344
+    Top = 200
   end
   object IdSSLIOHandlerSocket: TIdSSLIOHandlerSocket
     SSLOptions.Method = sslvSSLv2
     SSLOptions.Mode = sslmClient
     SSLOptions.VerifyMode = []
     SSLOptions.VerifyDepth = 0
-    Left = 124
-    Top = 449
+    Left = 376
+    Top = 200
   end
 end

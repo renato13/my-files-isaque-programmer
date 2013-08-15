@@ -122,6 +122,8 @@ type
     popRotatividade: TMenuItem;
     nmRotatividade: TMenuItem;
     nmConfiguracaoEmpresa: TMenuItem;
+    popEstoqueMinimo: TMenuItem;
+    nmEstoqueMinimo: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
@@ -177,6 +179,7 @@ type
     procedure nmRotatividadeClick(Sender: TObject);
     procedure nmInutilizarNumeroNFeClick(Sender: TObject);
     procedure nmConfiguracaoEmpresaClick(Sender: TObject);
+    procedure nmEstoqueMinimoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -589,7 +592,7 @@ end;
 
 procedure TfrmPrinc.nmRotatividadeClick(Sender: TObject);
 begin
-  FormFunction.ShowModalForm(Self, 'FrmProdutoRotatividadePRC');
+  FormFunction.ShowModalForm(Self, 'FrmGeProdutoRotatividadePRC');
 end;
 
 procedure TfrmPrinc.nmInutilizarNumeroNFeClick(Sender: TObject);
@@ -600,6 +603,11 @@ end;
 procedure TfrmPrinc.nmConfiguracaoEmpresaClick(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'frmGeConfiguracaoEmpresa');
+end;
+
+procedure TfrmPrinc.nmEstoqueMinimoClick(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'FrmGeProdutoEstoqueMinimo');
 end;
 
 end.
