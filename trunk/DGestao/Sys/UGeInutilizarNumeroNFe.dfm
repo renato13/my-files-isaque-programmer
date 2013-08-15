@@ -1,11 +1,15 @@
 inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
   Left = 580
   Top = 296
+  ActiveControl = edAno
   BorderStyle = bsDialog
   BorderWidth = 4
   Caption = 'Inutilizar Numera'#231#227'o NF-e'
   ClientHeight = 428
   ClientWidth = 593
+  DesignSize = (
+    593
+    428)
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
@@ -29,7 +33,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Top = 400
     Width = 216
     Height = 18
-    Anchors = [akTop, akBottom]
+    Anchors = [akLeft, akBottom]
     Caption = 'Andamento do processo . . . . '
     Font.Charset = ANSI_CHARSET
     Font.Color = clRed
@@ -37,6 +41,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
+    Visible = False
   end
   object GrpBxControle: TGroupBox
     Left = 0
@@ -81,7 +86,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ParentFont = False
     end
     object lblSerie: TLabel
-      Left = 16
+      Left = 96
       Top = 64
       Width = 32
       Height = 13
@@ -95,7 +100,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ParentFont = False
     end
     object lblNFe: TLabel
-      Left = 56
+      Left = 136
       Top = 64
       Width = 114
       Height = 13
@@ -109,12 +114,26 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ParentFont = False
     end
     object lblHoraEmissao: TLabel
-      Left = 184
+      Left = 264
       Top = 64
       Width = 119
       Height = 13
       Caption = #218'ltimo Lote de envio:'
       FocusControl = dbHoraEmissao
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblModelo: TLabel
+      Left = 16
+      Top = 64
+      Width = 72
+      Height = 13
+      Caption = 'Modelo NF-e:'
+      FocusControl = dbModelo
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -159,7 +178,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       TabOrder = 1
     end
     object dbSerie: TDBEdit
-      Left = 16
+      Left = 96
       Top = 80
       Width = 33
       Height = 21
@@ -174,10 +193,10 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       ReadOnly = True
-      TabOrder = 2
+      TabOrder = 3
     end
     object dbNFe: TDBEdit
-      Left = 56
+      Left = 136
       Top = 80
       Width = 121
       Height = 21
@@ -192,10 +211,10 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       ReadOnly = True
-      TabOrder = 3
+      TabOrder = 4
     end
     object dbHoraEmissao: TDBEdit
-      Left = 184
+      Left = 264
       Top = 80
       Width = 121
       Height = 21
@@ -210,7 +229,25 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       ReadOnly = True
-      TabOrder = 4
+      TabOrder = 5
+    end
+    object dbModelo: TDBEdit
+      Left = 16
+      Top = 80
+      Width = 73
+      Height = 21
+      TabStop = False
+      Color = clMoneyGreen
+      DataField = 'MODELO_NFE'
+      DataSource = dtsEmpresa
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 2
     end
   end
   object GrpBxImposto: TGroupBox
@@ -223,7 +260,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Caption = 'Dados para Inutiliza'#231#227'o'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
@@ -261,7 +298,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     end
     object lblJustificativa: TLabel
       Left = 16
-      Top = 64
+      Top = 104
       Width = 72
       Height = 13
       Caption = 'Justificativa:'
@@ -273,11 +310,54 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object lblAno: TLabel
+      Left = 16
+      Top = 64
+      Width = 25
+      Height = 13
+      Caption = 'Ano:'
+      FocusControl = edAno
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lblNumeroInicial: TLabel
+      Left = 80
+      Top = 64
+      Width = 84
+      Height = 13
+      Caption = 'N'#250'mero Inicial:'
+      FocusControl = edNumeroInicial
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = False
+    end
+    object lblNumeroFinal: TLabel
+      Left = 176
+      Top = 64
+      Width = 76
+      Height = 13
+      Caption = 'N'#250'mero Final:'
+      FocusControl = edNumeroFinal
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
     object dbJustificativa: TMemo
       Left = 16
-      Top = 80
+      Top = 120
       Width = 561
-      Height = 168
+      Height = 128
       Anchors = [akLeft, akTop, akRight, akBottom]
       Color = clWhite
       Font.Charset = ANSI_CHARSET
@@ -288,7 +368,9 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       MaxLength = 250
       ParentFont = False
       ScrollBars = ssVertical
-      TabOrder = 2
+      TabOrder = 5
+      OnEnter = ControlEditEnter
+      OnExit = ControlEditExit
     end
     object dbUsuario: TEdit
       Left = 16
@@ -323,6 +405,54 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ReadOnly = True
       TabOrder = 1
       Text = 'DBCANCELDATAHORA'
+    end
+    object edAno: TEdit
+      Left = 16
+      Top = 80
+      Width = 57
+      Height = 21
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+      OnEnter = ControlEditEnter
+      OnExit = ControlEditExit
+    end
+    object edNumeroInicial: TEdit
+      Left = 80
+      Top = 80
+      Width = 89
+      Height = 21
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 3
+      OnEnter = ControlEditEnter
+      OnExit = ControlEditExit
+    end
+    object edNumeroFinal: TEdit
+      Left = 176
+      Top = 80
+      Width = 89
+      Height = 21
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+      OnEnter = ControlEditEnter
+      OnExit = ControlEditExit
     end
   end
   object btnCancelar: TBitBtn
@@ -450,7 +580,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00}
     NumGlyphs = 2
   end
-  object cdsEmpresa: TIBDataSet
+  object cdsLOG: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
@@ -459,123 +589,85 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       '')
     SelectSQL.Strings = (
       'Select'
-      '    v.Ano'
-      '  , v.Codcontrol'
-      '  , v.Codemp'
-      '  , v.Codcli'
-      '  , v.Dtvenda'
-      '  , v.Status'
-      '  , v.Desconto'
-      '  , v.Totalvenda'
-      '  , v.Serie'
-      '  , v.Nfe'
-      '  , v.Lote_nfe_ano'
-      '  , v.Lote_nfe_numero'
-      '  , v.Nfe_enviada'
-      '  , v.Dataemissao'
-      '  , v.Horaemissao'
-      '  , v.Cancel_usuario'
-      '  , v.Cancel_datahora'
-      '  , v.Cancel_motivo'
-      '  , v.Cfop'
-      '  , v.Verificador_nfe'
-      '  , v.Xml_nfe'
-      '  , c.Nome'
-      'from TBVENDAS v'
-      '  inner join TBCLIENTE c on (c.Cnpj = v.Codcli)'
-      'where v.Ano = :anovenda'
-      '  and v.Codcontrol = :numvenda'
-      '')
+      '    t.usuario'
+      '  , t.data_hora'
+      '  , t.tipo'
+      '  , t.descricao'
+      '  , t.especificacao'
+      'from TBLOG_TRANSACAO t'
+      'where 1=0')
     ModifySQL.Strings = (
       '')
     GeneratorField.Field = 'CODCONTROL'
-    UpdateObject = updEmpresa
+    UpdateObject = updLOG
     Left = 424
     Top = 280
+    object cdsLOGUSUARIO: TIBStringField
+      FieldName = 'USUARIO'
+      Origin = '"TBLOG_TRANSACAO"."USUARIO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 50
+    end
+    object cdsLOGDATA_HORA: TDateTimeField
+      FieldName = 'DATA_HORA'
+      Origin = '"TBLOG_TRANSACAO"."DATA_HORA"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object cdsLOGTIPO: TSmallintField
+      FieldName = 'TIPO'
+      Origin = '"TBLOG_TRANSACAO"."TIPO"'
+      ProviderFlags = [pfInUpdate]
+    end
+    object cdsLOGDESCRICAO: TIBStringField
+      FieldName = 'DESCRICAO'
+      Origin = '"TBLOG_TRANSACAO"."DESCRICAO"'
+      ProviderFlags = [pfInUpdate]
+      Size = 100
+    end
+    object cdsLOGESPECIFICACAO: TMemoField
+      FieldName = 'ESPECIFICACAO'
+      Origin = '"TBLOG_TRANSACAO"."ESPECIFICACAO"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
   end
-  object updEmpresa: TIBUpdateSQL
+  object updLOG: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
-      '  ANO,'
-      '  CODCONTROL,'
-      '  CODEMP,'
-      '  CODCLI,'
-      '  DTVENDA,'
-      '  STATUS,'
-      '  DESCONTO,'
-      '  TOTALVENDA,'
-      '  DTFINALIZACAO_VENDA,'
-      '  OBS,'
-      '  FORMAPAG,'
-      '  FATDIAS,'
-      '  SERIE,'
-      '  NFE,'
-      '  DATAEMISSAO,'
-      '  HORAEMISSAO,'
-      '  CFOP,'
-      '  VERIFICADOR_NFE,'
-      '  XML_NFE,'
-      '  VENDEDOR_COD,'
       '  USUARIO,'
-      '  FORMAPAGTO_COD,'
-      '  CONDICAOPAGTO_COD,'
-      '  VENDA_PRAZO,'
-      '  PRAZO_01,'
-      '  PRAZO_02,'
-      '  PRAZO_03,'
-      '  PRAZO_04,'
-      '  PRAZO_05,'
-      '  PRAZO_06,'
-      '  PRAZO_07,'
-      '  PRAZO_08,'
-      '  PRAZO_09,'
-      '  PRAZO_10,'
-      '  PRAZO_11,'
-      '  PRAZO_12,'
-      '  LOTE_NFE_ANO,'
-      '  LOTE_NFE_NUMERO,'
-      '  NFE_ENVIADA,'
-      '  CANCEL_USUARIO,'
-      '  CANCEL_DATAHORA,'
-      '  CANCEL_MOTIVO,'
-      '  XML_NFE_FILENAME,'
-      '  NFE_VALOR_BASE_ICMS,'
-      '  NFE_VALOR_ICMS,'
-      '  NFE_VALOR_BASE_ICMS_SUBST,'
-      '  NFE_VALOR_ICMS_SUBST,'
-      '  NFE_VALOR_TOTAL_PRODUTO,'
-      '  NFE_VALOR_FRETE,'
-      '  NFE_VALOR_SEGURO,'
-      '  NFE_VALOR_DESCONTO,'
-      '  NFE_VALOR_TOTAL_II,'
-      '  NFE_VALOR_TOTAL_IPI,'
-      '  NFE_VALOR_PIS,'
-      '  NFE_VALOR_COFINS,'
-      '  NFE_VALOR_OUTROS,'
-      '  NFE_VALOR_TOTAL_NOTA'
-      'from TBVENDAS '
+      '  DATA_HORA,'
+      '  TIPO,'
+      '  DESCRICAO,'
+      '  ESPECIFICACAO'
+      'from TBLOG_TRANSACAO '
       'where'
-      '  ANO = :ANO and'
-      '  CODCONTROL = :CODCONTROL')
+      '  DATA_HORA = :DATA_HORA and'
+      '  USUARIO = :USUARIO')
     ModifySQL.Strings = (
-      'update TBVENDAS'
+      'update TBLOG_TRANSACAO'
       'set'
-      '  STATUS = :STATUS,'
-      '  CANCEL_USUARIO = :CANCEL_USUARIO,'
-      '  CANCEL_DATAHORA = :CANCEL_DATAHORA,'
-      '  CANCEL_MOTIVO = :CANCEL_MOTIVO'
+      '  DATA_HORA = :DATA_HORA,'
+      '  DESCRICAO = :DESCRICAO,'
+      '  ESPECIFICACAO = :ESPECIFICACAO,'
+      '  TIPO = :TIPO,'
+      '  USUARIO = :USUARIO'
       'where'
-      '  ANO = :OLD_ANO and'
-      '  CODCONTROL = :OLD_CODCONTROL')
+      '  DATA_HORA = :OLD_DATA_HORA and'
+      '  USUARIO = :OLD_USUARIO')
     InsertSQL.Strings = (
-      '')
+      'insert into TBLOG_TRANSACAO'
+      '  (DATA_HORA, DESCRICAO, ESPECIFICACAO, TIPO, USUARIO)'
+      'values'
+      '  (:DATA_HORA, :DESCRICAO, :ESPECIFICACAO, :TIPO, :USUARIO)')
+    DeleteSQL.Strings = (
+      'delete from TBLOG_TRANSACAO'
+      'where'
+      '  DATA_HORA = :OLD_DATA_HORA and'
+      '  USUARIO = :OLD_USUARIO')
     Left = 456
-    Top = 280
-  end
-  object dtsEmpresaxxx: TDataSource
-    AutoEdit = False
-    DataSet = cdsEmpresa
-    Left = 488
     Top = 280
   end
   object qryEmpresa: TIBQuery
@@ -589,10 +681,11 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       '  , e.numero_nfe'
       '  , e.lote_ano_nfe'
       '  , e.lote_num_nfe'
+      '  , 55 as modelo_nfe'
       'from TBEMPRESA e'
       'where e.cnpj = :cnpj')
-    Left = 392
-    Top = 72
+    Left = 520
+    Top = 16
     ParamData = <
       item
         DataType = ftString
@@ -632,10 +725,95 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Origin = '"TBEMPRESA"."LOTE_NUM_NFE"'
       DisplayFormat = '0000000'
     end
+    object qryEmpresaMODELO_NFE: TIntegerField
+      FieldName = 'MODELO_NFE'
+      ProviderFlags = []
+      OnGetText = qryEmpresaMODELO_NFEGetText
+    end
   end
   object dtsEmpresa: TDataSource
     DataSet = qryEmpresa
+    Left = 552
+    Top = 16
+  end
+  object qryNFeEmitida: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    v.serie'
+      '  , v.nfe'
+      '  , v.dataemissao'
+      '  , '#39'Sa'#237'da  '#39' as Tipo'
+      'from TBVENDAS v'
+      'where v.codemp = :empresa1'
+      '  and cast(v.serie as Smallint) = :serie1'
+      '  and v.nfe between :inicio1 and :final1'
+      ''
+      'union'
+      ''
+      'Select'
+      '    c.nfserie as serie'
+      '  , c.nf      as nfe'
+      '  , c.dtemiss as dataemissao'
+      '  , '#39'Entrada'#39' as Tipo'
+      'from TBCOMPRAS c'
+      'where c.codemp = :empresa2'
+      '  and cast(c.nfserie as Smallint) = :serie2'
+      '  and c.nf between :inicio2 and :final2'
+      '  and c.nfe_enviada = 1'
+      ''
+      'order by 1, 2')
     Left = 424
-    Top = 72
+    Top = 248
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'empresa1'
+        ParamType = ptInput
+        Value = ''
+      end
+      item
+        DataType = ftInteger
+        Name = 'serie1'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'inicio1'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'final1'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftString
+        Name = 'empresa2'
+        ParamType = ptInput
+        Value = ''
+      end
+      item
+        DataType = ftInteger
+        Name = 'serie2'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'inicio2'
+        ParamType = ptInput
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'final2'
+        ParamType = ptInput
+        Value = 0
+      end>
   end
 end

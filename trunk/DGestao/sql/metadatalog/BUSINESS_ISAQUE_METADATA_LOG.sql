@@ -8020,3 +8020,255 @@ COMMENT ON COLUMN TBLOG_TRANSACAO.ESPECIFICACAO IS
 'Texto especifico.';
 
 GRANT ALL ON TBLOG_TRANSACAO TO "PUBLIC";
+
+/*!!! Error occured !!!
+Invalid token.
+Dynamic SQL Error.
+SQL error code = -104.
+Token unknown - line 7, column 30.
+is.
+
+*/
+
+
+
+/*------ SYSDBA 14/08/2013 19:22:22 --------*/
+
+CREATE DOMAIN DMN_VCHAR_18_KEY AS
+VARCHAR(10)
+NOT NULL;
+
+
+/*------ SYSDBA 14/08/2013 19:23:09 --------*/
+
+ALTER DOMAIN DMN_VCHAR_18_KEY
+TYPE VARCHAR(18) CHARACTER SET ISO8859_2;
+
+CREATE DOMAIN DMN_VCHAR_18_N AS
+VARCHAR(18);
+
+
+/*------ SYSDBA 14/08/2013 19:23:21 --------*/
+
+ALTER TABLE TBNFE_ENVIADA
+    ADD EMPRESA DMN_VCHAR_18_N;
+
+
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column EMPRESA position 1;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column SERIE position 2;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMERO position 3;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column ANOVENDA position 4;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMVENDA position 5;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column ANOCOMPRA position 6;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMCOMPRA position 7;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column DATAEMISSAO position 8;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column HORAEMISSAO position 9;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column CHAVE position 10;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column PROTOCOLO position 11;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column RECIBO position 12;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column XML_FILENAME position 13;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column XML_FILE position 14;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column LOTE_ANO position 15;
+
+
+/*------ SYSDBA 14/08/2013 19:23:33 --------*/
+
+alter table TBNFE_ENVIADA
+alter column LOTE_NUM position 16;
+
+
+/*------ SYSDBA 14/08/2013 19:24:00 --------*/
+
+COMMENT ON COLUMN TBNFE_ENVIADA.EMPRESA IS
+'Empresa.';
+
+
+
+
+/*------ SYSDBA 14/08/2013 19:27:30 --------*/
+
+SET TERM ^ ;
+
+CREATE trigger tg_nfe_enviada_empresa for tbnfe_enviada
+active before insert or update position 10
+AS
+begin
+  if (new.empresa is null) then
+  begin
+    /* Identificando a Empresa da Venda (Saida) */
+    if (new.anovenda is not null) then
+    begin
+      Select
+        v.codemp
+      from TBVENDAS v
+      where v.ano        = new.anovenda
+        and v.codcontrol = new.numvenda
+      Into
+        new.empresa;
+
+    end
+    else
+    /* Identificando a Empresa da Compra (Entrada) */
+    if (new.anovenda is not null) then
+    begin
+
+      Select
+        v.codemp
+      from TBVENDAS v
+      where v.ano        = new.anovenda
+        and v.codcontrol = new.numvenda
+      Into
+        new.empresa;
+
+    end
+  end
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 14/08/2013 19:28:07 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_enviada_empresa for tbnfe_enviada
+active before insert or update position 10
+AS
+begin
+  if (new.empresa is null) then
+  begin
+
+    /* Identificando a Empresa da Venda (Saida) */
+
+    if (new.anovenda is not null) then
+    begin
+      Select
+        v.codemp
+      from TBVENDAS v
+      where v.ano        = new.anovenda
+        and v.codcontrol = new.numvenda
+      Into
+        new.empresa;
+
+    end
+
+    else
+
+    /* Identificando a Empresa da Compra (Entrada) */
+
+    if (new.anovenda is not null) then
+    begin
+
+      Select
+        v.codemp
+      from TBVENDAS v
+      where v.ano        = new.anovenda
+        and v.codcontrol = new.numvenda
+      Into
+        new.empresa;
+
+    end
+
+  end
+end^
+
+SET TERM ; ^
+
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+V.NFE.
+At line 19, column 9.
+
+*/
+
+
+
+/*------ SYSDBA 14/08/2013 21:59:34 --------*/
+
+COMMENT ON COLUMN TBLOG_TRANSACAO.TIPO IS
+'Tipo de LOG:
+0 - Notificacoes de uso do sistema
+1 - Transacao SEFA
+2 - Sistema';
+
