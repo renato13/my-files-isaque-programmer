@@ -5936,6 +5936,10 @@ object frmPrinc: TfrmPrinc
       object N3: TMenuItem
         Caption = '-'
       end
+      object nmConfiguracaoEmpresa: TMenuItem
+        Caption = 'Configura'#231#245'es da Empresa'
+        OnClick = nmConfiguracaoEmpresaClick
+      end
       object nmConfigurarNFeACBr: TMenuItem
         Bitmap.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100

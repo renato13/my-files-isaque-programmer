@@ -157,6 +157,9 @@ begin
   if ShowConfirm('Confirma a initilização do intervalor de numeração de NF-e informado?') then
   begin
 
+    if not DMNFe.GetValidadeCertificado then
+      Exit;
+
     sRetorno := EmptyStr;
     if DMNFe.InutilizaNumeroNFeACBr(GetEmpresaIDDefault, iAno, iModelo, iSerie, iNroInicial, iNroFinal, sJustific, sRetorno ) then
     begin
@@ -171,7 +174,7 @@ begin
         cdsLOGUSUARIO.AsString       := dbUsuario.Text;
         cdsLOGDATA_HORA.AsDateTime   := Now;
         cdsLOGTIPO.AsInteger         := TIPO_LOG_TRANS_SEFA;
-        cdsLOGDESCRICAO.AsString     := 'Inutilização de numerão para NF-e';
+        cdsLOGDESCRICAO.AsString     := DESC_LOG_INUTILIZA_NRO_NFE;
         cdsLOGESPECIFICACAO.AsString := sRetorno;
 
         Post;

@@ -534,6 +534,9 @@ procedure TfrmGrPadraoCadastro.CentralizarCodigo;
 var
   sCampoCodigo : String;
 begin
+  if ( Trim(CampoCodigo) = EmptyStr ) then
+    Exit;
+    
   if ( dbgDados.Columns.Count > 0 ) then
   begin
     if ( pos('.', CampoCodigo) > 0 ) then
@@ -541,14 +544,15 @@ begin
     else
       sCampoCodigo := Trim(CampoCodigo);
 
+    if ( StrToCurrDef(IbDtstTabela.FieldByName(sCampoCodigo).AsString, 0) = 0 ) then
+      Exit;
+
     dbgDados.Columns[0].Alignment       := taCenter;
     dbgDados.Columns[0].Title.Alignment := taCenter;
-    if ( Trim(CampoCodigo) <> EmptyStr ) then
-    begin
-      IbDtstTabela.FieldByName(sCampoCodigo).Alignment := taCenter;
-      IbDtstTabela.FieldByName(sCampoCodigo).Required  := False;
-      TIntegerField(IbDtstTabela.FieldByName(sCampoCodigo)).DisplayFormat := DisplayFormatCodigo;
-    end;
+
+    IbDtstTabela.FieldByName(sCampoCodigo).Alignment := taCenter;
+    IbDtstTabela.FieldByName(sCampoCodigo).Required  := False;
+    TIntegerField(IbDtstTabela.FieldByName(sCampoCodigo)).DisplayFormat := DisplayFormatCodigo;
   end;
 end;
 

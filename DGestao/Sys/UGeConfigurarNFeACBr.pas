@@ -186,7 +186,7 @@ end;
 procedure TfrmGeConfigurarNFeACBr.btnValidadeCertificadoClick(
   Sender: TObject);
 begin
-  DMNFe.GetValidadeCertificado;
+  DMNFe.GetValidadeCertificado(True);
 end;
 
 end.

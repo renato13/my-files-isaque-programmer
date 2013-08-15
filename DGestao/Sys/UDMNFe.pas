@@ -460,7 +460,7 @@ type
 
     function GerarNFeOnLine : Boolean;
     function GetInformacaoFisco : String;
-    function GetValidadeCertificado : Boolean;
+    function GetValidadeCertificado(const Informe : Boolean = FALSE) : Boolean;
 
     function GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var iSerieNFe, iNumeroNFe  : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE, ReciboNFE : String; var iNumeroLote  : Int64;
@@ -643,12 +643,16 @@ end;
 
 procedure TDMNFe.GravarConfiguracao(const sCNPJEmitente : String);
 Var
-  StreamMemo : TMemoryStream;
+  sPrefixoSecao : String;
+  StreamMemo    : TMemoryStream;
 begin
   try
 
+    sPrefixoSecao := Trim(sCNPJEmitente) + '_';
+
     with ConfigACBr, FileINI do
     begin
+//      WriteString( sPrefixoSecao + 'Certificado', 'Caminho' , edtCaminho.Text) ;
       WriteString( 'Certificado', 'Caminho' , edtCaminho.Text) ;
       WriteString( 'Certificado', 'Senha'   , edtSenha.Text) ;
       WriteString( 'Certificado', 'NumSerie', edtNumSerie.Text) ;
@@ -709,14 +713,18 @@ procedure TDMNFe.LerConfiguracao(const sCNPJEmitente : String);
 Var
   Ok : Boolean;
   StreamMemo : TMemoryStream;
-  sFileNFE : String;
+  sPrefixoSecao,
+  sFileNFE     : String;
 begin
   try
 
+    sPrefixoSecao := Trim(sCNPJEmitente) + '_';
+    
     with ConfigACBr, FileINI do
     begin
 
       {$IFDEF ACBrNFeOpenSSL}
+//         edtCaminho.Text  := ReadString( sPrefixoSecao + 'Certificado', 'Caminho' , '') ;
          edtCaminho.Text  := ReadString( 'Certificado', 'Caminho' , '') ;
          edtSenha.Text    := ReadString( 'Certificado', 'Senha'   , '') ;
          ACBrNFe.Configuracoes.Certificados.Certificado  := edtCaminho.Text;
@@ -725,6 +733,7 @@ begin
          Label25.Visible     := False;
          sbtnGetCert.Visible := False;
       {$ELSE}
+//         edtNumSerie.Text := ReadString( sPrefixoSecao + 'Certificado', 'NumSerie', '') ;
          edtNumSerie.Text := ReadString( 'Certificado', 'NumSerie', '') ;
          ACBrNFe.Configuracoes.Certificados.NumeroSerie := edtNumSerie.Text;
          edtNumSerie.Text := ACBrNFe.Configuracoes.Certificados.NumeroSerie;
@@ -801,7 +810,7 @@ begin
       if ( Trim(gContaEmail.Conta) <> EmptyStr ) then
       begin
         edtSmtpHost.Text      := gContaEmail.Servidor_SMTP;
-        edtSmtpPort.Text      := '25';
+        edtSmtpPort.Text      := IntToStr(gContaEmail.Porta_SMTP);
         edtSmtpUser.Text      := gContaEmail.Conta;
         edtSmtpPass.Text      := gContaEmail.Senha;
         edtEmailAssunto.Text  := 'Envio de NF-e (Emitente: ' + edtEmitRazao.Text + ')';
@@ -3053,7 +3062,7 @@ begin
 
 end;
 
-function TDMNFe.GetValidadeCertificado: Boolean;
+function TDMNFe.GetValidadeCertificado(const Informe : Boolean = FALSE): Boolean;
 var
   sDataVenc,
   sMsg     : String;
@@ -3073,7 +3082,7 @@ begin
   if ( iPrazo < 0 ) then
     sMsg := 'Data de Vencimento do Certificado: ' + sDataVenc + #13#13 + 'Prazo expirado à ' + FormatFloat(',0', iPrazo) + ' dia(s)!';
 
-  if (iPrazo <= 30) then
+  if Informe or (iPrazo <= 30) then
     ShowWarning('A T E N Ç Ã O :' + #13#13 + '-----------------------------------------' + #13#13 + sMsg);
 end;
 
@@ -3097,14 +3106,14 @@ begin
         'Ambiente:    ' + IntToStr( Ord(WebServices.Inutilizacao.TpAmb) ) + #13 +
         'Versão App.: ' + WebServices.Inutilizacao.verAplic        + #13 +
         'Status Trn.: ' + IntToStr(WebServices.Inutilizacao.cStat) + #13 +
-        'Motivo:      ' + WebServices.Inutilizacao.xMotivo         + #13 +
-        'Justif.:     ' + WebServices.Inutilizacao.Justificativa   + #13 +
         '---'     + #13 +
         'Emitente:    ' + WebServices.Inutilizacao.CNPJ + #13 +
         'Modelo NF-e: ' + IntToStr( WebServices.Inutilizacao.Modelo ) + #13 +
         'Série NF-e:  ' + IntToStr( WebServices.Inutilizacao.Serie )  + #13 +
         'No. Inicial: ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
         'No. Final:   ' + IntToStr( WebServices.Inutilizacao.NumeroFinal )   + #13 +
+        'Motivo:      ' + WebServices.Inutilizacao.xMotivo         + #13 +
+        'Justif.:     ' + WebServices.Inutilizacao.Justificativa   + #13 +
         '---'     + #13 +
         'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Inutilizacao.dhRecbto) + #13 +
         'Protocolo:   ' + WebServices.Inutilizacao.Protocolo;
