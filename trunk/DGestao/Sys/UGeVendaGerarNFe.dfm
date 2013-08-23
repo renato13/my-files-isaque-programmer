@@ -31,10 +31,10 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   object lblInforme: TLabel
     Left = 0
     Top = 384
-    Width = 376
+    Width = 302
     Height = 18
     Anchors = [akTop, akBottom]
-    Caption = 'Consulta/Gerando NF-e junto a SEFA. Aguarde . . . '
+    Caption = 'Gerando NF-e junto a SEFA. Aguarde . . . '
     Font.Charset = ANSI_CHARSET
     Font.Color = clRed
     Font.Height = -15
@@ -856,7 +856,6 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     ForcedRefresh = True
-    BufferChunks = 1000
     CachedUpdates = True
     RefreshSQL.Strings = (
       '')
@@ -1354,5 +1353,11 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     DataSet = cdsVenda
     Left = 80
     Top = 304
+  end
+  object TmrAlerta: TTimer
+    Interval = 500
+    OnTimer = TmrAlertaTimer
+    Left = 16
+    Top = 333
   end
 end

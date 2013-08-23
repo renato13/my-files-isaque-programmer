@@ -8365,3 +8365,127 @@ Token unknown - line 8, column 42.
 as.
 
 */
+
+
+
+/*------ SYSDBA 23/08/2013 09:54:48 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_venda for tbnfe_enviada
+active after insert position 0
+AS
+begin
+  if ( (new.anovenda > 0) and (new.numvenda > 0) ) then
+  begin
+    Update TBVENDAS v Set
+        v.serie = new.serie
+      , v.nfe   = new.numero
+      , v.nfe_enviada      = 1
+      , v.verificador_nfe  = new.chave
+      , v.xml_nfe_filename = new.xml_filename
+      , v.xml_nfe          = new.xml_file
+      , v.status      = 4 -- Nota Fiscal Gerada
+      , v.dataemissao = new.dataemissao
+      , v.horaemissao = new.horaemissao
+    where v.ano = new.anovenda
+      and v.codcontrol = new.numvenda;
+  end 
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/08/2013 09:55:08 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_compra for tbnfe_enviada
+active after insert position 1
+AS
+begin
+  if ( (new.anocompra > 0) and (new.numcompra > 0) ) then
+  begin
+    Update TBCOMPRAS c Set
+        c.nfserie = new.serie
+      , c.nf      = new.numero
+      , c.nfe_enviada      = 1
+      , c.verificador_nfe  = new.chave
+      , c.xml_nfe_filename = new.xml_filename
+      , c.xml_nfe          = new.xml_file
+      , c.status  = 4 -- Nota Fiscal Gerada
+      , c.dtemiss = new.dataemissao
+      , c.hremiss = new.horaemissao
+    where c.ano        = new.anocompra
+      and c.codcontrol = new.numcompra;
+  end 
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/08/2013 09:57:13 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_compra for tbnfe_enviada
+active after insert position 1
+AS
+begin
+  if ( (new.anocompra > 0) and (new.numcompra > 0) ) then
+  begin
+    Update TBCOMPRAS c Set
+        c.nfserie = new.serie
+      , c.nf      = new.numero
+      , c.nfe_enviada      = 1
+      , c.verificador_nfe  = new.chave
+      , c.xml_nfe_filename = new.xml_filename
+      , c.xml_nfe          = new.xml_file
+      , c.lote_nfe_ano     = new.lote_ano
+      , c.lote_nfe_numero  = new.lote_num
+      , c.status  = 4 -- Nota Fiscal Gerada
+      , c.dtemiss = new.dataemissao
+      , c.hremiss = new.horaemissao
+    where c.ano        = new.anocompra
+      and c.codcontrol = new.numcompra;
+  end 
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/08/2013 09:57:30 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_venda for tbnfe_enviada
+active after insert position 0
+AS
+begin
+  if ( (new.anovenda > 0) and (new.numvenda > 0) ) then
+  begin
+    Update TBVENDAS v Set
+        v.serie = new.serie
+      , v.nfe   = new.numero
+      , v.nfe_enviada      = 1
+      , v.verificador_nfe  = new.chave
+      , v.xml_nfe_filename = new.xml_filename
+      , v.xml_nfe          = new.xml_file
+      , v.lote_nfe_ano     = new.lote_ano
+      , v.lote_nfe_numero  = new.lote_num
+      , v.status      = 4 -- Nota Fiscal Gerada
+      , v.dataemissao = new.dataemissao
+      , v.horaemissao = new.horaemissao
+    where v.ano = new.anovenda
+      and v.codcontrol = new.numvenda;
+  end 
+end^
+
+SET TERM ; ^
+
