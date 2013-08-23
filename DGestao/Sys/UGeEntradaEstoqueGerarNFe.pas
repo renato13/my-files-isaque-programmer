@@ -95,10 +95,12 @@ type
     cdsCompraVALOR_TOTAL_PIS: TIBBCDField;
     cdsCompraVALOR_TOTAL_COFINS: TIBBCDField;
     cdsCompraNFSERIE: TIBStringField;
+    TmrAlerta: TTimer;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TmrAlertaTimer(Sender: TObject);
   private
     { Private declarations }
     iSerieNFe,
@@ -219,7 +221,10 @@ begin
       CommitTransaction;
     end;
 
-    lblInforme.Caption := 'Consulta/Gerando NF-e junto a SEFA. Aguarde . . . ';
+    lblInforme.Visible := True;
+    lblInforme.Caption := 'Gerando NF-e junto a SEFA. Aguarde . . . ';
+    TmrAlerta.Enabled  := True;
+    
     Application.ProcessMessages;
     
     if ( DMNFe.GerarNFeOnLine ) then
@@ -230,7 +235,11 @@ begin
                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, False);
 
     if ( bOK ) then
+    begin
+      TmrAlerta.Enabled  := False;
+      lblInforme.Visible := False;
       ModalResult := mrOk;
+    end;
   end;
 end;
 
@@ -245,6 +254,11 @@ begin
   sReciboNFE    := EmptyStr;
   iNumeroLote   := 0;
   lblInforme.Caption := EmptyStr;
+end;
+
+procedure TfrmGeEntradaEstoqueGerarNFe.TmrAlertaTimer(Sender: TObject);
+begin
+  lblInforme.Visible := not lblInforme.Visible;
 end;
 
 end.

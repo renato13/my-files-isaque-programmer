@@ -2804,6 +2804,8 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       '  , c.CODFORN'
       '  , c.NF'
       '  , c.NFSERIE'
+      '  , c.LOTE_NFE_ANO'
+      '  , c.LOTE_NFE_NUMERO'
       '  , c.DTLANCAMENTO'
       '  , c.DTEMISS'
       '  , c.DTENT'
@@ -2882,6 +2884,16 @@ inherited frmGeEntradaEstoque: TfrmGeEntradaEstoque
       FieldName = 'NFSERIE'
       Origin = 'TBCOMPRAS.NFSERIE'
       Size = 4
+    end
+    object IbDtstTabelaLOTE_NFE_ANO: TSmallintField
+      FieldName = 'LOTE_NFE_ANO'
+      Origin = '"TBCOMPRAS"."LOTE_NFE_ANO"'
+      ProviderFlags = []
+    end
+    object IbDtstTabelaLOTE_NFE_NUMERO: TIntegerField
+      FieldName = 'LOTE_NFE_NUMERO'
+      Origin = '"TBCOMPRAS"."LOTE_NFE_NUMERO"'
+      ProviderFlags = []
     end
     object IbDtstTabelaDTLANCAMENTO: TDateTimeField
       Alignment = taCenter

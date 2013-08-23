@@ -31,16 +31,21 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
   object lblInforme: TLabel
     Left = 0
     Top = 384
-    Width = 302
-    Height = 18
+    Width = 401
+    Height = 25
     Anchors = [akTop, akBottom]
+    AutoSize = False
     Caption = 'Gerando NF-e junto a SEFA. Aguarde . . . '
+    Color = clYellow
     Font.Charset = ANSI_CHARSET
     Font.Color = clRed
-    Font.Height = -15
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
+    ParentColor = False
     ParentFont = False
+    Transparent = False
+    Visible = False
   end
   object GrpBxControle: TGroupBox
     Left = 0
@@ -1355,6 +1360,7 @@ inherited frmGeVendaGerarNFe: TfrmGeVendaGerarNFe
     Top = 304
   end
   object TmrAlerta: TTimer
+    Enabled = False
     Interval = 500
     OnTimer = TmrAlertaTimer
     Left = 16

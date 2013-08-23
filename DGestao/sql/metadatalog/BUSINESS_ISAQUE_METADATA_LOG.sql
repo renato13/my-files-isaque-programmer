@@ -8489,3 +8489,464 @@ end^
 
 SET TERM ; ^
 
+
+/*!!! Error occured !!!
+Column does not belong to referenced table.
+Dynamic SQL Error.
+SQL error code = -206.
+Column unknown.
+C.NFE.
+At line 24, column 9.
+
+*/
+
+
+
+/*------ SYSDBA 23/08/2013 11:27:06 --------*/
+
+ALTER TABLE TBVENDAS
+    ADD LOTE_NFE_RECIBO DMN_VCHAR_250;
+
+COMMENT ON COLUMN TBVENDAS.LOTE_NFE_RECIBO IS
+'Numero do recibo de envio da NFe.';
+
+alter table TBVENDAS
+alter ANO position 1;
+
+alter table TBVENDAS
+alter CODCONTROL position 2;
+
+alter table TBVENDAS
+alter CODEMP position 3;
+
+alter table TBVENDAS
+alter CODCLI position 4;
+
+alter table TBVENDAS
+alter DTVENDA position 5;
+
+alter table TBVENDAS
+alter STATUS position 6;
+
+alter table TBVENDAS
+alter TOTALVENDA_BRUTA position 7;
+
+alter table TBVENDAS
+alter DESCONTO position 8;
+
+alter table TBVENDAS
+alter TOTALVENDA position 9;
+
+alter table TBVENDAS
+alter TOTALCUSTO position 10;
+
+alter table TBVENDAS
+alter DTFINALIZACAO_VENDA position 11;
+
+alter table TBVENDAS
+alter OBS position 12;
+
+alter table TBVENDAS
+alter FORMAPAG position 13;
+
+alter table TBVENDAS
+alter FATDIAS position 14;
+
+alter table TBVENDAS
+alter SERIE position 15;
+
+alter table TBVENDAS
+alter NFE position 16;
+
+alter table TBVENDAS
+alter DATAEMISSAO position 17;
+
+alter table TBVENDAS
+alter HORAEMISSAO position 18;
+
+alter table TBVENDAS
+alter CFOP position 19;
+
+alter table TBVENDAS
+alter VERIFICADOR_NFE position 20;
+
+alter table TBVENDAS
+alter XML_NFE position 21;
+
+alter table TBVENDAS
+alter VENDEDOR_COD position 22;
+
+alter table TBVENDAS
+alter USUARIO position 23;
+
+alter table TBVENDAS
+alter FORMAPAGTO_COD position 24;
+
+alter table TBVENDAS
+alter CONDICAOPAGTO_COD position 25;
+
+alter table TBVENDAS
+alter VENDA_PRAZO position 26;
+
+alter table TBVENDAS
+alter PRAZO_01 position 27;
+
+alter table TBVENDAS
+alter PRAZO_02 position 28;
+
+alter table TBVENDAS
+alter PRAZO_03 position 29;
+
+alter table TBVENDAS
+alter PRAZO_04 position 30;
+
+alter table TBVENDAS
+alter PRAZO_05 position 31;
+
+alter table TBVENDAS
+alter PRAZO_06 position 32;
+
+alter table TBVENDAS
+alter PRAZO_07 position 33;
+
+alter table TBVENDAS
+alter PRAZO_08 position 34;
+
+alter table TBVENDAS
+alter PRAZO_09 position 35;
+
+alter table TBVENDAS
+alter PRAZO_10 position 36;
+
+alter table TBVENDAS
+alter PRAZO_11 position 37;
+
+alter table TBVENDAS
+alter PRAZO_12 position 38;
+
+alter table TBVENDAS
+alter LOTE_NFE_ANO position 39;
+
+alter table TBVENDAS
+alter LOTE_NFE_NUMERO position 40;
+
+alter table TBVENDAS
+alter LOTE_NFE_RECIBO position 41;
+
+alter table TBVENDAS
+alter NFE_ENVIADA position 42;
+
+alter table TBVENDAS
+alter CANCEL_USUARIO position 43;
+
+alter table TBVENDAS
+alter CANCEL_DATAHORA position 44;
+
+alter table TBVENDAS
+alter CANCEL_MOTIVO position 45;
+
+alter table TBVENDAS
+alter XML_NFE_FILENAME position 46;
+
+alter table TBVENDAS
+alter NFE_MODALIDADE_FRETE position 47;
+
+alter table TBVENDAS
+alter NFE_TRANSPORTADORA position 48;
+
+alter table TBVENDAS
+alter NFE_PLACA_VEICULO position 49;
+
+alter table TBVENDAS
+alter NFE_PLACA_UF position 50;
+
+alter table TBVENDAS
+alter NFE_PLACA_RNTC position 51;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS position 52;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS position 53;
+
+alter table TBVENDAS
+alter NFE_VALOR_BASE_ICMS_SUBST position 54;
+
+alter table TBVENDAS
+alter NFE_VALOR_ICMS_SUBST position 55;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_PRODUTO position 56;
+
+alter table TBVENDAS
+alter NFE_VALOR_FRETE position 57;
+
+alter table TBVENDAS
+alter NFE_VALOR_SEGURO position 58;
+
+alter table TBVENDAS
+alter NFE_VALOR_DESCONTO position 59;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_II position 60;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_IPI position 61;
+
+alter table TBVENDAS
+alter NFE_VALOR_PIS position 62;
+
+alter table TBVENDAS
+alter NFE_VALOR_COFINS position 63;
+
+alter table TBVENDAS
+alter NFE_VALOR_OUTROS position 64;
+
+alter table TBVENDAS
+alter NFE_VALOR_TOTAL_NOTA position 65;
+
+
+
+
+/*------ SYSDBA 23/08/2013 11:27:45 --------*/
+
+ALTER TABLE TBCOMPRAS
+    ADD LOTE_NFE_RECIBO DMN_VCHAR_250;
+
+COMMENT ON COLUMN TBCOMPRAS.LOTE_NFE_RECIBO IS
+'Numero do recibo de envio da NFe.';
+
+alter table TBCOMPRAS
+alter ANO position 1;
+
+alter table TBCOMPRAS
+alter CODCONTROL position 2;
+
+alter table TBCOMPRAS
+alter CODEMP position 3;
+
+alter table TBCOMPRAS
+alter CODFORN position 4;
+
+alter table TBCOMPRAS
+alter NF position 5;
+
+alter table TBCOMPRAS
+alter NFSERIE position 6;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_ANO position 7;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_NUMERO position 8;
+
+alter table TBCOMPRAS
+alter LOTE_NFE_RECIBO position 9;
+
+alter table TBCOMPRAS
+alter NFE_ENVIADA position 10;
+
+alter table TBCOMPRAS
+alter VERIFICADOR_NFE position 11;
+
+alter table TBCOMPRAS
+alter XML_NFE position 12;
+
+alter table TBCOMPRAS
+alter XML_NFE_FILENAME position 13;
+
+alter table TBCOMPRAS
+alter DTLANCAMENTO position 14;
+
+alter table TBCOMPRAS
+alter DTEMISS position 15;
+
+alter table TBCOMPRAS
+alter HREMISS position 16;
+
+alter table TBCOMPRAS
+alter DTENT position 17;
+
+alter table TBCOMPRAS
+alter NFCFOP position 18;
+
+alter table TBCOMPRAS
+alter NATUREZA position 19;
+
+alter table TBCOMPRAS
+alter STATUS position 20;
+
+alter table TBCOMPRAS
+alter IPI position 21;
+
+alter table TBCOMPRAS
+alter ICMSBASE position 22;
+
+alter table TBCOMPRAS
+alter ICMSVALOR position 23;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTBASE position 24;
+
+alter table TBCOMPRAS
+alter ICMSSUBSTVALOR position 25;
+
+alter table TBCOMPRAS
+alter FRETE position 26;
+
+alter table TBCOMPRAS
+alter OUTROSCUSTOS position 27;
+
+alter table TBCOMPRAS
+alter DESCONTO position 28;
+
+alter table TBCOMPRAS
+alter VALORSEGURO position 29;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_II position 30;
+
+alter table TBCOMPRAS
+alter VALORTOTAL_IPI position 31;
+
+alter table TBCOMPRAS
+alter VALORPIS position 32;
+
+alter table TBCOMPRAS
+alter VALORCOFINS position 33;
+
+alter table TBCOMPRAS
+alter TOTALPROD position 34;
+
+alter table TBCOMPRAS
+alter TOTALNF position 35;
+
+alter table TBCOMPRAS
+alter OBS position 36;
+
+alter table TBCOMPRAS
+alter USUARIO position 37;
+
+alter table TBCOMPRAS
+alter FORMAPAGTO_COD position 38;
+
+alter table TBCOMPRAS
+alter CONDICAOPAGTO_COD position 39;
+
+alter table TBCOMPRAS
+alter COMPRA_PRAZO position 40;
+
+alter table TBCOMPRAS
+alter PRAZO_01 position 41;
+
+alter table TBCOMPRAS
+alter PRAZO_02 position 42;
+
+alter table TBCOMPRAS
+alter PRAZO_03 position 43;
+
+alter table TBCOMPRAS
+alter PRAZO_04 position 44;
+
+alter table TBCOMPRAS
+alter PRAZO_05 position 45;
+
+alter table TBCOMPRAS
+alter PRAZO_06 position 46;
+
+alter table TBCOMPRAS
+alter PRAZO_07 position 47;
+
+alter table TBCOMPRAS
+alter PRAZO_08 position 48;
+
+alter table TBCOMPRAS
+alter PRAZO_09 position 49;
+
+alter table TBCOMPRAS
+alter PRAZO_10 position 50;
+
+alter table TBCOMPRAS
+alter PRAZO_11 position 51;
+
+alter table TBCOMPRAS
+alter PRAZO_12 position 52;
+
+alter table TBCOMPRAS
+alter DTFINALIZACAO_COMPRA position 53;
+
+alter table TBCOMPRAS
+alter CANCEL_USUARIO position 54;
+
+alter table TBCOMPRAS
+alter CANCEL_DATAHORA position 55;
+
+alter table TBCOMPRAS
+alter CANCEL_MOTIVO position 56;
+
+
+
+
+/*------ SYSDBA 23/08/2013 11:28:13 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_venda for tbnfe_enviada
+active after insert position 0
+AS
+begin
+  if ( (new.anovenda > 0) and (new.numvenda > 0) ) then
+  begin
+    Update TBVENDAS v Set
+        v.serie = new.serie
+      , v.nfe   = new.numero
+      , v.nfe_enviada      = 1
+      , v.verificador_nfe  = new.chave
+      , v.xml_nfe_filename = new.xml_filename
+      , v.xml_nfe          = new.xml_file
+      , v.lote_nfe_ano     = new.lote_ano
+      , v.lote_nfe_numero  = new.lote_num
+      , v.lote_nfe_recibo  = new.recibo
+      , v.status      = 4 -- Nota Fiscal Gerada
+      , v.dataemissao = new.dataemissao
+      , v.horaemissao = new.horaemissao
+    where v.ano = new.anovenda
+      and v.codcontrol = new.numvenda;
+  end 
+end^
+
+SET TERM ; ^
+
+
+
+
+/*------ SYSDBA 23/08/2013 11:28:45 --------*/
+
+SET TERM ^ ;
+
+CREATE OR ALTER trigger tg_nfe_atualizar_compra for tbnfe_enviada
+active after insert position 1
+AS
+begin
+  if ( (new.anocompra > 0) and (new.numcompra > 0) ) then
+  begin
+    Update TBCOMPRAS c Set
+        c.nfserie = new.serie
+      , c.nf      = new.numero
+      , c.nfe_enviada      = 1
+      , c.verificador_nfe  = new.chave
+      , c.xml_nfe_filename = new.xml_filename
+      , c.xml_nfe          = new.xml_file
+      , c.lote_nfe_ano     = new.lote_ano
+      , c.lote_nfe_numero  = new.lote_num
+      , c.lote_nfe_recibo  = new.recibo
+      , c.status  = 4 -- Nota Fiscal Gerada
+      , c.dtemiss = new.dataemissao
+      , c.hremiss = new.horaemissao
+    where c.ano        = new.anocompra
+      and c.codcontrol = new.numcompra;
+  end 
+end^
+
+SET TERM ; ^
+

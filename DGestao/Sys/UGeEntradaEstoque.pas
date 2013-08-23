@@ -271,6 +271,8 @@ type
     qryNFELOTE_ANO: TSmallintField;
     qryNFELOTE_NUM: TIntegerField;
     IbDtstTabelaNFSERIE: TIBStringField;
+    IbDtstTabelaLOTE_NFE_ANO: TSmallintField;
+    IbDtstTabelaLOTE_NFE_NUMERO: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -1058,6 +1060,13 @@ begin
 
   if not DMNFe.GetValidadeCertificado then
     Exit;
+
+  if ( IbDtstTabelaLOTE_NFE_NUMERO.AsInteger > 0 ) then
+  begin
+    ShowWarning('O processo de geração de NF-e para esta entrada já foi solicitado, mas não fora concluído.' + #13 +
+      'Favor consultar junto a SEFA e processar o Recibo/Lote de número ' + FormatFloat('#########0', IbDtstTabelaLOTE_NFE_NUMERO.AsInteger));
+    Exit;  
+  end;
 
   if ( GerarNFeEntrada(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
                 iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
