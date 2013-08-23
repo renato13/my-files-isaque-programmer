@@ -6605,6 +6605,10 @@ object frmPrinc: TfrmPrinc
           Caption = 'Inutilizar Numera'#231#227'o NF-e'
           OnClick = nmInutilizarNumeroNFeClick
         end
+        object nmConsultarLoteNFe: TMenuItem
+          Caption = 'Consultar Recibo Lote NF-e'
+          Enabled = False
+        end
         object ExportarNFeGeradas1: TMenuItem
           Bitmap.Data = {
             16050000424D160500000000000036040000280000000E0000000E0000000100

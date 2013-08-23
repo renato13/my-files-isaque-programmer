@@ -124,6 +124,7 @@ type
     nmConfiguracaoEmpresa: TMenuItem;
     popEstoqueMinimo: TMenuItem;
     nmEstoqueMinimo: TMenuItem;
+    nmConsultarLoteNFe: TMenuItem;
     procedure btnEmpresaClick(Sender: TObject);
     procedure btnClienteClick(Sender: TObject);
     procedure btnContaAReceberClick(Sender: TObject);
