@@ -423,6 +423,20 @@ type
     qryDadosVolumeMARCA: TIBStringField;
     qryDadosVolumePESO_BRUTO: TIBBCDField;
     qryDadosVolumePESO_LIQUIDO: TIBBCDField;
+    qryLoteNFePendente: TIBQuery;
+    SmallintField1: TSmallintField;
+    IntegerField1: TIntegerField;
+    DateField1: TDateField;
+    TimeField1: TTimeField;
+    IBStringField1: TIBStringField;
+    IntegerField2: TIntegerField;
+    IBStringField2: TIBStringField;
+    IBStringField3: TIBStringField;
+    IBStringField4: TIBStringField;
+    IBStringField5: TIBStringField;
+    MemoField1: TMemoField;
+    SmallintField2: TSmallintField;
+    IntegerField3: TIntegerField;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -438,7 +452,8 @@ type
 
     procedure UpdateNumeroNFe(const sCNPJEmitente : String; const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
-    procedure GuardarLoteNFeVenda(const sCNPJEmitente : String; const Ano, Numero, NumeroLote : Integer);
+    procedure GuardarLoteNFeVenda(const sCNPJEmitente : String; const Ano, Numero, NumeroLote : Integer; const Recibo : String);
+    procedure GuardarLoteNFeEntrada(const sCNPJEmitente : String; const Ano, Numero, NumeroLote : Integer; const Recibo : String);
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
@@ -504,13 +519,15 @@ const
   DIRECTORY_PRINT  = 'NFe\Imprimir\';
   DIRECTORY_CLIENT = 'NFe\Clientes\';
 
+  REJEICAO_NFE_DUPLICIDADE = 204;
+
   procedure ConfigurarNFeACBr(const sCNPJEmitente : String = '');
 
 implementation
 
 uses UDMBusiness, Forms, FileCtrl, ACBrNFeConfiguracoes,
   ACBrNFeNotasFiscais, ACBrNFeWebServices, StdCtrls, pcnNFe, UFuncoes,
-  UConstantesDGE, DateUtils;
+  UConstantesDGE, DateUtils, pcnRetConsReciNFe;
 
 {$R *.dfm}
 
@@ -938,6 +955,7 @@ function TDMNFe.GerarNFeOnLineACBr(const sCNPJEmitente, sCNPJDestinatario : Stri
   const Imprimir : Boolean = TRUE): Boolean;
 var
   DtHoraEmiss : TDateTime;
+  sErrorMsg   : String;
 begin
 
   try
@@ -945,7 +963,7 @@ begin
     GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
     iNumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
-    GuardarLoteNFeVenda(sCNPJEmitente, iAnoVenda, iNumVenda, iNumeroLote);
+    GuardarLoteNFeVenda(sCNPJEmitente, iAnoVenda, iNumVenda, iNumeroLote, EmptyStr);
 
     Result := ACBrNFe.Enviar( iNumeroLote, Imprimir );
 
@@ -962,7 +980,25 @@ begin
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar gerar NF-e.' + #13#13 + 'GerarNFeOnLineACBr() --> ' + E.Message);
+      sErrorMsg := E.Message;
+
+      // Diretrizes de tomada de decisão quando a NFe enviada não é aceita
+      GuardarLoteNFeVenda(sCNPJEmitente, iAnoVenda, iNumVenda, iNumeroLote, ACBrNFe.WebServices.Retorno.Recibo);
+
+      if ( ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Count = 1 ) then
+        Case ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat of
+          REJEICAO_NFE_DUPLICIDADE:
+            begin
+              UpdateNumeroNFe(sCNPJEmitente, qryEmitenteSERIE_NFE.AsInteger, iNumeroNFe);
+              UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
+              
+              sErrorMsg := ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo + #13 +
+                'Favor refazer processo!';
+            end;
+        end;
+
+      ShowError('Erro ao tentar gerar NF-e.' + #13 +
+        'Recibo: ' + ACBrNFe.WebServices.Retorno.Recibo + #13#13 + 'GerarNFeOnLineACBr() --> ' + sErrorMsg);
       Result := False;
     end;
   end;
@@ -2158,6 +2194,7 @@ function TDMNFe.GerarNFeEntradaOnLineACBr(const sCNPJEmitente : String; const iC
   const Imprimir : Boolean = TRUE): Boolean;
 var
   DtHoraEmiss : TDateTime;
+  sErrorMsg   : String;
 begin
 
   try
@@ -2165,6 +2202,7 @@ begin
     GerarNFEEntradaACBr(sCNPJEmitente, iCodFornecedor, iAnoCompra, iNumCompra, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
     iNumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+    GuardarLoteNFeEntrada(sCNPJEmitente, iAnoCompra, iNumCompra, iNumeroLote, EmptyStr);
 
     Result := ACBrNFe.Enviar( iNumeroLote, Imprimir );
 
@@ -2181,7 +2219,24 @@ begin
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar gerar NF-e de Entrada.' + #13#13 + 'GerarNFeEntradaOnLineACBr() --> ' + E.Message);
+      sErrorMsg := E.Message;
+
+      // Diretrizes de tomada de decisão quando a NFe enviada não é aceita
+      GuardarLoteNFeEntrada(sCNPJEmitente, iAnoCompra, iNumCompra, iNumeroLote, ACBrNFe.WebServices.Retorno.Recibo);
+
+      if ( ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Count = 1 ) then
+        Case ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].cStat of
+          REJEICAO_NFE_DUPLICIDADE:
+            begin
+              UpdateNumeroNFe(sCNPJEmitente, qryEmitenteSERIE_NFE.AsInteger, iNumeroNFe);
+              UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
+              
+              sErrorMsg := ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo + #13 +
+                'Favor refazer processo!';
+            end;
+        end;
+
+      ShowError('Erro ao tentar gerar NF-e de Entrada.' + #13 + 'Recibo: ' + ACBrNFe.WebServices.Retorno.Recibo + #13#13 + 'GerarNFeEntradaOnLineACBr() --> ' + sErrorMsg);
       Result := False;
     end;
   end;
@@ -3132,7 +3187,7 @@ begin
 end;
 
 procedure TDMNFe.GuardarLoteNFeVenda(const sCNPJEmitente: String;
-  const Ano, Numero, NumeroLote: Integer);
+  const Ano, Numero, NumeroLote: Integer; const Recibo : String);
 begin
   try
     with IBSQL do
@@ -3141,6 +3196,7 @@ begin
       SQL.Add('Update TBVENDA Set');
       SQL.Add('    LOTE_NFE_ANO    = ' + qryEmitenteLOTE_ANO_NFE.AsString);
       SQL.Add('  , LOTE_NFE_NUMERO = ' + FormatFloat('#########', NumeroLote));
+      SQL.Add('  , LOTE_NFE_RECIBO = ' + QuotedStr(Trim(Recibo)));
       SQL.Add('Where CODEMP     = ' + QuotedStr(sCNPJEmitente));
       SQL.Add('  and ANO        = ' + FormatFloat('#########', Ano));
       SQL.Add('  and CODCONTROL = ' + FormatFloat('#########', Numero));
@@ -3151,6 +3207,30 @@ begin
   except
     On E : Exception do
       raise Exception.Create('GuardarLoteNFeVenda > ' + E.Message);
+  end;
+end;
+
+procedure TDMNFe.GuardarLoteNFeEntrada(const sCNPJEmitente: String;
+  const Ano, Numero, NumeroLote: Integer; const Recibo : String);
+begin
+  try
+    with IBSQL do
+    begin
+      SQL.Clear;
+      SQL.Add('Update TBCOMPRAS Set');
+      SQL.Add('    LOTE_NFE_ANO    = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+      SQL.Add('  , LOTE_NFE_NUMERO = ' + FormatFloat('#########', NumeroLote));
+      SQL.Add('  , LOTE_NFE_RECIBO = ' + QuotedStr(Trim(Recibo)));
+      SQL.Add('Where CODEMP     = ' + QuotedStr(sCNPJEmitente));
+      SQL.Add('  and ANO        = ' + FormatFloat('#########', Ano));
+      SQL.Add('  and CODCONTROL = ' + FormatFloat('#########', Numero));
+
+      ExecQuery;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('GuardarLoteNFeEntrada > ' + E.Message);
   end;
 end;
 

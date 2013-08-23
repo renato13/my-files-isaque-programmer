@@ -222,9 +222,12 @@ begin
       CommitTransaction;
     end;
 
+    lblInforme.Visible := True;
     lblInforme.Caption := 'Gerando NF-e junto a SEFA. Aguarde . . . ';
-    Application.ProcessMessages;
+    TmrAlerta.Enabled  := True;
     
+    Application.ProcessMessages;
+
     if ( DMNFe.GerarNFeOnLine ) then
       bOK := DMNFe.GerarNFeOnLineACBr ( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote, False)
@@ -233,7 +236,11 @@ begin
                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, False);
 
     if ( bOK ) then
+    begin
+      TmrAlerta.Enabled  := False;
+      lblInforme.Visible := False;
       ModalResult := mrOk;
+    end;
   end;
 end;
 

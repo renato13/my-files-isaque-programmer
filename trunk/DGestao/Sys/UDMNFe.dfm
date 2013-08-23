@@ -5039,4 +5039,116 @@ object DMNFe: TDMNFe
       Size = 3
     end
   end
+  object qryLoteNFePendente: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    v.ano        as Ano'
+      '  , v.codcontrol as Numero'
+      '  , 1            as TipoNFE'
+      '  , '#39'Sa'#237'da/Venda'#39'     as Tipo'
+      '  , v.lote_nfe_numero as Lote'
+      '  , v.lote_nfe_recibo as Recibo'
+      'from TBVENDAS v'
+      'where v.codemp = :empresa'
+      '  and v.lote_nfe_numero is not null'
+      '  and v.nfe is null'
+      '  and v.nfe_enviada = 0'
+      ''
+      'union'
+      ''
+      'Select'
+      '    c.ano        as Ano'
+      '  , c.codcontrol as Numero'
+      '  , 0            as TipoNFE'
+      '  , '#39'Entrada/Compra'#39'  as Tipo'
+      '  , c.lote_nfe_numero as Lote'
+      '  , c.lote_nfe_recibo as Recibo'
+      'from TBCOMPRAS c'
+      'where c.codemp = :empresa'
+      '  and c.lote_nfe_numero is not null'
+      '  and c.nf is null'
+      '  and C.nfe_enviada = 0'
+      ''
+      'order by 5')
+    Left = 144
+    Top = 408
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'empresa'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'empresa'
+        ParamType = ptUnknown
+      end>
+    object SmallintField1: TSmallintField
+      FieldName = 'ANOVENDA'
+      Origin = '"TBNFE_ENVIADA"."ANOVENDA"'
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'NUMVENDA'
+      Origin = '"TBNFE_ENVIADA"."NUMVENDA"'
+    end
+    object DateField1: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."DATAEMISSAO"'
+    end
+    object TimeField1: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = '"TBNFE_ENVIADA"."HORAEMISSAO"'
+    end
+    object IBStringField1: TIBStringField
+      FieldName = 'SERIE'
+      Origin = '"TBNFE_ENVIADA"."SERIE"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 4
+    end
+    object IntegerField2: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = '"TBNFE_ENVIADA"."NUMERO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object IBStringField2: TIBStringField
+      FieldName = 'CHAVE'
+      Origin = '"TBNFE_ENVIADA"."CHAVE"'
+      Size = 250
+    end
+    object IBStringField3: TIBStringField
+      FieldName = 'PROTOCOLO'
+      Origin = '"TBNFE_ENVIADA"."PROTOCOLO"'
+      Size = 250
+    end
+    object IBStringField4: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = '"TBNFE_ENVIADA"."RECIBO"'
+      Size = 250
+    end
+    object IBStringField5: TIBStringField
+      FieldName = 'XML_FILENAME'
+      Origin = '"TBNFE_ENVIADA"."XML_FILENAME"'
+      Size = 250
+    end
+    object MemoField1: TMemoField
+      FieldName = 'XML_FILE'
+      Origin = '"TBNFE_ENVIADA"."XML_FILE"'
+      ProviderFlags = [pfInUpdate]
+      BlobType = ftMemo
+      Size = 8
+    end
+    object SmallintField2: TSmallintField
+      FieldName = 'LOTE_ANO'
+      Origin = '"TBNFE_ENVIADA"."LOTE_ANO"'
+    end
+    object IntegerField3: TIntegerField
+      FieldName = 'LOTE_NUM'
+      Origin = '"TBNFE_ENVIADA"."LOTE_NUM"'
+      Required = True
+    end
+  end
 end
