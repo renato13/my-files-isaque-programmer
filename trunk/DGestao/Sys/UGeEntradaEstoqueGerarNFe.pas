@@ -234,12 +234,11 @@ begin
       bOK := DMNFe.GerarNFeEntradaOffLineACBr( cdsCompraCODEMP.AsString, cdsCompraCODFORN.AsInteger, cdsCompraANO.AsInteger, cdsCompraCODCONTROL.AsInteger,
                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, False);
 
+    TmrAlerta.Enabled  := False;
+    lblInforme.Visible := False;
+
     if ( bOK ) then
-    begin
-      TmrAlerta.Enabled  := False;
-      lblInforme.Visible := False;
       ModalResult := mrOk;
-    end;
   end;
 end;
 

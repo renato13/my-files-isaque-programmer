@@ -993,7 +993,7 @@ begin
               UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
               
               sErrorMsg := ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo + #13 +
-                'Favor refazer processo!';
+                'Favor gerar NF-e novamente!';
             end;
         end;
 
@@ -2232,7 +2232,7 @@ begin
               UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
               
               sErrorMsg := ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo + #13 +
-                'Favor refazer processo!';
+                'Favor gerar NF-e novamente!';
             end;
         end;
 

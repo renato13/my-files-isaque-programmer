@@ -3056,6 +3056,7 @@ inherited frmGeVenda: TfrmGeVenda
       '  , v.Nfe'
       '  , v.Lote_nfe_ano'
       '  , v.Lote_nfe_numero'
+      '  , v.Lote_nfe_Recibo'
       '  , v.Nfe_enviada'
       '  , v.Dataemissao'
       '  , v.Horaemissao'
@@ -3211,6 +3212,12 @@ inherited frmGeVenda: TfrmGeVenda
     object IbDtstTabelaLOTE_NFE_NUMERO: TIntegerField
       FieldName = 'LOTE_NFE_NUMERO'
       Origin = 'TBVENDAS.LOTE_NFE_NUMERO'
+    end
+    object IbDtstTabelaLOTE_NFE_RECIBO: TIBStringField
+      FieldName = 'LOTE_NFE_RECIBO'
+      Origin = '"TBVENDAS"."LOTE_NFE_RECIBO"'
+      ProviderFlags = []
+      Size = 250
     end
     object IbDtstTabelaNFE_ENVIADA: TSmallintField
       FieldName = 'NFE_ENVIADA'

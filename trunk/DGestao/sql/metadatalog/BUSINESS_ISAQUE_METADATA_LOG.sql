@@ -8950,3 +8950,84 @@ end^
 
 SET TERM ; ^
 
+
+
+
+/*------ SYSDBA 23/08/2013 13:12:42 --------*/
+
+COMMENT ON COLUMN TBVENDAS.NFE_ENVIADA IS
+'NF de Saida Enviada:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:12:50 --------*/
+
+ALTER TABLE TBVENDAS ADD IBE$$TEMP_COLUMN
+ SMALLINT DEFAULT 0
+;
+
+UPDATE RDB$RELATION_FIELDS F1
+SET
+F1.RDB$DEFAULT_VALUE  = (SELECT F2.RDB$DEFAULT_VALUE
+                         FROM RDB$RELATION_FIELDS F2
+                         WHERE (F2.RDB$RELATION_NAME = 'TBVENDAS') AND
+                               (F2.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN')),
+F1.RDB$DEFAULT_SOURCE = (SELECT F3.RDB$DEFAULT_SOURCE FROM RDB$RELATION_FIELDS F3
+                         WHERE (F3.RDB$RELATION_NAME = 'TBVENDAS') AND
+                               (F3.RDB$FIELD_NAME = 'IBE$$TEMP_COLUMN'))
+WHERE (F1.RDB$RELATION_NAME = 'TBVENDAS') AND
+      (F1.RDB$FIELD_NAME = 'NFE_ENVIADA');
+
+ALTER TABLE TBVENDAS DROP IBE$$TEMP_COLUMN;
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:13:18 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.LOTE_NFE_ANO IS
+'Ano do lote de envio (Interno).';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:13:29 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.LOTE_NFE_NUMERO IS
+'Numero do lote de envio (Interno).';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:13:42 --------*/
+
+COMMENT ON COLUMN TBCOMPRAS.LOTE_NFE_RECIBO IS
+'Numero do recibo de solicitacao de envio da NFe.';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:13:58 --------*/
+
+COMMENT ON COLUMN TBVENDAS.LOTE_NFE_ANO IS
+'Ano do lote de envio (Interno).';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:14:06 --------*/
+
+COMMENT ON COLUMN TBVENDAS.LOTE_NFE_NUMERO IS
+'Numero do lote de envio (Interno).';
+
+
+
+
+/*------ SYSDBA 23/08/2013 13:14:13 --------*/
+
+COMMENT ON COLUMN TBVENDAS.LOTE_NFE_RECIBO IS
+'Numero do recibo de solicitacao de envio da NFe.';
+
