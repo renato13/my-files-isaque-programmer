@@ -97,10 +97,12 @@ type
     cdsVendaVALOR_TOTAL_ICMS_NORMAL_DEVIDO: TFloatField;
     cdsVendaVALOR_TOTAL_PIS: TIBBCDField;
     cdsVendaVALOR_TOTAL_COFINS: TIBBCDField;
+    TmrAlerta: TTimer;
     procedure btnCancelarClick(Sender: TObject);
     procedure btnCalcularClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TmrAlertaTimer(Sender: TObject);
   private
     { Private declarations }
     iSerieNFe,
@@ -220,7 +222,7 @@ begin
       CommitTransaction;
     end;
 
-    lblInforme.Caption := 'Consulta/Gerando NF-e junto a SEFA. Aguarde . . . ';
+    lblInforme.Caption := 'Gerando NF-e junto a SEFA. Aguarde . . . ';
     Application.ProcessMessages;
     
     if ( DMNFe.GerarNFeOnLine ) then
@@ -246,6 +248,11 @@ begin
   sReciboNFE    := EmptyStr;
   iNumeroLote   := 0;
   lblInforme.Caption := EmptyStr;
+end;
+
+procedure TfrmGeVendaGerarNFe.TmrAlertaTimer(Sender: TObject);
+begin
+  lblInforme.Visible := not lblInforme.Visible;
 end;
 
 end.
