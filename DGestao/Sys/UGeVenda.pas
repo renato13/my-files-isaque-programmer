@@ -321,6 +321,7 @@ type
     Label3: TLabel;
     ShpLucroNegativo: TShape;
     Label4: TLabel;
+    IbDtstTabelaLOTE_NFE_RECIBO: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -1540,8 +1541,10 @@ begin
   if ( IbDtstTabelaLOTE_NFE_NUMERO.AsInteger > 0 ) then
   begin
     ShowWarning('O processo de geração de NF-e para esta venda já foi solicitado, mas não fora concluído.' + #13 +
-      'Favor consultar junto a SEFA e processar o Recibo/Lote de número ' + FormatFloat('#########0', IbDtstTabelaLOTE_NFE_NUMERO.AsInteger));
-    Exit;  
+      'Favor consultar junto a SEFA e processar o Recibo/Lote de número ' +
+        IbDtstTabelaLOTE_NFE_RECIBO.AsString + '/' +
+        FormatFloat('#########0', IbDtstTabelaLOTE_NFE_NUMERO.AsInteger));
+    Exit;
   end;
 
   if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,

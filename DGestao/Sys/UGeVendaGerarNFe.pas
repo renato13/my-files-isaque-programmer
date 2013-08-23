@@ -235,12 +235,11 @@ begin
       bOK := DMNFe.GerarNFeOffLineACBr( cdsVendaCODEMP.AsString, cdsVendaCODCLI.AsString, cdsVendaANO.AsInteger, cdsVendaCODCONTROL.AsInteger,
                iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, False);
 
+    TmrAlerta.Enabled  := False;
+    lblInforme.Visible := False;
+
     if ( bOK ) then
-    begin
-      TmrAlerta.Enabled  := False;
-      lblInforme.Visible := False;
       ModalResult := mrOk;
-    end;
   end;
 end;
 
