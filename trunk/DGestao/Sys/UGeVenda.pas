@@ -1537,6 +1537,13 @@ begin
   if not DMNFe.GetValidadeCertificado then
     Exit;
 
+  if ( IbDtstTabelaLOTE_NFE_NUMERO.AsInteger > 0 ) then
+  begin
+    ShowWarning('O processo de geração de NF-e para esta venda já foi solicitado, mas não fora concluído.' + #13 +
+      'Favor consultar junto a SEFA e processar o Lote de número ' + FormatFloat('#########0', IbDtstTabelaLOTE_NFE_NUMERO.AsInteger));
+    Exit;  
+  end;
+
   if ( GerarNFe(Self, IbDtstTabelaANO.Value, IbDtstTabelaCODCONTROL.Value,
                 iSerieNFe, iNumeroNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, sReciboNFE, iNumeroLote
   ) ) then

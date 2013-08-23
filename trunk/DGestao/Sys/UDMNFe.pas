@@ -438,6 +438,7 @@ type
 
     procedure UpdateNumeroNFe(const sCNPJEmitente : String; const Serie, Numero : Integer);
     procedure UpdateLoteNFe(const sCNPJEmitente : String; const Ano, Numero : Integer);
+    procedure GuardarLoteNFeVenda(const sCNPJEmitente : String; const Ano, Numero, NumeroLote : Integer);
 
     procedure GerarNFEACBr(const sCNPJEmitente, sCNPJDestinatario : String; const iAnoVenda, iNumVenda : Integer;
       var DtHoraEmiss : TDateTime; var iSerieNFe, iNumeroNFe : Integer; var FileNameXML : String);
@@ -944,6 +945,7 @@ begin
     GerarNFEACBr(sCNPJEmitente, sCNPJDestinatario, iAnoVenda, iNumVenda, DtHoraEmiss, iSerieNFe, iNumeroNFe, FileNameXML);
 
     iNumeroLote := GetNextID('TBEMPRESA', 'LOTE_NUM_NFE', 'where CNPJ = ' + QuotedStr(sCNPJEmitente) + ' and LOTE_ANO_NFE = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+    GuardarLoteNFeVenda(sCNPJEmitente, iAnoVenda, iNumVenda, iNumeroLote);
 
     Result := ACBrNFe.Enviar( iNumeroLote, Imprimir );
 
@@ -3127,6 +3129,29 @@ begin
     end;
   end;
 
+end;
+
+procedure TDMNFe.GuardarLoteNFeVenda(const sCNPJEmitente: String;
+  const Ano, Numero, NumeroLote: Integer);
+begin
+  try
+    with IBSQL do
+    begin
+      SQL.Clear;
+      SQL.Add('Update TBVENDA Set');
+      SQL.Add('    LOTE_NFE_ANO    = ' + qryEmitenteLOTE_ANO_NFE.AsString);
+      SQL.Add('  , LOTE_NFE_NUMERO = ' + FormatFloat('#########', NumeroLote));
+      SQL.Add('Where CODEMP     = ' + QuotedStr(sCNPJEmitente));
+      SQL.Add('  and ANO        = ' + FormatFloat('#########', Ano));
+      SQL.Add('  and CODCONTROL = ' + FormatFloat('#########', Numero));
+
+      ExecQuery;
+      CommitTransaction;
+    end;
+  except
+    On E : Exception do
+      raise Exception.Create('GuardarLoteNFeVenda > ' + E.Message);
+  end;
 end;
 
 end.
