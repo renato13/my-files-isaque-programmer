@@ -21,7 +21,7 @@ type
     dbNFe: TDBEdit;
     dbHoraEmissao: TDBEdit;
     Bevel1: TBevel;
-    GrpBxImposto: TGroupBox;
+    GrpBxDadosInutilizacao: TGroupBox;
     lblUsuario: TLabel;
     lblDataHora: TLabel;
     lblJustificativa: TLabel;
@@ -30,7 +30,7 @@ type
     dbDataHora: TEdit;
     Bevel2: TBevel;
     lblInforme: TLabel;
-    btnCancelar: TBitBtn;
+    btnConfirmar: TBitBtn;
     btFechar: TBitBtn;
     cdsLOG: TIBDataSet;
     updLOG: TIBUpdateSQL;
@@ -61,7 +61,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure qryEmpresaCNPJGetText(Sender: TField; var Text: String;
       DisplayText: Boolean);
-    procedure btnCancelarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
     procedure ApenasNumeroKeyPress(Sender: TObject; var Key: Char);
     procedure qryEmpresaMODELO_NFEGetText(Sender: TField; var Text: String;
       DisplayText: Boolean);
@@ -95,6 +95,8 @@ end;
 
 procedure TfrmGeInutilizarNumeroNFe.FormCreate(Sender: TObject);
 begin
+  inherited;
+  
   with qryEmpresa do
   begin
     Close;
@@ -119,7 +121,7 @@ begin
     Text := StrFormatarCpf(Sender.AsString);
 end;
 
-procedure TfrmGeInutilizarNumeroNFe.btnCancelarClick(Sender: TObject);
+procedure TfrmGeInutilizarNumeroNFe.btnConfirmarClick(Sender: TObject);
 var
   sJustific,
   sRetorno : String;
