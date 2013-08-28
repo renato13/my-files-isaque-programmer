@@ -1,15 +1,9 @@
-inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
-  Left = 580
-  Top = 296
-  ActiveControl = edAno
+inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
   BorderStyle = bsDialog
   BorderWidth = 4
-  Caption = 'Inutilizar Numera'#231#227'o NF-e'
+  Caption = 'frmGeConsultarLoteNFe'
   ClientHeight = 428
   ClientWidth = 593
-  DesignSize = (
-    593
-    428)
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
@@ -250,14 +244,14 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       TabOrder = 2
     end
   end
-  object GrpBxDadosInutilizacao: TGroupBox
+  object GrpBxDadosLote: TGroupBox
     Left = 0
     Top = 125
     Width = 593
     Height = 264
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Caption = 'Dados para Inutiliza'#231#227'o'
+    Caption = 'Dados para Consulta do Lote / Recibo NF-e'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -324,13 +318,13 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
     end
-    object lblNumeroInicial: TLabel
+    object lblNumeroLote: TLabel
       Left = 80
       Top = 64
-      Width = 84
+      Width = 92
       Height = 13
-      Caption = 'N'#250'mero Inicial:'
-      FocusControl = edNumeroInicial
+      Caption = 'N'#250'mero do Lote:'
+      FocusControl = edNumeroLote
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -339,13 +333,13 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ParentFont = False
       Transparent = False
     end
-    object lblNumeroFinal: TLabel
-      Left = 176
+    object lblNumeroRecibo: TLabel
+      Left = 184
       Top = 64
-      Width = 76
+      Width = 105
       Height = 13
-      Caption = 'N'#250'mero Final:'
-      FocusControl = edNumeroFinal
+      Caption = 'N'#250'mero do Recibo:'
+      FocusControl = edNumeroRecibo
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -369,8 +363,6 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       ParentFont = False
       ScrollBars = ssVertical
       TabOrder = 5
-      OnEnter = ControlEditEnter
-      OnExit = ControlEditExit
     end
     object dbUsuario: TEdit
       Left = 16
@@ -419,13 +411,11 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
-      OnEnter = ControlEditEnter
-      OnExit = ControlEditExit
     end
-    object edNumeroInicial: TEdit
+    object edNumeroLote: TEdit
       Left = 80
       Top = 80
-      Width = 89
+      Width = 97
       Height = 21
       Color = clWhite
       Font.Charset = ANSI_CHARSET
@@ -435,13 +425,11 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 3
-      OnEnter = ControlEditEnter
-      OnExit = ControlEditExit
     end
-    object edNumeroFinal: TEdit
-      Left = 176
+    object edNumeroRecibo: TEdit
+      Left = 184
       Top = 80
-      Width = 89
+      Width = 217
       Height = 21
       Color = clWhite
       Font.Charset = ANSI_CHARSET
@@ -451,8 +439,6 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 4
-      OnEnter = ControlEditEnter
-      OnExit = ControlEditExit
     end
   end
   object btnConfirmar: TBitBtn
@@ -461,9 +447,8 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Width = 92
     Height = 33
     Anchors = [akRight, akBottom]
-    Caption = '&Inutilizar'
+    Caption = '&Consultar'
     TabOrder = 2
-    OnClick = btnConfirmarClick
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
       1800000000000006000000000000000000000000000000000000FF00FFFF00FF
@@ -526,7 +511,6 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Cancel = True
     Caption = 'Fechar'
     TabOrder = 3
-    OnClick = btFecharClick
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
       180000000000000600000000000000000000000000000000000000FF0000FF00
@@ -579,6 +563,70 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
       0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000
       FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF00}
     NumGlyphs = 2
+  end
+  object dtsEmpresa: TDataSource
+    DataSet = qryEmpresa
+    Left = 552
+    Top = 16
+  end
+  object qryEmpresa: TIBQuery
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SQL.Strings = (
+      'Select'
+      '    e.cnpj'
+      '  , e.rzsoc'
+      '  , e.serie_nfe'
+      '  , e.numero_nfe'
+      '  , e.lote_ano_nfe'
+      '  , e.lote_num_nfe'
+      '  , 55 as modelo_nfe'
+      'from TBEMPRESA e'
+      'where e.cnpj = :cnpj')
+    Left = 520
+    Top = 16
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'cnpj'
+        ParamType = ptInput
+        Value = ''
+      end>
+    object qryEmpresaCNPJ: TIBStringField
+      FieldName = 'CNPJ'
+      Origin = '"TBEMPRESA"."CNPJ"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+      Size = 18
+    end
+    object qryEmpresaRZSOC: TIBStringField
+      FieldName = 'RZSOC'
+      Origin = '"TBEMPRESA"."RZSOC"'
+      Size = 60
+    end
+    object qryEmpresaSERIE_NFE: TSmallintField
+      FieldName = 'SERIE_NFE'
+      Origin = '"TBEMPRESA"."SERIE_NFE"'
+      DisplayFormat = '00'
+    end
+    object qryEmpresaNUMERO_NFE: TIntegerField
+      FieldName = 'NUMERO_NFE'
+      Origin = '"TBEMPRESA"."NUMERO_NFE"'
+      DisplayFormat = '0000000'
+    end
+    object qryEmpresaLOTE_ANO_NFE: TSmallintField
+      FieldName = 'LOTE_ANO_NFE'
+      Origin = '"TBEMPRESA"."LOTE_ANO_NFE"'
+    end
+    object qryEmpresaLOTE_NUM_NFE: TIntegerField
+      FieldName = 'LOTE_NUM_NFE'
+      Origin = '"TBEMPRESA"."LOTE_NUM_NFE"'
+      DisplayFormat = '0000000'
+    end
+    object qryEmpresaMODELO_NFE: TIntegerField
+      FieldName = 'MODELO_NFE'
+      ProviderFlags = []
+    end
   end
   object cdsLOG: TIBDataSet
     Database = DMBusiness.ibdtbsBusiness
@@ -670,73 +718,7 @@ inherited frmGeInutilizarNumeroNFe: TfrmGeInutilizarNumeroNFe
     Left = 456
     Top = 280
   end
-  object qryEmpresa: TIBQuery
-    Database = DMBusiness.ibdtbsBusiness
-    Transaction = DMBusiness.ibtrnsctnBusiness
-    SQL.Strings = (
-      'Select'
-      '    e.cnpj'
-      '  , e.rzsoc'
-      '  , e.serie_nfe'
-      '  , e.numero_nfe'
-      '  , e.lote_ano_nfe'
-      '  , e.lote_num_nfe'
-      '  , 55 as modelo_nfe'
-      'from TBEMPRESA e'
-      'where e.cnpj = :cnpj')
-    Left = 520
-    Top = 16
-    ParamData = <
-      item
-        DataType = ftString
-        Name = 'cnpj'
-        ParamType = ptInput
-        Value = ''
-      end>
-    object qryEmpresaCNPJ: TIBStringField
-      FieldName = 'CNPJ'
-      Origin = '"TBEMPRESA"."CNPJ"'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-      OnGetText = qryEmpresaCNPJGetText
-      Size = 18
-    end
-    object qryEmpresaRZSOC: TIBStringField
-      FieldName = 'RZSOC'
-      Origin = '"TBEMPRESA"."RZSOC"'
-      Size = 60
-    end
-    object qryEmpresaSERIE_NFE: TSmallintField
-      FieldName = 'SERIE_NFE'
-      Origin = '"TBEMPRESA"."SERIE_NFE"'
-      DisplayFormat = '00'
-    end
-    object qryEmpresaNUMERO_NFE: TIntegerField
-      FieldName = 'NUMERO_NFE'
-      Origin = '"TBEMPRESA"."NUMERO_NFE"'
-      DisplayFormat = '0000000'
-    end
-    object qryEmpresaLOTE_ANO_NFE: TSmallintField
-      FieldName = 'LOTE_ANO_NFE'
-      Origin = '"TBEMPRESA"."LOTE_ANO_NFE"'
-    end
-    object qryEmpresaLOTE_NUM_NFE: TIntegerField
-      FieldName = 'LOTE_NUM_NFE'
-      Origin = '"TBEMPRESA"."LOTE_NUM_NFE"'
-      DisplayFormat = '0000000'
-    end
-    object qryEmpresaMODELO_NFE: TIntegerField
-      FieldName = 'MODELO_NFE'
-      ProviderFlags = []
-      OnGetText = qryEmpresaMODELO_NFEGetText
-    end
-  end
-  object dtsEmpresa: TDataSource
-    DataSet = qryEmpresa
-    Left = 552
-    Top = 16
-  end
-  object qryNFeEmitida: TIBQuery
+  object qryLotesNFe: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     SQL.Strings = (
