@@ -505,7 +505,10 @@ type
       const Imprimir : Boolean = TRUE) : Boolean;
 
     function InutilizaNumeroNFeACBr(const sCNPJEmitente : String; iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal : Integer; const sJustificativa : String; var sRetorno : String) : Boolean;
-    function ConsultarNumeroLoteNFeACBr(const sCNPJEmitente : String; sNumeroRecibo : String; var sRetorno : String) : Boolean;
+    function ConsultarNumeroLoteNFeACBr(const sCNPJEmitente : String; sNumeroRecibo : String; var sChaveNFe, sRetorno : String) : Boolean;
+    function ConsultarChaveNFeACBr(const sCNPJEmitente, sChave : String;
+      var iSerieNFe, iNumeroNFe, iTipoNFe : Integer; var FileNameXML, ChaveNFE, ProtocoloNFE : String;
+      var DataEmissao : TDateTime; const Imprimir : Boolean = TRUE) : Boolean;
 
   end;
 
@@ -520,6 +523,7 @@ const
   DIRECTORY_PRINT  = 'NFe\Imprimir\';
   DIRECTORY_CLIENT = 'NFe\Clientes\';
 
+  PROCESSO_NFE_AUTORIZADA  = 100;
   REJEICAO_NFE_DUPLICIDADE = 204;
 
   procedure ConfigurarNFeACBr(const sCNPJEmitente : String = '');
@@ -992,7 +996,7 @@ begin
             begin
               UpdateNumeroNFe(sCNPJEmitente, qryEmitenteSERIE_NFE.AsInteger, iNumeroNFe);
               UpdateLoteNFe  (sCNPJEmitente, qryEmitenteLOTE_ANO_NFE.AsInteger, iNumeroLote);
-              
+
               sErrorMsg := ACBrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[0].xMotivo + #13 +
                 'Favor gerar NF-e novamente!';
             end;
@@ -3236,7 +3240,66 @@ begin
 end;
 
 function TDMNFe.ConsultarNumeroLoteNFeACBr(const sCNPJEmitente: String;
-  sNumeroRecibo: String; var sRetorno: String): Boolean;
+  sNumeroRecibo: String; var sChaveNFe, sRetorno: String): Boolean;
+var
+  bReturn : Boolean;
+begin
+  try
+
+    try
+
+      LerConfiguracao(sCNPJEmitente);
+
+      with ACBrNFe do
+      begin
+        WebServices.Recibo.Recibo := sNumeroRecibo;
+
+        bReturn := WebServices.Recibo.Executar;
+
+        // Verificar se houve retorno
+        if bReturn then
+          bReturn := (WebServices.Recibo.NFeRetorno.ProtNFe.Count = 1);
+
+        // Verificar se o retorno foi de NF-e autorizada
+        if bReturn then
+          bReturn := (WebServices.Recibo.NFeRetorno.ProtNFe.Items[0].cStat = PROCESSO_NFE_AUTORIZADA);
+
+        if bReturn then
+          sChaveNFe := WebServices.Recibo.NFeRetorno.ProtNFe.Items[0].chNFe;
+
+        if ( WebServices.Recibo.NFeRetorno.ProtNFe.Count = 1 ) then
+        begin
+          sRetorno :=
+            'Ambiente:    ' + IntToStr( Ord(WebServices.Recibo.NFeRetorno.tpAmb) ) + #13 +
+            'Versão App.: ' + WebServices.Recibo.NFeRetorno.verAplic               + #13 +
+            'Status Trn.: ' + IntToStr(WebServices.Recibo.NFeRetorno.cStat)        + #13 +
+            '---'     + #13 +
+            'Emitente:    ' + sCNPJEmitente + #13 +
+            'Chave NF-e:  ' + WebServices.Recibo.NFeRetorno.ProtNFe.Items[0].chNFe + #13 +
+            'Motivo:      ' + WebServices.Recibo.NFeRetorno.xMotivo + #13 +
+            'Mensagem:    ' + WebServices.Recibo.NFeRetorno.xMsg    + #13 +
+            '---'     + #13 +                              
+            'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Recibo.NFeRetorno.ProtNFe.Items[0].dhRecbto) + #13 +
+            'Protocolo:   ' + WebServices.Recibo.NFeRetorno.ProtNFe.Items[0].nProt;
+        end;
+      end;
+
+    except
+      On E : Exception do
+      begin
+        ShowError('Erro ao tentar consultar número de lote/recibo de envio de NF-e.' + #13#13 + 'ConsultarNumeroLoteNFeACBr() --> ' + e.Message);
+        Result := False;
+      end;
+    end;
+
+  finally
+    Result := bReturn;
+  end;
+end;
+
+function TDMNFe.ConsultarChaveNFeACBr(const sCNPJEmitente, sChave: String;
+  var iSerieNFe, iNumeroNFe, iTipoNFe : Integer; var FileNameXML, ChaveNFE,
+  ProtocoloNFE : String; var DataEmissao : TDateTime; const Imprimir: Boolean): Boolean;
 begin
   try
 
@@ -3244,39 +3307,47 @@ begin
 
     with ACBrNFe do
     begin
-(*
-      WebServices.Inutiliza(
-        sCNPJEmitente,
-        sJustificativa,
-        iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal);
+      WebServices.Consulta.NFeChave := sChave;
+      Result := WebServices.Consulta.Executar;
 
-      Result   := True;
-      sRetorno :=
-        'Ambiente:    ' + IntToStr( Ord(WebServices.Inutilizacao.TpAmb) ) + #13 +
-        'Versão App.: ' + WebServices.Inutilizacao.verAplic        + #13 +
-        'Status Trn.: ' + IntToStr(WebServices.Inutilizacao.cStat) + #13 +
-        '---'     + #13 +
-        'Emitente:    ' + WebServices.Inutilizacao.CNPJ + #13 +
-        'Modelo NF-e: ' + IntToStr( WebServices.Inutilizacao.Modelo ) + #13 +
-        'Série NF-e:  ' + IntToStr( WebServices.Inutilizacao.Serie )  + #13 +
-        'No. Inicial: ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
-        'No. Final:   ' + IntToStr( WebServices.Inutilizacao.NumeroFinal )   + #13 +
-        'Motivo:      ' + WebServices.Inutilizacao.xMotivo         + #13 +
-        'Justif.:     ' + WebServices.Inutilizacao.Justificativa   + #13 +
-        '---'     + #13 +
-        'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Inutilizacao.dhRecbto) + #13 +
-        'Protocolo:   ' + WebServices.Inutilizacao.Protocolo;
-*)        
-   end;
+      if Result then
+      begin
+        FileNameXML  := WebServices.Consulta.protNFe.PathNFe;
+        ChaveNFE     := WebServices.Consulta.NFeChave;
+        ProtocoloNFE := WebServices.Consulta.Protocolo;
+
+        NotasFiscais.Clear;
+        NotasFiscais.LoadFromFile( FileNameXML );
+
+        iSerieNFe   := NotasFiscais.Items[0].NFe.Ide.Serie;
+        iNumeroNFe  := NotasFiscais.Items[0].NFe.Ide.nNF;
+        iTipoNFe    := Ord(NotasFiscais.Items[0].NFe.Ide.tpNF);
+        DataEmissao := NotasFiscais.Items[0].NFe.Ide.dEmi;
+
+        if Imprimir then
+        begin
+
+          if NotasFiscais.Items[0].NFe.Ide.tpEmis = teDPEC then
+          begin
+            WebServices.ConsultaDPEC.NFeChave := NotasFiscais.Items[0].NFe.infNFe.ID;
+            WebServices.ConsultaDPEC.Executar;
+
+            DANFE.ProtocoloNFe := WebServices.ConsultaDPEC.nRegDPEC + ' ' + DateTimeToStr(WebServices.ConsultaDPEC.dhRegDPEC);
+          end;
+
+          NotasFiscais.ImprimirPDF
+
+        end;
+      end;
+    end;
 
   except
     On E : Exception do
     begin
-      ShowError('Erro ao tentar consultar número de lote/recibo de envio de NF-e.' + #13#13 + 'ConsultarNumeroLoteNFeACBr() --> ' + e.Message);
+      ShowError('Erro ao tentar consultar NF-e pela chave.' + #13#13 + 'ConsultarChaveNFeACBr() --> ' + e.Message);
       Result := False;
     end;
   end;
-
 end;
 
 end.

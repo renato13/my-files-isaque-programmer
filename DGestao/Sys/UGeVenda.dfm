@@ -4419,7 +4419,8 @@ inherited frmGeVenda: TfrmGeVenda
     Transaction = DMBusiness.ibtrnsctnBusiness
     SelectSQL.Strings = (
       'Select'
-      '    n.ANOVENDA'
+      '    n.EMPRESA'
+      '  , n.ANOVENDA'
       '  , n.NUMVENDA'
       '  , n.DATAEMISSAO'
       '  , n.HORAEMISSAO'
@@ -4433,11 +4434,17 @@ inherited frmGeVenda: TfrmGeVenda
       '  , n.LOTE_ANO'
       '  , n.LOTE_NUM'
       'from TBNFE_ENVIADA n'
-      'where n.ANOVENDA = :anovenda'
+      'where n.EMPRESA = :empresa'
+      '  and n.ANOVENDA = :anovenda'
       '  and n.NUMVENDA = :numvenda')
     UpdateObject = updNFE
     Left = 992
     Top = 176
+    object qryNFEEMPRESA: TIBStringField
+      FieldName = 'EMPRESA'
+      Origin = '"TBNFE_ENVIADA"."EMPRESA"'
+      Size = 18
+    end
     object qryNFEANOVENDA: TSmallintField
       FieldName = 'ANOVENDA'
       Origin = 'TBNFE_ENVIADA.ANOVENDA'
@@ -4505,12 +4512,15 @@ inherited frmGeVenda: TfrmGeVenda
   object updNFE: TIBUpdateSQL
     RefreshSQL.Strings = (
       'Select '
-      '  ANOVENDA,'
-      '  NUMVENDA,'
-      '  DATAEMISSAO,'
-      '  HORAEMISSAO,'
+      '  EMPRESA,'
       '  SERIE,'
       '  NUMERO,'
+      '  ANOVENDA,'
+      '  NUMVENDA,'
+      '  ANOCOMPRA,'
+      '  NUMCOMPRA,'
+      '  DATAEMISSAO,'
+      '  HORAEMISSAO,'
       '  CHAVE,'
       '  PROTOCOLO,'
       '  RECIBO,'
@@ -4520,47 +4530,52 @@ inherited frmGeVenda: TfrmGeVenda
       '  LOTE_NUM'
       'from TBNFE_ENVIADA '
       'where'
-      '  SERIE = :SERIE and'
-      '  NUMERO = :NUMERO')
+      '  EMPRESA = :EMPRESA and'
+      '  NUMERO = :NUMERO and'
+      '  SERIE = :SERIE')
     ModifySQL.Strings = (
       'update TBNFE_ENVIADA'
       'set'
       '  ANOVENDA = :ANOVENDA,'
-      '  NUMVENDA = :NUMVENDA,'
-      '  DATAEMISSAO = :DATAEMISSAO,'
-      '  HORAEMISSAO = :HORAEMISSAO,'
-      '  SERIE = :SERIE,'
-      '  NUMERO = :NUMERO,'
       '  CHAVE = :CHAVE,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  EMPRESA = :EMPRESA,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  LOTE_ANO = :LOTE_ANO,'
+      '  LOTE_NUM = :LOTE_NUM,'
+      '  NUMERO = :NUMERO,'
+      '  NUMVENDA = :NUMVENDA,'
       '  PROTOCOLO = :PROTOCOLO,'
       '  RECIBO = :RECIBO,'
-      '  XML_FILENAME = :XML_FILENAME,'
+      '  SERIE = :SERIE,'
       '  XML_FILE = :XML_FILE,'
-      '  LOTE_ANO = :LOTE_ANO,'
-      '  LOTE_NUM = :LOTE_NUM'
+      '  XML_FILENAME = :XML_FILENAME'
       'where'
-      '  SERIE = :OLD_SERIE and'
-      '  NUMERO = :OLD_NUMERO')
+      '  EMPRESA = :OLD_EMPRESA and'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
     InsertSQL.Strings = (
       'insert into TBNFE_ENVIADA'
       
-        '  (ANOVENDA, NUMVENDA, DATAEMISSAO, HORAEMISSAO, SERIE, NUMERO, ' +
-        'CHAVE, '
+        '  (ANOVENDA, CHAVE, DATAEMISSAO, EMPRESA, HORAEMISSAO, LOTE_ANO,' +
+        ' LOTE_NUM, '
       
-        '   PROTOCOLO, RECIBO, XML_FILENAME, XML_FILE, LOTE_ANO, LOTE_NUM' +
-        ')'
+        '   NUMERO, NUMVENDA, PROTOCOLO, RECIBO, SERIE, XML_FILE, XML_FIL' +
+        'ENAME)'
       'values'
       
-        '  (:ANOVENDA, :NUMVENDA, :DATAEMISSAO, :HORAEMISSAO, :SERIE, :NU' +
-        'MERO, :CHAVE, '
+        '  (:ANOVENDA, :CHAVE, :DATAEMISSAO, :EMPRESA, :HORAEMISSAO, :LOT' +
+        'E_ANO, '
       
-        '   :PROTOCOLO, :RECIBO, :XML_FILENAME, :XML_FILE, :LOTE_ANO, :LO' +
-        'TE_NUM)')
+        '   :LOTE_NUM, :NUMERO, :NUMVENDA, :PROTOCOLO, :RECIBO, :SERIE, :' +
+        'XML_FILE, '
+      '   :XML_FILENAME)')
     DeleteSQL.Strings = (
       'delete from TBNFE_ENVIADA'
       'where'
-      '  SERIE = :OLD_SERIE and'
-      '  NUMERO = :OLD_NUMERO')
+      '  EMPRESA = :OLD_EMPRESA and'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
     Left = 1024
     Top = 176
   end
