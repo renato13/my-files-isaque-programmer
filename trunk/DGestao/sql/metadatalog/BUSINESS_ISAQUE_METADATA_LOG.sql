@@ -9031,3 +9031,100 @@ COMMENT ON COLUMN TBVENDAS.LOTE_NFE_NUMERO IS
 COMMENT ON COLUMN TBVENDAS.LOTE_NFE_RECIBO IS
 'Numero do recibo de solicitacao de envio da NFe.';
 
+
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column EMPRESA position 1;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column SERIE position 2;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMERO position 3;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column ANOVENDA position 4;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMVENDA position 5;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column ANOCOMPRA position 6;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column NUMCOMPRA position 7;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column DATAEMISSAO position 8;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column HORAEMISSAO position 9;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column CHAVE position 10;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column PROTOCOLO position 11;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column RECIBO position 12;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column XML_FILENAME position 13;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column XML_FILE position 14;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column LOTE_ANO position 15;
+
+
+/*------ SYSDBA 30/08/2013 10:58:51 --------*/
+
+alter table TBNFE_ENVIADA
+alter column LOTE_NUM position 16;

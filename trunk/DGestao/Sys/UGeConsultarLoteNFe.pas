@@ -64,6 +64,24 @@ type
     qryLotesPendentesNFeTIPO: TIBStringField;
     qryLotesPendentesNFeLOTE: TIntegerField;
     qryLotesPendentesNFeRECIBO: TIBStringField;
+    qryNFE: TIBDataSet;
+    qryNFEANOVENDA: TSmallintField;
+    qryNFENUMVENDA: TIntegerField;
+    qryNFEDATAEMISSAO: TDateField;
+    qryNFEHORAEMISSAO: TTimeField;
+    qryNFESERIE: TIBStringField;
+    qryNFENUMERO: TIntegerField;
+    qryNFECHAVE: TIBStringField;
+    qryNFEPROTOCOLO: TIBStringField;
+    qryNFERECIBO: TIBStringField;
+    qryNFEXML_FILENAME: TIBStringField;
+    qryNFEXML_FILE: TMemoField;
+    qryNFELOTE_ANO: TSmallintField;
+    qryNFELOTE_NUM: TIntegerField;
+    updNFE: TIBUpdateSQL;
+    qryNFEEMPRESA: TIBStringField;
+    qryNFEANOCOMPRA: TSmallintField;
+    qryNFENUMCOMPRA: TIntegerField;
     procedure ApenasNumeroKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
     procedure btFecharClick(Sender: TObject);
@@ -227,11 +245,20 @@ var
   iAnoMov ,
   iCodMov : Integer;
   sRetorno : String;
+
+  iSerieNFe  ,
+  iNumeroNFe ,
+  iTipoNFe   : Integer;
+  sFileNameXML ,
+  sChaveNFE    ,
+  sProtocoloNFE,
+  sReciboNFE   : String;
+  dDataEmissao : TDateTime;
 begin
   bTudo   := (Trim(edAno.Text) = EmptyStr) and (Trim(edNumeroLote.Text) = EmptyStr) and (Trim(edNumeroRecibo.Text) = EmptyStr);
   bLote   := ((Trim(edAno.Text) <> EmptyStr) and (Trim(edNumeroLote.Text) = EmptyStr))
     or ((Trim(edAno.Text) = EmptyStr) and (Trim(edNumeroLote.Text) <> EmptyStr));
-  bRecibo := (Trim(edNumeroRecibo.Text) = EmptyStr);
+  bRecibo := bLote and (Trim(edNumeroRecibo.Text) = EmptyStr);
 
   if bTudo then
     ShowInformation('Favor informar o Número do Lote e/ou Recibo!')
@@ -243,6 +270,8 @@ begin
     ShowInformation('Favor informar o Número do Recibo!')
   else
   if PesquisarLote(StrToIntDef(Trim(edAno.Text), 0), StrToIntDef(Trim(edNumeroLote.Text), 0), Trim(edNumeroRecibo.Text), iAnoMov, iCodMov) then
+  begin
+
     if ShowConfirm('Confirma a consulta do lote/recibo de NF-e informado?') then
     begin
 
@@ -250,32 +279,108 @@ begin
         Exit;
 
       sRetorno := EmptyStr;
-      if DMNFe.ConsultarNumeroLoteNFeACBr(GetEmpresaIDDefault, Trim(edNumeroRecibo.Text), sRetorno ) then
+
+      // Executar Consulta Lote e Consulta Chave NF-e
+      
+      if DMNFe.ConsultarNumeroLoteNFeACBr(GetEmpresaIDDefault, Trim(edNumeroRecibo.Text), sChaveNFE, sRetorno ) then
       begin
 
-        with cdsLOG do
+        if ( DMNFe.ConsultarChaveNFeACBr(GetEmpresaIDDefault, sChaveNFE, iSerieNFe, iNumeroNFe, iTipoNFe, sFileNameXML, sChaveNFE, sProtocoloNFE, dDataEmissao) ) then
         begin
-          Auditar;
 
-          Open;
-          Append;
+          with qryNFE do
+          begin
+            Close;
+            ParamByName('empresa').AsString      := GetEmpresaIDDefault;
 
-          cdsLOGUSUARIO.AsString       := dbUsuario.Text;
-          cdsLOGDATA_HORA.AsDateTime   := Now;
-          cdsLOGTIPO.AsInteger         := TIPO_LOG_TRANS_SEFA;
-          cdsLOGDESCRICAO.AsString     := DESC_LOG_CONSULTAR_NRO_LOTE_NFE;
-          cdsLOGESPECIFICACAO.AsString := sRetorno;
+            ParamByName('tipo_compra').AsInteger := Ord(FTipoMovimento);
+            ParamByName('anocompra').AsInteger   := iAnoMov;
+            ParamByName('numcompra').AsInteger   := iCodMov;
 
-          Post;
-          ApplyUpdates;
-          CommitTransaction;
+            ParamByName('tipo_venda').AsInteger  := Ord(FTipoMovimento);
+            ParamByName('anovenda').AsInteger    := iAnoMov;
+            ParamByName('numvenda').AsInteger    := iCodMov;
+            Open;
 
-          ModalResult := mrOk;
+            if IsEmpty then
+              Append
+            else
+              Edit;
+
+            qryNFEEMPRESA.Value := GetEmpresaIDDefault;
+            if ( FTipoMovimento = tmNFeEntrada ) then
+            begin
+              qryNFEANOCOMPRA.AsInteger := iAnoMov;
+              qryNFENUMCOMPRA.AsInteger := iCodMov;
+              qryNFEANOVENDA.Clear;
+              qryNFENUMVENDA.Clear;
+            end
+            else
+            if ( FTipoMovimento = tmNFeSaida ) then
+            begin
+              qryNFEANOVENDA.AsInteger := iAnoMov;
+              qryNFENUMVENDA.AsInteger := iCodMov;
+              qryNFEANOCOMPRA.Clear;
+              qryNFENUMCOMPRA.Clear;
+            end;
+
+            qryNFESERIE.Value       := FormatFloat('#00', iSerieNFe);
+            qryNFENUMERO.Value      := iNumeroNFe;
+            qryNFEDATAEMISSAO.Value := dDataEmissao;
+            qryNFEHORAEMISSAO.Value := StrToTime( FormatDateTime('hh:mm:ss', dDataEmissao) );
+            qryNFECHAVE.Value     := sChaveNFE;
+            qryNFEPROTOCOLO.Value := sProtocoloNFE;
+            qryNFERECIBO.Value    := Trim(edNumeroRecibo.Text);
+            qryNFELOTE_ANO.Value  := StrToInt(edAno.Text);
+            qryNFELOTE_NUM.Value  := StrToInt(edNumeroLote.Text);
+
+            if ( FileExists(sFileNameXML) ) then
+            begin
+              qryNFEXML_FILENAME.Value := ExtractFileName( sFileNameXML );
+              qryNFEXML_FILE.LoadFromFile( sFileNameXML );
+            end;
+
+            Post;
+            ApplyUpdates;
+
+            CommitTransaction;
+          end;
+
+          ShowInformation('Lote/Recibo consultado e retorno processaod com sucesso.');
+
         end;
+
+      end
+      else
+        ;
+          
+      // Gravar LOG
+
+      with cdsLOG do
+      begin
+        Auditar;
+
+        Open;
+        Append;
+
+        cdsLOGUSUARIO.AsString       := dbUsuario.Text;
+        cdsLOGDATA_HORA.AsDateTime   := Now;
+        cdsLOGTIPO.AsInteger         := TIPO_LOG_TRANS_SEFA;
+        cdsLOGDESCRICAO.AsString     := DESC_LOG_CONSULTAR_NRO_LOTE_NFE;
+        cdsLOGESPECIFICACAO.AsString := sRetorno;
+
+        Post;
+        ApplyUpdates;
+        CommitTransaction;
 
       end;
 
+      ModalResult := mrOk;
     end;
+
+  end
+  else
+    ShowInformation('Lote/Recibo não encontrado no sistema !');  
 end;
 
 initialization

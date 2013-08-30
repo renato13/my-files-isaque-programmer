@@ -653,7 +653,7 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
     GeneratorField.Field = 'CODCONTROL'
     UpdateObject = updLOG
     Left = 424
-    Top = 280
+    Top = 312
     object cdsLOGUSUARIO: TIBStringField
       FieldName = 'USUARIO'
       Origin = '"TBLOG_TRANSACAO"."USUARIO"'
@@ -720,7 +720,7 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
       '  DATA_HORA = :OLD_DATA_HORA and'
       '  USUARIO = :OLD_USUARIO')
     Left = 456
-    Top = 280
+    Top = 312
   end
   object qryLotesPendentesNFe: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
@@ -798,5 +798,190 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
       Origin = '"TBVENDAS"."LOTE_NFE_RECIBO"'
       Size = 250
     end
+  end
+  object qryNFE: TIBDataSet
+    Database = DMBusiness.ibdtbsBusiness
+    Transaction = DMBusiness.ibtrnsctnBusiness
+    SelectSQL.Strings = (
+      'Select'
+      '    n.EMPRESA'
+      '  , n.ANOVENDA'
+      '  , n.NUMVENDA'
+      '  , n.ANOCOMPRA'
+      '  , n.NUMCOMPRA'
+      '  , n.DATAEMISSAO'
+      '  , n.HORAEMISSAO'
+      '  , n.SERIE'
+      '  , n.NUMERO'
+      '  , n.CHAVE'
+      '  , n.PROTOCOLO'
+      '  , n.RECIBO'
+      '  , n.XML_FILENAME'
+      '  , n.XML_FILE'
+      '  , n.LOTE_ANO'
+      '  , n.LOTE_NUM'
+      'from TBNFE_ENVIADA n'
+      'where n.empresa = :empresa'
+      '  and ('
+      
+        '    ((:tipo_compra = 0) and (n.anocompra = :anocompra and n.numc' +
+        'ompra = :numcompra))'
+      '    or'
+      
+        '    ((:tipo_venda  = 1) and (n.anovenda  = :anovenda  and n.numv' +
+        'enda  = :numvenda))'
+      '  )')
+    UpdateObject = updNFE
+    Left = 424
+    Top = 280
+    object qryNFEEMPRESA: TIBStringField
+      FieldName = 'EMPRESA'
+      Origin = '"TBNFE_ENVIADA"."EMPRESA"'
+      Size = 18
+    end
+    object qryNFEANOVENDA: TSmallintField
+      FieldName = 'ANOVENDA'
+      Origin = 'TBNFE_ENVIADA.ANOVENDA'
+      Required = True
+    end
+    object qryNFENUMVENDA: TIntegerField
+      FieldName = 'NUMVENDA'
+      Origin = 'TBNFE_ENVIADA.NUMVENDA'
+    end
+    object qryNFEANOCOMPRA: TSmallintField
+      FieldName = 'ANOCOMPRA'
+      Origin = '"TBNFE_ENVIADA"."ANOCOMPRA"'
+    end
+    object qryNFENUMCOMPRA: TIntegerField
+      FieldName = 'NUMCOMPRA'
+      Origin = '"TBNFE_ENVIADA"."NUMCOMPRA"'
+    end
+    object qryNFEDATAEMISSAO: TDateField
+      FieldName = 'DATAEMISSAO'
+      Origin = 'TBNFE_ENVIADA.DATAEMISSAO'
+    end
+    object qryNFEHORAEMISSAO: TTimeField
+      FieldName = 'HORAEMISSAO'
+      Origin = 'TBNFE_ENVIADA.HORAEMISSAO'
+    end
+    object qryNFESERIE: TIBStringField
+      FieldName = 'SERIE'
+      Origin = 'TBNFE_ENVIADA.SERIE'
+      Required = True
+      Size = 4
+    end
+    object qryNFENUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = 'TBNFE_ENVIADA.NUMERO'
+      Required = True
+    end
+    object qryNFECHAVE: TIBStringField
+      FieldName = 'CHAVE'
+      Origin = 'TBNFE_ENVIADA.CHAVE'
+      Size = 250
+    end
+    object qryNFEPROTOCOLO: TIBStringField
+      FieldName = 'PROTOCOLO'
+      Origin = 'TBNFE_ENVIADA.PROTOCOLO'
+      Size = 250
+    end
+    object qryNFERECIBO: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = 'TBNFE_ENVIADA.RECIBO'
+      Size = 250
+    end
+    object qryNFEXML_FILENAME: TIBStringField
+      FieldName = 'XML_FILENAME'
+      Origin = 'TBNFE_ENVIADA.XML_FILENAME'
+      Size = 250
+    end
+    object qryNFEXML_FILE: TMemoField
+      FieldName = 'XML_FILE'
+      Origin = 'TBNFE_ENVIADA.XML_FILE'
+      BlobType = ftMemo
+      Size = 8
+    end
+    object qryNFELOTE_ANO: TSmallintField
+      FieldName = 'LOTE_ANO'
+      Origin = 'TBNFE_ENVIADA.LOTE_ANO'
+    end
+    object qryNFELOTE_NUM: TIntegerField
+      FieldName = 'LOTE_NUM'
+      Origin = 'TBNFE_ENVIADA.LOTE_NUM'
+      Required = True
+    end
+  end
+  object updNFE: TIBUpdateSQL
+    RefreshSQL.Strings = (
+      'Select '
+      '  EMPRESA,'
+      '  SERIE,'
+      '  NUMERO,'
+      '  ANOVENDA,'
+      '  NUMVENDA,'
+      '  ANOCOMPRA,'
+      '  NUMCOMPRA,'
+      '  DATAEMISSAO,'
+      '  HORAEMISSAO,'
+      '  CHAVE,'
+      '  PROTOCOLO,'
+      '  RECIBO,'
+      '  XML_FILENAME,'
+      '  XML_FILE,'
+      '  LOTE_ANO,'
+      '  LOTE_NUM'
+      'from TBNFE_ENVIADA '
+      'where'
+      '  EMPRESA = :EMPRESA and'
+      '  NUMERO = :NUMERO and'
+      '  SERIE = :SERIE')
+    ModifySQL.Strings = (
+      'update TBNFE_ENVIADA'
+      'set'
+      '  ANOCOMPRA = :ANOCOMPRA,'
+      '  ANOVENDA = :ANOVENDA,'
+      '  CHAVE = :CHAVE,'
+      '  DATAEMISSAO = :DATAEMISSAO,'
+      '  EMPRESA = :EMPRESA,'
+      '  HORAEMISSAO = :HORAEMISSAO,'
+      '  LOTE_ANO = :LOTE_ANO,'
+      '  LOTE_NUM = :LOTE_NUM,'
+      '  NUMCOMPRA = :NUMCOMPRA,'
+      '  NUMERO = :NUMERO,'
+      '  NUMVENDA = :NUMVENDA,'
+      '  PROTOCOLO = :PROTOCOLO,'
+      '  RECIBO = :RECIBO,'
+      '  SERIE = :SERIE,'
+      '  XML_FILE = :XML_FILE,'
+      '  XML_FILENAME = :XML_FILENAME'
+      'where'
+      '  EMPRESA = :OLD_EMPRESA and'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
+    InsertSQL.Strings = (
+      'insert into TBNFE_ENVIADA'
+      
+        '  (ANOCOMPRA, ANOVENDA, CHAVE, DATAEMISSAO, EMPRESA, HORAEMISSAO' +
+        ', LOTE_ANO, '
+      
+        '   LOTE_NUM, NUMCOMPRA, NUMERO, NUMVENDA, PROTOCOLO, RECIBO, SER' +
+        'IE, XML_FILE, '
+      '   XML_FILENAME)'
+      'values'
+      
+        '  (:ANOCOMPRA, :ANOVENDA, :CHAVE, :DATAEMISSAO, :EMPRESA, :HORAE' +
+        'MISSAO, '
+      
+        '   :LOTE_ANO, :LOTE_NUM, :NUMCOMPRA, :NUMERO, :NUMVENDA, :PROTOC' +
+        'OLO, :RECIBO, '
+      '   :SERIE, :XML_FILE, :XML_FILENAME)')
+    DeleteSQL.Strings = (
+      'delete from TBNFE_ENVIADA'
+      'where'
+      '  EMPRESA = :OLD_EMPRESA and'
+      '  NUMERO = :OLD_NUMERO and'
+      '  SERIE = :OLD_SERIE')
+    Left = 456
+    Top = 280
   end
 end

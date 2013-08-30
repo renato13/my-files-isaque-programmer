@@ -322,6 +322,7 @@ type
     ShpLucroNegativo: TShape;
     Label4: TLabel;
     IbDtstTabelaLOTE_NFE_RECIBO: TIBStringField;
+    qryNFEEMPRESA: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -1557,12 +1558,14 @@ begin
       with qryNFE do
       begin
         Close;
+        ParamByName('empresa').AsString   := IbDtstTabelaCODEMP.AsString;
         ParamByName('anovenda').AsInteger := IbDtstTabelaANO.Value;
         ParamByName('numvenda').AsInteger := IbDtstTabelaCODCONTROL.Value;
         Open;
 
         Append;
 
+        qryNFEEMPRESA.Value     := IbDtstTabelaCODEMP.AsString;
         qryNFEANOVENDA.Value    := IbDtstTabelaANO.Value;
         qryNFENUMVENDA.Value    := IbDtstTabelaCODCONTROL.Value;
         qryNFESERIE.Value       := FormatFloat('#00', iSerieNFe);

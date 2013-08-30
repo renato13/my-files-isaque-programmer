@@ -274,6 +274,7 @@ type
     IbDtstTabelaLOTE_NFE_ANO: TSmallintField;
     IbDtstTabelaLOTE_NFE_NUMERO: TIntegerField;
     IbDtstTabelaLOTE_NFE_RECIBO: TIBStringField;
+    qryNFEEMPRESA: TIBStringField;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -1081,14 +1082,16 @@ begin
       with qryNFE do
       begin
         Close;
+        ParamByName('empresa').AsString    := IbDtstTabelaCODEMP.AsString;
         ParamByName('anoCompra').AsInteger := IbDtstTabelaANO.Value;
         ParamByName('numCompra').AsInteger := IbDtstTabelaCODCONTROL.Value;
         Open;
 
         Append;
 
-        qryNFEANOCOMPRA.Value    := IbDtstTabelaANO.Value;
-        qryNFENUMCOMPRA.Value    := IbDtstTabelaCODCONTROL.Value;
+        qryNFEEMPRESA.Value     := IbDtstTabelaCODEMP.AsString;
+        qryNFEANOCOMPRA.Value   := IbDtstTabelaANO.Value;
+        qryNFENUMCOMPRA.Value   := IbDtstTabelaCODCONTROL.Value;
         qryNFESERIE.Value       := FormatFloat('#00', iSerieNFe);
         qryNFENUMERO.Value      := iNumeroNFe;
         qryNFEDATAEMISSAO.Value := GetDateDB;
