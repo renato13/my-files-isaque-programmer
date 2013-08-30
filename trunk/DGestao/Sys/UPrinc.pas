@@ -181,6 +181,7 @@ type
     procedure nmInutilizarNumeroNFeClick(Sender: TObject);
     procedure nmConfiguracaoEmpresaClick(Sender: TObject);
     procedure nmEstoqueMinimoClick(Sender: TObject);
+    procedure nmConsultarLoteNFeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -466,15 +467,9 @@ procedure TfrmPrinc.FormCreate(Sender: TObject);
 var
   sFileImage : String;
 begin
-  {$IFDEF DGE}
   Self.Caption           := 'DGE - Sistema Integrado de Gestão Empresarial ' + VERSION_NUMBER;
   Self.Version.Caption   := 'Versão ' + VERSION_NUMBER;
   Self.Copyright.Caption := '© 2012 | 2013 - Masterdados Tecnologia da Informação' + #13 + 'Todos os direitos reservados.';
-  {$ELSE}
-  Self.Caption           := 'DGE - Sistema Integrado de Gestão Empresarial [ v' + GetExeVersion + ' ]';
-  Self.Version.Caption   := 'Versão ' + GetExeVersion;
-  Self.Copyright.Caption := GetCopyright;
-  {$ENDIF}
 
   // Carregar Imagem de Fundo da Tele Principal
 
@@ -609,6 +604,11 @@ end;
 procedure TfrmPrinc.nmEstoqueMinimoClick(Sender: TObject);
 begin
   FormFunction.ShowModalForm(Self, 'FrmGeProdutoEstoqueMinimo');
+end;
+
+procedure TfrmPrinc.nmConsultarLoteNFeClick(Sender: TObject);
+begin
+  FormFunction.ShowModalForm(Self, 'frmGeConsultarLoteNFe');
 end;
 
 end.

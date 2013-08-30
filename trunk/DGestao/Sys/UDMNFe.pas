@@ -505,6 +505,7 @@ type
       const Imprimir : Boolean = TRUE) : Boolean;
 
     function InutilizaNumeroNFeACBr(const sCNPJEmitente : String; iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal : Integer; const sJustificativa : String; var sRetorno : String) : Boolean;
+    function ConsultarNumeroLoteNFeACBr(const sCNPJEmitente : String; sNumeroRecibo : String; var sRetorno : String) : Boolean;
 
   end;
 
@@ -3232,6 +3233,50 @@ begin
     On E : Exception do
       raise Exception.Create('GuardarLoteNFeEntrada > ' + E.Message);
   end;
+end;
+
+function TDMNFe.ConsultarNumeroLoteNFeACBr(const sCNPJEmitente: String;
+  sNumeroRecibo: String; var sRetorno: String): Boolean;
+begin
+  try
+
+    LerConfiguracao(sCNPJEmitente);
+
+    with ACBrNFe do
+    begin
+(*
+      WebServices.Inutiliza(
+        sCNPJEmitente,
+        sJustificativa,
+        iAno, iModelo, iSerie, iNumeroInicial, iNumeroFinal);
+
+      Result   := True;
+      sRetorno :=
+        'Ambiente:    ' + IntToStr( Ord(WebServices.Inutilizacao.TpAmb) ) + #13 +
+        'Versão App.: ' + WebServices.Inutilizacao.verAplic        + #13 +
+        'Status Trn.: ' + IntToStr(WebServices.Inutilizacao.cStat) + #13 +
+        '---'     + #13 +
+        'Emitente:    ' + WebServices.Inutilizacao.CNPJ + #13 +
+        'Modelo NF-e: ' + IntToStr( WebServices.Inutilizacao.Modelo ) + #13 +
+        'Série NF-e:  ' + IntToStr( WebServices.Inutilizacao.Serie )  + #13 +
+        'No. Inicial: ' + IntToStr( WebServices.Inutilizacao.NumeroInicial ) + #13 +
+        'No. Final:   ' + IntToStr( WebServices.Inutilizacao.NumeroFinal )   + #13 +
+        'Motivo:      ' + WebServices.Inutilizacao.xMotivo         + #13 +
+        'Justif.:     ' + WebServices.Inutilizacao.Justificativa   + #13 +
+        '---'     + #13 +
+        'Data Recibo: ' + FormatDateTime('dd/mm/yyyy', WebServices.Inutilizacao.dhRecbto) + #13 +
+        'Protocolo:   ' + WebServices.Inutilizacao.Protocolo;
+*)        
+   end;
+
+  except
+    On E : Exception do
+    begin
+      ShowError('Erro ao tentar consultar número de lote/recibo de envio de NF-e.' + #13#13 + 'ConsultarNumeroLoteNFeACBr() --> ' + e.Message);
+      Result := False;
+    end;
+  end;
+
 end;
 
 end.

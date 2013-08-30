@@ -88,7 +88,8 @@ uses
   UGeProdutoRotatividadePRC in 'UGeProdutoRotatividadePRC.pas' {FrmProdutoRotatividadePRC},
   UGeInutilizarNumeroNFe in 'UGeInutilizarNumeroNFe.pas' {frmGeInutilizarNumeroNFe},
   UGeConfiguracaoEmpresa in 'UGeConfiguracaoEmpresa.pas' {frmGeConfiguracaoEmpresa},
-  UGeProdutoEstoqueMinimo in 'UGeProdutoEstoqueMinimo.pas' {FrmGeProdutoEstoqueMinimo};
+  UGeProdutoEstoqueMinimo in 'UGeProdutoEstoqueMinimo.pas' {FrmGeProdutoEstoqueMinimo},
+  UGeConsultarLoteNFe in 'UGeConsultarLoteNFe.pas' {frmGeConsultarLoteNFe};
 
 {$R *.res}
 

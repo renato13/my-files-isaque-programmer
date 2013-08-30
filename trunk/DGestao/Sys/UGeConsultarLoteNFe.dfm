@@ -1,9 +1,10 @@
 inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
   BorderStyle = bsDialog
   BorderWidth = 4
-  Caption = 'frmGeConsultarLoteNFe'
+  Caption = 'Consultar Recibo/Lote NF-e'
   ClientHeight = 428
   ClientWidth = 593
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
@@ -449,6 +450,7 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
     Anchors = [akRight, akBottom]
     Caption = '&Consultar'
     TabOrder = 2
+    OnClick = btnConfirmarClick
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
       1800000000000006000000000000000000000000000000000000FF00FFFF00FF
@@ -511,6 +513,7 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
     Cancel = True
     Caption = 'Fechar'
     TabOrder = 3
+    OnClick = btFecharClick
     Glyph.Data = {
       36060000424D3606000000000000360000002800000020000000100000000100
       180000000000000600000000000000000000000000000000000000FF0000FF00
@@ -597,6 +600,7 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
       Origin = '"TBEMPRESA"."CNPJ"'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
+      OnGetText = qryEmpresaCNPJGetText
       Size = 18
     end
     object qryEmpresaRZSOC: TIBStringField
@@ -718,84 +722,81 @@ inherited frmGeConsultarLoteNFe: TfrmGeConsultarLoteNFe
     Left = 456
     Top = 280
   end
-  object qryLotesNFe: TIBQuery
+  object qryLotesPendentesNFe: TIBQuery
     Database = DMBusiness.ibdtbsBusiness
     Transaction = DMBusiness.ibtrnsctnBusiness
     SQL.Strings = (
       'Select'
-      '    v.serie'
-      '  , v.nfe'
-      '  , v.dataemissao'
-      '  , '#39'Sa'#237'da  '#39' as Tipo'
+      '    v.ano        as Ano'
+      '  , v.codcontrol as Numero'
+      '  , 1            as TipoNFE'
+      '  , '#39'Sa'#237'da/Venda'#39'     as Tipo'
+      '  , v.lote_nfe_numero as Lote'
+      '  , v.lote_nfe_recibo as Recibo'
       'from TBVENDAS v'
-      'where v.codemp = :empresa1'
-      '  and cast(v.serie as Smallint) = :serie1'
-      '  and v.nfe between :inicio1 and :final1'
+      'where v.codemp = :empresa'
+      '  and v.lote_nfe_numero is not null'
+      '  and v.nfe is null'
+      '  and v.nfe_enviada = 0'
       ''
       'union'
       ''
       'Select'
-      '    c.nfserie as serie'
-      '  , c.nf      as nfe'
-      '  , c.dtemiss as dataemissao'
-      '  , '#39'Entrada'#39' as Tipo'
+      '    c.ano        as Ano'
+      '  , c.codcontrol as Numero'
+      '  , 0            as TipoNFE'
+      '  , '#39'Entrada/Compra'#39'  as Tipo'
+      '  , c.lote_nfe_numero as Lote'
+      '  , c.lote_nfe_recibo as Recibo'
       'from TBCOMPRAS c'
-      'where c.codemp = :empresa2'
-      '  and cast(c.nfserie as Smallint) = :serie2'
-      '  and c.nf between :inicio2 and :final2'
-      '  and c.nfe_enviada = 1'
+      'where c.codemp = :empresa'
+      '  and c.lote_nfe_numero is not null'
+      '  and c.nf is null'
+      '  and C.nfe_enviada = 0'
       ''
-      'order by 1, 2')
+      'order by 5')
     Left = 424
     Top = 248
     ParamData = <
       item
-        DataType = ftString
-        Name = 'empresa1'
-        ParamType = ptInput
-        Value = ''
+        DataType = ftUnknown
+        Name = 'empresa'
+        ParamType = ptUnknown
       end
       item
-        DataType = ftInteger
-        Name = 'serie1'
-        ParamType = ptInput
-        Value = 0
-      end
-      item
-        DataType = ftInteger
-        Name = 'inicio1'
-        ParamType = ptInput
-        Value = 0
-      end
-      item
-        DataType = ftInteger
-        Name = 'final1'
-        ParamType = ptInput
-        Value = 0
-      end
-      item
-        DataType = ftString
-        Name = 'empresa2'
-        ParamType = ptInput
-        Value = ''
-      end
-      item
-        DataType = ftInteger
-        Name = 'serie2'
-        ParamType = ptInput
-        Value = 0
-      end
-      item
-        DataType = ftInteger
-        Name = 'inicio2'
-        ParamType = ptInput
-        Value = 0
-      end
-      item
-        DataType = ftInteger
-        Name = 'final2'
-        ParamType = ptInput
-        Value = 0
+        DataType = ftUnknown
+        Name = 'empresa'
+        ParamType = ptUnknown
       end>
+    object qryLotesPendentesNFeANO: TSmallintField
+      FieldName = 'ANO'
+      Origin = '"TBVENDAS"."ANO"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object qryLotesPendentesNFeNUMERO: TIntegerField
+      FieldName = 'NUMERO'
+      Origin = '"TBVENDAS"."CODCONTROL"'
+      Required = True
+    end
+    object qryLotesPendentesNFeTIPONFE: TIntegerField
+      FieldName = 'TIPONFE'
+      ProviderFlags = []
+    end
+    object qryLotesPendentesNFeTIPO: TIBStringField
+      FieldName = 'TIPO'
+      ProviderFlags = []
+      FixedChar = True
+      Size = 14
+    end
+    object qryLotesPendentesNFeLOTE: TIntegerField
+      FieldName = 'LOTE'
+      Origin = '"TBVENDAS"."LOTE_NFE_NUMERO"'
+    end
+    object qryLotesPendentesNFeRECIBO: TIBStringField
+      FieldName = 'RECIBO'
+      Origin = '"TBVENDAS"."LOTE_NFE_RECIBO"'
+      Size = 250
+    end
   end
 end
