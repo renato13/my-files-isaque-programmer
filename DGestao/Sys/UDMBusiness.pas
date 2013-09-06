@@ -98,7 +98,8 @@ var
 
   function NetWorkActive(const Alertar : Boolean = FALSE) : Boolean;
 
-  procedure ShowInformation(sMsg : String);
+  procedure ShowInformation(sTitle, sMsg : String); overload;
+  procedure ShowInformation(sMsg : String); overload;
   procedure ShowWarning(sMsg : String);
   procedure ShowStop(sMsg : String);
   procedure ShowError(sMsg : String);
@@ -113,6 +114,7 @@ var
   procedure RegistrarSegmentos(Codigo : Integer; Descricao : String);
   procedure RegistrarControleAcesso(const AOnwer : TComponent; const EvUserAcesso : TEvUserAccess);
   procedure CarregarConfiguracoesEmpresa(CNPJ : String; Mensagem : String);
+  procedure SetEmpresaIDDefault(CNPJ : String);
 
   function DelphiIsRunning : Boolean;
   function ShowConfirm(sMsg : String; const sTitle : String = ''; const DefaultButton : Integer = MB_DEFBUTTON2) : Boolean;
@@ -140,6 +142,7 @@ var
   function StrFormatarCEP(sCEP: String): String;
   function StrFormatarFONE(sFone: String): String;
   function StrDescricaoProduto : String;
+  function StrOnlyNumbers(const Str : String) : String;
 
   function GetGeneratorID(const GeneratorName : String) : Integer;
   function GetNextID(NomeTabela, CampoChave : String; const sWhere : String = '') : Largeint;
@@ -155,6 +158,7 @@ var
   function GetSenhaAutorizacao : String;
   function GetDateTimeDB : TDateTime;
   function GetDateDB : TDateTime;
+  function GetProximoDiaUtil(const Data : TDateTime) : TDateTime;
   function GetTimeDB : TDateTime;
   function GetUserApp : String;
   function GetUserFunctionID : Integer;
@@ -182,10 +186,6 @@ const
   FUNCTION_USER_ID_AUX_FINANC2 =  8;
   FUNCTION_USER_ID_SUPORTE_TI  = 11;
   FUNCTION_USER_ID_SYSTEM_ADM  = 12;
-
-  BOLETO_ARQUIVO_LOGOTIPO = 'Imagens\Emitente.gif'; //gif
-  BOLETO_IMAGENS          = 'Imagens\';
-  BOLETO_LICENCAS         = 'Licencas\';
 
   STATUS_VND_AND = 1;
   STATUS_VND_ABR = 2;
@@ -342,6 +342,11 @@ begin
 
     Result := Return;
   end;
+end;
+
+procedure ShowInformation(sTitle, sMsg : String);
+begin
+  Application.MessageBox(PChar(sMsg), PChar(sTitle), MB_ICONINFORMATION);
 end;
 
 procedure ShowInformation(sMsg : String);
@@ -618,6 +623,11 @@ begin
       FieldByName('empresa_email').AsString  + #13 +
       FieldByName('empresa_homepage').AsString;
   end;
+end;
+
+procedure SetEmpresaIDDefault(CNPJ : String);
+begin
+  FileINI.WriteString('Default', 'EmpresaID', CNPJ);
 end;
 
 function DelphiIsRunning : Boolean;
@@ -955,10 +965,24 @@ begin
       else
         S := 'Produtos';
     end;
-    
+
   finally
     Result := S;
   end;
+end;
+
+function StrOnlyNumbers(const Str : String) : String;
+var
+  I : Byte;
+  Valor : String;
+begin
+  Valor := Str;
+
+  for I := 1 to Length(Valor) do
+    if not (Valor[I] in ['0'..'9']) then
+      Delete(Valor, I, 1);
+
+  Result := Valor;
 end;
 
 function GetGeneratorID(const GeneratorName : String) : Integer;
@@ -1168,6 +1192,16 @@ begin
 
     Result := FieldByName('Data').AsDateTime;
   end;
+end;
+
+function GetProximoDiaUtil(const Data : TDateTime) : TDateTime;
+var
+  dData : TDateTime;
+begin
+  dData := Data + 1;
+  while ( DayOfWeek(dData) in [1, 7] ) do
+    dData := dData + 1;
+  Result := dData;
 end;
 
 function GetTimeDB : TDateTime;

@@ -11,26 +11,22 @@ File_8=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\lib\FuncoesFormulario.p
 File_9=SourceModule,'E:\Projetos\MasterDados\DGESTAO\Sys\uRelCP.pas',0,1,31,85,37,1,0
 
 [Modules]
-Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
-Module1=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
-Module2=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEfetuarLogin.pas
-Module3=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoLogin.pas
-Module4=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
-Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
-Module8=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
-Count=9
+Module0=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
+Module1=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEfetuarLogin.pas
+Module2=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoLogin.pas
+Module3=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
+Module4=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
+Module5=E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas
+Module6=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
+Module7=E:\Projetos\MasterDados\DGESTAO\Sys\UDMNFe.pas
+Module8=C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas
+Module9=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
+Count=10
 EditWindowCount=1
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=0
-
-[C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas]
-ModuleType=SourceModule
-FormState=0
 FormOnTop=0
 
 [E:\Projetos\MasterDados\DGESTAO\Sys\UGeEfetuarLogin.pas]
@@ -41,9 +37,24 @@ FormOnTop=0
 [E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoLogin.pas]
 ModuleType=SourceModule
 FormState=1
-FormOnTop=1
+FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas]
+[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
@@ -53,12 +64,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[E:\Projetos\MasterDados\DGESTAO\Sys\UConstantesDGE.pas]
+[C:\Delphi\ACBr\Fontes\PCN2\pcnConversao.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -77,8 +83,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=9
-CurrentView=5
+ViewCount=10
+CurrentView=9
 View0=0
 View1=1
 View2=2
@@ -88,6 +94,7 @@ View5=5
 View6=6
 View7=7
 View8=8
+View9=9
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -105,9 +112,9 @@ LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
+BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\DGE.dpr
@@ -125,9 +132,9 @@ LeftCol=1
 
 [View2]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UDMBusiness.pas
-CursorX=1
-CursorY=551
-TopLine=549
+CursorX=30
+CursorY=628
+TopLine=606
 LeftCol=1
 
 [View3]
@@ -148,28 +155,35 @@ LeftCol=1
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UPrinc.pas
 CursorX=58
 CursorY=611
-TopLine=609
+TopLine=150
 LeftCol=1
 
 [View6]
-Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoLogin.pas
-CursorX=3
-CursorY=89
-TopLine=84
-LeftCol=1
-
-[View7]
-Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEfetuarLogin.pas
-CursorX=11
-CursorY=8
+Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UFuncoes.pas
+CursorX=1
+CursorY=24
 TopLine=1
 LeftCol=1
 
+[View7]
+Module=E:\Projetos\MasterDados\DGESTAO\Sys\lib\UGrPadraoLogin.pas
+CursorX=18
+CursorY=153
+TopLine=113
+LeftCol=1
+
 [View8]
+Module=E:\Projetos\MasterDados\DGESTAO\Sys\UGeEfetuarLogin.pas
+CursorX=25
+CursorY=25
+TopLine=40
+LeftCol=1
+
+[View9]
 Module=E:\Projetos\MasterDados\DGESTAO\Sys\UfrmAcessoSistema.pas
-CursorX=16
-CursorY=56
-TopLine=8
+CursorX=87
+CursorY=79
+TopLine=1
 LeftCol=1
 
 [Watches]
@@ -242,7 +256,7 @@ LRDockWidth=245
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Enabled
+SelectedItem=Action
 ExpandedItems=
 HiddenCategories=
 
@@ -301,26 +315,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=858
+Height=770
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=858
+ClientHeight=770
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=-10
-Top=-713
-Width=443
+Left=12
+Top=0
+Width=1636
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=443
+ClientWidth=1636
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
