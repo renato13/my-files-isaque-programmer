@@ -438,6 +438,7 @@ type
     SmallintField2: TSmallintField;
     IntegerField3: TIntegerField;
     frrBoletoEntrega: TfrxReport;
+    frxReport1: TfrxReport;
     procedure SelecionarCertificado(Sender : TObject);
     procedure TestarServico(Sender : TObject);
     procedure DataModuleCreate(Sender: TObject);
@@ -518,8 +519,9 @@ var
 
 const
   SELDIRHELP   = 1000;
-  FILENAME_NFE = 'Report\NotaFiscalEletronica.rav';
-  
+  FILENAME_NFE     = 'Report\NotaFiscalEletronica.rav';
+  FILENAME_NFE_FR3 = 'Report\NotaFiscalEletronica.fr3';
+
   DIRECTORY_CANCEL = 'NFe\Canceladas\';
   DIRECTORY_PRINT  = 'NFe\Imprimir\';
   DIRECTORY_CLIENT = 'NFe\Clientes\';
@@ -654,8 +656,12 @@ begin
 
   ConfigACBr.sbtnGetCert.OnClick := SelecionarCertificado;
   ConfigACBr.btnServico.OnClick  := TestarServico;
-  
+
   rvDANFE.Sistema := GetCompanyName + ' - Contato(s): ' + GetContacts;
+  rvDANFE.Usuario := GetUserApp;
+
+//  frDANFE.Sistema := GetCompanyName + ' - Contato(s): ' + GetContacts;
+//  frDANFE.Usuario := GetUserApp;
 
   LerConfiguracao(GetEmpresaIDDefault);
 
@@ -738,7 +744,8 @@ Var
   Ok : Boolean;
   StreamMemo : TMemoryStream;
   sPrefixoSecao,
-  sFileNFE     : String;
+  sFileNFE     ,
+  sFileNFE_fr3 : String;
 begin
   try
 
@@ -829,8 +836,12 @@ begin
       edInfoFisco.Text       := ReadString( 'Emitente', 'InfoFisco'  , 'EMPRESA OPTANTE PELO SIMPLES DE ACORDO COM A LEI COMPLEMENTAR 123, DE DEZEMBRO DE 2006' ) ;
 
       // Configuração para envio de e-mails
-      
-      CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, 'Envio de NF-e (Emitente: ' + edtEmitRazao.Text + ')');
+
+      try
+        CarregarConfiguracoesEmpresa(GetEmpresaIDDefault, 'Envio de NF-e (Emitente: ' + edtEmitRazao.Text + ')');
+      except
+      end;
+
       if ( Trim(gContaEmail.Conta) <> EmptyStr ) then
       begin
         edtSmtpHost.Text      := gContaEmail.Servidor_SMTP;
@@ -875,7 +886,8 @@ begin
       end;
     end;
 
-    sFileNFE := ExtractFilePath(ParamStr(0)) + FILENAME_NFE;
+    sFileNFE     := ExtractFilePath(ParamStr(0)) + FILENAME_NFE;
+    sFileNFE_fr3 := ExtractFilePath(ParamStr(0)) + FILENAME_NFE_FR3;
 
     if ( not FileExists(sFileNFE) ) then
       ShowError( 'Arquivo ' + QuotedStr(sFileNFE) + ' não encontrado!' );
@@ -884,6 +896,10 @@ begin
     rvDANFE.Site  := qryEmitenteHOME_PAGE.AsString;
     rvDANFE.TamanhoFonte_RazaoSocial := 10;
     rvDANFE.RavFile                  := sFileNFE;
+
+//    frDANFE.Email    := qryEmitenteEMAIL.AsString;
+//    frDANFE.Site     := qryEmitenteHOME_PAGE.AsString;
+//    frDANFE.FastFile := sFileNFE_fr3;
 
   finally
   end;

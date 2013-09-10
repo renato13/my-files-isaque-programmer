@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, UGrPadraoCadastro, ImgList, IBCustomDataSet, IBUpdateSQL, DB,
   Mask, DBCtrls, StdCtrls, Buttons, ExtCtrls, Grids, DBGrids, ComCtrls,
-  ToolWin;
+  ToolWin, IBTable;
 
 type
   TfrmGeBancos = class(TfrmGrPadraoCadastro)
@@ -53,9 +53,21 @@ type
     IbDtstTabelaBCO_DIRETORIO_REMESSA: TIBStringField;
     IbDtstTabelaBCO_DIRETORIO_RETORNO: TIBStringField;
     IbDtstTabelaBCO_SEQUENCIAL_REM: TIntegerField;
+    IbDtstTabelaBCO_GERAR_BOLETO: TSmallintField;
+    IbDtstTabelaEMPRESA: TIBStringField;
+    dbGerarBoleto: TDBCheckBox;
+    dtsEmpresa: TDataSource;
+    tblEmpresa: TIBTable;
+    lblEmpresa: TLabel;
+    dbEmpresa: TDBLookupComboBox;
+    lblCodigoCedente: TLabel;
+    dbCodigoCedente: TDBEdit;
+    IbDtstTabelaBCO_CODIGO_CEDENTE: TIBStringField;
+    imgAjuda: TImage;
     procedure FormCreate(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
     procedure IbDtstTabelaBeforePost(DataSet: TDataSet);
+    procedure imgAjudaClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -124,15 +136,20 @@ begin
   DisplayFormatCodigo := '0000';
   CampoCodigo    := 'bco_cod';
   CampoDescricao := 'bco_nome';
+
+  tblEmpresa.Open;
 end;
 
 procedure TfrmGeBancos.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
+  IbDtstTabelaEMPRESA.AsString            := GetEmpresaIDDefault;
+  IbDtstTabelaBCO_GERAR_BOLETO.Value      := 0;
   IbDtstTabelaBCO_NOSSO_NUM_INICIO.Value  := FormatFloat('000000', 1);
   IbDtstTabelaBCO_NOSSO_NUM_FINAL.Value   := FormatFloat('000000', 999999);
   IbDtstTabelaBCO_NOSSO_NUM_PROXIMO.Value := FormatFloat('000000', 1);
   IbDtstTabelaBCO_SEQUENCIAL_REM.Value    := 1;
+  IbDtstTabelaBCO_CODIGO_CEDENTE.Clear;
 end;
 
 procedure TfrmGeBancos.IbDtstTabelaBeforePost(DataSet: TDataSet);
@@ -170,6 +187,19 @@ begin
       Abort;
     end;
   end;
+end;
+
+procedure TfrmGeBancos.imgAjudaClick(Sender: TObject);
+var
+  sMsg : String;
+begin
+  sMsg := 'Informações importantes para a geração de boletos.' + #13 +
+    '---' + #13#13 + 
+    '1. O código da Agência deve ser informada com o dígito. Ex: 1232-1' + #13 +
+    '2. A Conta Corrente (C/C) deverá ser infrmanda funatmente com o seu dígito. Ex: 06598-7' + #13 +
+    '3. Para determinados bancos o Código do Cedente é o mesmo número de Conta Corrente.';
+
+  ShowInformation(Self.Caption, sMsg);
 end;
 
 initialization

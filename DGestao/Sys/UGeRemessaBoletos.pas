@@ -136,7 +136,7 @@ const
 
 implementation
 
-uses UDMBusiness;
+uses UDMBusiness, UConstantesDGE;
 
 {$R *.dfm}
 

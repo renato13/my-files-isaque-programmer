@@ -129,6 +129,7 @@ var
   function GetCondicaoPagtoIDDefault : Integer;
   function GetEmitirBoleto : Boolean;
   function GetCondicaoPagtoIDBoleto : Integer;
+  function GetFormaPagtoEmiteBoleto(const idFormaPagto : Integer) : Boolean;
   function GetEmitirCupom : Boolean;
   function GetModeloEmissaoCupom : Integer;
   function GetSegmentoID(const CNPJ : String) : Integer;
@@ -694,6 +695,28 @@ end;
 function GetCondicaoPagtoIDBoleto : Integer;
 begin
   Result := FileINI.ReadInteger('Boleto', 'FormaPagtoID', 1);
+end;
+
+function GetFormaPagtoEmiteBoleto(const idFormaPagto : Integer) : Boolean;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select');
+    SQL.Add('  f.cod as Codigo');
+    SQL.Add('from TBFORMPAGTO f');
+    SQL.Add('  inner join TBCONTA_CORRENTE c on (c.codigo = f.conta_corrente)');
+    SQL.Add('  inner join TBBANCO_BOLETO b on (b.bco_cod = c.conta_banco_boleto)');
+    SQL.Add('where f.cod     = ' + IntToStr(idFormaPagto));
+    SQL.Add('  and b.empresa = ' + QuotedStr(GetEmpresaIDDefault));
+    SQL.Add('  and b.bco_gerar_boleto = 1');
+    Open;
+
+    Result := (FieldByName('Codigo').AsInteger > 0);
+
+    Close;
+  end;
 end;
 
 function GetEmitirCupom : Boolean;

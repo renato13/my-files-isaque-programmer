@@ -1,6 +1,6 @@
 inherited frmGeVenda: TfrmGeVenda
-  Left = 276
-  Top = 89
+  Left = 260
+  Top = 132
   Width = 1132
   Height = 724
   ActiveControl = nil
@@ -1982,7 +1982,7 @@ inherited frmGeVenda: TfrmGeVenda
         Top = 424
         Width = 1108
         Height = 190
-        ActivePage = tbsRecebimento
+        ActivePage = tbsITitulos
         Align = alBottom
         TabOrder = 3
         object tbsRecebimento: TTabSheet
@@ -4399,6 +4399,10 @@ inherited frmGeVenda: TfrmGeVenda
     object nmImprimirVenda: TMenuItem
       Caption = 'Or'#231'amento / Venda'
       OnClick = nmImprimirVendaClick
+    end
+    object nmReimprimirBoletos: TMenuItem
+      Caption = 'Reimprimir Boletos'
+      OnClick = nmReimprimirBoletosClick
     end
     object N1: TMenuItem
       Caption = '-'
