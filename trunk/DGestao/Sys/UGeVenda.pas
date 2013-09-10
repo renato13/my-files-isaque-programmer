@@ -539,9 +539,6 @@ begin
   IbDtstTabelaNFE_MODALIDADE_FRETE.Value := MODALIDADE_FRETE_SEMFRETE;
   IbDtstTabelaUSUARIO.Value     := GetUserApp;
 
-//  IbDtstTabelaFORMAPAGTO_COD.Value    := GetFormaPagtoIDDefault;
-//  IbDtstTabelaCONDICAOPAGTO_COD.Value := GetCondicaoPagtoIDDefault;
-
   IbDtstTabelaFORMAPAGTO_COD.Clear;
   IbDtstTabelaCONDICAOPAGTO_COD.Clear;
 
@@ -550,6 +547,10 @@ begin
   IbDtstTabelaLOTE_NFE_ANO.Clear;
   IbDtstTabelaLOTE_NFE_NUMERO.Clear;
   IbDtstTabelaNFE_TRANSPORTADORA.Clear;
+
+  IbDtstTabelaNFE_TRANSPORTADORA.Required := False;
+  IbDtstTabelaNFE_PLACA_VEICULO.Required  := False;
+  IbDtstTabelaNFE_PLACA_UF.Required       := False;
 end;
 
 procedure TfrmGeVenda.dbClienteButtonClick(Sender: TObject);
