@@ -3,6 +3,7 @@ inherited frmGeCliente: TfrmGeCliente
   Top = 131
   Width = 860
   Height = 536
+  ActiveControl = dbCodigo
   Caption = 'Cadastro de Clientes'
   OldCreateOrder = True
   OnClose = FormClose
@@ -106,6 +107,7 @@ inherited frmGeCliente: TfrmGeCliente
   inherited pgcGuias: TPageControl
     Width = 844
     Height = 455
+    ActivePage = tbsCadastro
     OnChange = pgcGuiasChange
     inherited tbsTabela: TTabSheet
       inherited Bevel4: TBevel
