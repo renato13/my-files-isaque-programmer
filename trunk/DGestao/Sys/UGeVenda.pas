@@ -323,6 +323,7 @@ type
     Label4: TLabel;
     IbDtstTabelaLOTE_NFE_RECIBO: TIBStringField;
     qryNFEEMPRESA: TIBStringField;
+    nmReimprimirBoletos: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure btnFiltrarClick(Sender: TObject);
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
@@ -375,6 +376,7 @@ type
       Shift: TShiftState);
     procedure BtnTransporteInformeClick(Sender: TObject);
     procedure cdsVendaVolumeNewRecord(DataSet: TDataSet);
+    procedure nmReimprimirBoletosClick(Sender: TObject);
   private
     { Private declarations }
     sGeneratorName : String;
@@ -450,6 +452,10 @@ end;
 
 procedure TfrmGeVenda.FormCreate(Sender: TObject);
 begin
+  {$IFNDEF ACBR}
+  nmReimprimirBoletos.Visible := False;
+  {$ENDIF}
+
   Desativar_Promocoes;
 
   sGeneratorName := 'GEN_VENDAS_CONTROLE_' + FormatFloat('0000', YearOf(GetDateDB));
@@ -1496,8 +1502,8 @@ begin
 
     if GetEmitirBoleto then
       if ( cdsVendaFormaPagto.Locate('VENDA_PRAZO', 1, []) ) then
-        if ( cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger = GetCondicaoPagtoIDBoleto ) then
-          if ( ShowConfirm('Deseja gerar boletos para os títulos da venda.') ) then
+        if GetFormaPagtoEmiteBoleto( cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger ) then
+          if ShowConfirm('Deseja gerar boletos para os títulos da venda.') then
             btnGerarBoleto.Click;
 
     // Formas de Pagamento que nao seja a prazo
@@ -1814,8 +1820,9 @@ end;
 
 procedure TfrmGeVenda.btnGerarBoletoClick(Sender: TObject);
 begin
-  if ( not GetEmitirBoleto ) then
-    Exit;
+  if ( cdsVendaFormaPagto.Locate('VENDA_PRAZO', 1, []) ) then
+    if not GetFormaPagtoEmiteBoleto( cdsVendaFormaPagtoFORMAPAGTO_COD.AsInteger ) then
+      Exit;
 
   if ( not qryTitulos.IsEmpty ) then
   begin
@@ -2258,6 +2265,30 @@ begin
     IbDtstTabela.Close;
     IbDtstTabela.Open;
     IbDtstTabela.Locate('CODCONTROL', sID, []);
+  end;
+end;
+
+procedure TfrmGeVenda.nmReimprimirBoletosClick(Sender: TObject);
+begin
+  if IbDtstTabela.IsEmpty then
+    Exit;
+
+  if (IbDtstTabela.State in [dsEdit, dsInsert]) then
+    Exit;
+
+  AbrirTabelaTitulos( IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger );
+
+  qryTitulos.Filter := 'CODBANCO > 0';
+  try
+    qryTitulos.Filtered := True;
+    if qryTitulos.IsEmpty then
+      ShowWarning('Não existem títulos com boletos gerados para o movimento de venda.')
+    else
+      ReImprimirBoleto(Self, dbCliente.Text, IbDtstTabelaCODCLI.AsString,
+        IbDtstTabelaANO.AsInteger, IbDtstTabelaCODCONTROL.AsInteger, qryTitulosCODBANCO.AsInteger);
+  finally
+    qryTitulos.Filter   := EmptyStr;
+    qryTitulos.Filtered := False;
   end;
 end;
 

@@ -9128,3 +9128,475 @@ alter column LOTE_ANO position 15;
 
 alter table TBNFE_ENVIADA
 alter column LOTE_NUM position 16;
+
+
+/*------ SYSDBA 03/09/2013 16:06:14 --------*/
+
+ALTER TABLE TBBANCO_BOLETO
+    ADD EMPRESA DMN_CNPJ;
+
+COMMENT ON COLUMN TBBANCO_BOLETO.EMPRESA IS
+'Empresa.';
+
+
+
+
+/*------ SYSDBA 03/09/2013 16:06:42 --------*/
+
+ALTER TABLE TBBANCO_BOLETO
+ADD CONSTRAINT FK_TBBANCO_BOLETO_EMPRESA
+FOREIGN KEY (EMPRESA)
+REFERENCES TBEMPRESA(CNPJ);
+
+
+
+
+/*------ SYSDBA 03/09/2013 16:09:14 --------*/
+
+ALTER TABLE TBBANCO_BOLETO
+    ADD BCO_GERAR_BOLETO DMN_SMALLINT_N DEFAULT 0;
+
+COMMENT ON COLUMN TBBANCO_BOLETO.BCO_GERAR_BOLETO IS
+'Gerar Boleto:
+0 - Nao
+1 - Sim';
+
+
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_COD position 1;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CARTEIRA position 2;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOME position 3;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CHAVE position 4;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_AGENCIA position 5;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CC position 6;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_GERAR_BOLETO position 7;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_INICIO position 8;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_FINAL position 9;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_PROXIMO position 10;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_1 position 11;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_2 position 12;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_SEQUENCIAL_REM position 13;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_REMESSA position 14;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_RETORNO position 15;
+
+
+/*------ SYSDBA 03/09/2013 16:09:38 --------*/
+
+alter table TBBANCO_BOLETO
+alter column EMPRESA position 16;
+
+
+/*------ SYSDBA 03/09/2013 18:06:21 --------*/
+
+ALTER TABLE TBBANCO_BOLETO
+    ADD BCO_NUMERO_CONTRATO DMN_VCHAR_10;
+
+COMMENT ON COLUMN TBBANCO_BOLETO.BCO_NUMERO_CONTRATO IS
+'Numero do Convenio/Contrato.';
+
+alter table TBBANCO_BOLETO
+alter BCO_COD position 1;
+
+alter table TBBANCO_BOLETO
+alter BCO_CARTEIRA position 2;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOME position 3;
+
+alter table TBBANCO_BOLETO
+alter BCO_CHAVE position 4;
+
+alter table TBBANCO_BOLETO
+alter BCO_AGENCIA position 5;
+
+alter table TBBANCO_BOLETO
+alter BCO_CC position 6;
+
+alter table TBBANCO_BOLETO
+alter BCO_GERAR_BOLETO position 7;
+
+alter table TBBANCO_BOLETO
+alter BCO_NUMERO_CONTRATO position 8;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_INICIO position 9;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_FINAL position 10;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_PROXIMO position 11;
+
+alter table TBBANCO_BOLETO
+alter BCO_CONFG_1 position 12;
+
+alter table TBBANCO_BOLETO
+alter BCO_CONFG_2 position 13;
+
+alter table TBBANCO_BOLETO
+alter BCO_SEQUENCIAL_REM position 14;
+
+alter table TBBANCO_BOLETO
+alter BCO_DIRETORIO_REMESSA position 15;
+
+alter table TBBANCO_BOLETO
+alter BCO_DIRETORIO_RETORNO position 16;
+
+alter table TBBANCO_BOLETO
+alter EMPRESA position 17;
+
+
+
+
+/*------ SYSDBA 03/09/2013 18:06:53 --------*/
+
+ALTER TABLE TBBANCO_BOLETO DROP BCO_NUMERO_CONTRATO;
+
+
+
+
+/*------ SYSDBA 03/09/2013 18:07:08 --------*/
+
+COMMENT ON COLUMN TBBANCO_BOLETO.BCO_CHAVE IS
+'Numero do Convenio/Contrato.';
+
+
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_COD position 1;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column EMPRESA position 2;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CARTEIRA position 3;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOME position 4;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CHAVE position 5;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_AGENCIA position 6;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CC position 7;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_GERAR_BOLETO position 8;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_INICIO position 9;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_FINAL position 10;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_PROXIMO position 11;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_1 position 12;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_2 position 13;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_SEQUENCIAL_REM position 14;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_REMESSA position 15;
+
+
+/*------ SYSDBA 03/09/2013 18:57:24 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_RETORNO position 16;
+
+
+/*------ SYSDBA 03/09/2013 20:13:49 --------*/
+
+ALTER TABLE TBBANCO_BOLETO
+    ADD BCO_CODIGO_CEDENTE DMN_VCHAR_10;
+
+alter table TBBANCO_BOLETO
+alter BCO_COD position 1;
+
+alter table TBBANCO_BOLETO
+alter EMPRESA position 2;
+
+alter table TBBANCO_BOLETO
+alter BCO_CARTEIRA position 3;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOME position 4;
+
+alter table TBBANCO_BOLETO
+alter BCO_CODIGO_CEDENTE position 5;
+
+alter table TBBANCO_BOLETO
+alter BCO_CHAVE position 6;
+
+alter table TBBANCO_BOLETO
+alter BCO_AGENCIA position 7;
+
+alter table TBBANCO_BOLETO
+alter BCO_CC position 8;
+
+alter table TBBANCO_BOLETO
+alter BCO_GERAR_BOLETO position 9;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_INICIO position 10;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_FINAL position 11;
+
+alter table TBBANCO_BOLETO
+alter BCO_NOSSO_NUM_PROXIMO position 12;
+
+alter table TBBANCO_BOLETO
+alter BCO_CONFG_1 position 13;
+
+alter table TBBANCO_BOLETO
+alter BCO_CONFG_2 position 14;
+
+alter table TBBANCO_BOLETO
+alter BCO_SEQUENCIAL_REM position 15;
+
+alter table TBBANCO_BOLETO
+alter BCO_DIRETORIO_REMESSA position 16;
+
+alter table TBBANCO_BOLETO
+alter BCO_DIRETORIO_RETORNO position 17;
+
+
+
+
+/*------ SYSDBA 03/09/2013 20:14:12 --------*/
+
+COMMENT ON COLUMN TBBANCO_BOLETO.BCO_CODIGO_CEDENTE IS
+'Codigo do Cedente.';
+
+
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_COD position 1;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column EMPRESA position 2;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CARTEIRA position 3;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOME position 4;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_AGENCIA position 5;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CC position 6;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CODIGO_CEDENTE position 7;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CHAVE position 8;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_GERAR_BOLETO position 9;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_INICIO position 10;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_FINAL position 11;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_NOSSO_NUM_PROXIMO position 12;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_1 position 13;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_CONFG_2 position 14;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_SEQUENCIAL_REM position 15;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_REMESSA position 16;
+
+
+/*------ SYSDBA 03/09/2013 20:14:32 --------*/
+
+alter table TBBANCO_BOLETO
+alter column BCO_DIRETORIO_RETORNO position 17;
