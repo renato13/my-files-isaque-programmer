@@ -150,6 +150,7 @@ var
   function GetPaisNomeDefault : String;
   function GetEstadoNomeDefault : String;
   function GetCidadeNomeDefault : String;
+  function GetCidadeNome(const iCidade : Integer) : String;
   function GetCfopNomeDefault : String;
   function GetEmpresaNomeDefault : String;
   function GetClienteNomeDefault : String;
@@ -1075,6 +1076,21 @@ begin
     Close;
     SQL.Clear;
     SQL.Add('Select cid_nome from TBCIDADE where cid_cod = ' + IntToStr(GetCidadeIDDefault));
+    Open;
+
+    Result := FieldByName('cid_nome').AsString;
+
+    Close;
+  end;
+end;
+
+function GetCidadeNome(const iCidade : Integer) : String;
+begin
+  with DMBusiness, qryBusca do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('Select cid_nome from TBCIDADE where cid_cod = ' + IntToStr(iCidade));
     Open;
 
     Result := FieldByName('cid_nome').AsString;

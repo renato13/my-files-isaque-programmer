@@ -28,6 +28,7 @@ type
     procedure IbDtstTabelaNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
+    fCidade : Integer;
   public
     { Public declarations }
   end;
@@ -76,7 +77,9 @@ var
 begin
   frm := TfrmGeBairro.Create(AOwner);
   try
-    whr    := 'b.cid_cod = ' + IntToStr(Cidade);
+    frm.fCidade := Cidade;
+
+    whr := 'b.cid_cod = ' + IntToStr(Cidade);
 
     with frm, IbDtstTabela do
     begin
@@ -94,6 +97,8 @@ end;
 procedure TfrmGeBairro.FormCreate(Sender: TObject);
 begin
   inherited;
+  fCidade := 0;
+
   ControlFirstEdit := dbNome;
 
   DisplayFormatCodigo := '0000';
@@ -133,6 +138,12 @@ end;
 procedure TfrmGeBairro.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
+  if ( fCidade > 0 ) then
+  begin
+    IbDtstTabelaCID_COD.AsInteger := fCidade;
+    IbDtstTabelaCID_NOME.AsString := GetCidadeNome( fCidade );
+  end
+  else
   if ( GetCidadeIDDefault > 0 ) then
   begin
     IbDtstTabelaCID_COD.AsInteger := GetCidadeIDDefault;

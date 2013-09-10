@@ -30,6 +30,7 @@ type
     procedure btbtnSalvarClick(Sender: TObject);
   private
     { Private declarations }
+    fCidade : Integer;
   public
     { Public declarations }
   end;
@@ -78,7 +79,9 @@ var
 begin
   frm := TfrmGeLogradouro.Create(AOwner);
   try
-    whr    := 'l.cid_cod = ' + IntToStr(Cidade);
+    frm.fCidade := Cidade;
+
+    whr := 'l.cid_cod = ' + IntToStr(Cidade);
 
     with frm, IbDtstTabela do
     begin
@@ -105,6 +108,8 @@ end;
 procedure TfrmGeLogradouro.FormCreate(Sender: TObject);
 begin
   inherited;
+  fCidade := 0;
+
   ControlFirstEdit := dbTipo;
 
   tblTipo.Open;
@@ -120,6 +125,12 @@ end;
 procedure TfrmGeLogradouro.IbDtstTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
+  if ( fCidade > 0 ) then
+  begin
+    IbDtstTabelaCID_COD.AsInteger := fCidade;
+    IbDtstTabelaCID_NOME.AsString := GetCidadeNome( fCidade );
+  end
+  else
   if ( GetCidadeIDDefault > 0 ) then
   begin
     IbDtstTabelaCID_COD.AsInteger := GetCidadeIDDefault;

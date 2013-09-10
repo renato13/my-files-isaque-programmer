@@ -37,7 +37,11 @@ inherited frmGeBairro: TfrmGeBairro
       end
     end
     inherited tbsCadastro: TTabSheet
+      inherited Bevel8: TBevel
+        Width = 727
+      end
       inherited GrpBxDadosNominais: TGroupBox
+        Width = 727
         object lblCidade: TLabel [1]
           Left = 16
           Top = 64
